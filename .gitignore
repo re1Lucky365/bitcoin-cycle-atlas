@@ -1,0 +1,11 @@
+node_modules/
+release-assets/
+build/
+release/
+__pycache__/
+*.pyc
+.DS_Store
+.env
+.env.*
+!.env.example
+.openai/

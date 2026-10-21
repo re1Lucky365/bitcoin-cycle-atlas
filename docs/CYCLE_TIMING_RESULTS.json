@@ -1,0 +1,1391 @@
+{
+  "asOf": "2026-10-20",
+  "source": {
+    "source": "https://community-api.coinmetrics.io/v4/timeseries/asset-metrics?assets=btc&metrics=PriceUSD&frequency=1d&start_time=2010-07-18&end_time=2026-10-21&page_size=10000",
+    "sourceName": "Coin Metrics Community API",
+    "retrievedAt": "2026-10-21T09:16:20.212060+00:00"
+  },
+  "selectedBaseline": "recent2",
+  "cycles": [
+    {
+      "year": 2012,
+      "halvingDate": "2012-11-28",
+      "current": false,
+      "windowEnd": "2016-07-08",
+      "peak": {
+        "date": "2013-12-04",
+        "price": 1134.93223088837,
+        "dayAfterHalving": 371,
+        "annualYear": 2013,
+        "provisional": false,
+        "selection": "Explicit reference-year maximum: 2013.",
+        "retrospective": true
+      },
+      "troughAvailable": true,
+      "availability": {
+        "trough": true,
+        "reason": null
+      },
+      "trough": {
+        "date": "2015-01-14",
+        "price": 175.637640561075,
+        "dayAfterHalving": 777,
+        "daysAfterPeak": 406,
+        "provisional": false,
+        "windowEnd": "2016-07-08",
+        "retrospective": true
+      },
+      "confirmations": {
+        "gmaUp": {
+          "type": "ma",
+          "direction": "up",
+          "eventDate": "2015-06-29",
+          "confirmationDate": "2015-07-12",
+          "knownAt": "2015-07-12",
+          "price": 311.481879894798,
+          "maValue": 247.37329490237823,
+          "earliestKnowableUtc": "2015-07-13T00:00:00.000Z",
+          "maType": "geometric",
+          "maWindow": 200,
+          "persistence": 14,
+          "causal": true,
+          "dayAfterHalving": 956,
+          "eventDayAfterHalving": 943,
+          "daysAfterTrough": 179,
+          "pairingIsRetrospective": true
+        },
+        "reboundUp": {
+          "type": "running-low-rebound",
+          "direction": "up",
+          "eventDate": "2015-01-18",
+          "confirmationDate": "2015-01-31",
+          "knownAt": "2015-01-31",
+          "price": 217.332156049094,
+          "earliestKnowableUtc": "2015-02-01T00:00:00.000Z",
+          "runningLowDate": "2015-01-14",
+          "runningLowPrice": 175.637640561075,
+          "episodePeakDate": "2013-12-04",
+          "episodePeakPrice": 1134.93223088837,
+          "reboundPct": 20,
+          "persistence": 14,
+          "drawdownPct": 20,
+          "drawdownPersistence": 14,
+          "causal": true,
+          "dayAfterHalving": 794,
+          "eventDayAfterHalving": 781,
+          "daysAfterTrough": 17,
+          "pairingIsRetrospective": true
+        },
+        "gmaDown": {
+          "type": "ma",
+          "direction": "down",
+          "eventDate": "2014-04-18",
+          "confirmationDate": "2014-05-01",
+          "knownAt": "2014-05-01",
+          "price": 460.194698255991,
+          "maValue": 548.6186902747613,
+          "earliestKnowableUtc": "2014-05-02T00:00:00.000Z",
+          "maType": "geometric",
+          "maWindow": 200,
+          "persistence": 14,
+          "causal": true,
+          "dayAfterHalving": 519,
+          "eventDayAfterHalving": 506,
+          "daysAfterTrough": -258,
+          "pairingIsRetrospective": true
+        }
+      }
+    },
+    {
+      "year": 2016,
+      "halvingDate": "2016-07-09",
+      "current": false,
+      "windowEnd": "2020-05-10",
+      "peak": {
+        "date": "2017-12-16",
+        "price": 19640.5138834015,
+        "dayAfterHalving": 525,
+        "annualYear": 2017,
+        "provisional": false,
+        "selection": "Explicit reference-year maximum: 2017.",
+        "retrospective": true
+      },
+      "troughAvailable": true,
+      "availability": {
+        "trough": true,
+        "reason": null
+      },
+      "trough": {
+        "date": "2018-12-15",
+        "price": 3185.07404383402,
+        "dayAfterHalving": 889,
+        "daysAfterPeak": 364,
+        "provisional": false,
+        "windowEnd": "2020-05-10",
+        "retrospective": true
+      },
+      "confirmations": {
+        "gmaUp": {
+          "type": "ma",
+          "direction": "up",
+          "eventDate": "2019-04-02",
+          "confirmationDate": "2019-04-15",
+          "knownAt": "2019-04-15",
+          "price": 5042.89773845704,
+          "maValue": 4396.633019681452,
+          "earliestKnowableUtc": "2019-04-16T00:00:00.000Z",
+          "maType": "geometric",
+          "maWindow": 200,
+          "persistence": 14,
+          "causal": true,
+          "dayAfterHalving": 1010,
+          "eventDayAfterHalving": 997,
+          "daysAfterTrough": 121,
+          "pairingIsRetrospective": true
+        },
+        "reboundUp": {
+          "type": "running-low-rebound",
+          "direction": "up",
+          "eventDate": "2019-03-05",
+          "confirmationDate": "2019-03-18",
+          "knownAt": "2019-03-18",
+          "price": 3969.44014582116,
+          "earliestKnowableUtc": "2019-03-19T00:00:00.000Z",
+          "runningLowDate": "2018-12-15",
+          "runningLowPrice": 3185.07404383402,
+          "episodePeakDate": "2017-12-16",
+          "episodePeakPrice": 19640.5138834015,
+          "reboundPct": 20,
+          "persistence": 14,
+          "drawdownPct": 20,
+          "drawdownPersistence": 14,
+          "causal": true,
+          "dayAfterHalving": 982,
+          "eventDayAfterHalving": 969,
+          "daysAfterTrough": 93,
+          "pairingIsRetrospective": true
+        },
+        "gmaDown": {
+          "type": "ma",
+          "direction": "down",
+          "eventDate": "2018-03-25",
+          "confirmationDate": "2018-04-07",
+          "knownAt": "2018-04-07",
+          "price": 6886.46947194623,
+          "maValue": 8788.375454594227,
+          "earliestKnowableUtc": "2018-04-08T00:00:00.000Z",
+          "maType": "geometric",
+          "maWindow": 200,
+          "persistence": 14,
+          "causal": true,
+          "dayAfterHalving": 637,
+          "eventDayAfterHalving": 624,
+          "daysAfterTrough": -252,
+          "pairingIsRetrospective": true
+        }
+      }
+    },
+    {
+      "year": 2020,
+      "halvingDate": "2020-05-11",
+      "current": false,
+      "windowEnd": "2024-04-19",
+      "peak": {
+        "date": "2021-11-08",
+        "price": 67541.7555081824,
+        "dayAfterHalving": 546,
+        "annualYear": 2021,
+        "provisional": false,
+        "selection": "Explicit reference-year maximum: 2021.",
+        "retrospective": true
+      },
+      "troughAvailable": true,
+      "availability": {
+        "trough": true,
+        "reason": null
+      },
+      "trough": {
+        "date": "2022-11-09",
+        "price": 15758.2912819988,
+        "dayAfterHalving": 912,
+        "daysAfterPeak": 366,
+        "provisional": false,
+        "windowEnd": "2024-04-19",
+        "retrospective": true
+      },
+      "confirmations": {
+        "gmaUp": {
+          "type": "ma",
+          "direction": "up",
+          "eventDate": "2023-01-13",
+          "confirmationDate": "2023-01-26",
+          "knownAt": "2023-01-26",
+          "price": 23008.6894766219,
+          "maValue": 19476.147487432216,
+          "earliestKnowableUtc": "2023-01-27T00:00:00.000Z",
+          "maType": "geometric",
+          "maWindow": 200,
+          "persistence": 14,
+          "causal": true,
+          "dayAfterHalving": 990,
+          "eventDayAfterHalving": 977,
+          "daysAfterTrough": 78,
+          "pairingIsRetrospective": true
+        },
+        "reboundUp": {
+          "type": "running-low-rebound",
+          "direction": "up",
+          "eventDate": "2023-01-13",
+          "confirmationDate": "2023-01-26",
+          "knownAt": "2023-01-26",
+          "price": 23008.6894766219,
+          "earliestKnowableUtc": "2023-01-27T00:00:00.000Z",
+          "runningLowDate": "2022-11-09",
+          "runningLowPrice": 15758.2912819988,
+          "episodePeakDate": "2021-11-08",
+          "episodePeakPrice": 67541.7555081824,
+          "reboundPct": 20,
+          "persistence": 14,
+          "drawdownPct": 20,
+          "drawdownPersistence": 14,
+          "causal": true,
+          "dayAfterHalving": 990,
+          "eventDayAfterHalving": 977,
+          "daysAfterTrough": 78,
+          "pairingIsRetrospective": true
+        },
+        "gmaDown": {
+          "type": "ma",
+          "direction": "down",
+          "eventDate": "2022-01-03",
+          "confirmationDate": "2022-01-16",
+          "knownAt": "2022-01-16",
+          "price": 43168.8596671537,
+          "maValue": 47667.43786333293,
+          "earliestKnowableUtc": "2022-01-17T00:00:00.000Z",
+          "maType": "geometric",
+          "maWindow": 200,
+          "persistence": 14,
+          "causal": true,
+          "dayAfterHalving": 615,
+          "eventDayAfterHalving": 602,
+          "daysAfterTrough": -297,
+          "pairingIsRetrospective": true
+        }
+      }
+    },
+    {
+      "year": 2024,
+      "halvingDate": "2024-04-20",
+      "current": true,
+      "windowEnd": "2026-10-20",
+      "peak": {
+        "date": "2025-10-06",
+        "price": 124824.453666861,
+        "dayAfterHalving": 534,
+        "annualYear": null,
+        "provisional": true,
+        "selection": "Maximum observed since the 2024 halving; may change with new observations.",
+        "retrospective": true
+      },
+      "troughAvailable": true,
+      "availability": {
+        "trough": true,
+        "reason": null
+      },
+      "trough": {
+        "date": "2026-06-30",
+        "price": 58525.0753614845,
+        "dayAfterHalving": 801,
+        "daysAfterPeak": 267,
+        "provisional": true,
+        "windowEnd": "2026-10-20",
+        "retrospective": true
+      },
+      "confirmations": {
+        "gmaUp": {
+          "type": "ma",
+          "direction": "up",
+          "eventDate": "2026-08-19",
+          "confirmationDate": "2026-09-01",
+          "knownAt": "2026-09-01",
+          "price": 77407.7011547107,
+          "maValue": 69196.49482014896,
+          "earliestKnowableUtc": "2026-09-02T00:00:00.000Z",
+          "maType": "geometric",
+          "maWindow": 200,
+          "persistence": 14,
+          "causal": true,
+          "dayAfterHalving": 864,
+          "eventDayAfterHalving": 851,
+          "daysAfterTrough": 63,
+          "pairingIsRetrospective": true
+        },
+        "reboundUp": {
+          "type": "running-low-rebound",
+          "direction": "up",
+          "eventDate": "2026-08-20",
+          "confirmationDate": "2026-09-02",
+          "knownAt": "2026-09-02",
+          "price": 77188.7006046172,
+          "earliestKnowableUtc": "2026-09-03T00:00:00.000Z",
+          "runningLowDate": "2026-06-30",
+          "runningLowPrice": 58525.0753614845,
+          "episodePeakDate": "2025-10-06",
+          "episodePeakPrice": 124824.453666861,
+          "reboundPct": 20,
+          "persistence": 14,
+          "drawdownPct": 20,
+          "drawdownPersistence": 14,
+          "causal": true,
+          "dayAfterHalving": 865,
+          "eventDayAfterHalving": 852,
+          "daysAfterTrough": 64,
+          "pairingIsRetrospective": true
+        },
+        "gmaDown": {
+          "type": "ma",
+          "direction": "down",
+          "eventDate": "2025-11-03",
+          "confirmationDate": "2025-11-16",
+          "knownAt": "2025-11-16",
+          "price": 94182.3130996493,
+          "maValue": 110279.95090446607,
+          "earliestKnowableUtc": "2025-11-17T00:00:00.000Z",
+          "maType": "geometric",
+          "maWindow": 200,
+          "persistence": 14,
+          "causal": true,
+          "dayAfterHalving": 575,
+          "eventDayAfterHalving": 562,
+          "daysAfterTrough": -226,
+          "pairingIsRetrospective": true
+        }
+      }
+    }
+  ],
+  "baselines": {
+    "previous": {
+      "years": [
+        2020
+      ],
+      "sampleSize": 1,
+      "center": "median",
+      "metrics": {
+        "peak": {
+          "historicalValues": [
+            546
+          ],
+          "n": 1,
+          "medianDays": 546,
+          "meanDays": 546,
+          "minDays": 546,
+          "maxDays": 546,
+          "currentDays": 534,
+          "leadDays": 12,
+          "leadMonthsApprox": 0.3942586090063451
+        },
+        "trough": {
+          "historicalValues": [
+            912
+          ],
+          "n": 1,
+          "medianDays": 912,
+          "meanDays": 912,
+          "minDays": 912,
+          "maxDays": 912,
+          "currentDays": 801,
+          "leadDays": 111,
+          "leadMonthsApprox": 3.646892133308692
+        },
+        "bear": {
+          "historicalValues": [
+            366
+          ],
+          "n": 1,
+          "medianDays": 366,
+          "meanDays": 366,
+          "minDays": 366,
+          "maxDays": 366,
+          "currentDays": 267,
+          "leadDays": 99,
+          "leadMonthsApprox": 3.252633524302347
+        },
+        "gmaDown": {
+          "historicalValues": [
+            615
+          ],
+          "n": 1,
+          "medianDays": 615,
+          "meanDays": 615,
+          "minDays": 615,
+          "maxDays": 615,
+          "currentDays": 575,
+          "leadDays": 40,
+          "leadMonthsApprox": 1.3141953633544836
+        },
+        "gmaUp": {
+          "historicalValues": [
+            990
+          ],
+          "n": 1,
+          "medianDays": 990,
+          "meanDays": 990,
+          "minDays": 990,
+          "maxDays": 990,
+          "currentDays": 864,
+          "leadDays": 126,
+          "leadMonthsApprox": 4.139715394566624
+        },
+        "reboundUp": {
+          "historicalValues": [
+            990
+          ],
+          "n": 1,
+          "medianDays": 990,
+          "meanDays": 990,
+          "minDays": 990,
+          "maxDays": 990,
+          "currentDays": 865,
+          "leadDays": 125,
+          "leadMonthsApprox": 4.106860510482761
+        },
+        "gmaUpAfterTrough": {
+          "historicalValues": [
+            78
+          ],
+          "n": 1,
+          "medianDays": 78,
+          "meanDays": 78,
+          "minDays": 78,
+          "maxDays": 78,
+          "currentDays": 63,
+          "leadDays": 15,
+          "leadMonthsApprox": 0.49282326125793136
+        },
+        "reboundUpAfterTrough": {
+          "historicalValues": [
+            78
+          ],
+          "n": 1,
+          "medianDays": 78,
+          "meanDays": 78,
+          "minDays": 78,
+          "maxDays": 78,
+          "currentDays": 64,
+          "leadDays": 14,
+          "leadMonthsApprox": 0.4599683771740693
+        }
+      }
+    },
+    "recent2": {
+      "years": [
+        2016,
+        2020
+      ],
+      "sampleSize": 2,
+      "center": "median",
+      "metrics": {
+        "peak": {
+          "historicalValues": [
+            525,
+            546
+          ],
+          "n": 2,
+          "medianDays": 535.5,
+          "meanDays": 535.5,
+          "minDays": 525,
+          "maxDays": 546,
+          "currentDays": 534,
+          "leadDays": 1.5,
+          "leadMonthsApprox": 0.049282326125793134
+        },
+        "trough": {
+          "historicalValues": [
+            889,
+            912
+          ],
+          "n": 2,
+          "medianDays": 900.5,
+          "meanDays": 900.5,
+          "minDays": 889,
+          "maxDays": 912,
+          "currentDays": 801,
+          "leadDays": 99.5,
+          "leadMonthsApprox": 3.269060966344278
+        },
+        "bear": {
+          "historicalValues": [
+            364,
+            366
+          ],
+          "n": 2,
+          "medianDays": 365,
+          "meanDays": 365,
+          "minDays": 364,
+          "maxDays": 366,
+          "currentDays": 267,
+          "leadDays": 98,
+          "leadMonthsApprox": 3.2197786402184847
+        },
+        "gmaDown": {
+          "historicalValues": [
+            637,
+            615
+          ],
+          "n": 2,
+          "medianDays": 626,
+          "meanDays": 626,
+          "minDays": 615,
+          "maxDays": 637,
+          "currentDays": 575,
+          "leadDays": 51,
+          "leadMonthsApprox": 1.6755990882769667
+        },
+        "gmaUp": {
+          "historicalValues": [
+            1010,
+            990
+          ],
+          "n": 2,
+          "medianDays": 1000,
+          "meanDays": 1000,
+          "minDays": 990,
+          "maxDays": 1010,
+          "currentDays": 864,
+          "leadDays": 136,
+          "leadMonthsApprox": 4.468264235405244
+        },
+        "reboundUp": {
+          "historicalValues": [
+            982,
+            990
+          ],
+          "n": 2,
+          "medianDays": 986,
+          "meanDays": 986,
+          "minDays": 982,
+          "maxDays": 990,
+          "currentDays": 865,
+          "leadDays": 121,
+          "leadMonthsApprox": 3.975440974147313
+        },
+        "gmaUpAfterTrough": {
+          "historicalValues": [
+            121,
+            78
+          ],
+          "n": 2,
+          "medianDays": 99.5,
+          "meanDays": 99.5,
+          "minDays": 78,
+          "maxDays": 121,
+          "currentDays": 63,
+          "leadDays": 36.5,
+          "leadMonthsApprox": 1.1992032690609664
+        },
+        "reboundUpAfterTrough": {
+          "historicalValues": [
+            93,
+            78
+          ],
+          "n": 2,
+          "medianDays": 85.5,
+          "meanDays": 85.5,
+          "minDays": 78,
+          "maxDays": 93,
+          "currentDays": 64,
+          "leadDays": 21.5,
+          "leadMonthsApprox": 0.706380007803035
+        }
+      }
+    },
+    "all3": {
+      "years": [
+        2012,
+        2016,
+        2020
+      ],
+      "sampleSize": 3,
+      "center": "median",
+      "metrics": {
+        "peak": {
+          "historicalValues": [
+            371,
+            525,
+            546
+          ],
+          "n": 3,
+          "medianDays": 525,
+          "meanDays": 480.6666666666667,
+          "minDays": 371,
+          "maxDays": 546,
+          "currentDays": 534,
+          "leadDays": -9,
+          "leadMonthsApprox": -0.29569395675475885
+        },
+        "trough": {
+          "historicalValues": [
+            777,
+            889,
+            912
+          ],
+          "n": 3,
+          "medianDays": 889,
+          "meanDays": 859.3333333333334,
+          "minDays": 777,
+          "maxDays": 912,
+          "currentDays": 801,
+          "leadDays": 88,
+          "leadMonthsApprox": 2.891229799379864
+        },
+        "bear": {
+          "historicalValues": [
+            406,
+            364,
+            366
+          ],
+          "n": 3,
+          "medianDays": 366,
+          "meanDays": 378.6666666666667,
+          "minDays": 364,
+          "maxDays": 406,
+          "currentDays": 267,
+          "leadDays": 99,
+          "leadMonthsApprox": 3.252633524302347
+        },
+        "gmaDown": {
+          "historicalValues": [
+            519,
+            637,
+            615
+          ],
+          "n": 3,
+          "medianDays": 615,
+          "meanDays": 590.3333333333334,
+          "minDays": 519,
+          "maxDays": 637,
+          "currentDays": 575,
+          "leadDays": 40,
+          "leadMonthsApprox": 1.3141953633544836
+        },
+        "gmaUp": {
+          "historicalValues": [
+            956,
+            1010,
+            990
+          ],
+          "n": 3,
+          "medianDays": 990,
+          "meanDays": 985.3333333333334,
+          "minDays": 956,
+          "maxDays": 1010,
+          "currentDays": 864,
+          "leadDays": 126,
+          "leadMonthsApprox": 4.139715394566624
+        },
+        "reboundUp": {
+          "historicalValues": [
+            794,
+            982,
+            990
+          ],
+          "n": 3,
+          "medianDays": 982,
+          "meanDays": 922,
+          "minDays": 794,
+          "maxDays": 990,
+          "currentDays": 865,
+          "leadDays": 117,
+          "leadMonthsApprox": 3.8440214378118647
+        },
+        "gmaUpAfterTrough": {
+          "historicalValues": [
+            179,
+            121,
+            78
+          ],
+          "n": 3,
+          "medianDays": 121,
+          "meanDays": 126,
+          "minDays": 78,
+          "maxDays": 179,
+          "currentDays": 63,
+          "leadDays": 58,
+          "leadMonthsApprox": 1.9055832768640013
+        },
+        "reboundUpAfterTrough": {
+          "historicalValues": [
+            17,
+            93,
+            78
+          ],
+          "n": 3,
+          "medianDays": 78,
+          "meanDays": 62.666666666666664,
+          "minDays": 17,
+          "maxDays": 93,
+          "currentDays": 64,
+          "leadDays": 14,
+          "leadMonthsApprox": 0.4599683771740693
+        }
+      }
+    }
+  },
+  "current": {
+    "year": 2024,
+    "halvingDate": "2024-04-20",
+    "peak": {
+      "date": "2025-10-06",
+      "price": 124824.453666861,
+      "dayAfterHalving": 534,
+      "annualYear": null,
+      "provisional": true,
+      "selection": "Maximum observed since the 2024 halving; may change with new observations.",
+      "retrospective": true
+    },
+    "troughCandidate": {
+      "date": "2026-06-30",
+      "price": 58525.0753614845,
+      "dayAfterHalving": 801,
+      "daysAfterPeak": 267,
+      "provisional": true,
+      "windowEnd": "2026-10-20",
+      "retrospective": true
+    },
+    "troughAvailable": true,
+    "availability": {
+      "trough": true,
+      "reason": null
+    },
+    "latestPrice": 82898.9101560549,
+    "reboundPct": 41.64682342401713,
+    "drawdownFromPeakPct": -33.58760425477166,
+    "daysSinceLow": 112,
+    "daysSinceHalving": 913,
+    "confirmations": {
+      "gmaUp": {
+        "type": "ma",
+        "direction": "up",
+        "eventDate": "2026-08-19",
+        "confirmationDate": "2026-09-01",
+        "knownAt": "2026-09-01",
+        "price": 77407.7011547107,
+        "maValue": 69196.49482014896,
+        "earliestKnowableUtc": "2026-09-02T00:00:00.000Z",
+        "maType": "geometric",
+        "maWindow": 200,
+        "persistence": 14,
+        "causal": true,
+        "dayAfterHalving": 864,
+        "eventDayAfterHalving": 851,
+        "daysAfterTrough": 63,
+        "pairingIsRetrospective": true
+      },
+      "reboundUp": {
+        "type": "running-low-rebound",
+        "direction": "up",
+        "eventDate": "2026-08-20",
+        "confirmationDate": "2026-09-02",
+        "knownAt": "2026-09-02",
+        "price": 77188.7006046172,
+        "earliestKnowableUtc": "2026-09-03T00:00:00.000Z",
+        "runningLowDate": "2026-06-30",
+        "runningLowPrice": 58525.0753614845,
+        "episodePeakDate": "2025-10-06",
+        "episodePeakPrice": 124824.453666861,
+        "reboundPct": 20,
+        "persistence": 14,
+        "drawdownPct": 20,
+        "drawdownPersistence": 14,
+        "causal": true,
+        "dayAfterHalving": 865,
+        "eventDayAfterHalving": 852,
+        "daysAfterTrough": 64,
+        "pairingIsRetrospective": true
+      },
+      "gmaDown": {
+        "type": "ma",
+        "direction": "down",
+        "eventDate": "2025-11-03",
+        "confirmationDate": "2025-11-16",
+        "knownAt": "2025-11-16",
+        "price": 94182.3130996493,
+        "maValue": 110279.95090446607,
+        "earliestKnowableUtc": "2025-11-17T00:00:00.000Z",
+        "maType": "geometric",
+        "maWindow": 200,
+        "persistence": 14,
+        "causal": true,
+        "dayAfterHalving": 575,
+        "eventDayAfterHalving": 562,
+        "daysAfterTrough": -226,
+        "pairingIsRetrospective": true
+      }
+    },
+    "regime": {
+      "asOf": "2026-10-20",
+      "state": "up",
+      "maValue": 72186.19893846886,
+      "aboveMA": true,
+      "maType": "geometric",
+      "maWindow": 200,
+      "persistence": 14,
+      "lastTransition": {
+        "type": "ma",
+        "direction": "up",
+        "eventDate": "2026-08-19",
+        "confirmationDate": "2026-09-01",
+        "knownAt": "2026-09-01",
+        "price": 77407.7011547107,
+        "maValue": 69196.49482014896,
+        "earliestKnowableUtc": "2026-09-02T00:00:00.000Z",
+        "maType": "geometric",
+        "maWindow": 200,
+        "persistence": 14,
+        "causal": true
+      },
+      "bearEpisodeActive": true,
+      "observedATH": 124824.453666861,
+      "episodePeakDate": "2025-10-06",
+      "runningLowIsPostPeak": true,
+      "runningLowDate": "2026-06-30",
+      "runningLowPrice": 58525.0753614845
+    }
+  },
+  "advances": {
+    "calendarFourYear": {
+      "previousPeakDate": "2021-11-08",
+      "previousTroughDate": "2022-11-09",
+      "projectedPeakDate": "2025-11-08",
+      "projectedTroughDate": "2026-11-09",
+      "peakAdvanceDays": 33,
+      "previousPeakShiftDays": 33,
+      "previousBearDurationDays": 366,
+      "projectedBearDurationDays": 366,
+      "currentBearDurationDays": 267,
+      "bearDurationShorteningDays": 99,
+      "troughAdvanceDays": 132,
+      "identityCheck": true,
+      "identity": "trough advance = peak advance + shortening of the projected peak-to-trough interval"
+    },
+    "bearMedian": {
+      "priorYears": [
+        2016,
+        2020
+      ],
+      "medianDays": 365,
+      "advanceDays": 98
+    },
+    "halvingTiming": {
+      "peakLeadDays": 1.5,
+      "troughLeadDays": 99.5,
+      "gmaUpLeadDays": 136,
+      "reboundUpLeadDays": 121
+    }
+  },
+  "scenarios": {
+    "previousTroughCalendarFourYears": {
+      "referenceDate": "2026-11-09",
+      "startDate": "2026-06-09",
+      "endDate": "2026-08-09",
+      "earlierMonths": [
+        3,
+        5
+      ],
+      "scenarioOnly": true,
+      "description": "Calendar arithmetic scenario; not a forecast or probability interval."
+    },
+    "previousTroughHalvingRelative": {
+      "referenceDate": "2026-10-19",
+      "startDate": "2026-05-19",
+      "endDate": "2026-07-19",
+      "earlierMonths": [
+        3,
+        5
+      ],
+      "scenarioOnly": true,
+      "description": "Calendar arithmetic scenario; not a forecast or probability interval."
+    },
+    "currentCandidateInsideCalendarWindow": true
+  },
+  "falseSignals": {
+    "gma": [
+      {
+        "family": "gma",
+        "cycleYear": 2012,
+        "eventDate": "2014-06-30",
+        "confirmationDate": "2014-07-13",
+        "floorAtConfirmationDate": "2014-04-10",
+        "floorAtConfirmationPrice": 366.911866063413,
+        "invalidatedAt": "2014-10-03",
+        "subsequentLowerLow": true,
+        "daysToInvalidation": 82,
+        "followupDays": 726,
+        "windowClosedByHalving": true,
+        "interpretation": "A later observed lower low invalidated a final-bottom interpretation."
+      },
+      {
+        "family": "gma",
+        "cycleYear": 2012,
+        "eventDate": "2015-06-29",
+        "confirmationDate": "2015-07-12",
+        "floorAtConfirmationDate": "2015-01-14",
+        "floorAtConfirmationPrice": 175.637640561075,
+        "invalidatedAt": null,
+        "subsequentLowerLow": false,
+        "daysToInvalidation": null,
+        "followupDays": 362,
+        "windowClosedByHalving": true,
+        "interpretation": "No lower low before the next halving."
+      },
+      {
+        "family": "gma",
+        "cycleYear": 2012,
+        "eventDate": "2015-10-10",
+        "confirmationDate": "2015-10-23",
+        "floorAtConfirmationDate": "2015-01-14",
+        "floorAtConfirmationPrice": 175.637640561075,
+        "invalidatedAt": null,
+        "subsequentLowerLow": false,
+        "daysToInvalidation": null,
+        "followupDays": 259,
+        "windowClosedByHalving": true,
+        "interpretation": "No lower low before the next halving."
+      },
+      {
+        "family": "gma",
+        "cycleYear": 2016,
+        "eventDate": "2019-04-02",
+        "confirmationDate": "2019-04-15",
+        "floorAtConfirmationDate": "2018-12-15",
+        "floorAtConfirmationPrice": 3185.07404383402,
+        "invalidatedAt": null,
+        "subsequentLowerLow": false,
+        "daysToInvalidation": null,
+        "followupDays": 391,
+        "windowClosedByHalving": true,
+        "interpretation": "No lower low before the next halving."
+      },
+      {
+        "family": "gma",
+        "cycleYear": 2016,
+        "eventDate": "2019-10-25",
+        "confirmationDate": "2019-11-07",
+        "floorAtConfirmationDate": "2018-12-15",
+        "floorAtConfirmationPrice": 3185.07404383402,
+        "invalidatedAt": null,
+        "subsequentLowerLow": false,
+        "daysToInvalidation": null,
+        "followupDays": 185,
+        "windowClosedByHalving": true,
+        "interpretation": "No lower low before the next halving."
+      },
+      {
+        "family": "gma",
+        "cycleYear": 2016,
+        "eventDate": "2020-01-27",
+        "confirmationDate": "2020-02-09",
+        "floorAtConfirmationDate": "2018-12-15",
+        "floorAtConfirmationPrice": 3185.07404383402,
+        "invalidatedAt": null,
+        "subsequentLowerLow": false,
+        "daysToInvalidation": null,
+        "followupDays": 91,
+        "windowClosedByHalving": true,
+        "interpretation": "No lower low before the next halving."
+      },
+      {
+        "family": "gma",
+        "cycleYear": 2020,
+        "eventDate": "2023-01-13",
+        "confirmationDate": "2023-01-26",
+        "floorAtConfirmationDate": "2022-11-09",
+        "floorAtConfirmationPrice": 15758.2912819988,
+        "invalidatedAt": null,
+        "subsequentLowerLow": false,
+        "daysToInvalidation": null,
+        "followupDays": 449,
+        "windowClosedByHalving": true,
+        "interpretation": "No lower low before the next halving."
+      },
+      {
+        "family": "gma",
+        "cycleYear": 2020,
+        "eventDate": "2023-10-16",
+        "confirmationDate": "2023-10-29",
+        "floorAtConfirmationDate": "2022-11-09",
+        "floorAtConfirmationPrice": 15758.2912819988,
+        "invalidatedAt": null,
+        "subsequentLowerLow": false,
+        "daysToInvalidation": null,
+        "followupDays": 173,
+        "windowClosedByHalving": true,
+        "interpretation": "No lower low before the next halving."
+      },
+      {
+        "family": "gma",
+        "cycleYear": 2024,
+        "eventDate": "2026-08-19",
+        "confirmationDate": "2026-09-01",
+        "floorAtConfirmationDate": "2026-06-30",
+        "floorAtConfirmationPrice": 58525.0753614845,
+        "invalidatedAt": null,
+        "subsequentLowerLow": false,
+        "daysToInvalidation": null,
+        "followupDays": 49,
+        "windowClosedByHalving": false,
+        "interpretation": "No lower low observed yet; right-censored."
+      }
+    ],
+    "rebound": [
+      {
+        "family": "rebound",
+        "cycleYear": 2012,
+        "eventDate": "2013-12-24",
+        "confirmationDate": "2014-01-06",
+        "floorAtConfirmationDate": "2013-12-18",
+        "floorAtConfirmationPrice": 526.12097632671,
+        "invalidatedAt": "2014-03-27",
+        "subsequentLowerLow": true,
+        "daysToInvalidation": 80,
+        "followupDays": 914,
+        "windowClosedByHalving": true,
+        "interpretation": "A later observed lower low invalidated a final-bottom interpretation."
+      },
+      {
+        "family": "rebound",
+        "cycleYear": 2012,
+        "eventDate": "2014-05-14",
+        "confirmationDate": "2014-05-27",
+        "floorAtConfirmationDate": "2014-04-10",
+        "floorAtConfirmationPrice": 366.911866063413,
+        "invalidatedAt": "2014-10-03",
+        "subsequentLowerLow": true,
+        "daysToInvalidation": 129,
+        "followupDays": 773,
+        "windowClosedByHalving": true,
+        "interpretation": "A later observed lower low invalidated a final-bottom interpretation."
+      },
+      {
+        "family": "rebound",
+        "cycleYear": 2012,
+        "eventDate": "2015-01-18",
+        "confirmationDate": "2015-01-31",
+        "floorAtConfirmationDate": "2015-01-14",
+        "floorAtConfirmationPrice": 175.637640561075,
+        "invalidatedAt": null,
+        "subsequentLowerLow": false,
+        "daysToInvalidation": null,
+        "followupDays": 524,
+        "windowClosedByHalving": true,
+        "interpretation": "No lower low before the next halving."
+      },
+      {
+        "family": "rebound",
+        "cycleYear": 2016,
+        "eventDate": "2018-02-12",
+        "confirmationDate": "2018-02-25",
+        "floorAtConfirmationDate": "2018-02-05",
+        "floorAtConfirmationPrice": 6849.54255932203,
+        "invalidatedAt": "2018-03-30",
+        "subsequentLowerLow": true,
+        "daysToInvalidation": 33,
+        "followupDays": 805,
+        "windowClosedByHalving": true,
+        "interpretation": "A later observed lower low invalidated a final-bottom interpretation."
+      },
+      {
+        "family": "rebound",
+        "cycleYear": 2016,
+        "eventDate": "2018-04-18",
+        "confirmationDate": "2018-05-01",
+        "floorAtConfirmationDate": "2018-04-06",
+        "floorAtConfirmationPrice": 6610.49234979544,
+        "invalidatedAt": "2018-06-12",
+        "subsequentLowerLow": true,
+        "daysToInvalidation": 42,
+        "followupDays": 740,
+        "windowClosedByHalving": true,
+        "interpretation": "A later observed lower low invalidated a final-bottom interpretation."
+      },
+      {
+        "family": "rebound",
+        "cycleYear": 2016,
+        "eventDate": "2018-07-17",
+        "confirmationDate": "2018-07-30",
+        "floorAtConfirmationDate": "2018-06-28",
+        "floorAtConfirmationPrice": 5858.63577819988,
+        "invalidatedAt": "2018-11-14",
+        "subsequentLowerLow": true,
+        "daysToInvalidation": 107,
+        "followupDays": 650,
+        "windowClosedByHalving": true,
+        "interpretation": "A later observed lower low invalidated a final-bottom interpretation."
+      },
+      {
+        "family": "rebound",
+        "cycleYear": 2016,
+        "eventDate": "2019-03-05",
+        "confirmationDate": "2019-03-18",
+        "floorAtConfirmationDate": "2018-12-15",
+        "floorAtConfirmationPrice": 3185.07404383402,
+        "invalidatedAt": null,
+        "subsequentLowerLow": false,
+        "daysToInvalidation": null,
+        "followupDays": 419,
+        "windowClosedByHalving": true,
+        "interpretation": "No lower low before the next halving."
+      },
+      {
+        "family": "rebound",
+        "cycleYear": 2020,
+        "eventDate": "2022-03-22",
+        "confirmationDate": "2022-04-04",
+        "floorAtConfirmationDate": "2022-01-22",
+        "floorAtConfirmationPrice": 34996.390965225,
+        "invalidatedAt": "2022-05-08",
+        "subsequentLowerLow": true,
+        "daysToInvalidation": 34,
+        "followupDays": 746,
+        "windowClosedByHalving": true,
+        "interpretation": "A later observed lower low invalidated a final-bottom interpretation."
+      },
+      {
+        "family": "rebound",
+        "cycleYear": 2020,
+        "eventDate": "2022-08-05",
+        "confirmationDate": "2022-08-18",
+        "floorAtConfirmationDate": "2022-06-18",
+        "floorAtConfirmationPrice": 19013.8672536528,
+        "invalidatedAt": "2022-09-06",
+        "subsequentLowerLow": true,
+        "daysToInvalidation": 19,
+        "followupDays": 610,
+        "windowClosedByHalving": true,
+        "interpretation": "A later observed lower low invalidated a final-bottom interpretation."
+      },
+      {
+        "family": "rebound",
+        "cycleYear": 2020,
+        "eventDate": "2023-01-13",
+        "confirmationDate": "2023-01-26",
+        "floorAtConfirmationDate": "2022-11-09",
+        "floorAtConfirmationPrice": 15758.2912819988,
+        "invalidatedAt": null,
+        "subsequentLowerLow": false,
+        "daysToInvalidation": null,
+        "followupDays": 449,
+        "windowClosedByHalving": true,
+        "interpretation": "No lower low before the next halving."
+      },
+      {
+        "family": "rebound",
+        "cycleYear": 2024,
+        "eventDate": "2026-04-30",
+        "confirmationDate": "2026-05-13",
+        "floorAtConfirmationDate": "2026-02-05",
+        "floorAtConfirmationPrice": 63494.6884456458,
+        "invalidatedAt": "2026-06-05",
+        "subsequentLowerLow": true,
+        "daysToInvalidation": 23,
+        "followupDays": 160,
+        "windowClosedByHalving": false,
+        "interpretation": "A later observed lower low invalidated a final-bottom interpretation."
+      },
+      {
+        "family": "rebound",
+        "cycleYear": 2024,
+        "eventDate": "2026-08-20",
+        "confirmationDate": "2026-09-02",
+        "floorAtConfirmationDate": "2026-06-30",
+        "floorAtConfirmationPrice": 58525.0753614845,
+        "invalidatedAt": null,
+        "subsequentLowerLow": false,
+        "daysToInvalidation": null,
+        "followupDays": 48,
+        "windowClosedByHalving": false,
+        "interpretation": "No lower low observed yet; right-censored."
+      }
+    ],
+    "counts": {
+      "previous": {
+        "gma": {
+          "signals": 2,
+          "subsequentLowerLows": 0
+        },
+        "rebound": {
+          "signals": 3,
+          "subsequentLowerLows": 2
+        }
+      },
+      "recent2": {
+        "gma": {
+          "signals": 5,
+          "subsequentLowerLows": 0
+        },
+        "rebound": {
+          "signals": 7,
+          "subsequentLowerLows": 5
+        }
+      },
+      "all3": {
+        "gma": {
+          "signals": 8,
+          "subsequentLowerLows": 1
+        },
+        "rebound": {
+          "signals": 10,
+          "subsequentLowerLows": 7
+        }
+      }
+    }
+  },
+  "sensitivity": [
+    {
+      "maType": "geometric",
+      "maWindow": 150,
+      "persistence": 7,
+      "currentEventDate": "2026-08-19",
+      "currentConfirmationDate": "2026-08-25",
+      "halvingToUpLeadDays": 132.5,
+      "troughToUpLeadDays": 33,
+      "halvingToDownLeadDays": 51,
+      "notIndependentSamples": true
+    },
+    {
+      "maType": "geometric",
+      "maWindow": 150,
+      "persistence": 14,
+      "currentEventDate": "2026-08-19",
+      "currentConfirmationDate": "2026-09-01",
+      "halvingToUpLeadDays": 132.5,
+      "troughToUpLeadDays": 33,
+      "halvingToDownLeadDays": 37,
+      "notIndependentSamples": true
+    },
+    {
+      "maType": "geometric",
+      "maWindow": 150,
+      "persistence": 30,
+      "currentEventDate": "2026-08-19",
+      "currentConfirmationDate": "2026-09-17",
+      "halvingToUpLeadDays": 132.5,
+      "troughToUpLeadDays": 33,
+      "halvingToDownLeadDays": 37,
+      "notIndependentSamples": true
+    },
+    {
+      "maType": "geometric",
+      "maWindow": 200,
+      "persistence": 7,
+      "currentEventDate": "2026-08-19",
+      "currentConfirmationDate": "2026-08-25",
+      "halvingToUpLeadDays": 136,
+      "troughToUpLeadDays": 36.5,
+      "halvingToDownLeadDays": 51,
+      "notIndependentSamples": true
+    },
+    {
+      "maType": "geometric",
+      "maWindow": 200,
+      "persistence": 14,
+      "currentEventDate": "2026-08-19",
+      "currentConfirmationDate": "2026-09-01",
+      "halvingToUpLeadDays": 136,
+      "troughToUpLeadDays": 36.5,
+      "halvingToDownLeadDays": 51,
+      "notIndependentSamples": true
+    },
+    {
+      "maType": "geometric",
+      "maWindow": 200,
+      "persistence": 30,
+      "currentEventDate": "2026-08-19",
+      "currentConfirmationDate": "2026-09-17",
+      "halvingToUpLeadDays": 136,
+      "troughToUpLeadDays": 36.5,
+      "halvingToDownLeadDays": 51,
+      "notIndependentSamples": true
+    },
+    {
+      "maType": "geometric",
+      "maWindow": 250,
+      "persistence": 7,
+      "currentEventDate": "2026-08-20",
+      "currentConfirmationDate": "2026-08-26",
+      "halvingToUpLeadDays": 135.5,
+      "troughToUpLeadDays": 36,
+      "halvingToDownLeadDays": 48.5,
+      "notIndependentSamples": true
+    },
+    {
+      "maType": "geometric",
+      "maWindow": 250,
+      "persistence": 14,
+      "currentEventDate": "2026-08-20",
+      "currentConfirmationDate": "2026-09-02",
+      "halvingToUpLeadDays": 135.5,
+      "troughToUpLeadDays": 36,
+      "halvingToDownLeadDays": 69.5,
+      "notIndependentSamples": true
+    },
+    {
+      "maType": "geometric",
+      "maWindow": 250,
+      "persistence": 30,
+      "currentEventDate": "2026-08-20",
+      "currentConfirmationDate": "2026-09-18",
+      "halvingToUpLeadDays": 135.5,
+      "troughToUpLeadDays": 36,
+      "halvingToDownLeadDays": 69.5,
+      "notIndependentSamples": true
+    },
+    {
+      "maType": "arithmetic",
+      "maWindow": 200,
+      "persistence": 7,
+      "currentEventDate": "2026-08-19",
+      "currentConfirmationDate": "2026-08-25",
+      "halvingToUpLeadDays": 136,
+      "troughToUpLeadDays": 36.5,
+      "halvingToDownLeadDays": 42.5,
+      "notIndependentSamples": true
+    },
+    {
+      "maType": "arithmetic",
+      "maWindow": 200,
+      "persistence": 14,
+      "currentEventDate": "2026-08-19",
+      "currentConfirmationDate": "2026-09-01",
+      "halvingToUpLeadDays": 136,
+      "troughToUpLeadDays": 36.5,
+      "halvingToDownLeadDays": 42.5,
+      "notIndependentSamples": true
+    },
+    {
+      "maType": "arithmetic",
+      "maWindow": 200,
+      "persistence": 30,
+      "currentEventDate": "2026-08-19",
+      "currentConfirmationDate": "2026-09-17",
+      "halvingToUpLeadDays": 136,
+      "troughToUpLeadDays": 36.5,
+      "halvingToDownLeadDays": 42.5,
+      "notIndependentSamples": true
+    }
+  ],
+  "methodology": {
+    "observationsAreDailyUTC": true,
+    "dateMeaning": "eventDate, confirmationDate and knownAt are UTC observation-day labels. A completed daily confirmation cannot be known before earliestKnowableUtc (the following UTC midnight); actual provider publication may be later. regime.asOf is the latest observed day, whereas lastTransition is the most recent confirmed transition.",
+    "gapPolicy": "Missing dates are not filled; persistence and moving-average windows require contiguous days.",
+    "currentPeakRule": "Maximum observed from the 2024 halving through asOf, not a fixed annual maximum.",
+    "troughAvailabilityRule": "A trough requires a strictly later observation with price strictly below the selected peak. Without one, trough-dependent statistics and comparisons are unavailable (null), not zero.",
+    "historicalPeakRule": "Explicit annual maxima in 2013, 2017 and 2021; selection is retrospective.",
+    "signalCausality": "Each detector uses only observations available through its confirmationDate.",
+    "pairingCaveat": "Selecting the first signal after the eventual observed trough is retrospective; earlier invalidated signals are retained separately.",
+    "rightCensoring": "The current minimum and recovery are provisional; a later lower low changes the trough date and every dependent timing comparison.",
+    "statisticalLimit": "Only 1, 2 or 3 prior cycles. Parameter variants share the same observations and are not independent samples. No predictive p-value is claimed.",
+    "approximateMonthDays": 30.436875
+  }
+}

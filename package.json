@@ -1,0 +1,13 @@
+{
+  "name": "bitcoin-cycle-atlas",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "verify:static": "node scripts/verify-static.mjs",
+    "build:standalone": "node scripts/build-standalone.mjs",
+    "release:package": "node scripts/package-release.mjs"
+  }
+}

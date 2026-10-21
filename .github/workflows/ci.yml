@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # First-party release SHAs verified on 2026-10-21.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Run model and data tests
+        run: npm test
+      - name: Verify static resources at the Pages base path
+        run: node scripts/verify-static.mjs
+      - name: Build standalone HTML
+        run: node scripts/build-standalone.mjs build/Bitcoin_Cycles_Comparison.html
+      - name: Verify standalone HTML
+        run: node scripts/verify-static.mjs --standalone build/Bitcoin_Cycles_Comparison.html

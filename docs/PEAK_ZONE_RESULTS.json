@@ -1,0 +1,1176 @@
+{
+  "asOf": "2026-10-20",
+  "threshold": 0.95,
+  "baseline": "recent2",
+  "retrospective": true,
+  "cycles": [
+    {
+      "year": 2012,
+      "peakYear": 2013,
+      "halvingDate": "2012-11-28",
+      "current": false,
+      "windowEnd": "2016-07-08",
+      "peak": {
+        "date": "2013-12-04",
+        "price": 1134.93223088837,
+        "dayAfterHalving": 371,
+        "annualYear": 2013,
+        "provisional": false,
+        "selection": "Explicit reference-year maximum: 2013.",
+        "retrospective": true
+      },
+      "threshold": 0.95,
+      "thresholdPrice": 1078.1856193439514,
+      "firstEntry": {
+        "date": "2013-11-29",
+        "price": 1128.7254880187,
+        "dayAfterHalving": 366,
+        "daysBeforePeak": 5,
+        "retrospective": true
+      },
+      "sustained5of7": null,
+      "sustained14consecutive": null,
+      "zoneStats": {
+        "startDate": "2013-11-29",
+        "endDate": "2013-12-04",
+        "observations": 6,
+        "elapsedDays": 5,
+        "completeDailyWindow": true,
+        "aboveThresholdDays": 3,
+        "occupancyPct": 50,
+        "maxDrawdownPct": -14.550897988411238,
+        "maxDrawdown": {
+          "peakDate": "2013-11-29",
+          "troughDate": "2013-12-01"
+        },
+        "longestAboveRunDays": 2,
+        "longestBelowRunDays": 3,
+        "returnPct": 0.5498894935530352,
+        "annualizedVolatilityPct": 175.36040371682887,
+        "dailyReturnObservations": 5,
+        "minimum": {
+          "date": "2013-12-01",
+          "price": 964.485793687902
+        },
+        "maximum": {
+          "date": "2013-12-04",
+          "price": 1134.93223088837
+        },
+        "rangePctOfMinimum": 17.67226000797093
+      },
+      "prePeak90Days": {
+        "startDate": "2013-09-05",
+        "endDate": "2013-12-04",
+        "observations": 91,
+        "elapsedDays": 90,
+        "completeDailyWindow": true,
+        "aboveThresholdDays": 3,
+        "occupancyPct": 3.296703296703297,
+        "maxDrawdownPct": -18.397219928128628,
+        "maxDrawdown": {
+          "peakDate": "2013-10-01",
+          "troughDate": "2013-10-02"
+        },
+        "longestAboveRunDays": 2,
+        "longestBelowRunDays": 85,
+        "returnPct": 827.4588887766464,
+        "annualizedVolatilityPct": 125.63125132696081,
+        "dailyReturnObservations": 90,
+        "minimum": {
+          "date": "2013-10-02",
+          "price": 104.105092928112
+        },
+        "maximum": {
+          "date": "2013-12-04",
+          "price": 1134.93223088837
+        },
+        "rangePctOfMinimum": 990.1793552713873
+      },
+      "terminalEpisodes": [
+        {
+          "maxGapDays": 0,
+          "startDate": "2013-12-04",
+          "endDate": "2013-12-04",
+          "dayAfterHalving": 371,
+          "daysBeforePeak": 0,
+          "aboveThresholdDays": 1,
+          "occupancyPct": 100,
+          "gapPolicy": "Intervening observed below-threshold calendar days; a missing observation always separates episodes."
+        },
+        {
+          "maxGapDays": 7,
+          "startDate": "2013-11-29",
+          "endDate": "2013-12-04",
+          "dayAfterHalving": 366,
+          "daysBeforePeak": 5,
+          "aboveThresholdDays": 3,
+          "occupancyPct": 50,
+          "gapPolicy": "Intervening observed below-threshold calendar days; a missing observation always separates episodes."
+        },
+        {
+          "maxGapDays": 14,
+          "startDate": "2013-11-29",
+          "endDate": "2013-12-04",
+          "dayAfterHalving": 366,
+          "daysBeforePeak": 5,
+          "aboveThresholdDays": 3,
+          "occupancyPct": 50,
+          "gapPolicy": "Intervening observed below-threshold calendar days; a missing observation always separates episodes."
+        },
+        {
+          "maxGapDays": 30,
+          "startDate": "2013-11-29",
+          "endDate": "2013-12-04",
+          "dayAfterHalving": 366,
+          "daysBeforePeak": 5,
+          "aboveThresholdDays": 3,
+          "occupancyPct": 50,
+          "gapPolicy": "Intervening observed below-threshold calendar days; a missing observation always separates episodes."
+        }
+      ]
+    },
+    {
+      "year": 2016,
+      "peakYear": 2017,
+      "halvingDate": "2016-07-09",
+      "current": false,
+      "windowEnd": "2020-05-10",
+      "peak": {
+        "date": "2017-12-16",
+        "price": 19640.5138834015,
+        "dayAfterHalving": 525,
+        "annualYear": 2017,
+        "provisional": false,
+        "selection": "Explicit reference-year maximum: 2017.",
+        "retrospective": true
+      },
+      "threshold": 0.95,
+      "thresholdPrice": 18658.488189231426,
+      "firstEntry": {
+        "date": "2017-12-16",
+        "price": 19640.5138834015,
+        "dayAfterHalving": 525,
+        "daysBeforePeak": 0,
+        "retrospective": true
+      },
+      "sustained5of7": null,
+      "sustained14consecutive": null,
+      "zoneStats": {
+        "startDate": "2017-12-16",
+        "endDate": "2017-12-16",
+        "observations": 1,
+        "elapsedDays": 0,
+        "completeDailyWindow": true,
+        "aboveThresholdDays": 1,
+        "occupancyPct": 100,
+        "maxDrawdownPct": 0,
+        "maxDrawdown": {
+          "peakDate": "2017-12-16",
+          "troughDate": "2017-12-16"
+        },
+        "longestAboveRunDays": 1,
+        "longestBelowRunDays": 0,
+        "returnPct": 0,
+        "annualizedVolatilityPct": null,
+        "dailyReturnObservations": 0,
+        "minimum": {
+          "date": "2017-12-16",
+          "price": 19640.5138834015
+        },
+        "maximum": {
+          "date": "2017-12-16",
+          "price": 19640.5138834015
+        },
+        "rangePctOfMinimum": 0
+      },
+      "prePeak90Days": {
+        "startDate": "2017-09-17",
+        "endDate": "2017-12-16",
+        "observations": 91,
+        "elapsedDays": 90,
+        "completeDailyWindow": true,
+        "aboveThresholdDays": 1,
+        "occupancyPct": 1.098901098901099,
+        "maxDrawdownPct": -21.76981124454257,
+        "maxDrawdown": {
+          "peakDate": "2017-11-08",
+          "troughDate": "2017-11-12"
+        },
+        "longestAboveRunDays": 1,
+        "longestBelowRunDays": 90,
+        "returnPct": 429.1291689147987,
+        "annualizedVolatilityPct": 95.28834820191688,
+        "dailyReturnObservations": 90,
+        "minimum": {
+          "date": "2017-09-21",
+          "price": 3617.24346580947
+        },
+        "maximum": {
+          "date": "2017-12-16",
+          "price": 19640.5138834015
+        },
+        "rangePctOfMinimum": 442.9690887286275
+      },
+      "terminalEpisodes": [
+        {
+          "maxGapDays": 0,
+          "startDate": "2017-12-16",
+          "endDate": "2017-12-16",
+          "dayAfterHalving": 525,
+          "daysBeforePeak": 0,
+          "aboveThresholdDays": 1,
+          "occupancyPct": 100,
+          "gapPolicy": "Intervening observed below-threshold calendar days; a missing observation always separates episodes."
+        },
+        {
+          "maxGapDays": 7,
+          "startDate": "2017-12-16",
+          "endDate": "2017-12-16",
+          "dayAfterHalving": 525,
+          "daysBeforePeak": 0,
+          "aboveThresholdDays": 1,
+          "occupancyPct": 100,
+          "gapPolicy": "Intervening observed below-threshold calendar days; a missing observation always separates episodes."
+        },
+        {
+          "maxGapDays": 14,
+          "startDate": "2017-12-16",
+          "endDate": "2017-12-16",
+          "dayAfterHalving": 525,
+          "daysBeforePeak": 0,
+          "aboveThresholdDays": 1,
+          "occupancyPct": 100,
+          "gapPolicy": "Intervening observed below-threshold calendar days; a missing observation always separates episodes."
+        },
+        {
+          "maxGapDays": 30,
+          "startDate": "2017-12-16",
+          "endDate": "2017-12-16",
+          "dayAfterHalving": 525,
+          "daysBeforePeak": 0,
+          "aboveThresholdDays": 1,
+          "occupancyPct": 100,
+          "gapPolicy": "Intervening observed below-threshold calendar days; a missing observation always separates episodes."
+        }
+      ]
+    },
+    {
+      "year": 2020,
+      "peakYear": 2021,
+      "halvingDate": "2020-05-11",
+      "current": false,
+      "windowEnd": "2024-04-19",
+      "peak": {
+        "date": "2021-11-08",
+        "price": 67541.7555081824,
+        "dayAfterHalving": 546,
+        "annualYear": 2021,
+        "provisional": false,
+        "selection": "Explicit reference-year maximum: 2021.",
+        "retrospective": true
+      },
+      "threshold": 0.95,
+      "thresholdPrice": 64164.667732773276,
+      "firstEntry": {
+        "date": "2021-10-19",
+        "price": 64290.8977574518,
+        "dayAfterHalving": 526,
+        "daysBeforePeak": 20,
+        "retrospective": true
+      },
+      "sustained5of7": null,
+      "sustained14consecutive": null,
+      "zoneStats": {
+        "startDate": "2021-10-19",
+        "endDate": "2021-11-08",
+        "observations": 21,
+        "elapsedDays": 20,
+        "completeDailyWindow": true,
+        "aboveThresholdDays": 3,
+        "occupancyPct": 14.285714285714285,
+        "maxDrawdownPct": -11.350676130578641,
+        "maxDrawdown": {
+          "peakDate": "2021-10-20",
+          "troughDate": "2021-10-27"
+        },
+        "longestAboveRunDays": 2,
+        "longestBelowRunDays": 18,
+        "returnPct": 5.056482121302763,
+        "annualizedVolatilityPct": 58.47178199006291,
+        "dailyReturnObservations": 20,
+        "minimum": {
+          "date": "2021-10-27",
+          "price": 58563.3359899766
+        },
+        "maximum": {
+          "date": "2021-11-08",
+          "price": 67541.7555081824
+        },
+        "rangePctOfMinimum": 15.331127174419334
+      },
+      "prePeak90Days": {
+        "startDate": "2021-08-10",
+        "endDate": "2021-11-08",
+        "observations": 91,
+        "elapsedDays": 90,
+        "completeDailyWindow": true,
+        "aboveThresholdDays": 3,
+        "occupancyPct": 3.296703296703297,
+        "maxDrawdownPct": -23.01284877721136,
+        "maxDrawdown": {
+          "peakDate": "2021-09-06",
+          "troughDate": "2021-09-21"
+        },
+        "longestAboveRunDays": 2,
+        "longestBelowRunDays": 70,
+        "returnPct": 48.479996134744006,
+        "annualizedVolatilityPct": 66.89509819741946,
+        "dailyReturnObservations": 90,
+        "minimum": {
+          "date": "2021-09-21",
+          "price": 40526.4893760958
+        },
+        "maximum": {
+          "date": "2021-11-08",
+          "price": 67541.7555081824
+        },
+        "rangePctOfMinimum": 66.66076077150002
+      },
+      "terminalEpisodes": [
+        {
+          "maxGapDays": 0,
+          "startDate": "2021-11-08",
+          "endDate": "2021-11-08",
+          "dayAfterHalving": 546,
+          "daysBeforePeak": 0,
+          "aboveThresholdDays": 1,
+          "occupancyPct": 100,
+          "gapPolicy": "Intervening observed below-threshold calendar days; a missing observation always separates episodes."
+        },
+        {
+          "maxGapDays": 7,
+          "startDate": "2021-11-08",
+          "endDate": "2021-11-08",
+          "dayAfterHalving": 546,
+          "daysBeforePeak": 0,
+          "aboveThresholdDays": 1,
+          "occupancyPct": 100,
+          "gapPolicy": "Intervening observed below-threshold calendar days; a missing observation always separates episodes."
+        },
+        {
+          "maxGapDays": 14,
+          "startDate": "2021-11-08",
+          "endDate": "2021-11-08",
+          "dayAfterHalving": 546,
+          "daysBeforePeak": 0,
+          "aboveThresholdDays": 1,
+          "occupancyPct": 100,
+          "gapPolicy": "Intervening observed below-threshold calendar days; a missing observation always separates episodes."
+        },
+        {
+          "maxGapDays": 30,
+          "startDate": "2021-10-19",
+          "endDate": "2021-11-08",
+          "dayAfterHalving": 526,
+          "daysBeforePeak": 20,
+          "aboveThresholdDays": 3,
+          "occupancyPct": 14.285714285714285,
+          "gapPolicy": "Intervening observed below-threshold calendar days; a missing observation always separates episodes."
+        }
+      ]
+    },
+    {
+      "year": 2024,
+      "peakYear": 2025,
+      "halvingDate": "2024-04-20",
+      "current": true,
+      "windowEnd": "2026-10-20",
+      "peak": {
+        "date": "2025-10-06",
+        "price": 124824.453666861,
+        "dayAfterHalving": 534,
+        "annualYear": null,
+        "provisional": true,
+        "selection": "Maximum observed since the 2024 halving; may change with new observations.",
+        "retrospective": true
+      },
+      "threshold": 0.95,
+      "thresholdPrice": 118583.23098351793,
+      "firstEntry": {
+        "date": "2025-07-13",
+        "price": 118899.737107832,
+        "dayAfterHalving": 449,
+        "daysBeforePeak": 85,
+        "retrospective": true
+      },
+      "sustained5of7": {
+        "date": "2025-10-06",
+        "price": 124824.453666861,
+        "dayAfterHalving": 534,
+        "daysBeforePeak": 0,
+        "retrospective": true,
+        "confirmationDate": "2025-10-06",
+        "firstQualifyingDate": "2025-10-02",
+        "earliestKnowableUtc": "2025-10-07T00:00:00.000Z",
+        "qualifyingDays": 5,
+        "requiredDays": 5,
+        "windowDays": 7,
+        "retrospectiveThreshold": true,
+        "causal": false
+      },
+      "sustained14consecutive": null,
+      "zoneStats": {
+        "startDate": "2025-07-13",
+        "endDate": "2025-10-06",
+        "observations": 86,
+        "elapsedDays": 85,
+        "completeDailyWindow": true,
+        "aboveThresholdDays": 16,
+        "occupancyPct": 18.6046511627907,
+        "maxDrawdownPct": -12.253649182941317,
+        "maxDrawdown": {
+          "peakDate": "2025-08-13",
+          "troughDate": "2025-08-31"
+        },
+        "longestAboveRunDays": 5,
+        "longestBelowRunDays": 49,
+        "returnPct": 4.9829517736071915,
+        "annualizedVolatilityPct": 29.167241877389927,
+        "dailyReturnObservations": 85,
+        "minimum": {
+          "date": "2025-08-31",
+          "price": 108316.44689481
+        },
+        "maximum": {
+          "date": "2025-10-06",
+          "price": 124824.453666861
+        },
+        "rangePctOfMinimum": 15.240535712995197
+      },
+      "prePeak90Days": {
+        "startDate": "2025-07-08",
+        "endDate": "2025-10-06",
+        "observations": 91,
+        "elapsedDays": 90,
+        "completeDailyWindow": true,
+        "aboveThresholdDays": 16,
+        "occupancyPct": 17.582417582417584,
+        "maxDrawdownPct": -12.253649182941317,
+        "maxDrawdown": {
+          "peakDate": "2025-08-13",
+          "troughDate": "2025-08-31"
+        },
+        "longestAboveRunDays": 5,
+        "longestBelowRunDays": 49,
+        "returnPct": 14.563429243115845,
+        "annualizedVolatilityPct": 29.921345779741827,
+        "dailyReturnObservations": 90,
+        "minimum": {
+          "date": "2025-08-31",
+          "price": 108316.44689481
+        },
+        "maximum": {
+          "date": "2025-10-06",
+          "price": 124824.453666861
+        },
+        "rangePctOfMinimum": 15.240535712995197
+      },
+      "terminalEpisodes": [
+        {
+          "maxGapDays": 0,
+          "startDate": "2025-10-02",
+          "endDate": "2025-10-06",
+          "dayAfterHalving": 530,
+          "daysBeforePeak": 4,
+          "aboveThresholdDays": 5,
+          "occupancyPct": 100,
+          "gapPolicy": "Intervening observed below-threshold calendar days; a missing observation always separates episodes."
+        },
+        {
+          "maxGapDays": 7,
+          "startDate": "2025-10-02",
+          "endDate": "2025-10-06",
+          "dayAfterHalving": 530,
+          "daysBeforePeak": 4,
+          "aboveThresholdDays": 5,
+          "occupancyPct": 100,
+          "gapPolicy": "Intervening observed below-threshold calendar days; a missing observation always separates episodes."
+        },
+        {
+          "maxGapDays": 14,
+          "startDate": "2025-10-02",
+          "endDate": "2025-10-06",
+          "dayAfterHalving": 530,
+          "daysBeforePeak": 4,
+          "aboveThresholdDays": 5,
+          "occupancyPct": 100,
+          "gapPolicy": "Intervening observed below-threshold calendar days; a missing observation always separates episodes."
+        },
+        {
+          "maxGapDays": 30,
+          "startDate": "2025-10-02",
+          "endDate": "2025-10-06",
+          "dayAfterHalving": 530,
+          "daysBeforePeak": 4,
+          "aboveThresholdDays": 5,
+          "occupancyPct": 100,
+          "gapPolicy": "Intervening observed below-threshold calendar days; a missing observation always separates episodes."
+        }
+      ]
+    }
+  ],
+  "current": {
+    "year": 2024,
+    "peakYear": 2025,
+    "halvingDate": "2024-04-20",
+    "current": true,
+    "windowEnd": "2026-10-20",
+    "peak": {
+      "date": "2025-10-06",
+      "price": 124824.453666861,
+      "dayAfterHalving": 534,
+      "annualYear": null,
+      "provisional": true,
+      "selection": "Maximum observed since the 2024 halving; may change with new observations.",
+      "retrospective": true
+    },
+    "threshold": 0.95,
+    "thresholdPrice": 118583.23098351793,
+    "firstEntry": {
+      "date": "2025-07-13",
+      "price": 118899.737107832,
+      "dayAfterHalving": 449,
+      "daysBeforePeak": 85,
+      "retrospective": true
+    },
+    "sustained5of7": {
+      "date": "2025-10-06",
+      "price": 124824.453666861,
+      "dayAfterHalving": 534,
+      "daysBeforePeak": 0,
+      "retrospective": true,
+      "confirmationDate": "2025-10-06",
+      "firstQualifyingDate": "2025-10-02",
+      "earliestKnowableUtc": "2025-10-07T00:00:00.000Z",
+      "qualifyingDays": 5,
+      "requiredDays": 5,
+      "windowDays": 7,
+      "retrospectiveThreshold": true,
+      "causal": false
+    },
+    "sustained14consecutive": null,
+    "zoneStats": {
+      "startDate": "2025-07-13",
+      "endDate": "2025-10-06",
+      "observations": 86,
+      "elapsedDays": 85,
+      "completeDailyWindow": true,
+      "aboveThresholdDays": 16,
+      "occupancyPct": 18.6046511627907,
+      "maxDrawdownPct": -12.253649182941317,
+      "maxDrawdown": {
+        "peakDate": "2025-08-13",
+        "troughDate": "2025-08-31"
+      },
+      "longestAboveRunDays": 5,
+      "longestBelowRunDays": 49,
+      "returnPct": 4.9829517736071915,
+      "annualizedVolatilityPct": 29.167241877389927,
+      "dailyReturnObservations": 85,
+      "minimum": {
+        "date": "2025-08-31",
+        "price": 108316.44689481
+      },
+      "maximum": {
+        "date": "2025-10-06",
+        "price": 124824.453666861
+      },
+      "rangePctOfMinimum": 15.240535712995197
+    },
+    "prePeak90Days": {
+      "startDate": "2025-07-08",
+      "endDate": "2025-10-06",
+      "observations": 91,
+      "elapsedDays": 90,
+      "completeDailyWindow": true,
+      "aboveThresholdDays": 16,
+      "occupancyPct": 17.582417582417584,
+      "maxDrawdownPct": -12.253649182941317,
+      "maxDrawdown": {
+        "peakDate": "2025-08-13",
+        "troughDate": "2025-08-31"
+      },
+      "longestAboveRunDays": 5,
+      "longestBelowRunDays": 49,
+      "returnPct": 14.563429243115845,
+      "annualizedVolatilityPct": 29.921345779741827,
+      "dailyReturnObservations": 90,
+      "minimum": {
+        "date": "2025-08-31",
+        "price": 108316.44689481
+      },
+      "maximum": {
+        "date": "2025-10-06",
+        "price": 124824.453666861
+      },
+      "rangePctOfMinimum": 15.240535712995197
+    },
+    "terminalEpisodes": [
+      {
+        "maxGapDays": 0,
+        "startDate": "2025-10-02",
+        "endDate": "2025-10-06",
+        "dayAfterHalving": 530,
+        "daysBeforePeak": 4,
+        "aboveThresholdDays": 5,
+        "occupancyPct": 100,
+        "gapPolicy": "Intervening observed below-threshold calendar days; a missing observation always separates episodes."
+      },
+      {
+        "maxGapDays": 7,
+        "startDate": "2025-10-02",
+        "endDate": "2025-10-06",
+        "dayAfterHalving": 530,
+        "daysBeforePeak": 4,
+        "aboveThresholdDays": 5,
+        "occupancyPct": 100,
+        "gapPolicy": "Intervening observed below-threshold calendar days; a missing observation always separates episodes."
+      },
+      {
+        "maxGapDays": 14,
+        "startDate": "2025-10-02",
+        "endDate": "2025-10-06",
+        "dayAfterHalving": 530,
+        "daysBeforePeak": 4,
+        "aboveThresholdDays": 5,
+        "occupancyPct": 100,
+        "gapPolicy": "Intervening observed below-threshold calendar days; a missing observation always separates episodes."
+      },
+      {
+        "maxGapDays": 30,
+        "startDate": "2025-10-02",
+        "endDate": "2025-10-06",
+        "dayAfterHalving": 530,
+        "daysBeforePeak": 4,
+        "aboveThresholdDays": 5,
+        "occupancyPct": 100,
+        "gapPolicy": "Intervening observed below-threshold calendar days; a missing observation always separates episodes."
+      }
+    ],
+    "latestPrice": 82898.9101560549,
+    "peakAgeDays": 379,
+    "troughCandidate": {
+      "date": "2026-06-30",
+      "price": 58525.0753614845,
+      "dayAfterHalving": 801,
+      "daysAfterPeak": 267,
+      "provisional": true,
+      "windowEnd": "2026-10-20",
+      "retrospective": true
+    },
+    "daysPeakToLow": 267,
+    "daysSinceLow": 112,
+    "currentDrawdownPct": -33.58760425477166,
+    "maxObservedDrawdownPct": -53.11409452054985,
+    "recoveryToPeakPct": 50.57429999005103,
+    "reboundFromLowPct": 41.64682342401713,
+    "regime": {
+      "asOf": "2026-10-20",
+      "state": "up",
+      "maValue": 72186.19893846886,
+      "aboveMA": true,
+      "maType": "geometric",
+      "maWindow": 200,
+      "persistence": 14,
+      "lastTransition": {
+        "type": "ma",
+        "direction": "up",
+        "eventDate": "2026-08-19",
+        "confirmationDate": "2026-09-01",
+        "knownAt": "2026-09-01",
+        "price": 77407.7011547107,
+        "maValue": 69196.49482014896,
+        "earliestKnowableUtc": "2026-09-02T00:00:00.000Z",
+        "maType": "geometric",
+        "maWindow": 200,
+        "persistence": 14,
+        "causal": true
+      },
+      "bearEpisodeActive": true,
+      "observedATH": 124824.453666861,
+      "episodePeakDate": "2025-10-06",
+      "runningLowIsPostPeak": true,
+      "runningLowDate": "2026-06-30",
+      "runningLowPrice": 58525.0753614845
+    },
+    "durationIdentity": {
+      "peakAgeDays": 379,
+      "daysPeakToLow": 267,
+      "daysSinceLow": 112,
+      "holds": true
+    }
+  },
+  "comparison": {
+    "firstEntry": {
+      "historicalValues": [
+        525,
+        526
+      ],
+      "historicalYears": [
+        2016,
+        2020
+      ],
+      "n": 2,
+      "eligibleHistoricalCycles": 2,
+      "medianDays": 525.5,
+      "currentDays": 449,
+      "leadDays": 76.5,
+      "leadMonthsApprox": 2.51339863241545
+    },
+    "sustained5of7": {
+      "historicalValues": [],
+      "historicalYears": [
+        2016,
+        2020
+      ],
+      "n": 0,
+      "eligibleHistoricalCycles": 2,
+      "medianDays": null,
+      "currentDays": 534,
+      "leadDays": null,
+      "leadMonthsApprox": null
+    },
+    "absolutePeak": {
+      "historicalValues": [
+        525,
+        546
+      ],
+      "historicalYears": [
+        2016,
+        2020
+      ],
+      "n": 2,
+      "eligibleHistoricalCycles": 2,
+      "medianDays": 535.5,
+      "currentDays": 534,
+      "leadDays": 1.5,
+      "leadMonthsApprox": 0.049282326125793134
+    }
+  },
+  "calendarFourYear": {
+    "firstEntryReferenceDate": "2025-10-19",
+    "firstEntryAdvanceDays": 98,
+    "absolutePeakReferenceDate": "2025-11-08",
+    "absolutePeakAdvanceDays": 33,
+    "basis": "Same previous-cycle event plus 48 calendar months; distinct from elapsed days since each halving."
+  },
+  "sensitivity": [
+    {
+      "threshold": 0.9,
+      "cycleEntries": [
+        {
+          "year": 2012,
+          "date": "2013-11-29",
+          "price": 1128.7254880187,
+          "dayAfterHalving": 366,
+          "daysBeforePeak": 5,
+          "retrospective": true
+        },
+        {
+          "year": 2016,
+          "date": "2017-12-15",
+          "price": 17702.0021721216,
+          "dayAfterHalving": 524,
+          "daysBeforePeak": 1,
+          "retrospective": true
+        },
+        {
+          "year": 2020,
+          "date": "2021-03-13",
+          "price": 61288.7941276447,
+          "dayAfterHalving": 306,
+          "daysBeforePeak": 240,
+          "retrospective": true
+        },
+        {
+          "year": 2024,
+          "date": "2025-07-10",
+          "price": 115873.903783752,
+          "dayAfterHalving": 446,
+          "daysBeforePeak": 88,
+          "retrospective": true
+        }
+      ],
+      "currentDate": "2025-07-10",
+      "currentDayAfterHalving": 446,
+      "medianDays": 415,
+      "n": 2,
+      "leadDays": -31,
+      "leadMonthsApprox": -1.0185014065997249,
+      "calendarLeadDays": -119,
+      "currentSustained5of7": {
+        "date": "2025-07-14",
+        "price": 119871.096197838,
+        "dayAfterHalving": 450,
+        "daysBeforePeak": 84,
+        "retrospective": true,
+        "confirmationDate": "2025-07-14",
+        "firstQualifyingDate": "2025-07-10",
+        "earliestKnowableUtc": "2025-07-15T00:00:00.000Z",
+        "qualifyingDays": 5,
+        "requiredDays": 5,
+        "windowDays": 7,
+        "retrospectiveThreshold": true,
+        "causal": false
+      },
+      "sameUnderlyingObservations": true
+    },
+    {
+      "threshold": 0.93,
+      "cycleEntries": [
+        {
+          "year": 2012,
+          "date": "2013-11-29",
+          "price": 1128.7254880187,
+          "dayAfterHalving": 366,
+          "daysBeforePeak": 5,
+          "retrospective": true
+        },
+        {
+          "year": 2016,
+          "date": "2017-12-16",
+          "price": 19640.5138834015,
+          "dayAfterHalving": 525,
+          "daysBeforePeak": 0,
+          "retrospective": true
+        },
+        {
+          "year": 2020,
+          "date": "2021-04-13",
+          "price": 63445.638314436,
+          "dayAfterHalving": 337,
+          "daysBeforePeak": 209,
+          "retrospective": true
+        },
+        {
+          "year": 2024,
+          "date": "2025-07-11",
+          "price": 117618.605087084,
+          "dayAfterHalving": 447,
+          "daysBeforePeak": 87,
+          "retrospective": true
+        }
+      ],
+      "currentDate": "2025-07-11",
+      "currentDayAfterHalving": 447,
+      "medianDays": 431,
+      "n": 2,
+      "leadDays": -16,
+      "leadMonthsApprox": -0.5256781453417935,
+      "calendarLeadDays": -89,
+      "currentSustained5of7": {
+        "date": "2025-07-15",
+        "price": 117710.89100789,
+        "dayAfterHalving": 451,
+        "daysBeforePeak": 83,
+        "retrospective": true,
+        "confirmationDate": "2025-07-15",
+        "firstQualifyingDate": "2025-07-11",
+        "earliestKnowableUtc": "2025-07-16T00:00:00.000Z",
+        "qualifyingDays": 5,
+        "requiredDays": 5,
+        "windowDays": 7,
+        "retrospectiveThreshold": true,
+        "causal": false
+      },
+      "sameUnderlyingObservations": true
+    },
+    {
+      "threshold": 0.94,
+      "cycleEntries": [
+        {
+          "year": 2012,
+          "date": "2013-11-29",
+          "price": 1128.7254880187,
+          "dayAfterHalving": 366,
+          "daysBeforePeak": 5,
+          "retrospective": true
+        },
+        {
+          "year": 2016,
+          "date": "2017-12-16",
+          "price": 19640.5138834015,
+          "dayAfterHalving": 525,
+          "daysBeforePeak": 0,
+          "retrospective": true
+        },
+        {
+          "year": 2020,
+          "date": "2021-10-19",
+          "price": 64290.8977574518,
+          "dayAfterHalving": 526,
+          "daysBeforePeak": 20,
+          "retrospective": true
+        },
+        {
+          "year": 2024,
+          "date": "2025-07-11",
+          "price": 117618.605087084,
+          "dayAfterHalving": 447,
+          "daysBeforePeak": 87,
+          "retrospective": true
+        }
+      ],
+      "currentDate": "2025-07-11",
+      "currentDayAfterHalving": 447,
+      "medianDays": 525.5,
+      "n": 2,
+      "leadDays": 78.5,
+      "leadMonthsApprox": 2.5791084005831744,
+      "calendarLeadDays": 100,
+      "currentSustained5of7": {
+        "date": "2025-07-15",
+        "price": 117710.89100789,
+        "dayAfterHalving": 451,
+        "daysBeforePeak": 83,
+        "retrospective": true,
+        "confirmationDate": "2025-07-15",
+        "firstQualifyingDate": "2025-07-11",
+        "earliestKnowableUtc": "2025-07-16T00:00:00.000Z",
+        "qualifyingDays": 5,
+        "requiredDays": 5,
+        "windowDays": 7,
+        "retrospectiveThreshold": true,
+        "causal": false
+      },
+      "sameUnderlyingObservations": true
+    },
+    {
+      "threshold": 0.95,
+      "cycleEntries": [
+        {
+          "year": 2012,
+          "date": "2013-11-29",
+          "price": 1128.7254880187,
+          "dayAfterHalving": 366,
+          "daysBeforePeak": 5,
+          "retrospective": true
+        },
+        {
+          "year": 2016,
+          "date": "2017-12-16",
+          "price": 19640.5138834015,
+          "dayAfterHalving": 525,
+          "daysBeforePeak": 0,
+          "retrospective": true
+        },
+        {
+          "year": 2020,
+          "date": "2021-10-19",
+          "price": 64290.8977574518,
+          "dayAfterHalving": 526,
+          "daysBeforePeak": 20,
+          "retrospective": true
+        },
+        {
+          "year": 2024,
+          "date": "2025-07-13",
+          "price": 118899.737107832,
+          "dayAfterHalving": 449,
+          "daysBeforePeak": 85,
+          "retrospective": true
+        }
+      ],
+      "currentDate": "2025-07-13",
+      "currentDayAfterHalving": 449,
+      "medianDays": 525.5,
+      "n": 2,
+      "leadDays": 76.5,
+      "leadMonthsApprox": 2.51339863241545,
+      "calendarLeadDays": 98,
+      "currentSustained5of7": {
+        "date": "2025-10-06",
+        "price": 124824.453666861,
+        "dayAfterHalving": 534,
+        "daysBeforePeak": 0,
+        "retrospective": true,
+        "confirmationDate": "2025-10-06",
+        "firstQualifyingDate": "2025-10-02",
+        "earliestKnowableUtc": "2025-10-07T00:00:00.000Z",
+        "qualifyingDays": 5,
+        "requiredDays": 5,
+        "windowDays": 7,
+        "retrospectiveThreshold": true,
+        "causal": false
+      },
+      "sameUnderlyingObservations": true
+    },
+    {
+      "threshold": 0.98,
+      "cycleEntries": [
+        {
+          "year": 2012,
+          "date": "2013-11-29",
+          "price": 1128.7254880187,
+          "dayAfterHalving": 366,
+          "daysBeforePeak": 5,
+          "retrospective": true
+        },
+        {
+          "year": 2016,
+          "date": "2017-12-16",
+          "price": 19640.5138834015,
+          "dayAfterHalving": 525,
+          "daysBeforePeak": 0,
+          "retrospective": true
+        },
+        {
+          "year": 2020,
+          "date": "2021-11-08",
+          "price": 67541.7555081824,
+          "dayAfterHalving": 546,
+          "daysBeforePeak": 0,
+          "retrospective": true
+        },
+        {
+          "year": 2024,
+          "date": "2025-08-13",
+          "price": 123442.67982225,
+          "dayAfterHalving": 480,
+          "daysBeforePeak": 54,
+          "retrospective": true
+        }
+      ],
+      "currentDate": "2025-08-13",
+      "currentDayAfterHalving": 480,
+      "medianDays": 535.5,
+      "n": 2,
+      "leadDays": 55.5,
+      "leadMonthsApprox": 1.823446066654346,
+      "calendarLeadDays": 87,
+      "currentSustained5of7": null,
+      "sameUnderlyingObservations": true
+    }
+  ],
+  "july2025": {
+    "date": "2025-07-22",
+    "price": 120068.00578872,
+    "pctOfPeak": 96.1894903294868,
+    "remainingUpsidePct": 3.961461545809941,
+    "daysBeforePeak": 76,
+    "referencePeakDate": "2025-10-06",
+    "referencePeakProvisional": true
+  },
+  "spring2021": {
+    "date": "2021-04-13",
+    "price": 63445.638314436,
+    "pctOfPeak": 93.93542977536293,
+    "referencePeakDate": "2021-11-08"
+  },
+  "plateau2025": {
+    "calendarJulyToPeak": {
+      "startDate": "2025-07-01",
+      "endDate": "2025-10-06",
+      "observations": 98,
+      "elapsedDays": 97,
+      "completeDailyWindow": true,
+      "aboveThresholdDays": 16,
+      "occupancyPct": 16.3265306122449,
+      "maxDrawdownPct": -12.253649182941317,
+      "maxDrawdown": {
+        "peakDate": "2025-08-13",
+        "troughDate": "2025-08-31"
+      },
+      "longestAboveRunDays": 5,
+      "longestBelowRunDays": 49,
+      "returnPct": 18.242646321800613,
+      "annualizedVolatilityPct": 29.67741279743976,
+      "dailyReturnObservations": 97,
+      "minimum": {
+        "date": "2025-07-01",
+        "price": 105566.356597896
+      },
+      "maximum": {
+        "date": "2025-10-06",
+        "price": 124824.453666861
+      },
+      "rangePctOfMinimum": 18.242646321800613
+    },
+    "first90ToPeak": {
+      "startDate": "2025-07-10",
+      "endDate": "2025-10-06",
+      "observations": 89,
+      "elapsedDays": 88,
+      "completeDailyWindow": true,
+      "aboveThresholdDays": 69,
+      "occupancyPct": 77.52808988764045,
+      "maxDrawdownPct": -12.253649182941317,
+      "maxDrawdown": {
+        "peakDate": "2025-08-13",
+        "troughDate": "2025-08-31"
+      },
+      "longestAboveRunDays": 46,
+      "longestBelowRunDays": 12,
+      "returnPct": 7.724387969022617,
+      "annualizedVolatilityPct": 28.92025126069178,
+      "dailyReturnObservations": 88,
+      "minimum": {
+        "date": "2025-08-31",
+        "price": 108316.44689481
+      },
+      "maximum": {
+        "date": "2025-10-06",
+        "price": 124824.453666861
+      },
+      "rangePctOfMinimum": 15.240535712995197
+    },
+    "first95ToPeak": {
+      "startDate": "2025-07-13",
+      "endDate": "2025-10-06",
+      "observations": 86,
+      "elapsedDays": 85,
+      "completeDailyWindow": true,
+      "aboveThresholdDays": 16,
+      "occupancyPct": 18.6046511627907,
+      "maxDrawdownPct": -12.253649182941317,
+      "maxDrawdown": {
+        "peakDate": "2025-08-13",
+        "troughDate": "2025-08-31"
+      },
+      "longestAboveRunDays": 5,
+      "longestBelowRunDays": 49,
+      "returnPct": 4.9829517736071915,
+      "annualizedVolatilityPct": 29.167241877389927,
+      "dailyReturnObservations": 85,
+      "minimum": {
+        "date": "2025-08-31",
+        "price": 108316.44689481
+      },
+      "maximum": {
+        "date": "2025-10-06",
+        "price": 124824.453666861
+      },
+      "rangePctOfMinimum": 15.240535712995197
+    }
+  },
+  "methodology": {
+    "priceConvention": "Coin Metrics PriceUSD UTC end-of-day price; not an exchange intraday high.",
+    "firstEntry": "First close on or after the halving with P(t) >= threshold × selected reference peak, searched only through that peak day.",
+    "persistence": "The first 7 consecutive calendar days containing at least 5 qualifying closes; the date is the confirming close. Missing days interrupt the window.",
+    "occupancy": "Qualifying observed closes divided by all observed closes from first entry through peak, both endpoints included. Gaps are disclosed.",
+    "volatility": "Sample standard deviation of adjacent one-calendar-day log returns, multiplied by sqrt(365). The 90-day window normally contains 91 closes and 90 returns.",
+    "historicalPeakRule": "Explicit annual maxima in 2013, 2017 and 2021; selection is retrospective.",
+    "currentPeakRule": "Maximum observed from the 2024 halving through asOf, not a fixed annual maximum.",
+    "positiveLeadMeaning": "Historical median halving-to-event days minus current days; positive means current event was earlier.",
+    "approximateMonthDays": 30.436875,
+    "noProbabilityEstimate": true
+  },
+  "warnings": [
+    "최종 관측 고점을 분모로 한 고점권 진입은 사후 계산입니다. 당시 최종 고점임을 알았다는 뜻이 아닙니다.",
+    "현재 최고가와 저점은 관측 후보입니다. 새로운 최고가·저점이 나오면 날짜와 관련 계산이 바뀝니다.",
+    "2021년 봄 최고 종가는 11월 최고 종가의 약 93.94%였습니다. 93%→94% 기준 변경으로 첫 진입 시기가 봄에서 가을로 바뀝니다.",
+    "첫 진입, 7일 중 5일 유지, 마지막 고점 구간, 최고가 날짜는 서로 다른 사건입니다.",
+    "고점 미회복 기간에는 저점 이후 반등 기간도 포함됩니다. 고점부터 저점까지의 하락 기간과 구분해야 합니다.",
+    "과거 1~3개 회차와 여러 임계값은 동일 관측을 공유합니다. 고정된 주기 단축이나 예측 확률을 증명하지 않습니다."
+  ]
+}
