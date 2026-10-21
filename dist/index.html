@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="./styles.css">
   <link rel="stylesheet" href="./compact.css">
   <link rel="stylesheet" href="./outlook.css">
+  <link rel="stylesheet" href="./lab.css">
 </head>
 <body>
   <a class="skip-link" href="#main">본문으로 이동</a>
@@ -17,39 +18,50 @@
     <button class="atlas-brand" data-view="outlook" aria-label="Bitcoin Cycles 3년 전망"><span aria-hidden="true">₿</span><div>Bitcoin Cycles<small>RESEARCH WORKSPACE</small></div></button>
     <nav class="atlas-nav" aria-label="주요 페이지">
       <button data-view="outlook" class="active" aria-current="page" title="3년 전망"><span data-icon="trend"></span><span>3년 전망</span></button>
-      <button data-view="compare" title="사이클 비교"><span data-icon="layers"></span><span>사이클 비교</span></button>
+      <button data-view="compare" title="사이클 구조"><span data-icon="layers"></span><span>사이클 구조</span></button>
       <button data-view="evidence" title="리서치 우선순위"><span data-icon="book"></span><span>리서치 자료</span></button>
       <button data-view="data" title="일별 원자료"><span data-icon="table"></span><span>원자료</span></button>
     </nav>
-    <div class="atlas-side-foot"><strong>관측과 가정을 구분합니다</strong><br><span id="sidebar-asof">관측 · 2026.10.20 UTC</span><br>연구 기준 · 2026.10.21 KST</div>
+    <div class="atlas-side-foot"><strong>관측과 가정을 구분합니다</strong><br><span id="sidebar-asof">관측 · 2026.10.20 UTC</span><br>연구 기준 · 2026.10.22 KST</div>
   </aside>
   <div class="workspace">
     <main id="main">
-      <section id="outlook-view" aria-labelledby="outlook-heading">
-        <header class="outlook-heading"><div><h1 id="outlook-heading">앞으로의 3년</h1><p>약 3년 상승 · 약 1년 하락을 기준으로, 고점권 도달과 고점 형성 기간을 나눠 봅니다.</p></div><div class="outlook-date">2026.10.21 — 2029.10.21<small>연구 기준일 · 한국 시간</small></div></header>
-        <section class="outlook-card" aria-labelledby="outlook-chart-title">
-          <div class="outlook-card-top"><h2 id="outlook-chart-title">같은 큰 주기, 다른 전환 시점<span class="outlook-tag">조건부 시나리오</span></h2><div class="outlook-tools"><select id="outlook-scenario" aria-label="3년 전망 시나리오"><option value="base">기준 · 3개월 / 3개월</option><option value="early-arrival-6">빠른 도달 · 6개월 / 6개월</option><option value="early-arrival-9">더 빠른 도달 · 9개월 / 9개월</option><option value="early-turn">이른 전환 · 9개월 / 5개월</option><option value="delayed">늦은 전환 · 3개월 / 6개월</option><option value="stress">저점 이탈 · 스트레스</option><option value="custom" disabled>직접 설정</option></select><select id="outlook-unit" aria-label="전망 그래프 가격 단위"><option value="indexed">현재 = 100</option><option value="usd">가격 · USD</option></select><button id="outlook-export-svg" class="subtle-button" aria-label="3년 전망 SVG 저장">SVG ↓</button></div></div>
-          <div class="outlook-axis"><span id="outlook-axis-label">현재 = 100 · 로그 눈금</span><span>실선 관측 · 점선 계산 · 음영은 가격 가정 범위</span></div>
-          <div id="outlook-chart-stage" class="outlook-chart-stage"><svg id="outlook-chart" role="img" aria-label="2029년 10월까지의 비트코인 조건부 방향성 그래프"></svg><div id="outlook-tooltip" class="outlook-tooltip" hidden></div></div>
-          <div id="outlook-legend" class="outlook-legend" aria-label="그래프 시나리오 선택"></div>
-          <p id="outlook-caption" class="outlook-caption">관측 자료에서 계산하고 있습니다.</p>
+      <section id="outlook-view" class="lab-page" aria-labelledby="outlook-heading">
+        <header class="lab-heading"><div><span class="lab-eyebrow">BITCOIN / SCENARIO WORKSPACE</span><h1 id="outlook-heading">앞으로의 3년</h1></div><div class="lab-date">2026.10.22 — 2029.10.22<small id="lab-asof">UTC 일말 자료 · 계산 중</small></div></header>
+        <div id="lab-metrics" class="lab-metrics" aria-live="polite"></div>
+        <section class="lab-panel" aria-label="3년 조건부 경로 차트">
+          <div class="lab-toolbar"><div class="lab-toolbar-group"><select id="lab-scenario" aria-label="거시 시나리오"><option value="base">기준 주기</option><option value="accelerated">빠른 도달 · 이른 전환</option><option value="wait">빠른 도달 · 긴 고점권</option><option value="late">늦은 전환</option><option value="stress">저점 이탈</option></select><div class="lab-segmented" aria-label="차트 관측 간격"><button data-lab-frequency="daily" aria-pressed="true">일봉</button><button data-lab-frequency="weekly" aria-pressed="false">주봉</button></div></div><div class="lab-toolbar-group"><select id="lab-window" aria-label="전망 차트 확대 구간"><option value="all">3년 전체</option><option value="history">전체 역사 + 3년</option><option value="0">첫 1년</option><option value="1">두 번째 1년</option><option value="2">세 번째 1년</option></select><select id="lab-unit" aria-label="전망 가격 단위"><option value="usd">USD</option><option value="indexed">현재 = 100</option></select><button id="lab-svg" class="lab-text-button" aria-label="전망 차트 SVG 다운로드">SVG ↓</button></div></div>
+          <div class="lab-chart-meta"><span id="lab-chart-title">과거 변동을 재표본한 일별 경로</span><span>로그 눈금 · UTC</span></div>
+          <div id="lab-chart-stage" class="lab-chart-stage"><svg id="lab-chart" role="img" tabindex="0" aria-label="비트코인 과거 관측값과 향후 3년 조건부 경로. 좌우 방향키로 날짜를 이동할 수 있습니다."></svg><div id="lab-tooltip" class="lab-tooltip" hidden></div></div>
+          <div class="lab-chart-foot"><div class="lab-legend"><span><i class="legend-observed"></i>관측</span><span><i class="legend-simulated"></i>대표 모의 경로</span><span><i class="legend-band"></i>10–90% 경로 범위</span><span><i class="legend-turn"></i>12% 방향 전환</span></div><span class="lab-caveat">조건부 경로 · 예측 우위 미확인</span></div>
         </section>
-        <div class="outlook-assumptions-row"><label><input id="outlook-compare-paths" type="checkbox" checked>다른 시나리오 함께 보기</label><label><input id="outlook-show-history" type="checkbox" checked>2025년 고점 구간 포함</label><label><input id="outlook-show-band" type="checkbox" checked>가격 가정 범위</label><button id="outlook-export-json" class="text-link">계산 조건 · 결과 JSON ↓</button></div>
-        <div class="outlook-control-head"><h2>시기와 가격 가정</h2><button id="outlook-reset" class="text-link">기준값으로 초기화 ↺</button></div>
-        <div class="outlook-controls">
-          <div class="outlook-control"><label for="outlook-arrival">A · 고점권 도달 시차<output id="outlook-arrival-value" for="outlook-arrival">3개월 먼저</output></label><input id="outlook-arrival" type="range" min="-6" max="12" step="1" value="3"><small>명목 최고점에서 역산합니다.<br>음수는 그보다 늦은 도달입니다.</small></div>
-          <div class="outlook-control"><label for="outlook-dwell">D · 고점 형성 기간<output id="outlook-dwell-value" for="outlook-dwell">3개월</output></label><input id="outlook-dwell" type="range" min="0" max="9" step="1" value="3"><small>고점권 첫 도달부터 최고가까지.<br>중간 조정을 포함하는 기간입니다.</small></div>
-          <div class="outlook-control"><label for="outlook-multiple">고점 가격 배수 가정<output id="outlook-multiple-value" for="outlook-multiple">계산 중</output></label><input id="outlook-multiple" type="range" min="1.6" max="8" step=".05" value="3"><small>최신 관측 가격에 곱하는 배수.<br>가격 목표나 확률 추정치가 아닙니다.</small></div>
-          <div class="outlook-control"><label for="outlook-drawdown">고점 이후 낙폭 가정<output id="outlook-drawdown-value" for="outlook-drawdown">50%</output></label><input id="outlook-drawdown" type="range" min="20" max="80" step="1" value="50"><small>약 1년 하락 구간에 적용합니다.<br>향후 저점은 표시 범위 밖일 수 있습니다.</small></div>
-        </div>
-        <p id="outlook-equation" class="outlook-equation"></p><p id="outlook-error" class="outlook-error" role="alert" hidden></p>
-        <h2 class="outlook-section-title">방향이 달라지는 시점</h2><div class="table-scroll"><table class="outlook-events"><thead><tr><th>사건</th><th>조건부 날짜 · UTC</th><th>현재 = 100</th><th>가격 가정 · USD</th><th>구분</th></tr></thead><tbody id="outlook-events-body"></tbody></table></div>
-        <details id="outlook-method" class="outlook-card outlook-method"><summary>수학적 구조 · 과거 검증 · 반증 조건</summary><div id="outlook-method-body" class="outlook-method-body"></div></details>
+        <div class="lab-options"><label><input id="lab-band" type="checkbox" checked>경로 범위</label><label><input id="lab-turns" type="checkbox" checked>세부 고저점</label><label><input id="lab-fib" type="checkbox">확인된 스윙의 되돌림</label><button id="lab-json" class="lab-text-button">계산 결과 JSON ↓</button></div>
+        <div class="lab-section-head"><h2>주요 시점</h2><div class="lab-segmented"><button data-lab-events="macro" aria-pressed="true">거시 기준일</button><button data-lab-events="local" aria-pressed="false">세부 고저점</button></div></div>
+        <div class="lab-table-scroll"><table class="lab-table"><thead id="lab-events-head"></thead><tbody id="lab-events-body"></tbody></table></div><div id="lab-events-foot" class="lab-table-foot"></div>
+        <details class="lab-details"><summary>계산 가정 · 과거 검증</summary><div id="lab-method" class="lab-details-body"></div></details>
+        <p id="lab-error" class="lab-error" role="alert" hidden></p>
       </section>
       <section id="evidence-view" aria-label="리서치 우선순위" hidden>
-        <div class="evidence-table-shell"><table class="evidence-table"><caption>리서치 읽기 순서 <span id="evidence-total"></span><span>원자료 → 당시 관찰 → 사전 전망 → 반론 → 사후·소셜</span></caption><colgroup><col class="evidence-rank-col" style="width:52px"><col><col class="evidence-publisher-col" style="width:140px"><col class="evidence-date-col" style="width:108px"><col class="evidence-role-col" style="width:125px"><col class="evidence-grade-col" style="width:68px"></colgroup><thead><tr><th scope="col">순서</th><th scope="col">자료 제목</th><th class="evidence-publisher" scope="col">출처</th><th class="evidence-date" scope="col">발행일</th><th class="evidence-role" scope="col">읽는 목적</th><th scope="col">근거</th></tr></thead><tbody id="evidence-body"></tbody><tfoot><tr id="evidence-sentinel"><td colspan="6"><button id="evidence-more">다음 자료 더 보기</button><span id="evidence-progress" role="status" aria-live="polite"></span><span id="evidence-end" hidden></span></td></tr></tfoot></table></div>
+        <div class="evidence-table-shell"><table class="evidence-table"><caption>리서치 읽기 순서 <span id="evidence-total"></span><span>원자료 → 검증 방법 → 지정 차트 → 교차 검증 → 소셜</span></caption><colgroup><col class="evidence-rank-col" style="width:52px"><col><col class="evidence-publisher-col" style="width:140px"><col class="evidence-date-col" style="width:108px"><col class="evidence-role-col" style="width:125px"><col class="evidence-grade-col" style="width:68px"></colgroup><thead><tr><th scope="col">순서</th><th scope="col">자료 제목</th><th class="evidence-publisher" scope="col">출처</th><th class="evidence-date" scope="col">발행일</th><th class="evidence-role" scope="col">읽는 목적</th><th scope="col">근거</th></tr></thead><tbody id="evidence-body"></tbody><tfoot><tr id="evidence-sentinel"><td colspan="6"><button id="evidence-more">다음 자료 더 보기</button><span id="evidence-progress" role="status" aria-live="polite"></span><span id="evidence-end" hidden></span></td></tr></tfoot></table></div>
       </section>
-      <section id="compare-view" hidden>
+      <section id="compare-view" class="lab-page" hidden>
+        <header class="lab-heading"><div><span class="lab-eyebrow">2010 — PRESENT / MULTISCALE</span><h1>사이클 내부의 구조</h1></div><div class="lab-date" id="structure-range">일 · 주 · 월 · 분기<small>완료되지 않은 기간은 별도 표시</small></div></header>
+        <section class="lab-panel" aria-label="2010년부터의 비트코인 내부 구간">
+          <div class="lab-toolbar"><div class="lab-toolbar-group"><select id="structure-scope" aria-label="역사 차트의 4년 구간"><option value="all">2010년부터 전체</option><option value="2010">2010–2013</option><option value="2014">2014–2017</option><option value="2018">2018–2021</option><option value="2022">2022–2025</option><option value="2026">2026년부터 · 진행 중</option></select><div class="lab-segmented"><button data-structure-frequency="daily" aria-pressed="false">일봉</button><button data-structure-frequency="weekly" aria-pressed="true">주봉</button></div></div><div class="lab-toolbar-group"><select id="structure-threshold" aria-label="방향 전환 확인 임계값"><option value="0.08">방향 전환 8%</option><option value="0.12" selected>방향 전환 12%</option><option value="0.20">방향 전환 20%</option></select><button id="structure-json" class="lab-text-button">JSON ↓</button></div></div>
+          <div class="lab-chart-meta"><span>BTC / USD · 관측값</span><span>로그 눈금 · 일말 가격 기준</span></div>
+          <div id="structure-chart-stage" class="lab-chart-stage"><svg id="structure-chart" role="img" tabindex="0" aria-label="2010년부터 현재까지 가격, 낙폭 및 당시 정보로 분류한 국면"></svg><div id="structure-tooltip" class="lab-tooltip" hidden></div></div>
+          <div id="structure-legend" class="lab-legend structure-legend"></div>
+        </section>
+        <div class="lab-section-head"><h2>같은 4년, 다른 내부 길이</h2><select id="structure-alignment" aria-label="4년 내부 구간 정렬"><option value="calendar">고정 달력 4년</option><option value="trough">저점부터 4년</option></select></div>
+        <div class="lab-timeline-panel"><svg id="structure-timeline" role="img" aria-label="사이클별 국면 기간을 같은 4년 축에 정렬한 차트"></svg></div>
+        <div class="lab-table-scroll"><table class="lab-table"><thead><tr><th>사이클 · 일말 기준</th><th>저점 → 고점</th><th>고점 → 다음 저점</th><th>합계</th><th>관측 상태</th></tr></thead><tbody id="structure-cycles"></tbody></table></div>
+        <p id="structure-conclusion" class="lab-inline-note"></p>
+        <div class="lab-section-head"><h2>기간별 낙폭과 가격 발견</h2><div class="lab-segmented"><button data-structure-period="monthly" aria-pressed="true">월별</button><button data-structure-period="quarterly" aria-pressed="false">분기별</button></div></div>
+        <div class="lab-table-scroll"><table class="lab-table"><thead><tr><th>기간 · UTC</th><th>수익률</th><th>기간 내 MDD</th><th>전고점 대비</th><th>실현 변동성</th><th>가격 발견 일수</th><th>스윙 되돌림</th><th>완료 여부</th></tr></thead><tbody id="structure-periods"></tbody></table></div><div class="lab-pagination"><span id="structure-period-count"></span><button id="structure-prev" aria-label="더 최근 기간">←</button><button id="structure-next" aria-label="더 오래된 기간">→</button></div>
+        <details class="lab-details"><summary>국면 길이 · 단축/연장 민감도</summary><div id="structure-durations" class="lab-details-body"></div></details>
+        <details class="lab-details"><summary>피보나치 되돌림 · 대조 비율 검증</summary><div id="structure-fibonacci" class="lab-details-body"></div></details>
+        <details class="lab-details"><summary>정의 · 수식 · 데이터 한계</summary><div id="structure-method" class="lab-details-body"></div></details>
+        <details id="legacy-comparison" class="lab-details legacy-comparison"><summary>반감기 · 고점권 · 이전 기준점 비교</summary><div class="legacy-body">
         <section class="chart-card" aria-labelledby="chart-heading">
           <div class="chart-card-header compact-header"><h1 id="chart-heading">비트코인 사이클 <span class="small-label">BTC / USD</span></h1><div class="compact-actions"><a class="text-link" href="#analysis-workbench" id="jump-forecast">미래 고저점 보기 ↓</a><div class="export-wrap"><button id="export-button" class="subtle-button" aria-haspopup="menu" aria-expanded="false"><span data-icon="table"></span>데이터 · 도구<span data-icon="chevron"></span></button><div id="export-menu" class="dropdown" role="menu" hidden><button data-view="data" role="menuitem">원자료 탐색</button><button id="refresh-button" role="menuitem"><span data-icon="refresh"></span>데이터 갱신</button><button data-method role="menuitem">방법론 · 출처</button><hr><button id="export-csv" role="menuitem">비교 데이터 CSV</button><button id="export-png" role="menuitem">차트 이미지 PNG</button><button id="export-svg" role="menuitem">벡터 이미지 SVG</button><button id="export-timing" role="menuitem">전환 분석 JSON</button><button id="export-research" role="menuitem">고점 · 미래 분석 JSON</button></div></div></div></div>
           <div class="anchor-tabs" role="tablist" aria-label="사이클 시작 기준">
@@ -103,6 +115,7 @@
         </section>
         <section class="comparison-section" aria-labelledby="comparison-heading"><div class="section-title-row"><div><h2 id="comparison-heading">경과일별 비교</h2></div><button id="jump-today" class="text-link">현재 경과일로 <span>↗</span></button></div><div class="day-selector"><label for="day-cursor">비교 시점 <strong id="day-cursor-value">D + 0</strong></label><input id="day-cursor" type="range" min="0" max="1461" value="0" aria-label="비교할 경과일"><input id="day-number" type="number" min="0" max="1461" value="0" aria-label="비교 경과일 직접 입력"><span>일</span></div><div class="table-scroll"><table class="comparison-table"><thead><tr><th scope="col">사이클</th><th scope="col">실제 관측일</th><th scope="col">실제 가격</th><th scope="col" id="table-unit-header">환산 가격</th><th scope="col">기준일 대비</th><th scope="col">가격 배수</th></tr></thead><tbody id="comparison-body"></tbody></table></div><p class="table-footnote">환산 가격은 비교를 위한 계산값입니다. 실제 거래 가격은 ‘실제 가격’ 열에서 확인하세요.</p></section>
 
+        </div></details>
       </section>
       <section id="data-view" hidden><div class="data-heading"><div><button class="text-link" data-view="compare">← 사이클 비교로</button><h1>일별 원자료</h1></div><button id="export-raw" class="subtle-button"><span data-icon="download"></span>원자료 CSV</button></div><div class="data-summary" id="data-summary"></div><div class="data-panel"><div class="data-filter"><label for="data-year">조회 연도</label><select id="data-year"><option value="all">전체 연도</option></select><span id="data-result-count"></span></div><div class="table-scroll"><table class="comparison-table"><thead><tr><th scope="col">일자 (UTC)</th><th scope="col">BTC 가격 (USD)</th><th scope="col">전일 대비</th><th scope="col">지표</th></tr></thead><tbody id="data-body"></tbody></table></div><div class="pagination"><span id="data-page-label"></span><div><button id="data-prev" class="subtle-button">이전</button><button id="data-next" class="subtle-button">다음</button></div></div></div></section>
       <footer class="footer"><span>Data © <a href="https://coinmetrics.io/" target="_blank" rel="noopener noreferrer">Coin Metrics</a><span class="footer-dot">·</span><a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC 4.0</a></span><button data-method>데이터 · 출처 · 이용 조건 <span>↗</span></button><span>UTC 일말 관측 · 비상업 연구용</span></footer>

@@ -21,7 +21,7 @@ async function inlineModule(file) {
   return url;
 }
 let html = await readFile(resolve(dist, 'index.html'), 'utf8');
-for (const file of ['styles.css', 'compact.css', 'outlook.css']) {
+for (const file of ['styles.css', 'compact.css', 'outlook.css', 'lab.css']) {
   const css = (await readFile(resolve(dist, file), 'utf8')).replace(/@import\s+url\([^;]+;/g, '');
   html = html.replace(`<link rel="stylesheet" href="./${file}">`, `<style>\n${css}\n</style>`);
 }

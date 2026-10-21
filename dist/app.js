@@ -6,7 +6,7 @@ import { analyzePeakZones } from './peak-zones.js';
 import { analyzeCycleForecast } from './forecast-engine.js';
 import { renderPeakView } from './peak-view.js';
 import { renderForecastView, exportForecastSvg } from './forecast-view.js';
-import { initOutlookView } from './outlook-view.js';
+import { initLabView } from './lab-view.js';
 import { initEvidenceView, showEvidenceView } from './evidence-view.js';
 
 const $ = (selector) => document.querySelector(selector);
@@ -81,13 +81,14 @@ function persistUrl() {
   try { history.replaceState(null, '', `${location.pathname}${p.size ? `?${p}` : ''}`); } catch {}
 }
 document.documentElement.dataset.theme = 'dark';
-const outlookController = initOutlookView();
+const outlookController = initLabView();
 initEvidenceView();
 function syncPage() {
   for (const view of ['outlook','compare','evidence','data']) document.querySelector(`#${view}-view`).hidden=state.view!==view;
   $$('[data-view]').forEach(n=>{const active=n.dataset.view===state.view;n.classList.toggle('active',active);if(active)n.setAttribute('aria-current','page');else n.removeAttribute('aria-current');});
   showEvidenceView(state.view==='evidence');
   outlookController.show(state.view==='outlook');
+  outlookController.showCompare(state.view==='compare');
 }
 syncPage();
 
