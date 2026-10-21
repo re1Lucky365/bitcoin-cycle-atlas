@@ -106,7 +106,11 @@ python3 -m pip install matplotlib numpy
 
 한글 폰트는 `BCA_FONT_DIR`로 지정한 디렉터리 또는 Matplotlib이 찾을 수 있는 운영체제의 설치 폰트에서 선택한다. 지정 디렉터리의 하위 폴더를 포함한 `.ttf`·`.otf`·`.ttc` 파일에서 한글 지원을 확인하며, 같은 외형 재현에는 NanumGothic Regular·Bold를 권장한다. 3년 도표의 `--font-dir`는 `BCA_FONT_DIR`보다 우선한다. 도표의 기본 출력 위치는 `build/`이며 `BCA_OUTPUT_DIR`로 변경할 수 있다. 폰트 파일은 저장소에 포함하지 않는다. 이 요건은 PNG 재생성에 관한 것이며 정적 페이지 실행·Node.js 테스트와는 별개다.
 
-공개 저장소 [twoimo/bitcoin-cycle-atlas](https://github.com/twoimo/bitcoin-cycle-atlas)가 생성됐으며 기본 브랜치는 `main`이다. GitHub Pages의 소스는 GitHub Actions로 설정했다. **첫 CI·Pages·릴리스 실행은 대기 중이고, 원격 실행 성공과 라이브 페이지 게시 성공은 아직 이 기록에 포함하지 않았다.** 게시 후에는 해당 커밋의 Actions 결과, 태그와 릴리스 파일, 실제 실행 페이지를 각각 확인해야 한다. 로컬 테스트 결과로 원격 게시 성공을 대신하지 않는다.
+공개 저장소 [twoimo/bitcoin-cycle-atlas](https://github.com/twoimo/bitcoin-cycle-atlas)의 기본 브랜치는 `main`이고 Pages의 소스는 GitHub Actions다. 2026-10-21에 커밋 `918ce95bdcdb5b2611b8ab5a0314815c1e326a1d`의 [CI](https://github.com/twoimo/bitcoin-cycle-atlas/actions/runs/39620180993)와 [Pages 배포](https://github.com/twoimo/bitcoin-cycle-atlas/actions/runs/39620181262)가 모두 성공했다.
+
+[실제 공개 페이지](https://twoimo.github.io/bitcoin-cycle-atlas/)에서 기본 3년 그래프와 이른 전환 시나리오의 2029-01-06 도달·2029-06-06 최고가 날짜를 확인했다. 리서치 자료는 스크롤·추가 표시를 통해 24→36→48→50행으로 늘어나고 마지막에 완료 문구를 표시했다. 확인 후 기본 시나리오로 복원했다. [공개 화면 기록](figures/Live_Site_Preview_1792594245735.jpg)을 저장소에 포함한다.
+
+로컬 공개 커밋에서 릴리스 파일 7개를 생성했고, 체크섬 파일에 기록된 배포 파일 6개의 SHA-256 일치를 확인했다. 태그별 원격 발행 상태와 첨부파일은 [릴리스 목록](https://github.com/twoimo/bitcoin-cycle-atlas/releases), 이후 커밋의 검증·배포 결과는 [Actions](https://github.com/twoimo/bitcoin-cycle-atlas/actions)에서 확인한다. 릴리스 워크플로는 테스트·정적 검증·패키징·체크섬 검증을 통과해야 첨부파일을 게시한다.
 
 ## 6. 데이터와 코드의 이용 조건
 

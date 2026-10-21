@@ -8,14 +8,18 @@
 
 ## 실행 페이지 · 릴리스 · CI 상태
 
-공개 저장소 **[twoimo/bitcoin-cycle-atlas](https://github.com/twoimo/bitcoin-cycle-atlas)**가 생성됐으며 기본 브랜치는 `main`입니다. GitHub Pages의 배포 소스는 **GitHub Actions**로 설정했습니다. **첫 CI·Pages·릴리스 실행은 대기 중이며, 라이브 페이지의 게시 성공은 아직 확인하지 않았습니다.** 실제 실행 URL과 성공한 워크플로 실행 기록은 게시 검증 후 추가합니다.
+**[사이트 열기](https://twoimo.github.io/bitcoin-cycle-atlas/)** · **[리서치 자료 읽기 순서](https://twoimo.github.io/bitcoin-cycle-atlas/?page=evidence)** · **[릴리스 다운로드](https://github.com/twoimo/bitcoin-cycle-atlas/releases)**
+
+공개 저장소의 기본 브랜치는 `main`입니다. 2026-10-21에 첫 원격 CI와 Pages 배포가 성공했고, 실제 공개 주소에서 3년 그래프·시나리오 전환·50개 자료 표시를 확인했습니다.
 
 | 항목 | 제공 목적 | 현재 문서에서 확인 가능한 상태 |
 |---|---|---|
-| GitHub 저장소 | 코드·검증 결과·출처 이력 공개 | 공개 저장소 생성 완료, 기본 브랜치 `main` |
-| GitHub Pages | `dist/`의 네 페이지를 브라우저에서 실행 | 소스 GitHub Actions 설정 완료, 첫 배포 실행 대기 |
-| GitHub Actions | 테스트와 정적 산출물 생성을 반복 검증 | 첫 원격 CI 실행 대기, 성공 결과 미확인 |
-| GitHub Release | 태그에 대응하는 단일 HTML·소스·도표 제공 | 첫 릴리스 실행·발행 대기 |
+| [GitHub 저장소](https://github.com/twoimo/bitcoin-cycle-atlas) | 코드·검증 결과·출처 이력 공개 | 공개, 기본 브랜치 `main` |
+| [GitHub Pages](https://twoimo.github.io/bitcoin-cycle-atlas/) | `dist/`의 네 페이지를 브라우저에서 실행 | [첫 배포 성공](https://github.com/twoimo/bitcoin-cycle-atlas/actions/runs/39620181262), HTTPS 접속 확인 |
+| [GitHub Actions](https://github.com/twoimo/bitcoin-cycle-atlas/actions) | 테스트와 정적 산출물 생성을 반복 검증 | [첫 CI 성공](https://github.com/twoimo/bitcoin-cycle-atlas/actions/runs/39620180993), 7개 테스트 파일 통과 |
+| [GitHub Release](https://github.com/twoimo/bitcoin-cycle-atlas/releases) | 태그에 대응하는 단일 HTML·소스·도표·체크섬 제공 | `v*` 태그 push 또는 릴리스 발행 시 패키징 자동화 |
+
+`main`에 push하면 CI와 Pages 배포가 각각 검증을 수행합니다. PR에서는 CI를 실행합니다. 릴리스 자동화는 같은 태그의 기존 파일을 덮어쓰지 않으며, 동일한 파일은 건너뛰고 빠진 파일만 추가합니다. 공개 화면 기록은 [실제 배포 화면](docs/figures/Live_Site_Preview_1792594245735.jpg)에서 확인할 수 있습니다.
 
 지금 재현하려면 아래 [실행과 재현](#실행과-재현)을 사용합니다. 모델 설명은 [THREE_YEAR_MODEL.md](docs/THREE_YEAR_MODEL.md), 검증 범위와 한계는 [THREE_YEAR_VERIFICATION.md](docs/THREE_YEAR_VERIFICATION.md)에 있습니다.
 
