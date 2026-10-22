@@ -21,8 +21,10 @@ async function inlineModule(file) {
   return url;
 }
 let html = await readFile(resolve(dist, 'index.html'), 'utf8');
-for (const file of ['styles.css', 'compact.css', 'outlook.css', 'lab.css']) {
-  const css = (await readFile(resolve(dist, file), 'utf8')).replace(/@import\s+url\([^;]+;/g, '');
+for (const file of ['styles.css', 'compact.css', 'outlook.css', 'lab.css', 'atlas.css']) {
+  // Font URLs contain semicolons in their weight lists. Consume the complete
+  // url(...) before its terminating semicolon so :root stays valid CSS.
+  const css = (await readFile(resolve(dist, file), 'utf8')).replace(/@import\s+url\(\s*(?:"[^"]*"|'[^']*'|[^)]*)\s*\)\s*;/g, '');
   html = html.replace(`<link rel="stylesheet" href="./${file}">`, `<style>\n${css}\n</style>`);
 }
 const favicon = Buffer.from(await readFile(resolve(dist, 'favicon.svg'))).toString('base64');

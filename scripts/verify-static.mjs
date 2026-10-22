@@ -78,5 +78,8 @@ if (args.length) {
   assert(/id=["']embedded-btc-data["']/.test(standalone), 'Standalone file lacks the embedded data snapshot');
   assert(/data:text\/javascript;base64,/.test(standalone), 'Standalone file lacks embedded ES modules');
   assert(!/\b(?:src|href)\s*=\s*["']\.\.?\//i.test(standalone), 'Standalone file still references a local file');
+  const baseStyle = standalone.match(/<style>\s*([\s\S]*?)<\/style>/i)?.[1];
+  assert(baseStyle && /^:root\s*\{/.test(baseStyle),
+    'Standalone base CSS is malformed before :root; check font import removal');
 }
 console.log(JSON.stringify({ status: 'ok', files: files.length, checkedReferences, basePath: base.pathname, standalone: args[1] ?? null }));

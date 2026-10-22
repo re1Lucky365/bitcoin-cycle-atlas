@@ -54,7 +54,7 @@ const state = {
   horizon: ['365','730','1461','current','all'].includes(params.get('range')) ? params.get('range') : '1461',
   cursor: /^\d{1,5}$/.test(params.get('day') || '') ? Number(params.get('day')) : null,
   hidden: new Set((params.get('hide') || '').split(',').filter(Boolean)),
-  view: ['outlook','compare','evidence','data'].includes(params.get('page')) ? params.get('page') : 'outlook', dataset: null, comparison: null, chart: null, dataPage: 0,
+  view: params.get('page')==='compare'&&!params.has('legacy')?'outlook':['outlook','compare','evidence','data'].includes(params.get('page')) ? params.get('page') : 'outlook', dataset: null, comparison: null, chart: null, dataPage: 0,
   timing: null, timingDataset: null, timingBaseline: ['previous','recent2','all3'].includes(params.get('baseline')) ? params.get('baseline') : 'recent2',
   analysisView: ['forecast','peak','timing'].includes(params.get('analysis')) ? params.get('analysis') : 'forecast',
   peakThreshold: ['0.9','0.93','0.94','0.95','0.98'].includes(params.get('zone')) ? Number(params.get('zone')) : .95,
@@ -66,6 +66,8 @@ let toastTimer;
 function toast(message) { $('#toast').textContent = message; $('#toast').hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => $('#toast').hidden = true, 4200); }
 function persistUrl() {
   const p = new URLSearchParams();
+  const currentParams=new URLSearchParams(location.search);
+  for(const key of ['chart','span','assumption','granularity','align','interval','measure','scope','phase','legacy'])if(currentParams.has(key))p.set(key,currentParams.get(key));
   if (state.view !== 'outlook') p.set('page',state.view);
   if (state.mode !== 'halving') p.set('mode', state.mode);
   if (state.unit !== 'rebased') p.set('unit', state.unit);
