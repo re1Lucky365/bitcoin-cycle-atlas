@@ -2,6 +2,8 @@
 
 Audit base: [`e15ae31a4223d127244b6d630ae4b7c910f653ef`](https://github.com/twoimo/bitcoin-cycle-atlas/tree/e15ae31a4223d127244b6d630ae4b7c910f653ef).
 
+Last code/model correspondence review: [`d4e27dbb18cbe00af733779723b9db9406e243ef`](https://github.com/twoimo/bitcoin-cycle-atlas/tree/d4e27dbb18cbe00af733779723b9db9406e243ef). The committed ownership paths were checked against the model and the formal gate was rerun successfully; the results below were unchanged.
+
 **The current ownership guard passed this audit.** No existing asynchronous overwrite defect was reproduced. The red/green comparison is a deliberate negative control: remove one guard, observe failure, then compare against the existing correct code. It is not evidence that this audit repaired a production race.
 
 ## Property and practical consequence
