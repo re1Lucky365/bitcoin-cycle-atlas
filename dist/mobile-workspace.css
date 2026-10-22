@@ -20,15 +20,16 @@
   .mobile-chart-home svg{width:19px;height:19px}
   body:not([data-page=outlook]) .workspace.atlas-details-layout>#main{padding-top:52px;box-sizing:border-box}
   .atlas-plot{contain:layout paint}
-  .atlas-plot>#lab-metrics{top:8px;left:10px;right:10px;max-width:calc(100% - 20px);padding:0;gap:4px;min-height:0}
+  .atlas-plot>#lab-metrics,.atlas-plot[data-countdown-visible=true]>#lab-metrics{top:8px;left:10px;right:10px;max-width:calc(100% - 20px);padding:0;gap:4px;min-height:0}
   .readout-main{gap:7px;flex-wrap:wrap;white-space:normal;row-gap:1px}
   .atlas-plot>.atlas-readout strong{font-size:16px;letter-spacing:-.3px}
   .atlas-readout .atlas-symbol,.atlas-readout .atlas-day-change{font-size:10px}
   .atlas-readout .atlas-day-change{display:inline}
   .atlas-readout .atlas-observation-date{font-size:9px;margin-left:0}
-  .readout-detail,.readout-ohlc{flex-wrap:wrap;white-space:normal;overflow:visible;gap:3px 9px;font-size:10px;line-height:1.5;min-height:0}
+  .atlas-plot .readout-detail,.atlas-plot .readout-ohlc{display:flex;flex-wrap:wrap;white-space:normal;overflow:visible;gap:3px 9px;font-size:10px;line-height:1.5;min-height:0}
   .readout-detail>span,.readout-ohlc>span{white-space:nowrap}
-  .workbench-market-info{left:10px;right:10px;max-width:calc(100% - 20px);font-size:9px;line-height:16px}
+  .atlas-plot>.workbench-market-info,.atlas-plot[data-countdown-visible=true]>.workbench-market-info{left:10px;right:10px;width:auto;max-width:calc(100% - 20px);font-size:9px;line-height:16px}
+  .atlas-plot .observed-split-badge{display:none}
   .workbench-market-info #workbench-market-refresh{width:28px;height:24px;min-height:24px;padding:4px;flex:none}
   .chart-indicator-manager{left:9px;max-width:calc(100% - 18px);box-shadow:none;background:#101923f5}
   .chart-indicator-manager[data-collapsed=true]{width:128px;min-width:0}
