@@ -1,0 +1,927 @@
+{
+  "version": "1.10.4",
+  "codeCommit": "6c86708378a583da280e62746a4f74e9628fe861",
+  "observedAtUtc": "2026-10-22T15:21:04.788Z",
+  "desktopUrl": "https://twoimo.github.io/bitcoin-cycle-atlas/?type=candles",
+  "mobilePreviewUrl": "https://twoimo.github.io/bitcoin-cycle-atlas/mobile-preview.html?v=1.10.4",
+  "method": "Published application in Chrome; mobile sizes are CSS viewport iframe checks, not physical-device performance measurements.",
+  "measurements": [
+    {
+      "app": "./app.js?v=1.10.4",
+      "chartMode": "캔들 표시 · 선으로 변경",
+      "countdown": {
+        "bottom": 188.59375,
+        "height": 47.59375,
+        "right": 381,
+        "width": 128.390625,
+        "x": 252.609375,
+        "y": 141
+      },
+      "dialogOpen": false,
+      "focus": "캔들 표시 · 선으로 변경",
+      "headerCount": 0,
+      "manager": {
+        "bottom": 173,
+        "height": 32,
+        "right": 160.65625,
+        "width": 150.65625,
+        "x": 10,
+        "y": 141
+      },
+      "overlapArea": 0,
+      "plot": {
+        "bottom": 741,
+        "height": 693,
+        "right": 390,
+        "width": 390,
+        "x": 0,
+        "y": 48
+      },
+      "readout": {
+        "bottom": 108,
+        "height": 52,
+        "right": 380,
+        "width": 370,
+        "x": 10,
+        "y": 56
+      },
+      "readoutText": "1D관측$84,023+1.3%2026.10.21 UTCO $82,946.02H $84,842.65L $82,552.76C $84,023.24Vol 2.22k BTC",
+      "source": {
+        "bottom": 135,
+        "height": 24,
+        "right": 380,
+        "width": 370,
+        "x": 10,
+        "y": 111
+      },
+      "viewport": {
+        "height": 844,
+        "scrollWidth": 390,
+        "width": 390
+      },
+      "visibleRows": [
+        {
+          "box": {
+            "bottom": 173,
+            "height": 32,
+            "right": 160.65625,
+            "width": 150.65625,
+            "x": 10,
+            "y": 141
+          },
+          "id": "volume",
+          "primary": "true",
+          "text": "Vol2.22k BTC"
+        }
+      ]
+    },
+    {
+      "app": "./app.js?v=1.10.4",
+      "chartMode": "캔들 표시 · 선으로 변경",
+      "countdown": {
+        "bottom": 188.59375,
+        "height": 47.59375,
+        "right": 311,
+        "width": 128.390625,
+        "x": 182.609375,
+        "y": 141
+      },
+      "dialogOpen": false,
+      "focus": "캔들 표시 · 선으로 변경",
+      "headerCount": 0,
+      "manager": {
+        "bottom": 173,
+        "height": 32,
+        "right": 160.65625,
+        "width": 150.65625,
+        "x": 10,
+        "y": 141
+      },
+      "overlapArea": 0,
+      "plot": {
+        "bottom": 637,
+        "height": 589,
+        "right": 320,
+        "width": 320,
+        "x": 0,
+        "y": 48
+      },
+      "readout": {
+        "bottom": 108,
+        "height": 52,
+        "right": 310,
+        "width": 300,
+        "x": 10,
+        "y": 56
+      },
+      "readoutText": "1D관측$84,023+1.3%2026.10.21 UTCO $82,946.02H $84,842.65L $82,552.76C $84,023.24Vol 2.22k BTC",
+      "source": {
+        "bottom": 135,
+        "height": 24,
+        "right": 310,
+        "width": 300,
+        "x": 10,
+        "y": 111
+      },
+      "viewport": {
+        "height": 740,
+        "scrollWidth": 320,
+        "width": 320
+      },
+      "visibleRows": [
+        {
+          "box": {
+            "bottom": 173,
+            "height": 32,
+            "right": 160.65625,
+            "width": 150.65625,
+            "x": 10,
+            "y": 141
+          },
+          "id": "volume",
+          "primary": "true",
+          "text": "Vol2.22k BTC"
+        }
+      ]
+    },
+    {
+      "app": "./app.js?v=1.10.4",
+      "chartMode": "캔들 표시 · 선으로 변경",
+      "countdown": {
+        "bottom": 104.59375,
+        "height": 56.59375,
+        "right": 726,
+        "width": 141.0625,
+        "x": 584.9375,
+        "y": 48
+      },
+      "dialogOpen": false,
+      "focus": "캔들 표시 · 선으로 변경",
+      "headerCount": 0,
+      "manager": {
+        "bottom": 147,
+        "height": 32,
+        "right": 202.671875,
+        "width": 148.671875,
+        "x": 54,
+        "y": 115
+      },
+      "overlapArea": 0,
+      "plot": {
+        "bottom": 327,
+        "height": 287,
+        "right": 806,
+        "width": 762,
+        "x": 44,
+        "y": 40
+      },
+      "readout": {
+        "bottom": 87,
+        "height": 39,
+        "right": 421.90625,
+        "width": 367.90625,
+        "x": 54,
+        "y": 48
+      },
+      "readoutText": "1D관측$84,023+1.3%2026.10.21 UTCO $82,946.02H $84,842.65L $82,552.76C $84,023.24Vol 2.22k BTC",
+      "source": {
+        "bottom": 109,
+        "height": 19,
+        "right": 371.078125,
+        "width": 317.078125,
+        "x": 54,
+        "y": 90
+      },
+      "viewport": {
+        "height": 390,
+        "scrollWidth": 844,
+        "width": 844
+      },
+      "visibleRows": [
+        {
+          "box": {
+            "bottom": 147,
+            "height": 32,
+            "right": 199.671875,
+            "width": 145.671875,
+            "x": 54,
+            "y": 115
+          },
+          "id": "volume",
+          "primary": "true",
+          "text": "Vol2.22k BTC"
+        }
+      ]
+    },
+    {
+      "app": "./app.js?v=1.10.4",
+      "chartMode": "캔들 표시 · 선으로 변경",
+      "countdown": {
+        "bottom": 106.59375,
+        "height": 58.59375,
+        "right": 1237,
+        "width": 150.34375,
+        "x": 1086.65625,
+        "y": 48
+      },
+      "dialogOpen": false,
+      "focus": "",
+      "headerCount": 0,
+      "manager": {
+        "bottom": 331,
+        "height": 216,
+        "right": 305.484375,
+        "width": 251.484375,
+        "x": 54,
+        "y": 115
+      },
+      "overlapArea": 0,
+      "plot": {
+        "bottom": 873,
+        "height": 833,
+        "right": 1325,
+        "width": 1281,
+        "x": 44,
+        "y": 40
+      },
+      "readout": {
+        "bottom": 87,
+        "height": 39,
+        "right": 433.90625,
+        "width": 379.90625,
+        "x": 54,
+        "y": 48
+      },
+      "readoutText": "1D관측$84,023+1.3%2026.10.21 UTCO $82,946.02H $84,842.65L $82,552.76C $84,023.24Vol 2.22k BTC",
+      "source": {
+        "bottom": 109,
+        "height": 19,
+        "right": 371.078125,
+        "width": 317.078125,
+        "x": 54,
+        "y": 90
+      },
+      "viewport": {
+        "height": 936,
+        "scrollWidth": 1363,
+        "width": 1363
+      },
+      "visibleRows": [
+        {
+          "box": {
+            "bottom": 139,
+            "height": 24,
+            "right": 302.484375,
+            "width": 248.484375,
+            "x": 54,
+            "y": 115
+          },
+          "id": "readout",
+          "primary": "false",
+          "text": "가격 · OHLC$84,023.24  +1.3%"
+        },
+        {
+          "box": {
+            "bottom": 163,
+            "height": 24,
+            "right": 302.484375,
+            "width": 248.484375,
+            "x": 54,
+            "y": 139
+          },
+          "id": "source",
+          "primary": "false",
+          "text": "자료 출처Bitstamp"
+        },
+        {
+          "box": {
+            "bottom": 187,
+            "height": 24,
+            "right": 302.484375,
+            "width": 248.484375,
+            "x": 54,
+            "y": 163
+          },
+          "id": "legend",
+          "primary": "false",
+          "text": "범례실제 캔들 · 가정 점선"
+        },
+        {
+          "box": {
+            "bottom": 211,
+            "height": 24,
+            "right": 302.484375,
+            "width": 248.484375,
+            "x": 54,
+            "y": 187
+          },
+          "id": "countdown",
+          "primary": "false",
+          "text": "다음 국면D-87 · 하락 가정"
+        },
+        {
+          "box": {
+            "bottom": 235,
+            "height": 24,
+            "right": 302.484375,
+            "width": 248.484375,
+            "x": 54,
+            "y": 211
+          },
+          "id": "volume",
+          "primary": "true",
+          "text": "Vol2.22k BTC"
+        },
+        {
+          "box": {
+            "bottom": 259,
+            "height": 24,
+            "right": 302.484375,
+            "width": 248.484375,
+            "x": 54,
+            "y": 235
+          },
+          "id": "history",
+          "primary": "false",
+          "text": "역사 사건7개 사건 · 이름 2개"
+        },
+        {
+          "box": {
+            "bottom": 283,
+            "height": 24,
+            "right": 302.484375,
+            "width": 248.484375,
+            "x": 54,
+            "y": 259
+          },
+          "id": "range",
+          "primary": "false",
+          "text": "수요·채택 범위미래 구간의 가정 범위"
+        },
+        {
+          "box": {
+            "bottom": 307,
+            "height": 24,
+            "right": 302.484375,
+            "width": 248.484375,
+            "x": 54,
+            "y": 283
+          },
+          "id": "turns",
+          "primary": "false",
+          "text": "고점·저점저점 2026.06.30 · $58,525.08"
+        },
+        {
+          "box": {
+            "bottom": 331,
+            "height": 24,
+            "right": 302.484375,
+            "width": 248.484375,
+            "x": 54,
+            "y": 307
+          },
+          "id": "cycle-timing",
+          "primary": "false",
+          "text": "사이클 시계단축 가정 −52일"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "addedValues": 9,
+      "clientWidth": 372,
+      "eyeButtons": 9,
+      "nestedButtons": 0,
+      "open": true,
+      "scrollWidth": 372,
+      "test": "dialog-values-and-eyes",
+      "width": 374
+    },
+    {
+      "test": "hide-volume",
+      "app": "./app.js?v=1.10.4",
+      "chartMode": "캔들 표시 · 선으로 변경",
+      "countdown": {
+        "bottom": 188.59375,
+        "height": 47.59375,
+        "right": 381,
+        "width": 128.390625,
+        "x": 252.609375,
+        "y": 141
+      },
+      "dialogOpen": true,
+      "focus": "거래량 표시",
+      "headerCount": 0,
+      "manager": {
+        "bottom": 178.59375,
+        "height": 37.59375,
+        "right": 243,
+        "width": 233,
+        "x": 10,
+        "y": 141
+      },
+      "overlapArea": 0,
+      "plot": {
+        "bottom": 741,
+        "height": 693,
+        "right": 390,
+        "width": 390,
+        "x": 0,
+        "y": 48
+      },
+      "readout": {
+        "bottom": 108,
+        "height": 52,
+        "right": 380,
+        "width": 370,
+        "x": 10,
+        "y": 56
+      },
+      "readoutText": "1D관측$84,023+1.3%2026.10.21 UTCO $82,946.02H $84,842.65L $82,552.76C $84,023.24Vol 2.22k BTC",
+      "source": {
+        "bottom": 135,
+        "height": 24,
+        "right": 380,
+        "width": 370,
+        "x": 10,
+        "y": 111
+      },
+      "viewport": {
+        "height": 844,
+        "scrollWidth": 390,
+        "width": 390
+      },
+      "visibleRows": [
+        {
+          "box": {
+            "bottom": 178.59375,
+            "height": 37.59375,
+            "right": 243,
+            "width": 233,
+            "x": 10,
+            "y": 141
+          },
+          "id": "range",
+          "primary": "true",
+          "text": "수요·채택 범위미래 구간의 가정 범위"
+        }
+      ]
+    },
+    {
+      "test": "restore-volume",
+      "app": "./app.js?v=1.10.4",
+      "chartMode": "캔들 표시 · 선으로 변경",
+      "countdown": {
+        "bottom": 170.59375,
+        "height": 47.59375,
+        "right": 381,
+        "width": 128.390625,
+        "x": 252.609375,
+        "y": 123
+      },
+      "dialogOpen": true,
+      "focus": "거래량 숨기기",
+      "headerCount": 0,
+      "manager": {
+        "bottom": 155,
+        "height": 32,
+        "right": 160.65625,
+        "width": 150.65625,
+        "x": 10,
+        "y": 123
+      },
+      "overlapArea": 0,
+      "plot": {
+        "bottom": 741,
+        "height": 693,
+        "right": 390,
+        "width": 390,
+        "x": 0,
+        "y": 48
+      },
+      "readout": {
+        "bottom": 90,
+        "height": 34,
+        "right": 304.5625,
+        "width": 294.5625,
+        "x": 10,
+        "y": 56
+      },
+      "readoutText": "1D관측$84,023+1.3%2026.10.21 UTCO $82,946.02H $84,842.65L $82,552.76C $84,023.24",
+      "source": {
+        "bottom": 117,
+        "height": 24,
+        "right": 380,
+        "width": 370,
+        "x": 10,
+        "y": 93
+      },
+      "viewport": {
+        "height": 844,
+        "scrollWidth": 390,
+        "width": 390
+      },
+      "visibleRows": [
+        {
+          "box": {
+            "bottom": 155,
+            "height": 32,
+            "right": 160.65625,
+            "width": 150.65625,
+            "x": 10,
+            "y": 123
+          },
+          "id": "volume",
+          "primary": "true",
+          "text": "Vol2.22k BTC"
+        }
+      ]
+    },
+    {
+      "test": "hide-legend",
+      "app": "./app.js?v=1.10.4",
+      "chartMode": "캔들 표시 · 선으로 변경",
+      "countdown": {
+        "bottom": 188.59375,
+        "height": 47.59375,
+        "right": 381,
+        "width": 128.390625,
+        "x": 252.609375,
+        "y": 141
+      },
+      "dialogOpen": true,
+      "focus": "indicator-list-visibility",
+      "headerCount": 0,
+      "manager": {
+        "bottom": 0,
+        "height": 0,
+        "right": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      },
+      "overlapArea": 0,
+      "plot": {
+        "bottom": 741,
+        "height": 693,
+        "right": 390,
+        "width": 390,
+        "x": 0,
+        "y": 48
+      },
+      "readout": {
+        "bottom": 108,
+        "height": 52,
+        "right": 380,
+        "width": 370,
+        "x": 10,
+        "y": 56
+      },
+      "readoutText": "1D관측$84,023+1.3%2026.10.21 UTCO $82,946.02H $84,842.65L $82,552.76C $84,023.24Vol 2.22k BTC",
+      "source": {
+        "bottom": 135,
+        "height": 24,
+        "right": 380,
+        "width": 370,
+        "x": 10,
+        "y": 111
+      },
+      "viewport": {
+        "height": 844,
+        "scrollWidth": 390,
+        "width": 390
+      },
+      "visibleRows": []
+    },
+    {
+      "test": "close-with-legend-hidden",
+      "app": "./app.js?v=1.10.4",
+      "chartMode": "캔들 표시 · 선으로 변경",
+      "countdown": {
+        "bottom": 188.59375,
+        "height": 47.59375,
+        "right": 381,
+        "width": 128.390625,
+        "x": 252.609375,
+        "y": 141
+      },
+      "dialogOpen": false,
+      "focus": "인디케이터 추가·삭제",
+      "headerCount": 0,
+      "manager": {
+        "bottom": 0,
+        "height": 0,
+        "right": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      },
+      "overlapArea": 0,
+      "plot": {
+        "bottom": 741,
+        "height": 693,
+        "right": 390,
+        "width": 390,
+        "x": 0,
+        "y": 48
+      },
+      "readout": {
+        "bottom": 108,
+        "height": 52,
+        "right": 380,
+        "width": 370,
+        "x": 10,
+        "y": 56
+      },
+      "readoutText": "1D관측$84,023+1.3%2026.10.21 UTCO $82,946.02H $84,842.65L $82,552.76C $84,023.24Vol 2.22k BTC",
+      "source": {
+        "bottom": 135,
+        "height": 24,
+        "right": 380,
+        "width": 370,
+        "x": 10,
+        "y": 111
+      },
+      "viewport": {
+        "height": 844,
+        "scrollWidth": 390,
+        "width": 390
+      },
+      "visibleRows": []
+    },
+    {
+      "listChecked": false,
+      "open": true,
+      "test": "reopen-hidden-legend",
+      "valueCount": 9,
+      "volume": "Vol 2.22k BTC"
+    },
+    {
+      "added": "false",
+      "test": "remove-volume",
+      "valueCount": 8
+    },
+    {
+      "added": "true",
+      "test": "readd-volume",
+      "valueCount": 9
+    },
+    {
+      "test": "final-close-auto-compact",
+      "app": "./app.js?v=1.10.4",
+      "chartMode": "캔들 표시 · 선으로 변경",
+      "countdown": {
+        "bottom": 188.59375,
+        "height": 47.59375,
+        "right": 381,
+        "width": 128.390625,
+        "x": 252.609375,
+        "y": 141
+      },
+      "dialogOpen": false,
+      "focus": "인디케이터 추가·삭제",
+      "headerCount": 0,
+      "manager": {
+        "bottom": 173,
+        "height": 32,
+        "right": 160.65625,
+        "width": 150.65625,
+        "x": 10,
+        "y": 141
+      },
+      "overlapArea": 0,
+      "plot": {
+        "bottom": 741,
+        "height": 693,
+        "right": 390,
+        "width": 390,
+        "x": 0,
+        "y": 48
+      },
+      "readout": {
+        "bottom": 108,
+        "height": 52,
+        "right": 380,
+        "width": 370,
+        "x": 10,
+        "y": 56
+      },
+      "readoutText": "1D관측$84,023+1.3%2026.10.21 UTCO $82,946.02H $84,842.65L $82,552.76C $84,023.24Vol 2.22k BTC",
+      "source": {
+        "bottom": 135,
+        "height": 24,
+        "right": 380,
+        "width": 370,
+        "x": 10,
+        "y": 111
+      },
+      "viewport": {
+        "height": 844,
+        "scrollWidth": 390,
+        "width": 390
+      },
+      "visibleRows": [
+        {
+          "box": {
+            "bottom": 173,
+            "height": 32,
+            "right": 160.65625,
+            "width": 150.65625,
+            "x": 10,
+            "y": 141
+          },
+          "id": "volume",
+          "primary": "true",
+          "text": "Vol2.22k BTC"
+        }
+      ]
+    },
+    {
+      "test": "hide-all",
+      "app": "./app.js?v=1.10.4",
+      "chartMode": "캔들 표시 · 선으로 변경",
+      "countdown": {
+        "bottom": 0,
+        "height": 0,
+        "right": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      },
+      "dialogOpen": true,
+      "focus": "추가한 인디케이터 모두 표시",
+      "headerCount": 0,
+      "manager": {
+        "bottom": 0,
+        "height": 0,
+        "right": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      },
+      "overlapArea": 0,
+      "plot": {
+        "bottom": 741,
+        "height": 693,
+        "right": 390,
+        "width": 390,
+        "x": 0,
+        "y": 48
+      },
+      "readout": {
+        "bottom": 0,
+        "height": 0,
+        "right": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      },
+      "readoutText": "1D관측$84,023+1.3%2026.10.21 UTCO $82,946.02H $84,842.65L $82,552.76C $84,023.24Vol 2.22k BTC",
+      "source": {
+        "bottom": 0,
+        "height": 0,
+        "right": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      },
+      "viewport": {
+        "height": 844,
+        "scrollWidth": 390,
+        "width": 390
+      },
+      "visibleRows": []
+    },
+    {
+      "test": "show-all-close",
+      "app": "./app.js?v=1.10.4",
+      "chartMode": "캔들 표시 · 선으로 변경",
+      "countdown": {
+        "bottom": 188.59375,
+        "height": 47.59375,
+        "right": 381,
+        "width": 128.390625,
+        "x": 252.609375,
+        "y": 141
+      },
+      "dialogOpen": false,
+      "focus": "인디케이터 추가·삭제",
+      "headerCount": 0,
+      "manager": {
+        "bottom": 173,
+        "height": 32,
+        "right": 160.65625,
+        "width": 150.65625,
+        "x": 10,
+        "y": 141
+      },
+      "overlapArea": 0,
+      "plot": {
+        "bottom": 741,
+        "height": 693,
+        "right": 390,
+        "width": 390,
+        "x": 0,
+        "y": 48
+      },
+      "readout": {
+        "bottom": 108,
+        "height": 52,
+        "right": 380,
+        "width": 370,
+        "x": 10,
+        "y": 56
+      },
+      "readoutText": "1D관측$84,023+1.3%2026.10.21 UTCO $82,946.02H $84,842.65L $82,552.76C $84,023.24Vol 2.22k BTC",
+      "source": {
+        "bottom": 135,
+        "height": 24,
+        "right": 380,
+        "width": 370,
+        "x": 10,
+        "y": 111
+      },
+      "viewport": {
+        "height": 844,
+        "scrollWidth": 390,
+        "width": 390
+      },
+      "visibleRows": [
+        {
+          "box": {
+            "bottom": 173,
+            "height": 32,
+            "right": 160.65625,
+            "width": 150.65625,
+            "x": 10,
+            "y": 141
+          },
+          "id": "volume",
+          "primary": "true",
+          "text": "Vol2.22k BTC"
+        }
+      ]
+    }
+  ],
+  "verificationLimits": [
+    "Mobile viewport checks ran in the published same-origin preview iframe. Physical phones and hardware FPS were not measured.",
+    "The indicator legend presentation changed; price, volatility, volume and cycle forecasting formulas did not change in this release."
+  ],
+  "initialLineMode": {
+    "viewport": {
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390
+    },
+    "headerCount": 0,
+    "visibleIndicators": [
+      "volume"
+    ],
+    "indicatorText": "Vol 2.22k BTC",
+    "managerWidth": 150.65625,
+    "managerHeight": 32,
+    "managerLeft": 10,
+    "managerTop": 123,
+    "countdownLeft": 252.609375,
+    "countdownTop": 123,
+    "countdownWidth": 128.390625,
+    "countdownHeight": 47.59375,
+    "overlapArea": 0
+  },
+  "ci": {
+    "commit": "6c86708378a583da280e62746a4f74e9628fe861",
+    "runId": 39803011053,
+    "jobId": 119908707476,
+    "url": "https://github.com/twoimo/bitcoin-cycle-atlas/actions/runs/39803011053/job/119908707476",
+    "tests": 289,
+    "passed": 289,
+    "failed": 0,
+    "staticFiles": 76,
+    "staticReferences": 132,
+    "svgElements": 94,
+    "svgBudget": 120,
+    "standaloneModules": 53,
+    "standaloneBytes": 8910324,
+    "completedUtc": "2026-10-22T15:15:22.2106253Z",
+    "evidence": "Actual job logs inspected by root and an independent agent."
+  },
+  "pages": {
+    "commit": "6c86708378a583da280e62746a4f74e9628fe861",
+    "runId": 39803010991,
+    "jobId": 119909031981,
+    "url": "https://github.com/twoimo/bitcoin-cycle-atlas/actions/runs/39803010991/job/119909031981",
+    "createdUtc": "2026-10-22T15:15:37.4112493Z",
+    "successUtc": "2026-10-22T15:16:02.2620751Z",
+    "message": "Reported success!",
+    "site": "https://twoimo.github.io/bitcoin-cycle-atlas/"
+  },
+  "screenshots": [
+    "../figures/v1.10.4-desktop.jpg",
+    "../figures/v1.10.4-mobile-390-candles.jpg",
+    "../figures/v1.10.4-mobile-320-candles.jpg",
+    "../figures/v1.10.4-mobile-landscape.jpg",
+    "../figures/v1.10.4-mobile-indicators.jpg",
+    "../figures/v1.10.4-mobile-390-line.jpg"
+  ]
+}
