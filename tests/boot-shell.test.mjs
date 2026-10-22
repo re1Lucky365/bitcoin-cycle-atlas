@@ -6,6 +6,8 @@ import { runInNewContext } from 'node:vm';
 const html = await readFile(new URL('../dist/index.html', import.meta.url), 'utf8');
 const bootMatch = html.match(/<script\b[^>]*id="atlas-boot-script"[^>]*>([\s\S]*?)<\/script>/);
 const bootSource = bootMatch?.[1];
+const earlyMatch = html.match(/<script\b[^>]*id="atlas-boot-resource-script"[^>]*>([\s\S]*?)<\/script>/);
+const firstStylesheet = html.search(/<link\b[^>]*rel="stylesheet"/);
 
 // This fixture supplies only the event and attribute APIs used by the real
 // inline bootstrap. Browser layout and module loading are separate checks.
@@ -30,41 +32,41 @@ class ElementFixture extends EventTarget {
   click() { this.dispatchEvent(new Event('click')); }
 }
 
-function bootstrap() {
+function bootstrap({ earlyErrors = [] } = {}) {
   assert.ok(bootSource, 'The initial HTML must include its boot controller before the app module graph loads');
   const tags = [...html.matchAll(/<([a-z][\w:-]*)\b([^<>]*)>/gi)];
-  const byId = new Map(), parsedIds = new Map();
-  const content = [], parsedContent = [];
+  const byId = new Map(), positions = new Map();
+  const content = [];
   let root;
   for (const match of tags) {
     const [, tag, attributes] = match;
     const node = new ElementFixture(attributes);
+    positions.set(node, match.index);
     node.tagName = tag.toUpperCase();
     if (tag === 'html') root = node;
     if (node.hasAttribute('id')) {
       byId.set(node.getAttribute('id'), node);
-      if (match.index < bootMatch.index) parsedIds.set(node.getAttribute('id'), node);
     }
     if (node.hasAttribute('data-boot-content')) {
       content.push(node);
-      if (match.index < bootMatch.index) parsedContent.push(node);
     }
   }
   assert.ok(root);
   const window = new EventTarget(), document = new EventTarget();
   document.documentElement = root;
-  let finishedParsing = false;
-  document.getElementById = id => (finishedParsing ? byId : parsedIds).get(id) ?? null;
+  let parsingPosition = 0;
+  document.getElementById = id => {
+    const node = byId.get(id);
+    return node && positions.get(node) < parsingPosition ? node : null;
+  };
   document.querySelectorAll = selector => {
     assert.equal(selector, '[data-boot-content]', 'The boot controller must only touch its designated content roots');
-    return finishedParsing ? content : parsedContent;
+    return content.filter(node => positions.get(node) < parsingPosition);
   };
   let reloads = 0;
   const location = { reload() { reloads += 1; } };
   window.location = location;
   window.document = document;
-  runInNewContext(bootSource, { window, document, location, Event, console }, { filename: 'atlas-boot-script', timeout: 1000 });
-  finishedParsing = true;
   const emit = (type, target = document) => target.dispatchEvent(new Event(type));
   const resourceError = target => {
     const event = new Event('error');
@@ -72,6 +74,19 @@ function bootstrap() {
     Object.defineProperty(event, 'target', { value: target });
     window.dispatchEvent(event);
   };
+  const context = { window, document, location, Event, console };
+  // Preceding stylesheets may fail before the body script is allowed to run.
+  // Respect source order and do not expose DOM nodes the parser has not reached.
+  const steps = [
+    { position: firstStylesheet, run: () => earlyErrors.forEach(resourceError) },
+    { position: bootMatch.index, run: () => runInNewContext(bootSource, context, { filename: 'atlas-boot-script', timeout: 1000 }) },
+  ];
+  if (earlyMatch) steps.push({ position: earlyMatch.index, run: () => runInNewContext(earlyMatch[1], context, { filename: 'atlas-boot-resource-script', timeout: 1000 }) });
+  for (const step of steps.sort((a, b) => a.position - b.position)) {
+    parsingPosition = step.position;
+    step.run();
+  }
+  parsingPosition = Infinity;
   return { root, window, document, content, byId, emit, resourceError, reloads: () => reloads };
 }
 
@@ -139,4 +154,20 @@ test('optional resource failures do not abort boot while script and stylesheet f
     assert.equal(root.dataset.boot, 'error', `${resource.tagName} ${resource.rel ?? resource.type} is required to initialize the app`);
     assert.equal(byId.get('atlas-boot-error').hidden, false);
   }
+});
+
+test('stylesheet failure during head parsing reaches recovery while early icon failure remains optional', () => {
+  const failed = bootstrap({ earlyErrors: [{ tagName: 'LINK', rel: 'stylesheet' }] });
+  assert.equal(failed.root.dataset.boot, 'error', 'A failed head stylesheet must survive the later body-controller handoff');
+  assert.equal(failed.byId.get('atlas-boot-error').hidden, false);
+  assert.ok(failed.content.every(node => node.inert));
+  failed.emit('atlas:ready');
+  assert.equal(failed.root.dataset.boot, 'error', 'Later rendering cannot override the recorded stylesheet failure');
+  failed.byId.get('atlas-boot-retry').click();
+  assert.equal(failed.reloads(), 1);
+
+  const optional = bootstrap({ earlyErrors: [{ tagName: 'LINK', rel: 'icon' }, { tagName: 'LINK', rel: 'preload' }] });
+  assert.equal(optional.root.dataset.boot, 'loading');
+  optional.emit('atlas:ready');
+  assert.equal(optional.root.dataset.boot, 'ready');
 });

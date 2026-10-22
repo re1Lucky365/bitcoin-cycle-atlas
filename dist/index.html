@@ -43,6 +43,22 @@
     @media(prefers-reduced-motion:reduce){.atlas-boot-bar{animation:none;opacity:.65}}
   </style>
   <noscript><style id="atlas-boot-noscript-style">#atlas-boot-status{display:none}.atlas-boot-bar{animation:none}</style></noscript>
+  <script id="atlas-boot-resource-script">
+    (() => {
+      // A preceding stylesheet can fail before the body bootstrap may execute.
+      let failed = false;
+      function capture(event) {
+        const target = event.target;
+        if (target?.tagName === 'LINK' && /(?:^|\s)stylesheet(?:\s|$)/i.test(target.rel || '')) failed = true;
+      }
+      window.addEventListener('error', capture, true);
+      window.__atlasTakeEarlyStyleFailure = () => {
+        window.removeEventListener('error', capture, true);
+        delete window.__atlasTakeEarlyStyleFailure;
+        return failed;
+      };
+    })();
+  </script>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="./styles.css?v=1.10.5">
   <link rel="stylesheet" href="./compact.css?v=1.10.5">
@@ -115,6 +131,8 @@
       // Module/runtime failures block setup; optional images and icons do not.
       window.addEventListener('error', onError, true);
       window.addEventListener('unhandledrejection', fail);
+      // Install the regular handler before releasing the early capture.
+      if (window.__atlasTakeEarlyStyleFailure?.()) fail();
     })();
   </script>
   <a class="skip-link" href="#main" data-boot-content inert aria-hidden="true">본문으로 이동</a>
