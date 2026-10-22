@@ -1,5 +1,5 @@
 import { DATA_UPDATE } from './data-update.js';
-import { mountWorkbenchChrome } from './workbench-chrome.js';
+import { mountWorkbenchChrome } from './workbench-chrome.js?v=1.6.0';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

@@ -1,4 +1,4 @@
-import {createPriceScale} from './chart-math.js';
+import {createPriceScale} from './chart-math.js?v=1.6.0';
 import {chartInterval} from './ohlc-data.js';
 
 const number=(value,digits=2)=>new Intl.NumberFormat('en-US',{maximumFractionDigits:digits}).format(value);

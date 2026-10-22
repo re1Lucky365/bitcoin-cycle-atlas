@@ -1,7 +1,7 @@
 import { utcDay } from './cycle-engine.js';
 import { shiftCalendarMonths } from './cycle-timing.js';
 import { STATE_LABELS } from './market-structure.js';
-import { createPriceScale,nearestDailyIndex as nearest,measureDailyRange } from './chart-math.js';
+import { createPriceScale,nearestDailyIndex as nearest,measureDailyRange } from './chart-math.js?v=1.6.0';
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const nf=(v,n=0)=>new Intl.NumberFormat('en-US',{maximumFractionDigits:n}).format(v);
