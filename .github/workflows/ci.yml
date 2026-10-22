@@ -28,6 +28,10 @@ jobs:
           package-manager-cache: false
       - name: Run model and data tests
         run: npm test
+      - name: Verify the observed daily clock and bounded chart work
+        run: |
+          npm run verify:cycle
+          npm run verify:performance
       - name: Verify static resources at the Pages base path
         run: node scripts/verify-static.mjs
       - name: Build standalone HTML

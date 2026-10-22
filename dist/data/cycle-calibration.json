@@ -1,0 +1,1266 @@
+{
+  "schemaVersion": "cycle-calibration-record-v1",
+  "generatedBy": "node scripts/refresh-cycle-calibration.mjs",
+  "source": {
+    "path": "dist/data/btc-daily.json",
+    "pricesSha256": "ad06798cd46011f5ceeee157256adbaf15a6e1ed140d8d87f3ea311375488477",
+    "provider": "Coin Metrics Community API",
+    "metric": "PriceUSD",
+    "firstDate": "2010-07-18",
+    "lastDate": "2026-10-21",
+    "observationCount": 5940,
+    "completedUtcObservationsOnly": true
+  },
+  "version": "causal-cycle-clock-v1",
+  "asOf": "2026-10-21",
+  "current": {
+    "date": "2026-10-21",
+    "epochDay": 20747,
+    "state": "shortened",
+    "label": "단축 가정",
+    "color": "#df7c83",
+    "shiftDays": -52.15334164617086,
+    "appliedShiftDays": -52,
+    "cycleLengthDays": 1409,
+    "causal": true,
+    "probability": null,
+    "asOf": "2026-10-21",
+    "available": true,
+    "rawShiftDays": -66,
+    "referencePeakDate": "2025-10-06",
+    "referencePeakPrice": 124824.453666861,
+    "candidateTroughDate": "2026-06-30",
+    "candidateTroughPrice": 58525.0753614845,
+    "peakConfirmedAt": "2026-02-17",
+    "troughConfirmedAt": "2026-09-02",
+    "candidateIsFinalCycleTurn": false,
+    "nominalPeakDate": "2029-10-06",
+    "expectedNextPeakDate": "2029-08-15",
+    "nextPeakDateIsConditionalClock": true,
+    "referenceCount": 3,
+    "cycleIntervalCount": 3,
+    "observedBearDays": 267,
+    "medianBearDays": 366,
+    "peakComponentDays": -16.5,
+    "bearComponentDays": -49.5,
+    "peakWeight": 0.5,
+    "bearWeight": 0.5,
+    "resetReason": null,
+    "unavailableReason": null,
+    "sensitivity": {
+      "lowerShiftDays": -66,
+      "upperShiftDays": 0,
+      "meaning": "Sensitivity spanning the unadjusted calendar prior, current smoothed correction and current raw rule. It is not a prediction interval.",
+      "probability": null,
+      "calibrated": false
+    }
+  },
+  "settings": {
+    "drawdownPct": 40,
+    "reversalPct": 20,
+    "confirmationDays": 14,
+    "priorEquivalentCycles": 3,
+    "smoothingHalfLifeDays": 30,
+    "maxDailyShiftDays": 2,
+    "maxAbsoluteShiftDays": 180,
+    "neutralToleranceDays": 21
+  },
+  "closedReferences": [
+    {
+      "index": 0,
+      "year": 2012,
+      "halvingDate": "2012-11-28",
+      "peak": {
+        "date": "2013-12-04",
+        "price": 1134.93223088837
+      },
+      "trough": {
+        "date": "2015-01-14",
+        "price": 175.637640561075
+      },
+      "bearDays": 406,
+      "knownAt": "2016-07-09",
+      "peakDrawdownConfirmedAt": "2014-02-24",
+      "retrospectiveExtrema": true
+    },
+    {
+      "index": 1,
+      "year": 2016,
+      "halvingDate": "2016-07-09",
+      "peak": {
+        "date": "2017-12-16",
+        "price": 19640.5138834015
+      },
+      "trough": {
+        "date": "2018-12-15",
+        "price": 3185.07404383402
+      },
+      "bearDays": 364,
+      "knownAt": "2020-05-11",
+      "peakDrawdownConfirmedAt": "2018-02-03",
+      "retrospectiveExtrema": true
+    },
+    {
+      "index": 2,
+      "year": 2020,
+      "halvingDate": "2020-05-11",
+      "peak": {
+        "date": "2021-11-08",
+        "price": 67541.7555081824
+      },
+      "trough": {
+        "date": "2022-11-09",
+        "price": 15758.2912819988
+      },
+      "bearDays": 366,
+      "knownAt": "2024-04-20",
+      "peakDrawdownConfirmedAt": "2022-02-03",
+      "retrospectiveExtrema": true
+    }
+  ],
+  "method": {
+    "referenceRule": "The last running high with a persistent deep drawdown, and its following running low, in a fully observed halving-to-halving era become eligible only on its next observed halving. A newer unconfirmed high cannot replace this historical episode; no chosen peak years.",
+    "confirmationRule": "40% drawdown / 20% rebound, 14 consecutive observed daily closes; final cycle turns remain unconfirmed.",
+    "rawFormula": "clip(w_peak × median(peak-to-peak deviation from 48 calendar months) + w_bear × (current confirmed-candidate bear duration − median closed bear duration), −maxShift, maxShift)",
+    "shrinkageFormula": "w = n / (n + priorEquivalentCycles); three prior-equivalent observations favor zero shift by default.",
+    "smoothingFormula": "s_t = s_(t−1) + clip((1−2^(−1/halfLife)) × (raw_t−s_(t−1)), −dailyLimit, dailyLimit)",
+    "stabilityReset": "A new observed high, missing observation or newly observed halving resets the origin and smoothing; fixed-origin daily changes are bounded.",
+    "phaseTransferAssumption": "A deviation in the candidate bear duration shifts the conditional next high by the same shrunk number of days. This is a chosen phase-transfer rule, not an estimated causal law.",
+    "parametersFittedToFuture": false,
+    "modelChoicesAreAssumed": true,
+    "colorsAreTradingSignals": false,
+    "colorToleranceDays": 21,
+    "probability": null,
+    "calibrated": false,
+    "historicalForecastAccuracyClaim": false,
+    "earlierRowsRecomputedFromLaterData": false,
+    "complexity": "O(n) for the fixed catalog of observed halvings; O(n) output memory. One forward scan, no prefix recomputation."
+  },
+  "sources": [
+    "https://otexts.com/fpp3/tscv.html",
+    "https://otexts.com/fpp3/holt.html",
+    "https://www.fidelity.com/learning-center/trading-investing/four-year-bitcoin-and-crypto-cycles",
+    "https://fidelitydigitalassets.com/research-and-insights/bitcoins-four-year-cycle-over"
+  ],
+  "observationCount": 5940,
+  "futureApplication": {
+    "enabled": true,
+    "requestedShiftDays": -52,
+    "appliedShiftDays": -52,
+    "applied": true,
+    "reason": "causal-daily-clock-applied",
+    "sourceValuationAnchorsChanged": false,
+    "scope": "The optional near-phase clock only; no automatic repetition of four-year waves through 2050.",
+    "displayEnd": "2050-12-31",
+    "nominalPeakDate": "2029-10-06",
+    "effectivePeakDate": "2029-08-15",
+    "nominalTroughDate": "2026-10-06",
+    "nextLowDate": "2030-08-15",
+    "timingAdjustment": {
+      "requested": true,
+      "available": true,
+      "asOf": "2026-10-21",
+      "requestedShiftDays": -52,
+      "appliedShiftDays": -52,
+      "applied": true,
+      "sourceReferencePeakDate": "2025-10-06",
+      "reason": "causal-daily-clock-applied",
+      "nominalZoneDate": "2029-07-06",
+      "nominalEffectivePeakDate": "2029-10-06",
+      "nominalNextLowDate": "2030-10-06",
+      "finalCycleTurnClaim": false,
+      "probability": null
+    },
+    "clockVerifiedWithSampleCount": 16
+  },
+  "recentDailyStates": [
+    {
+      "date": "2026-04-25",
+      "state": "aligned",
+      "appliedShiftDays": -13,
+      "cycleLengthDays": 1448
+    },
+    {
+      "date": "2026-04-26",
+      "state": "aligned",
+      "appliedShiftDays": -13,
+      "cycleLengthDays": 1448
+    },
+    {
+      "date": "2026-04-27",
+      "state": "aligned",
+      "appliedShiftDays": -13,
+      "cycleLengthDays": 1448
+    },
+    {
+      "date": "2026-04-28",
+      "state": "aligned",
+      "appliedShiftDays": -13,
+      "cycleLengthDays": 1448
+    },
+    {
+      "date": "2026-04-29",
+      "state": "aligned",
+      "appliedShiftDays": -13,
+      "cycleLengthDays": 1448
+    },
+    {
+      "date": "2026-04-30",
+      "state": "aligned",
+      "appliedShiftDays": -13,
+      "cycleLengthDays": 1448
+    },
+    {
+      "date": "2026-05-01",
+      "state": "aligned",
+      "appliedShiftDays": -14,
+      "cycleLengthDays": 1447
+    },
+    {
+      "date": "2026-05-02",
+      "state": "aligned",
+      "appliedShiftDays": -14,
+      "cycleLengthDays": 1447
+    },
+    {
+      "date": "2026-05-03",
+      "state": "aligned",
+      "appliedShiftDays": -14,
+      "cycleLengthDays": 1447
+    },
+    {
+      "date": "2026-05-04",
+      "state": "aligned",
+      "appliedShiftDays": -14,
+      "cycleLengthDays": 1447
+    },
+    {
+      "date": "2026-05-05",
+      "state": "aligned",
+      "appliedShiftDays": -14,
+      "cycleLengthDays": 1447
+    },
+    {
+      "date": "2026-05-06",
+      "state": "aligned",
+      "appliedShiftDays": -14,
+      "cycleLengthDays": 1447
+    },
+    {
+      "date": "2026-05-07",
+      "state": "aligned",
+      "appliedShiftDays": -14,
+      "cycleLengthDays": 1447
+    },
+    {
+      "date": "2026-05-08",
+      "state": "aligned",
+      "appliedShiftDays": -14,
+      "cycleLengthDays": 1447
+    },
+    {
+      "date": "2026-05-09",
+      "state": "aligned",
+      "appliedShiftDays": -14,
+      "cycleLengthDays": 1447
+    },
+    {
+      "date": "2026-05-10",
+      "state": "aligned",
+      "appliedShiftDays": -14,
+      "cycleLengthDays": 1447
+    },
+    {
+      "date": "2026-05-11",
+      "state": "aligned",
+      "appliedShiftDays": -14,
+      "cycleLengthDays": 1447
+    },
+    {
+      "date": "2026-05-12",
+      "state": "aligned",
+      "appliedShiftDays": -14,
+      "cycleLengthDays": 1447
+    },
+    {
+      "date": "2026-05-13",
+      "state": "aligned",
+      "appliedShiftDays": -16,
+      "cycleLengthDays": 1445
+    },
+    {
+      "date": "2026-05-14",
+      "state": "aligned",
+      "appliedShiftDays": -18,
+      "cycleLengthDays": 1443
+    },
+    {
+      "date": "2026-05-15",
+      "state": "aligned",
+      "appliedShiftDays": -20,
+      "cycleLengthDays": 1441
+    },
+    {
+      "date": "2026-05-16",
+      "state": "shortened",
+      "appliedShiftDays": -22,
+      "cycleLengthDays": 1439
+    },
+    {
+      "date": "2026-05-17",
+      "state": "shortened",
+      "appliedShiftDays": -24,
+      "cycleLengthDays": 1437
+    },
+    {
+      "date": "2026-05-18",
+      "state": "shortened",
+      "appliedShiftDays": -26,
+      "cycleLengthDays": 1435
+    },
+    {
+      "date": "2026-05-19",
+      "state": "shortened",
+      "appliedShiftDays": -28,
+      "cycleLengthDays": 1433
+    },
+    {
+      "date": "2026-05-20",
+      "state": "shortened",
+      "appliedShiftDays": -30,
+      "cycleLengthDays": 1431
+    },
+    {
+      "date": "2026-05-21",
+      "state": "shortened",
+      "appliedShiftDays": -32,
+      "cycleLengthDays": 1429
+    },
+    {
+      "date": "2026-05-22",
+      "state": "shortened",
+      "appliedShiftDays": -34,
+      "cycleLengthDays": 1427
+    },
+    {
+      "date": "2026-05-23",
+      "state": "shortened",
+      "appliedShiftDays": -36,
+      "cycleLengthDays": 1425
+    },
+    {
+      "date": "2026-05-24",
+      "state": "shortened",
+      "appliedShiftDays": -38,
+      "cycleLengthDays": 1423
+    },
+    {
+      "date": "2026-05-25",
+      "state": "shortened",
+      "appliedShiftDays": -40,
+      "cycleLengthDays": 1421
+    },
+    {
+      "date": "2026-05-26",
+      "state": "shortened",
+      "appliedShiftDays": -42,
+      "cycleLengthDays": 1419
+    },
+    {
+      "date": "2026-05-27",
+      "state": "shortened",
+      "appliedShiftDays": -44,
+      "cycleLengthDays": 1417
+    },
+    {
+      "date": "2026-05-28",
+      "state": "shortened",
+      "appliedShiftDays": -46,
+      "cycleLengthDays": 1415
+    },
+    {
+      "date": "2026-05-29",
+      "state": "shortened",
+      "appliedShiftDays": -48,
+      "cycleLengthDays": 1413
+    },
+    {
+      "date": "2026-05-30",
+      "state": "shortened",
+      "appliedShiftDays": -50,
+      "cycleLengthDays": 1411
+    },
+    {
+      "date": "2026-05-31",
+      "state": "shortened",
+      "appliedShiftDays": -52,
+      "cycleLengthDays": 1409
+    },
+    {
+      "date": "2026-06-01",
+      "state": "shortened",
+      "appliedShiftDays": -54,
+      "cycleLengthDays": 1407
+    },
+    {
+      "date": "2026-06-02",
+      "state": "shortened",
+      "appliedShiftDays": -56,
+      "cycleLengthDays": 1405
+    },
+    {
+      "date": "2026-06-03",
+      "state": "shortened",
+      "appliedShiftDays": -58,
+      "cycleLengthDays": 1403
+    },
+    {
+      "date": "2026-06-04",
+      "state": "shortened",
+      "appliedShiftDays": -60,
+      "cycleLengthDays": 1401
+    },
+    {
+      "date": "2026-06-05",
+      "state": "shortened",
+      "appliedShiftDays": -59,
+      "cycleLengthDays": 1402
+    },
+    {
+      "date": "2026-06-06",
+      "state": "shortened",
+      "appliedShiftDays": -58,
+      "cycleLengthDays": 1403
+    },
+    {
+      "date": "2026-06-07",
+      "state": "shortened",
+      "appliedShiftDays": -57,
+      "cycleLengthDays": 1404
+    },
+    {
+      "date": "2026-06-08",
+      "state": "shortened",
+      "appliedShiftDays": -56,
+      "cycleLengthDays": 1405
+    },
+    {
+      "date": "2026-06-09",
+      "state": "shortened",
+      "appliedShiftDays": -55,
+      "cycleLengthDays": 1406
+    },
+    {
+      "date": "2026-06-10",
+      "state": "shortened",
+      "appliedShiftDays": -54,
+      "cycleLengthDays": 1407
+    },
+    {
+      "date": "2026-06-11",
+      "state": "shortened",
+      "appliedShiftDays": -53,
+      "cycleLengthDays": 1408
+    },
+    {
+      "date": "2026-06-12",
+      "state": "shortened",
+      "appliedShiftDays": -52,
+      "cycleLengthDays": 1409
+    },
+    {
+      "date": "2026-06-13",
+      "state": "shortened",
+      "appliedShiftDays": -52,
+      "cycleLengthDays": 1409
+    },
+    {
+      "date": "2026-06-14",
+      "state": "shortened",
+      "appliedShiftDays": -51,
+      "cycleLengthDays": 1410
+    },
+    {
+      "date": "2026-06-15",
+      "state": "shortened",
+      "appliedShiftDays": -50,
+      "cycleLengthDays": 1411
+    },
+    {
+      "date": "2026-06-16",
+      "state": "shortened",
+      "appliedShiftDays": -49,
+      "cycleLengthDays": 1412
+    },
+    {
+      "date": "2026-06-17",
+      "state": "shortened",
+      "appliedShiftDays": -49,
+      "cycleLengthDays": 1412
+    },
+    {
+      "date": "2026-06-18",
+      "state": "shortened",
+      "appliedShiftDays": -48,
+      "cycleLengthDays": 1413
+    },
+    {
+      "date": "2026-06-19",
+      "state": "shortened",
+      "appliedShiftDays": -47,
+      "cycleLengthDays": 1414
+    },
+    {
+      "date": "2026-06-20",
+      "state": "shortened",
+      "appliedShiftDays": -46,
+      "cycleLengthDays": 1415
+    },
+    {
+      "date": "2026-06-21",
+      "state": "shortened",
+      "appliedShiftDays": -46,
+      "cycleLengthDays": 1415
+    },
+    {
+      "date": "2026-06-22",
+      "state": "shortened",
+      "appliedShiftDays": -45,
+      "cycleLengthDays": 1416
+    },
+    {
+      "date": "2026-06-23",
+      "state": "shortened",
+      "appliedShiftDays": -44,
+      "cycleLengthDays": 1417
+    },
+    {
+      "date": "2026-06-24",
+      "state": "shortened",
+      "appliedShiftDays": -44,
+      "cycleLengthDays": 1417
+    },
+    {
+      "date": "2026-06-25",
+      "state": "shortened",
+      "appliedShiftDays": -43,
+      "cycleLengthDays": 1418
+    },
+    {
+      "date": "2026-06-26",
+      "state": "shortened",
+      "appliedShiftDays": -43,
+      "cycleLengthDays": 1418
+    },
+    {
+      "date": "2026-06-27",
+      "state": "shortened",
+      "appliedShiftDays": -42,
+      "cycleLengthDays": 1419
+    },
+    {
+      "date": "2026-06-28",
+      "state": "shortened",
+      "appliedShiftDays": -41,
+      "cycleLengthDays": 1420
+    },
+    {
+      "date": "2026-06-29",
+      "state": "shortened",
+      "appliedShiftDays": -41,
+      "cycleLengthDays": 1420
+    },
+    {
+      "date": "2026-06-30",
+      "state": "shortened",
+      "appliedShiftDays": -40,
+      "cycleLengthDays": 1421
+    },
+    {
+      "date": "2026-07-01",
+      "state": "shortened",
+      "appliedShiftDays": -40,
+      "cycleLengthDays": 1421
+    },
+    {
+      "date": "2026-07-02",
+      "state": "shortened",
+      "appliedShiftDays": -39,
+      "cycleLengthDays": 1422
+    },
+    {
+      "date": "2026-07-03",
+      "state": "shortened",
+      "appliedShiftDays": -39,
+      "cycleLengthDays": 1422
+    },
+    {
+      "date": "2026-07-04",
+      "state": "shortened",
+      "appliedShiftDays": -38,
+      "cycleLengthDays": 1423
+    },
+    {
+      "date": "2026-07-05",
+      "state": "shortened",
+      "appliedShiftDays": -38,
+      "cycleLengthDays": 1423
+    },
+    {
+      "date": "2026-07-06",
+      "state": "shortened",
+      "appliedShiftDays": -37,
+      "cycleLengthDays": 1424
+    },
+    {
+      "date": "2026-07-07",
+      "state": "shortened",
+      "appliedShiftDays": -37,
+      "cycleLengthDays": 1424
+    },
+    {
+      "date": "2026-07-08",
+      "state": "shortened",
+      "appliedShiftDays": -36,
+      "cycleLengthDays": 1425
+    },
+    {
+      "date": "2026-07-09",
+      "state": "shortened",
+      "appliedShiftDays": -36,
+      "cycleLengthDays": 1425
+    },
+    {
+      "date": "2026-07-10",
+      "state": "shortened",
+      "appliedShiftDays": -35,
+      "cycleLengthDays": 1426
+    },
+    {
+      "date": "2026-07-11",
+      "state": "shortened",
+      "appliedShiftDays": -35,
+      "cycleLengthDays": 1426
+    },
+    {
+      "date": "2026-07-12",
+      "state": "shortened",
+      "appliedShiftDays": -34,
+      "cycleLengthDays": 1427
+    },
+    {
+      "date": "2026-07-13",
+      "state": "shortened",
+      "appliedShiftDays": -34,
+      "cycleLengthDays": 1427
+    },
+    {
+      "date": "2026-07-14",
+      "state": "shortened",
+      "appliedShiftDays": -34,
+      "cycleLengthDays": 1427
+    },
+    {
+      "date": "2026-07-15",
+      "state": "shortened",
+      "appliedShiftDays": -33,
+      "cycleLengthDays": 1428
+    },
+    {
+      "date": "2026-07-16",
+      "state": "shortened",
+      "appliedShiftDays": -33,
+      "cycleLengthDays": 1428
+    },
+    {
+      "date": "2026-07-17",
+      "state": "shortened",
+      "appliedShiftDays": -33,
+      "cycleLengthDays": 1428
+    },
+    {
+      "date": "2026-07-18",
+      "state": "shortened",
+      "appliedShiftDays": -32,
+      "cycleLengthDays": 1429
+    },
+    {
+      "date": "2026-07-19",
+      "state": "shortened",
+      "appliedShiftDays": -32,
+      "cycleLengthDays": 1429
+    },
+    {
+      "date": "2026-07-20",
+      "state": "shortened",
+      "appliedShiftDays": -31,
+      "cycleLengthDays": 1430
+    },
+    {
+      "date": "2026-07-21",
+      "state": "shortened",
+      "appliedShiftDays": -31,
+      "cycleLengthDays": 1430
+    },
+    {
+      "date": "2026-07-22",
+      "state": "shortened",
+      "appliedShiftDays": -31,
+      "cycleLengthDays": 1430
+    },
+    {
+      "date": "2026-07-23",
+      "state": "shortened",
+      "appliedShiftDays": -30,
+      "cycleLengthDays": 1431
+    },
+    {
+      "date": "2026-07-24",
+      "state": "shortened",
+      "appliedShiftDays": -30,
+      "cycleLengthDays": 1431
+    },
+    {
+      "date": "2026-07-25",
+      "state": "shortened",
+      "appliedShiftDays": -30,
+      "cycleLengthDays": 1431
+    },
+    {
+      "date": "2026-07-26",
+      "state": "shortened",
+      "appliedShiftDays": -30,
+      "cycleLengthDays": 1431
+    },
+    {
+      "date": "2026-07-27",
+      "state": "shortened",
+      "appliedShiftDays": -29,
+      "cycleLengthDays": 1432
+    },
+    {
+      "date": "2026-07-28",
+      "state": "shortened",
+      "appliedShiftDays": -29,
+      "cycleLengthDays": 1432
+    },
+    {
+      "date": "2026-07-29",
+      "state": "shortened",
+      "appliedShiftDays": -29,
+      "cycleLengthDays": 1432
+    },
+    {
+      "date": "2026-07-30",
+      "state": "shortened",
+      "appliedShiftDays": -28,
+      "cycleLengthDays": 1433
+    },
+    {
+      "date": "2026-07-31",
+      "state": "shortened",
+      "appliedShiftDays": -28,
+      "cycleLengthDays": 1433
+    },
+    {
+      "date": "2026-08-01",
+      "state": "shortened",
+      "appliedShiftDays": -28,
+      "cycleLengthDays": 1433
+    },
+    {
+      "date": "2026-08-02",
+      "state": "shortened",
+      "appliedShiftDays": -28,
+      "cycleLengthDays": 1433
+    },
+    {
+      "date": "2026-08-03",
+      "state": "shortened",
+      "appliedShiftDays": -27,
+      "cycleLengthDays": 1434
+    },
+    {
+      "date": "2026-08-04",
+      "state": "shortened",
+      "appliedShiftDays": -27,
+      "cycleLengthDays": 1434
+    },
+    {
+      "date": "2026-08-05",
+      "state": "shortened",
+      "appliedShiftDays": -27,
+      "cycleLengthDays": 1434
+    },
+    {
+      "date": "2026-08-06",
+      "state": "shortened",
+      "appliedShiftDays": -27,
+      "cycleLengthDays": 1434
+    },
+    {
+      "date": "2026-08-07",
+      "state": "shortened",
+      "appliedShiftDays": -26,
+      "cycleLengthDays": 1435
+    },
+    {
+      "date": "2026-08-08",
+      "state": "shortened",
+      "appliedShiftDays": -26,
+      "cycleLengthDays": 1435
+    },
+    {
+      "date": "2026-08-09",
+      "state": "shortened",
+      "appliedShiftDays": -26,
+      "cycleLengthDays": 1435
+    },
+    {
+      "date": "2026-08-10",
+      "state": "shortened",
+      "appliedShiftDays": -26,
+      "cycleLengthDays": 1435
+    },
+    {
+      "date": "2026-08-11",
+      "state": "shortened",
+      "appliedShiftDays": -25,
+      "cycleLengthDays": 1436
+    },
+    {
+      "date": "2026-08-12",
+      "state": "shortened",
+      "appliedShiftDays": -25,
+      "cycleLengthDays": 1436
+    },
+    {
+      "date": "2026-08-13",
+      "state": "shortened",
+      "appliedShiftDays": -25,
+      "cycleLengthDays": 1436
+    },
+    {
+      "date": "2026-08-14",
+      "state": "shortened",
+      "appliedShiftDays": -25,
+      "cycleLengthDays": 1436
+    },
+    {
+      "date": "2026-08-15",
+      "state": "shortened",
+      "appliedShiftDays": -25,
+      "cycleLengthDays": 1436
+    },
+    {
+      "date": "2026-08-16",
+      "state": "shortened",
+      "appliedShiftDays": -25,
+      "cycleLengthDays": 1436
+    },
+    {
+      "date": "2026-08-17",
+      "state": "shortened",
+      "appliedShiftDays": -24,
+      "cycleLengthDays": 1437
+    },
+    {
+      "date": "2026-08-18",
+      "state": "shortened",
+      "appliedShiftDays": -24,
+      "cycleLengthDays": 1437
+    },
+    {
+      "date": "2026-08-19",
+      "state": "shortened",
+      "appliedShiftDays": -24,
+      "cycleLengthDays": 1437
+    },
+    {
+      "date": "2026-08-20",
+      "state": "shortened",
+      "appliedShiftDays": -24,
+      "cycleLengthDays": 1437
+    },
+    {
+      "date": "2026-08-21",
+      "state": "shortened",
+      "appliedShiftDays": -24,
+      "cycleLengthDays": 1437
+    },
+    {
+      "date": "2026-08-22",
+      "state": "shortened",
+      "appliedShiftDays": -23,
+      "cycleLengthDays": 1438
+    },
+    {
+      "date": "2026-08-23",
+      "state": "shortened",
+      "appliedShiftDays": -23,
+      "cycleLengthDays": 1438
+    },
+    {
+      "date": "2026-08-24",
+      "state": "shortened",
+      "appliedShiftDays": -23,
+      "cycleLengthDays": 1438
+    },
+    {
+      "date": "2026-08-25",
+      "state": "shortened",
+      "appliedShiftDays": -23,
+      "cycleLengthDays": 1438
+    },
+    {
+      "date": "2026-08-26",
+      "state": "shortened",
+      "appliedShiftDays": -23,
+      "cycleLengthDays": 1438
+    },
+    {
+      "date": "2026-08-27",
+      "state": "shortened",
+      "appliedShiftDays": -23,
+      "cycleLengthDays": 1438
+    },
+    {
+      "date": "2026-08-28",
+      "state": "shortened",
+      "appliedShiftDays": -23,
+      "cycleLengthDays": 1438
+    },
+    {
+      "date": "2026-08-29",
+      "state": "shortened",
+      "appliedShiftDays": -22,
+      "cycleLengthDays": 1439
+    },
+    {
+      "date": "2026-08-30",
+      "state": "shortened",
+      "appliedShiftDays": -22,
+      "cycleLengthDays": 1439
+    },
+    {
+      "date": "2026-08-31",
+      "state": "shortened",
+      "appliedShiftDays": -22,
+      "cycleLengthDays": 1439
+    },
+    {
+      "date": "2026-09-01",
+      "state": "shortened",
+      "appliedShiftDays": -22,
+      "cycleLengthDays": 1439
+    },
+    {
+      "date": "2026-09-02",
+      "state": "shortened",
+      "appliedShiftDays": -23,
+      "cycleLengthDays": 1438
+    },
+    {
+      "date": "2026-09-03",
+      "state": "shortened",
+      "appliedShiftDays": -24,
+      "cycleLengthDays": 1437
+    },
+    {
+      "date": "2026-09-04",
+      "state": "shortened",
+      "appliedShiftDays": -25,
+      "cycleLengthDays": 1436
+    },
+    {
+      "date": "2026-09-05",
+      "state": "shortened",
+      "appliedShiftDays": -26,
+      "cycleLengthDays": 1435
+    },
+    {
+      "date": "2026-09-06",
+      "state": "shortened",
+      "appliedShiftDays": -27,
+      "cycleLengthDays": 1434
+    },
+    {
+      "date": "2026-09-07",
+      "state": "shortened",
+      "appliedShiftDays": -28,
+      "cycleLengthDays": 1433
+    },
+    {
+      "date": "2026-09-08",
+      "state": "shortened",
+      "appliedShiftDays": -29,
+      "cycleLengthDays": 1432
+    },
+    {
+      "date": "2026-09-09",
+      "state": "shortened",
+      "appliedShiftDays": -29,
+      "cycleLengthDays": 1432
+    },
+    {
+      "date": "2026-09-10",
+      "state": "shortened",
+      "appliedShiftDays": -30,
+      "cycleLengthDays": 1431
+    },
+    {
+      "date": "2026-09-11",
+      "state": "shortened",
+      "appliedShiftDays": -31,
+      "cycleLengthDays": 1430
+    },
+    {
+      "date": "2026-09-12",
+      "state": "shortened",
+      "appliedShiftDays": -32,
+      "cycleLengthDays": 1429
+    },
+    {
+      "date": "2026-09-13",
+      "state": "shortened",
+      "appliedShiftDays": -33,
+      "cycleLengthDays": 1428
+    },
+    {
+      "date": "2026-09-14",
+      "state": "shortened",
+      "appliedShiftDays": -33,
+      "cycleLengthDays": 1428
+    },
+    {
+      "date": "2026-09-15",
+      "state": "shortened",
+      "appliedShiftDays": -34,
+      "cycleLengthDays": 1427
+    },
+    {
+      "date": "2026-09-16",
+      "state": "shortened",
+      "appliedShiftDays": -35,
+      "cycleLengthDays": 1426
+    },
+    {
+      "date": "2026-09-17",
+      "state": "shortened",
+      "appliedShiftDays": -36,
+      "cycleLengthDays": 1425
+    },
+    {
+      "date": "2026-09-18",
+      "state": "shortened",
+      "appliedShiftDays": -36,
+      "cycleLengthDays": 1425
+    },
+    {
+      "date": "2026-09-19",
+      "state": "shortened",
+      "appliedShiftDays": -37,
+      "cycleLengthDays": 1424
+    },
+    {
+      "date": "2026-09-20",
+      "state": "shortened",
+      "appliedShiftDays": -38,
+      "cycleLengthDays": 1423
+    },
+    {
+      "date": "2026-09-21",
+      "state": "shortened",
+      "appliedShiftDays": -38,
+      "cycleLengthDays": 1423
+    },
+    {
+      "date": "2026-09-22",
+      "state": "shortened",
+      "appliedShiftDays": -39,
+      "cycleLengthDays": 1422
+    },
+    {
+      "date": "2026-09-23",
+      "state": "shortened",
+      "appliedShiftDays": -40,
+      "cycleLengthDays": 1421
+    },
+    {
+      "date": "2026-09-24",
+      "state": "shortened",
+      "appliedShiftDays": -40,
+      "cycleLengthDays": 1421
+    },
+    {
+      "date": "2026-09-25",
+      "state": "shortened",
+      "appliedShiftDays": -41,
+      "cycleLengthDays": 1420
+    },
+    {
+      "date": "2026-09-26",
+      "state": "shortened",
+      "appliedShiftDays": -41,
+      "cycleLengthDays": 1420
+    },
+    {
+      "date": "2026-09-27",
+      "state": "shortened",
+      "appliedShiftDays": -42,
+      "cycleLengthDays": 1419
+    },
+    {
+      "date": "2026-09-28",
+      "state": "shortened",
+      "appliedShiftDays": -42,
+      "cycleLengthDays": 1419
+    },
+    {
+      "date": "2026-09-29",
+      "state": "shortened",
+      "appliedShiftDays": -43,
+      "cycleLengthDays": 1418
+    },
+    {
+      "date": "2026-09-30",
+      "state": "shortened",
+      "appliedShiftDays": -44,
+      "cycleLengthDays": 1417
+    },
+    {
+      "date": "2026-10-01",
+      "state": "shortened",
+      "appliedShiftDays": -44,
+      "cycleLengthDays": 1417
+    },
+    {
+      "date": "2026-10-02",
+      "state": "shortened",
+      "appliedShiftDays": -45,
+      "cycleLengthDays": 1416
+    },
+    {
+      "date": "2026-10-03",
+      "state": "shortened",
+      "appliedShiftDays": -45,
+      "cycleLengthDays": 1416
+    },
+    {
+      "date": "2026-10-04",
+      "state": "shortened",
+      "appliedShiftDays": -45,
+      "cycleLengthDays": 1416
+    },
+    {
+      "date": "2026-10-05",
+      "state": "shortened",
+      "appliedShiftDays": -46,
+      "cycleLengthDays": 1415
+    },
+    {
+      "date": "2026-10-06",
+      "state": "shortened",
+      "appliedShiftDays": -46,
+      "cycleLengthDays": 1415
+    },
+    {
+      "date": "2026-10-07",
+      "state": "shortened",
+      "appliedShiftDays": -47,
+      "cycleLengthDays": 1414
+    },
+    {
+      "date": "2026-10-08",
+      "state": "shortened",
+      "appliedShiftDays": -47,
+      "cycleLengthDays": 1414
+    },
+    {
+      "date": "2026-10-09",
+      "state": "shortened",
+      "appliedShiftDays": -48,
+      "cycleLengthDays": 1413
+    },
+    {
+      "date": "2026-10-10",
+      "state": "shortened",
+      "appliedShiftDays": -48,
+      "cycleLengthDays": 1413
+    },
+    {
+      "date": "2026-10-11",
+      "state": "shortened",
+      "appliedShiftDays": -49,
+      "cycleLengthDays": 1412
+    },
+    {
+      "date": "2026-10-12",
+      "state": "shortened",
+      "appliedShiftDays": -49,
+      "cycleLengthDays": 1412
+    },
+    {
+      "date": "2026-10-13",
+      "state": "shortened",
+      "appliedShiftDays": -49,
+      "cycleLengthDays": 1412
+    },
+    {
+      "date": "2026-10-14",
+      "state": "shortened",
+      "appliedShiftDays": -50,
+      "cycleLengthDays": 1411
+    },
+    {
+      "date": "2026-10-15",
+      "state": "shortened",
+      "appliedShiftDays": -50,
+      "cycleLengthDays": 1411
+    },
+    {
+      "date": "2026-10-16",
+      "state": "shortened",
+      "appliedShiftDays": -50,
+      "cycleLengthDays": 1411
+    },
+    {
+      "date": "2026-10-17",
+      "state": "shortened",
+      "appliedShiftDays": -51,
+      "cycleLengthDays": 1410
+    },
+    {
+      "date": "2026-10-18",
+      "state": "shortened",
+      "appliedShiftDays": -51,
+      "cycleLengthDays": 1410
+    },
+    {
+      "date": "2026-10-19",
+      "state": "shortened",
+      "appliedShiftDays": -51,
+      "cycleLengthDays": 1410
+    },
+    {
+      "date": "2026-10-20",
+      "state": "shortened",
+      "appliedShiftDays": -52,
+      "cycleLengthDays": 1409
+    },
+    {
+      "date": "2026-10-21",
+      "state": "shortened",
+      "appliedShiftDays": -52,
+      "cycleLengthDays": 1409
+    }
+  ],
+  "interpretation": {
+    "automaticUpdate": "Recalculated after validated completed UTC price observations are appended.",
+    "unchangedObservationsProduceIdenticalRecord": true,
+    "wallClockIsNotMarketData": true,
+    "historicalSignalsUseTheirOwnObservedPrefix": true,
+    "calibratedPredictionInterval": false,
+    "tradingSignal": false
+  }
+}

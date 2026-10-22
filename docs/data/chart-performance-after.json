@@ -1,0 +1,180 @@
+{
+  "generatedAt": "2026-10-22T12:16:14.705Z",
+  "revision": "optimized-renderer",
+  "node": "v24.19.0",
+  "scope": "Node SVG boundary stub: renderer JS and markup generation. No DOM parsing, browser paint, network, or end-to-end latency claim.",
+  "method": "7 measured samples per case after 2 warmups; 1280×720; cases in the listed order; no wall-time pass/fail threshold.",
+  "rendererModuleHashes": {
+    "atlas-price-chart.js": "9a61fd790abc0a1caecf4d3493befe3cd793dfeeda9a0f1b3002046e5b507969",
+    "chart-overlays.js": "d88024108895277ec3748397a6815bc6260c6009be24d8d279177f108772dd75",
+    "chart-window.js": "ff1527876a0185e8f8a52211170c696bde98f0120c6f0ddde58cea987daaf7cd",
+    "chart-navigation.js": "3d6e1a708789a74dbe06d25da517d606ecf181c5a2836fe7194a9ae07d7e923c"
+  },
+  "inputRoot": "/tmp/btc-perf-8d2db05",
+  "rendererRoot": "/workspace/scratch/147ead717009/bitcoin-cycle-atlas",
+  "rows": 14777,
+  "observedBars": 5544,
+  "projectedBars": 8837,
+  "inputSha256": "b93599acedde3810417fb76f8d8fd7533302404fdcea86fe1fc2b86aba972e22",
+  "construction": {
+    "priceModelMs": 696.1596609999999,
+    "volumeModelMs": 243.88538100000005
+  },
+  "results": [
+    {
+      "name": "full-line",
+      "medianMs": 34.643677000000025,
+      "minMs": 28.23784300000011,
+      "maxMs": 45.62030600000003,
+      "samplesMs": [
+        45.62030600000003,
+        41.91335499999991,
+        35.16431499999999,
+        34.52596300000005,
+        28.278233,
+        34.643677000000025,
+        28.23784300000011
+      ],
+      "markupBytes": 509357,
+      "svgElements": 444,
+      "pathCommands": 25507,
+      "data": {
+        "historyLabelCount": "5",
+        "historyEventCount": "41",
+        "historyLabelMode": "overview",
+        "historyHiddenLabelCount": "36",
+        "plotLeft": "12",
+        "plotRight": "1198",
+        "plotTop": "70",
+        "plotBottom": "674",
+        "priceBottom": "445",
+        "scale": "log",
+        "tool": "crosshair",
+        "chartType": "line",
+        "visiblePointCount": "14777",
+        "observedCandleCount": "0",
+        "candleRendering": "individual"
+      }
+    },
+    {
+      "name": "full-candles",
+      "medianMs": 64.8428550000001,
+      "minMs": 57.083142999999836,
+      "maxMs": 83.45728699999995,
+      "samplesMs": [
+        67.25465899999995,
+        63.69537700000001,
+        64.8428550000001,
+        83.45728699999995,
+        70.54338299999995,
+        57.083142999999836,
+        62.004249999999956
+      ],
+      "markupBytes": 775896,
+      "svgElements": 450,
+      "pathCommands": 35106,
+      "data": {
+        "historyLabelCount": "5",
+        "historyEventCount": "41",
+        "historyLabelMode": "overview",
+        "historyHiddenLabelCount": "36",
+        "plotLeft": "12",
+        "plotRight": "1198",
+        "plotTop": "70",
+        "plotBottom": "674",
+        "priceBottom": "445",
+        "scale": "log",
+        "tool": "crosshair",
+        "chartType": "candles",
+        "visiblePointCount": "14777",
+        "observedCandleCount": "5544",
+        "candleRendering": "batched"
+      }
+    },
+    {
+      "name": "one-year-candles",
+      "medianMs": 2.878537999999935,
+      "minMs": 2.637823000000026,
+      "maxMs": 3.2635469999997895,
+      "samplesMs": [
+        3.2635469999997895,
+        2.878537999999935,
+        2.729547999999795,
+        2.6885480000000825,
+        2.637823000000026,
+        2.9252269999997225,
+        2.8980169999999816
+      ],
+      "markupBytes": 284701,
+      "svgElements": 2265,
+      "pathCommands": 371,
+      "data": {
+        "historyLabelCount": "0",
+        "historyEventCount": "0",
+        "historyLabelMode": "detail",
+        "historyHiddenLabelCount": "0",
+        "plotLeft": "12",
+        "plotRight": "1198",
+        "plotTop": "70",
+        "plotBottom": "674",
+        "priceBottom": "445",
+        "scale": "log",
+        "tool": "crosshair",
+        "chartType": "candles",
+        "visiblePointCount": "365",
+        "observedCandleCount": "365",
+        "candleRendering": "individual"
+      }
+    },
+    {
+      "name": "future-90-days",
+      "medianMs": 0.5081799999998111,
+      "minMs": 0.42118200000004435,
+      "maxMs": 0.6424179999999069,
+      "samplesMs": [
+        0.5081799999998111,
+        0.49504099999967366,
+        0.5601160000001073,
+        0.5217900000002373,
+        0.6424179999999069,
+        0.42118200000004435,
+        0.4969530000003033
+      ],
+      "markupBytes": 16346,
+      "svgElements": 66,
+      "pathCommands": 812,
+      "data": {
+        "historyLabelCount": "0",
+        "historyEventCount": "0",
+        "historyLabelMode": "detail",
+        "historyHiddenLabelCount": "0",
+        "plotLeft": "12",
+        "plotRight": "1198",
+        "plotTop": "70",
+        "plotBottom": "674",
+        "priceBottom": "445",
+        "scale": "log",
+        "tool": "crosshair",
+        "chartType": "line",
+        "visiblePointCount": "90",
+        "observedCandleCount": "0",
+        "candleRendering": "individual"
+      }
+    },
+    {
+      "name": "measurement-100-pointer-events",
+      "medianMs": 7.963712999999643,
+      "minMs": 6.8958669999997255,
+      "maxMs": 11.982714000000215,
+      "samplesMs": [
+        11.982714000000215,
+        7.71761000000015,
+        8.743032999999741,
+        9.101662000000033,
+        6.8958669999997255,
+        7.5978729999997086,
+        7.963712999999643
+      ]
+    }
+  ]
+}

@@ -99,6 +99,8 @@ The approximately 3.99-year half-life imitates declining issuance. It is **chose
 
 The optional near model can be unavailable because of an expired clock, insufficient halving history, or no observed 20% peak decline. The long economic model still runs from a validated consecutive daily prefix; it records the missing near-phase reason instead of fabricating a reference peak.
 
+**v1.9 timing update:** the near clock now accepts the daily observed-prefix calibration documented in [CYCLE_CALIBRATION_MODEL.md](CYCLE_CALIBRATION_MODEL.md). Its persistent 40% drawdown / 20% rebound criteria, 14-day confirmation, small-sample shrinkage and smoothing are disclosed modeling choices, not empirically validated optimal settings. The calibration shifts valid near-phase dates without changing published long-horizon valuation anchors. Each historical ribbon row uses only its own observed prefix. A new high, observed halving or gap resets the reference. The top-right countdown reads the resulting representative path, filters candidate runs below seven days, and reports the next sustained state as conditional. This is not a probability of a future market turn. Archived numerical example paths below predate this clock update and should not be read as current live results.
+
 ### Residual path and assumed volatility
 
 Near-phase residuals retain the existing model’s historical sampling; the later segment samples consecutive blocks from the latest 1,461 actual daily returns known by the selected price cutoff. The default later block length is 28 days. Block provenance records source dates and target dates. Source blocks may overlap and are not independent observations.

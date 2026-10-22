@@ -1,7 +1,8 @@
 import { HALVINGS, utcDay, dateFromDay, validateDataset } from './cycle-engine.js';
-import { buildDetailedForecast } from './detailed-forecast.js';
+import { buildDetailedForecast } from './detailed-forecast.js?v=1.9.0';
 import { computeRollingStates, detectDirectionalChanges } from './market-structure.js';
 import { LONG_HORIZON_CLAIMS, LONG_HORIZON_REVIEW_DATE } from './long-horizon-evidence.js';
+import { calibrateCycleTiming } from './cycle-calibration.js?v=1.9.0';
 
 const DAYS_PER_YEAR = 365.25;
 const BLOCKS_PER_DAY = 144;
@@ -18,6 +19,7 @@ export const LONG_HORIZON_DEFAULTS = Object.freeze({
   volatilityWindowDays: 90, volatilityMultiplier: 1,
   terminalVolatilityPct: 20, volatilityHalfLifeYears: 8,
   residualHalfLifeDays: 730, localTurnThreshold: 0.12,
+  applyCycleCalibration: true,
 });
 
 export const LONG_HORIZON_SCENARIOS = Object.freeze([
@@ -185,7 +187,9 @@ export function buildLongHorizonForecast(input, options = {}) {
   finitePositive(settings.volatilityHalfLifeYears, 'volatilityHalfLifeYears');
   finitePositive(settings.residualHalfLifeDays, 'residualHalfLifeDays');
   bounded(settings.localTurnThreshold, 0.05, 0.5, 'localTurnThreshold');
+  if (typeof settings.applyCycleCalibration !== 'boolean') throw new TypeError('applyCycleCalibration must be boolean');
   const rows = validatedPrefix(input, options.asOf), current = rows.at(-1);
+  const cycleCalibration = calibrateCycleTiming(rows, { asOf: current.date });
   const referenceDate = options.referenceDate ?? (current.date < '2026-10-22' ? '2026-10-22' : dateFromDay(current.epochDay + 1));
   utcDay(referenceDate);
   if (referenceDate <= current.date) throw new RangeError('referenceDate must follow the latest completed UTC price');
@@ -206,7 +210,8 @@ export function buildLongHorizonForecast(input, options = {}) {
     nearPhaseUnavailable = 'Insufficient historical halving eras for the optional near-phase model';
   } else {
     try {
-      nearPhase = buildDetailedForecast(rows, { ...settings, scenario: 'base', asOf: current.date, referenceDate, horizonYears: 3, displayEnd: undefined, includeSamplePaths: false });
+      nearPhase = buildDetailedForecast(rows, { ...settings, scenario: 'base', asOf: current.date, referenceDate, horizonYears: 3, displayEnd: undefined, includeSamplePaths: false,
+        timingCalibration: settings.applyCycleCalibration ? cycleCalibration.current : null });
     } catch (error) {
       const unavailableClock = /calendar reference high needs a 20% decline|high-zone reference must be strictly in the future|stress reference date is expired|horizon exceeds the next assumed low|display horizon days|bridge terminal horizon/.test(error.message);
       if (!(error instanceof RangeError) || !unavailableClock) throw error;
@@ -330,7 +335,7 @@ export function buildLongHorizonForecast(input, options = {}) {
   const currentState = statesByDate.get(current.date)?.state ?? 'transition';
   const observed = row => ({ date: row.date, price: row.price });
   return {
-    version: 'source-anchored-long-horizon-1', asOf: current.date, referenceDate,
+    version: 'source-anchored-long-horizon-2', asOf: current.date, referenceDate,
     referenceTimezone: options.referenceTimezone ?? 'Asia/Seoul', displayEnd: evidence.displayEnd, horizonDays,
     observables: nearPhase?.observables ?? {
       current: observed(current), peak: { ...observed(observedPeak), provisional: true }, previousPeak: null,
@@ -342,6 +347,18 @@ export function buildLongHorizonForecast(input, options = {}) {
       priceDefinition: 'Completed UTC daily observations; future daily values are simulated, never OHLC.',
     },
     scenario, nominalClock: nearPhase?.nominalClock ?? null, nearPhase,
+    cycleCalibration: {
+      ...cycleCalibration,
+      forecastApplication: {
+        enabled: settings.applyCycleCalibration,
+        requestedShiftDays: settings.applyCycleCalibration ? cycleCalibration.current.appliedShiftDays : 0,
+        appliedShiftDays: nearPhase?.nominalClock.timingAdjustment.appliedShiftDays ?? 0,
+        applied: Boolean(settings.applyCycleCalibration && nearPhase?.nominalClock.timingAdjustment.applied),
+        reason: !settings.applyCycleCalibration ? 'disabled-for-comparison' : nearPhase?.nominalClock.timingAdjustment.reason ?? 'near-phase-unavailable',
+        sourceValuationAnchorsChanged: false,
+        scope: 'The optional near-phase clock only; no automatic repetition of four-year waves through 2050.',
+      },
+    },
     path, weeklyPath: weeklyRows(path), events, localTurns,
     assumptions: {
       seed: settings.seed, blockDays: settings.blockDays, volatilityMultiplier: settings.volatilityMultiplier,
@@ -408,6 +425,9 @@ export function buildLongHorizonForecast(input, options = {}) {
         repeatedFourYearWaves: false, cycleExpiryYear: null,
         nearPhaseEnd: nearPhase?.displayEnd ?? null, nearPhaseUnavailable,
         nearPhaseTransitionIsNotCycleExpiry: true,
+        adaptiveTimingEnabled: settings.applyCycleCalibration,
+        timingCalibrationVersion: cycleCalibration.version,
+        appliedTimingShiftDays: nearPhase?.nominalClock.timingAdjustment.appliedShiftDays ?? 0,
         displacementDefinition: 'Damped deviation of the legacy short-term reference from its endpoint trend, returning to zero at the near-phase endpoint. No new scheduled peaks or troughs are invented afterward.',
       },
       annualSummary, sourceReferencePoints,

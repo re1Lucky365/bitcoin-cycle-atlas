@@ -47,7 +47,17 @@ jobs:
           import { readFile, appendFile } from 'node:fs/promises';
           const result = JSON.parse(await readFile(`${process.env.RUNNER_TEMP}/data-refresh.json`, 'utf8'));
           await appendFile(process.env.GITHUB_STEP_SUMMARY,
-            `## BTC observation refresh\n\nStatus: ${result.status}\n\nSuccessful check: ${result.checkedAt}\n\nLatest completed UTC observation: ${result.latestObservationDate}\n\nAppended daily rows: ${result.appendedRows}\n\nLast bundled data update: ${result.dataUpdatedAt}\n\nPublished research calculations and backtests are unchanged.\n`);
+            `## BTC observation refresh\n\nStatus: ${result.status}\n\nSuccessful check: ${result.checkedAt}\n\nLatest completed UTC observation: ${result.latestObservationDate}\n\nAppended daily rows: ${result.appendedRows}\n\nLast bundled data update: ${result.dataUpdatedAt}\n\nArchived research and fixed backtest fixtures remain unchanged. The daily cycle clock is regenerated below.\n`);
+          NODE
+      - name: Recalculate the cycle clock from completed observations
+        shell: bash
+        run: |
+          node scripts/refresh-cycle-calibration.mjs | tee "$RUNNER_TEMP/cycle-refresh.json"
+          node --input-type=module <<'NODE'
+          import { readFile, appendFile } from 'node:fs/promises';
+          const result = JSON.parse(await readFile(`${process.env.RUNNER_TEMP}/cycle-refresh.json`, 'utf8'));
+          await appendFile(process.env.GITHUB_STEP_SUMMARY,
+            `## Conditional cycle clock\n\nStatus: ${result.status}\n\nObserved through: ${result.asOf}\n\nClosed historical references: ${result.referenceCount}\n\nSmoothed correction: ${result.shiftDays} days\n\nFuture clock applied: ${result.futureApplied} (${result.futureAppliedShiftDays} days)\n\nApplication reason: ${result.futureReason}\n\nSource prices SHA-256: ${result.sourcePricesSha256}\n\nThis is an assumed timing rule, not a calibrated prediction interval or confirmed future event.\n`);
           NODE
       - name: Refresh completed exchange candle fallback
         # Live browser reads remain available. If the optional exchange endpoint
@@ -60,12 +70,16 @@ jobs:
         run: node scripts/refresh-volume.mjs
       - name: Test code, fixed research fixtures and refreshed source data
         run: npm test
+      - name: Verify regenerated calibration and chart complexity budgets
+        run: |
+          npm run verify:cycle
+          npm run verify:performance
       - name: Verify the refreshed static site and standalone build
         run: |
           node scripts/verify-static.mjs
           node scripts/build-standalone.mjs build/Bitcoin_Cycles_Comparison.html
           node scripts/verify-static.mjs --standalone build/Bitcoin_Cycles_Comparison.html
-      - name: Commit only validated dataset and update metadata
+      - name: Commit only validated data, derived clock and update metadata
         shell: bash
         env:
           BASE_HEAD: ${{ steps.revision.outputs.head }}
@@ -75,11 +89,11 @@ jobs:
             echo 'Remote main changed during validation. Aborting; a later run will retry from the new revision.'
             exit 1
           fi
-          git add -- dist/data/btc-daily.json dist/data-update.js dist/data/btc-ohlc.json dist/data/btc-volume.json
+          git add -- dist/data/btc-daily.json dist/data-update.js dist/data/btc-ohlc.json dist/data/btc-volume.json dist/data/cycle-calibration.json
           node --input-type=module <<'NODE'
           import { execFile } from 'node:child_process';
           import { promisify } from 'node:util';
-          const allowed = new Set(['dist/data/btc-daily.json', 'dist/data-update.js', 'dist/data/btc-ohlc.json', 'dist/data/btc-volume.json']);
+          const allowed = new Set(['dist/data/btc-daily.json', 'dist/data-update.js', 'dist/data/btc-ohlc.json', 'dist/data/btc-volume.json', 'dist/data/cycle-calibration.json']);
           const { stdout } = await promisify(execFile)('git', ['diff', '--cached', '--name-only', '-z']);
           const staged = stdout.split('\0').filter(Boolean);
           if (staged.some(file => !allowed.has(file))) throw new Error('Unexpected file staged for the data refresh');

@@ -1,0 +1,167 @@
+{
+  "generatedAt": "2026-10-22T12:06:36.246Z",
+  "revision": "8d2db055bf6a609893740f6e9d5f44122baa64cc",
+  "node": "v24.19.0",
+  "scope": "Node SVG boundary stub: renderer JS and markup generation. No DOM parsing, browser paint, network, or end-to-end latency claim.",
+  "method": "7 measured samples per case after 2 warmups; 1280×720; cases in the listed order; no wall-time pass/fail threshold.",
+  "inputRoot": "/tmp/btc-perf-8d2db05",
+  "rendererRoot": "/tmp/btc-perf-8d2db05",
+  "rows": 14777,
+  "observedBars": 5544,
+  "projectedBars": 8837,
+  "inputSha256": "b93599acedde3810417fb76f8d8fd7533302404fdcea86fe1fc2b86aba972e22",
+  "construction": {
+    "priceModelMs": 699.210121,
+    "volumeModelMs": 229.56521699999996
+  },
+  "results": [
+    {
+      "name": "full-line",
+      "medianMs": 305.41247099999987,
+      "minMs": 286.75029600000016,
+      "maxMs": 322.29176499999994,
+      "samplesMs": [
+        305.41247099999987,
+        311.42602899999974,
+        307.90618300000006,
+        286.75029600000016,
+        302.7030329999998,
+        297.31846300000007,
+        322.29176499999994
+      ],
+      "markupBytes": 2346955,
+      "svgElements": 11529,
+      "pathCommands": 52846,
+      "data": {
+        "historyLabelCount": "5",
+        "historyEventCount": "41",
+        "historyLabelMode": "overview",
+        "historyHiddenLabelCount": "36",
+        "plotLeft": "12",
+        "plotRight": "1198",
+        "plotTop": "70",
+        "plotBottom": "674",
+        "priceBottom": "445",
+        "scale": "log",
+        "tool": "crosshair",
+        "chartType": "line"
+      }
+    },
+    {
+      "name": "full-candles",
+      "medianMs": 883.2741530000003,
+      "minMs": 811.5903209999997,
+      "maxMs": 1004.2126260000005,
+      "samplesMs": [
+        883.2741530000003,
+        1004.2126260000005,
+        949.2181919999994,
+        853.0734520000005,
+        811.5903209999997,
+        815.9297670000014,
+        899.7257829999999
+      ],
+      "markupBytes": 4635094,
+      "svgElements": 33705,
+      "pathCommands": 47302,
+      "data": {
+        "historyLabelCount": "5",
+        "historyEventCount": "41",
+        "historyLabelMode": "overview",
+        "historyHiddenLabelCount": "36",
+        "plotLeft": "12",
+        "plotRight": "1198",
+        "plotTop": "70",
+        "plotBottom": "674",
+        "priceBottom": "445",
+        "scale": "log",
+        "tool": "crosshair",
+        "chartType": "candles"
+      }
+    },
+    {
+      "name": "one-year-candles",
+      "medianMs": 87.09260600000016,
+      "minMs": 85.33071399999972,
+      "maxMs": 92.59935699999915,
+      "samplesMs": [
+        89.63440900000023,
+        86.53125699999873,
+        85.33071399999972,
+        88.82015700000011,
+        87.09260600000016,
+        86.20730899999944,
+        92.59935699999915
+      ],
+      "markupBytes": 284633,
+      "svgElements": 2265,
+      "pathCommands": 371,
+      "data": {
+        "historyLabelCount": "0",
+        "historyEventCount": "0",
+        "historyLabelMode": "detail",
+        "historyHiddenLabelCount": "0",
+        "plotLeft": "12",
+        "plotRight": "1198",
+        "plotTop": "70",
+        "plotBottom": "674",
+        "priceBottom": "445",
+        "scale": "log",
+        "tool": "crosshair",
+        "chartType": "candles"
+      }
+    },
+    {
+      "name": "future-90-days",
+      "medianMs": 35.53214099999968,
+      "minMs": 32.61775800000032,
+      "maxMs": 38.625998999999865,
+      "samplesMs": [
+        33.614299000000756,
+        36.97415000000001,
+        32.61775800000032,
+        33.844858999998905,
+        35.53214099999968,
+        36.737230000000636,
+        38.625998999999865
+      ],
+      "markupBytes": 16280,
+      "svgElements": 66,
+      "pathCommands": 812,
+      "data": {
+        "historyLabelCount": "0",
+        "historyEventCount": "0",
+        "historyLabelMode": "detail",
+        "historyHiddenLabelCount": "0",
+        "plotLeft": "12",
+        "plotRight": "1198",
+        "plotTop": "70",
+        "plotBottom": "674",
+        "priceBottom": "445",
+        "scale": "log",
+        "tool": "crosshair",
+        "chartType": "line"
+      }
+    },
+    {
+      "name": "measurement-100-pointer-events",
+      "medianMs": 69.158367,
+      "minMs": 66.70931100000053,
+      "maxMs": 73.95623100000012,
+      "samplesMs": [
+        66.70931100000053,
+        69.17684399999962,
+        67.74876600000061,
+        67.8271109999987,
+        70.99991600000067,
+        69.158367,
+        73.95623100000012
+      ]
+    }
+  ],
+  "rendererModuleHashes": {
+    "atlas-price-chart.js": "04101ff73578d2de267b46c28633609cf2ff21bf7f9bc068c0e92a7cfe12ec20",
+    "chart-overlays.js": "86251ce95550f6b12ced7a430cd1abcc3d91137101f011971bc1b393df76f07f",
+    "chart-navigation.js": "cc3203e7f493713bafdb8169f30e22c01cd755c3ad23a5774bafe48820d6c0dc"
+  }
+}

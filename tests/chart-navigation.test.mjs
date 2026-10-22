@@ -158,6 +158,8 @@ class TestElement extends EventSurface {
   getAttribute(key){return this.attributes.get(key)??null;}
   contains(target){return target===this||this.children.some(child=>child.contains?.(target));}
   matchesSelector(selector){
+    if(selector.startsWith('.'))return this.getAttribute('class')?.split(/\s+/).includes(selector.slice(1))||false;
+    if(selector.startsWith('#'))return this.getAttribute('id')===selector.slice(1);
     if(selector==='svg[data-plot-left]:not([hidden])')return this.tagName==='SVG'&&this.dataset.plotLeft!==undefined&&!this.hidden;
     if(selector==='[role=button]:not(.history-event-marker)')return this.getAttribute('role')==='button'&&!this.getAttribute('class')?.split(/\s+/).includes('history-event-marker');
     if(selector.startsWith('[role='))return this.getAttribute('role')===selector.slice(6,-1);
@@ -300,5 +302,17 @@ test('Escape and window changes stop an in-progress gesture without leaving a st
   assert.equal(h.fire('click').defaultPrevented,true);
   h.controller.openMenu();h.window.emit('resize');assert.equal(h.controller.menu.hidden,true);
   h.fire('pointerdown');h.pointer('pointermove',{clientX:650});h.window.emit('blur');h.flush();assert.equal(h.changes.length,0);assert.equal(h.element.dataset.dragging,undefined);
+  h.controller.destroy();
+});
+
+
+test('floating indicator windows and their non-button children keep their own wheel and drag behavior',()=>{
+  const h=navigationHarness();
+  for(const [attribute,value]of [['class','analysis-indicator-windows'],['id','chart-indicator-manager']]){
+    const panel=h.document.createElement('div'),content=h.document.createElement('span');panel.setAttribute(attribute,value);panel.append(content);h.element.append(panel);
+    assert.equal(h.fire('wheel',{target:content,deltaY:-100}).defaultPrevented,false);
+    h.fire('pointerdown',{target:content,clientX:300});h.pointer('pointermove',{target:content,clientX:650});h.pointer('pointerup',{target:content,clientX:650});
+    h.flush();assert.equal(h.changes.length,0);assert.equal(h.frames.size,0);
+  }
   h.controller.destroy();
 });

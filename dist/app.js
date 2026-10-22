@@ -1,5 +1,6 @@
 import { buildComparison, getAnchors, getPointAtDay, comparisonToCsv, validateDataset, utcDay } from './cycle-engine.js';
 import { fetchLatestDataset } from './data-source.js';
+import { inspectPublishedDataset, shouldCheckPublishedSnapshot } from './published-data.js?v=1.9.0';
 import { analyzeCycleTiming } from './cycle-timing.js';
 import { renderTimingView } from './timing-view.js';
 import { analyzePeakZones } from './peak-zones.js';
@@ -8,8 +9,8 @@ import { renderPeakView } from './peak-view.js';
 import { renderForecastView, exportForecastSvg } from './forecast-view.js';
 // Changed release modules use a versioned URL so a cached v1.5 module cannot
 // leave a new long-horizon page running the old three-year workbench.
-import { initViewportWorkspace } from './viewport-workspace.js?v=1.8.2';
-import { initLabView } from './lab-view.js?v=1.8.2';
+import { initViewportWorkspace } from './viewport-workspace.js?v=1.9.0';
+import { initLabView } from './lab-view.js?v=1.9.0';
 import { initEvidenceView, showEvidenceView } from './evidence-view.js?v=1.6.0';
 
 const $ = (selector) => document.querySelector(selector);
@@ -70,7 +71,7 @@ function toast(message) { $('#toast').textContent = message; $('#toast').hidden 
 function persistUrl() {
   const p = new URLSearchParams();
   const currentParams=new URLSearchParams(location.search);
-  for(const key of ['chart','span','assumption','granularity','type','axis','align','interval','measure','scope','phase','legacy','dock','audit'])if(currentParams.has(key))p.set(key,currentParams.get(key));
+  for(const key of ['chart','span','assumption','granularity','type','axis','align','interval','measure','scope','phase','legacy','dock','audit','indicators','indicator-hide','indicator-list'])if(currentParams.has(key))p.set(key,currentParams.get(key));
   if (state.view !== 'outlook') p.set('page',state.view);
   if (state.mode !== 'halving') p.set('mode', state.mode);
   if (state.unit !== 'rebased') p.set('unit', state.unit);
@@ -359,6 +360,36 @@ $('#export-svg').addEventListener('click',()=>{if(!state.chart)return;download(`
 $('#export-png').addEventListener('click',async()=>{if(!state.chart)return;closeExport();try {const source=chartExport(),url=URL.createObjectURL(new Blob([source],{type:'image/svg+xml;charset=utf-8'})),img=new Image();try{await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=reject;img.src=url;});const canvas=document.createElement('canvas');canvas.width=img.width*2;canvas.height=img.height*2;const ctx=canvas.getContext('2d');ctx.scale(2,2);ctx.drawImage(img,0,0);const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));if(!blob)throw Error('PNG encoding failed');download(`bitcoin-cycles-${state.mode}.png`,blob);toast('차트 PNG를 저장했습니다.');}finally{URL.revokeObjectURL(url);}}catch{toast('이미지를 저장하지 못했습니다. SVG 저장을 이용해 주세요.');}});
 
 let refreshing=false;
+let checkingPublished=false,lastPublishedAttempt=Date.now();
+async function refreshPublishedSnapshot() {
+  if(checkingPublished||refreshing||!state.dataset||document.getElementById('embedded-btc-data')||!/^https?:$/.test(location.protocol)||!shouldCheckPublishedSnapshot(lastPublishedAttempt,Date.now(),document.visibilityState==='visible'))return;
+  checkingPublished=true;lastPublishedAttempt=Date.now();
+  const requestedDataset=state.dataset;
+  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);
+  try {
+    const response=await fetch('./data/btc-daily.json',{cache:'no-store',credentials:'omit',signal:controller.signal});
+    if(!response.ok)throw new Error(`Published data HTTP ${response.status}`);
+    const next=await response.json();
+    // A manual refresh completed while this request was in flight. Keep its
+    // source revision and model identity rather than publishing a stale reply.
+    if(state.dataset!==requestedDataset)return;
+    const result=inspectPublishedDataset(next,state.dataset);
+    if(result.changed){
+      state.dataset=next;
+      try{localStorage.setItem('btc-cycles-daily-v1',JSON.stringify(next));}catch{}
+      render();
+    }
+    const detail={status:'success',checkedAt:new Date().toISOString(),latestObservationDate:state.dataset.prices.at(-1)[0],source:'published-snapshot',observationsChanged:result.changed};
+    document.dispatchEvent(new CustomEvent('atlas:data-update',{detail}));
+    document.dispatchEvent(new CustomEvent('atlas:published-refresh',{detail}));
+  }catch{/* Keep the verified data and its source cutoff; retry after the bounded interval. */}
+  finally{clearTimeout(timer);checkingPublished=false;}
+}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')refreshPublishedSnapshot();});
+window.addEventListener('focus',refreshPublishedSnapshot);
+// A long-lived foreground tab follows the published data without downloading
+// provider history on each pointer action or each midnight tick.
+setInterval(refreshPublishedSnapshot,60*1000);
 async function refreshData({quiet=false}={}) {
   if(refreshing)return;refreshing=true;const button=$('#refresh-button');button.disabled=true;button.classList.add('busy');
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),22000);

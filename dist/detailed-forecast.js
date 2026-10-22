@@ -123,9 +123,27 @@ function context(input, options) {
   if (Math.abs(d - a) > 6) throw new RangeError('|dwellMonths - arrivalLeadMonths| must be <= 6; no silent clamping');
   const nominalLowDate = shiftCalendarMonths(peak.date, 12);
   const nominalPeakDate = shiftCalendarMonths(peak.date, 48);
-  const zoneDate = shiftCalendarMonths(nominalPeakDate, -a);
-  const peakDate = shiftCalendarMonths(nominalPeakDate, d - a);
-  const nextLowDate = shiftCalendarMonths(peakDate, 12);
+  const requestedTiming = options.timingCalibration ?? null;
+  if (requestedTiming && (!Number.isSafeInteger(requestedTiming.appliedShiftDays) || Math.abs(requestedTiming.appliedShiftDays) > 180)) {
+    throw new RangeError('timingCalibration.appliedShiftDays must be an integer in [-180, 180]');
+  }
+  if (requestedTiming && requestedTiming.asOf !== current.date) throw new RangeError('timingCalibration.asOf must match the observed forecast cutoff');
+  const calibrationCompatible = Boolean(requestedTiming?.available && requestedTiming.referencePeakDate === peak.date);
+  const requestedShiftDays = calibrationCompatible ? requestedTiming.appliedShiftDays : 0;
+  const nominalZoneDate = shiftCalendarMonths(nominalPeakDate, -a);
+  const nominalEffectivePeakDate = shiftCalendarMonths(nominalPeakDate, d - a);
+  const nominalNextLowDate = shiftCalendarMonths(nominalEffectivePeakDate, 12);
+  // Do not manufacture another cycle or silently clamp an expired reference.
+  // A feasible adjustment shifts the whole remaining phase clock by the same
+  // calendar-day amount. If it would expire a required anchor, keep the prior
+  // and expose the reason rather than displaying a different undisclosed shift.
+  const shiftedZoneDate = addDays(nominalZoneDate, requestedShiftDays);
+  const shiftedNextLowDate = addDays(nominalNextLowDate, requestedShiftDays);
+  const calibrationFeasible = shiftedZoneDate > current.date && shiftedNextLowDate >= displayEnd;
+  const timingShiftDays = calibrationFeasible ? requestedShiftDays : 0;
+  const zoneDate = addDays(nominalZoneDate, timingShiftDays);
+  const peakDate = addDays(nominalEffectivePeakDate, timingShiftDays);
+  const nextLowDate = addDays(nominalNextLowDate, timingShiftDays);
   if (zoneDate <= current.date || peakDate < zoneDate) throw new RangeError('The assumed next high-zone reference must be strictly in the future');
   if (displayEnd > nextLowDate) throw new RangeError('The requested horizon exceeds the next assumed low; no extra cycle is invented');
   const totalDays = utcDay(nextLowDate) - current.epochDay;
@@ -137,7 +155,7 @@ function context(input, options) {
   const anchors = [{ id: 'current', type: 'observation', date: current.date, price: current.price, label: '현재 관측' }];
   let stressDate = null;
   if (preset.kind === 'stress') {
-    stressDate = shiftCalendarMonths(nominalLowDate, 3);
+    stressDate = addDays(shiftCalendarMonths(nominalLowDate, 3), timingShiftDays);
     if (stressDate <= current.date || stressDate >= zoneDate) throw new RangeError('The stress reference date is expired or follows the high-zone reference');
     anchors.push({ id: 'stress-low', type: 'macro-reference', date: stressDate, price: candidate.price * (1 - settings.stressBelowCandidatePct / 100), label: '추가 하락 기준점' });
   }
@@ -149,9 +167,22 @@ function context(input, options) {
     referencePeakDate: peak.date, referencePeakConfirmationDate: confirmation.date,
     referenceConfirmationRule: '20% fall from the observed reference high; not proof of a completed four-year cycle',
     nominalTroughDate: nominalLowDate, nominalPeakDate, zoneEntryDate: zoneDate,
+    effectiveTroughDate: addDays(nominalLowDate, timingShiftDays),
     effectivePeakDate: peakDate, nextLowDate, nominalNextTroughDate: shiftCalendarMonths(nominalPeakDate, 12),
     arrivalLeadMonths: a, dwellMonths: d, netShiftMonths: d - a,
     nominalRiseMonths: 36, nominalDeclineMonths: 12, definitionIsConditionalPrior: true,
+    timingAdjustment: {
+      requested: Boolean(requestedTiming), available: Boolean(requestedTiming?.available),
+      asOf: requestedTiming?.asOf ?? null, requestedShiftDays,
+      appliedShiftDays: timingShiftDays, applied: Boolean(calibrationCompatible && calibrationFeasible),
+      sourceReferencePeakDate: requestedTiming?.referencePeakDate ?? null,
+      reason: !requestedTiming ? 'legacy-calendar-prior'
+        : !requestedTiming.available ? 'insufficient-causal-timing-evidence'
+          : !calibrationCompatible ? 'calibration-reference-high-differs'
+            : !calibrationFeasible ? 'adjustment-would-expire-required-anchor' : 'causal-daily-clock-applied',
+      nominalZoneDate, nominalEffectivePeakDate, nominalNextLowDate,
+      finalCycleTurnClaim: false, probability: null,
+    },
     intermediateAnchorsAreHardConstraints: false, finalBridgeEndpointIsHardConstraint: true,
     futureHalvingDateAssumed: false, probability: null,
   };
@@ -167,7 +198,7 @@ function phaseAt(ctx, day) {
   if (ctx.stressDate && day <= utcDay(ctx.stressDate)) return 'stress-decline';
   if (day >= utcDay(ctx.nominalClock.effectivePeakDate)) return 'decline';
   if (day >= utcDay(ctx.nominalClock.zoneEntryDate)) return 'distribution';
-  const start = ctx.stressDate ? utcDay(ctx.stressDate) : utcDay(ctx.nominalClock.nominalTroughDate);
+  const start = ctx.stressDate ? utcDay(ctx.stressDate) : utcDay(ctx.nominalClock.effectiveTroughDate);
   const progress = (day - start) / (utcDay(ctx.nominalClock.zoneEntryDate) - start);
   return progress < 1 / 3 ? 'accumulation' : progress < 2 / 3 ? 'advance' : 'expansion';
 }
@@ -426,7 +457,7 @@ export function buildDetailedForecast(input, options = {}) {
     nominalClock: ctx.nominalClock,
     scenario: { ...ctx.preset, arrivalLeadMonths: ctx.nominalClock.arrivalLeadMonths, dwellMonths: ctx.nominalClock.dwellMonths },
     assumptions: {
-      macroClock: '48 calendar months from the known reference high; nominal 12-month decline plus 36-month rise is a user-retained conditional prior, not an estimated law',
+      macroClock: '48 calendar months from the known reference high; nominal 12-month decline plus 36-month rise is a conditional prior, optionally shifted by the separately disclosed observed-prefix timing adjustment, not an estimated law',
       peakMultiple: ctx.peakMultiple, peakReferencePrice: ctx.peakPrice, priceGrowthRetention: ctx.settings.priceGrowthRetention,
       priceReferenceFormula: options.peakMultiple === undefined ? 'referenceHigh × (referenceHigh / previousEraHigh)^g; g is an editable assumption' : 'currentPrice × user-specified peakMultiple',
       priceGrowthRetentionEstimatedFromData: false, bearDrawdownPct: ctx.settings.bearDrawdownPct, highZoneFraction: ctx.settings.highZoneFraction,
@@ -438,7 +469,7 @@ export function buildDetailedForecast(input, options = {}) {
       bridgeTerminalDate: ctx.nominalClock.nextLowDate, bridgeTerminalPrice: ctx.anchors.at(-1).price,
       intermediateDatesAndPricesForced: false, terminalPriceForced: true, pathCapsOrFloorsApplied: false,
       volatilityPersistsAtRecentLevel: true, volatilityMultiplier: ctx.settings.volatilityMultiplier, volatilityMultiplierEstimated: false, stateEligibilityIsModelChoice: true, equalEraSamplingIsModelChoice: true,
-      phasePriorClockOriginDate: ctx.stressDate ?? ctx.nominalClock.nominalTroughDate,
+      phasePriorClockOriginDate: ctx.stressDate ?? ctx.nominalClock.effectiveTroughDate,
       risePhaseFractions: [1 / 3, 2 / 3], risePhaseFractionsEstimatedFromData: false,
       phaseEligibilityIsNotFutureStatePrediction: true, microTimeWarpApplied: false, fibonacciDrivesExpectedReturns: false,
       blockLengthRule: 'geometric mean parameter blockDays; clipped to 7..84 days and available historical/terminal length',

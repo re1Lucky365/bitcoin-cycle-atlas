@@ -51,75 +51,59 @@ export function dockHeight({availableHeight,open}) {
   return Math.max(40,Math.min(340,Math.round(Math.max(0,availableHeight)*.48)));
 }
 
-export function mountAnalysisDock({stage,svg,modeTabs,controls}) {
+export function mountAnalysisIndicators({stage,svg,modeTabs,controls}) {
   const doc=stage.ownerDocument;
-  const command=(action,value)=>doc.dispatchEvent(new CustomEvent('atlas:analysis-command',{detail:{action,value}}));
-  const dock=doc.createElement('section');dock.id='analysis-dock';dock.className='analysis-dock';dock.dataset.open='false';dock.setAttribute('aria-label','과거 자료 분석 패널');
-  const header=doc.createElement('div');header.className='analysis-dock-header';
-  const heading=doc.createElement('span');heading.className='analysis-dock-label';heading.textContent='분석';
-  modeTabs.className='analysis-dock-tabs';modeTabs.setAttribute('role','tablist');modeTabs.setAttribute('aria-label','주 가격 차트 아래에서 볼 분석');
-  modeTabs.querySelector('[data-atlas-mode="price"]')?.remove();
-  for(const button of modeTabs.querySelectorAll('[data-atlas-mode]')){
-    const mode=button.dataset.atlasMode;button.id=`analysis-tab-${mode}`;button.type='button';button.setAttribute('role','tab');button.setAttribute('aria-controls','analysis-dock-body');button.setAttribute('aria-selected','false');button.removeAttribute('aria-pressed');button.tabIndex=-1;
-    button.onclick=()=>command('select',mode);
+  const command=(action,mode)=>doc.dispatchEvent(new CustomEvent('atlas:analysis-command',{detail:{action,mode,value:mode}}));
+  const indicator=(action,id)=>doc.dispatchEvent(new CustomEvent('atlas:indicator-command',{detail:{action,id}}));
+  const windows=doc.createElement('section');windows.id='analysis-indicator-windows';windows.className='analysis-indicator-windows';windows.setAttribute('aria-label','차트에 추가한 분석 창');windows.hidden=true;
+  const views=new Map(),controlGroups={cycles:'atlas-cycle-controls',duration:'atlas-duration-controls',periods:'atlas-period-controls',cryptocon:'atlas-cryptocon-controls'};
+  for(const {id:mode,label} of ANALYSIS_MODES){
+    const card=doc.createElement('article');card.id=`analysis-window-${mode}`;card.className='analysis-indicator-window';card.dataset.analysisMode=mode;card.hidden=true;card.setAttribute('aria-labelledby',`analysis-window-title-${mode}`);
+    const header=doc.createElement('header');header.className='analysis-window-heading';
+    const heading=doc.createElement('h3');heading.id=`analysis-window-title-${mode}`;heading.textContent=label;
+    const axis=doc.createElement('span');axis.className='analysis-window-axis';axis.textContent='독립 분석 축';
+    const hide=doc.createElement('button');hide.type='button';hide.textContent='−';hide.title=`${label} 숨기기`;hide.setAttribute('aria-label',hide.title);hide.onclick=()=>indicator('visibility',mode);
+    const remove=doc.createElement('button');remove.type='button';remove.textContent='×';remove.title=`${label} 삭제`;remove.setAttribute('aria-label',remove.title);remove.onclick=()=>indicator('remove',mode);
+    header.append(heading,axis,hide,remove);
+    const meta=doc.createElement('div');meta.className='analysis-window-meta';
+    const title=doc.createElement('h4'),caption=doc.createElement('p'),legend=doc.createElement('div');caption.id=`analysis-caption-${mode}`;legend.className='analysis-window-legend';meta.append(title,caption,legend);
+    const controlRow=doc.createElement('div');controlRow.className='analysis-window-controls';
+    const control=controls.find(node=>node.id===controlGroups[mode]);if(control){control.hidden=false;controlRow.append(control);}else controlRow.hidden=true;
+    const viewport=doc.createElement('div');viewport.className='analysis-chart-viewport';viewport.id=mode==='cycles'?'analysis-chart-viewport':`analysis-chart-viewport-${mode}`;
+    const chart=mode==='cycles'?svg:doc.createElementNS('http://www.w3.org/2000/svg','svg');chart.id=mode==='cycles'?'atlas-analysis-chart':`atlas-analysis-${mode}-chart`;chart.dataset.analysisSvg=mode;chart.hidden=false;chart.removeAttribute('hidden');chart.setAttribute('role','group');chart.setAttribute('aria-describedby',caption.id);viewport.append(chart);
+    const selection=doc.createElement('div');selection.className='analysis-window-selection';
+    const prev=doc.createElement('button');prev.type='button';prev.textContent='←';prev.setAttribute('aria-label',`${label} 이전 항목`);prev.onclick=()=>command('previous',mode);
+    const next=doc.createElement('button');next.type='button';next.textContent='→';next.setAttribute('aria-label',`${label} 다음 항목`);next.onclick=()=>command('next',mode);
+    const summary=doc.createElement('button');summary.type='button';summary.className='analysis-selection-summary';summary.textContent='분석 항목 선택';summary.onclick=()=>command('inspect',mode);
+    const locate=doc.createElement('button');locate.type='button';locate.textContent='날짜로';locate.disabled=true;locate.onclick=()=>command('locate-date',mode);
+    const save=doc.createElement('button');save.type='button';save.textContent='SVG';save.title=`${label} 그래프 저장`;save.setAttribute('aria-label',save.title);save.onclick=()=>command('save',mode);
+    selection.append(prev,next,summary,locate,save);
+    const note=doc.createElement('p');note.className='analysis-window-note';
+    card.append(header,meta,controlRow,viewport,selection,note);windows.append(card);
+    card.addEventListener('pointerdown',()=>command('activate',mode),true);card.addEventListener('focusin',()=>command('activate',mode));
+    views.set(mode,{card,chart,title,caption,legend,note,summary,locate,prev,next});
   }
-  const toggle=doc.createElement('button');toggle.type='button';toggle.id='analysis-dock-toggle';toggle.className='analysis-dock-toggle';toggle.setAttribute('aria-controls','analysis-dock-body');toggle.onclick=()=>command('toggle');
-  header.append(heading,modeTabs,toggle);
-  const panel=doc.createElement('div');panel.id='analysis-dock-body';panel.className='analysis-dock-body';panel.setAttribute('role','tabpanel');panel.hidden=true;
-  const meta=doc.createElement('div');meta.className='analysis-dock-meta';
-  const title=doc.createElement('h3');title.id='analysis-dock-title';
-  const caption=doc.createElement('p');caption.id='analysis-dock-caption';
-  const legend=doc.createElement('div');legend.id='analysis-dock-legend';legend.className='analysis-dock-legend';
-  meta.append(title,caption,legend);
-  const controlRow=doc.createElement('div');controlRow.className='analysis-dock-controls';controlRow.append(...controls);
-  const viewport=doc.createElement('div');viewport.id='analysis-chart-viewport';viewport.className='analysis-chart-viewport';svg.hidden=false;svg.removeAttribute('hidden');svg.setAttribute('role','group');svg.setAttribute('aria-describedby','analysis-dock-caption');viewport.append(svg);
-  const selection=doc.createElement('div');selection.className='analysis-dock-selection';
-  const prev=doc.createElement('button');prev.type='button';prev.id='analysis-inspect-prev';prev.textContent='←';prev.setAttribute('aria-label','이전 분석 항목');prev.onclick=()=>command('previous');
-  const next=doc.createElement('button');next.type='button';next.id='analysis-inspect-next';next.textContent='→';next.setAttribute('aria-label','다음 분석 항목');next.onclick=()=>command('next');
-  const summary=doc.createElement('button');summary.type='button';summary.id='analysis-selection-summary';summary.className='analysis-selection-summary';summary.textContent='분석 항목을 선택하면 값을 확인합니다.';summary.onclick=()=>command('inspect');
-  const locate=doc.createElement('button');locate.type='button';locate.id='analysis-locate-date';locate.textContent='가격 차트에서 보기';locate.disabled=true;locate.onclick=()=>command('locate-date');
-  const save=doc.createElement('button');save.type='button';save.id='analysis-save-svg';save.textContent='SVG';save.title='현재 분석 그래프만 SVG로 저장';save.setAttribute('aria-label',save.title);save.onclick=()=>command('save');
-  selection.append(prev,next,summary,locate,save);
-  const note=doc.createElement('p');note.id='analysis-dock-note';note.className='analysis-dock-note';
-  panel.append(meta,controlRow,viewport,selection,note);dock.append(header,panel);
-  stage.querySelector('.atlas-plot').after(dock);
-  let current={mode:'cycles',open:false},sizeKey='';
-  function size(){
-    const plot=stage.querySelector('.atlas-plot');
-    const availableHeight=(plot?.getBoundingClientRect().height||0)+dock.getBoundingClientRect().height;
-    const height=dockHeight({availableHeight,open:current.open});
-    const key=String(height);if(key!==sizeKey){sizeKey=key;dock.style.setProperty('--analysis-dock-height',`${height}px`);}
-  }
+  modeTabs.remove();stage.querySelector('.atlas-plot').append(windows);
   function setState(event){
-    const nextState=event.detail||{};current={...current,...nextState};
-    const mode=modeIds.has(current.mode)?current.mode:'cycles';
-    dock.dataset.open=String(Boolean(current.open));dock.dataset.mode=mode;panel.hidden=!current.open;
-    panel.setAttribute('aria-labelledby',`analysis-tab-${mode}`);
-    for(const button of modeTabs.querySelectorAll('[data-atlas-mode]')){
-      const selected=button.dataset.atlasMode===mode;button.setAttribute('aria-selected',String(selected));button.setAttribute('aria-expanded',String(selected&&current.open));button.tabIndex=selected?0:-1;
-    }
-    toggle.textContent=current.open?'접기':'펼치기';toggle.title=current.open?'분석을 접고 가격 차트를 넓게 보기':'선택한 분석 펼치기';toggle.setAttribute('aria-label',toggle.title);toggle.setAttribute('aria-expanded',String(Boolean(current.open)));
-    const groups={cycles:'atlas-cycle-controls',duration:'atlas-duration-controls',periods:'atlas-period-controls',cryptocon:'atlas-cryptocon-controls'};
-    for(const control of controls)control.hidden=control.id!==groups[mode];
-    controlRow.hidden=!groups[mode];
-    if(nextState.controller){
-      const c=nextState.controller;title.textContent=c.title||'';caption.textContent=c.caption||'';note.textContent=c.note||'';
+    const state=event.detail||{},view=views.get(state.mode);if(!view)return;
+    const {title,caption,legend,note,summary,locate,prev,next}=view;
+    if(state.controller){
+      const c=state.controller;title.textContent=c.title||'';caption.textContent=c.caption||'';note.textContent=c.note||'';
       legend.replaceChildren(...(c.legend||[]).map(item=>{const node=doc.createElement('span'),swatch=doc.createElement('i');swatch.style.borderColor=item.color;swatch.style.borderTopStyle=item.dashed?'dashed':'solid';node.append(swatch,doc.createTextNode(item.label));return node;}));
       prev.disabled=typeof c.previous!=='function'||Boolean(c.hasPrevious)&&!c.hasPrevious();next.disabled=typeof c.next!=='function'||Boolean(c.hasNext)&&!c.hasNext();
     }
-    if(Object.hasOwn(nextState,'detail')){
-      const detail=nextState.detail;summary.textContent=analysisSelectionSummary(detail,{mode,metric:current.metric});summary.title=detail?'선택한 분석 값과 설명 열기':'분석 항목을 선택해 주세요';summary.disabled=!detail;
-      const date=nextState.calendarDate;locate.disabled=!date;locate.title=date?`${date} UTC를 주 가격 차트에서 보기`:'경과일 비교에는 공통 달력 날짜가 없습니다.';
+    if(Object.hasOwn(state,'detail')){
+      const detail=state.detail;summary.textContent=analysisSelectionSummary(detail,{mode:state.mode,metric:state.metric});summary.title=detail?'선택한 분석 값과 설명 열기':'분석 항목을 선택해 주세요';summary.disabled=!detail;
+      locate.disabled=!state.calendarDate;locate.title=state.calendarDate?`${state.calendarDate} UTC를 가격 차트에서 보기`:'경과일 비교에는 공통 달력 날짜가 없습니다.';
     }
-    size();
   }
-  const handleTabKeys=event=>{
-    if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
-    const tabs=[...modeTabs.querySelectorAll('[role=tab]')],index=tabs.indexOf(event.target);if(index<0)return;
-    event.preventDefault();event.stopPropagation();const nextIndex=event.key==='Home'?0:event.key==='End'?tabs.length-1:(index+(event.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;tabs[nextIndex].focus({preventScroll:true});tabs[nextIndex].click();
-  };
-  modeTabs.addEventListener('keydown',handleTabKeys);
-  const observer=new ResizeObserver(size);observer.observe(stage);
-  doc.addEventListener('atlas:analysis-state',setState);setState({detail:current});
-  return {element:dock,destroy(){observer.disconnect();doc.removeEventListener('atlas:analysis-state',setState);modeTabs.removeEventListener('keydown',handleTabKeys);}};
+  function indicators(event){
+    const {added=[],hidden=[],active}=event.detail.indicators||{};let count=0;
+    for(const [mode,view] of views){const visible=added.includes(mode)&&!hidden.includes(mode);view.card.hidden=!visible;view.card.dataset.active=String(mode===active);if(visible)count++;}
+    windows.hidden=!count;windows.dataset.count=String(count);
+  }
+  // Scroll inside floating analysis windows never pans the underlying price axis.
+  windows.addEventListener('wheel',event=>event.stopPropagation(),{passive:true});windows.addEventListener('pointerdown',event=>event.stopPropagation());windows.addEventListener('dblclick',event=>event.stopPropagation());windows.addEventListener('contextmenu',event=>event.stopPropagation());windows.addEventListener('keydown',event=>event.stopPropagation());
+  doc.addEventListener('atlas:analysis-state',setState);doc.addEventListener('atlas:indicator-state',indicators);
+  return {element:windows,views,destroy(){doc.removeEventListener('atlas:analysis-state',setState);doc.removeEventListener('atlas:indicator-state',indicators);windows.remove();}};
 }

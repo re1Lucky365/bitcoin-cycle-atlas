@@ -1,7 +1,8 @@
 import { DATA_UPDATE } from './data-update.js';
-import { mountWorkbenchChrome } from './workbench-chrome.js?v=1.8.2';
-import { mountResearchWorkbench } from './research-workbench.js?v=1.8.2';
-import { mountAnalysisDock } from './analysis-dock.js?v=1.8.2';
+import { mountWorkbenchChrome } from './workbench-chrome.js?v=1.9.0';
+import { mountResearchWorkbench } from './research-workbench.js?v=1.9.0';
+import { mountAnalysisIndicators } from './analysis-dock.js?v=1.9.0';
+import { mountIndicatorWorkbench } from './indicator-workbench.js?v=1.9.0';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -234,7 +235,8 @@ export function initViewportWorkspace(icon) {
   }
   mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlStore,liveControls,openReader,closeReader,isReaderOpen:kind=>!reader.hidden&&reader.dataset.kind===kind});
   mountResearchWorkbench({stage,controlStore,liveControls,openReader,closeReader,isReaderOpen:kind=>!reader.hidden&&reader.dataset.kind===kind});
-  mountAnalysisDock({stage,svg:$('#atlas-analysis-chart'),modeTabs:$('.atlas-mode-tabs'),controls:['atlas-cycle-controls','atlas-duration-controls','atlas-period-controls','atlas-cryptocon-controls'].map(id=>document.getElementById(id))});
+  mountAnalysisIndicators({stage,svg:$('#atlas-analysis-chart'),modeTabs:$('.atlas-mode-tabs'),controls:['atlas-cycle-controls','atlas-duration-controls','atlas-period-controls','atlas-cryptocon-controls'].map(id=>document.getElementById(id))});
+  mountIndicatorWorkbench({plot,stage});
   document.addEventListener('click',event=>{if(event.target.closest('[data-view]'))closeReader({restoreFocus:false});});
   document.addEventListener('atlas:close-detail',()=>closeReader({restoreFocus:false}));
   document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!reader.hidden){event.preventDefault();closeReader();}});

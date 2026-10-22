@@ -68,9 +68,9 @@ export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlSto
   controlStore.append(settingsBody,modeTabs,layers,scenarios);
   const heading=document.createElement('header');heading.className='atlas-canvas-heading';heading.setAttribute('aria-label','차트 상단 도구');
   const symbol=document.createElement('span');symbol.className='workbench-symbol';symbol.textContent='BTCUSD';symbol.title='비트코인 / 미국 달러 · UTC 일말 가격';
-  const menu=button('chart','차트 안의 분석 패널 펼치기',{'aria-controls':'analysis-dock-body','aria-expanded':'false'});menu.id='atlas-mode-menu';
-  menu.onclick=()=>document.dispatchEvent(new CustomEvent('atlas:analysis-command',{detail:{action:'toggle'}}));
-  const modeName=document.createElement('span');modeName.id='atlas-mode-name';modeName.textContent='분석 패널';menu.append(modeName);menu.classList.add('workbench-mode');
+  const menu=button('chart','인디케이터 추가·삭제',{'aria-controls':'indicator-library','aria-haspopup':'dialog','aria-expanded':'false'});menu.id='atlas-mode-menu';
+  menu.onclick=()=>document.dispatchEvent(new CustomEvent('atlas:indicator-library',{detail:{opener:menu}}));
+  const modeName=document.createElement('span');modeName.id='atlas-mode-name';modeName.textContent='인디케이터';menu.append(modeName);menu.classList.add('workbench-mode');
   const scenario=panelButton(button('scenario','미래 가정 선택'),'scenarios');scenario.id='workbench-scenario';
   const scenarioName=document.createElement('span');scenarioName.id='workbench-scenario-name';scenarioName.textContent='기본 가정';scenario.append(scenarioName);
   const settingButton=panelButton(button('settings','차트 설정'),'settings');settingButton.id='atlas-display-options';settings.remove();
@@ -120,7 +120,7 @@ export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlSto
   $('#lab-metrics').removeAttribute('aria-live');
   const handleState=event=>{
     const s=event.detail,price=s.mode==='price',intraday=price&&isIntradayInterval(s.frequency),candles=s.chartType==='candles';plot.dataset.tool=intraday&&s.tool==='measure'?'crosshair':s.tool;plot.dataset.intraday=String(intraday);workspace.dataset.chartMode=s.mode;
-    menu.setAttribute('aria-expanded',String(Boolean(s.analysisOpen)));menu.title=s.analysisOpen?'분석 패널 접기':'차트 안의 분석 패널 펼치기';menu.setAttribute('aria-label',menu.title);workspace.dataset.analysisMode=s.analysisMode||'';
+    workspace.dataset.analysisMode=s.analysisMode||'';
     left.hidden=!price;left.querySelector('[data-chart-tool=measure]').hidden=intraday;clear.hidden=intraday;chartMenu.hidden=!price;chartMenu.disabled=s.navigationAvailable===false;scenario.hidden=!price||intraday;layerButton.hidden=!price;ranges.hidden=!price||intraday;axis.hidden=!price;next.hidden=!price||intraday;goDate.hidden=!price||intraday;chartType.hidden=!price;
     intervalSelect.value=s.frequency||'daily';
     for(const node of intervalButtons.querySelectorAll('button')){const selected=node.dataset.labFrequency===s.frequency;node.setAttribute('aria-pressed',String(selected));node.tabIndex=selected?0:-1;}
@@ -149,7 +149,7 @@ export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlSto
     nodes[next].focus({preventScroll:true});nodes[next].click();
   };
   const handleKey=event=>{
-    if(event.defaultPrevented||document.body.dataset.page!=='outlook'||event.ctrlKey||event.metaKey||event.target.closest?.('input,textarea,select,[contenteditable=true],#chart-reader,#analysis-dock,.chart-context-menu'))return;
+    if(event.defaultPrevented||document.body.dataset.page!=='outlook'||event.ctrlKey||event.metaKey||event.target.closest?.('input,textarea,select,[contenteditable=true],#chart-reader,#indicator-library,#chart-indicator-manager,.analysis-indicator-window,.chart-context-menu'))return;
     if(workspace.dataset.chartMode!=='price')return;
     const key=event.key.toLowerCase(),intraday=plot.dataset.intraday==='true';
     if(event.altKey){

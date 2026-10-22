@@ -1,17 +1,17 @@
 import {createPriceScale} from './chart-math.js?v=1.6.0';
 import {chartInterval} from './ohlc-data.js';
-import {chartPaneLayout,volumePaneMarkup} from './chart-overlays.js?v=1.8.2';
+import {chartPaneLayout,volumePaneMarkup} from './chart-overlays.js?v=1.9.0';
 
 const number=(value,digits=2)=>new Intl.NumberFormat('en-US',{maximumFractionDigits:digits}).format(value);
 const money=value=>`$${number(value,value<1?6:2)}`;
 const timestamp=time=>new Date(time*1000).toISOString().slice(0,16).replace('T',' ');
 const esc=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 
-export function drawIntradayChart({svg,series,chartType='candles',scale='log',unit='usd',tool='crosshair',range=null,showVolume=true,onHover=()=>{},onInspect=()=>{},selectedTime=null}) {
+export function drawIntradayChart({svg,series,chartType='candles',scale='log',unit='usd',tool='crosshair',range=null,showVolume=true,headerInset=70,onHover=()=>{},onInspect=()=>{},selectedTime=null}) {
   const allRows=series.candles,interval=chartInterval(series.interval);
   if(!allRows.length)throw new RangeError('The market chart needs completed candles');
   const W=Math.max(1,Math.round(svg.clientWidth||1100)),H=Math.max(1,Math.round(svg.clientHeight||500)),small=W<600;
-  const layout=chartPaneLayout({width:W,height:H,volume:showVolume,top:70});
+  const layout=chartPaneLayout({width:W,height:H,volume:showVolume,top:Number.isFinite(headerInset)?Math.max(12,headerInset):70});
   const {left:L,right:R,top:T,axisY,bottom,priceBottom:B,volumeTop,volumeBottom}=layout;
   const minTime=range?.start??allRows[0].time-interval.seconds,maxTime=range?.end??allRows.at(-1).time+interval.seconds;
   const rows=allRows.filter(row=>row.time>=minTime&&row.time<=maxTime);

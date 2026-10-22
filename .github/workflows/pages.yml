@@ -26,6 +26,10 @@ jobs:
           package-manager-cache: false
       - name: Test before deployment
         run: npm test
+      - name: Verify the published calibration and chart performance gate
+        run: |
+          npm run verify:cycle
+          npm run verify:performance
       - name: Verify static paths and standalone build
         run: |
           node scripts/verify-static.mjs
