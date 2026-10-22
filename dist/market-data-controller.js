@@ -1,6 +1,6 @@
 import { chartInterval, fetchMarketCandles, parseMarketSnapshot } from './ohlc-data.js';
 
-export function createMarketDataController({ onChange = () => {}, fetchImpl = globalThis.fetch, readEmbedded = () => null, timeoutMs = 15000 } = {}) {
+export function createMarketDataController({ onChange = () => {}, fetchImpl = globalThis.fetch, readEmbedded = () => null, timeoutMs = 15000, preferSnapshot = false } = {}) {
   const entries = new Map();
   let active = null, snapshotPromise = null;
   const get = interval => entries.get(interval) || { status: 'idle', series: null, error: null };
@@ -31,7 +31,7 @@ export function createMarketDataController({ onChange = () => {}, fetchImpl = gl
 
   async function load(interval, { force = false } = {}) {
     chartInterval(interval);
-    if (active?.interval === interval) return;
+    if (active?.interval === interval && !force) return;
     const prior = get(interval);
     cancel();
     if (!force && prior.status !== 'idle') return;
@@ -40,6 +40,13 @@ export function createMarketDataController({ onChange = () => {}, fetchImpl = gl
     active = request;
     publish(interval, { ...prior, status: 'loading', error: null });
     try {
+      if(preferSnapshot&&!force){
+        try{
+          const series=parseMarketSnapshot(await snapshot(),interval);
+          if(active!==request)return;controller.signal.throwIfAborted();
+          publish(interval,{status:'snapshot',series:{...series,snapshot:true},error:null});return;
+        }catch(error){if(active!==request)return;controller.signal.throwIfAborted();}
+      }
       const series = await fetchMarketCandles({ interval, signal: controller.signal, count: interval === 'daily' ? 300 : 180, fetchImpl });
       if (active !== request) return;
       publish(interval, { status: 'ready', series, error: null });
@@ -65,6 +72,6 @@ export function marketStatusText(entry) {
   if (entry.status === 'loading' && !entry.series) return 'Coinbase BTC-USD · 완료 봉 조회 중';
   if (!entry.series) return '캔들 조회 실패 · 새로고침으로 재시도';
   const stamp = entry.series.retrievedAt.slice(0, 16).replace('T', ' ');
-  const state = entry.status === 'loading' ? '갱신 중 · 이전 조회' : entry.status === 'snapshot' ? '연결 실패 · 저장 자료' : '조회 완료';
+  const state = entry.status === 'loading' ? '갱신 중 · 이전 조회' : entry.status === 'snapshot' ? (entry.error?'연결 실패 · 저장 자료':'저장 자료') : '조회 완료';
   return `Coinbase BTC-USD · ${state} ${stamp} UTC${entry.series.gapCount ? ` · 빈 봉 ${entry.series.gapCount}개` : ''}`;
 }

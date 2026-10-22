@@ -242,3 +242,63 @@ test('a saved-data response arriving after cancellation cannot publish stale fal
   assert.equal(controller.get('1m').series, null);
   assert.deepEqual(record.changes.map(change => change.status), ['loading']);
 });
+
+test('snapshot-first loading obeys cancellation even when saved data ignores abort and arrives late', testOptions, async t => {
+  const record = recordChanges(), savedResponse = deferred();
+  const calls = [];
+  const controller = createMarketDataController({
+    preferSnapshot: true,
+    onChange: record.onChange,
+    fetchImpl: url => {
+      calls.push(url);
+      assert.equal(url, './data/btc-ohlc.json');
+      return savedResponse.promise;
+    },
+  });
+  t.after(() => controller.cancel());
+
+  const pending = controller.load('1m');
+  assert.equal(controller.get('1m').status, 'loading');
+  controller.cancel();
+  const notificationsAtCancel = record.changes.length;
+  savedResponse.resolve({ ok: true, json: async () => savedSnapshot() });
+  await pending;
+
+  assert.equal(controller.get('1m').status, 'idle');
+  assert.equal(controller.get('1m').series, null);
+  assert.equal(record.changes.length, notificationsAtCancel, 'cancelled snapshot work must not notify the UI');
+  assert.deepEqual(calls, ['./data/btc-ohlc.json'], 'cancelled snapshot work must not start a live fallback');
+});
+
+test('a late preferred snapshot cannot overwrite a newer forced refresh of the same interval', testOptions, async t => {
+  const record = recordChanges(), savedResponse = deferred();
+  const calls = [];
+  const controller = createMarketDataController({
+    preferSnapshot: true,
+    onChange: record.onChange,
+    fetchImpl: async url => {
+      calls.push(url);
+      if (url === './data/btc-ohlc.json') return savedResponse.promise;
+      return publicResponse(url);
+    },
+  });
+  t.after(() => controller.cancel());
+
+  const older = controller.load('1m');
+  assert.equal(controller.get('1m').status, 'loading');
+  await controller.load('1m', { force: true });
+  const refreshed = controller.get('1m');
+  assert.equal(refreshed.status, 'ready', 'force must restart an already active request for the same interval');
+  assert.equal(refreshed.series.candles.length, 180);
+  assert.equal(refreshed.series.snapshot, undefined);
+  assert.notEqual(refreshed.series.retrievedAt, savedAt);
+  const notificationsAfterRefresh = record.changes.length;
+
+  savedResponse.resolve({ ok: true, json: async () => savedSnapshot() });
+  await older;
+
+  assert.equal(controller.get('1m'), refreshed, 'the older snapshot must not replace the fresh entry');
+  assert.equal(record.changes.length, notificationsAfterRefresh, 'the late snapshot must not cause a stale render');
+  assert.equal(calls.filter(url => url === './data/btc-ohlc.json').length, 1);
+  assert.equal(calls.filter(url => url !== './data/btc-ohlc.json').length, 1);
+});

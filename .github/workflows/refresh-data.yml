@@ -54,6 +54,10 @@ jobs:
         # fails, the existing snapshot keeps its original collection timestamp.
         continue-on-error: true
         run: node scripts/refresh-ohlc.mjs
+      - name: Refresh and cross-check historical spot volume
+        # Retain the last verified snapshot if a source or cross-check fails.
+        continue-on-error: true
+        run: node scripts/refresh-volume.mjs
       - name: Test code, fixed research fixtures and refreshed source data
         run: npm test
       - name: Verify the refreshed static site and standalone build
@@ -71,11 +75,11 @@ jobs:
             echo 'Remote main changed during validation. Aborting; a later run will retry from the new revision.'
             exit 1
           fi
-          git add -- dist/data/btc-daily.json dist/data-update.js dist/data/btc-ohlc.json
+          git add -- dist/data/btc-daily.json dist/data-update.js dist/data/btc-ohlc.json dist/data/btc-volume.json
           node --input-type=module <<'NODE'
           import { execFile } from 'node:child_process';
           import { promisify } from 'node:util';
-          const allowed = new Set(['dist/data/btc-daily.json', 'dist/data-update.js', 'dist/data/btc-ohlc.json']);
+          const allowed = new Set(['dist/data/btc-daily.json', 'dist/data-update.js', 'dist/data/btc-ohlc.json', 'dist/data/btc-volume.json']);
           const { stdout } = await promisify(execFile)('git', ['diff', '--cached', '--name-only', '-z']);
           const staged = stdout.split('\0').filter(Boolean);
           if (staged.some(file => !allowed.has(file))) throw new Error('Unexpected file staged for the data refresh');
