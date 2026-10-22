@@ -5,7 +5,7 @@ const glyph=name=>`<svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[name]}</s
 
 export function countdownPresentation(value={}) {
   const upcoming=value.status==='upcoming',maintained=value.status==='maintained';
-  const current=value.currentLabel?`현재 가정 ${value.currentLabel}${value.currentUntil?` · ${value.currentUntil.slice(5).replace('-','.')}까지${value.currentRightCensored?' 표시':''}`:''}`:'현재 국면 확인 불가';
+  const current=value.currentLabel?`현재 가정 ${value.currentLabel}${value.currentUntil?` · ${value.currentUntil.replaceAll('-','.')}까지${value.currentRightCensored?' 표시':''}`:''}`:'현재 국면 확인 불가';
   return {caption:`시나리오 기준 · ${value.minimumRunDays||7}일 유지 조건`,dday:upcoming?value.dday||'—':'—',next:upcoming?value.nextLabel||'전환 후보':maintained?'다음 후보 없음':'다음 후보 계산 불가',current};
 }
 

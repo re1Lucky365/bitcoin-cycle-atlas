@@ -2,7 +2,8 @@ import { DATA_UPDATE } from './data-update.js';
 import { mountWorkbenchChrome } from './workbench-chrome.js?v=1.9.0';
 import { mountResearchWorkbench } from './research-workbench.js?v=1.9.0';
 import { mountAnalysisIndicators } from './analysis-dock.js?v=1.9.0';
-import { mountIndicatorWorkbench } from './indicator-workbench.js?v=1.9.0';
+import { mountIndicatorWorkbench } from './indicator-workbench.js?v=1.9.1';
+import { inspectionPanelAction } from './inspection-policy.js?v=1.9.1';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -183,7 +184,7 @@ export function initViewportWorkspace(icon) {
     const changed=reader.hidden||reader.dataset.kind!==kind;
     if(reader.hidden||focus)rememberOpener(trigger);
     returnControls();
-    title.textContent=heading;title.title=heading;reader.dataset.kind=kind;actions.hidden=kind!=='selection'||selectedKind==='history';
+    title.textContent=heading;title.title=heading;reader.dataset.kind=kind;actions.hidden=kind!=='selection'||selectedKind==='history'||selectedOwner==='countdown';
     reader.hidden=false;workspace.dataset.detailsOpen='true';
     if(!overlay.matches)sizeReader(parseFloat(workspace.style.getPropertyValue('--detail-width'))||320);
     if(liveControls.has(kind)){readerPager.suspend();body.dataset.controls=kind;body.replaceChildren(liveControls.get(kind));}
@@ -203,12 +204,13 @@ export function initViewportWorkspace(icon) {
   document.addEventListener('atlas:dataset',event=>{displayedObservationDate=event.detail.latestObservationDate;status();if(!reader.hidden&&reader.dataset.kind==='update')openReader('update',{preservePage:true});});
   document.addEventListener('atlas:inspection',event=>{
     selectedSources=event.detail.sources||[];selectedKind=event.detail.kind;selectedOwner=event.detail.owner||'price';actions.setAttribute('aria-label',selectedOwner==='analysis'?'선택한 분석 항목 이동':'선택한 날짜 이동');
-    if(event.detail.userInitiated||(!reader.hidden&&reader.dataset.kind==='selection'))openReader('selection',{preservePage:!event.detail.userInitiated});
+    const action=inspectionPanelAction(event.detail,{open:!reader.hidden,kind:reader.dataset.kind});
+    if(action!=='preserve')openReader('selection',{preservePage:action==='refresh'&&!event.detail.userInitiated});
   });
   document.addEventListener('atlas:open-detail',event=>openReader(event.detail?.kind,{focus:event.detail?.focus!==false,opener:event.detail?.opener}));
   function openReader(kind,options={}){
     const source=document.createElement('div');
-    const titles={events:'비트코인 주요 사건',volume:'거래량 · 출처와 미래 모형',selection:selectedOwner==='analysis'?'분석 선택 · 값과 해석':selectedKind==='history'?'역사 사건과 출처':'선택 데이터 · 고정',guide:'차트 사용법',math:'모델과 검증',update:'자료 갱신 상태',settings:'차트 설정',charts:'분석 패널',layers:'차트 레이어',scenarios:'미래 가정'};
+    const titles={events:'비트코인 주요 사건',volume:'거래량 · 출처와 미래 모형',selection:selectedOwner==='analysis'?'분석 선택 · 값과 해석':selectedOwner==='countdown'?'다음 국면 · 조건부 근거':selectedKind==='history'?'역사 사건과 출처':'선택 데이터 · 고정',guide:'차트 사용법',math:'모델과 검증',update:'자료 갱신 상태',settings:'차트 설정',charts:'분석 패널',layers:'차트 레이어',scenarios:'미래 가정'};
     if(!titles[kind])return;
     if(liveControls.has(kind)){showReader(kind,titles[kind],null,options);return;}
     if(kind==='selection'){
@@ -219,7 +221,7 @@ export function initViewportWorkspace(icon) {
 
     }else if(kind==='guide'){
       source.append($('.atlas-guide>div').cloneNode(true));
-      source.insertAdjacentHTML('beforeend','<p>가격과 미래에서는 그래프를 눌러 날짜를 선택합니다. 오른쪽은 가격, 아래는 날짜입니다. ← → 키로 하루씩, 선택 상세의 이전·다음 버튼으로 고저점을 이동합니다.</p><p>휠로 확대·축소하고 가로로 드래그해 구간을 이동합니다. 왼쪽 −·+·초기화 아이콘도 같은 기능입니다. 이동 도구는 차트를 옮기고, 자 모양 도구는 두 날짜를 눌러 기간·가격 차이·변화율을 잽니다. 미래가 포함되면 가정 포함으로 표시합니다. 차트에 초점을 둔 상태에서 +·−·0 키를 사용할 수 있습니다.</p><p>상단 1m·5m·15m·30m·1h·4h·1D·1W는 표시 간격입니다. 선·캔들 버튼으로 표시 방식을 바꿉니다. 분·시간봉은 Coinbase의 완료된 실제 거래 봉이고, 1D·1W에서는 장기 전망이 이어집니다. 일·주봉 캔들과 거래량은 Bitstamp 현물 자료이며, 캔들이 없는 옛 기간은 Coin Metrics 일말 가격선을 유지합니다. 하단 기간 버튼은 화면에 보이는 범위입니다. 로그·선형은 눈금만 바꾸며 가격을 바꾸지 않습니다. 차트 안쪽 하단의 분석 탭에서 4년 비교·구간 길이·고점권 도달·월·분기·CryptoCon 검증을 펼칩니다. 주 가격 차트는 계속 유지되고, 아래 분석은 각 지표에 맞는 별도의 축을 사용합니다. 4년 비교의 가로축은 출발 후 경과일이며 달력 날짜가 아닙니다. 분석 항목을 눌러도 가격 날짜는 바뀌지 않으며, 날짜가 있는 항목만 ‘가격 차트에서 보기’로 연결합니다. 분석은 접기 버튼으로 최소화합니다. 오른쪽 데이터 아이콘에서 고정한 날짜와 출처를 확인합니다. 리서치와 원자료도 오른쪽 아이콘으로 엽니다. 고점권 도달과 실제 최고가 날짜는 서로 다를 수 있습니다.</p>');
+      source.insertAdjacentHTML('beforeend','<p>가격과 미래에서는 그래프를 눌러 날짜를 선택합니다. 오른쪽은 가격, 아래는 날짜입니다. ← → 키로 하루씩, 선택 상세의 이전·다음 버튼으로 고저점을 이동합니다.</p><p>휠로 확대·축소하고 가로로 드래그해 구간을 이동합니다. 왼쪽 −·+·초기화 아이콘도 같은 기능입니다. 이동 도구는 차트를 옮기고, 자 모양 도구는 두 날짜를 눌러 기간·가격 차이·변화율을 잽니다. 미래가 포함되면 가정 포함으로 표시합니다. 차트에 초점을 둔 상태에서 +·−·0 키를 사용할 수 있습니다.</p><p>상단 1m·5m·15m·30m·1h·4h·1D·1W는 표시 간격입니다. 선·캔들 버튼으로 표시 방식을 바꿉니다. 분·시간봉은 Coinbase의 완료된 실제 거래 봉이고, 1D·1W에서는 장기 전망이 이어집니다. 일·주봉 캔들과 거래량은 Bitstamp 현물 자료이며, 캔들이 없는 옛 기간은 Coin Metrics 일말 가격선을 유지합니다. 하단 기간 버튼은 화면에 보이는 범위입니다. 로그·선형은 눈금만 바꾸며 가격을 바꾸지 않습니다. 상단 인디케이터 창에서 4년 비교·구간 길이·고점권 도달·월·분기·CryptoCon 검증을 추가하거나 삭제합니다. 분석은 가격 차트 내부의 창에 별도의 축으로 표시되며, 좌측 위 목록에서 개별 숨김·표시·삭제를 조작합니다. 4년 비교의 가로축은 출발 후 경과일이며 달력 날짜가 아닙니다. 분석 항목을 눌러도 가격 날짜는 바뀌지 않으며, 날짜가 있는 항목만 ‘가격 차트에서 보기’로 연결합니다. 차트의 일반 클릭과 키보드 선택은 날짜·값만 고정하며 상세 패널의 열림 상태를 바꾸지 않습니다. 오른쪽 데이터 아이콘에서 고정한 날짜와 출처를 엽니다. 리서치와 원자료도 오른쪽 아이콘으로 엽니다. 고점권 도달과 실제 최고가 날짜는 서로 다를 수 있습니다.</p>');
       source.insertAdjacentHTML('beforeend','<h3>확대·이동과 빠른 조작</h3><p>포인터가 있는 곳을 중심으로 휠 확대·축소합니다. Shift+휠 또는 가로 휠은 이동합니다. 좌클릭 후 드래그하면 이동하고, 한 번 클릭하면 값을 고정합니다. 우클릭 또는 Shift+F10은 확대·전체 범위·선택 데이터 복사 메뉴를 엽니다. +·−는 확대·축소, Shift+←·→는 이동, 0·Alt+R·배경 더블클릭은 기본 범위 복원입니다. C는 십자선, H는 이동, M은 일·주봉 측정입니다.</p><h3>사건과 거래량</h3><p>사건 라벨의 색은 분류를 나타냅니다. 확대 수준에 따라 읽을 수 있는 라벨 수를 조절하며, 생략된 이름도 점과 전체 목록에서 찾을 수 있습니다. 클릭하면 원문과 사건 날짜의 해석을 확인합니다. 하단 주요 사건을 펼치면 표시 기간의 타임라인을 봅니다.</p><p>거래량 막대는 가격과 같은 날짜축을 사용하고 BTC 수량을 표시합니다. 일·주봉은 Bitstamp, 분·시간봉은 Coinbase BTC/USD 현물입니다. 실제 막대는 가격 상승·하락 봉과 같은 색을 씁니다. 장기 미래 거래량은 금색 점선과 가정 범위로 구별합니다. 모두 단일 거래소 BTC/USD를 기준으로 하며 세계 전체 물량이 아닙니다. 긴 범위에서 BTC 로그 축을 쓰면 제목에 표시하고, 0을 보존하는 log(1+수량) 눈금을 사용합니다. 우측 거래량 패널에서 출처·원문 교차 검증·모형 수식과 과거 예측 검증을 확인합니다.</p>');
     }else if(kind==='math'){
       const modelInfo=$('#atlas-model-info');if(modelInfo){const copy=modelInfo.cloneNode(true);copy.hidden=false;source.append(copy);}

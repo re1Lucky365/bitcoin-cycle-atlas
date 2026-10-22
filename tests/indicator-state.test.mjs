@@ -72,7 +72,7 @@ test('price-view preparation preserves exact points and drawdowns while reusing 
 test('countdown HUD distinguishes upcoming candidates, no candidate and unavailable paths',()=>{
   const current={currentLabel:'횡보',currentUntil:'2026-10-26',holdDays:5,minimumRunDays:7};
   const upcoming=countdownPresentation({...current,status:'upcoming',dday:'D-33',nextLabel:'상승'});
-  assert.equal(upcoming.dday,'D-33');assert.equal(upcoming.next,'상승');assert.equal(upcoming.current,'현재 가정 횡보 · 10.26까지');
+  assert.equal(upcoming.dday,'D-33');assert.equal(upcoming.next,'상승');assert.equal(upcoming.current,'현재 가정 횡보 · 2026.10.26까지');
   const maintained=countdownPresentation({...current,status:'maintained',currentRightCensored:true});
   assert.equal(maintained.dday,'—');assert.equal(maintained.next,'다음 후보 없음');assert.match(maintained.current,/까지 표시$/);
   const unavailable=countdownPresentation({...current,status:'unavailable',reason:'incomplete-future-path'});

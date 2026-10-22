@@ -4,6 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { buildScenarioCountdown, koreanCalendarDate } from '../dist/scenario-countdown.js';
 import { buildLongHorizonForecast, LONG_HORIZON_SCENARIOS } from '../dist/long-horizon-forecast.js';
 import { utcDay, dateFromDay } from '../dist/cycle-engine.js';
+import { preparePriceViewData } from '../dist/price-view-data.js';
 
 function fixture(segments, asOf = '2026-10-21') {
   const path = [], start = utcDay(asOf);
@@ -100,7 +101,7 @@ test('unavailable, invalid or exhausted paths explain absence instead of negativ
   assert.throws(() => buildScenarioCountdown(null, { today: '2026-10-22', minimumRunDays: 0 }), /positive integer/);
 });
 
-test('production countdown follows the selected calibrated path without changing model data', async () => {
+test('reduced-ensemble countdown follows all selected scenario paths without changing model data', async () => {
   const data = JSON.parse(await readFile(new URL('./fixtures/btc-daily-2026-10-20.json', import.meta.url), 'utf8'));
   for (const { id: scenario } of LONG_HORIZON_SCENARIOS) {
     const model = buildLongHorizonForecast(data, { scenario, sampleCount: 16 });
@@ -116,4 +117,38 @@ test('production countdown follows the selected calibrated path without changing
     assert.ok(target.holdDays >= 7);
     assert.equal(JSON.stringify(model.path), original);
   }
+});
+
+test('the production 128-draw base contract matches the plotted path and its calendar countdown', async () => {
+  const fixtureData = JSON.parse(await readFile(new URL('./fixtures/btc-daily-2026-10-20.json', import.meta.url), 'utf8'));
+  // One completed Coin Metrics observation from the published 2026-10-21
+  // snapshot makes this browser-contract regression independent of daily refresh.
+  const prices = [...fixtureData.prices, ['2026-10-21', 84176.0796455874]];
+  // Keep the real lab-view model() options here. A 16-draw speed fixture may
+  // select a different representative path and must not stand in for production.
+  const model = buildLongHorizonForecast(prices, {
+    asOf: '2026-10-21', referenceDate: '2026-10-22', scenario: 'base',
+    seed: 20261022, sampleCount: 128, blockDays: 28,
+  });
+  const result = buildScenarioCountdown(model, { today: '2026-10-22' });
+  assert.equal(model.nearPhase.assumptions.sampleCount, 128);
+  assert.equal(model.cycleCalibration.forecastApplication.appliedShiftDays, -52);
+  assert.deepEqual({
+    status: result.status, current: result.currentLabel, currentUntil: result.currentUntil,
+    holdDays: result.holdDays, next: result.nextLabel, date: result.date,
+    days: result.days, nextRunDays: result.nextRunDays, skipped: result.intermediateTransitions,
+  }, {
+    status: 'upcoming', current: '횡보', currentUntil: '2027-01-12',
+    holdDays: 83, next: '하락', date: '2027-01-18',
+    days: 88, nextRunDays: 27, skipped: 2,
+  });
+  const plotted = preparePriceViewData(model, prices.map(([date, price]) => ({ date, price }))).future;
+  const from = plotted.findIndex(point => point.date === result.date);
+  assert.ok(from >= 0);
+  assert.equal(plotted[from - 1].state === 'correction', false);
+  assert.ok(plotted.slice(from, from + result.nextRunDays).every(point => point.state === 'correction'));
+  assert.equal(plotted[from + result.nextRunDays].state === 'correction', false);
+  assert.equal(buildScenarioCountdown(model, { today: '2026-10-23' }).days, 87);
+  assert.equal(result.conditional, true);
+  assert.equal(result.probability, null);
 });
