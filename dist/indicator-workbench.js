@@ -273,8 +273,9 @@ export function mountIndicatorWorkbench({plot,stage}) {
   const onState=event=>{state=normalizeIndicatorState(event.detail.indicators||state);cycle=event.detail.cycleCalibration||cycle;readoutContext.cycle=cycle;paintList();if(dialog.open)paintDialog();};
   const onWorkbench=event=>{
     intraday=Boolean(event.detail.intraday);countdown=event.detail.countdown||countdown;readoutContext.workbench=event.detail;paintCountdown();paintList();
-    // Publish the first chart with its actual indicator values, not the prior frame's placeholders.
-    if(doc.documentElement.dataset.boot==='loading')paintReadouts();
+    // A completed chart and its indicator values must share the same selection.
+    // Ordinary pointer updates remain coalesced by onReadout below.
+    paintReadouts();
     if(dialog.open)paintDialog();
   };
   const onReadout=event=>{readoutContext.selection=event.detail;scheduleReadouts();};
