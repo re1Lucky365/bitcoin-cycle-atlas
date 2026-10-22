@@ -123,6 +123,10 @@
 .chart-details-panel .reader-heading button{width:32px;height:32px}
 .chart-details-panel .reader-body .reader-value{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0;padding:10px 0;border-bottom:1px solid #253145;font-variant-numeric:tabular-nums;font-size:11px}
 .chart-details-panel .reader-value b{text-align:right;font-weight:550;color:#e1e9f5}
+.chart-details-panel .reader-value>span{flex-shrink:0;max-width:42%}
+.chart-details-panel .reader-value>b{min-width:0;overflow-wrap:anywhere}
+.chart-details-panel .reader-body .reader-value.reader-value-description{display:block}
+.chart-details-panel .reader-value-description>b{display:block;margin-top:6px;text-align:left;font-weight:400;line-height:1.7}
 .chart-details-panel .reader-body .reader-kind{display:inline-block;padding:1px 6px;background:#27384b;border-radius:2px;color:#b8d5eb;font-size:10px;margin-bottom:6px}
 .chart-details-panel .reader-body .atlas-inspector-note{margin-top:12px;font-size:11px;color:#8ea3bd}
 .chart-details-panel .workbench-layers{gap:0}

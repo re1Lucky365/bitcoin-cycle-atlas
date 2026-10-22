@@ -1,7 +1,7 @@
 import { DATA_UPDATE } from './data-update.js';
-import { mountWorkbenchChrome } from './workbench-chrome.js?v=1.8.1';
-import { mountResearchWorkbench } from './research-workbench.js?v=1.8.1';
-import { mountAnalysisDock } from './analysis-dock.js?v=1.8.1';
+import { mountWorkbenchChrome } from './workbench-chrome.js?v=1.8.2';
+import { mountResearchWorkbench } from './research-workbench.js?v=1.8.2';
+import { mountAnalysisDock } from './analysis-dock.js?v=1.8.2';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -212,7 +212,7 @@ export function initViewportWorkspace(icon) {
     if(liveControls.has(kind)){showReader(kind,titles[kind],null,options);return;}
     if(kind==='selection'){
       source.innerHTML=`<h3>${esc($('#atlas-inspector-title').textContent)}</h3><p class="reader-kind">${esc($('#atlas-inspector-kind').textContent)}</p>`;
-      for(const value of $('#atlas-inspector-values').children){const p=document.createElement('p');p.className='reader-value';p.innerHTML=`<span>${value.querySelector('span').innerHTML}</span><b>${value.querySelector('strong').innerHTML}</b>`;source.append(p);}
+      for(const value of $('#atlas-inspector-values').children){const p=document.createElement('p'),text=value.querySelector('strong');p.className=`reader-value${text.textContent.length>80?' reader-value-description':''}`;p.innerHTML=`<span>${value.querySelector('span').innerHTML}</span><b>${text.innerHTML}</b>`;source.append(p);}
       source.append($('#atlas-inspector-note').cloneNode(true));
       for(const item of selectedSources){const p=document.createElement('p'),a=document.createElement('a');a.href=item.url;a.target='_blank';a.rel='noopener noreferrer';a.textContent=item.title||item.url;p.append(a);source.append(p);}
 

@@ -1,5 +1,5 @@
-import {BITCOIN_EVENTS,BITCOIN_EVENT_CATEGORIES,BITCOIN_EVENTS_REVIEW_DATE} from './bitcoin-events.js?v=1.8.1';
-import {EVENT_COLORS,formatBtcVolume} from './chart-overlays.js?v=1.8.1';
+import {BITCOIN_EVENTS,BITCOIN_EVENT_CATEGORIES,BITCOIN_EVENTS_REVIEW_DATE} from './bitcoin-events.js?v=1.8.2';
+import {EVENT_COLORS,formatBtcVolume} from './chart-overlays.js?v=1.8.2';
 
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const stamp=value=>value?value.slice(0,16).replace('T',' '):'—';

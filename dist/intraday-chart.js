@@ -1,6 +1,6 @@
 import {createPriceScale} from './chart-math.js?v=1.6.0';
 import {chartInterval} from './ohlc-data.js';
-import {chartPaneLayout,volumePaneMarkup} from './chart-overlays.js?v=1.8.1';
+import {chartPaneLayout,volumePaneMarkup} from './chart-overlays.js?v=1.8.2';
 
 const number=(value,digits=2)=>new Intl.NumberFormat('en-US',{maximumFractionDigits:digits}).format(value);
 const money=value=>`$${number(value,value<1?6:2)}`;
