@@ -48,7 +48,7 @@ const icons={
   reset:'<path d="M4 10a8 8 0 1 1 2 8M4 4v6h6"/>'
 };
 
-export function bindChartNavigation({element,getRange,onRangeChange,onReset}) {
+export function bindChartNavigation({element,getRange,getTool=()=> 'crosshair',onRangeChange,onReset}) {
   const document=element.ownerDocument,window=document.defaultView;
   const toolbar=document.createElement('div');toolbar.className='chart-navigation';toolbar.setAttribute('role','group');toolbar.setAttribute('aria-label','차트 날짜 범위');
   toolbar.innerHTML=[['left','이전 구간'],['out','차트 축소'],['in','차트 확대'],['right','다음 구간'],['reset','기본 구간으로']].map(([action,label])=>`<button type="button" data-chart-navigation="${action}" aria-label="${label}" title="${label}"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${icons[action]}</svg></button>`).join('');
@@ -64,7 +64,7 @@ export function bindChartNavigation({element,getRange,onRangeChange,onReset}) {
   }
   function enqueue(next){pending=next;if(frame===null)frame=window.requestAnimationFrame(flush);}
   function reset(){if(frame!==null)window.cancelAnimationFrame(frame);frame=null;pending=null;if(getRange())onReset();}
-  const interactive=target=>Boolean(target?.closest?.('button,input,select,textarea,summary,a,[contenteditable=true]'));
+  const interactive=target=>Boolean(target?.closest?.('button,input,select,textarea,summary,a,[contenteditable=true],[data-next-turn]'));
   function plotBounds(){
     const svg=element.querySelector('svg[data-plot-left]:not([hidden])');
     const rect=(svg||element).getBoundingClientRect();
@@ -90,12 +90,13 @@ export function bindChartNavigation({element,getRange,onRangeChange,onReset}) {
   function pointerDown(event){
     suppressClick=false;
     const range=current();
-    if(!range||event.button!==0||event.isPrimary===false||interactive(event.target))return;
+    if(!range||getTool()==='measure'||event.button!==0||event.isPrimary===false||interactive(event.target))return;
     const rect=plotBounds();if(rect.width<=0)return;
     drag={id:event.pointerId,x:event.clientX,y:event.clientY,width:rect.width,range,active:false};
   }
   function pointerMove(event){
     if(!drag||event.pointerId!==drag.id)return;
+    if(getTool()==='measure'){release(event,true);return;}
     if(event.buttons===0&&event.pointerType!=='touch'){drag=null;delete element.dataset.dragging;return;}
     const dx=event.clientX-drag.x,dy=event.clientY-drag.y;
     if(!drag.active){
@@ -136,6 +137,11 @@ export function bindChartNavigation({element,getRange,onRangeChange,onReset}) {
   for(const args of listeners)element.addEventListener(...args);
   function update(){
     const range=getRange();toolbar.hidden=!range;
+    if(drag&&getTool()==='measure'){
+      if(element.hasPointerCapture?.(drag.id))element.releasePointerCapture(drag.id);
+      drag=null;pending=null;delete element.dataset.dragging;
+      if(frame!==null){window.cancelAnimationFrame(frame);frame=null;}
+    }
     if(!range){drag=null;pending=null;suppressClick=false;delete element.dataset.dragging;}
     else{
       const {min,max,start,end}=rangeDays(range),length=end-start+1;

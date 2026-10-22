@@ -1,6 +1,7 @@
 import { utcDay } from './cycle-engine.js';
 import { shiftCalendarMonths } from './cycle-timing.js';
 import { STATE_LABELS } from './market-structure.js';
+import { createPriceScale,nearestDailyIndex as nearest,measureDailyRange } from './chart-math.js';
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const nf=(v,n=0)=>new Intl.NumberFormat('en-US',{maximumFractionDigits:n}).format(v);
@@ -10,11 +11,10 @@ const date=v=>v?.replaceAll('-','.')??'—';
 const compact=v=>v>=1e6?`${nf(v/1e6,1)}m`:v>=1e3?`${nf(v/1e3,v<1e4?1:0)}k`:nf(v,v<1?2:0);
 const COLORS={warmup:'#536173','price-discovery':'#dfb567','bottom-formation':'#91a1ce',range:'#93a1b1',rebound:'#7ec5b7',pullback:'#bc9bb7',advance:'#81b79b',correction:'#d28f94',transition:'#697c91'};
 const plainState={warmup:'초기 자료', 'price-discovery':'최고가를 새로 쓰는 중','bottom-formation':'낮은 가격대에서 회복 중',range:'좁은 범위에서 횡보',rebound:'하락 뒤 반등',pullback:'상승 중 되돌림',advance:'상승 흐름',correction:'하락 흐름',transition:'방향이 섞인 구간'};
-function nearest(rows,day){let lo=0,hi=rows.length-1;while(lo<hi){const mid=(lo+hi)>>1;if(utcDay(rows[mid].date)<day)lo=mid+1;else hi=mid;}return lo>0&&Math.abs(utcDay(rows[lo-1].date)-day)<Math.abs(utcDay(rows[lo].date)-day)?lo-1:lo;}
 function sample(rows,frequency){return frequency==='daily'?rows:rows.filter((p,i)=>new Date(`${p.date}T00:00:00Z`).getUTCDay()===0||i===0||i===rows.length-1);}
 
 /** Rendering and inspection only. It never changes prices, paths or model dates. */
-export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency='daily',stateStepDays=1,unit='usd',denominator=1,band=false,turns=[],showTurns=true,events=[],states=[],fib=[],historical=false,nextTurn=null,onNextTurn=()=>{},showDrawdown=true,showStates=false,threshold=.12,onInspect=()=>{},selectedDate}){
+export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency='daily',stateStepDays=1,unit='usd',denominator=1,scale='log',tool='crosshair',measurement=null,onMeasurement=()=>{},onHover=()=>{},band=false,turns=[],showTurns=true,events=[],states=[],fib=[],historical=false,nextTurn=null,onNextTurn=()=>{},showDrawdown=true,showStates=false,threshold=.12,onInspect=()=>{},selectedDate}){
   // Match the allocated viewport instead of shrinking a fixed-height drawing.
   // An explicitly enabled secondary band stays present even in a short chart.
   const W=Math.max(1,Math.round(svg.clientWidth||svg.parentElement?.clientWidth||1100)),H=Math.max(1,Math.round(svg.clientHeight||svg.parentElement?.clientHeight||500)),small=W<600,compactHeight=H<320;
@@ -25,17 +25,15 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   if(!visible.length){svg.innerHTML='<text x="24" y="60" fill="#c6d0dd">이 기간에는 아직 자료가 없습니다.</text>';return null;}
   const factor=unit==='indexed'?100/denominator:1;
   const values=visible.flatMap(p=>band&&p.lower>0&&p.upper>0?[p.lower,p.upper,p.price]:[p.price]);
-  const min=Math.min(...values)*.82,max=Math.max(...values)*1.19;
-  const y=v=>priceBottom-(Math.log(v)-Math.log(min))/(Math.log(max)-Math.log(min))*(priceBottom-T);
+  const tickCount=Math.max(2,Math.min(small?5:7,Math.floor((priceBottom-T)/38)+1));
+  const priceScale=createPriceScale(values,{scale,top:T,bottom:priceBottom,tickCount,factor}),{min,max,y}=priceScale;
   const yd=v=>ddTop+Math.min(100,Math.max(0,-(v??0)))/100*(ddBottom-ddTop);
   const path=(ps,yy=y,key='price')=>ps.map((p,i)=>`${i?'L':'M'}${x(p).toFixed(2)},${yy(p[key]).toFixed(2)}`).join('');
   const observed=sample(visible.filter(p=>!split||p.date<=split),frequency),future=sample(visible.filter(p=>split&&p.date>=split),frequency).map(p=>({...p,lower:p.lower??p.price,upper:p.upper??p.price}));
   const bottom=showStates?stateBottom:showDrawdown?ddBottom:priceBottom;
   const clip=`${svg.id}-clip`,fullHistory=span>3000;
   let s=`<title>${historical?'실제 비트코인 가격':'실제 비트코인 가격과 미래 가정'}</title><desc>실선은 실제 관측, 점선은 가정에 따른 가격 예시입니다. 그래프를 누르면 값을 고정해 읽을 수 있습니다. 미래 음영은 보정된 확률 구간이 아닙니다.</desc><defs><clipPath id="${clip}"><rect x="${L}" y="${T}" width="${W-L-R}" height="${bottom-T}"/></clipPath></defs>`;
-  const allTicks=[];for(let e=Math.floor(Math.log10(min*factor))-1;e<=Math.ceil(Math.log10(max*factor))+1;e++)for(const mult of[1,2,5]){const v=mult*10**e;if(v>=min*factor&&v<=max*factor)allTicks.push(v);}
-  const tickCount=Math.max(2,Math.min(small?5:7,Math.floor((priceBottom-T)/38)+1)),tickStride=Math.max(1,Math.ceil(allTicks.length/tickCount));
-  for(const value of allTicks.filter((_,i)=>i%tickStride===0)){const yy=y(value/factor);s+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#28323f"/><text x="${W-R+8}" y="${yy+4}" text-anchor="start" fill="#b0bbca" font-size="12">${unit==='usd'?'$':''}${compact(value)}</text>`;}
+  for(const price of priceScale.ticks){const value=price*factor,yy=y(price);s+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#28323f"/><text x="${W-R+8}" y="${yy+4}" text-anchor="start" fill="#b0bbca" font-size="12">${unit==='usd'?'$':''}${compact(value)}</text>`;}
   let months=span>5000?(small?60:24):span>3000?(small?36:24):span>1100?(small?12:6):span>550?(small?6:3):span>270?3:1;
   let tick=`${start.slice(0,4)}-01-01`;while(utcDay(tick)<minDay)tick=shiftCalendarMonths(tick,months);
   while(utcDay(tick)<=maxDay){const xx=xday(utcDay(tick));s+=`<line x1="${xx}" x2="${xx}" y1="${T}" y2="${bottom}" stroke="#222c37"/><text x="${xx}" y="${axisY}" text-anchor="${xx>W-35?'end':'middle'}" fill="#aebaca" font-size="12">${months>=12?tick.slice(0,4):tick.slice(2,7).replace('-','.')}</text>`;tick=shiftCalendarMonths(tick,months);}
@@ -57,21 +55,61 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   const latest=visible.find(p=>p.date===split);
   if(latest){const yy=y(latest.price);s+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#7da89c" stroke-dasharray="2 5" opacity=".5"/><rect x="${W-R}" y="${yy-9}" width="${R-3}" height="18" rx="2" fill="#2b6558"/><text x="${W-R+5}" y="${yy+4}" fill="#edf8f3" font-size="${small?10:11}">${unit==='usd'?money(latest.price):nf(latest.price*factor,1)}</text>`;}
   s+=`<g id="${svg.id}-cross" pointer-events="none"><line class="cross-time" y1="${T}" y2="${bottom}" stroke="#afc4dd" stroke-dasharray="3 3" opacity=".6"/><line class="cross-price" x1="${L}" x2="${W-R}" stroke="#afc4dd" stroke-dasharray="3 3" opacity=".6"/><circle r="4" fill="#10151c" stroke="#f4dcac" stroke-width="1.5"/><g class="cross-price-tag"><rect x="${W-R}" width="${R-3}" height="18" rx="2" fill="#465366"/><text x="${W-R+5}" fill="#edf2f9" font-size="${small?10:11}"></text></g><g class="cross-date-tag"><rect width="80" height="18" rx="2" fill="#39485b"/><text fill="#edf2f9" font-size="10" text-anchor="middle"></text></g></g>`;
-  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.dataset.plotLeft=String(L);svg.dataset.plotRight=String(W-R);svg.innerHTML=s;
+  s+=`<g class="chart-measurement" pointer-events="none" display="none" role="img"><g class="measurement-geometry" clip-path="url(#${clip})"><rect class="measurement-area" fill-opacity=".1"/><line class="measurement-line" stroke-width="1.4" stroke-dasharray="4 3"/><circle class="measurement-start" r="4" fill="#10151c" stroke-width="2"/><circle class="measurement-end" r="4" fill="#10151c" stroke-width="2"/></g><g class="measurement-label"><rect rx="4" fill="#142131" stroke="#557b9f"/><text x="8" y="15" fill="#d8e7f8" font-size="10"></text><text x="8" y="29" fill="#d8e7f8" font-size="10"></text><text x="8" y="43" fill="#e1ecf8" font-size="10"></text><text x="8" y="57" fill="#b9cde3" font-size="10"></text></g></g>`;
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.dataset.plotLeft=String(L);svg.dataset.plotRight=String(W-R);svg.dataset.scale=scale;svg.dataset.tool=tool;svg.innerHTML=s;
   const cross=svg.querySelector('[id$="-cross"]'),crossLine=cross.querySelector('.cross-time'),crossPrice=cross.querySelector('.cross-price'),crossDot=cross.querySelector('circle'),priceTag=cross.querySelector('.cross-price-tag'),dateTag=cross.querySelector('.cross-date-tag'),stateByDate=new Map(states.map(p=>[p.date,p]));
-  let active=nearest(visible,utcDay(selectedDate||split||visible.at(-1).date)),pinned=false;
+  let measurementState=measurement?{startDate:measurement.startDate,endDate:measurement.endDate??null}:null;
+  const initialDate=tool==='measure'&&measurementState?(measurementState.endDate||measurementState.startDate):(selectedDate||split||visible.at(-1).date);
+  let active=nearest(visible,utcDay(initialDate)),pinned=false,cursor=active;
+  const rowIndices=new Map(rows.map((point,index)=>[point.date,index]));
+  const hoverInfo=(index,hovered)=>{const point=visible[index],previous=rows[(rowIndices.get(point.date)??0)-1];return {date:point.date,price:point.price,displayedPrice:point.price*factor,changePrice:previous?point.price-previous.price:null,changePct:previous?(point.price/previous.price-1)*100:null,drawdownPct:point.drawdownPct??null,kind:split&&point.date>split?'simulated':'observed',hovered};};
+  const measurementLayer=svg.querySelector('.chart-measurement'),measureArea=measurementLayer.querySelector('.measurement-area'),measureLine=measurementLayer.querySelector('.measurement-line'),measureStart=measurementLayer.querySelector('.measurement-start'),measureEnd=measurementLayer.querySelector('.measurement-end'),measureLabel=measurementLayer.querySelector('.measurement-label'),measureLabelRect=measureLabel.querySelector('rect'),measureTexts=[...measureLabel.querySelectorAll('text')];
+  const attrs=(node,values)=>{for(const [key,value] of Object.entries(values))node.setAttribute(key,value);};
+  const measurementMoney=value=>`$${nf(value,Math.abs(value)<1?6:2)}`;
+  function renderMeasurement(previewDate=null){
+    if(!measurementState){measurementLayer.setAttribute('display','none');return;}
+    const input={...measurementState,endDate:measurementState.endDate||previewDate},result=measureDailyRange(rows,input,split);
+    if(!result){measurementLayer.setAttribute('display','none');return;}
+    measurementLayer.removeAttribute('display');measurementLayer.dataset.pending=String(!measurementState.endDate);
+    const ax=xday(utcDay(result.startDate)),ay=y(result.startPrice),hasEnd=Boolean(result.endDate),bx=hasEnd?xday(utcDay(result.endDate)):ax,by=hasEnd?y(result.endPrice):ay,color=hasEnd?(result.changePrice<0?'#db9ba7':'#8ac8b9'):'#93c3e8';
+    attrs(measureStart,{cx:ax,cy:ay,stroke:color,'data-measure-date':result.startDate,'data-measure-price':result.startPrice});
+    attrs(measureEnd,{cx:bx,cy:by,stroke:color,display:hasEnd?'inline':'none','data-measure-date':result.endDate||'','data-measure-price':result.endPrice??''});
+    attrs(measureArea,{x:Math.min(ax,bx),y:Math.min(ay,by),width:Math.abs(bx-ax),height:Math.max(1,Math.abs(by-ay)),fill:color,display:hasEnd?'inline':'none'});
+    attrs(measureLine,{x1:ax,y1:ay,x2:bx,y2:by,stroke:color,display:hasEnd?'inline':'none'});
+    const signedMoney=hasEnd?`${result.changePrice>0?'+':result.changePrice<0?'−':''}${measurementMoney(Math.abs(result.changePrice))}`:'';
+    const lines=hasEnd?[`시작 ${date(result.startDate)} · ${measurementMoney(result.startPrice)}`,`끝 ${date(result.endDate)} · ${measurementMoney(result.endPrice)}`,`Δ ${signedMoney} · ${percent(result.changePct)}`,`Δ ${result.deltaDays>0?'+':''}${result.deltaDays}일${result.includesSimulated?' · 가정 포함':''}`]:[`${date(result.startDate)} · ${measurementMoney(result.startPrice)}`,`끝점 선택${result.includesSimulated?' · 가정 포함':''}`];
+    const labelWidth=Math.min(small?214:240,Math.max(140,W-L-R-12)),labelHeight=lines.length*14+9;
+    const labelX=Math.max(L+4,Math.min(W-R-labelWidth-4,(ax+bx)/2-labelWidth/2)),labelY=Math.max(T+5,Math.min(priceBottom-labelHeight-4,Math.min(ay,by)-labelHeight-10));
+    attrs(measureLabel,{transform:`translate(${labelX},${labelY})`});attrs(measureLabelRect,{width:labelWidth,height:labelHeight,stroke:color});
+    measureTexts.forEach((node,index)=>{node.textContent=lines[index]||'';});
+    measurementLayer.setAttribute('aria-label',lines.join(' · '));
+  }
   const inspection=index=>{const p=visible[index],isFuture=Boolean(split&&p.date>split),flow=stateByDate.get(p.date),event=visibleTurns.find(t=>t.date===p.date),fields=[{label:unit==='usd'?'가격 · 달러':'최근 관측 가격 = 100',value:unit==='usd'?money(p.price):nf(p.price*factor,1)},{label:'이전 최고가 대비',value:percent(p.drawdownPct)},{label:'가격 흐름',value:plainState[flow?.state]||'—'}];
     if(event)fields.push({label:isFuture?'예시에서 확인한 날':'방향 전환 확인일',value:date(event.confirmationDate)});else if(isFuture&&p.lower)fields.push({label:'여러 예시의 가격 범위',value:`${money(p.lower)}–${money(p.upper)}`});
     return {label:`${date(p.date)}${event?` · ${event.type==='high'?'고점':'저점'}${isFuture?' 예시':''}`:''}`,date:p.date,kind:isFuture?'simulated':'observed',fields,note:isFuture?'선택한 가정의 예시입니다. 가격 범위는 확률이 보정된 예측구간이 아닙니다.':event?`가격이 꺾인 날과, 반대 방향으로 ${nf(threshold*100)}% 이동해 확인한 날을 구분합니다.`:frequency==='weekly'?'선은 주간 마지막 가격, 선택한 값은 해당 날짜의 일말 가격입니다.':'하루가 끝난 가격입니다. 장중 최고·최저가와 다를 수 있습니다.'};};
-  function mark(index){const p=visible[index],xx=x(p),yy=y(p.price),tx=Math.max(L,Math.min(W-R-80,xx-40));crossLine.setAttribute('x1',xx);crossLine.setAttribute('x2',xx);crossPrice.setAttribute('y1',yy);crossPrice.setAttribute('y2',yy);crossDot.setAttribute('cx',xx);crossDot.setAttribute('cy',yy);priceTag.querySelector('rect').setAttribute('y',yy-9);priceTag.querySelector('text').setAttribute('y',yy+4);priceTag.querySelector('text').textContent=unit==='usd'?money(p.price):nf(p.price*factor,1);dateTag.querySelector('rect').setAttribute('x',tx);dateTag.querySelector('rect').setAttribute('y',axisY-12);dateTag.querySelector('text').setAttribute('x',tx+40);dateTag.querySelector('text').setAttribute('y',axisY+1);dateTag.querySelector('text').textContent=p.date;}
+  function mark(index){cursor=index;const p=visible[index],xx=x(p),yy=y(p.price),tx=Math.max(L,Math.min(W-R-80,xx-40));crossLine.setAttribute('x1',xx);crossLine.setAttribute('x2',xx);crossPrice.setAttribute('y1',yy);crossPrice.setAttribute('y2',yy);crossDot.setAttribute('cx',xx);crossDot.setAttribute('cy',yy);priceTag.querySelector('rect').setAttribute('y',yy-9);priceTag.querySelector('text').setAttribute('y',yy+4);priceTag.querySelector('text').textContent=unit==='usd'?money(p.price):nf(p.price*factor,1);dateTag.querySelector('rect').setAttribute('x',tx);dateTag.querySelector('rect').setAttribute('y',axisY-12);dateTag.querySelector('text').setAttribute('x',tx+40);dateTag.querySelector('text').setAttribute('y',axisY+1);dateTag.querySelector('text').textContent=p.date;}
 
-  function commit(index,pin=true,user=pin){active=Math.max(0,Math.min(visible.length-1,index));pinned=pin;mark(active);if(tooltip)tooltip.hidden=true;onInspect(inspection(active),{user,openPanel:pin});}
+  function commit(index,pin=true,user=pin){active=Math.max(0,Math.min(visible.length-1,index));pinned=pin;mark(active);if(tooltip)tooltip.hidden=true;onHover(hoverInfo(active,false));onInspect(inspection(active),{user,openPanel:pin});}
+  function measure(index){
+    active=Math.max(0,Math.min(visible.length-1,index));mark(active);onHover(hoverInfo(active,false));
+    measurementState=!measurementState||measurementState.endDate?{startDate:visible[active].date,endDate:null}:{startDate:measurementState.startDate,endDate:visible[active].date};
+    renderMeasurement();onMeasurement({...measurementState});
+  }
   function fromPointer(e){const target=e.target.closest?.('[data-date]');if(target)return nearest(visible,utcDay(target.dataset.date));const rect=svg.getBoundingClientRect(),px=(e.clientX-rect.left)/rect.width*W;return nearest(visible,minDay+(Math.max(L,Math.min(W-R,px))-L)/(W-L-R)*span);}
-  svg.onclick=e=>{if(e.target.closest?.('[data-next-turn]')){onNextTurn();return;}commit(fromPointer(e));};
-  svg.onpointermove=e=>{if(e.pointerType==='touch'||e.target.closest?.('[data-next-turn]'))return;mark(fromPointer(e));if(tooltip)tooltip.hidden=true;};
-  svg.onpointerleave=()=>{mark(active);if(tooltip)tooltip.hidden=true;};
+  svg.onclick=e=>{if(e.target.closest?.('[data-next-turn]')){onNextTurn();return;}if(tool==='pan')return;if(tool==='measure'){svg.focus({preventScroll:true});measure(fromPointer(e));return;}commit(fromPointer(e));};
+  svg.onpointermove=e=>{if(e.pointerType==='touch'||e.target.closest?.('[data-next-turn]'))return;const index=fromPointer(e);mark(index);onHover(hoverInfo(index,true));if(tool==='measure'&&measurementState&&!measurementState.endDate)renderMeasurement(visible[index].date);if(tooltip)tooltip.hidden=true;};
+  svg.onpointerleave=()=>{mark(active);onHover(hoverInfo(active,false));if(measurementState&&!measurementState.endDate)renderMeasurement();if(tooltip)tooltip.hidden=true;};
   svg.onblur=()=>{if(tooltip&&!pinned)tooltip.hidden=true;};
-  svg.onkeydown=e=>{if(e.target.closest?.('[data-next-turn]')&&['Enter',' '].includes(e.key)){e.preventDefault();e.stopPropagation();onNextTurn();return;}if(!['ArrowLeft','ArrowRight','Home','End','Escape'].includes(e.key))return;e.preventDefault();if(e.key==='Escape'){pinned=false;if(tooltip)tooltip.hidden=true;mark(active);return;}commit(e.key==='Home'?0:e.key==='End'?visible.length-1:active+(e.key==='ArrowRight'?1:-1)*(frequency==='weekly'?7:1),false,true);};
-  commit(active,false);
+  svg.onkeydown=e=>{
+    if(e.target.closest?.('[data-next-turn]')&&['Enter',' '].includes(e.key)){e.preventDefault();e.stopPropagation();onNextTurn();return;}
+    if(tool==='measure'&&['Enter',' '].includes(e.key)){e.preventDefault();e.stopPropagation();if(!e.repeat)measure(cursor);return;}
+    if(!['ArrowLeft','ArrowRight','Home','End','Escape'].includes(e.key))return;e.preventDefault();
+    if(e.key==='Escape'){pinned=false;if(tooltip)tooltip.hidden=true;mark(active);if(measurementState){measurementState=null;renderMeasurement();onMeasurement(null);e.stopPropagation();}return;}
+    const index=e.key==='Home'?0:e.key==='End'?visible.length-1:active+(e.key==='ArrowRight'?1:-1)*(frequency==='weekly'?7:1);
+    if(tool==='measure'){active=Math.max(0,Math.min(visible.length-1,index));mark(active);onHover(hoverInfo(active,false));if(measurementState&&!measurementState.endDate)renderMeasurement(visible[active].date);}
+    else commit(index,false,true);
+  };
+  renderMeasurement();
+  if(tool==='measure'){mark(active);onHover(hoverInfo(active,false));}else commit(active,false);
   return {selectDate(value){commit(nearest(visible,utcDay(value)));},previous(){const previous=visibleTurns.filter(p=>p.date<visible[active].date).at(-1);commit(previous?nearest(visible,utcDay(previous.date)):0);},next(){const next=visibleTurns.find(p=>p.date>visible[active].date);commit(next?nearest(visible,utcDay(next.date)):visible.length-1);},getDate(){return visible[active].date;},hasPrevious(){return visibleTurns.some(p=>p.date<visible[active].date);},hasNext(){return visibleTurns.some(p=>p.date>visible[active].date);}};
 }

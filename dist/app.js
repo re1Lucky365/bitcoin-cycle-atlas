@@ -68,7 +68,7 @@ function toast(message) { $('#toast').textContent = message; $('#toast').hidden 
 function persistUrl() {
   const p = new URLSearchParams();
   const currentParams=new URLSearchParams(location.search);
-  for(const key of ['chart','span','assumption','granularity','align','interval','measure','scope','phase','legacy'])if(currentParams.has(key))p.set(key,currentParams.get(key));
+  for(const key of ['chart','span','assumption','granularity','axis','align','interval','measure','scope','phase','legacy'])if(currentParams.has(key))p.set(key,currentParams.get(key));
   if (state.view !== 'outlook') p.set('page',state.view);
   if (state.mode !== 'halving') p.set('mode', state.mode);
   if (state.unit !== 'rebased') p.set('unit', state.unit);

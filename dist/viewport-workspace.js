@@ -1,4 +1,5 @@
 import { DATA_UPDATE } from './data-update.js';
+import { mountWorkbenchChrome } from './workbench-chrome.js';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -104,8 +105,8 @@ function pager(panel,body) {
 export function initViewportWorkspace(icon) {
   const stage=$('#lab-chart-stage'),plot=document.createElement('div');plot.className='atlas-plot';
   plot.append(...stage.childNodes);stage.append(plot);
-  stage.prepend($('#lab-metrics'),$('.lab-chart-meta'));
-  stage.append($('.lab-chart-foot'),$('.atlas-inspector'),$('#atlas-event-rail'));
+  plot.prepend($('#lab-metrics'));plot.append($('.lab-chart-foot'));
+  stage.append($('.lab-chart-meta'),$('.atlas-inspector'),$('#atlas-event-rail'));
   const tools=document.createElement('div');tools.className='atlas-canvas-tools';
   tools.innerHTML='<button data-reader="selection">값·근거</button><button data-reader="guide">읽는 법</button><button data-reader="math">계산식</button><button data-reader="update" id="atlas-update-status" title="자동 갱신 상태"></button>';
   stage.append(tools);
@@ -114,6 +115,28 @@ export function initViewportWorkspace(icon) {
   reader.innerHTML='<div class="reader-heading"><h2 id="chart-reader-title" tabindex="-1"></h2><button type="button" aria-label="상세 패널 닫기" title="상세 패널 닫기">'+icon('close')+'</button></div><div id="chart-detail-actions" class="chart-detail-actions" role="group" aria-label="선택한 날짜 이동" hidden></div><div id="chart-reader-body"></div>';
   workspace.append(reader);
   const body=$('#chart-reader-body'),readerPager=pager(reader,body);
+  const overlay=matchMedia('(max-width:900px)');
+  function syncOverlay(){
+    const covers=!reader.hidden&&overlay.matches;
+    $('#main').inert=covers;$('.atlas-sidebar').inert=covers;
+    reader.dataset.overlay=String(covers);
+    if(covers&&!reader.contains(document.activeElement)&&!document.activeElement?.closest('.workbench-rail'))$('#chart-reader-title').focus({preventScroll:true});
+  }
+  overlay.addEventListener('change',syncOverlay);
+  const resize=document.createElement('div');resize.className='reader-resize';resize.tabIndex=0;
+  resize.setAttribute('role','separator');resize.setAttribute('aria-orientation','vertical');resize.setAttribute('aria-label','상세 패널 너비');resize.setAttribute('aria-valuemin','280');resize.setAttribute('aria-valuemax','420');resize.setAttribute('aria-valuenow','320');reader.prepend(resize);
+  function sizeReader(value){
+    const rail=Math.ceil(workspace.querySelector('.workbench-rail')?.getBoundingClientRect().width||38),max=Math.max(280,Math.min(420,workspace.clientWidth-rail-480));
+    const width=Math.round(Math.max(280,Math.min(max,value)));workspace.style.setProperty('--detail-width',`${width}px`);resize.setAttribute('aria-valuenow',String(width));resize.setAttribute('aria-valuemax',String(max));
+  }
+  window.addEventListener('resize',()=>{if(!reader.hidden&&!overlay.matches)sizeReader(parseFloat(workspace.style.getPropertyValue('--detail-width'))||320);});
+  let resizeStart=null;
+  resize.addEventListener('pointerdown',event=>{if(event.button!==0||overlay.matches)return;event.preventDefault();resizeStart={x:event.clientX,width:reader.getBoundingClientRect().width};resize.setPointerCapture(event.pointerId);});
+  resize.addEventListener('pointermove',event=>{if(resizeStart)sizeReader(resizeStart.width+resizeStart.x-event.clientX);});
+  const endResize=()=>{resizeStart=null;};resize.addEventListener('pointerup',endResize);resize.addEventListener('pointercancel',endResize);
+  resize.addEventListener('dblclick',()=>sizeReader(320));
+  resize.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','Home'].includes(event.key))return;event.preventDefault();sizeReader(event.key==='Home'?320:reader.getBoundingClientRect().width+(event.key==='ArrowLeft'?20:-20));});
+
   const title=$('#chart-reader-title'),actions=$('#chart-detail-actions');
   const controlStore=document.createElement('div');controlStore.id='chart-control-store';controlStore.hidden=true;stage.append(controlStore);
   const liveControls=new Map();
@@ -140,20 +163,28 @@ export function initViewportWorkspace(icon) {
   function closeReader({restoreFocus=true}={}){
     if(reader.hidden)return;
     returnControls();
-    reader.hidden=true;workspace.dataset.detailsOpen='false';expanded();
+    reader.hidden=true;workspace.dataset.detailsOpen='false';expanded();syncOverlay();
     document.dispatchEvent(new CustomEvent('atlas:panel-state',{detail:{open:false,kind:reader.dataset.kind}}));
     if(restoreFocus)restoreOpener();
   }
   reader.querySelector('button').onclick=()=>closeReader();
+  document.addEventListener('keydown',event=>{
+    if(event.key!=='Tab'||reader.hidden||!overlay.matches)return;
+    const focusable=[...reader.querySelectorAll('button:not(:disabled),input:not(:disabled),select:not(:disabled),a[href],[tabindex="0"]'),...workspace.querySelectorAll('.workbench-rail button:not(:disabled)')].filter(node=>node.getClientRects().length);
+    if(!focusable.length)return;const first=focusable[0],last=focusable.at(-1);
+    if(event.shiftKey&&(document.activeElement===first||document.activeElement===title)){event.preventDefault();last.focus();}
+    else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+  });
   function showReader(kind,heading,source,{focus=false,opener:trigger,preservePage=false}={}){
     const changed=reader.hidden||reader.dataset.kind!==kind;
     if(reader.hidden||focus)rememberOpener(trigger);
     returnControls();
     title.textContent=heading;title.title=heading;reader.dataset.kind=kind;actions.hidden=kind!=='selection';
     reader.hidden=false;workspace.dataset.detailsOpen='true';
+    if(!overlay.matches)sizeReader(parseFloat(workspace.style.getPropertyValue('--detail-width'))||320);
     if(liveControls.has(kind)){readerPager.suspend();body.dataset.controls=kind;body.replaceChildren(liveControls.get(kind));}
     else readerPager.set(source,{preservePage});
-    expanded();
+    expanded();syncOverlay();
     if(focus){$('#atlas-display-options').open=false;$('#atlas-mode-menu').open=false;title.focus({preventScroll:true});}
     if(changed)document.dispatchEvent(new CustomEvent('atlas:panel-state',{detail:{open:true,kind}}));
   }
@@ -173,19 +204,18 @@ export function initViewportWorkspace(icon) {
   document.addEventListener('atlas:open-detail',event=>openReader(event.detail?.kind,{focus:event.detail?.focus!==false,opener:event.detail?.opener}));
   function openReader(kind,options={}){
     const source=document.createElement('div');
-    const titles={selection:'선택한 값과 근거',guide:'차트 읽는 법',math:'계산식과 검증',update:'자료 갱신 상태',settings:'표시 설정',charts:'그래프 종류'};
+    const titles={selection:'선택 데이터 · 고정',guide:'차트 사용법',math:'모델과 검증',update:'자료 갱신 상태',settings:'차트 설정',charts:'그래프 종류',layers:'차트 레이어',scenarios:'미래 가정'};
     if(!titles[kind])return;
     if(liveControls.has(kind)){showReader(kind,titles[kind],null,options);return;}
     if(kind==='selection'){
-      source.innerHTML=`<h3>${esc($('#atlas-inspector-title').textContent)}</h3><p>${esc($('#atlas-inspector-kind').textContent)}</p>`;
-      for(const value of $('#atlas-inspector-values').children){const p=document.createElement('p');p.innerHTML=`<b>${value.querySelector('span').innerHTML}</b><br>${value.querySelector('strong').innerHTML}`;source.append(p);}
+      source.innerHTML=`<h3>${esc($('#atlas-inspector-title').textContent)}</h3><p class="reader-kind">${esc($('#atlas-inspector-kind').textContent)}</p>`;
+      for(const value of $('#atlas-inspector-values').children){const p=document.createElement('p');p.className='reader-value';p.innerHTML=`<span>${value.querySelector('span').innerHTML}</span><b>${value.querySelector('strong').innerHTML}</b>`;source.append(p);}
       source.append($('#atlas-inspector-note').cloneNode(true));
       for(const item of selectedSources){const p=document.createElement('p'),a=document.createElement('a');a.href=item.url;a.target='_blank';a.rel='noopener noreferrer';a.textContent=item.title||item.url;p.append(a);source.append(p);}
-      source.append($('#atlas-chart-note').cloneNode(true));
-      const legend=$('#atlas-chart-legend').cloneNode(true);legend.querySelectorAll('span').forEach(n=>{const p=document.createElement('p');p.textContent=n.textContent;source.append(p);});
+
     }else if(kind==='guide'){
       source.append($('.atlas-guide>div').cloneNode(true));
-      source.insertAdjacentHTML('beforeend','<p>가격과 미래에서는 그래프를 눌러 날짜를 선택합니다. 오른쪽은 가격, 아래는 날짜입니다. ← → 키로 하루씩, 선택 상세의 이전·다음 버튼으로 고저점을 이동합니다.</p><p>휠로 확대·축소하고 가로로 드래그해 구간을 이동합니다. 차트 안의 −·+·방향·초기화 아이콘도 같은 기능입니다. 차트에 초점을 둔 상태에서 +·−·0 키를 사용할 수 있습니다.</p><p>다른 그래프는 실제 관측 자료의 비교입니다. ⓘ에서 선택한 구간의 모든 수치와 출처를 확인합니다. 리서치와 원자료는 왼쪽 아이콘으로 엽니다. 고점권 도달과 실제 최고가 날짜는 서로 다를 수 있습니다.</p>');
+      source.insertAdjacentHTML('beforeend','<p>가격과 미래에서는 그래프를 눌러 날짜를 선택합니다. 오른쪽은 가격, 아래는 날짜입니다. ← → 키로 하루씩, 선택 상세의 이전·다음 버튼으로 고저점을 이동합니다.</p><p>휠로 확대·축소하고 가로로 드래그해 구간을 이동합니다. 왼쪽 −·+·초기화 아이콘도 같은 기능입니다. 이동 도구는 차트를 옮기고, 자 모양 도구는 두 날짜를 눌러 기간·가격 차이·변화율을 잽니다. 미래가 포함되면 가정 포함으로 표시합니다. 차트에 초점을 둔 상태에서 +·−·0 키를 사용할 수 있습니다.</p><p>상단 1D·1W는 표시 간격이며, 하단 기간 버튼은 화면에 보이는 범위입니다. 로그·선형은 눈금만 바꾸며 가격을 바꾸지 않습니다. 다른 그래프는 실제 관측 자료의 비교입니다. 오른쪽 데이터 아이콘에서 고정한 날짜와 출처를 확인합니다. 리서치와 원자료도 오른쪽 아이콘으로 엽니다. 고점권 도달과 실제 최고가 날짜는 서로 다를 수 있습니다.</p>');
     }else if(kind==='math'){
       const modelInfo=$('#atlas-model-info');if(modelInfo)source.append(modelInfo.cloneNode(true));
       source.append($('#atlas-exact-details .lab-details-body').cloneNode(true));
@@ -198,32 +228,10 @@ export function initViewportWorkspace(icon) {
     }
     showReader(kind,titles[kind],source,options);
   }
-  tools.querySelectorAll('[data-reader]').forEach(button=>button.onclick=()=>openReader(button.dataset.reader,{focus:true,opener:button}));
-  const heading=document.createElement('div');heading.className='atlas-canvas-heading';
-  const menu=document.createElement('details');menu.id='atlas-mode-menu';menu.className='atlas-mode-menu';
-  menu.innerHTML=`<summary aria-label="그래프 종류" title="그래프 종류">${icon('chart')}</summary>`;
-  const modeTabs=$('.atlas-mode-tabs');
-  modeTabs.querySelectorAll('[data-atlas-mode]').forEach(button=>button.addEventListener('click',()=>{menu.open=false;closeReader();}));
-  const menuTrigger=menu.querySelector('summary');menuTrigger.dataset.reader='charts';
-  menuTrigger.addEventListener('click',event=>{event.preventDefault();menu.open=false;openReader('charts',{focus:true,opener:menuTrigger});});
-  const modeName=document.createElement('span');modeName.id='atlas-mode-name';modeName.textContent='가격과 미래';
-  const settings=$('#atlas-display-options'),settingsBody=$('.atlas-settings-body');
-  settings.querySelector('summary').innerHTML=icon('layers');settings.querySelector('summary').setAttribute('aria-label','차트 설정');settings.querySelector('summary').title='차트 설정';
-  const settingsTrigger=settings.querySelector('summary');settingsTrigger.dataset.reader='settings';
-  settingsTrigger.addEventListener('click',event=>{event.preventDefault();settings.open=false;openReader('settings',{focus:true,opener:settingsTrigger});});
-  const controlSets=[...document.querySelectorAll('.atlas-controls>.atlas-control-set')];
-  settingsBody.prepend(...controlSets);
-  settingsBody.append($('#atlas-reset'));
-  const selection=tools.querySelector('[data-reader=selection]');selection.innerHTML=icon('info');selection.title='선택한 값과 근거';selection.setAttribute('aria-label','선택한 값과 근거');
-  $('.atlas-inspector-actions').append(selection);
-  const math=tools.querySelector('[data-reader=math]');math.innerHTML=icon('book');math.title='계산식과 검증';math.setAttribute('aria-label','계산식과 검증');$('.atlas-setting-downloads').append(math);
-  liveControls.set('settings',settingsBody);liveControls.set('charts',modeTabs);controlStore.append(settingsBody,modeTabs);settings.open=false;menu.open=false;
-  const updateButton=$('#atlas-update-status');heading.append(menu,modeName,updateButton,settings);
-  $('.atlas-controls').remove();tools.remove();stage.prepend(heading);
-  document.addEventListener('click',event=>{if(!menu.contains(event.target))menu.open=false;if(event.target.closest('[data-view]'))closeReader({restoreFocus:false});});
-  document.addEventListener('keydown',event=>{if(event.key==='Escape'){menu.open=false;if(!reader.hidden){event.preventDefault();closeReader();}}});
-  $('#atlas-latest').innerHTML=icon('clock');$('#atlas-latest').title='최근 관측으로';$('#atlas-latest').setAttribute('aria-label','최근 관측으로');
-  const help=document.createElement('button');help.type='button';help.className='sidebar-help';help.dataset.reader='guide';help.title='차트 읽는 법';help.setAttribute('aria-label','차트 읽는 법');help.innerHTML=icon('info');help.onclick=()=>openReader('guide',{focus:true,opener:help});$('.atlas-sidebar').append(help);
+  mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlStore,liveControls,openReader,closeReader,isReaderOpen:kind=>!reader.hidden&&reader.dataset.kind===kind});
+  document.addEventListener('click',event=>{if(event.target.closest('[data-view]'))closeReader({restoreFocus:false});});
+  document.addEventListener('atlas:close-detail',()=>closeReader({restoreFocus:false}));
+  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!reader.hidden){event.preventDefault();closeReader();}});
   document.addEventListener('click',event=>{const trigger=event.target.closest('[data-method],[data-evidence-detail]');if(trigger)lastDialogTrigger=trigger;},true);
   for(const name of ['method','evidence']){
     const dialog=$(`#${name}-dialog`),content=$(name==='method'?'#method-content':'#evidence-detail-body');
