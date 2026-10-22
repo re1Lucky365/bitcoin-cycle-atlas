@@ -49,10 +49,10 @@ TradingView의 [공식 화면 구성](https://www.tradingview.com/support/soluti
 
 | 공개 확인 | 실제 결과 |
 |---|---|
-| 변경 커밋의 CI·Pages | 공개 실행 후 기록한다. |
-| 정기 자료 갱신 첫 수동 실행 | 공개 실행 후 기록한다. |
-| 실제 관측일·확인 시각 표시 | 공개 배포 후 기록한다. |
-| v1.3.0 릴리스·8개 산출물 | 공개 실행 후 기록한다. |
+| 변경 커밋의 CI·Pages | PASS. 기능 커밋 `78615ece4ad5efff41fa24529049d16348a2a79c`의 [CI](https://github.com/twoimo/bitcoin-cycle-atlas/actions/runs/39729387874)와 [Pages](https://github.com/twoimo/bitcoin-cycle-atlas/actions/runs/39729387922) 성공. 공개 사이트에서 새 화면 확인. |
+| 정기 자료 갱신 첫 수동 실행 | PASS. [실행 39729446829](https://github.com/twoimo/bitcoin-cycle-atlas/actions/runs/39729446829)의 자료 검증·테스트·커밋·Pages 배포 모두 성공. `6e7a3252af336843cab00e8728c6137888c5db40`에 2026-10-21 완료 일봉을 추가했다. 5,940행. |
+| 실제 관측일·확인 시각 표시 | CI가 기록한 확인 시각은 2026-10-22 05:41:30.989 UTC / 14:41 KST, 관측 종료는 2026-10-21 UTC다. 브라우저의 공개 반영 확인을 마친 뒤 결과를 보완한다. |
+| v1.3.0 릴리스·8개 산출물 | 동일 소스에서 단일 HTML·연구 PNG·두 계산 JSON·연구 문서·소스 ZIP·메타데이터·체크섬을 만드는 Release 워크플로를 사용한다. 게시 결과와 다운로드 검증은 [릴리스](https://github.com/twoimo/bitcoin-cycle-atlas/releases)와 [Release 실행](https://github.com/twoimo/bitcoin-cycle-atlas/actions/workflows/release.yml)에 기록된다. |
 
 ## 남는 범위
 
