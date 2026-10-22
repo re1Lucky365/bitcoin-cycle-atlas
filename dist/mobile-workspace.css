@@ -108,8 +108,8 @@
   .indicator-primary-option{font-size:11px;gap:8px}.indicator-primary-option select{min-height:42px;height:42px;font-size:12px}
   .indicator-template-panel{padding:2px 16px 12px}.indicator-template-form input{font-size:16px;min-height:44px}.indicator-template-form button{min-height:44px}
   .indicator-preference-status{padding:7px 16px}
-  .analysis-indicator-windows,.atlas-plot[data-countdown-visible=true]>.analysis-indicator-windows{left:8px;right:8px;width:auto;max-width:none;top:calc(var(--mobile-legend-top) + var(--indicator-manager-height,0px) + var(--mobile-countdown-height,0px) + var(--mobile-countdown-gap,0px) + 8px);bottom:30px}
-  .analysis-indicator-window{height:300px;min-height:240px;max-height:68dvh;box-shadow:none}
+  .analysis-indicator-windows,.atlas-plot[data-countdown-visible=true]>.analysis-indicator-windows{left:8px;right:8px;width:auto;max-width:none;--analysis-stack-top:calc(var(--mobile-legend-top) + var(--indicator-manager-height,0px) + var(--mobile-countdown-height,0px) + var(--mobile-countdown-gap,0px) + 8px);--analysis-bottom-gap:30px}
+  .analysis-indicator-window{min-height:300px;box-shadow:none}
   .analysis-window-heading{min-height:40px}
   .analysis-window-heading button{min-width:40px;min-height:40px}
   .analysis-window-selection>button{min-height:36px}

@@ -98,9 +98,24 @@ export function mountAnalysisIndicators({stage,svg,modeTabs,controls}) {
     }
   }
   function indicators(event){
+    const focused=doc.activeElement,focusedCard=focused?.closest?.('.analysis-indicator-window');
     const {added=[],hidden=[],active}=event.detail.indicators||{};let count=0;
     for(const [mode,view] of views){const visible=added.includes(mode)&&!hidden.includes(mode);view.card.hidden=!visible;view.card.dataset.active=String(mode===active);if(visible)count++;}
     windows.hidden=!count;windows.dataset.count=String(count);
+    if(focusedCard&&windows.contains(focusedCard)&&focusedCard.hidden)queueMicrotask(()=>{
+      // The indicator legend receives the same event after this controller.
+      // Restore focus only after it has rendered the surviving controls.
+      if(!windows.isConnected||!focusedCard.hidden||doc.querySelector('dialog[open]'))return;
+      const current=doc.activeElement;
+      if(current!==focused&&current!==doc.body&&current?.isConnected&&!current.closest('[hidden]'))return;
+      const mode=focusedCard.dataset.analysisMode;
+      const visible=node=>node&&!node.closest('[hidden]')&&!node.disabled;
+      const own=doc.querySelector(`[data-indicator-row="${mode}"] [data-indicator-action="visibility"]`);
+      const remaining=[...windows.querySelectorAll('.analysis-window-heading button')].find(visible);
+      const legend=[...doc.querySelectorAll('[data-indicator-row] [data-indicator-action="visibility"]')].find(visible);
+      const target=visible(own)?own:remaining||legend||doc.getElementById('atlas-mode-menu');
+      target?.focus();
+    });
   }
   // Scroll inside floating analysis windows never pans the underlying price axis.
   windows.addEventListener('wheel',event=>event.stopPropagation(),{passive:true});windows.addEventListener('pointerdown',event=>event.stopPropagation());windows.addEventListener('dblclick',event=>event.stopPropagation());windows.addEventListener('contextmenu',event=>event.stopPropagation());windows.addEventListener('keydown',event=>event.stopPropagation());
