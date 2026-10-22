@@ -1,4 +1,4 @@
-import { RESEARCH_EVIDENCE as EVIDENCE, RESEARCH_SUPPLEMENTS as EVIDENCE_SUPPLEMENTS } from './evidence-index.js?v=1.10.5';
+import { RESEARCH_EVIDENCE as EVIDENCE, RESEARCH_SUPPLEMENTS as EVIDENCE_SUPPLEMENTS } from './evidence-index.js?v=1.11.0';
 
 const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let visible = false, initialized = false, pendingFrame = 0, resizeObserver;

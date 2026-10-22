@@ -1,4 +1,4 @@
-import { pixelExtrema } from './chart-window.js?v=1.10.5';
+import { pixelExtrema } from './chart-window.js?v=1.11.0';
 /** Pure layout helpers shared by the daily and intraday chart renderers. */
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const numberFormats=new Map();

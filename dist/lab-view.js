@@ -1,28 +1,29 @@
-import { drawAtlasPriceChart as drawChart } from './atlas-price-chart.js?v=1.10.5';
-import { renderCryptoConAudit } from './cryptocon-audit.js?v=1.10.5';
-import { bindChartNavigation, panRange } from './chart-navigation.js?v=1.10.5';
-import { renderAtlasAnalysis } from './atlas-analysis.js?v=1.10.5';
-import { ANALYSIS_MODES, analysisCalendarDate, shouldPublishInspection, analysisSelectionSummary } from './analysis-dock.js?v=1.10.5';
-import { INDICATORS, readIndicatorState, writeIndicatorState, changeIndicatorState, isIndicatorVisible, visibleAnalysisIds } from './indicator-state.js?v=1.10.5';
-import { preparePriceViewData } from './price-view-data.js?v=1.10.5';
-import { chartSelectionHandler } from './inspection-policy.js?v=1.10.5';
-import { buildScenarioCountdown, koreanCalendarDate } from './scenario-countdown.js?v=1.10.5';
-import { buildLongHorizonForecast } from './long-horizon-forecast.js?v=1.10.5';
-import { longHorizonMethodMarkup } from './long-horizon-view.js?v=1.10.5';
-import { CHART_INTERVALS, chartInterval, isIntradayInterval } from './ohlc-data.js?v=1.10.5';
-import { drawIntradayChart } from './intraday-chart.js?v=1.10.5';
-import { createMarketDataController, marketStatusText } from './market-data-controller.js?v=1.10.5';
-import { parseVolumeSnapshot, aggregateWeeklyVolume } from './volume-data.js?v=1.10.5';
-import { fitVolumeForecastModel, projectVolumeForecast } from './volume-forecast.js?v=1.10.5';
-import { BITCOIN_EVENTS } from './bitcoin-events.js?v=1.10.5';
-import { historicalEventDetail } from './research-workbench.js?v=1.10.5';
-import { formatBtcVolume } from './chart-overlays.js?v=1.10.5';
-import { analyzeMarketStructure, computeRollingStates, detectDirectionalChanges, STATE_LABELS } from './market-structure.js?v=1.10.5';
-import { utcDay, dateFromDay } from './cycle-engine.js?v=1.10.5';
-import { shiftCalendarMonths } from './cycle-timing.js?v=1.10.5';
-import { chartPresetRange, DEFAULT_CHART_SPAN, CHART_SPANS } from './chart-presets.js?v=1.10.5';
-import { createChartSvgExport } from './chart-export.js?v=1.10.5';
-import { clearChartHover } from './chart-hover.js?v=1.10.5';
+import { drawAtlasPriceChart as drawChart } from './atlas-price-chart.js?v=1.11.0';
+import { renderCryptoConAudit } from './cryptocon-audit.js?v=1.11.0';
+import { bindChartNavigation, panRange } from './chart-navigation.js?v=1.11.0';
+import { renderAtlasAnalysis } from './atlas-analysis.js?v=1.11.0';
+import { ANALYSIS_MODES, analysisCalendarDate, shouldPublishInspection, analysisSelectionSummary } from './analysis-dock.js?v=1.11.0';
+import { INDICATORS, readIndicatorState, writeIndicatorState, changeIndicatorState, isIndicatorVisible, visibleAnalysisIds } from './indicator-state.js?v=1.11.0';
+import { preparePriceViewData } from './price-view-data.js?v=1.11.0';
+import { chartSelectionHandler } from './inspection-policy.js?v=1.11.0';
+import { buildScenarioCountdown, koreanCalendarDate } from './scenario-countdown.js?v=1.11.0';
+import { buildLongHorizonForecast } from './long-horizon-forecast.js?v=1.11.0';
+import { longHorizonMethodMarkup } from './long-horizon-view.js?v=1.11.0';
+import { CHART_INTERVALS, chartInterval, isIntradayInterval } from './ohlc-data.js?v=1.11.0';
+import { drawIntradayChart } from './intraday-chart.js?v=1.11.0';
+import { createMarketDataController, marketStatusText } from './market-data-controller.js?v=1.11.0';
+import { parseVolumeSnapshot, aggregateWeeklyVolume } from './volume-data.js?v=1.11.0';
+import { fitVolumeForecastModel, projectVolumeForecast } from './volume-forecast.js?v=1.11.0';
+import { BITCOIN_EVENTS } from './bitcoin-events.js?v=1.11.0';
+import { historicalEventDetail } from './research-workbench.js?v=1.11.0';
+import { formatBtcVolume } from './chart-overlays.js?v=1.11.0';
+import { analyzeMarketStructure, computeRollingStates, detectDirectionalChanges, STATE_LABELS } from './market-structure.js?v=1.11.0';
+import { utcDay, dateFromDay } from './cycle-engine.js?v=1.11.0';
+import { shiftCalendarMonths } from './cycle-timing.js?v=1.11.0';
+import { chartPresetRange, DEFAULT_CHART_SPAN, CHART_SPANS } from './chart-presets.js?v=1.11.0';
+import { createChartSvgExport, createObservedChartCsv } from './chart-export.js?v=1.11.0';
+import { readWorkspaceViewport, writeWorkspaceViewport, workspaceQuery } from './workspace-state.js?v=1.11.0';
+import { clearChartHover } from './chart-hover.js?v=1.11.0';
 
 const $ = (selector) => document.querySelector(selector);
 const esc = (value) => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -74,6 +75,9 @@ export function initLabView() {
   state.priceRange=null;state.marketRange=null;state.chartRange=null;state.historyCategory='all';state.selectedHistoryEvent=null;
   state.frequency=valid('granularity',CHART_INTERVALS.map(item=>item.id),'daily');
   state.chartType=valid('type',['line','candles'],'line');
+  const restoredViewport=readWorkspaceViewport(query);state.unit=restoredViewport.unit;
+  if(isIntradayInterval(state.frequency))state.marketRange=restoredViewport.range;else state.priceRange=restoredViewport.range;
+  state.restoreMarketRange=Boolean(isIntradayInterval(state.frequency)&&restoredViewport.range);
   state.marketSelectedTime=null;
   state.candleFitDone=false;
   const marketData=createMarketDataController({preferSnapshot:true,onChange:()=>schedule(),readEmbedded:()=>document.getElementById('embedded-ohlc-data')?.textContent});
@@ -140,6 +144,7 @@ export function initLabView() {
     writeIndicatorState(p,state.indicators);
     for(const [key,value,defaultValue] of [['span',state.window,DEFAULT_CHART_SPAN],['magnet',state.magnet,'off'],['assumption',state.scenario,'base'],['granularity',state.frequency,'daily'],['axis',state.scale,'log'],['align',state.atlasAlignment,'trough'],['interval',state.atlasPeriod,'monthly'],['measure',state.atlasMetric,'returnPct'],['scope',state.atlasScope,'recent'],['phase',state.atlasPhase,'macro'],['audit',state.cryptoView,'timing']])value===defaultValue?p.delete(key):p.set(key,value);
     state.chartType==='line'?p.delete('type'):p.set('type',state.chartType);
+    writeWorkspaceViewport(p,{frequency:state.frequency,unit:state.unit,range:isIntradayInterval(state.frequency)?state.marketRange:state.priceRange});
     if(p.get('page')==='compare'&&!p.has('legacy'))p.delete('page');
     try{history.replaceState(null,'',`${location.pathname}${p.size?'?'+p:''}`);}catch{}
   }
@@ -259,7 +264,7 @@ export function initLabView() {
       const history=historicalSeries(m.asOf);
       const needsMarket=intraday;
       if(needsMarket&&marketData.get(state.frequency).status==='idle')void marketData.load(state.frequency);
-      const market=needsMarket?marketData.get(state.frequency):null;
+      let market=needsMarket?marketData.get(state.frequency):null;
       state.volumeProjection=intraday?null:forecastVolume(m);
       if(intraday){
         state.chartRange=null;
@@ -269,6 +274,9 @@ export function initLabView() {
           const previousRange=state.marketRange;
           state.chartRange=panRange(marketData.range(state.frequency,previousRange),0);
           if(previousRange)state.marketRange={start:state.chartRange.start,end:state.chartRange.end};
+          if(previousRange&&state.restoreMarketRange){
+            state.restoreMarketRange=false;void marketData.ensureRange(state.frequency,state.marketRange);market=marketData.get(state.frequency);
+          }
           state.priceController=drawIntradayChart({range:state.chartRange,tool:state.tool,magnet:state.magnet,measurement:state.measurement,onMeasurement:value=>{state.measurement=value;if(value)state.marketSelectedTime=value.endDate||value.startDate;schedule();},historyStatus:market.historyStatus,showVolume:$('#atlas-volume').checked,headerInset:18,svg:$('#lab-chart'),series:market.series,chartType:state.chartType,scale:state.scale,unit:state.unit,onHover:renderHover,onInspect:inspectPriceSelection,selectedTime:state.marketSelectedTime});
           $('#lab-chart-title').textContent=`${chartInterval(state.frequency).label} · ${market.series.firstDate.slice(0,16).replace('T',' ')} — ${market.series.lastDate.slice(0,16).replace('T',' ')} UTC`;
           $('#lab-asof').textContent=`완료 봉 ${market.series.lastDate.slice(0,16).replace('T',' ')} UTC까지`;
@@ -294,7 +302,9 @@ export function initLabView() {
         const preset=chartPresetRange({asOf:m.asOf,referenceDate:ref,firstDate:b.rows[0].date,lastDate:end,span:state.window});
         let start=preset.start,chartEnd=preset.end;
         if(state.priceRange){start=state.priceRange.start;chartEnd=state.priceRange.end;}
-        state.chartRange={start,end:chartEnd,min:b.rows[0].date,max:end,contextKey:`daily:${state.frequency}:${m.asOf}`};
+        state.chartRange=panRange({start,end:chartEnd,min:b.rows[0].date,max:end,contextKey:`daily:${state.frequency}:${m.asOf}`},0);
+        start=state.chartRange.start;chartEnd=state.chartRange.end;
+        if(state.priceRange)state.priceRange={start,end:chartEnd};
         if($('#atlas-states').checked&&!state.futureStates.has(state.scenario))state.futureStates.set(state.scenario,computeRollingStates({prices:[...state.dataset.prices,...future.map(p=>[p.date,p.price])]}).points);
                 if(state.selectedEvent?.startsWith('macro-')&&!m.events[Number(state.selectedEvent.split('-')[1])]?.inHorizon)state.selectedEvent=null;
         const activeMarker=['low','high'].includes(state.selectedEvent)?turnInfo(m,state.selectedEvent):next;
@@ -320,12 +330,14 @@ export function initLabView() {
       const eventKey=`${m.asOf}/${state.scenario}/${state.eventMode}/${state.eventPage}`;if(eventKey!==state.eventsRenderKey){renderEvents(m);state.eventsRenderKey=eventKey;}const methodKey=`${m.asOf}/${m.scenario.id||state.scenario}`;if(methodKey!==state.methodKey){renderForecastMethod(m);state.methodKey=methodKey;}
       $('#lab-error').hidden=true;updateNavigation();chartNavigation.update();syncAtlasUrl();
       const historyLabels=$('#lab-chart').dataset;
-      document.dispatchEvent(new CustomEvent('atlas:workbench-state',{detail:{mode:'price',analysisMode:state.analysisMode,analysisOpen:state.analysisOpen,countdown:countdownFor(m),inspectionOwner:state.inspectionOwner,historicalEventsVisible:$('#atlas-history-events').checked&&!intraday,historicalLabelMeta:{mode:historyLabels.historyLabelMode,labels:Number(historyLabels.historyLabelCount||0),total:Number(historyLabels.historyEventCount||0),hidden:Number(historyLabels.historyHiddenLabelCount||0)},scenario:state.scenario,frequency:state.frequency,chartType:state.chartType,intraday,asOf:m.asOf,intervalLabel:chartInterval(state.frequency).label,marketSeries:market?.series,volumeMeta:volumeMetadata(),volumeForecast:state.volumeProjection?{status:state.volumeProjection.status,reason:state.volumeProjection.reason,summary:state.volumeProjection.summary,annual:state.volumeProjection.annual,diagnostics:state.volumeProjection.diagnostics}:null,volumeError:volumeState.error,marketStatus:intraday?marketStatusText(market):volumeState.series?`${state.chartType==='candles'?'캔들·거래량':'거래량'} · Bitstamp BTC/USD · ${volumeState.series.retrievedAt.slice(0,16).replace('T',' ')} UTC 수집${state.chartType==='line'?' · 가격선 Coin Metrics':''}`:volumeState.error?'거래량 조회 실패 · 가격선은 이용 가능':'거래량 자료 불러오는 중',marketLoading:intraday?(market?.status==='loading'||market?.historyStatus==='loading'):volumeState.status==='loading',navigationAvailable:Boolean(state.chartRange),scale:state.scale,tool:state.tool,magnet:state.magnet,measurement:state.measurement,window:state.window,customRange:Boolean(intraday?state.marketRange:state.priceRange),start:state.chartRange?.start,end:state.chartRange?.end,next}}));
+      const shareQuery=state.chartRange?workspaceQuery(new URLSearchParams(location.search),{frequency:state.frequency,unit:state.unit,range:state.chartRange}):undefined;
+      document.dispatchEvent(new CustomEvent('atlas:workbench-state',{detail:{shareQuery,unit:state.unit,mode:'price',analysisMode:state.analysisMode,analysisOpen:state.analysisOpen,countdown:countdownFor(m),inspectionOwner:state.inspectionOwner,historicalEventsVisible:$('#atlas-history-events').checked&&!intraday,historicalLabelMeta:{mode:historyLabels.historyLabelMode,labels:Number(historyLabels.historyLabelCount||0),total:Number(historyLabels.historyEventCount||0),hidden:Number(historyLabels.historyHiddenLabelCount||0)},scenario:state.scenario,frequency:state.frequency,chartType:state.chartType,intraday,asOf:m.asOf,intervalLabel:chartInterval(state.frequency).label,marketSeries:market?.series,volumeMeta:volumeMetadata(),volumeForecast:state.volumeProjection?{status:state.volumeProjection.status,reason:state.volumeProjection.reason,summary:state.volumeProjection.summary,annual:state.volumeProjection.annual,diagnostics:state.volumeProjection.diagnostics}:null,volumeError:volumeState.error,marketStatus:intraday?marketStatusText(market):volumeState.series?`${state.chartType==='candles'?'캔들·거래량':'거래량'} · Bitstamp BTC/USD · ${volumeState.series.retrievedAt.slice(0,16).replace('T',' ')} UTC 수집${state.chartType==='line'?' · 가격선 Coin Metrics':''}`:volumeState.error?'거래량 조회 실패 · 가격선은 이용 가능':'거래량 자료 불러오는 중',marketLoading:intraday?(market?.status==='loading'||market?.historyStatus==='loading'):volumeState.status==='loading',navigationAvailable:Boolean(state.chartRange),scale:state.scale,tool:state.tool,magnet:state.magnet,measurement:state.measurement,window:state.window,customRange:Boolean(intraday?state.marketRange:state.priceRange),start:state.chartRange?.start,end:state.chartRange?.end,next}}));
       if(state.openEventPanel){state.openEventPanel=false;const chart=$('#lab-chart');chart.focus({preventScroll:true});document.dispatchEvent(new CustomEvent('atlas:open-detail',{detail:{kind:'selection',focus:false,opener:chart}}));}
       if(focusId)document.getElementById(focusId)?.focus({preventScroll:true});else if(focusEventId)document.querySelector(`[data-atlas-event="${focusEventId}"]`)?.focus({preventScroll:true});
       // A loading message is not a rendered price chart on a direct intraday visit.
-      if(!intraday||market?.series)document.dispatchEvent(new CustomEvent('atlas:page-ready',{detail:{page:'outlook'}}));
-      else if(market?.status==='error')document.dispatchEvent(new CustomEvent('atlas:boot-error'));
+      const visibleMarket=market?.series?.candles.some(row=>row.time>=state.chartRange?.start&&row.time<=state.chartRange?.end);
+      if(!intraday||(market?.series&&(visibleMarket||market.historyStatus!=='loading'&&market.historyStatus!=='error')))document.dispatchEvent(new CustomEvent('atlas:page-ready',{detail:{page:'outlook'}}));
+      else if(market?.status==='error'||market?.historyStatus==='error')document.dispatchEvent(new CustomEvent('atlas:boot-error'));
     }catch(error){fail(error);}
   }
   function focusHistoricalEvent(id,zoom=true){
@@ -427,7 +439,7 @@ export function initLabView() {
   const scheduleAnalysis=()=>{if(state.analysisPending)return;state.analysisPending=true;requestAnimationFrame(()=>{state.analysisPending=false;if(!state.dataset||!state.visible)return;drawAnalysisIndicators();updateNavigation();syncAtlasUrl();});};
   function selectFrequency(value){
     if(!CHART_INTERVALS.some(interval=>interval.id===value))return;
-    marketData.cancel();state.inspectionOwner='price';state.frequency=value;state.marketRange=null;state.selectedHistoryEvent=null;state.marketSelectedTime=null;state.measurement=null;state.tool='crosshair';
+    marketData.cancel();state.restoreMarketRange=false;state.inspectionOwner='price';state.frequency=value;state.marketRange=null;state.selectedHistoryEvent=null;state.marketSelectedTime=null;state.measurement=null;state.tool='crosshair';
     state.selectedEvent=null;state.priceRange=null;schedule();
   }
   $('#lab-scenario').onchange=e=>{state.scenario=e.target.value;state.measurement=null;state.eventPage=0;schedule();};
@@ -437,7 +449,7 @@ export function initLabView() {
     if(command.action==='activate'){activateAnalysis(command.id);return;}
     if(!isIndicatorVisible(state.indicators,state.analysisMode)&&state.inspectionOwner==='analysis')showPriceInspection();
     publishIndicators();syncAtlasUrl();
-    const htmlOnly=['readout','source','legend'].includes(command.id)||command.action==='collapse';
+    const htmlOnly=['readout','source','legend'].includes(command.id)||['collapse','primary'].includes(command.action);
     if(!htmlOnly){if(ANALYSIS_MODES.some(item=>item.id===command.id))scheduleAnalysis();else schedule();}
   });
   document.addEventListener('atlas:countdown-detail',()=>{
@@ -468,6 +480,15 @@ export function initLabView() {
     if(!state.dataset||state.atlasMode!=='price')return;
     const {action,value}=event.detail;
     if(action==='price-inspection'){showPriceInspection();return;}
+    if(action==='export-csv'){
+      try{
+        const intraday=isIntradayInterval(state.frequency),series=intraday?marketData.get(state.frequency).series:null,candles=intraday?series?.candles:null;
+        if(intraday&&!candles)throw new Error('완료 봉을 불러온 뒤 저장해 주세요.');
+        const content=createObservedChartCsv({rows:base().rows,candles,range:state.chartRange,frequency:state.frequency,asOf:model().asOf,source:candles?(series.source||'거래소'):'Coin Metrics'});
+        download(`Bitcoin_Observed_${intraday?state.frequency:'daily'}.csv`,content,'text/csv;charset=utf-8');document.dispatchEvent(new CustomEvent('atlas:action-feedback',{detail:{message:'현재 범위의 실제 관측값을 USD 단위 CSV로 저장했습니다.'}}));
+      }catch(error){document.dispatchEvent(new CustomEvent('atlas:action-feedback',{detail:{message:error.message}}));}
+      return;
+    }
     if(action==='context-menu'){chartNavigation.openMenu();return;}
     if(action==='tool'&&['crosshair','pan','measure'].includes(value)){
       state.tool=value;if(value!=='measure'&&state.measurement&&!state.measurement.endDate)state.measurement=null;

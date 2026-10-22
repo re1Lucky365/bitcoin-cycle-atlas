@@ -1,5 +1,5 @@
-import { chartInterval, fetchMarketCandles, parseMarketSnapshot } from './ohlc-data.js?v=1.10.5';
-import { createHistoryState, intradayNavigationRange, requestedHistoryWindow, nextHistoryPage, appendHistoryPage } from './intraday-history.js?v=1.10.5';
+import { chartInterval, fetchMarketCandles, parseMarketSnapshot } from './ohlc-data.js?v=1.11.0';
+import { createHistoryState, intradayNavigationRange, requestedHistoryWindow, nextHistoryPage, appendHistoryPage } from './intraday-history.js?v=1.11.0';
 
 export function createMarketDataController({ onChange = () => {}, fetchImpl = globalThis.fetch, readEmbedded = () => null, timeoutMs = 15000, preferSnapshot = false, historyRequestGapMs = 250 } = {}) {
   const entries = new Map(), histories = new Map();

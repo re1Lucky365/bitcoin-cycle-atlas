@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {INDICATORS,normalizeIndicatorState,readIndicatorState,writeIndicatorState,changeIndicatorState,isIndicatorVisible,visibleAnalysisIds,searchIndicators} from '../dist/indicator-state.js';
 import {preparePriceViewData} from '../dist/price-view-data.js';
-import {countdownPresentation} from '../dist/indicator-workbench.js';
+import {countdownPresentation,mobilePrimaryIndicator} from '../dist/indicator-workbench.js';
 
 test('fresh chart shows the indicator legend without unsolicited research analysis windows',()=>{
   const state=readIndicatorState('');
@@ -67,6 +67,36 @@ test('unknown or duplicated IDs cannot create invalid controls; search combines 
   assert.deepEqual(changeIndicatorState(state,{action:'add',id:'bad'}),state);
   assert.deepEqual(searchIndicators('사이클 시계').map(x=>x.id),['cycle-timing']);
   assert.ok(searchIndicators('','분석 창').every(x=>x.analysis));assert.deepEqual(searchIndicators('없는 지표 123'),[]);
+});
+
+test('a chosen mobile readout survives sharing and falls back while hidden or unavailable',()=>{
+  let state=changeIndicatorState(readIndicatorState(''),{action:'primary',id:'cycle-timing'});
+  assert.equal(mobilePrimaryIndicator(state),'cycle-timing');
+  assert.equal(mobilePrimaryIndicator(state,{intraday:true}),'volume');
+  const params=writeIndicatorState(new URLSearchParams('granularity=1m'),state);
+  assert.equal(params.get('indicator-primary'),'cycle-timing');
+  assert.deepEqual(readIndicatorState(params),state);
+  state=changeIndicatorState(state,{action:'visibility',id:'cycle-timing'});
+  assert.equal(mobilePrimaryIndicator(state),'volume');
+  state=changeIndicatorState(state,{action:'visibility',id:'cycle-timing'});
+  assert.equal(mobilePrimaryIndicator(state),'cycle-timing');
+  state=changeIndicatorState(state,{action:'remove',id:'cycle-timing'});
+  assert.equal(state.primary,null);
+  assert.equal(mobilePrimaryIndicator(state),'volume');
+  assert.equal(changeIndicatorState(state,{action:'primary',id:'missing'}).primary,null);
+});
+
+test('applying an indicator template replaces only validated indicator state',()=>{
+  const template={added:['volume','periods','invalid','volume'],hidden:['volume','invalid'],active:'periods',primary:'periods',collapsed:false,frequency:'1m'};
+  const next=changeIndicatorState(readIndicatorState(''),{action:'replace',state:template});
+  assert.deepEqual(next,normalizeIndicatorState(template));
+  assert.deepEqual(next.added,['volume','periods']);
+  assert.equal(next.primary,'periods');
+  assert.equal(next.frequency,undefined);
+  const params=writeIndicatorState(new URLSearchParams('granularity=1h&assumption=stress&type=candles'),next);
+  assert.equal(params.get('granularity'),'1h');assert.equal(params.get('assumption'),'stress');assert.equal(params.get('type'),'candles');
+  assert.deepEqual(readIndicatorState(params),next);
+  assert.deepEqual(changeIndicatorState(next,{action:'replace'}),next);
 });
 
 test('price-view preparation preserves exact points and drawdowns while reusing identity during zoom',()=>{

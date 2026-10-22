@@ -1,14 +1,14 @@
-import { utcDay } from './cycle-engine.js?v=1.10.5';
-import { shiftCalendarMonths } from './cycle-timing.js?v=1.10.5';
-import { STATE_LABELS } from './market-structure.js?v=1.10.5';
-import { chartPaneLayout, historicalMarkersMarkup, volumePaneMarkup, cycleTimingMarkup, formatBtcVolume } from './chart-overlays.js?v=1.10.5';
-import { createPriceScale,nearestDailyIndex as nearest } from './chart-math.js?v=1.10.5';
+import { utcDay } from './cycle-engine.js?v=1.11.0';
+import { shiftCalendarMonths } from './cycle-timing.js?v=1.11.0';
+import { STATE_LABELS } from './market-structure.js?v=1.11.0';
+import { chartPaneLayout, historicalMarkersMarkup, volumePaneMarkup, cycleTimingMarkup, formatBtcVolume } from './chart-overlays.js?v=1.11.0';
+import { createPriceScale,nearestDailyIndex as nearest } from './chart-math.js?v=1.11.0';
 
-import { resolveMagnetPoint, advanceMeasurement, measurePriceAnchors, measurementOverlayMarkup, createMeasurementOverlay } from './chart-magnet.js?v=1.10.5';
+import { resolveMagnetPoint, advanceMeasurement, measurePriceAnchors, measurementOverlayMarkup, createMeasurementOverlay } from './chart-magnet.js?v=1.11.0';
 
-import { clearChartHover, coalescedChartHover } from './chart-hover.js?v=1.10.5';
+import { clearChartHover, coalescedChartHover, paintPriceCursor } from './chart-hover.js?v=1.11.0';
 
-import { dateWindow, intervalAtDate, upperBoundDate, pixelExtrema } from './chart-window.js?v=1.10.5';
+import { dateWindow, intervalAtDate, upperBoundDate, pixelExtrema } from './chart-window.js?v=1.11.0';
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const numberFormats=new Map();
@@ -172,7 +172,12 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
     if(isLong&&Number.isFinite(p.annualizedVolatilityPct))fields.push({label:'연환산 변동성 가정',value:`${nf(p.annualizedVolatilityPct,1)}%`});
     if(isLong&&Number.isFinite(p.realizedVolPct))fields.push({label:'가정 경로의 계산 변동성',value:`${nf(p.realizedVolPct,1)}%`});
     return {label:`${date(p.date)}${event?` · ${event.type==='high'?'고점':'저점'}${isFuture?' 예시':''}`:''}`,date:p.date,kind:isFuture?'simulated':'observed',fields,note:(p.candle?`${candleSource} 실제 거래소의 완료 ${frequency==='weekly'?'주':'일'}봉입니다. 캔들 ${p.candle.startDate}–${p.candle.endDate} UTC. 과거 종가 선과 미래 가정의 연결 기준은 Coin Metrics이며 거래소 종가와 다를 수 있습니다.`:isLong?'가격선과 범위는 경제적 채택 가정에 따른 예시입니다. 가치평가 기준과 변동성 가정은 모델 입력이며, 가정 경로의 계산 변동성은 그 예시에서 따로 계산한 값입니다. 실제 미래의 실현 변동성이나 확률이 보정된 예측구간을 뜻하지 않습니다.':isFuture?'선택한 가정의 예시입니다. 가격 범위는 확률이 보정된 예측구간이 아닙니다.':event?`가격이 꺾인 날과, 반대 방향으로 ${nf(threshold*100)}% 이동해 확인한 날을 구분합니다.`:frequency==='weekly'?'선은 주간 마지막 가격, 선택한 값은 해당 날짜의 일말 가격입니다.':`Coin Metrics의 하루 말 가격입니다. 장중 최고·최저가와 다를 수 있습니다.${volume?` 거래량은 ${volumeSource} BTC/USD 현물의 ${volume.startDate||volume.date}${volume.endDate?'–'+volume.endDate:''} UTC 합계이며 전 세계 거래량이 아닙니다.`:''}`)+(projected?` 거래량 점선은 ${volumeSource} BTC/USD 자료로 보정한 조건부 평균 거래량입니다. 음영은 가정 민감도이며 확률구간이 아닙니다. 달러 환산은 기준 가격 × 가정 BTC 수량으로, 실제 VWAP 거래대금이나 전 세계 합계가 아닙니다.`:''),...(projected?{sources:[{url:'https://github.com/twoimo/bitcoin-cycle-atlas/blob/main/docs/VOLUME_FORECAST_MODEL.md',title:'거래량 모형 · 과거 검증 · 장기 가정'}]}:{})};};
-  function mark(index,anchor=null){cursor=index;const p=visible[index],markPrice=anchor?.price??p.price,xx=x(p),yy=y(markPrice),tx=Math.max(L,Math.min(W-R-80,xx-40));crossLine.setAttribute('x1',xx);crossLine.setAttribute('x2',xx);crossPrice.setAttribute('y1',yy);crossPrice.setAttribute('y2',yy);crossDot.setAttribute('cx',xx);crossDot.setAttribute('cy',yy);priceTag.querySelector('rect').setAttribute('y',yy-9);priceTag.querySelector('text').setAttribute('y',yy+4);priceTag.querySelector('text').textContent=unit==='usd'?money(markPrice):nf(markPrice*factor,1);dateTag.querySelector('rect').setAttribute('x',tx);dateTag.querySelector('rect').setAttribute('y',axisY-12);dateTag.querySelector('text').setAttribute('x',tx+40);dateTag.querySelector('text').setAttribute('y',axisY+1);dateTag.querySelector('text').textContent=p.date;}
+  function mark(index,anchor=null,pointerY=null){
+    cursor=index;const p=visible[index],xx=x(p),tx=Math.max(L,Math.min(W-R-80,xx-40));
+    crossLine.setAttribute('x1',xx);crossLine.setAttribute('x2',xx);crossDot.setAttribute('cx',xx);
+    paintPriceCursor({horizontal:crossPrice,dot:crossDot,tag:priceTag,axis:priceScale,top:T,bottom:priceBottom,selectedPrice:anchor?.price??p.price,pointerY,formatPrice:value=>unit==='usd'?money(value):nf(value*factor,1)});
+    dateTag.querySelector('rect').setAttribute('x',tx);dateTag.querySelector('rect').setAttribute('y',axisY-12);dateTag.querySelector('text').setAttribute('x',tx+40);dateTag.querySelector('text').setAttribute('y',axisY+1);dateTag.querySelector('text').textContent=p.date;
+  }
 
   function commit(index,pin=true,user=pin){lastHovered=-1;active=Math.max(0,Math.min(visible.length-1,index));pinned=pin;mark(active);if(tooltip)tooltip.hidden=true;onHover(hoverInfo(active,false));onInspect(inspection(active),{user,openPanel:pin});}
   function measure(index,anchor=null){
@@ -186,9 +191,12 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   svg.onclick=e=>{hoverHandler.cancel();const history=e.target.closest?.('[data-history-event]');if(history){onHistoricalEvent(history.dataset.historyEvent);return;}if(e.target.closest?.('[data-next-turn]')){onNextTurn();return;}if(tool==='pan'||!inPlot(e))return;if(tool==='measure'){const box=svg.getBoundingClientRect();if((e.clientY-box.top)/box.height*H>priceBottom)return;svg.focus({preventScroll:true});measure(fromPointer(e),anchorAt(fromPointer(e),e));return;}commit(fromPointer(e));};
   function pointerPreview(e){
     if(e.pointerType==='touch'||e.target?.closest?.('[data-next-turn],[data-history-event]')||!inPlot(e))return;
-    const index=fromPointer(e),dataChanged=index!==lastHovered;if(index===lastHovered&&(tool!=='measure'||(lastPointer&&e.clientY===lastPointer.clientY&&Boolean(e.ctrlKey)===Boolean(lastPointer.ctrlKey)&&Boolean(e.metaKey)===Boolean(lastPointer.metaKey))))return;lastHovered=index;
-    const anchor=tool==='measure'?anchorAt(index,e):null;mark(index,anchor);if(dataChanged)onHover(hoverInfo(index,true));
-    if(tool==='measure'){lastPointer=e;measurementOverlay.showSnap(anchor);if(measurementState&&!measurementState.endDate)renderMeasurement(anchor);}
+    const index=fromPointer(e),dataChanged=index!==lastHovered;
+    if(!dataChanged&&lastPointer&&e.clientY===lastPointer.clientY&&Boolean(e.ctrlKey)===Boolean(lastPointer.ctrlKey)&&Boolean(e.metaKey)===Boolean(lastPointer.metaKey))return;
+    lastHovered=index;lastPointer=e;
+    const anchor=tool==='measure'?anchorAt(index,e):null,box=svg.getBoundingClientRect(),pointerY=tool==='measure'?null:(e.clientY-box.top)/box.height*H;
+    mark(index,anchor,pointerY);if(dataChanged)onHover(hoverInfo(index,true));
+    if(tool==='measure'){measurementOverlay.showSnap(anchor);if(measurementState&&!measurementState.endDate)renderMeasurement(anchor);}
     if(tooltip)tooltip.hidden=true;
   }
   const hoverHandler=coalescedChartHover(svg,pointerPreview);svg.onpointermove=hoverHandler;

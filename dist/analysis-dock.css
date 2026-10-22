@@ -61,6 +61,29 @@
 .indicator-library-options button:hover:not(:disabled){background:#293d55;border-color:#54769c}
 .indicator-library-help{margin:0;font-size:10px;line-height:1.6;color:#839bb8}
 .indicator-library :focus-visible,.chart-indicator-manager :focus-visible,.analysis-indicator-window :focus-visible{outline:2px solid #82b5f7;outline-offset:-2px}
+.indicator-library-views{display:flex;gap:4px;padding:0 24px 12px;flex:none}
+.indicator-library-views button{flex:1;min-width:0;padding:7px 5px;min-height:36px;border:0;border-radius:5px;background:#101a27;color:#a7b9d0;font:inherit;font-size:12px;white-space:nowrap;cursor:pointer}
+.indicator-library-views button[aria-pressed=true]{background:#284463;color:#e0efff}
+.indicator-library-favorite{display:grid;place-items:center;flex:none;width:32px;height:40px;min-height:40px;padding:7px;border:0;border-radius:5px;background:transparent;color:#738aa7;cursor:pointer}
+.indicator-library-favorite:hover{background:#29394f;color:#e2c783}
+.indicator-library-favorite svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linejoin:round}
+.indicator-library-favorite[aria-pressed=true]{color:#e1bd6e}.indicator-library-favorite[aria-pressed=true] svg{fill:#e1bd6e35}
+.indicator-primary-option{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:40px;margin:3px 0 8px;color:#bdd0e8;font-size:11px}
+.indicator-primary-option select{width:220px;max-width:58%;min-width:0;height:36px;min-height:36px;padding:5px 24px 5px 8px;border:1px solid #344b66;border-radius:5px;background:#111d2b;color:#d5e6fa;font:inherit;font-size:11px}
+.indicator-template-panel{overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;min-height:80px;padding:2px 24px 14px;flex:1}
+.indicator-template-form{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px 8px;margin:0}
+.indicator-template-form label{grid-column:1/-1;margin:0;color:#bfd0e7;font-size:12px}
+.indicator-template-form input{width:100%;min-width:0;box-sizing:border-box;min-height:40px;border:1px solid #3c4d64;border-radius:5px;background:#0e1621;color:#e2ebf9;padding:8px 10px;font:inherit;font-size:13px}
+.indicator-template-form button{min-height:40px;padding:7px 14px;border:1px solid #4b6a8d;border-radius:5px;background:#254363;color:#e0efff;font:inherit;font-size:12px;cursor:pointer}
+.indicator-template-note{margin:9px 0 12px;color:#839bb8;font-size:11px;line-height:1.7}
+.indicator-template-list{display:grid;gap:5px}
+.indicator-template-row{display:flex;align-items:center;gap:5px;border:1px solid #2a3c53;border-radius:6px;background:#122131;min-width:0}
+.indicator-template-apply{display:flex;flex-direction:column;gap:4px;flex:1;min-width:0;min-height:60px;padding:11px 12px;border:0;border-radius:5px;background:transparent;color:#d6e4f6;text-align:left;cursor:pointer}
+.indicator-template-apply:hover{background:#23394d}.indicator-template-apply strong{font-size:13px;font-weight:500;overflow-wrap:anywhere}.indicator-template-apply small{font-size:10px;line-height:1.6;color:#91aac5;overflow-wrap:anywhere}
+.indicator-preference-status{margin:0;padding:7px 24px;color:#a9caef;background:#192f47;font-size:11px;line-height:1.6;flex:none}
+.indicator-template-panel[hidden],.indicator-library-results[hidden],.indicator-categories[hidden],#indicator-search[hidden],.indicator-preference-status[hidden]{display:none}
+/* Short landscape screens scroll the whole dialog instead of clipping controls. */
+@media(max-height:600px){.indicator-library[open]{display:block;overflow:auto;overscroll-behavior:contain}.indicator-library-heading{position:sticky;top:0;z-index:2;background:#151e2b}.indicator-library-results,.indicator-template-panel{overflow:visible;min-height:0}}
 .analysis-indicator-windows{position:absolute;top:78px;right:10px;bottom:60px;width:min(640px,62%);max-width:calc(100% - 20px);z-index:8;display:flex;flex-direction:column;gap:10px;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;pointer-events:none;padding:0 3px 3px 0;box-sizing:border-box}
 .analysis-indicator-windows[hidden],.analysis-indicator-window[hidden],.chart-indicator-list[hidden],.chart-indicator-manager[hidden]{display:none!important}
 .analysis-indicator-window{pointer-events:auto;flex:0 0 auto;display:flex;flex-direction:column;height:330px;min-height:285px;max-height:75vh;resize:vertical;overflow:auto;box-sizing:border-box;background:#101923f5;border:1px solid #34465d;border-radius:7px;box-shadow:0 8px 30px #0006;color:#c7d6e8;padding:0 9px 8px;gap:5px}

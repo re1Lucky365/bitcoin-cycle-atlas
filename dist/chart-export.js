@@ -1,5 +1,23 @@
 const NS='http://www.w3.org/2000/svg';
 
+/** Export original observations in the visible window, never sampled pixels or model paths. */
+export function createObservedChartCsv({rows=[],candles=null,range,frequency='daily',asOf,source='Coin Metrics'}={}) {
+  if(!range||range.end<range.start)throw new RangeError('저장할 표시 범위가 없습니다.');
+  const numeric=typeof range.start==='number';
+  const selected=candles?candles.filter(row=>{const key=numeric?row.time:row.date;return key>=range.start&&key<=range.end&&(numeric||!asOf||row.date<=asOf);})
+    :rows.filter(row=>row.date>=range.start&&row.date<=range.end&&(!asOf||row.date<=asOf));
+  if(!selected.length)throw new RangeError('현재 범위에 저장할 실제 관측값이 없습니다.');
+  const cell=value=>{if(value==null)return '';let text=String(value);if(typeof value==='string'&&/^[=+@\-\t\r]/u.test(text))text="'"+text;return /[",\r\n]/u.test(text)?`"${text.replaceAll('"','""')}"`:text;};
+  const lines=[['chart_date_utc','candle_open_utc','interval','source','currency','open','high','low','close','volume_btc','kind']];
+  for(const row of selected){
+    const price=candles?row.close:row.price;if(!Number.isFinite(price)||price<=0)throw new RangeError('유효하지 않은 관측 가격입니다.');
+    const opened=candles&&Number.isSafeInteger(row.time)?new Date(row.time*1000).toISOString():'';
+    const record=candles?[row.date,opened,frequency,source,'USD',row.open,row.high,row.low,row.close,row.volume,'observed']:[row.date,'','daily',source,'USD',null,null,null,row.price,null,'observed'];
+    lines.push(record);
+  }
+  return '\uFEFF'+lines.map(line=>line.map(cell).join(',')).join('\r\n')+'\r\n';
+}
+
 /** Conservative text wrapping keeps vector exports legible at phone widths. */
 export function wrapExportText(text,width,fontSize=11){
   const limit=Math.max(5,width/fontSize),lines=[];let line='',units=0;
