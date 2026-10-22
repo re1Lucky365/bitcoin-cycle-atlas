@@ -1,5 +1,5 @@
-import { analyzeThreeYearOutlook, buildOutlookScenario } from './outlook-engine.js?v=1.10.4';
-import { utcDay, dateFromDay } from './cycle-engine.js?v=1.10.4';
+import { analyzeThreeYearOutlook, buildOutlookScenario } from './outlook-engine.js?v=1.10.5';
+import { utcDay, dateFromDay } from './cycle-engine.js?v=1.10.5';
 
 const $=s=>document.querySelector(s);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

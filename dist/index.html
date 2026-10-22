@@ -1,26 +1,142 @@
 <!doctype html>
-<html lang="ko" data-theme="dark">
+<html lang="ko" data-theme="dark" data-boot="loading">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0c0f14">
   <meta name="description" content="비트코인 반감기, 저점, 고점, 이전 최고가 돌파 사이클과 방향 전환 시점을 실제 일별 데이터로 비교하세요. 관측일과 확인일, 사이클 속도, 계산 근거를 함께 제공합니다.">
   <title>Bitcoin Cycles — 비트코인 통합 차트</title>
+  <!-- Keep the first paint stable while the module graph builds the workbench. -->
+  <style id="atlas-boot-style">
+    html[data-boot="loading"],html[data-boot="error"]{background:#10151c;overflow:hidden}
+    html:not([data-boot="ready"]) body>:not(#atlas-boot-shell),html:not([data-boot="ready"]) body>:not(#atlas-boot-shell) *{visibility:hidden!important}
+    #atlas-boot-shell{position:fixed;inset:0;z-index:200;display:grid;grid-template-columns:44px minmax(0,1fr) 38px;background:#10151c;color:#c4d0df;font:13px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    #atlas-boot-shell[hidden],#atlas-boot-shell [hidden]{display:none!important}
+    #atlas-boot-shell *{box-sizing:border-box}
+    .atlas-boot-side{display:flex;flex-direction:column;align-items:center;gap:17px;padding:9px 7px;background:#11161f;border-right:1px solid #2a3240}
+    .atlas-boot-side:last-child{border-right:0;border-left:1px solid #2a3240;padding-top:14px}
+    .atlas-boot-brand{font-size:23px;line-height:25px;color:#c4a16d;margin-bottom:9px}
+    .atlas-boot-main{display:grid;grid-template-rows:40px minmax(0,1fr) 62px;min-width:0;min-height:0}
+    .atlas-boot-top{display:flex;align-items:center;gap:14px;padding:0 10px;background:#11161f;border-bottom:1px solid #2a3240;overflow:hidden}
+    .atlas-boot-symbol{font-size:13px;font-weight:650;letter-spacing:.1px;white-space:nowrap}
+    .atlas-boot-bar{display:block;flex:none;width:64px;height:9px;border-radius:3px;background:#263140;animation:atlas-boot-pulse 1.8s ease-in-out infinite}
+    .atlas-boot-square{width:17px;height:17px;border-radius:4px}
+    .atlas-boot-wide{width:106px}.atlas-boot-short{width:38px}
+    .atlas-boot-canvas{position:relative;min-height:0;overflow:hidden;background-image:linear-gradient(#1b243080 1px,transparent 1px),linear-gradient(90deg,#1b243080 1px,transparent 1px);background-size:100% 20%,20% 100%}
+    .atlas-boot-readout{display:flex;align-items:center;gap:14px;margin:17px 16px}.atlas-boot-readout .atlas-boot-wide{height:15px}
+    .atlas-boot-indicators{display:grid;gap:14px;margin:22px 16px}
+    .atlas-boot-bottom{display:grid;gap:0;background:#11161f;border-top:1px solid #2a3240}
+    .atlas-boot-bottom>div{display:flex;align-items:center;gap:13px;padding:0 12px;overflow:hidden}
+    .atlas-boot-bottom>div+div{border-top:1px solid #2a3240}
+    .atlas-boot-message{position:absolute;inset:0;display:grid;align-content:center;justify-items:center;padding:24px;text-align:center}
+    #atlas-boot-status{margin:0;color:#a9bbce;font-size:13px;background:#10151ce8;padding:12px 18px;border-radius:6px}
+    #atlas-boot-error{max-width:390px;padding:24px;background:#141d29;border:1px solid #35465e;border-radius:8px;box-shadow:0 12px 40px #0003}
+    #atlas-boot-error strong{display:block;color:#e0e8f3;font-size:15px}
+    #atlas-boot-error p{margin:8px 0 18px;font-size:13px;color:#afbed1}
+    #atlas-boot-retry{min-height:44px;padding:9px 18px;border:1px solid #54739b;border-radius:5px;background:#243953;color:#eef4fc;font:inherit;cursor:pointer}
+    #atlas-boot-retry:hover{background:#304b6c}#atlas-boot-retry:focus-visible{outline:2px solid #96c4ff;outline-offset:3px}
+    .atlas-boot-noscript{padding:20px;max-width:360px;color:#dce5f0;background:#141d29;border:1px solid #35465e;border-radius:6px}
+    html[data-boot="error"] .atlas-boot-bar{animation:none}
+    @keyframes atlas-boot-pulse{0%,100%{opacity:.45}50%{opacity:.85}}
+    @media(max-width:620px){#atlas-boot-shell{grid-template-columns:minmax(0,1fr)}.atlas-boot-side{display:none}.atlas-boot-main{grid-template-rows:calc(48px + env(safe-area-inset-top,0px)) minmax(0,1fr) calc(102px + env(safe-area-inset-bottom,0px))}.atlas-boot-top{padding-top:env(safe-area-inset-top,0px);gap:14px}.atlas-boot-symbol{font-size:11px}.atlas-boot-top .atlas-boot-wide{display:none}.atlas-boot-bottom{grid-template-rows:36px 1fr;padding-bottom:env(safe-area-inset-bottom,0px)}.atlas-boot-readout{gap:10px}.atlas-boot-readout .atlas-boot-short{display:none}.atlas-boot-message{padding:16px}}
+    @media(max-width:620px) and (max-height:500px){.atlas-boot-main{grid-template-rows:44px minmax(0,1fr) 42px}.atlas-boot-bottom{grid-template-rows:1fr}.atlas-boot-bottom>div:first-child{display:none}}
+    @media(prefers-reduced-motion:reduce){.atlas-boot-bar{animation:none;opacity:.65}}
+  </style>
+  <noscript><style id="atlas-boot-noscript-style">#atlas-boot-status{display:none}.atlas-boot-bar{animation:none}</style></noscript>
+  <script id="atlas-boot-resource-script">
+    (() => {
+      // A preceding stylesheet can fail before the body bootstrap may execute.
+      let failed = false;
+      function capture(event) {
+        const target = event.target;
+        if (target?.tagName === 'LINK' && /(?:^|\s)stylesheet(?:\s|$)/i.test(target.rel || '')) failed = true;
+      }
+      window.addEventListener('error', capture, true);
+      window.__atlasTakeEarlyStyleFailure = () => {
+        window.removeEventListener('error', capture, true);
+        delete window.__atlasTakeEarlyStyleFailure;
+        return failed;
+      };
+    })();
+  </script>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./styles.css?v=1.10.4">
-  <link rel="stylesheet" href="./compact.css?v=1.10.4">
-  <link rel="stylesheet" href="./outlook.css?v=1.10.4">
-  <link rel="stylesheet" href="./lab.css?v=1.10.4">
-  <link rel="stylesheet" href="./atlas.css?v=1.10.4">
-  <link rel="stylesheet" href="./viewport.css?v=1.10.4">
-  <link rel="stylesheet" href="./chart-details-panel.css?v=1.10.4">
-  <link rel="stylesheet" href="./analysis-dock.css?v=1.10.4">
-  <link rel="stylesheet" href="./chart-magnet.css?v=1.10.4">
-  <link rel="stylesheet" href="./mobile-workspace.css?v=1.10.4">
+  <link rel="stylesheet" href="./styles.css?v=1.10.5">
+  <link rel="stylesheet" href="./compact.css?v=1.10.5">
+  <link rel="stylesheet" href="./outlook.css?v=1.10.5">
+  <link rel="stylesheet" href="./lab.css?v=1.10.5">
+  <link rel="stylesheet" href="./atlas.css?v=1.10.5">
+  <link rel="stylesheet" href="./viewport.css?v=1.10.5">
+  <link rel="stylesheet" href="./chart-details-panel.css?v=1.10.5">
+  <link rel="stylesheet" href="./analysis-dock.css?v=1.10.5">
+  <link rel="stylesheet" href="./chart-magnet.css?v=1.10.5">
+  <link rel="stylesheet" href="./mobile-workspace.css?v=1.10.5">
 </head>
 <body>
-  <a class="skip-link" href="#main">본문으로 이동</a>
-  <aside class="atlas-sidebar" aria-label="사이드바">
+  <div id="atlas-boot-shell">
+    <div class="atlas-boot-side" aria-hidden="true"><span class="atlas-boot-brand">₿</span><i class="atlas-boot-bar atlas-boot-square"></i><i class="atlas-boot-bar atlas-boot-square"></i><i class="atlas-boot-bar atlas-boot-square"></i><i class="atlas-boot-bar atlas-boot-square"></i><i class="atlas-boot-bar atlas-boot-square"></i></div>
+    <div class="atlas-boot-main">
+      <div class="atlas-boot-top" aria-hidden="true"><span class="atlas-boot-symbol">BTCUSD</span><i class="atlas-boot-bar atlas-boot-short"></i><i class="atlas-boot-bar atlas-boot-wide"></i><i class="atlas-boot-bar"></i><i class="atlas-boot-bar atlas-boot-square"></i></div>
+      <div class="atlas-boot-canvas">
+        <div class="atlas-boot-readout" aria-hidden="true"><i class="atlas-boot-bar atlas-boot-wide"></i><i class="atlas-boot-bar"></i><i class="atlas-boot-bar atlas-boot-short"></i></div>
+        <div class="atlas-boot-indicators" aria-hidden="true"><i class="atlas-boot-bar atlas-boot-wide"></i><i class="atlas-boot-bar"></i></div>
+        <div class="atlas-boot-message">
+          <p id="atlas-boot-status" role="status" aria-live="polite" aria-busy="true">화면과 데이터를 준비하고 있습니다.</p>
+          <div id="atlas-boot-error" role="alert" hidden><strong>화면을 불러오지 못했습니다.</strong><p>연결을 확인한 뒤 다시 불러와 주세요.</p><button id="atlas-boot-retry" type="button">다시 불러오기</button></div>
+          <noscript><p class="atlas-boot-noscript">이 차트는 JavaScript가 필요합니다. 브라우저에서 JavaScript를 허용한 뒤 다시 불러와 주세요.</p></noscript>
+        </div>
+      </div>
+      <div class="atlas-boot-bottom" aria-hidden="true"><div><i class="atlas-boot-bar atlas-boot-wide"></i><i class="atlas-boot-bar"></i></div><div><i class="atlas-boot-bar atlas-boot-short"></i><i class="atlas-boot-bar atlas-boot-short"></i><i class="atlas-boot-bar atlas-boot-short"></i><i class="atlas-boot-bar atlas-boot-short"></i></div></div>
+    </div>
+    <div class="atlas-boot-side" aria-hidden="true"><i class="atlas-boot-bar atlas-boot-square"></i><i class="atlas-boot-bar atlas-boot-square"></i><i class="atlas-boot-bar atlas-boot-square"></i><i class="atlas-boot-bar atlas-boot-square"></i></div>
+  </div>
+  <script id="atlas-boot-script">
+    (() => {
+      const root = document.documentElement;
+      const shell = document.getElementById('atlas-boot-shell');
+      const status = document.getElementById('atlas-boot-status');
+      const error = document.getElementById('atlas-boot-error');
+      function detach() {
+        document.removeEventListener('atlas:ready', ready);
+        document.removeEventListener('atlas:boot-error', fail);
+        window.removeEventListener('error', onError, true);
+        window.removeEventListener('unhandledrejection', fail);
+      }
+      function ready() {
+        if (root.dataset.boot !== 'loading') return;
+        root.dataset.boot = 'ready';
+        status.setAttribute('aria-busy', 'false');
+        for (const node of document.querySelectorAll('[data-boot-content]')) {
+          node.inert = false;
+          node.removeAttribute('aria-hidden');
+        }
+        shell.hidden = true;
+        detach();
+      }
+      function fail() {
+        if (root.dataset.boot !== 'loading') return;
+        root.dataset.boot = 'error';
+        status.setAttribute('aria-busy', 'false');
+        status.hidden = true;
+        error.hidden = false;
+        detach();
+      }
+      function onError(event) {
+        const target = event.target;
+        const stylesheet = target?.tagName === 'LINK' && /(?:^|\s)stylesheet(?:\s|$)/i.test(target.rel || '');
+        if (target === window || target?.tagName === 'SCRIPT' || stylesheet) fail();
+      }
+      document.getElementById('atlas-boot-retry').addEventListener('click', () => location.reload());
+      document.addEventListener('atlas:ready', ready);
+      document.addEventListener('atlas:boot-error', fail);
+      // Module/runtime failures block setup; optional images and icons do not.
+      window.addEventListener('error', onError, true);
+      window.addEventListener('unhandledrejection', fail);
+      // Install the regular handler before releasing the early capture.
+      if (window.__atlasTakeEarlyStyleFailure?.()) fail();
+    })();
+  </script>
+  <a class="skip-link" href="#main" data-boot-content inert aria-hidden="true">본문으로 이동</a>
+  <aside class="atlas-sidebar" aria-label="사이드바" data-boot-content inert aria-hidden="true">
     <button class="atlas-brand" data-view="outlook" aria-label="Bitcoin Cycles 통합 차트"><span aria-hidden="true">₿</span><div>Bitcoin Cycles<small>CYCLE ATLAS</small></div></button>
     <nav class="atlas-nav" aria-label="주요 페이지">
       <button data-view="outlook" class="active" aria-current="page" title="통합 차트"><span data-icon="trend"></span><span>통합 차트</span></button>
@@ -29,7 +145,7 @@
     </nav>
     <div class="atlas-side-foot"><strong>실제 가격과 미래 예시</strong><br><span id="sidebar-asof">관측 · 2026.10.20 UTC</span><br><span id="sidebar-reference">계산 기준 · 2026.10.22</span></div>
   </aside>
-  <div class="workspace">
+  <div class="workspace" data-boot-content inert aria-hidden="true">
     <main id="main">
       <section id="outlook-view" class="lab-page atlas-page" aria-labelledby="outlook-heading">
         <header class="lab-heading"><div><span class="lab-eyebrow">BITCOIN CYCLES</span><h1 id="outlook-heading">비트코인 통합 차트</h1></div><div class="lab-date"><span id="atlas-reference">장기 전망</span><small id="lab-asof">관측 자료를 불러오는 중</small></div></header>
@@ -152,6 +268,6 @@
   <dialog id="method-dialog" aria-labelledby="method-title"><div class="dialog-top"><span class="eyebrow">DATA & METHODOLOGY</span><button id="close-method" class="icon-button" aria-label="방법론 닫기"><span data-icon="close"></span></button></div><h2 id="method-title">방법론과 출처</h2><p class="dialog-lead">차트의 출발점부터 가격의 정의까지, 비교에 사용한 기준입니다.</p><div id="method-content"></div><button id="method-done" class="primary-button">확인했습니다</button></dialog>
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
   <dialog id="evidence-dialog" aria-labelledby="evidence-detail-title"><div class="dialog-top"><span class="eyebrow">EVIDENCE & LIMITS</span><button id="evidence-close" class="icon-button" aria-label="자료 상세 닫기"><span data-icon="close"></span></button></div><h2 id="evidence-detail-title"></h2><div id="evidence-detail-body"></div></dialog>
-  <script type="module" src="./app.js?v=1.10.4"></script>
+  <script type="module" src="./app.js?v=1.10.5"></script>
 </body>
 </html>

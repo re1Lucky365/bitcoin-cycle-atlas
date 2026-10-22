@@ -1,4 +1,4 @@
-import { utcDay, dateFromDay } from './cycle-engine.js?v=1.10.4';
+import { utcDay, dateFromDay } from './cycle-engine.js?v=1.10.5';
 
 const MIN_DAYS = 30;
 const MIN_BARS = 12;

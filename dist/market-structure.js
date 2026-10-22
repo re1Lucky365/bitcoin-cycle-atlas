@@ -2,8 +2,8 @@
  * Daily-close market structure: causal state labels and confirmed pivots, with
  * separately marked retrospective macro windows. No intraday OHLC is inferred.
  */
-import { utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.10.4';
-import { shiftCalendarMonths } from './cycle-timing.js?v=1.10.4';
+import { utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.10.5';
+import { shiftCalendarMonths } from './cycle-timing.js?v=1.10.5';
 
 export const MARKET_STRUCTURE_VERSION = 'market-structure-v1';
 export const STATE_LABELS = Object.freeze({
@@ -75,9 +75,11 @@ function periodBounds(date, frequency) {
   throw new TypeError(`Unsupported calendar frequency: ${frequency}`);
 }
 
-/** Within-period MDD includes the preceding observed close as its initial peak. */
+/** Within-period MDD includes a contiguous preceding close as its initial peak. */
 function periodStatistics(rows, prior, priorATH) {
-  let runningPeak = prior ?? rows[0], drawdownPeak = runningPeak, drawdownLow = runningPeak;
+  const priorCloseContiguous = Boolean(prior && rows[0].epochDay - prior.epochDay === 1);
+  const boundaryClose = priorCloseContiguous ? prior : null;
+  let runningPeak = boundaryClose ?? rows[0], drawdownPeak = runningPeak, drawdownLow = runningPeak;
   let mdd = 0, ath = priorATH ?? -Infinity, maxATHDrawdown = 0, newHighDays = 0;
   const returns = [];
   let previous = prior, continuous = true;
@@ -102,11 +104,11 @@ function periodStatistics(rows, prior, priorATH) {
     highDate: high.date, lowDate: low.date,
     ohlcDefinition: 'Daily-close-derived O/H/L/C; not intraday candles.',
     priorCloseDate: prior?.date ?? null, priorClose: prior?.price ?? null,
-    priorCloseContiguous: Boolean(prior && first.epochDay - prior.epochDay === 1),
-    returnPct: prior ? (last.price / prior.price - 1) * 100 : null,
+    priorCloseContiguous,
+    returnPct: boundaryClose ? (last.price / boundaryClose.price - 1) * 100 : null,
     firstToLastReturnPct: (last.price / first.price - 1) * 100,
     maxDrawdownPct: mdd * 100, drawdownPeakDate: drawdownPeak.date, drawdownTroughDate: drawdownLow.date,
-    drawdownSeededWithPriorClose: Boolean(prior),
+    drawdownSeededWithPriorClose: Boolean(boundaryClose),
     athDrawdownPct: (last.price / ath - 1) * 100, maxATHDrawdownPct: maxATHDrawdown * 100,
     rangePct: (high.price / low.price - 1) * 100,
     realizedVolPct: rv === null ? null : rv * Math.sqrt(365) * 100,
@@ -483,6 +485,12 @@ export function evaluateFibonacci(input, {
         if (beforeKnown.some((p) => direction * (p.price - levelPrice) <= 0)) {
           trial.status = 'crossed-before-confirmation'; trials.push(trial); return;
         }
+        if (beforeKnown.some((p, j) => p.epochDay - rows[eventIndex + j].epochDay !== stepDays)) {
+          // An absent close may already have crossed the level. It cannot be
+          // treated as evidence that the level survived until confirmation.
+          trial.status = 'search-censored'; trial.censorReason = 'missing-before-confirmation';
+          trials.push(trial); return;
+        }
         let touchIndex = -1;
         for (let j = knownIndex + 1; j < rows.length && rows[j].epochDay <= horizonEndDay; j++) {
           if (direction * (rows[j].price - levelPrice) <= 0) { touchIndex = j; break; }
@@ -491,6 +499,13 @@ export function evaluateFibonacci(input, {
           const searchRows = rows.slice(knownIndex).filter((p) => p.epochDay <= horizonEndDay);
           const expected = Math.floor(touchHorizonDays / stepDays) + 1;
           trial.status = lastDay >= horizonEndDay && searchRows.length === expected ? 'no-touch' : 'search-censored';
+          trials.push(trial); return;
+        }
+        if (rows.slice(knownIndex + 1, touchIndex + 1)
+          .some((p, j) => p.epochDay - rows[knownIndex + j].epochDay !== stepDays)) {
+          // The first observed crossing after a gap need not be the first
+          // crossing. Scoring its rebound would select a possibly later try.
+          trial.status = 'search-censored'; trial.censorReason = 'missing-before-first-touch';
           trials.push(trial); return;
         }
         const touched = rows[touchIndex], outcomeEndDay = touched.epochDay + followupDays;

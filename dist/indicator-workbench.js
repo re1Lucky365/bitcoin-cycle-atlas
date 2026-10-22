@@ -1,5 +1,5 @@
-import { INDICATORS, readIndicatorState, normalizeIndicatorState, isIndicatorVisible, searchIndicators } from './indicator-state.js?v=1.10.4';
-import {indicatorReadout,indicatorReadoutDate} from './indicator-readouts.js?v=1.10.4';
+import { INDICATORS, readIndicatorState, normalizeIndicatorState, isIndicatorVisible, searchIndicators } from './indicator-state.js?v=1.10.5';
+import {indicatorReadout,indicatorReadoutDate} from './indicator-readouts.js?v=1.10.5';
 
 const ICONS={eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',hidden:'<path d="m3 3 18 18M10 5a12 12 0 0 1 2 0c6.5 0 10 7 10 7a20 20 0 0 1-3 4M6 6a20 20 0 0 0-4 6s3.5 7 10 7a12 12 0 0 0 5-1"/>',close:'<path d="m6 6 12 12M6 18 18 6"/>'};
 const glyph=name=>`<svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[name]}</svg>`;
@@ -189,7 +189,12 @@ export function mountIndicatorWorkbench({plot,stage}) {
   });
   const onOpen=event=>open(event.detail?.opener);
   const onState=event=>{state=normalizeIndicatorState(event.detail.indicators||state);cycle=event.detail.cycleCalibration||cycle;readoutContext.cycle=cycle;paintList();if(dialog.open)paintDialog();};
-  const onWorkbench=event=>{intraday=Boolean(event.detail.intraday);countdown=event.detail.countdown||countdown;readoutContext.workbench=event.detail;paintCountdown();paintList();if(dialog.open)paintDialog();};
+  const onWorkbench=event=>{
+    intraday=Boolean(event.detail.intraday);countdown=event.detail.countdown||countdown;readoutContext.workbench=event.detail;paintCountdown();paintList();
+    // Publish the first chart with its actual indicator values, not the prior frame's placeholders.
+    if(doc.documentElement.dataset.boot==='loading')paintReadouts();
+    if(dialog.open)paintDialog();
+  };
   const onReadout=event=>{readoutContext.selection=event.detail;scheduleReadouts();};
   const onAnalysis=event=>{const detail=event.detail;if(!detail?.mode)return;readoutContext.analyses.set(detail.mode,{...readoutContext.analyses.get(detail.mode),...detail});scheduleReadouts();};
   const onCompactViewport=()=>{

@@ -60,6 +60,19 @@ test('UTC calendar bins honor leap days and exclude partial weekly runtime sampl
   assert.equal(gap.realizedVolPct, null);
 });
 
+test('A missing period cannot turn a multi-period change into a monthly return or drawdown', () => {
+  const input = [['2024-01-31', 200], ...rows(Array(31).fill(100), '2024-03-01')];
+  const march = aggregateCloseBars(input, { frequency: 'monthly' }).at(-1);
+  assert.equal(march.complete, true);
+  assert.equal(march.priorCloseDate, '2024-01-31');
+  assert.equal(march.priorCloseContiguous, false);
+  assert.equal(march.returnPct, null);
+  assert.equal(march.maxDrawdownPct, 0);
+  assert.equal(march.drawdownSeededWithPriorClose, false);
+  const comparison = analyzeMarketStructure(input, { includeFibonacciSensitivity: false }).periodComparisons;
+  assert.equal(comparison.calendarBlocks[0].monthly.completedPeriods, 0);
+});
+
 test('directional changes separate event date from first knowable confirmation', () => {
   const input = rows([100, 110, 125, 124, 111, 105, 118, 120, 100, 90, 100, 103]);
   const result = detectDirectionalChanges(input, { threshold: 0.10 });
@@ -214,4 +227,27 @@ test('combined analysis reconciles durations, schema, partial periods and sensit
   close(result.doublePeakExamples[1].interimDrawdownPct, -53.08320869786175);
   const latest = result.macroCycles.at(-1);
   close(latest.risk.bullMaxDrawdownPct, -28.049027604886778);
+});
+
+test('Fibonacci first-touch outcomes are censored when the search contains an unobserved day', () => {
+  const input = rows([120, 100, 112, 150, 200, 178, 160, 149, 158, ...Array(61).fill(160)]);
+  const target = analysis => analysis.trials.find(trial => trial.group === 'fibonacci'
+    && trial.ratio === .5 && trial.anchorEndDate === '2020-01-05');
+  const complete = evaluateFibonacci(input, { threshold: .10, includeTrials: true });
+  assert.equal(target(complete).status, 'rejected');
+  const missingBeforeTouch = input.filter(([date]) => date !== '2020-01-07');
+  const censored = target(evaluateFibonacci(missingBeforeTouch, { threshold: .10, includeTrials: true }));
+  assert.equal(censored.status, 'search-censored');
+  assert.equal(censored.touchDate, null);
+  assert.equal(censored.outcomeDate, null);
+});
+
+test('Fibonacci preconfirmation gaps cannot prove a level was untouched', () => {
+  const input = rows([120, 100, 112, 150, 200, 195, 190, 178, 160, 149, 158, ...Array(61).fill(160)])
+    .filter(([date]) => date !== '2020-01-06');
+  const result = evaluateFibonacci(input, { threshold: .10, includeTrials: true });
+  const target = result.trials.find(trial => trial.group === 'fibonacci'
+    && trial.ratio === .5 && trial.anchorEndDate === '2020-01-05');
+  assert.equal(target.status, 'search-censored');
+  assert.equal(target.touchDate, null);
 });

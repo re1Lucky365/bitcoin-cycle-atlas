@@ -1,6 +1,6 @@
-import { HALVINGS, utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.10.4';
-import { shiftCalendarMonths } from './cycle-timing.js?v=1.10.4';
-import { computeRollingStates } from './market-structure.js?v=1.10.4';
+import { HALVINGS, utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.10.5';
+import { shiftCalendarMonths } from './cycle-timing.js?v=1.10.5';
+import { computeRollingStates } from './market-structure.js?v=1.10.5';
 
 /**
  * Conditional historical-block scenarios, not a probability-calibrated forecast.
@@ -543,16 +543,39 @@ export function evaluateDetailedForecast(input, options = {}) {
   const cutoffs = options.cutoffs ?? VALIDATION_CUTOFFS;
   const sampleCount = options.sampleCount ?? 64;
   const seed = options.seed ?? 20261022;
+  const blockDays = options.blockDays ?? 28;
   const horizons = options.horizons ?? [{ id: '30d', days: 30 }, { id: '90d', days: 90 }, { id: '180d', days: 180 }, { id: '1y', months: 12 }, { id: '2y', months: 24 }, { id: '3y', months: 36 }];
+  if (!Array.isArray(cutoffs) || new Set(cutoffs).size !== cutoffs.length) throw new TypeError('Evaluation cutoffs must be an array of distinct dates');
+  for (const cutoff of cutoffs) utcDay(cutoff);
+  if (!Array.isArray(horizons) || !horizons.length) throw new TypeError('Evaluation horizons must be a nonempty array');
+  for (const horizon of horizons) {
+    if (!horizon || typeof horizon.id !== 'string' || !horizon.id.trim()) throw new TypeError('Each evaluation horizon requires a nonempty string id');
+    const hasDays = horizon.days !== undefined, hasMonths = horizon.months !== undefined;
+    const duration = hasDays ? horizon.days : horizon.months;
+    if (hasDays === hasMonths || !Number.isSafeInteger(duration) || duration < 1) throw new RangeError('Each evaluation horizon requires exactly one positive integer duration: days or months');
+    if (duration > (hasDays ? 1120 : 36)) throw new RangeError('Evaluation horizon exceeds the supported model scope: at most 1120 days or 36 calendar months');
+  }
+  if (new Set(horizons.map(horizon => horizon.id)).size !== horizons.length
+    || new Set(horizons.map(horizon => horizon.days !== undefined ? `days:${horizon.days}` : `months:${horizon.months}`)).size !== horizons.length) {
+    throw new RangeError('Evaluation horizon ids and durations must be distinct');
+  }
+  range(sampleCount, 16, 512, 'sampleCount', true);
+  range(seed, 0, 4294967295, 'seed', true);
+  range(blockDays, 7, 84, 'blockDays', true);
+  const availableOutcomeThrough = outcomeThrough < rows.at(-1).date ? outcomeThrough : rows.at(-1).date;
   const cases = [], excluded = [];
+  let current2025And2026OutcomesIncluded = false;
   for (const cutoff of cutoffs) {
     if (!byDate.has(cutoff)) { excluded.push({ cutoff, reason: 'No exact completed observation at cutoff' }); continue; }
+    if (cutoff >= availableOutcomeThrough) { excluded.push({ cutoff, reason: 'No subsequent observed outcome exists before the evaluation ceiling' }); continue; }
     try {
-      const model = buildDetailedForecast(input, { asOf: cutoff, referenceDate: addDays(cutoff, 1), displayEnd: shiftCalendarMonths(cutoff, 36), scenario: 'base', sampleCount, seed, blockDays: options.blockDays ?? 28, includeSamplePaths: true });
+      const outcomeDates = horizons.map(horizon => horizon.months ? shiftCalendarMonths(cutoff, horizon.months) : addDays(cutoff, horizon.days));
+      const displayEnd = [...outcomeDates].sort().at(-1);
+      const model = buildDetailedForecast(input, { asOf: cutoff, referenceDate: addDays(cutoff, 1), displayEnd, scenario: 'base', sampleCount, seed, blockDays, includeSamplePaths: true });
       const points = new Map(model.path.map(point => [point.date, point]));
       const results = [];
-      for (const horizon of horizons) {
-        const date = horizon.months ? shiftCalendarMonths(cutoff, horizon.months) : addDays(cutoff, horizon.days);
+      for (const [index, horizon] of horizons.entries()) {
+        const date = outcomeDates[index];
         if (date > outcomeThrough || !byDate.has(date) || !points.has(date)) continue;
         const actual = byDate.get(date).price, point = points.get(date), flat = model.observables.current.price;
         const score = predicted => ({ price: predicted, absolutePercentageErrorPct: 100 * Math.abs(predicted / actual - 1), absoluteLogError: Math.abs(Math.log(predicted / actual)) });
@@ -572,6 +595,7 @@ export function evaluateDetailedForecast(input, options = {}) {
         mddComparisonEndDate: dailyEligible.at(-1)?.date ?? cutoff,
         simulatedWindowMdd: { p10: quantile(comparableMdds, 0.1), p50: quantile(comparableMdds, 0.5), p90: quantile(comparableMdds, 0.9), probability: null, calibrated: false },
       });
+      current2025And2026OutcomesIncluded ||= dailyEligible.some(point => point.date >= '2025-01-01' && point.date <= '2026-12-31');
     } catch (error) { excluded.push({ cutoff, reason: error.message }); }
   }
   const summary = horizons.map(horizon => {
@@ -584,9 +608,13 @@ export function evaluateDetailedForecast(input, options = {}) {
       nominalEnsembleFraction: 0.8, calibratedProbabilityClaim: false,
     };
   }).filter(Boolean);
+  const defaultCutoffs = cutoffs.length === VALIDATION_CUTOFFS.length && cutoffs.every((cutoff, index) => cutoff === VALIDATION_CUTOFFS[index]);
   return { method: 'fixed-cutoff rolling-origin reconstruction', outcomeThrough, sampleCount, seed,
-    cutoffSelection: 'Three fixed calendar origins in each of the 2013, 2017 and 2021 reference-high cohorts; selected during this retrospective analysis, not a historical preregistration or an optimum selected from test scores',
-    parameterSelectionWasRetrospective: true, genuineProspectiveValidation: false, current2025And2026OutcomesIncluded: outcomeThrough >= '2025-01-01',
+    cutoffSelection: defaultCutoffs
+      ? 'Three fixed calendar origins in each of the 2013, 2017 and 2021 reference-high cohorts; selected during this retrospective analysis, not a historical preregistration or an optimum selected from test scores'
+      : 'Custom calendar origins supplied by the caller; no historical preregistration or independent-trial claim',
+    parameterSelectionWasRetrospective: true, genuineProspectiveValidation: false,
+    current2025And2026OutcomesIncluded,
     sameCohortsForAllBaselinesWithinEachHorizon: true, simpleBaselineDefinition: 'The identical scenario calendar and price reference curve with residuals set to zero; isolates the contribution of historical blocks, not a differently tuned competitor',
     numberOfDistinctCutoffs: cases.length, effectiveMacroCohorts: new Set(cases.map(item => item.macroCohort)).size,
     independentTrialCountClaim: null, overlappingOutcomes: true, cases, excluded, summary,

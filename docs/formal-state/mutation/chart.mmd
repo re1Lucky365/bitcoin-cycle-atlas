@@ -1,0 +1,45 @@
+---
+title: "Negative control: guard removed"
+config:
+  markdownAutoWrap: false
+  state:
+    useMaxWidth: false
+---
+stateDiagram-v2
+  %% second model (fix): the existing guard
+  classDef works fill:#f4f6f7,stroke:#566573,color:#1b2631
+  classDef wrong fill:#fdedec,stroke:#c0392b,color:#7b241c
+  classDef fixed fill:#e9f7ef,stroke:#1e8449,color:#145a32
+  classDef worksPath fill:#f4f6f7,stroke:#1f3a93,stroke-width:4px,color:#1b2631
+  classDef wrongPath fill:#fdedec,stroke:#1f3a93,stroke-width:4px,color:#7b241c
+  classDef fixedPath fill:#e9f7ef,stroke:#1f3a93,stroke-width:4px,color:#145a32
+  state "Legend" as legend {
+    state "Works today" as legendWorks
+    state "Fixed or new with the existing guard" as legendFixed
+  }
+  class legendWorks works
+  class legendFixed fixed
+  state "Cancelled request replaced<br/>chart" as s0
+  state "Candle request failed" as s1
+  state "Live candles displayed" as s2
+  state "Loading candles" as s3
+  state "No candles loaded" as s4
+  state "Reading saved candles" as s5
+  state "Saved candles displayed" as s6
+  [*] --> s4
+  s4 --> s3 : change interval or refresh or<br/>open candle chart
+  s3 --> s2 : exchange candles arrive or<br/>cancel candle request
+  s3 --> s5 : exchange fails, read saved<br/>candles
+  s5 --> s3 : change interval or refresh
+  s5 --> s1 : saved candles fail
+  s3 --> s0 : saved candles arrive
+  s4 --> s0 : saved candles arrive
+  s3 --> s6 : cancel candle request
+  s3 --> s3 : with the existing guard, saved<br/>candles arrive
+  class s0 fixed
+  class s1 works
+  class s2 works
+  class s3 works
+  class s4 works
+  class s5 works
+  class s6 works

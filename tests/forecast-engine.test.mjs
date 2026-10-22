@@ -160,3 +160,36 @@ test('fixed-cutoff replay includes the weak horizon and no current-cycle informa
   const changedCurrent = { ...data, prices: data.prices.map(([date, price]) => [date, date >= '2025-01-01' ? price / 10 : price]) };
   assert.deepEqual(backtestAnalogueForecast(changedCurrent), replay);
 });
+
+test('log interpolation enforces its sensitivity band when only one bound is supplied', () => {
+  for (const anchor of [
+    { date: '2030-01-01', price: 100, low: 110 },
+    { date: '2030-01-01', price: 100, high: 90 },
+  ]) assert.throws(() => interpolateLogAnchors([anchor]), /inside its sensitivity band/);
+  assert.deepEqual(interpolateLogAnchors([{ date: '2030-01-01', price: 100, low: 90 }])[0], {
+    date: '2030-01-01', price: 100, low: 90, high: 100, kind: 'observed-anchor',
+  });
+});
+
+test('analogue scaling avoids intermediate overflow when the resulting prices are finite', () => {
+  const options = { horizonDays: 30, includeBacktest: false };
+  const original = analyzeCycleForecast(data, options);
+  const multiplier = 1e150;
+  const scaled = analyzeCycleForecast({ prices: data.prices.map(([date, price]) => [date, price * multiplier]) }, options);
+  assert.equal(scaled.scenarios.length, original.scenarios.length);
+  for (let s = 0; s < original.scenarios.length; s++) {
+    const before = original.scenarios[s], after = scaled.scenarios[s];
+    assert.equal(after.path[0].price, scaled.current.price);
+    for (let i = 0; i < before.path.length; i++) close(after.path[i].price / multiplier, before.path[i].price);
+  }
+});
+
+test('a customized analogue replay discloses actual included current-cycle outcomes', () => {
+  const current = backtestAnalogueForecast(data, { cutoffs: ['2026-06-30'], validationEnd: '2026-10-20', horizons: [90] });
+  assert.equal(current.numberOfDistinctCutoffs, 1);
+  assert.equal(current.currentCycleIncluded, true);
+  assert.ok(current.samples[0].results.some(result => result.outcomeDate >= '2025-01-01'));
+  const priorOnly = backtestAnalogueForecast(data, { cutoffs: ['2019-03-31'], validationEnd: '2026-10-20', horizons: [90] });
+  assert.equal(priorOnly.currentCycleIncluded, false);
+  assert.throws(() => backtestAnalogueForecast(data, { horizons: [90, 90] }), /distinct|duplicate/i);
+});

@@ -3,7 +3,7 @@
  * Extrema and pairing a signal to an eventual low are retrospective selections.
  * No small-sample timing comparison here proves a predictive market law.
  */
-import { DAY_MS, HALVINGS, utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.10.4';
+import { DAY_MS, HALVINGS, utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.10.5';
 
 const BASELINES = Object.freeze({ previous: [2020], recent2: [2016, 2020], all3: [2012, 2016, 2020] });
 const PEAK_YEARS = [2013, 2017, 2021];
@@ -58,22 +58,38 @@ export function computeOnlineSignals(input, {
   if (!['geometric', 'arithmetic'].includes(maType)) throw new TypeError('Unsupported moving-average type');
   if (![reboundPct, drawdownPct].every((v) => Number.isFinite(v) && v > 0 && v < 100)) throw new TypeError('Thresholds must lie between 0 and 100 percent');
   const rows = validateDataset(input), trend = [], rebound = [];
-  const logPrefix = [0], pricePrefix = [0];
+  // A lifetime prefix sum loses precision when two large, nearly equal sums
+  // are subtracted. Keep a compensated window sum and rebuild every window;
+  // rebuilding is amortized O(n), and old history cannot amplify roundoff.
+  let averageSum = 0, averageCorrection = 0;
+  const averageTerm = price => (maType === 'geometric' ? Math.log(price) : price) / maWindow;
+  const addAverageTerm = value => {
+    const next = averageSum + value;
+    averageCorrection += Math.abs(averageSum) >= Math.abs(value)
+      ? (averageSum - next) + value : (value - next) + averageSum;
+    averageSum = next;
+  };
   let state = 'unknown', pendingSide = null, sideRun = 0;
   let ath = -Infinity, peak = null, runningLow = null, drawdownRun = 0, bear = false, reboundRun = 0;
   let maValue = null, aboveMA = null;
   for (let i = 0; i < rows.length; i++) {
     const row = rows[i], contiguous = i === 0 || row.epochDay - rows[i - 1].epochDay === 1;
-    logPrefix.push(logPrefix[i] + Math.log(row.price));
-    pricePrefix.push(pricePrefix[i] + row.price);
+    if (i >= maWindow) addAverageTerm(-averageTerm(rows[i - maWindow].price));
+    addAverageTerm(averageTerm(row.price));
+    if ((i + 1) % maWindow === 0) {
+      averageSum = 0; averageCorrection = 0;
+      for (let j = i + 1 - maWindow; j <= i; j++) addAverageTerm(averageTerm(rows[j].price));
+    }
     if (!contiguous) { sideRun = 0; pendingSide = null; state = 'unknown'; drawdownRun = 0; reboundRun = 0; }
     const hasWindow = i >= maWindow - 1 && row.epochDay - rows[i + 1 - maWindow].epochDay === maWindow - 1;
-    maValue = hasWindow ? maType === 'geometric'
-      ? Math.exp((logPrefix[i + 1] - logPrefix[i + 1 - maWindow]) / maWindow)
-      : (pricePrefix[i + 1] - pricePrefix[i + 1 - maWindow]) / maWindow : null;
+    const average = averageSum + averageCorrection;
+    maValue = hasWindow ? maType === 'geometric' ? Math.exp(average) : average : null;
     if (maValue !== null && (!Number.isFinite(maValue) || maValue <= 0)) throw new RangeError('Invalid moving-average result');
-    aboveMA = maValue === null ? null : row.price > maValue;
-    const side = maValue === null || row.price === maValue ? null : aboveMA ? 'up' : 'down';
+    const comparisonPrice = maType === 'geometric' ? Math.log(row.price) : row.price;
+    const roundingTolerance = 64 * Number.EPSILON * Math.max(Math.abs(comparisonPrice), Math.abs(average), maType === 'geometric' ? 1 : 0);
+    const equalToMA = Math.abs(comparisonPrice - average) <= roundingTolerance;
+    aboveMA = maValue === null ? null : !equalToMA && comparisonPrice > average;
+    const side = maValue === null || equalToMA ? null : aboveMA ? 'up' : 'down';
     if (side === null) { pendingSide = null; sideRun = 0; }
     else {
       sideRun = side === pendingSide ? sideRun + 1 : 1; pendingSide = side;

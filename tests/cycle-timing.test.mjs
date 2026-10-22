@@ -10,6 +10,29 @@ let checks = 0;
 const check = (name, fn) => { fn(); checks++; console.log(`PASS ${name}`); };
 const analysis = analyzeCycleTiming(data);
 
+check('A constant price cannot manufacture moving-average trend confirmations', () => {
+  const start = utcDay('2020-01-01');
+  for (const maType of ['geometric', 'arithmetic']) for (const price of [0.1, 10, 100, 60000]) {
+    const prices = Array.from({ length: 1000 }, (_, index) => [dateFromDay(start + index), price]);
+    const result = computeOnlineSignals(prices, { maType });
+    assert.deepEqual(result.trend, [], `${maType} MA invented a transition at constant price ${price}`);
+    assert.equal(result.current.state, 'unknown');
+    assert.equal(result.current.aboveMA, false);
+    assert.ok(Math.abs(result.current.maValue / price - 1) < 1e-12);
+  }
+});
+
+check('Numerical equality does not suppress a small sustained price trend', () => {
+  const start = utcDay('2020-01-01');
+  for (const maType of ['geometric', 'arithmetic']) for (const scale of [0.1, 60000]) {
+    const prices = Array.from({ length: 240 }, (_, index) => [dateFromDay(start + index), scale * (1 + index * 1e-8)]);
+    const result = computeOnlineSignals(prices, { maType });
+    assert.equal(result.trend.length, 1);
+    assert.equal(result.trend[0].direction, 'up');
+    assert.equal(result.trend[0].confirmationDate, dateFromDay(start + 212));
+  }
+});
+
 check('Calendar scenarios use calendar months including month-end and leap rules', () => {
   assert.equal(shiftCalendarMonths('2026-11-09', -5), '2026-06-09');
   assert.equal(shiftCalendarMonths('2026-03-31', -1), '2026-02-28');

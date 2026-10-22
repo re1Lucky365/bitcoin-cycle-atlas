@@ -1,9 +1,9 @@
-import {createPriceScale} from './chart-math.js?v=1.10.4';
-import {chartInterval} from './ohlc-data.js?v=1.10.4';
-import {chartPaneLayout,volumePaneMarkup} from './chart-overlays.js?v=1.10.4';
-import { resolveMagnetPoint, advanceMeasurement, measurePriceAnchors, measurementOverlayMarkup, createMeasurementOverlay } from './chart-magnet.js?v=1.10.4';
-import { clearChartHover, coalescedChartHover } from './chart-hover.js?v=1.10.4';
-import { dateWindow, pixelExtrema } from './chart-window.js?v=1.10.4';
+import {createPriceScale} from './chart-math.js?v=1.10.5';
+import {chartInterval} from './ohlc-data.js?v=1.10.5';
+import {chartPaneLayout,volumePaneMarkup} from './chart-overlays.js?v=1.10.5';
+import { resolveMagnetPoint, advanceMeasurement, measurePriceAnchors, measurementOverlayMarkup, createMeasurementOverlay } from './chart-magnet.js?v=1.10.5';
+import { clearChartHover, coalescedChartHover } from './chart-hover.js?v=1.10.5';
+import { dateWindow, pixelExtrema } from './chart-window.js?v=1.10.5';
 
 const numberFormats=new Map();
 const number=(value,digits=2)=>{if(!numberFormats.has(digits))numberFormats.set(digits,new Intl.NumberFormat('en-US',{maximumFractionDigits:digits}));return numberFormats.get(digits).format(value);};

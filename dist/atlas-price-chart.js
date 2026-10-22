@@ -1,14 +1,14 @@
-import { utcDay } from './cycle-engine.js?v=1.10.4';
-import { shiftCalendarMonths } from './cycle-timing.js?v=1.10.4';
-import { STATE_LABELS } from './market-structure.js?v=1.10.4';
-import { chartPaneLayout, historicalMarkersMarkup, volumePaneMarkup, cycleTimingMarkup, formatBtcVolume } from './chart-overlays.js?v=1.10.4';
-import { createPriceScale,nearestDailyIndex as nearest } from './chart-math.js?v=1.10.4';
+import { utcDay } from './cycle-engine.js?v=1.10.5';
+import { shiftCalendarMonths } from './cycle-timing.js?v=1.10.5';
+import { STATE_LABELS } from './market-structure.js?v=1.10.5';
+import { chartPaneLayout, historicalMarkersMarkup, volumePaneMarkup, cycleTimingMarkup, formatBtcVolume } from './chart-overlays.js?v=1.10.5';
+import { createPriceScale,nearestDailyIndex as nearest } from './chart-math.js?v=1.10.5';
 
-import { resolveMagnetPoint, advanceMeasurement, measurePriceAnchors, measurementOverlayMarkup, createMeasurementOverlay } from './chart-magnet.js?v=1.10.4';
+import { resolveMagnetPoint, advanceMeasurement, measurePriceAnchors, measurementOverlayMarkup, createMeasurementOverlay } from './chart-magnet.js?v=1.10.5';
 
-import { clearChartHover, coalescedChartHover } from './chart-hover.js?v=1.10.4';
+import { clearChartHover, coalescedChartHover } from './chart-hover.js?v=1.10.5';
 
-import { dateWindow, intervalAtDate, upperBoundDate, pixelExtrema, pixelLineSegments } from './chart-window.js?v=1.10.4';
+import { dateWindow, intervalAtDate, upperBoundDate, pixelExtrema } from './chart-window.js?v=1.10.5';
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const numberFormats=new Map();
@@ -25,6 +25,19 @@ const COLORS={warmup:'#536173','price-discovery':'#dfb567','bottom-formation':'#
 const plainState={warmup:'초기 자료', 'price-discovery':'최고가를 새로 쓰는 중','bottom-formation':'낮은 가격대에서 회복 중',range:'좁은 범위에서 횡보',rebound:'하락 뒤 반등',pullback:'상승 중 되돌림',advance:'상승 흐름',correction:'하락 흐름',transition:'방향이 섞인 구간'};
 const timingReasons={'causal-daily-clock-applied':'관측 보정을 근거리 시계에 반영','near-phase-unavailable':'적용할 근거리 기준 시계 없음','adjustment-would-expire-required-anchor':'보정하면 필수 기준일이 이미 지남','insufficient-causal-timing-evidence':'완료된 관측 근거 부족','calibration-reference-high-differs':'보정과 근거리 모형의 기준 고점이 다름','disabled-for-comparison':'비교 조건에서 보정 끔','legacy-calendar-prior':'기존 달력 기준 사용'};
 function sample(rows,frequency){return frequency==='daily'?rows:rows.filter((p,i)=>new Date(`${p.date}T00:00:00Z`).getUTCDay()===0||i===0||i===rows.length-1);}
+
+// Split the daily source before weekly/pixel sampling. Otherwise a missing
+// weekday disappears between two Sundays and looks like continuous evidence.
+function dailyRuns(rows,omit=()=>false){
+  const runs=[];let run=[];
+  for(const row of rows){
+    if(omit(row)){if(run.length)runs.push(run);run=[];continue;}
+    if(run.length&&dayOf(row.date)!==dayOf(run.at(-1).date)+1){runs.push(run);run=[];}
+    run.push(row);
+  }
+  if(run.length)runs.push(run);
+  return runs;
+}
 
 /** Rendering and inspection only. It never changes prices, paths or model dates. */
 export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency='daily',chartType='line',observedCandles=[],candleSource='Bitstamp',volumeBars=[],volumeProjection=null,volumeSource='Bitstamp',showVolume=false,historicalEvents=[],cycleCalibration=null,showCycleTiming=false,headerInset=null,showHistoricalEvents=true,activeHistoricalEventId=null,onHistoricalEvent=()=>{},stateStepDays=1,unit='usd',denominator=1,scale='log',tool='crosshair',magnet='off',measurement=null,onMeasurement=()=>{},onHover=()=>{},band=false,turns=[],showTurns=true,events=[],states=[],fib=[],historical=false,nextTurn=null,showNextTurnLabel=true,onNextTurn=()=>{},showDrawdown=true,showStates=false,threshold=.12,onInspect=()=>{},selectedDate}){
@@ -51,7 +64,11 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   const priceScale=createPriceScale(values,{scale,top:T,bottom:priceBottom,tickCount,factor}),{min,max,y}=priceScale;
   const yd=v=>ddTop+Math.min(100,Math.max(0,-(v??0)))/100*(ddBottom-ddTop);
   const path=(ps,yy=y,key='price')=>pixelExtrema(ps,x,[key]).map((p,i)=>`${i?'L':'M'}${x(p).toFixed(2)},${yy(p[key]).toFixed(2)}`).join('');
-  const observed=sample(visible.filter(p=>!split||p.date<=split),frequency),future=sample(originalVisible.filter(p=>split&&p.date>=split),frequency).map(p=>({...p,lower:p.lower??p.price,upper:p.upper??p.price}));
+  const observedTrace=(source,yy=y,key='price',omit)=>{
+    const runs=dailyRuns(source,omit).map(run=>sample(run,frequency));
+    return {path:runs.map(run=>path(run,yy,key)).join(''),isolated:runs.filter(run=>run.length===1).map(run=>run[0])};
+  };
+  const observed=visible.filter(p=>!split||p.date<=split),future=sample(originalVisible.filter(p=>split&&p.date>=split),frequency).map(p=>({...p,lower:p.lower??p.price,upper:p.upper??p.price}));
   const bottom=showVolume?volumeBottom:showStates?stateBottom:showCycleTiming?cycleBottom:showDrawdown?ddBottom:priceBottom;
   const visibleVolume=dateWindow(volumeBars,start,split&&split<end?split:end),volumeByDate=new Map(visibleVolume.map(bar=>[bar.date,bar]));
   const allProjectedVolume=volumeProjection?.points||[];
@@ -74,7 +91,11 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   if(nextTurn){const left=xday(Math.max(minDay,dayOf(nextTurn.lowerDate||nextTurn.date))),right=xday(Math.min(maxDay,dayOf(nextTurn.upperDate||nextTurn.date)));if(right>left)s+=`<rect x="${left}" y="${T}" width="${right-left}" height="${priceBottom-T}" fill="#87bde7" opacity=".065"/>`;}
   if(band&&future.length){s+=`<path d="${path(future,y,'upper')}${pixelExtrema(future,x,['lower']).reverse().map(p=>`L${x(p).toFixed(2)},${y(p.lower).toFixed(2)}`).join('')}Z" fill="#efb45f" opacity=".13"/>`;}
   for(const f of fib.filter(f=>f.price>min&&f.price<max&&(!f.startDate||f.startDate<=end))){const yy=y(f.price),from=xday(Math.max(minDay,f.startDate?dayOf(f.startDate):minDay));s+=`<line x1="${from}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#b4a7d6" opacity=".55" stroke-dasharray="3 5"/><text x="${W-R-4}" y="${yy-5}" text-anchor="end" fill="#c2b5e0" font-size="11">${nf(f.ratio*100,1)}% · ${unit==='usd'?money(f.price):nf(f.price*factor,1)}</text>`;}
-  if(observed.length){const line=pixelLineSegments(observed,x,['price'],point=>Boolean(point.candle)).map(segment=>segment.map((p,i)=>`${i?'L':'M'}${x(p).toFixed(2)},${y(p.price).toFixed(2)}`).join('')).join('');s+=`<path class="observed-close-line" d="${line}" fill="none" stroke="#e2eaf3" stroke-width="1.8"/>`;}
+  if(observed.length){
+    const trace=observedTrace(observed,y,'price',point=>Boolean(point.candle));
+    s+=`<path class="observed-close-line" d="${trace.path}" fill="none" stroke="#e2eaf3" stroke-width="1.8"/>`;
+    for(const p of trace.isolated)s+=`<circle class="observed-close-point" cx="${x(p).toFixed(2)}" cy="${y(p.price).toFixed(2)}" r="1.8" fill="#e2eaf3"/>`;
+  }
   const candleWidth=Math.max(.7,Math.min(12,(W-L-R)*candleDays/span*.68));
   const denseCandles=candleRows.length>256&&candleWidth<2;
   if(denseCandles){
@@ -86,8 +107,15 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   for(const c of candleRows){const xx=xday(dayOf(c.endDate)),color=c.close>=c.open?'#62bca5':'#dd7e8d',top=Math.min(y(c.open),y(c.close)),height=Math.max(1,Math.abs(y(c.open)-y(c.close)));s+=`<g class="observed-candle" data-date="${c.endDate}" data-open="${c.open}" data-high="${c.high}" data-low="${c.low}" data-close="${c.close}"><line x1="${xx}" x2="${xx}" y1="${y(c.high)}" y2="${y(c.low)}" stroke="${color}"/><rect x="${xx-candleWidth/2}" y="${top}" width="${candleWidth}" height="${height}" fill="${color}"/><title>${esc(candleSource)} BTC-USD · ${c.startDate}${candleDays>1?`–${c.endDate}`:''} UTC · O ${money(c.open)} H ${money(c.high)} L ${money(c.low)} C ${money(c.close)}</title></g>`;}
   }
   if(future.length)s+=`<path d="${path(future)}" fill="none" stroke="#f2b960" stroke-width="1.8" stroke-dasharray="5 3"/>`;
-  if(showDrawdown){if(observed.length)s+=`<path d="${path(observed,yd,'drawdownPct')}" fill="none" stroke="#a7b8cd" stroke-width="1.1"/>`;if(future.length)s+=`<path d="${path(future,yd,'drawdownPct')}" fill="none" stroke="#cba069" stroke-width="1.1" stroke-dasharray="4 3"/>`;}
-  if(showStates){let segments=[];for(const p of dateWindow(states,start,end)){const last=segments.at(-1);if(last&&last.state===p.state)last.end=p.date;else segments.push({start:p.date,end:p.date,state:p.state});}for(const seg of segments){const xx=xday(dayOf(seg.start)),width=xday(dayOf(seg.end)+stateStepDays)-xx;s+=`<rect x="${xx}" y="${stateTop}" width="${Math.max(.7,width)}" height="${stateHeight}" fill="${COLORS[seg.state]||COLORS.transition}"><title>${esc(STATE_LABELS[seg.state])} ${seg.start}–${seg.end}</title></rect>`;}}
+  if(showDrawdown){
+    if(observed.length){
+      const trace=observedTrace(originalVisible.filter(p=>!split||p.date<=split),yd,'drawdownPct');
+      s+=`<path d="${trace.path}" fill="none" stroke="#a7b8cd" stroke-width="1.1"/>`;
+      for(const p of trace.isolated)s+=`<circle class="observed-drawdown-point" cx="${x(p).toFixed(2)}" cy="${yd(p.drawdownPct).toFixed(2)}" r="1.1" fill="#a7b8cd"/>`;
+    }
+    if(future.length)s+=`<path d="${path(future,yd,'drawdownPct')}" fill="none" stroke="#cba069" stroke-width="1.1" stroke-dasharray="4 3"/>`;
+  }
+  if(showStates){let segments=[];for(const p of dateWindow(states,start,end)){const last=segments.at(-1);if(last&&last.state===p.state&&dayOf(p.date)===dayOf(last.end)+stateStepDays)last.end=p.date;else segments.push({start:p.date,end:p.date,state:p.state});}for(const seg of segments){const xx=xday(dayOf(seg.start)),width=xday(dayOf(seg.end)+stateStepDays)-xx;s+=`<rect x="${xx}" y="${stateTop}" width="${Math.max(.7,width)}" height="${stateHeight}" fill="${COLORS[seg.state]||COLORS.transition}"><title>${esc(STATE_LABELS[seg.state])} ${seg.start}–${seg.end}</title></rect>`;}}
   const confirmedTurns=turns.filter(point=>point.confirmationDate).sort((a,b)=>a.confirmationDate.localeCompare(b.confirmationDate));
   const turnAt=value=>{const point=confirmedTurns[upperBoundDate(confirmedTurns,value,turn=>turn.confirmationDate)-1];return point?{...point,kind:split&&point.date>split?'simulated':'observed'}:null;};
   const visibleTurns=turns.filter(p=>p.date>=start&&p.date<=end);
