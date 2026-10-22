@@ -1,4 +1,4 @@
-import { drawAtlasPriceChart as drawChart } from './atlas-price-chart.js?v=1.7.0';
+import { drawAtlasPriceChart as drawChart } from './atlas-price-chart.js?v=1.7.1';
 import { renderCryptoConAudit } from './cryptocon-audit.js';
 import { bindChartNavigation, panRange } from './chart-navigation.js?v=1.7.0';
 import { renderAtlasAnalysis } from './atlas-analysis.js';
