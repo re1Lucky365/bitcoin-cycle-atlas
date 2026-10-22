@@ -1,6 +1,6 @@
 # Bitcoin Cycle Atlas
 
-**v1.10.1 — 실제 비트코인 가격과 출처가 있는 장기 경제 가정을 한 차트에서 비교하는 한국어 사이트**입니다. 고정된 3년 표시 제한을 없앴습니다. 첫 접속은 최신 관측일의 앞뒤 2년, 합계 약 **4년**을 보여 줍니다. ‘장기 전망’·‘전체’ 또는 축소·이동으로 검토한 원문의 마지막 목표 연도인 **2050년 말**까지 볼 수 있습니다. 가격·출처·인디케이터와 다음 상태 D-day를 차트 안에 통합했습니다. N년을 고르는 별도 입력은 없습니다. [표시 종료일 규칙](dist/long-horizon-forecast.js)
+**v1.10.2 — 실제 비트코인 가격과 출처가 있는 장기 경제 가정을 한 차트에서 비교하는 한국어 사이트**입니다. 고정된 3년 표시 제한을 없앴습니다. 첫 접속은 최신 관측일의 앞뒤 2년, 합계 약 **4년**을 보여 줍니다. ‘장기 전망’·‘전체’ 또는 축소·이동으로 검토한 원문의 마지막 목표 연도인 **2050년 말**까지 볼 수 있습니다. 가격·출처·인디케이터와 다음 상태 D-day를 차트 안에 통합했습니다. N년을 고르는 별도 입력은 없습니다. [표시 종료일 규칙](dist/long-horizon-forecast.js)
 
 **[통합 차트 열기](https://twoimo.github.io/bitcoin-cycle-atlas/)** · **[사용 안내](docs/GRAPH_WORKSPACE_GUIDE.md)** · **[장기 전망 리서치](docs/LONG_HORIZON_RESEARCH.md)** · **[모델의 반영 범위](docs/MODEL_SCOPE.md)** · **[리서치 표](https://twoimo.github.io/bitcoin-cycle-atlas/?page=evidence)** · **[릴리스](https://github.com/twoimo/bitcoin-cycle-atlas/releases)** · **[Actions](https://github.com/twoimo/bitcoin-cycle-atlas/actions)**
 

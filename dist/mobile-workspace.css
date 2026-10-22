@@ -74,6 +74,8 @@
   .workbench-rail[data-mobile-open=true] button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:auto;height:auto;min-height:64px;padding:8px 4px;border-radius:5px;font-size:10px;line-height:1.4}
   .workbench-rail[data-mobile-open=true] button::after{content:attr(aria-label);display:block;max-width:100%;font-size:10px;line-height:1.4;text-align:center;white-space:normal;overflow-wrap:anywhere}
   .workbench-rail[data-mobile-open=true] button>span:last-child:not([data-icon]){display:none}
+  .workbench-rail[data-mobile-open=true] .atlas-nav button>span:last-child:not([data-icon]){display:block;position:static;width:auto;height:auto;margin:0;clip-path:none;overflow:visible;white-space:normal}
+  .workbench-rail[data-mobile-open=true] .atlas-nav button::after{display:none}
   .workbench-rail[data-mobile-open=true] .workbench-help{min-height:40px;flex-direction:row;margin:0;border-top:1px solid #2b394d}
   .chart-details-panel{position:fixed;inset:calc(54px + var(--mobile-top)) 6px calc(6px + var(--mobile-bottom));width:auto;height:auto;max-height:none;z-index:55;border:1px solid #354861;border-radius:10px;padding:10px 12px;box-shadow:0 14px 60px #000b;gap:8px}
   .chart-details-panel .reader-heading{min-height:44px;padding:0 0 6px}
