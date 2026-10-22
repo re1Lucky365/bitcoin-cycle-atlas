@@ -30,9 +30,10 @@ for (const file of ['styles.css', 'compact.css', 'outlook.css', 'lab.css', 'atla
 const favicon = Buffer.from(await readFile(resolve(dist, 'favicon.svg'))).toString('base64');
 html = html.replace('href="./favicon.svg"', `href="data:image/svg+xml;base64,${favicon}"`);
 const data = (await readFile(resolve(dist, 'data/btc-daily.json'), 'utf8')).replaceAll('<', '\\u003c');
+const ohlc = (await readFile(resolve(dist, 'data/btc-ohlc.json'), 'utf8')).replaceAll('<', '\\u003c');
 const app = await inlineModule(resolve(dist, 'app.js'));
 html = html.replace('<script type="module" src="./app.js"></script>',
-  `<script id="embedded-btc-data" type="application/json">${data}</script>\n  <script type="module" src="${app}"></script>`);
+  `<script id="embedded-btc-data" type="application/json">${data}</script>\n  <script id="embedded-ohlc-data" type="application/json">${ohlc}</script>\n  <script type="module" src="${app}"></script>`);
 if (/\b(?:src|href)=["']\.\//.test(html)) throw new Error('Unresolved local resource');
 await mkdir(dirname(output), { recursive: true });
 await writeFile(output, html);

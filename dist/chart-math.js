@@ -1,14 +1,16 @@
 import { utcDay } from './cycle-engine.js';
 
 /** All coordinates use original prices; factor affects only the choice of ticks. */
-export function createPriceScale(values,{scale='log',top=0,bottom=1,tickCount=6,factor=1}={}) {
+export function createPriceScale(values,{scale='log',top=0,bottom=1,tickCount=6,factor=1,paddingRatio=null}={}) {
   if(!['log','linear'].includes(scale))throw new RangeError('Unknown price scale');
   if(!Number.isFinite(factor)||factor<=0||!Number.isFinite(top)||!Number.isFinite(bottom)||top===bottom)throw new RangeError('Invalid price axis');
   const prices=values.filter(value=>Number.isFinite(value)&&value>0);
   if(!prices.length)throw new RangeError('A price axis requires positive prices');
   const low=Math.min(...prices),high=Math.max(...prices);
   let min,max;
-  if(scale==='log'){min=low*.82;max=high*1.19;}
+  if(paddingRatio!==null&&(!Number.isFinite(paddingRatio)||paddingRatio<0||paddingRatio>1))throw new RangeError('Invalid price padding');
+  if(scale==='log'&&paddingRatio!==null){const padding=Math.max(Math.log(high/low),.002)*paddingRatio;min=low*Math.exp(-padding);max=high*Math.exp(padding);}
+  else if(scale==='log'){min=low*.82;max=high*1.19;}
   else{const padding=(high-low||high*.2)*.1;min=Math.max(0,low-padding);max=high+padding;}
   const transform=scale==='log'?Math.log:value=>value;
   const reverse=scale==='log'?Math.exp:value=>value;
@@ -21,6 +23,7 @@ export function createPriceScale(values,{scale='log',top=0,bottom=1,tickCount=6,
     for(let exponent=Math.floor(Math.log10(a))-1;exponent<=Math.ceil(Math.log10(b))+1;exponent++)for(const multiplier of [1,2,5]){
       const value=multiplier*10**exponent;if(value>=a&&value<=b)displayTicks.push(value);
     }
+    if(displayTicks.length<2&&paddingRatio!==null){displayTicks.length=0;for(let i=0;i<count;i++)displayTicks.push(a*Math.pow(b/a,i/(count-1)));}
     const stride=Math.max(1,Math.ceil(displayTicks.length/count));
     return {scale,min,max,y,invert,ticks:displayTicks.filter((_,i)=>i%stride===0).map(value=>value/factor)};
   }

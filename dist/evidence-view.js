@@ -17,7 +17,8 @@ function safeUrl(value) {
 function filteredRows() {
   const terms=normalized(query).trim().split(/\s+/).filter(Boolean);
   return rows.filter(r=>terms.every(term=>searchText.get(r.id).includes(term)) &&
-    (sourceFilter!=='cryptocon'||/cryptocon|크립토콘/i.test([r.title,r.originalTitle,r.publisher,r.family,r.url].join(' '))));
+    (sourceFilter!=='cryptocon'||/cryptocon|크립토콘/i.test([r.title,r.originalTitle,r.publisher,r.family,r.url].join(' '))) &&
+    (sourceFilter!=='long-horizon'||r.scope==='long-horizon'));
 }
 
 function rowMarkup(r) {
@@ -40,7 +41,7 @@ function renderPage() {
   document.querySelector('#evidence-progress').textContent=filtered.length?`${start+1}–${start+shown} / ${filtered.length}개`:'0개 자료';
   document.querySelector('#evidence-prev').disabled=start===0;
   document.querySelector('#evidence-more').disabled=start+shown>=filtered.length;
-  document.querySelector('#evidence-clear').disabled=!query&&!sourceFilter.includes('cryptocon');
+  document.querySelector('#evidence-clear').disabled=!query&&sourceFilter==='all';
   document.querySelector('#evidence-end').hidden=true;
 }
 
@@ -67,7 +68,7 @@ export function initEvidenceView() {
   if(initialized)return;initialized=true;
   const view=document.querySelector('#evidence-view'),shell=view.querySelector('.evidence-table-shell');
   const controls=document.createElement('div');controls.className='evidence-controls';
-  controls.innerHTML='<label class="evidence-search"><span class="lab-visually-hidden">자료 제목·출처 검색</span><input id="evidence-search" type="search" placeholder="자료 제목·출처 검색" aria-label="자료 제목·출처 검색" autocomplete="off"></label><label class="evidence-filter"><span class="lab-visually-hidden">자료 범위</span><select id="evidence-filter" aria-label="자료 범위"><option value="all">전체 자료</option><option value="cryptocon">CryptoCon 관련</option></select></label><button id="evidence-clear" type="button">초기화</button>';
+  controls.innerHTML='<label class="evidence-search"><span class="lab-visually-hidden">자료 제목·출처 검색</span><input id="evidence-search" type="search" placeholder="자료 제목·출처 검색" aria-label="자료 제목·출처 검색" autocomplete="off"></label><label class="evidence-filter"><span class="lab-visually-hidden">자료 범위</span><select id="evidence-filter" aria-label="자료 범위"><option value="all">전체 자료</option><option value="long-horizon">장기 전망·금·변동성</option><option value="cryptocon">CryptoCon 관련</option></select></label><button id="evidence-clear" type="button">초기화</button>';
   view.insertBefore(controls,shell);
   const pager=document.createElement('nav');pager.className='evidence-pagination';pager.setAttribute('aria-label','리서치 자료 페이지');
   pager.innerHTML='<button id="evidence-prev" type="button" aria-label="이전 자료 페이지">← 이전</button>';

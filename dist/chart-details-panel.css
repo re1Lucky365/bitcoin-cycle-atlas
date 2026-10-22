@@ -174,3 +174,32 @@ body:not([data-page=outlook]) .workbench-detail-tools>[data-reader=selection],bo
   .workbench-zone{font-size:8px}
 }
 @media(max-width:360px){.atlas-readout .atlas-day-change{display:none}.workbench-symbol{font-size:10px}}
+
+/* Exchange intervals share the compact toolbar; native selection fits phones. */
+#workbench-frequency{flex:0 1 auto;min-width:0}
+#workbench-frequency .lab-segmented{display:flex;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+#workbench-frequency .lab-segmented::-webkit-scrollbar{display:none}
+#workbench-frequency button{flex:none;white-space:nowrap}
+#workbench-interval-select{display:none}
+.workbench-market-info{position:absolute;top:31px;left:12px;right:82px;z-index:3;display:flex;align-items:center;gap:5px;max-width:700px;min-width:0;font-size:9px;color:#8eabbd;pointer-events:none}
+.workbench-market-info[hidden]{display:none}
+#workbench-market-status{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+#workbench-market-refresh{width:22px;height:22px;min-height:22px;padding:3px;pointer-events:auto;flex:none}
+#workbench-market-refresh .icon{width:13px;height:13px}
+.atlas-plot>.lab-chart-foot{inset:auto 80px 3px 12px;justify-content:flex-end;max-height:28px}
+.atlas-plot>.lab-chart-foot .lab-legend{justify-content:flex-end;text-align:right}
+.atlas-plot>.lab-chart-foot .lab-legend span{white-space:nowrap}
+.legend-candle{border:0!important;width:9px!important;height:8px;background:#62bca5;position:relative}
+.legend-candle:before{content:'';position:absolute;left:4px;top:-3px;width:1px;height:14px;background:#62bca5}
+@media(max-width:1100px){
+  .atlas-canvas-heading .workbench-mode,#workbench-scenario{width:28px;padding:5px;max-width:28px;border:0}
+  .atlas-canvas-heading #atlas-mode-name,#workbench-scenario-name{display:none}
+}
+@media(max-width:620px){
+  #workbench-frequency .lab-segmented{display:none}
+  #workbench-interval-select{display:block;min-width:60px;width:60px;max-width:60px;height:29px;min-height:29px;border:0;padding:3px 17px 3px 5px;color:#a9c1dd;background-color:transparent;font-size:11px}
+  .workbench-market-info{top:29px;left:8px;right:69px;font-size:8px}
+  .atlas-plot>.lab-chart-foot{left:8px;right:68px;bottom:3px;max-height:28px}
+  .atlas-plot[data-mode=price]>.lab-chart-foot .lab-legend{flex-wrap:wrap;gap:1px 8px}
+  .atlas-plot>.lab-chart-foot .lab-legend span{font-size:8px;line-height:12px}
+}

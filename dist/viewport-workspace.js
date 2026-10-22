@@ -215,9 +215,9 @@ export function initViewportWorkspace(icon) {
 
     }else if(kind==='guide'){
       source.append($('.atlas-guide>div').cloneNode(true));
-      source.insertAdjacentHTML('beforeend','<p>가격과 미래에서는 그래프를 눌러 날짜를 선택합니다. 오른쪽은 가격, 아래는 날짜입니다. ← → 키로 하루씩, 선택 상세의 이전·다음 버튼으로 고저점을 이동합니다.</p><p>휠로 확대·축소하고 가로로 드래그해 구간을 이동합니다. 왼쪽 −·+·초기화 아이콘도 같은 기능입니다. 이동 도구는 차트를 옮기고, 자 모양 도구는 두 날짜를 눌러 기간·가격 차이·변화율을 잽니다. 미래가 포함되면 가정 포함으로 표시합니다. 차트에 초점을 둔 상태에서 +·−·0 키를 사용할 수 있습니다.</p><p>상단 1D·1W는 표시 간격이며, 하단 기간 버튼은 화면에 보이는 범위입니다. 로그·선형은 눈금만 바꾸며 가격을 바꾸지 않습니다. 다른 그래프는 실제 관측 자료의 비교입니다. 오른쪽 데이터 아이콘에서 고정한 날짜와 출처를 확인합니다. 리서치와 원자료도 오른쪽 아이콘으로 엽니다. 고점권 도달과 실제 최고가 날짜는 서로 다를 수 있습니다.</p>');
+      source.insertAdjacentHTML('beforeend','<p>가격과 미래에서는 그래프를 눌러 날짜를 선택합니다. 오른쪽은 가격, 아래는 날짜입니다. ← → 키로 하루씩, 선택 상세의 이전·다음 버튼으로 고저점을 이동합니다.</p><p>휠로 확대·축소하고 가로로 드래그해 구간을 이동합니다. 왼쪽 −·+·초기화 아이콘도 같은 기능입니다. 이동 도구는 차트를 옮기고, 자 모양 도구는 두 날짜를 눌러 기간·가격 차이·변화율을 잽니다. 미래가 포함되면 가정 포함으로 표시합니다. 차트에 초점을 둔 상태에서 +·−·0 키를 사용할 수 있습니다.</p><p>상단 1m·5m·15m·30m·1h·4h·1D·1W는 표시 간격입니다. 선·캔들 버튼으로 표시 방식을 바꿉니다. 분·시간봉은 Coinbase의 완료된 실제 거래 봉이고, 1D·1W에서는 장기 전망이 이어집니다. 캔들이 없는 옛 기간은 일말 가격선을 유지합니다. 하단 기간 버튼은 화면에 보이는 범위입니다. 로그·선형은 눈금만 바꾸며 가격을 바꾸지 않습니다. 다른 그래프는 실제 관측 자료의 비교입니다. 오른쪽 데이터 아이콘에서 고정한 날짜와 출처를 확인합니다. 리서치와 원자료도 오른쪽 아이콘으로 엽니다. 고점권 도달과 실제 최고가 날짜는 서로 다를 수 있습니다.</p>');
     }else if(kind==='math'){
-      const modelInfo=$('#atlas-model-info');if(modelInfo)source.append(modelInfo.cloneNode(true));
+      const modelInfo=$('#atlas-model-info');if(modelInfo){const copy=modelInfo.cloneNode(true);copy.hidden=false;source.append(copy);}
       source.append($('#atlas-exact-details .lab-details-body').cloneNode(true));
     }
     else{

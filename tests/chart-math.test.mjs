@@ -68,3 +68,10 @@ test('reverse measurement uses the first chosen price as denominator and marks f
   assert.equal(measureDailyRange(daily,null),null);
   assert.equal(nearestDailyIndex([],0),-1);
 });
+
+test('intraday log axis fits a narrow price range without hiding movement',()=>{
+  const axis=createPriceScale([80000,80100],{scale:'log',top:50,bottom:350,paddingRatio:.12});
+  assert.ok(axis.min<80000&&axis.min>79900);assert.ok(axis.max>80100&&axis.max<80200);
+  assert.ok(axis.ticks.length>=2);assert.ok(axis.y(80000)-axis.y(80100)>180);
+  assert.throws(()=>createPriceScale([80000],{paddingRatio:-1}),RangeError);
+});

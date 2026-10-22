@@ -76,6 +76,11 @@ assert(args.length === 0 || (args.length === 2 && args[0] === '--standalone'),
 if (args.length) {
   const standalone = await readFile(path.resolve(root, args[1]), 'utf8');
   assert(/id=["']embedded-btc-data["']/.test(standalone), 'Standalone file lacks the embedded data snapshot');
+  const ohlcSnapshot = standalone.match(/<script\b[^>]*id=["']embedded-ohlc-data["'][^>]*>([\s\S]*?)<\/script>/i)?.[1];
+  assert(ohlcSnapshot, 'Standalone file lacks its real OHLC fallback');
+  const { parseMarketSnapshot, CHART_INTERVALS } = await import('../dist/ohlc-data.js');
+  const savedCandles = JSON.parse(ohlcSnapshot);
+  for (const interval of CHART_INTERVALS) parseMarketSnapshot(savedCandles, interval.id);
   assert(/data:text\/javascript;base64,/.test(standalone), 'Standalone file lacks embedded ES modules');
   assert(!/\b(?:src|href)\s*=\s*["']\.\.?\//i.test(standalone), 'Standalone file still references a local file');
   const baseStyle = standalone.match(/<style>\s*([\s\S]*?)<\/style>/i)?.[1];
