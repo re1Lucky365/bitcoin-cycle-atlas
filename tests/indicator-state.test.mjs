@@ -4,9 +4,9 @@ import {INDICATORS,normalizeIndicatorState,readIndicatorState,writeIndicatorStat
 import {preparePriceViewData} from '../dist/price-view-data.js';
 import {countdownPresentation} from '../dist/indicator-workbench.js';
 
-test('fresh chart has compact controls and no unsolicited research analysis windows',()=>{
+test('fresh chart shows the indicator legend without unsolicited research analysis windows',()=>{
   const state=readIndicatorState('');
-  assert.equal(state.collapsed,true);assert.deepEqual(visibleAnalysisIds(state),[]);
+  assert.equal(state.collapsed,false);assert.deepEqual(visibleAnalysisIds(state),[]);
   for(const id of ['readout','source','legend','volume','history','cycle-timing'])assert.ok(isIndicatorVisible(state,id));
 });
 
@@ -31,11 +31,24 @@ test('multiple optional analyses have independent membership and visibility',()=
 });
 
 test('indicator URL preserves empty selections, hidden rows, active study and unrelated chart settings',()=>{
-  for(const value of [{added:[]},{added:['readout','volume','periods','cycles'],hidden:['volume','cycles'],active:'periods',collapsed:false},readIndicatorState('')]){
+  for(const value of [{added:[]},{added:['readout','volume','periods','cycles'],hidden:['volume','cycles'],active:'periods',collapsed:false},{added:['volume'],collapsed:true},readIndicatorState('')]){
     const state=normalizeIndicatorState(value),params=new URLSearchParams('granularity=1h&type=candles&measure=realizedVolPct&assumption=late&page=evidence');
     writeIndicatorState(params,state);assert.deepEqual(readIndicatorState(params),state);
     assert.equal(params.get('granularity'),'1h');assert.equal(params.get('type'),'candles');assert.equal(params.get('measure'),'realizedVolPct');assert.equal(params.get('page'),'evidence');
   }
+});
+
+test('explicit closed legend survives sharing while existing open links remain expanded',()=>{
+  assert.equal(readIndicatorState('indicator-list=open').collapsed,false);
+  const closed=readIndicatorState('indicator-list=closed');
+  assert.equal(closed.collapsed,true);
+  const params=writeIndicatorState(new URLSearchParams(),closed);
+  assert.equal(params.get('indicator-list'),'closed');
+  const expanded=changeIndicatorState(closed,{action:'collapse'});
+  assert.equal(expanded.collapsed,false);
+  writeIndicatorState(params,expanded);
+  assert.equal(params.has('indicator-list'),false);
+  assert.deepEqual(readIndicatorState(params),expanded);
 });
 
 test('legacy graph links migrate into optional in-chart indicators without a bottom dock',()=>{

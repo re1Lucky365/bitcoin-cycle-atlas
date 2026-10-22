@@ -28,7 +28,7 @@ export function normalizeIndicatorState(value={}) {
   const added=ordered(Array.isArray(value.added)?value.added:defaults);
   const hidden=ordered((Array.isArray(value.hidden)?value.hidden:[]).filter(id=>added.includes(id)));
   const active=analyses.has(value.active)&&added.includes(value.active)&&!hidden.includes(value.active)?value.active:added.find(id=>analyses.has(id)&&!hidden.includes(id))||added.find(id=>analyses.has(id))||'cycles';
-  return {added,hidden,active,collapsed:value.collapsed!==false};
+  return {added,hidden,active,collapsed:value.collapsed===true};
 }
 
 export function readIndicatorState(search='') {
@@ -39,14 +39,14 @@ export function readIndicatorState(search='') {
   if(!params.has('indicators')&&(analyses.has(legacy)||legacyCompare)){
     const mode=analyses.has(legacy)?legacy:'cycles';added.push(mode);if(params.get('dock')==='closed')hidden.push(mode);
   }
-  return normalizeIndicatorState({added,hidden,active:legacy,collapsed:params.get('indicator-list')!=='open'});
+  return normalizeIndicatorState({added,hidden,active:legacy,collapsed:params.get('indicator-list')==='closed'});
 }
 
 export function writeIndicatorState(params,state) {
   const next=normalizeIndicatorState(state),defaultKey=defaults.join(','),addedKey=next.added.join(',');
   if(addedKey===defaultKey)params.delete('indicators');else params.set('indicators',addedKey);
   if(next.hidden.length)params.set('indicator-hide',next.hidden.join(','));else params.delete('indicator-hide');
-  if(!next.collapsed)params.set('indicator-list','open');else params.delete('indicator-list');
+  if(next.collapsed)params.set('indicator-list','closed');else params.delete('indicator-list');
   if(next.added.some(id=>analyses.has(id)))params.set('chart',next.active);else params.delete('chart');
   params.delete('dock');
   return params;

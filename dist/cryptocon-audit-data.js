@@ -1,4 +1,4 @@
-import { utcDay } from './cycle-engine.js?v=1.10.0';
+import { utcDay } from './cycle-engine.js?v=1.10.3';
 
 export const CRYPTOCON_AUDIT_AS_OF = '2026-10-20';
 export const CRYPTOCON_AUDIT_SOURCE = Object.freeze({

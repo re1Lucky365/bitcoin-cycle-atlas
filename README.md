@@ -1,12 +1,12 @@
 # Bitcoin Cycle Atlas
 
-**v1.10.2 — 실제 비트코인 가격과 출처가 있는 장기 경제 가정을 한 차트에서 비교하는 한국어 사이트**입니다. 고정된 3년 표시 제한을 없앴습니다. 첫 접속은 최신 관측일의 앞뒤 2년, 합계 약 **4년**을 보여 줍니다. ‘장기 전망’·‘전체’ 또는 축소·이동으로 검토한 원문의 마지막 목표 연도인 **2050년 말**까지 볼 수 있습니다. 가격·출처·인디케이터와 다음 상태 D-day를 차트 안에 통합했습니다. N년을 고르는 별도 입력은 없습니다. [표시 종료일 규칙](dist/long-horizon-forecast.js)
+**v1.10.3 — 실제 비트코인 가격과 출처가 있는 장기 경제 가정을 한 차트에서 비교하는 한국어 사이트**입니다. 고정된 3년 표시 제한을 없앴습니다. 첫 접속은 최신 관측일의 앞뒤 2년, 합계 약 **4년**을 보여 줍니다. ‘장기 전망’·‘전체’ 또는 축소·이동으로 검토한 원문의 마지막 목표 연도인 **2050년 말**까지 볼 수 있습니다. 가격·출처·인디케이터와 다음 상태 D-day를 차트 안에 통합했습니다. N년을 고르는 별도 입력은 없습니다. [표시 종료일 규칙](dist/long-horizon-forecast.js)
 
 **[통합 차트 열기](https://twoimo.github.io/bitcoin-cycle-atlas/)** · **[사용 안내](docs/GRAPH_WORKSPACE_GUIDE.md)** · **[장기 전망 리서치](docs/LONG_HORIZON_RESEARCH.md)** · **[모델의 반영 범위](docs/MODEL_SCOPE.md)** · **[리서치 표](https://twoimo.github.io/bitcoin-cycle-atlas/?page=evidence)** · **[릴리스](https://github.com/twoimo/bitcoin-cycle-atlas/releases)** · **[Actions](https://github.com/twoimo/bitcoin-cycle-atlas/actions)**
 
 ## v1.10 변경
 
-지표 목록에 가격·거래량·국면·보정값 등 현재 값을 함께 표시합니다. D-day는 두 줄로 간소화했습니다. 모바일은 고정 좌우 레일을 접어 차트 폭을 확보하고, 도구·설정을 별도 트레이로 엽니다. 차트에서는 한 손가락 이동과 두 손가락 확대·축소를 지원합니다. [모바일·표시 개선과 검증](docs/MOBILE_WORKSPACE_IMPROVEMENTS.md) · [자석과 측정](docs/MAGNET_MODE.md) · [분·시간봉 과거 조회](docs/INTRADAY_HISTORY.md)
+지표 이름과 가격·거래량·국면·보정값을 차트 좌측 상단에 간결한 텍스트 행으로 나열합니다. 첫 접속부터 목록을 표시하고, 접기 상태도 공유 링크에 보존합니다. 데스크톱에서는 행에 마우스를 올리거나 키보드로 선택하면 눈·삭제 버튼이 나타납니다. D-day는 두 줄로 간소화했습니다. 모바일은 고정 좌우 레일을 접어 차트 폭을 확보하고, 도구·설정을 별도 트레이로 엽니다. 차트에서는 한 손가락 이동과 두 손가락 확대·축소를 지원합니다. [모바일·표시 개선과 검증](docs/MOBILE_WORKSPACE_IMPROVEMENTS.md) · [자석과 측정](docs/MAGNET_MODE.md) · [분·시간봉 과거 조회](docs/INTRADAY_HISTORY.md)
 
 ## 처음 사용할 때
 

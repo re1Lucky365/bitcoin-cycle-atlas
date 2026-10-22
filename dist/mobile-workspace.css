@@ -31,17 +31,17 @@
   .atlas-plot>.workbench-market-info,.atlas-plot[data-countdown-visible=true]>.workbench-market-info{left:10px;right:10px;width:auto;max-width:calc(100% - 20px);font-size:9px;line-height:16px}
   .atlas-plot .observed-split-badge{display:none}
   .workbench-market-info #workbench-market-refresh{width:28px;height:24px;min-height:24px;padding:4px;flex:none}
-  .chart-indicator-manager{left:9px;max-width:calc(100% - 18px);box-shadow:none;background:#101923f5}
-  .chart-indicator-manager[data-collapsed=true]{width:128px;min-width:0}
-  .chart-indicator-manager[data-collapsed=true] #indicator-visibility-all{display:none}
-  .chart-indicator-manager[data-collapsed=true] .indicator-manager-heading{padding:0 2px;gap:0;min-height:36px}
-  .chart-indicator-manager[data-collapsed=true] .indicator-manager-heading>span{min-width:0;font-size:10px}
-  .chart-indicator-manager[data-collapsed=true] .indicator-manager-heading button{width:34px;height:36px}
-  .chart-indicator-manager[data-collapsed=false]{top:calc(var(--indicator-top,90px) + 44px);width:calc(100% - 18px)}
-  .chart-indicator-list{max-height:min(43dvh,360px);overscroll-behavior:contain}
-  .chart-indicator-manager .indicator-row button{min-width:40px;min-height:40px}
-  .chart-indicator-manager .indicator-name{font-size:11px}
-  .chart-indicator-manager .indicator-value{font-size:12px}
+  .chart-indicator-manager{top:var(--indicator-top,90px);left:10px;width:calc(100% - 20px);max-width:calc(100% - 20px);box-shadow:none;background:transparent;border:0;border-radius:0}
+  .chart-indicator-manager[data-collapsed=true]{width:auto;min-width:0}
+  .chart-indicator-manager .indicator-manager-heading{width:138px;max-width:100%;padding:0;gap:1px;min-height:40px}
+  .chart-indicator-manager .indicator-manager-heading>span{min-width:0;font-size:10px}
+  .chart-indicator-manager .indicator-manager-heading button{width:32px;height:36px}
+  .chart-indicator-list{max-height:min(230px,30dvh,max(0px,calc(var(--plot-height,500px) - var(--indicator-top,90px) - 120px)));overscroll-behavior:contain;padding:0}
+  .chart-indicator-manager .indicator-row{min-height:32px}
+  .chart-indicator-manager .indicator-row button{min-width:32px;min-height:32px}
+  .chart-indicator-manager .indicator-row [data-indicator-action],.chart-indicator-manager #indicator-visibility-all{opacity:1;pointer-events:auto}
+  .chart-indicator-manager .indicator-name{font-size:10px}
+  .chart-indicator-manager .indicator-value{font-size:11px}
   .atlas-plot .scenario-countdown{top:var(--indicator-top,90px);left:auto;right:9px;width:auto;max-width:calc(100% - 155px);min-width:0;min-height:36px;padding:5px 9px;box-shadow:none;border-radius:5px;background:#14202de8}
   .scenario-countdown .countdown-main{font-size:11px;gap:8px;line-height:1.4}
   .scenario-countdown .countdown-main b{font-size:18px;letter-spacing:-.5px}
@@ -103,7 +103,7 @@
   .indicator-library-item small{font-size:11px}
   .indicator-library-status{font-size:10px}
   .indicator-library footer{padding:10px 16px}
-  .analysis-indicator-windows{left:8px;right:8px;width:auto;max-width:none;top:calc(var(--indicator-top,90px) + 46px);bottom:30px}
+  .analysis-indicator-windows,.atlas-plot[data-countdown-visible=true]>.analysis-indicator-windows{left:8px;right:8px;width:auto;max-width:none;top:calc(var(--indicator-top,90px) + var(--indicator-manager-height,40px) + 8px);bottom:30px}
   .analysis-indicator-window{height:300px;min-height:240px;max-height:68dvh;box-shadow:none}
   .analysis-window-heading{min-height:40px}
   .analysis-window-heading button{min-width:40px;min-height:40px}
@@ -111,5 +111,5 @@
   .chart-context-menu button{min-height:44px;font-size:12px}
 }
 @media (max-width:360px){.atlas-canvas-heading{padding-left:3px;padding-right:3px}.workbench-symbol{font-size:10px;padding-right:2px}#workbench-interval-select{width:54px}.atlas-canvas-heading .workbench-spacer{display:none}}
-@media (max-width:620px) and (max-height:500px){.atlas-canvas-heading{min-height:44px;height:44px}.workbench-bottom{height:42px;min-height:42px;grid-template-rows:40px}.workbench-status,.history-journal{display:none}.chart-indicator-list{max-height:45dvh}.chart-details-panel{inset:6px}.scenario-countdown .countdown-current{display:none}}
+@media (max-width:620px) and (max-height:500px){.atlas-canvas-heading{min-height:44px;height:44px}.workbench-bottom{height:42px;min-height:42px;grid-template-rows:40px}.workbench-status,.history-journal{display:none}.chart-details-panel{inset:6px}.scenario-countdown .countdown-current{display:none}}
 @media (prefers-reduced-motion:reduce){.journal-chevron{transition:none}.chart-indicator-manager,.scenario-countdown,.indicator-library{scroll-behavior:auto}}

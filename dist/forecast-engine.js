@@ -1,5 +1,5 @@
-import { HALVINGS, utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.10.0';
-import { shiftCalendarMonths } from './cycle-timing.js?v=1.10.0';
+import { HALVINGS, utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.10.3';
+import { shiftCalendarMonths } from './cycle-timing.js?v=1.10.3';
 
 /**
  * Conditional scenarios, not a fitted market-price forecasting model.

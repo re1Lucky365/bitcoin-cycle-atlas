@@ -1,0 +1,126 @@
+{
+  "checkedAtUtc": "2026-10-22T14:42:43.544544+00:00",
+  "codeVersion": "1.10.2",
+  "codeCommit": "8587db9083a7fc6ebf9bfa73a6944cb4fb428508",
+  "browser": "Chrome cloud browser; mobile CSS viewport in same-origin iframe, not physical-device emulation",
+  "coreObservedVersion": "1.10.0",
+  "defaultRange": {
+    "start": "2024-10-21",
+    "end": "2028-10-21",
+    "visibleControl": "4년",
+    "readerHidden": true
+  },
+  "indicatorReadouts": {
+    "count": 9,
+    "initialVolume": "Vol 2.22k BTC",
+    "previousDateVolume": "Vol 1.39k BTC",
+    "previousDate": "2026-10-20",
+    "priceChange": "$82,899 +1.2%",
+    "readerRemainedHidden": true
+  },
+  "intraday": {
+    "interval": "1m",
+    "initialBars": 180,
+    "expandedBars": 444,
+    "initialFirstUtc": "2026-10-22T08:53:00Z",
+    "expandedFirstUtc": "2026-10-22T04:29:00Z",
+    "lastUtc": "2026-10-22T11:52:00Z",
+    "lineVisiblePointsAfterZoom": 285,
+    "source": "Coinbase Exchange BTC-USD"
+  },
+  "magnet": {
+    "mode": "strong",
+    "start": {
+      "date": "2026-10-22T07:16:00Z",
+      "field": "C",
+      "price": 82249.69
+    },
+    "end": {
+      "date": "2026-10-22T09:10:00Z",
+      "field": "C",
+      "price": 81710.87
+    },
+    "changeUsd": -538.82,
+    "displayedChangePct": -0.66,
+    "elapsedMinutes": 114,
+    "valuesPreservedAfterZoom": true,
+    "readerRemainedHidden": true
+  },
+  "svgExport": {
+    "file": "figures/v1.10-intraday-export.svg",
+    "width": 1281,
+    "height": 934,
+    "bytes": 231011,
+    "xmlValid": true,
+    "scripts": 0,
+    "externalHrefDependencies": 0,
+    "crosshairRemoved": true,
+    "snapPreviewRemoved": true,
+    "completedMeasurementRetained": true
+  },
+  "mobile": {
+    "checkedViewports": [
+      [
+        320,
+        740
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        844,
+        390
+      ]
+    ],
+    "horizontalOverflow": false,
+    "settingsCloseFocus": "mobile-details-toggle",
+    "indicatorAddThenRemove": [
+      true,
+      false
+    ],
+    "indicatorCloseFocus": "atlas-mode-menu",
+    "researchReturnButtonWorked": true,
+    "finalCssVerification": {
+      "version": "1.10.2",
+      "viewports": [
+        [
+          390,
+          844
+        ],
+        [
+          320,
+          740
+        ]
+      ],
+      "ohlcVisible": true,
+      "readoutWidths": [
+        370,
+        300
+      ],
+      "readoutBottom": 108,
+      "sourceTop": 111,
+      "observedBadgeHidden": true,
+      "navigationNames": [
+        "통합 차트",
+        "리서치 자료",
+        "원자료"
+      ]
+    }
+  },
+  "ci": {
+    "run": 39796452151,
+    "url": "https://github.com/twoimo/bitcoin-cycle-atlas/actions/runs/39796452151",
+    "job": 119884730622,
+    "testFiles": 36,
+    "logChecksCompleted": true
+  },
+  "pages": {
+    "run": 39796452308,
+    "url": "https://github.com/twoimo/bitcoin-cycle-atlas/actions/runs/39796452308",
+    "deployJob": 119886901345,
+    "status": "success confirmed in deploy log",
+    "createdDeploymentAtUtc": "2026-10-22T14:42:39.0069434Z",
+    "reportedSuccessAtUtc": "2026-10-22T14:42:52.4420240Z"
+  }
+}
