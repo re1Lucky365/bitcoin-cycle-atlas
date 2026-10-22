@@ -102,7 +102,8 @@ $$
 | [실제 OHLC 방법](docs/OHLC_CHART_METHOD.md) / [일·주 거래량 검증](docs/VOLUME_METHOD.md) | Coinbase 분·시간, Bitstamp 일·주 공급자·완료 봉·집계·공백·실패 처리 |
 | [거래량 모형](docs/VOLUME_FORECAST_MODEL.md) / [문헌 대조](docs/VOLUME_FORECAST_RESEARCH.md) | 조건부 미래 수량·순차 검증·기준선 선택·불확실성의 범위 |
 | [역사 사건 조사](docs/BITCOIN_EVENTS_RESEARCH.md) | 43개 사건·관세 4개·날짜 해석·원문·편집 우선순위 |
-| [작업공간 검증](docs/WORKBENCH_VERIFICATION.md) / [TradingView 조사](docs/TRADINGVIEW_DEEP_AUDIT.md) | 자동 검사와 실제 브라우저 관측, 공개 접근 범위와 남은 검증 |
+| [v1.9 통합 검증](docs/INDICATOR_WORKSPACE_VERIFICATION.md) / [성능 측정](docs/CHART_PERFORMANCE.md) | 인디케이터·패널 선택·D-day·사이클 보정·실제 브라우저 및 자동 검사 |
+| [이전 작업공간 검증](docs/WORKBENCH_VERIFICATION.md) / [TradingView 조사](docs/TRADINGVIEW_DEEP_AUDIT.md) | v1.8의 브라우저 관측과 공개 접근 범위; 현재 인디케이터 검수는 위 v1.9 기록 참조 |
 | [장기 모형](dist/long-horizon-forecast.js) / [출처 원장](dist/long-horizon-evidence.js) | 표시 종료일·연도별 가정·발행량과 출처 메타데이터 |
 | [시장 자료 제어](dist/market-data-controller.js) / [OHLC 처리](dist/ohlc-data.js) | 요청 취소·저장 자료·수치 검증·집계 |
 | [사이클 보정](dist/cycle-calibration.js) / [일별 산출물](dist/data/cycle-calibration.json) / [D-day](dist/scenario-countdown.js) | 관측 접두 구간의 시점 보정·미래 경로 적용·다음 지속 상태 |
