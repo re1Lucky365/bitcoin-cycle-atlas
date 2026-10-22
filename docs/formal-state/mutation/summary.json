@@ -1,0 +1,31 @@
+{
+  "view": "customer",
+  "second": {
+    "role": "fix",
+    "label": "the existing guard",
+    "lacks": []
+  },
+  "modelStates": 3005,
+  "modelTransitions": 7818,
+  "chartStates": 7,
+  "chartTransitions": 9,
+  "chartStatus": {
+    "works": 6,
+    "wrong": 0,
+    "fixed": 1
+  },
+  "classes": [
+    {
+      "n": 1,
+      "end": "Cancelled request replaced chart",
+      "invariant": "NoStaleDisplay",
+      "rule": "A canceled or replaced request must never supply a displayed chart.",
+      "cause": "A saved response returns after cancellation without checking who owns the request",
+      "readerSteps": 4,
+      "modelSteps": 5,
+      "counterexamples": 774,
+      "fix": "Loading candles"
+    }
+  ],
+  "codeLike": []
+}

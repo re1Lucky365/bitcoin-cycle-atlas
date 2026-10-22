@@ -1,5 +1,5 @@
-import { HALVINGS, utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.10.4';
-import { shiftCalendarMonths } from './cycle-timing.js?v=1.10.4';
+import { HALVINGS, utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.10.5';
+import { shiftCalendarMonths } from './cycle-timing.js?v=1.10.5';
 
 /**
  * Conditional scenarios, not a fitted market-price forecasting model.
@@ -156,7 +156,7 @@ function analoguePaths(rows, state, { horizonDays, reversalPct }) {
       if (!source) { missingDate = sourceDate; break; }
       path.push({
         date: addDays(current.date, horizonDay), horizonDay,
-        price: current.price * source.price / base.price,
+        price: current.price * (source.price / base.price),
         sourceDate, kind: horizonDay ? 'conditional-analogue' : 'observed-anchor',
       });
     }
@@ -233,7 +233,7 @@ export function interpolateLogAnchors(anchors, { stepDays = 14 } = {}) {
     const point = anchors[index];
     utcDay(point.date);
     if (![point.price, point.low ?? point.price, point.high ?? point.price].every((value) => Number.isFinite(value) && value > 0)) throw new TypeError('Log-price anchors must be positive and finite');
-    if (point.low !== undefined && point.high !== undefined && !(point.low <= point.price && point.price <= point.high)) throw new RangeError('Anchor price must be inside its sensitivity band');
+    if (!((point.low ?? point.price) <= point.price && point.price <= (point.high ?? point.price))) throw new RangeError('Anchor price must be inside its sensitivity band');
     if (index && point.date <= anchors[index - 1].date) throw new TypeError('Anchor dates must be strictly increasing');
   }
   const path = [];
@@ -396,6 +396,7 @@ export function backtestAnalogueForecast(input, {
   if (!(reversalPct > 0 && reversalPct < 100)) throw new RangeError('reversalPct must be between 0 and 100');
   if (!Array.isArray(cutoffs) || new Set(cutoffs).size !== cutoffs.length) throw new TypeError('Replay cutoffs must be an array of distinct dates');
   if (!Array.isArray(horizons) || !horizons.length || horizons.some((value) => !Number.isSafeInteger(value) || value < 1)) throw new RangeError('Replay horizons must be positive integer days');
+  if (new Set(horizons).size !== horizons.length) throw new RangeError('Replay horizons must be distinct');
   const rows = validateDataset(input);
   const outcomeLimit = rows.at(-1).date < validationEnd ? rows.at(-1).date : validationEnd;
   const outcomes = new Map(rows.filter((row) => row.date <= outcomeLimit).map((row) => [row.date, row]));
@@ -447,15 +448,15 @@ export function backtestAnalogueForecast(input, {
     samples, summary, excluded, numberOfDistinctCutoffs: samples.length,
     validationEnd: outcomeLimit, requestedValidationEnd: validationEnd,
     forecastsUseOnlyCutoffPrefix: true,
-    currentCycleIncluded: false,
+    currentCycleIncluded: samples.some(sample => sample.results.some(result => result.outcomeDate >= '2025-01-01')),
     testedModel: 'Undiscounted historical analogue returns; geometric mean across available analogues, compared with unchanged current price.',
-    notTested: ['730-day performance', 'macro event dates', 'log-growth alpha choices', 'future peak/trough prices', 'calibrated interval coverage'],
+    notTested: [...(samples.some(sample => sample.results.some(result => result.horizonDays === 730)) ? [] : ['730-day performance']), 'macro event dates', 'log-growth alpha choices', 'future peak/trough prices', 'calibrated interval coverage'],
     limits: [
-      'Only two retrospectively selected post-decline cutoffs; no significance test or predictive-probability claim.',
-      'The 90/180/365-day horizons share the same two regimes and are not six independent trials.',
+      `${samples.length} evaluated cutoff(s); the origin selection is retrospective, with no significance test or predictive-probability claim.`,
+      'Horizons from the same origin overlap. Changing the origin or horizon count does not create independent market cycles.',
       'Past reference cycle extrema are selected retrospectively, although each selection window was completed before its replay cutoff.',
       'Current low candidates are computed from each cutoff prefix, not replaced by later-known lows.',
-      'No outcome from 2025 onward enters the default evaluation. The current cycle is not used as a validation example.',
+      'The default evaluation excludes outcomes from 2025 onward. Custom cutoffs or a later validation ceiling can include them; currentCycleIncluded reports whether any were actually scored.',
     ],
   };
 }

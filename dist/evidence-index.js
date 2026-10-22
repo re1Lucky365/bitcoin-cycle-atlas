@@ -1,7 +1,7 @@
-import { CRYPTOCON_EVIDENCE } from './cryptocon-evidence.js?v=1.10.4';
-import { EVIDENCE, EVIDENCE_SUPPLEMENTS } from './evidence-catalog.js?v=1.10.4';
-import { STRUCTURE_EVIDENCE, STRUCTURE_EVIDENCE_SUPPLEMENTS } from './structure-evidence.js?v=1.10.4';
-import { LONG_HORIZON_CLAIMS } from './long-horizon-evidence.js?v=1.10.4';
+import { CRYPTOCON_EVIDENCE } from './cryptocon-evidence.js?v=1.10.5';
+import { EVIDENCE, EVIDENCE_SUPPLEMENTS } from './evidence-catalog.js?v=1.10.5';
+import { STRUCTURE_EVIDENCE, STRUCTURE_EVIDENCE_SUPPLEMENTS } from './structure-evidence.js?v=1.10.5';
+import { LONG_HORIZON_CLAIMS } from './long-horizon-evidence.js?v=1.10.5';
 
 const longHorizonEvidence = LONG_HORIZON_CLAIMS.map(claim => ({
   id: `long-${claim.id}`, title: claim.title, originalTitle: claim.sourceLocator,

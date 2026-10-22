@@ -30,6 +30,8 @@ jobs:
           package-manager-cache: false
       - name: Test release source
         run: npm test
+      - name: Verify bounded request ownership and negative controls
+        run: npm run verify:formal
       - name: Verify and package release assets
         env:
           RELEASE_TAG: ${{ github.ref_name }}

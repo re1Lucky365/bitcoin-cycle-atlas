@@ -70,6 +70,8 @@ jobs:
         run: node scripts/refresh-volume.mjs
       - name: Test code, fixed research fixtures and refreshed source data
         run: npm test
+      - name: Verify bounded request ownership and negative controls
+        run: npm run verify:formal
       - name: Verify regenerated calibration and chart complexity budgets
         run: |
           npm run verify:cycle

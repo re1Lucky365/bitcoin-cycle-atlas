@@ -1,28 +1,28 @@
-import { drawAtlasPriceChart as drawChart } from './atlas-price-chart.js?v=1.10.4';
-import { renderCryptoConAudit } from './cryptocon-audit.js?v=1.10.4';
-import { bindChartNavigation, panRange } from './chart-navigation.js?v=1.10.4';
-import { renderAtlasAnalysis } from './atlas-analysis.js?v=1.10.4';
-import { ANALYSIS_MODES, analysisCalendarDate, shouldPublishInspection, analysisSelectionSummary } from './analysis-dock.js?v=1.10.4';
-import { INDICATORS, readIndicatorState, writeIndicatorState, changeIndicatorState, isIndicatorVisible, visibleAnalysisIds } from './indicator-state.js?v=1.10.4';
-import { preparePriceViewData } from './price-view-data.js?v=1.10.4';
-import { chartSelectionHandler } from './inspection-policy.js?v=1.10.4';
-import { buildScenarioCountdown, koreanCalendarDate } from './scenario-countdown.js?v=1.10.4';
-import { buildLongHorizonForecast } from './long-horizon-forecast.js?v=1.10.4';
-import { longHorizonMethodMarkup } from './long-horizon-view.js?v=1.10.4';
-import { CHART_INTERVALS, chartInterval, isIntradayInterval } from './ohlc-data.js?v=1.10.4';
-import { drawIntradayChart } from './intraday-chart.js?v=1.10.4';
-import { createMarketDataController, marketStatusText } from './market-data-controller.js?v=1.10.4';
-import { parseVolumeSnapshot, aggregateWeeklyVolume } from './volume-data.js?v=1.10.4';
-import { fitVolumeForecastModel, projectVolumeForecast } from './volume-forecast.js?v=1.10.4';
-import { BITCOIN_EVENTS } from './bitcoin-events.js?v=1.10.4';
-import { historicalEventDetail } from './research-workbench.js?v=1.10.4';
-import { formatBtcVolume } from './chart-overlays.js?v=1.10.4';
-import { analyzeMarketStructure, computeRollingStates, detectDirectionalChanges, STATE_LABELS } from './market-structure.js?v=1.10.4';
-import { utcDay, dateFromDay } from './cycle-engine.js?v=1.10.4';
-import { shiftCalendarMonths } from './cycle-timing.js?v=1.10.4';
-import { chartPresetRange, DEFAULT_CHART_SPAN, CHART_SPANS } from './chart-presets.js?v=1.10.4';
-import { createChartSvgExport } from './chart-export.js?v=1.10.4';
-import { clearChartHover } from './chart-hover.js?v=1.10.4';
+import { drawAtlasPriceChart as drawChart } from './atlas-price-chart.js?v=1.10.5';
+import { renderCryptoConAudit } from './cryptocon-audit.js?v=1.10.5';
+import { bindChartNavigation, panRange } from './chart-navigation.js?v=1.10.5';
+import { renderAtlasAnalysis } from './atlas-analysis.js?v=1.10.5';
+import { ANALYSIS_MODES, analysisCalendarDate, shouldPublishInspection, analysisSelectionSummary } from './analysis-dock.js?v=1.10.5';
+import { INDICATORS, readIndicatorState, writeIndicatorState, changeIndicatorState, isIndicatorVisible, visibleAnalysisIds } from './indicator-state.js?v=1.10.5';
+import { preparePriceViewData } from './price-view-data.js?v=1.10.5';
+import { chartSelectionHandler } from './inspection-policy.js?v=1.10.5';
+import { buildScenarioCountdown, koreanCalendarDate } from './scenario-countdown.js?v=1.10.5';
+import { buildLongHorizonForecast } from './long-horizon-forecast.js?v=1.10.5';
+import { longHorizonMethodMarkup } from './long-horizon-view.js?v=1.10.5';
+import { CHART_INTERVALS, chartInterval, isIntradayInterval } from './ohlc-data.js?v=1.10.5';
+import { drawIntradayChart } from './intraday-chart.js?v=1.10.5';
+import { createMarketDataController, marketStatusText } from './market-data-controller.js?v=1.10.5';
+import { parseVolumeSnapshot, aggregateWeeklyVolume } from './volume-data.js?v=1.10.5';
+import { fitVolumeForecastModel, projectVolumeForecast } from './volume-forecast.js?v=1.10.5';
+import { BITCOIN_EVENTS } from './bitcoin-events.js?v=1.10.5';
+import { historicalEventDetail } from './research-workbench.js?v=1.10.5';
+import { formatBtcVolume } from './chart-overlays.js?v=1.10.5';
+import { analyzeMarketStructure, computeRollingStates, detectDirectionalChanges, STATE_LABELS } from './market-structure.js?v=1.10.5';
+import { utcDay, dateFromDay } from './cycle-engine.js?v=1.10.5';
+import { shiftCalendarMonths } from './cycle-timing.js?v=1.10.5';
+import { chartPresetRange, DEFAULT_CHART_SPAN, CHART_SPANS } from './chart-presets.js?v=1.10.5';
+import { createChartSvgExport } from './chart-export.js?v=1.10.5';
+import { clearChartHover } from './chart-hover.js?v=1.10.5';
 
 const $ = (selector) => document.querySelector(selector);
 const esc = (value) => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -66,7 +66,7 @@ export function initLabView() {
   const query=new URLSearchParams(location.search);
   const valid=(name,values,fallback)=>values.includes(query.get(name))?query.get(name):fallback;
   const state={dataset:null,base:null,analysis:null,models:new Map(),futureStates:new Map(),visible:false,compareVisible:false,scenario:valid('assumption',['base','accelerated','wait','late','stress'],'base'),frequency:valid('granularity',['daily','weekly'],'daily'),scale:valid('axis',['log','linear'],'log'),tool:'crosshair',magnet:valid('magnet',['off','weak','strong'],'off'),measurement:null,unit:'usd',window:valid('span',CHART_SPANS,DEFAULT_CHART_SPAN),atlasMode:'price',cryptoView:'timing',atlasAlignment:valid('align',['trough','calendar','halving'],'trough'),atlasPeriod:valid('interval',['monthly','quarterly'],'monthly'),atlasMetric:valid('measure',['returnPct','maxDrawdownPct','realizedVolPct','discoveryDays'],'returnPct'),atlasPhase:valid('phase',['macro','bull','bear'],'macro'),atlasScope:valid('scope',['recent','all'],'recent'),selectedDate:null,methodKey:null,selectedEvent:null,eventMode:'macro',eventPage:0,structureFrequency:'weekly',scope:'all',threshold:.12,alignment:'calendar',period:'monthly',periodPage:0,pending:false};
-  function fail(error){console.error('Detailed research workspace',error);$('#lab-error').hidden=false;$('#lab-error').textContent='분석을 계산하지 못했습니다. 원자료와 계산 결과를 확인해 주세요.';}
+  function fail(error){console.error('Detailed research workspace',error);$('#lab-error').hidden=false;$('#lab-error').textContent='분석을 계산하지 못했습니다. 원자료와 계산 결과를 확인해 주세요.';document.dispatchEvent(new CustomEvent('atlas:boot-error'));}
   state.indicators=readIndicatorState(query);
   state.atlasMode='price';state.analysisMode=state.indicators.active;state.analysisOpen=visibleAnalysisIds(state.indicators).length>0;state.priceController=null;state.analysisController=null;state.inspectionOwner='price';state.lastAnalysisDetail=null;state.lastPriceDetail=null;state.lastCountdownInspection=null;
   state.analysisControllers=new Map();state.analysisDetails=new Map();state.analysisRenderKeys=new Map();state.analysisDataset=null;
@@ -323,6 +323,7 @@ export function initLabView() {
       document.dispatchEvent(new CustomEvent('atlas:workbench-state',{detail:{mode:'price',analysisMode:state.analysisMode,analysisOpen:state.analysisOpen,countdown:countdownFor(m),inspectionOwner:state.inspectionOwner,historicalEventsVisible:$('#atlas-history-events').checked&&!intraday,historicalLabelMeta:{mode:historyLabels.historyLabelMode,labels:Number(historyLabels.historyLabelCount||0),total:Number(historyLabels.historyEventCount||0),hidden:Number(historyLabels.historyHiddenLabelCount||0)},scenario:state.scenario,frequency:state.frequency,chartType:state.chartType,intraday,asOf:m.asOf,intervalLabel:chartInterval(state.frequency).label,marketSeries:market?.series,volumeMeta:volumeMetadata(),volumeForecast:state.volumeProjection?{status:state.volumeProjection.status,reason:state.volumeProjection.reason,summary:state.volumeProjection.summary,annual:state.volumeProjection.annual,diagnostics:state.volumeProjection.diagnostics}:null,volumeError:volumeState.error,marketStatus:intraday?marketStatusText(market):volumeState.series?`${state.chartType==='candles'?'캔들·거래량':'거래량'} · Bitstamp BTC/USD · ${volumeState.series.retrievedAt.slice(0,16).replace('T',' ')} UTC 수집${state.chartType==='line'?' · 가격선 Coin Metrics':''}`:volumeState.error?'거래량 조회 실패 · 가격선은 이용 가능':'거래량 자료 불러오는 중',marketLoading:intraday?(market?.status==='loading'||market?.historyStatus==='loading'):volumeState.status==='loading',navigationAvailable:Boolean(state.chartRange),scale:state.scale,tool:state.tool,magnet:state.magnet,measurement:state.measurement,window:state.window,customRange:Boolean(intraday?state.marketRange:state.priceRange),start:state.chartRange?.start,end:state.chartRange?.end,next}}));
       if(state.openEventPanel){state.openEventPanel=false;const chart=$('#lab-chart');chart.focus({preventScroll:true});document.dispatchEvent(new CustomEvent('atlas:open-detail',{detail:{kind:'selection',focus:false,opener:chart}}));}
       if(focusId)document.getElementById(focusId)?.focus({preventScroll:true});else if(focusEventId)document.querySelector(`[data-atlas-event="${focusEventId}"]`)?.focus({preventScroll:true});
+      document.dispatchEvent(new CustomEvent('atlas:page-ready',{detail:{page:'outlook'}}));
     }catch(error){fail(error);}
   }
   function focusHistoricalEvent(id,zoom=true){
@@ -387,6 +388,7 @@ export function initLabView() {
       drawChart({svg:$('#structure-chart'),tooltip:$('#structure-tooltip'),rows:b.rows,start,end:actualEnd,frequency:state.structureFrequency,stateStepDays:state.structureFrequency==='weekly'?7:1,states:rolling.points,turns:dc.pivots.map(p=>({date:p.eventDate,price:p.eventPrice,type:p.type,confirmationDate:p.confirmationDate})),historical:true,showStates:true,threshold:state.threshold});
       $('#structure-legend').innerHTML=Object.entries(STATE_LABELS).filter(([k])=>k!=='warmup').map(([k,v])=>`<span><i style="background:${COLORS[k]}"></i>${esc(v)}</span>`).join('');
       drawTimeline(a,rolling.points);renderCycleTable(a);renderPeriods(a);renderStructureDetails(a);
+      document.dispatchEvent(new CustomEvent('atlas:page-ready',{detail:{page:'compare'}}));
     }catch(error){fail(error);}
   }
   function cycles(a){return Array.isArray(a.macroCycles)?a.macroCycles:(a.macroCycles?.cycles||[]);}
@@ -417,7 +419,7 @@ export function initLabView() {
     $('#structure-durations').innerHTML=`<h3>상승 구간 내부의 국면 일수 · 일별 분류</h3><p>이 표는 일별 분류 기준이며 위 주봉 토글과 별도입니다. 각 날짜에 이미 알려진 값으로 국면을 분류합니다. 신고가 발견은 당시까지의 최고 종가 갱신을 뜻합니다. ‘저점 형성 조건’은 미래의 최종 저점 판정이 아닙니다.</p>${simpleTable(['국면',...cs.map(c=>String(c.peakYear))],states.map(s=>[STATE_LABELS[s],...cs.map(c=>{const v=c.stateSummary?.bull?.stateCounts?.[s];return v==null?'—':`${v}일`})]))}<h3>8% · 12% · 20%, 일봉 · 주봉</h3><p>방향 전환을 확인하는 임계값이 커지면 작은 조정이 합쳐지고, 주봉으로 바꾸면 확인이 늦어집니다. 한 임계값에서 얻은 짧아짐을 전체 주기의 법칙으로 일반화하지 않습니다. 완료된 구간의 중앙 기간과 미완료 구간을 분리한 결과를 제공합니다.</p>${simpleTable(['간격','확인 임계값','확인 전환점','스윙 중앙 길이','확인 지연 중앙값'],(a.sensitivity||[]).map(s=>[s.frequency==='daily'?'일봉':'주봉',nf(s.threshold*100)+'%',nf(s.confirmedPivotCount),nf(s.medianConfirmedLegDays)+'일',nf(s.medianConfirmationLagDays)+'일']))}<p><a href="${REPORT_ROOT}MARKET_STRUCTURE_METHOD.md" target="_blank" rel="noopener noreferrer">국면별 기간 · 민감도 검증 ↗</a> &nbsp; <a href="${REPORT_ROOT}MARKET_STRUCTURE_RESULTS.json" target="_blank" rel="noopener noreferrer">8·12·20% 전체 계산값 ↗</a></p>`;
     const f=a.fibonacci||{},fc=f.completedCycleComparison||{},matched=f.matchedCompletedTouches||{};
     $('#structure-fibonacci').innerHTML=`<h3>피보나치가 특별한가</h3>${simpleTable(['완료된 사이클 · 선형 가격','되돌림 거부','완전 추적 표본','비율'],[['피보나치 계열',nf(fc.fibonacci?.rejected),nf(fc.fibonacci?.completedTouches),pct(fc.fibonacci?.rejectionRatePct)],['대조 비율',nf(fc.control?.rejected),nf(fc.control?.completedTouches),pct(fc.control?.rejectionRatePct)]])}<p>이미 확인된 두 방향 전환점으로 스윙을 고정한 뒤 되돌림을 관찰합니다. 23.6·38.2·50·61.8·78.6%를 20·35·45·65·80% 대조 비율과 같은 조건에서 비교합니다. 50%는 관습적으로 포함되는 비율이며 피보나치 수열에서 직접 나온 값은 아닙니다.</p><div class="lab-formula">상승 스윙 되돌림: F(r) = H − r(H − L)<br>하락 스윙 반등: F(r) = L + r(H − L)</div><p>기준점이 확인되기 전의 돌파는 검증 표본에 넣지 않습니다. 가격이 비율에 닿았다는 사실만으로 저항이나 예측력이 입증되지 않습니다. 같은 스윙의 여러 비율은 독립 표본이 아니며, 중첩된 사건과 여러 임계값을 시험한 효과도 남습니다.</p><p><a href="${REPORT_ROOT}MARKET_STRUCTURE_METHOD.md#피보나치" target="_blank" rel="noopener noreferrer">대조검증 결과와 판정 규칙 ↗</a></p>${simpleTable(['간격','반전 임계값','가격 눈금','사이클 평균 차이'],(f.sensitivity||[]).map(s=>[s.frequency==='daily'?'일봉':'주봉',nf(s.threshold*100)+'%',s.scale==='linear'?'선형':'로그',pct(s.completedCycleComparison?.meanCycleDifferencePercentagePoints,2)+'p']))}<p class="lab-small-note">비율 간 차이는 기술 통계입니다. 표본은 완료된 세 사이클이며, 독립 표본처럼 일수나 접촉 수를 늘려 유의확률을 계산하지 않았습니다.</p>`;
-    $('#structure-method').innerHTML=`<h3>서로 다른 네 가지 시간</h3><p>① 고정 달력 4년 ② 사후 저점→고점→다음 저점 ③ 당시에 알 수 있었던 국면의 길이 ④ 고저점 발생 후 확인까지의 지연을 따로 계산합니다. 첫 자료는 2010-07-18이며, 2010년 전체나 2009년은 관측하지 않았습니다.</p><div class="lab-formula">r(t) = log[P(t)/P(t−1)]<br>DD(t) = P(t)/max P(s≤t) − 1<br>MDD[a,b] = min(P(t)/max{P(a−1),…,P(t)} − 1)<br>RV = sd(r) × √365<br>β̂ = median{(기간ⱼ−기간ᵢ)/(사이클ⱼ−사이클ᵢ)}</div><p>월·분기 MDD는 전기 마지막 관측 종가를 시작 고점에 포함합니다. 수익률은 전기 종가 대비, 변동성은 일별 로그수익률의 연율화입니다. 일말 가격으로 계산한 지표이므로 실제 장중 최대 낙폭보다 작을 수 있습니다. 주봉의 고가·저가는 일말 가격의 최댓값·최솟값입니다.</p><h3>날짜를 바꾸는 가격 제공자 차이</h3><p>2022년 11월 Coin Metrics의 최저 일말 가격은 11월 9일이고 Coinbase의 최저 종가는 11월 21일입니다. Coin Metrics에서 두 날짜 가격 차이는 약 0.125%입니다. 2021년 최고 종가는 두 제공자 모두 11월 8일, Coinbase 장중 최고가는 11월 10일입니다. 전환일을 하루 단위 확정 사실로 과도하게 해석하지 않습니다.</p><p><a href="${REPORT_ROOT}STRUCTURE_CROSS_VALIDATION.md" target="_blank" rel="noopener noreferrer">원자료 대조 · 이슈 · X/레딧/보고서 교차 검증 ↗</a></p>`;
+    $('#structure-method').innerHTML=`<h3>서로 다른 네 가지 시간</h3><p>① 고정 달력 4년 ② 사후 저점→고점→다음 저점 ③ 당시에 알 수 있었던 국면의 길이 ④ 고저점 발생 후 확인까지의 지연을 따로 계산합니다. 첫 자료는 2010-07-18이며, 2010년 전체나 2009년은 관측하지 않았습니다.</p><div class="lab-formula">r(t) = log[P(t)/P(t−1)]<br>DD(t) = P(t)/max P(s≤t) − 1<br>MDD[a,b] = min(P(t)/max{기간 내 P(s≤t), 연속된 전일 종가} − 1)<br>RV = sd(r) × √365<br>β̂ = median{(기간ⱼ−기간ᵢ)/(사이클ⱼ−사이클ᵢ)}</div><p>월·분기 MDD는 새 기간 첫 관측의 바로 전날 종가가 있을 때만 그 값을 시작 고점에 포함합니다. 경계 종가가 누락되면 기간 수익률을 계산하지 않고, MDD는 기간 안의 관측만 사용합니다. 변동성은 연속된 일별 로그수익률의 연율화입니다. 일말 가격으로 계산한 지표이므로 실제 장중 최대 낙폭보다 작을 수 있습니다. 주봉의 고가·저가는 일말 가격의 최댓값·최솟값입니다.</p><h3>날짜를 바꾸는 가격 제공자 차이</h3><p>2022년 11월 Coin Metrics의 최저 일말 가격은 11월 9일이고 Coinbase의 최저 종가는 11월 21일입니다. Coin Metrics에서 두 날짜 가격 차이는 약 0.125%입니다. 2021년 최고 종가는 두 제공자 모두 11월 8일, Coinbase 장중 최고가는 11월 10일입니다. 전환일을 하루 단위 확정 사실로 과도하게 해석하지 않습니다.</p><p><a href="${REPORT_ROOT}STRUCTURE_CROSS_VALIDATION.md" target="_blank" rel="noopener noreferrer">원자료 대조 · 이슈 · X/레딧/보고서 교차 검증 ↗</a></p>`;
   }
   const schedule=()=>{if(state.pending)return;state.pending=true;requestAnimationFrame(()=>{state.pending=false;drawOutlook();drawStructure();});};
   const scheduleAnalysis=()=>{if(state.analysisPending)return;state.analysisPending=true;requestAnimationFrame(()=>{state.analysisPending=false;if(!state.dataset||!state.visible)return;drawAnalysisIndicators();updateNavigation();syncAtlasUrl();});};

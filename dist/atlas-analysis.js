@@ -1,8 +1,8 @@
 /** Observed-data charts for the unified workspace; no forecast mathematics here. */
-import { getMacroCycles, aggregateCloseBars, computeRollingStates, STATE_LABELS } from './market-structure.js?v=1.10.4';
-import { analyzePeakZones } from './peak-zones.js?v=1.10.4';
-import { utcDay, dateFromDay, getAnchors } from './cycle-engine.js?v=1.10.4';
-import { shiftCalendarMonths } from './cycle-timing.js?v=1.10.4';
+import { getMacroCycles, aggregateCloseBars, computeRollingStates, STATE_LABELS } from './market-structure.js?v=1.10.5';
+import { analyzePeakZones } from './peak-zones.js?v=1.10.5';
+import { utcDay, dateFromDay, getAnchors } from './cycle-engine.js?v=1.10.5';
+import { shiftCalendarMonths } from './cycle-timing.js?v=1.10.5';
 
 const cache = new WeakMap();
 const selections = new WeakMap();
@@ -223,8 +223,8 @@ function renderPhases({svg,dataset,phaseLeg,onInspect}) {
 }
 
 const METRICS={
-  returnPct:{label:'기간 수익률',unit:'%',description:'전기 마지막 가격에서 이번 기간 마지막 가격까지의 변화입니다.'},
-  maxDrawdownPct:{label:'기간 중 가장 큰 하락',unit:'%',description:'기간 내 앞선 고점에서 이후 저점까지 가장 크게 떨어진 비율입니다. 전기 마지막 가격을 포함합니다.'},
+  returnPct:{label:'기간 수익률',unit:'%',description:'연속된 전기 마지막 가격에서 이번 기간 마지막 가격까지의 변화입니다. 기간 경계의 종가가 누락되면 계산하지 않습니다.'},
+  maxDrawdownPct:{label:'기간 중 가장 큰 하락',unit:'%',description:'기간 내 관측된 앞선 고점에서 이후 저점까지 가장 크게 떨어진 비율입니다. 바로 전날의 전기 마지막 가격이 있을 때 포함합니다.'},
   realizedVolPct:{label:'가격 흔들림',unit:'%',description:'일별 수익률의 흔들림을 연간 기준으로 환산한 값입니다. 상승 방향이나 손실 확률을 뜻하지 않습니다.'},
   discoveryDays:{label:'새 최고가를 기록한 날',unit:'일',description:'해당 날짜까지 관측한 최고 일말 가격을 새로 넘은 날의 수입니다.'},
 };

@@ -70,6 +70,40 @@ test('display reduction never connects across a candle-covered run', () => {
   assert.deepEqual(runs.map(run => run.map(row => row.index)), [[0], [2, 3]]);
 });
 
+test('observed daily and weekly price lines retain calendar gaps before display sampling', () => {
+  // All Sundays exist. A missing Tuesday must not disappear when selecting
+  // weekly closes, or the chart would imply an uninterrupted observed path.
+  const rows = data(28).filter(row => row.date !== at(10));
+  for (const frequency of ['daily', 'weekly']) {
+    const svg = svgFixture();
+    drawAtlasPriceChart({ svg, rows, start: at(0), end: at(27), split: at(27), frequency, showDrawdown: true, showHistoricalEvents: false });
+    const closePath = svg.innerHTML.match(/class="observed-close-line" d="([^"]*)"/)[1];
+    assert.equal((closePath.match(/M/g) || []).length, 2, `${frequency} closes must break at the missing day`);
+    const drawdownPath = svg.innerHTML.match(/<path d="([^"]*)"[^>]*stroke="#a7b8cd"/)[1];
+    assert.equal((drawdownPath.match(/M/g) || []).length, 2, `${frequency} drawdowns must preserve the same gap`);
+  }
+});
+
+test('identical market-state labels on both sides of a gap remain separate observations', () => {
+  const rows = data(6).filter(row => row.date !== at(2));
+  const states = rows.map(row => ({ date: row.date, state: 'range' }));
+  const svg = svgFixture();
+  drawAtlasPriceChart({ svg, rows, states, start: at(0), end: at(5), split: at(5), showStates: true, showDrawdown: false, showHistoricalEvents: false });
+  const rectangles = [...svg.innerHTML.matchAll(/<rect x="([^"]+)"[^>]*width="([^"]+)"[^>]*fill="#93a1b1"/g)];
+  assert.equal(rectangles.length, 2, 'a missing day cannot inherit a market-state label');
+  assert.ok(Number(rectangles[0][1]) + Number(rectangles[0][2]) < Number(rectangles[1][1]), 'the missing state has a visible gap');
+});
+
+test('isolated observations remain visible as points without connecting missing dates', () => {
+  const rows = data(7).filter((_, index) => index % 3 === 0);
+  const svg = svgFixture();
+  drawAtlasPriceChart({ svg, rows, start: at(0), end: at(6), split: at(6), showDrawdown: true, showHistoricalEvents: false });
+  assert.equal((svg.innerHTML.match(/class="observed-close-point"/g) || []).length, 3);
+  assert.equal((svg.innerHTML.match(/class="observed-drawdown-point"/g) || []).length, 3);
+  const closePath = svg.innerHTML.match(/class="observed-close-line" d="([^"]*)"/)[1];
+  assert.equal((closePath.match(/L/g) || []).length, 0);
+});
+
 test('small-window chart redraw and ruler preview do not scan the full source series', () => {
   const source = data(65536), counter = counted(source), svg = svgFixture(), start = source[30000].date, end = source[30089].date;
   drawAtlasPriceChart({ svg, rows: counter.rows, start, end, split: end, showDrawdown: false, showHistoricalEvents: false, tool: 'measure', measurement: { startDate: start, endDate: null } });

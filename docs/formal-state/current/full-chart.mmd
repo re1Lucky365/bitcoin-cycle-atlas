@@ -1,0 +1,45 @@
+---
+title: "Candle request transitions: all projected edges"
+config:
+  markdownAutoWrap: false
+  state:
+    useMaxWidth: false
+---
+stateDiagram-v2
+  %% labels in full
+  classDef works fill:#f4f6f7,stroke:#566573,color:#1b2631
+  classDef wrong fill:#fdedec,stroke:#c0392b,color:#7b241c
+  classDef fixed fill:#e9f7ef,stroke:#1e8449,color:#145a32
+  classDef worksPath fill:#f4f6f7,stroke:#1f3a93,stroke-width:4px,color:#1b2631
+  classDef wrongPath fill:#fdedec,stroke:#1f3a93,stroke-width:4px,color:#7b241c
+  classDef fixedPath fill:#e9f7ef,stroke:#1f3a93,stroke-width:4px,color:#145a32
+  state "Legend" as legend {
+    state "Works" as legendWorks
+  }
+  class legendWorks works
+  state "Candle request failed" as s0
+  state "Live candles displayed" as s1
+  state "Loading candles" as s2
+  state "No candles loaded" as s3
+  state "Reading saved candles" as s4
+  state "Saved candles displayed" as s5
+  [*] --> s3
+  s3 --> s2 : change interval or refresh or<br/>open candle chart
+  s2 --> s3 : cancel candle request
+  s2 --> s1 : exchange candles arrive or<br/>cancel candle request
+  s2 --> s4 : exchange fails, read saved<br/>candles
+  s1 --> s2 : change interval or refresh
+  s4 --> s2 : change interval or refresh
+  s4 --> s3 : cancel candle request
+  s4 --> s5 : saved candles arrive or cancel<br/>candle request
+  s4 --> s0 : saved candles fail
+  s5 --> s2 : change interval or refresh
+  s0 --> s2 : change interval or refresh
+  s4 --> s1 : cancel candle request
+  s2 --> s5 : cancel candle request
+  class s0 works
+  class s1 works
+  class s2 works
+  class s3 works
+  class s4 works
+  class s5 works

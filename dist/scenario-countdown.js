@@ -1,4 +1,4 @@
-import { utcDay, dateFromDay } from './cycle-engine.js?v=1.10.4';
+import { utcDay, dateFromDay } from './cycle-engine.js?v=1.10.5';
 
 /** Daily state labels describe one conditional price path, never an event ETA. */
 export const COUNTDOWN_REGIMES = Object.freeze({

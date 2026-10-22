@@ -1,0 +1,40 @@
+{
+  "tool": {
+    "name": "TLC",
+    "version": "1.7.4",
+    "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "bounds": {
+    "requestGenerations": 3,
+    "intervals": [
+      "1m",
+      "5m"
+    ],
+    "property": "NoStaleDisplay"
+  },
+  "model": {
+    "MarketRequests": {
+      "outcome": "pass",
+      "generatedStates": 5955,
+      "distinctStates": 2081,
+      "remainingStates": 0
+    },
+    "MarketRequestsBroken": {
+      "outcome": "expected invariant violation",
+      "generatedStates": 151,
+      "distinctStates": 109,
+      "remainingStates": 79
+    }
+  },
+  "implementation": {
+    "regression": "pass",
+    "mutation": "expected assertion failure",
+    "sourceSha256": "f1ac6e876f7271f7fc5d17e591cdb5488fd85246be49c57e1566786ba4e5c4ce",
+    "mutatedSourceSha256": "a24b2cedd3833a6bc89e5b9cc470ebf281806c112acd27807209f5340cdf234b"
+  },
+  "limitations": [
+    "Bounded abstract model, not a whole-program proof",
+    "No pricing, numerical, history-pagination, wall-clock or liveness proof"
+  ],
+  "actualRegressionTests": 30
+}

@@ -1,10 +1,12 @@
 # Bitcoin Cycle Atlas
 
-**v1.10.4 — 실제 비트코인 가격과 출처가 있는 장기 경제 가정을 한 차트에서 비교하는 한국어 사이트**입니다. 고정된 3년 표시 제한을 없앴습니다. 첫 접속은 최신 관측일의 앞뒤 2년, 합계 약 **4년**을 보여 줍니다. ‘장기 전망’·‘전체’ 또는 축소·이동으로 검토한 원문의 마지막 목표 연도인 **2050년 말**까지 볼 수 있습니다. 가격·출처·인디케이터와 다음 상태 D-day를 차트 안에 통합했습니다. N년을 고르는 별도 입력은 없습니다. [표시 종료일 규칙](dist/long-horizon-forecast.js)
+**v1.10.5 — 실제 비트코인 가격과 출처가 있는 장기 경제 가정을 한 차트에서 비교하는 한국어 사이트**입니다. 고정된 3년 표시 제한을 없앴습니다. 첫 접속은 최신 관측일의 앞뒤 2년, 합계 약 **4년**을 보여 줍니다. ‘장기 전망’·‘전체’ 또는 축소·이동으로 검토한 원문의 마지막 목표 연도인 **2050년 말**까지 볼 수 있습니다. 가격·출처·인디케이터와 다음 상태 D-day를 차트 안에 통합했습니다. N년을 고르는 별도 입력은 없습니다. [표시 종료일 규칙](dist/long-horizon-forecast.js)
 
 **[통합 차트 열기](https://twoimo.github.io/bitcoin-cycle-atlas/)** · **[사용 안내](docs/GRAPH_WORKSPACE_GUIDE.md)** · **[장기 전망 리서치](docs/LONG_HORIZON_RESEARCH.md)** · **[모델의 반영 범위](docs/MODEL_SCOPE.md)** · **[리서치 표](https://twoimo.github.io/bitcoin-cycle-atlas/?page=evidence)** · **[릴리스](https://github.com/twoimo/bitcoin-cycle-atlas/releases)** · **[Actions](https://github.com/twoimo/bitcoin-cycle-atlas/actions)**
 
 ## v1.10 변경
+
+v1.10.5에서는 첫 접속부터 차트와 도구 영역의 틀을 표시하고 간단한 스켈레톤으로 준비 상태를 보여 줍니다. 요청한 화면이 실제로 준비되면 전환하며, 초기 실패에는 다시 불러오기 버튼을 제공합니다. 수학·논리 감사의 10개 결함군 수정과 요청 상태전이 형식 검증도 포함합니다. [초기 로딩](docs/INITIAL_LOADING.md) · [심층 감사](docs/MATH_STATE_AUDIT.md) · [상태전이도](docs/formal-state/README.md)
 
 지표 이름과 가격·거래량·국면·보정값을 차트 좌측 상단에 간결한 텍스트 행으로 나열합니다. 첫 접속부터 목록을 표시하며 ‘지표 9’ 제목줄은 표시하지 않습니다. 목록 표시 여부와 전체 숨김·보임은 인디케이터 창에서 바꿀 수 있고 공유 링크에도 보존합니다. 데스크톱에서는 행에 마우스를 올리거나 키보드로 선택하면 눈·삭제 버튼이 나타납니다. D-day는 두 줄로 간소화했습니다. 모바일은 거래량을 우선한 대표 지표 한 개만 표시해 차트를 확보합니다. 전체 값과 개별 숨김·보임은 상단 인디케이터 창에서 확인하고, 닫으면 다시 대표 지표 1개만 보입니다. 고정 좌우 레일은 접고 도구·설정을 별도 트레이로 엽니다. 차트에서는 한 손가락 이동과 두 손가락 확대·축소를 지원합니다. [모바일·표시 개선과 검증](docs/MOBILE_WORKSPACE_IMPROVEMENTS.md) · [자석과 측정](docs/MAGNET_MODE.md) · [분·시간봉 과거 조회](docs/INTRADAY_HISTORY.md)
 
@@ -99,6 +101,8 @@ $$
 
 | 파일 | 역할 |
 |---|---|
+| [수학·논리 심층 감사](docs/MATH_STATE_AUDIT.md) | 재현한 10개 결함군의 수정, 기존 결과 비교, 수학적 항등식과 경험적 가정의 구분 |
+| [요청 상태전이와 형식 검증](docs/formal-state/README.md) | 실제 제어기와 연결한 TLA+ 모형, 정상 상태도·반례 상태도, 유한 탐색 범위와 재실행 절차 |
 | [사용 안내](docs/GRAPH_WORKSPACE_GUIDE.md) | 간격·캔들·기간·선택·출처·갱신 읽기 |
 | [장기 전망 심층 리서치](docs/LONG_HORIZON_RESEARCH.md) | 가격·금·변동성·주기 종료 주장, 판본·산술·반론 대조 |
 | [장기 모형 기술 설명](docs/LONG_HORIZON_MODEL.md) | 학술·프로토콜 근거와 계산 구조의 영문 설명 |
@@ -124,9 +128,12 @@ npm test
 npm run verify:static
 npm run verify:cycle
 npm run verify:performance
+npm run verify:formal
 npm run build:standalone
 python3 -m http.server 8000 --directory dist
 ```
+
+형식 검증에는 Java 11 이상이 추가로 필요합니다. `verify:formal`은 SHA-256을 고정한 TLC 1.7.4를 처음 실행할 때 내려받습니다. 이미 받은 동일 파일은 `TLA2TOOLS=/path/to/tla2tools.jar`로 지정할 수 있습니다. 정상 모형 검사뿐 아니라 소유권 검사를 의도적으로 제거한 모형·실제 제어기에서 예상 반례가 발생하는지도 확인합니다. [검증 범위와 상태도](docs/formal-state/README.md)
 
 실제 거래소 저장 봉을 새로 수집하려면 다음을 실행합니다. 네트워크 접근이 필요하며 완료 봉만 검증해 저장합니다.
 

@@ -1,4 +1,4 @@
-import { RESEARCH_EVIDENCE as EVIDENCE, RESEARCH_SUPPLEMENTS as EVIDENCE_SUPPLEMENTS } from './evidence-index.js?v=1.10.4';
+import { RESEARCH_EVIDENCE as EVIDENCE, RESEARCH_SUPPLEMENTS as EVIDENCE_SUPPLEMENTS } from './evidence-index.js?v=1.10.5';
 
 const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let visible = false, initialized = false, pendingFrame = 0, resizeObserver;
@@ -43,6 +43,7 @@ function renderPage() {
   document.querySelector('#evidence-more').disabled=start+shown>=filtered.length;
   document.querySelector('#evidence-clear').disabled=!query&&sourceFilter==='all';
   document.querySelector('#evidence-end').hidden=true;
+  if(visible)document.dispatchEvent(new CustomEvent('atlas:page-ready',{detail:{page:'evidence'}}));
 }
 
 function schedulePage() {

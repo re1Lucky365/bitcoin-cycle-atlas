@@ -244,3 +244,77 @@ test('invalid inputs and unsupported horizons fail explicitly; an unconfirmed ne
   const missing = { ...data, prices: data.prices.filter(([date]) => date !== '2019-04-01') };
   assert.throws(() => buildDetailedForecast(missing, fast), /consecutive/);
 });
+
+test('evaluation rejects duplicate origins and ambiguous or nonfuture horizon definitions', () => {
+  const options = { sampleCount: 16, cutoffs: ['2018-12-30'], horizons: [{ id: '30d', days: 30 }] };
+  assert.throws(() => evaluateDetailedForecast(data, { ...options, cutoffs: ['2018-12-30', '2018-12-30'] }), /distinct.*cutoff|cutoff.*distinct/i);
+  for (const horizons of [
+    [{ id: 'zero', days: 0 }],
+    [{ id: 'negative', days: -1 }],
+    [{ id: 'fraction', days: 1.5 }],
+    [{ id: 'ambiguous', days: 30, months: 1 }],
+    [{ id: 'same', days: 30 }, { id: 'same', days: 60 }],
+    [{ id: 'first', days: 30 }, { id: 'duplicate', days: 30 }],
+  ]) assert.throws(() => evaluateDetailedForecast(data, { ...options, horizons }), /horizon/i);
+});
+
+test('an origin with no observable future is excluded, never scored as zero drawdown', () => {
+  for (const cutoff of ['2026-10-20', '2024-12-31']) {
+    const result = evaluateDetailedForecast(data, { sampleCount: 16, cutoffs: [cutoff], outcomeThrough: '2024-12-31' });
+    assert.equal(result.numberOfDistinctCutoffs, 0);
+    assert.equal(result.effectiveMacroCohorts, 0);
+    assert.deepEqual(result.cases, []);
+    assert.equal(result.excluded.length, 1);
+    assert.match(result.excluded[0].reason, /subsequent|future|outcome/i);
+  }
+  const unobserved = evaluateDetailedForecast(data, { sampleCount: 16, cutoffs: [data.prices.at(-1)[0]], outcomeThrough: '2027-12-31' });
+  assert.equal(unobserved.numberOfDistinctCutoffs, 0);
+  assert.equal(unobserved.current2025And2026OutcomesIncluded, false);
+});
+
+test('evaluation reports actual included outcome dates, not merely the requested ceiling', () => {
+  const priorOnly = evaluateDetailedForecast(data, { sampleCount: 16, cutoffs: ['2018-12-30'], outcomeThrough: '2026-10-20' });
+  assert.equal(priorOnly.current2025And2026OutcomesIncluded, false);
+  const current = evaluateDetailedForecast(data, { sampleCount: 16, cutoffs: ['2026-06-30'], outcomeThrough: '2026-10-20' });
+  assert.equal(current.current2025And2026OutcomesIncluded, true);
+  assert.ok(current.cases.some(item => item.dailyEnvelopeEvaluated > 0));
+});
+
+test('a visible bridge endpoint is the same imposed price in every stochastic draw', () => {
+  const model = buildDetailedForecast(data, { ...fast, asOf: '2020-01-01', displayEnd: '2022-12-16', includeSamplePaths: true });
+  assert.equal(model.displayEnd, model.assumptions.bridgeTerminalDate);
+  assert.equal(model.diagnostics.terminalBridgeOutsideHorizon, false);
+  for (const sample of model.samplePaths) close(sample.prices.at(-1), model.assumptions.bridgeTerminalPrice);
+  close(model.path.at(-1).lower, model.path.at(-1).upper);
+});
+
+test('a supported custom short horizon does not require an unsupported three-year model window', () => {
+  const cutoff = '2020-01-01';
+  const result = evaluateDetailedForecast(data, { ...fast, cutoffs: [cutoff], horizons: [{ id: '30d', days: 30 }] });
+  assert.deepEqual(result.excluded, []);
+  assert.equal(result.numberOfDistinctCutoffs, 1);
+  assert.equal(result.cases[0].results[0].outcomeDate, '2020-01-31');
+  assert.equal(result.cases[0].mddComparisonEndDate, '2020-01-31');
+  assert.equal(result.cases[0].dailyEnvelopeEvaluated, 30);
+  const expected = buildDetailedForecast(data, { ...fast, asOf: cutoff, referenceDate: '2020-01-02', displayEnd: '2020-01-31' });
+  assert.equal(result.cases[0].results[0].representative.price, expected.path.at(-1).price);
+  assert.equal(result.cases[0].results[0].median.price, expected.path.at(-1).median);
+  assert.throws(() => evaluateDetailedForecast(data, { ...fast, horizons: [{ id: 'too-long', days: 1121 }] }), /horizon/i);
+  assert.throws(() => evaluateDetailedForecast(data, { ...fast, horizons: [{ id: 'too-long', months: 37 }] }), /horizon/i);
+});
+
+test('custom evaluation uses its last requested endpoint while each bridge draw keeps its prefix', () => {
+  const cutoff = '2020-01-01';
+  const options = { ...fast, asOf: cutoff, referenceDate: '2020-01-02', includeSamplePaths: true };
+  const short = buildDetailedForecast(data, { ...options, displayEnd: '2020-01-31' });
+  const long = buildDetailedForecast(data, { ...options, displayEnd: '2020-03-31' });
+  for (let i = 0; i < short.samplePaths.length; i++) assert.deepEqual(short.samplePaths[i].prices, long.samplePaths[i].prices.slice(0, short.path.length));
+  const result = evaluateDetailedForecast(data, { ...fast, cutoffs: [cutoff], horizons: [{ id: '90d', days: 90 }, { id: '30d', days: 30 }] });
+  assert.deepEqual(result.excluded, []);
+  assert.equal(result.cases[0].mddComparisonEndDate, '2020-03-31');
+  assert.equal(result.cases[0].dailyEnvelopeEvaluated, 90);
+  assert.deepEqual(result.cases[0].results.map(item => item.outcomeDate), ['2020-03-31', '2020-01-31']);
+  const unavailable = evaluateDetailedForecast(data, { ...fast, cutoffs: [cutoff], horizons: [{ id: '3y', months: 36 }] });
+  assert.equal(unavailable.numberOfDistinctCutoffs, 0);
+  assert.match(unavailable.excluded[0].reason, /exceeds the next assumed low/);
+});
