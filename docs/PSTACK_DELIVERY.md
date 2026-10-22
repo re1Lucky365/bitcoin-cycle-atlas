@@ -66,3 +66,6 @@
 ## v1.4 후속 분업
 
 우측 패널의 구현, 현재 모델 입력 감사, 반응형 브라우저 검수를 별도 담당자로 나눴다. 통합 담당자는 차트 안 표시·클릭·키보드 연결과 릴리스 패키지를 맡았다. 모바일 grid 폭과 십자선 클릭 문제를 실제 브라우저에서 찾아 수정한 뒤 재확인했다. 세부 증거는 [v1.4 검증](RIGHT_PANEL_VERIFICATION.md)에 남긴다. 기간·가격 가정을 데이터에서 학습한 결과로 표현하지 않도록 코드와 문서를 직접 대조했다.
+
+
+v1.4의 정확한 소스는 `e61ded95562aa3f84a8819d004ca492bf380fd4d`이며 로컬·원격 tree를 대조했다. [CI](https://github.com/twoimo/bitcoin-cycle-atlas/actions/runs/39733215967), [Pages](https://github.com/twoimo/bitcoin-cycle-atlas/actions/runs/39733215724), [Release](https://github.com/twoimo/bitcoin-cycle-atlas/actions/runs/39733543572)가 성공했다. 실제 공개 화면을 확인하고 첨부 8개 모두 동일 소스 패키지의 크기·SHA-256과 일치함을 확인했다.
