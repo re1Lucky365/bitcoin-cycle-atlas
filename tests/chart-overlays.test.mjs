@@ -122,6 +122,50 @@ test('enabled chart panes remain ordered within the viewport at desktop and shor
   }
 });
 
+test('all 128 compact and tall pane combinations keep each enabled title between neighboring data panes', () => {
+  for (const width of [320, 844]) for (const height of [220, 300, 500, 800]) for (let flags = 0; flags < 16; flags++) {
+    const enabled = { drawdown: Boolean(flags & 1), cycleTiming: Boolean(flags & 2), states: Boolean(flags & 4), volume: Boolean(flags & 8) };
+    const layout = chartPaneLayout({ width, height, top: 18, ...enabled });
+    const label = `${width}×${height} ${JSON.stringify(enabled)}`;
+    assert.ok(layout.priceBottom > layout.top, `${label}: the price pane retains positive height`);
+    let previousBottom = layout.priceBottom;
+    for (const [id, prefix] of [['drawdown', 'dd'], ['cycleTiming', 'cycle'], ['states', 'state'], ['volume', 'volume']]) {
+      if (!enabled[id]) continue;
+      const top = layout[`${prefix}Top`], bottom = layout[`${prefix}Bottom`];
+      const titleY = layout[`${prefix}TitleY`], fontSize = layout[`${prefix}TitleFontSize`];
+      assert.ok(bottom > top && top >= previousBottom && bottom <= layout.bottom, `${label}: ${id} data stay ordered`);
+      assert.ok(Number.isFinite(titleY) && fontSize > 0, `${label}: ${id} has an allocated title`);
+      assert.ok(titleY - fontSize >= previousBottom - 1e-8, `${label}: ${id} title stays below prior data`);
+      assert.ok(titleY + fontSize * .25 <= top + 1e-8, `${label}: ${id} title and descenders stay above its data`);
+      if (id === 'volume') assert.ok(layout.volumeSeparatorY >= previousBottom && layout.volumeSeparatorY <= titleY - fontSize, `${label}: volume separator stays outside both data panes`);
+      previousBottom = bottom;
+    }
+    assert.ok(previousBottom < layout.axisY && layout.axisY < height, `${label}: data and titles remain above the date axis`);
+  }
+});
+
+test('the market-state ribbon exports its own title without changing selected values or creating data', () => {
+  const rows = [dailyBar(0), dailyBar(1), dailyBar(2)].map(row => ({ date: row.date, price: row.close, drawdownPct: 0 }));
+  const states = [{ date: rows[0].date, state: 'range' }, { date: rows[2].date, state: 'range' }];
+  for (const showStates of [false, true]) {
+    const svg = svgFixture(320, 220); let selected;
+    drawAtlasPriceChart({ svg, rows, states, start: rows[0].date, end: rows[2].date, split: rows[2].date, selectedDate: rows[2].date, headerInset: 18, showStates, showVolume: true, showDrawdown: true, showCycleTiming: true, showHistoricalEvents: false, onHover: value => { selected = value; } });
+    const title = svg.innerHTML.match(/<text class="state-pane-title"[^>]*>[\s\S]*?<\/text>/g) || [];
+    assert.equal(title.length, showStates ? 1 : 0, 'the title follows actual pane visibility');
+    if (showStates) {
+      assert.match(title[0], /시장 국면/);
+      assert.match(title[0], /가정/);
+      assert.match(title[0], /매매 신호가 아닙니다/);
+      const rectangles = [...svg.innerHTML.matchAll(/<rect x="([^"]+)"[^>]*width="([^"]+)"[^>]*fill="#93a1b1"/g)];
+      assert.equal(rectangles.length, 2, 'a missing state date remains a gap');
+      assert.ok(Number(rectangles[0][1]) + Number(rectangles[0][2]) < Number(rectangles[1][1]));
+    }
+    assert.equal(selected.date, rows[2].date);
+    assert.equal(selected.price, rows[2].price);
+    assert.equal(selected.marketState, 'range');
+  }
+});
+
 const event = (id, date, importance = 1, label = id) => ({ id, date, importance, label, title: label, category: 'market' });
 const dayNumber = date => Date.parse(`${date}T00:00:00Z`) / 86400000;
 const displayedIds = result => result.markers.filter(marker => marker.box).map(marker => marker.event.id);

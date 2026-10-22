@@ -44,7 +44,11 @@ export function mountMobileWorkspace({workspace,stage,plot,reader,closeReader}) 
   }
   tools.onclick=()=>toggle('tools',tools);details.onclick=()=>toggle('details',details);backdrop.onclick=()=>close();
   const onKey=event=>{
-    if(!active||event.target.closest?.('.workbench-magnet-menu'))return;
+    if(!active)return;
+    // The top modal owns Tab/Escape even if an external opener omitted the
+    // notification. Never restore a tray opener over the modal's focus.
+    if(event.target.closest?.('dialog[open]')){close(false);return;}
+    if(event.target.closest?.('.workbench-magnet-menu'))return;
     if(event.key==='Escape'){event.preventDefault();event.stopImmediatePropagation();close();return;}
     if(event.key==='Tab'){
       const node=active==='tools'?sidebar:rail;
@@ -55,10 +59,11 @@ export function mountMobileWorkspace({workspace,stage,plot,reader,closeReader}) 
     }
   };
   const onPanel=event=>{if(event.detail?.open)close(false);};
+  const onModal=()=>close(false);
   const onCommand=event=>{if(active&&['tool','span','chart-type','frequency'].includes(event.detail?.action))close();};
   const onPage=event=>{if(active&&event.target.closest?.('[data-view]'))close(false);};
   const sync=()=>{close(false);workspace.dataset.mobile=String(media.matches);};
   const onState=event=>{for(const node of mobileActions.children){if(node.dataset.mobileTarget==='#workbench-scenario')node.hidden=Boolean(event.detail.intraday);}};
-  media.addEventListener('change',sync);doc.addEventListener('keydown',onKey,true);doc.addEventListener('atlas:panel-state',onPanel);doc.addEventListener('atlas:chart-command',onCommand);rail.addEventListener('click',onPage);doc.addEventListener('atlas:workbench-state',onState);sync();
-  return {destroy(){close(false);media.removeEventListener('change',sync);doc.removeEventListener('keydown',onKey,true);doc.removeEventListener('atlas:panel-state',onPanel);doc.removeEventListener('atlas:chart-command',onCommand);rail.removeEventListener('click',onPage);doc.removeEventListener('atlas:workbench-state',onState);tools.remove();details.remove();home.remove();mobileActions.remove();backdrop.remove();}};
+  media.addEventListener('change',sync);doc.addEventListener('keydown',onKey,true);doc.addEventListener('atlas:panel-state',onPanel);doc.addEventListener('atlas:modal-open',onModal);doc.addEventListener('atlas:chart-command',onCommand);rail.addEventListener('click',onPage);doc.addEventListener('atlas:workbench-state',onState);sync();
+  return {destroy(){close(false);media.removeEventListener('change',sync);doc.removeEventListener('keydown',onKey,true);doc.removeEventListener('atlas:panel-state',onPanel);doc.removeEventListener('atlas:modal-open',onModal);doc.removeEventListener('atlas:chart-command',onCommand);rail.removeEventListener('click',onPage);doc.removeEventListener('atlas:workbench-state',onState);tools.remove();details.remove();home.remove();mobileActions.remove();backdrop.remove();}};
 }

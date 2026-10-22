@@ -69,6 +69,7 @@ export function mountWorkspaceTools({trigger, plot, openReader, closeReader}) {
   }
   function open(value='commands',source=trigger){
     opener=source;closeReader({restoreFocus:false});
+    doc.dispatchEvent(new win.CustomEvent('atlas:modal-open',{detail:{id:dialog.id}}));
     if(!dialog.open)dialog.showModal();trigger.setAttribute('aria-expanded','true');search.value='';selectTab(value);
   }
   function run(item){close(false);plot.querySelector('svg:not([hidden])')?.focus({preventScroll:true});item.run();}

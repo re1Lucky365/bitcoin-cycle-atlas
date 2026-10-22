@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {INDICATORS,normalizeIndicatorState,readIndicatorState,writeIndicatorState,changeIndicatorState,isIndicatorVisible,visibleAnalysisIds,searchIndicators} from '../dist/indicator-state.js';
 import {preparePriceViewData} from '../dist/price-view-data.js';
-import {countdownPresentation,mobilePrimaryIndicator} from '../dist/indicator-workbench.js';
+import {countdownPresentation,mobilePrimaryIndicator,chartIndicatorItems} from '../dist/indicator-workbench.js';
 
 test('fresh chart shows the indicator legend without unsolicited research analysis windows',()=>{
   const state=readIndicatorState('');
@@ -69,7 +69,7 @@ test('unknown or duplicated IDs cannot create invalid controls; search combines 
   assert.ok(searchIndicators('','분석 창').every(x=>x.analysis));assert.deepEqual(searchIndicators('없는 지표 123'),[]);
 });
 
-test('a chosen mobile readout survives sharing and falls back while hidden or unavailable',()=>{
+test('a chosen folded readout survives sharing and falls back while hidden or unavailable',()=>{
   let state=changeIndicatorState(readIndicatorState(''),{action:'primary',id:'cycle-timing'});
   assert.equal(mobilePrimaryIndicator(state),'cycle-timing');
   assert.equal(mobilePrimaryIndicator(state,{intraday:true}),'volume');
@@ -84,6 +84,31 @@ test('a chosen mobile readout survives sharing and falls back while hidden or un
   assert.equal(state.primary,null);
   assert.equal(mobilePrimaryIndicator(state),'volume');
   assert.equal(changeIndicatorState(state,{action:'primary',id:'missing'}).primary,null);
+});
+
+test('chart value rows exclude duplicate display controls and preserve hidden indicator membership',()=>{
+  const state=normalizeIndicatorState({added:INDICATORS.map(item=>item.id),hidden:['volume','cycle-timing']});
+  const before=structuredClone(state),rows=chartIndicatorItems(state);
+  assert.equal(rows[0].id,'volume');
+  assert.equal(rows.length,INDICATORS.filter(item=>item.category!=='표시').length);
+  assert.ok(rows.every(item=>item.category!=='표시'));
+  assert.ok(rows.some(item=>item.id==='cycle-timing'));
+  assert.ok(rows.some(item=>item.id==='cryptocon'));
+  assert.deepEqual(state,before,'Rendering a stack must not rewrite saved membership or visibility');
+  assert.deepEqual(chartIndicatorItems(normalizeIndicatorState({added:['readout','source','legend']})),[]);
+});
+
+test('legacy display-only primary links fall back to an actual indicator without rewriting URL state',()=>{
+  for(const id of ['readout','source','legend']){
+    const state=readIndicatorState(`indicators=readout,source,legend,volume,cycle-timing&indicator-primary=${id}`);
+    assert.equal(mobilePrimaryIndicator(state),'volume');
+    assert.equal(writeIndicatorState(new URLSearchParams(),state).get('indicator-primary'),id);
+    assert.equal(state.primary,id);
+  }
+  const noSupported=normalizeIndicatorState({added:['readout','cycle-timing'],primary:'readout'});
+  assert.equal(mobilePrimaryIndicator(noSupported),'cycle-timing');
+  assert.equal(mobilePrimaryIndicator(noSupported,{intraday:true}),null);
+  assert.equal(mobilePrimaryIndicator(normalizeIndicatorState({added:['volume'],hidden:['volume']})),null);
 });
 
 test('applying an indicator template replaces only validated indicator state',()=>{

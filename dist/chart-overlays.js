@@ -31,6 +31,7 @@ export function chartPaneLayout({width,height,volume=true,drawdown=false,states=
   const priceBottom=cursor;
   return {left,right,top,axisY,bottom,priceBottom,volumeTop,volumeBottom,ddTop,ddBottom,stateTop,stateBottom,cycleTop,cycleBottom,paneScale,
     cycleTitleY:cycleTop-cycleGap*.25,cycleTitleFontSize:Math.min(10,cycleGap*.45),
+    stateTitleY:stateTop-stateGap*.2,stateTitleFontSize:Math.min(10,stateGap*.65),
     ddTitleY:ddTop-ddGap*.28,ddTitleFontSize:Math.min(height<320?11:12,ddGap*.52),
     volumeTitleY:volumeTop-volumeGap*.25,volumeTitleFontSize:Math.min(10,volumeGap*.45),volumeSeparatorY:volumeTop-volumeGap*.83};
 }
