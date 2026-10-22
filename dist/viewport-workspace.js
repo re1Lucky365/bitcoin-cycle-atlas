@@ -1,7 +1,7 @@
 import { DATA_UPDATE } from './data-update.js';
-import { mountWorkbenchChrome } from './workbench-chrome.js?v=1.8.0';
-import { mountResearchWorkbench } from './research-workbench.js?v=1.8.0';
-import { mountAnalysisDock } from './analysis-dock.js?v=1.8.0';
+import { mountWorkbenchChrome } from './workbench-chrome.js?v=1.8.1';
+import { mountResearchWorkbench } from './research-workbench.js?v=1.8.1';
+import { mountAnalysisDock } from './analysis-dock.js?v=1.8.1';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

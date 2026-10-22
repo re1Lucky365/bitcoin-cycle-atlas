@@ -1,7 +1,7 @@
 import { utcDay } from './cycle-engine.js';
 import { shiftCalendarMonths } from './cycle-timing.js';
 import { STATE_LABELS } from './market-structure.js';
-import { chartPaneLayout, historicalMarkersMarkup, volumePaneMarkup, formatBtcVolume } from './chart-overlays.js?v=1.8.0';
+import { chartPaneLayout, historicalMarkersMarkup, volumePaneMarkup, formatBtcVolume } from './chart-overlays.js?v=1.8.1';
 import { createPriceScale,nearestDailyIndex as nearest,measureDailyRange } from './chart-math.js?v=1.6.0';
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

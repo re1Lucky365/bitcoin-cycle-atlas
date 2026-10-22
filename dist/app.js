@@ -8,8 +8,8 @@ import { renderPeakView } from './peak-view.js';
 import { renderForecastView, exportForecastSvg } from './forecast-view.js';
 // Changed release modules use a versioned URL so a cached v1.5 module cannot
 // leave a new long-horizon page running the old three-year workbench.
-import { initViewportWorkspace } from './viewport-workspace.js?v=1.8.0';
-import { initLabView } from './lab-view.js?v=1.8.0';
+import { initViewportWorkspace } from './viewport-workspace.js?v=1.8.1';
+import { initLabView } from './lab-view.js?v=1.8.1';
 import { initEvidenceView, showEvidenceView } from './evidence-view.js?v=1.6.0';
 
 const $ = (selector) => document.querySelector(selector);
@@ -325,8 +325,10 @@ $$('[data-view]').forEach(b => b.addEventListener('click', () => {
 }));
 $('#data-year').addEventListener('change',()=>{state.dataPage=0;renderData();});
 $('#data-prev').addEventListener('click',()=>{state.dataPage--;renderData();}); $('#data-next').addEventListener('click',()=>{state.dataPage++;renderData();});
-$$('[data-mode]').forEach(b=>b.addEventListener('click',()=>{state.mode=b.dataset.mode;state.cursor=null;state.hidden.clear();render();}));
-$$('[data-mode]').forEach((b,i,all)=>b.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const next=e.key==='Home'?0:e.key==='End'?all.length-1:(i+(e.key==='ArrowRight'?1:-1)+all.length)%all.length;all[next].click();all[next].focus();}));
+// Comparison controls must not capture clicks or keys that bubble from the
+// separate analysis dock, which also publishes its current mode in the DOM.
+$$('#compare-view .anchor-tab[data-mode]').forEach(b=>b.addEventListener('click',()=>{state.mode=b.dataset.mode;state.cursor=null;state.hidden.clear();render();}));
+$$('#compare-view .anchor-tab[data-mode]').forEach((b,i,all)=>b.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();const next=e.key==='Home'?0:e.key==='End'?all.length-1:(i+(e.key==='ArrowRight'?1:-1)+all.length)%all.length;all[next].click();all[next].focus();}));
 $$('[data-unit]').forEach(b=>b.addEventListener('click',()=>{state.unit=b.dataset.unit;render(false);}));
 $$('[data-scale]').forEach(b=>b.addEventListener('click',()=>{state.scale=b.dataset.scale;render(false);}));
 $('#horizon').addEventListener('change',e=>{state.horizon=e.target.value;render();});

@@ -125,7 +125,9 @@ export function bindChartNavigation({
   let menuState = null, lastPointer = null, destroyed = false;
   const listeners = [];
   const listen = (target, type, handler, options) => { target.addEventListener(type, handler, options);listeners.push([target, type, handler, options]); };
-  const interactive = target => Boolean(target?.closest?.('button,input,select,textarea,summary,a,[contenteditable=true],[role=button],[role=menu],[data-next-turn]'));
+  // Event labels are chart surfaces for wheel navigation, while their click,
+  // pointer and keyboard activation keeps the usual interactive boundary.
+  const interactive = (target, allowHistoryWheel = false) => Boolean(target?.closest?.(`button,input,select,textarea,summary,a,[contenteditable=true],[role=button]${allowHistoryWheel ? ':not(.history-event-marker)' : ''},[role=menu],[data-next-turn]`));
   const chartSvg = () => element.querySelector('svg[data-plot-left]:not([hidden])');
   const focusChart = () => chartSvg()?.focus?.({ preventScroll: true });
 
@@ -182,7 +184,7 @@ export function bindChartNavigation({
 
   function wheel(event) {
     const range = current(), rect = plotBounds();
-    if (!range || event.ctrlKey || event.metaKey || interactive(event.target) || !inside(event, rect)) return;
+    if (!range || event.ctrlKey || event.metaKey || interactive(event.target, true) || !inside(event, rect)) return;
     const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? rect.height : 1;
     if (!event.deltaX && !event.deltaY) return;
     event.preventDefault();closeMenu();

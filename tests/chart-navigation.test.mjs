@@ -159,6 +159,7 @@ class TestElement extends EventSurface {
   contains(target){return target===this||this.children.some(child=>child.contains?.(target));}
   matchesSelector(selector){
     if(selector==='svg[data-plot-left]:not([hidden])')return this.tagName==='SVG'&&this.dataset.plotLeft!==undefined&&!this.hidden;
+    if(selector==='[role=button]:not(.history-event-marker)')return this.getAttribute('role')==='button'&&!this.getAttribute('class')?.split(/\s+/).includes('history-event-marker');
     if(selector.startsWith('[role='))return this.getAttribute('role')===selector.slice(6,-1);
     if(selector==='[contenteditable=true]')return this.getAttribute('contenteditable')==='true';
     if(selector==='[data-next-turn]')return this.dataset.nextTurn!==undefined;
@@ -194,6 +195,37 @@ test('wheel zoom uses the actual plot and cursor; axes, controls and browser zoo
   const anchor=(234-60)/(930-60),before=utcDay(range.start)+anchor*(length(range)-1),after=utcDay(h.range.start)+anchor*(length(h.range)-1);
   assert.ok(Math.abs(before-after)<=.5);assert.ok(length(h.range)<100);
   h.controller.destroy();
+});
+
+test('historical event label children allow wheel zoom and pan but retain activation and real control boundaries',()=>{
+  const h=navigationHarness();
+  const marker=h.document.createElement('g'),label=h.document.createElement('rect'),text=h.document.createElement('text');
+  marker.setAttribute('class','history-event-marker has-label');marker.setAttribute('role','button');marker.dataset.historyEvent='ftx-bankruptcy';
+  marker.append(label,text);h.svg.append(marker);
+  assert.equal(h.fire('wheel',{target:label,clientX:234,deltaY:-200}).defaultPrevented,true);h.flush();
+  assert.deepEqual(h.range,zoomRange(range,Math.exp(-200*.0015),(234-60)/(930-60)));
+  const zoomed=h.range;
+  assert.equal(h.fire('wheel',{target:text,shiftKey:true,deltaY:174}).defaultPrevented,true);h.flush();
+  assert.deepEqual(h.range,panRange(zoomed,.2));assert.equal(length(h.range),length(zoomed));
+  const shifted=h.range;
+  assert.equal(h.fire('wheel',{target:label,deltaX:-87,deltaY:2}).defaultPrevented,true);h.flush();
+  assert.deepEqual(h.range,panRange(shifted,-.1));
+  const changed=h.changes.length;
+  for(const type of ['click','pointerdown','dblclick','contextmenu'])assert.equal(h.fire(type,{target:label}).defaultPrevented,false);
+  for(const key of ['Enter',' ','+'])assert.equal(h.fire('keydown',{target:text,key}).defaultPrevented,false);
+  assert.equal(h.element.dataset.dragging,undefined);assert.equal(h.resets,0);
+  const button=h.document.createElement('button'),input=h.document.createElement('input'),otherRole=h.document.createElement('g');
+  button.setAttribute('class','history-event-marker');button.setAttribute('role','button');otherRole.setAttribute('role','button');
+  marker.append(button,input);h.svg.append(otherRole);
+  for(const target of [button,input,otherRole,h.controller.toolbar.children[0],h.controller.menu,h.menuButton('in')]){
+    assert.equal(h.fire('wheel',{target,deltaY:-100}).defaultPrevented,false);
+  }
+  assert.equal(h.fire('wheel',{target:label,ctrlKey:true,deltaY:-100}).defaultPrevented,false);
+  assert.equal(h.fire('wheel',{target:label,metaKey:true,deltaY:-100}).defaultPrevented,false);
+  assert.equal(h.fire('wheel',{target:label,clientY:20,deltaY:-100}).defaultPrevented,false);
+  h.controller.menu.append(marker);
+  assert.equal(h.fire('wheel',{target:label,deltaY:-100}).defaultPrevented,false);
+  h.flush();assert.equal(h.changes.length,changed);h.controller.destroy();
 });
 
 test('plain click is left to selection while a real drag pans and suppresses only its trailing click',()=>{

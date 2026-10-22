@@ -36,6 +36,14 @@ export function shouldPublishInspection({owner,currentOwner,user=false}) {
   return Boolean(user)||owner===currentOwner;
 }
 
+const periodSummaryLabels={returnPct:'기간 수익률',maxDrawdownPct:'기간 중 최대 하락',realizedVolPct:'가격 흔들림 · 연간 환산',discoveryDays:'새 최고가를 기록한 날'};
+export function analysisSelectionSummary(detail,{mode,metric='returnPct'}={}) {
+  if(!detail)return '분석 항목을 선택하면 값을 확인합니다.';
+  const metricLabel=mode==='periods'?(periodSummaryLabels[metric]||periodSummaryLabels.returnPct):null;
+  const field=metricLabel?detail.fields?.find(item=>item.label===metricLabel):detail.fields?.[0];
+  return `${detail.label} · ${metricLabel&&field?`${field.label} `:''}${field?.value??'선택 값 보기'}`;
+}
+
 export function dockHeight({availableHeight,open}) {
   if(!open)return 40;
   // The independent analysis axis can scroll inside its panel on small screens.
@@ -100,7 +108,7 @@ export function mountAnalysisDock({stage,svg,modeTabs,controls}) {
       prev.disabled=typeof c.previous!=='function'||Boolean(c.hasPrevious)&&!c.hasPrevious();next.disabled=typeof c.next!=='function'||Boolean(c.hasNext)&&!c.hasNext();
     }
     if(Object.hasOwn(nextState,'detail')){
-      const detail=nextState.detail;summary.textContent=detail?`${detail.label} · ${detail.fields?.[0]?.value||'선택 값 보기'}`:'분석 항목을 선택하면 값을 확인합니다.';summary.title=detail?'선택한 분석 값과 설명 열기':'분석 항목을 선택해 주세요';summary.disabled=!detail;
+      const detail=nextState.detail;summary.textContent=analysisSelectionSummary(detail,{mode,metric:current.metric});summary.title=detail?'선택한 분석 값과 설명 열기':'분석 항목을 선택해 주세요';summary.disabled=!detail;
       const date=nextState.calendarDate;locate.disabled=!date;locate.title=date?`${date} UTC를 주 가격 차트에서 보기`:'경과일 비교에는 공통 달력 날짜가 없습니다.';
     }
     size();

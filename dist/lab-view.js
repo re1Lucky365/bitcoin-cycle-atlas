@@ -1,18 +1,18 @@
-import { drawAtlasPriceChart as drawChart } from './atlas-price-chart.js?v=1.8.0';
+import { drawAtlasPriceChart as drawChart } from './atlas-price-chart.js?v=1.8.1';
 import { renderCryptoConAudit } from './cryptocon-audit.js';
-import { bindChartNavigation, panRange } from './chart-navigation.js?v=1.7.0';
+import { bindChartNavigation, panRange } from './chart-navigation.js?v=1.8.1';
 import { renderAtlasAnalysis } from './atlas-analysis.js';
-import { ANALYSIS_MODES, readAnalysisDockState, writeAnalysisDockState, analysisCalendarDate, shouldPublishInspection } from './analysis-dock.js?v=1.8.0';
+import { ANALYSIS_MODES, readAnalysisDockState, writeAnalysisDockState, analysisCalendarDate, shouldPublishInspection, analysisSelectionSummary } from './analysis-dock.js?v=1.8.1';
 import { buildLongHorizonForecast } from './long-horizon-forecast.js';
 import { longHorizonMethodMarkup } from './long-horizon-view.js';
 import { CHART_INTERVALS, chartInterval, isIntradayInterval } from './ohlc-data.js';
-import { drawIntradayChart } from './intraday-chart.js?v=1.8.0';
+import { drawIntradayChart } from './intraday-chart.js?v=1.8.1';
 import { createMarketDataController, marketStatusText } from './market-data-controller.js?v=1.7.0';
 import { parseVolumeSnapshot, aggregateWeeklyVolume } from './volume-data.js?v=1.7.0';
-import { fitVolumeForecastModel, projectVolumeForecast } from './volume-forecast.js?v=1.8.0';
-import { BITCOIN_EVENTS } from './bitcoin-events.js?v=1.8.0';
-import { historicalEventDetail } from './research-workbench.js?v=1.8.0';
-import { formatBtcVolume } from './chart-overlays.js?v=1.8.0';
+import { fitVolumeForecastModel, projectVolumeForecast } from './volume-forecast.js?v=1.8.1';
+import { BITCOIN_EVENTS } from './bitcoin-events.js?v=1.8.1';
+import { historicalEventDetail } from './research-workbench.js?v=1.8.1';
+import { formatBtcVolume } from './chart-overlays.js?v=1.8.1';
 import { analyzeMarketStructure, computeRollingStates, detectDirectionalChanges, STATE_LABELS } from './market-structure.js';
 import { utcDay, dateFromDay } from './cycle-engine.js';
 import { shiftCalendarMonths } from './cycle-timing.js';
@@ -156,11 +156,11 @@ export function initLabView() {
       if(isIntradayInterval(state.frequency))state.marketSelectedTime=detail.date;
       else{state.selectedDate=detail.date;$('#atlas-date').value=detail.date;}
     }
-    if(user&&$('#workbench-announcement'))$('#workbench-announcement').textContent=`${detail.label} · ${labels[detail.kind]||'관측'} · ${detail.fields?.[0]?.value||''}`;
+    if(user&&$('#workbench-announcement'))$('#workbench-announcement').textContent=owner==='analysis'?`${analysisSelectionSummary(detail,{mode:state.analysisMode,metric:state.atlasMetric})} · ${labels[detail.kind]||'관측'}`:`${detail.label} · ${labels[detail.kind]||'관측'} · ${detail.fields?.[0]?.value||''}`;
     document.dispatchEvent(new CustomEvent('atlas:inspection',{detail:{...detail,owner,analysisMode:owner==='analysis'?state.analysisMode:null,userInitiated:Boolean(options.openPanel??user)}}));
   }
   function analysisDate(){return analysisCalendarDate(state.lastAnalysisDetail,{firstDate:state.dataset?.prices[0]?.[0],lastDate:state.dataset?.prices.at(-1)?.[0]});}
-  function publishAnalysisState(extra={}){document.dispatchEvent(new CustomEvent('atlas:analysis-state',{detail:{mode:state.analysisMode,open:state.analysisOpen,...extra}}));}
+  function publishAnalysisState(extra={}){document.dispatchEvent(new CustomEvent('atlas:analysis-state',{detail:{mode:state.analysisMode,metric:state.atlasMetric,open:state.analysisOpen,...extra}}));}
   function inspectAnalysis(detail){
     state.lastAnalysisDetail=detail;
     publishAnalysisState({detail,calendarDate:analysisDate()});

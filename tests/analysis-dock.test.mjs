@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {readFile} from 'node:fs/promises';
-import {ANALYSIS_MODES,readAnalysisDockState,writeAnalysisDockState,analysisCalendarDate,shouldPublishInspection,dockHeight} from '../dist/analysis-dock.js';
+import {ANALYSIS_MODES,readAnalysisDockState,writeAnalysisDockState,analysisCalendarDate,shouldPublishInspection,analysisSelectionSummary,dockHeight} from '../dist/analysis-dock.js';
 import {renderAtlasAnalysis} from '../dist/atlas-analysis.js';
 import {renderCryptoConAudit} from '../dist/cryptocon-audit.js';
 
@@ -52,6 +52,18 @@ test('expanded analysis leaves at least half the canvas region available for the
 function svgStub(width,height){
   const attrs={};return {clientWidth:width,clientHeight:height,innerHTML:'',setAttribute(key,value){attrs[key]=value;},getAttribute(key){return attrs[key];},getBoundingClientRect(){return {left:0,top:0,width,height};}};
 }
+
+test('monthly and quarterly selection summaries name and show the selected metric instead of always showing returns',()=>{
+  const metricFields={returnPct:'기간 수익률',maxDrawdownPct:'기간 중 최대 하락',realizedVolPct:'가격 흔들림 · 연간 환산',discoveryDays:'새 최고가를 기록한 날'};
+  for(const period of ['monthly','quarterly'])for(const [metric,label] of Object.entries(metricFields)){
+    let detail;
+    renderAtlasAnalysis({svg:svgStub(660,180),dataset,mode:'periods',period,metric,onInspect:value=>{detail=value;}});
+    const field=detail.fields.find(item=>item.label===label);
+    assert.ok(field,`${period} ${metric} must expose its selected metric`);
+    assert.equal(analysisSelectionSummary(detail,{mode:'periods',metric}),`${detail.label} · ${label} ${field.value}`);
+    if(metric!=='returnPct')assert.notEqual(analysisSelectionSummary(detail,{mode:'periods',metric}),`${detail.label} · ${detail.fields[0].value}`);
+  }
+});
 
 test('all five dock analyses and their subviews render and navigate at compact panel sizes',()=>{
   const definitions=[
