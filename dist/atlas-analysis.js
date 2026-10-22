@@ -72,9 +72,11 @@ function logTicks(min,max) {
   return ticks;
 }
 function geometry(svg) {
-  const width=Math.max(360,Math.round(svg.clientWidth||svg.parentElement?.clientWidth||1000)),small=width<650;
-  const height=small?410:500;
-  return {W:width,H:height,L:small?51:67,R:small?17:29,T:39,B:height-45,small};
+  const width=Math.max(1,Math.round(svg.clientWidth||svg.parentElement?.clientWidth||1000)),small=width<650;
+  const height=Math.max(1,Math.round(svg.clientHeight||svg.parentElement?.clientHeight||500)),short=height<330;
+  const top=short?30:39,bottom=height-(short?30:40);
+  return {W:width,H:height,L:small?49:64,R:small?16:26,T:top,B:bottom,small,short,
+    ticks:Math.max(2,Math.min(5,Math.floor((bottom-top)/38))),axisY:height-9};
 }
 function frame(svg,g,title,description) {
   svg.setAttribute('viewBox',`0 0 ${g.W} ${g.H}`);svg.setAttribute('role','img');svg.setAttribute('tabindex','0');
@@ -143,9 +145,10 @@ function renderCycles({svg,dataset,alignment,onInspect}) {
   }
   function draw(){
     let out=frame(svg,g,title,note);
-    for(const v of logTicks(min,max)){const yy=y(v);out+=`<line x1="${g.L}" x2="${g.W-g.R}" y1="${yy}" y2="${yy}" stroke="${GRID}"/><text x="${g.L-9}" y="${yy+4}" fill="${MUTED}" text-anchor="end" font-size="12">${esc(shortNumber(v))}</text>`;}
-    for(let year=0;year<=4;year++){const xx=x(Math.min(maxDay,year*365.25));out+=`<line x1="${xx}" x2="${xx}" y1="${g.T}" y2="${g.B}" stroke="${GRID}"/><text x="${xx}" y="${g.B+26}" text-anchor="middle" fill="${MUTED}" font-size="12">${year}년</text>`;}
-    out+=`<text x="${g.L}" y="20" font-size="12" fill="${MUTED}">시작 = 100 · 배수 눈금</text>`;
+    const ticks=logTicks(min,max),tickStride=Math.max(1,Math.ceil(ticks.length/g.ticks));
+    for(const v of ticks.filter((_,i)=>i%tickStride===0)){const yy=y(v);out+=`<line x1="${g.L}" x2="${g.W-g.R}" y1="${yy}" y2="${yy}" stroke="${GRID}"/><text x="${g.L-9}" y="${yy+4}" fill="${MUTED}" text-anchor="end" font-size="12">${esc(shortNumber(v))}</text>`;}
+    for(let year=0;year<=4;year++){const xx=x(Math.min(maxDay,year*365.25));out+=`<line x1="${xx}" x2="${xx}" y1="${g.T}" y2="${g.B}" stroke="${GRID}"/><text x="${xx}" y="${g.axisY}" text-anchor="middle" fill="${MUTED}" font-size="12">${year}년</text>`;}
+    out+=`<text x="${g.L}" y="${g.short?16:20}" font-size="12" fill="${MUTED}">시작 = 100 · 배수 눈금</text>`;
     for(const s of series){const sampled=s.points.filter((_,i)=>i%Math.max(1,Math.floor(s.points.length/(g.W*1.5)))===0||i===s.points.length-1);out+=`<path d="${line(sampled,p=>x(p.elapsed),y)}" fill="none" stroke="${s.color}" stroke-width="${s.color===GOLD?2.25:1.6}" stroke-linejoin="round"/>`;}
     const xx=x(selected);out+=`<line x1="${xx}" x2="${xx}" y1="${g.T}" y2="${g.B}" stroke="#d6e1ef" opacity=".6" stroke-dasharray="4 4"/>`;
     for(const s of series){if(selected<s.points[0].elapsed||selected>s.points.at(-1).elapsed)continue;const p=s.points[nearest(s.points,selected,'elapsed')];out+=`<circle cx="${x(p.elapsed)}" cy="${y(p.value)}" r="4" fill="#10151c" stroke="${s.color}" stroke-width="2"/>`;}
@@ -159,7 +162,7 @@ function renderCycles({svg,dataset,alignment,onInspect}) {
 function renderDuration({svg,dataset,onInspect}) {
   const g=geometry(svg),cycles=macro(dataset).cycles,key='duration',saved=selections.get(svg);
   let selected=clamp(saved?.key===key?saved.index:cycles.length-1,0,cycles.length-1);
-  const left=g.small?66:113,plotTop=59,rowHeight=(g.B-plotTop)/cycles.length,maxDays=Math.max(1461,...cycles.map(c=>c.cycleDays));
+  const left=g.small?60:91,plotTop=g.short?35:53,plotBottom=g.H-10,rowHeight=(plotBottom-plotTop)/cycles.length,maxDays=Math.max(1461,...cycles.map(c=>c.cycleDays));
   const x=days=>left+days/maxDays*(g.W-left-g.R);
   const title='상승과 하락에 실제로 걸린 시간',caption='저점 → 고점 → 다음 저점 · 달력 일수';
   const note='색칠된 길이는 사후에 구분한 기간입니다. 2026년 저점은 현재까지의 후보이며, 하락 기간이 확정된 것은 아닙니다.';
@@ -167,12 +170,13 @@ function renderDuration({svg,dataset,onInspect}) {
   function inspect(){const c=cycles[selected];return {label:`${c.peakYear}년 고점 사이클`,date:c.peak.date,kind:'observed',fields:[{label:'상승 · 저점 → 고점',value:`${format(c.bullDays)}일`},{label:'하락 · 고점 → 저점',value:`${format(c.bearDays)}일${c.endIsCandidate?' · 후보':''}`},{label:'시작 → 고점',value:`${dateText(c.start.date)} → ${dateText(c.peak.date)}`},{label:'다음 저점',value:`${dateText(c.end.date)}${c.endIsCandidate?' · 미확정':''}`},{label:'관측 범위',value:c.leftCensored?'초기 관측이 부족한 구간':c.rightCensored?'진행 중인 사이클':'사후 구분 완료'}],note:c.endIsCandidate?`후보 저점 이후 ${format(c.recoverySinceCandidateDays)}일의 회복은 막대의 하락 기간에 포함하지 않습니다.`:'‘3년 상승·1년 하락’은 고정 규칙이 아닙니다. 기간은 실제 관측값으로 계산했습니다.'};}
   function draw(){
     let out=frame(svg,g,title,note);
-    for(let year=0;year<=4;year++){const xx=x(year*365.25);out+=`<line x1="${xx}" x2="${xx}" y1="36" y2="${g.B+4}" stroke="${GRID}" stroke-dasharray="${year===3?'4 4':'0'}"/><text x="${xx}" y="25" text-anchor="middle" fill="${MUTED}" font-size="12">${year}년</text>`;}
-    cycles.forEach((c,i)=>{const yy=plotTop+i*rowHeight,barY=yy+12,h=Math.min(30,rowHeight-28),a=x(c.bullDays),end=x(c.cycleDays);if(i===selected)out+=`<rect x="6" y="${yy-4}" width="${g.W-12}" height="${rowHeight-2}" rx="5" fill="#b6c9e5" opacity=".055"/>`;
-      out+=`<text x="${left-12}" y="${barY+14}" text-anchor="end" fill="${INK}" font-size="13">${c.peakYear}</text><text x="${left-12}" y="${barY+31}" text-anchor="end" fill="${MUTED}" font-size="${g.small?10:11}">${c.leftCensored?'초기 일부':c.rightCensored?'진행 중':'완료'}</text>`;
+    for(let year=0;year<=4;year++){const xx=x(year*365.25);out+=`<line x1="${xx}" x2="${xx}" y1="${g.short?27:36}" y2="${plotBottom}" stroke="${GRID}" stroke-dasharray="${year===3?'4 4':'0'}"/><text x="${xx}" y="${g.short?18:25}" text-anchor="middle" fill="${MUTED}" font-size="12">${year}년</text>`;}
+    cycles.forEach((c,i)=>{const yy=plotTop+i*rowHeight,h=Math.max(8,Math.min(30,rowHeight-(g.short?12:26))),barY=yy+(rowHeight-h)/2,a=x(c.bullDays),end=x(c.cycleDays);if(i===selected)out+=`<rect x="6" y="${yy}" width="${g.W-12}" height="${rowHeight-2}" rx="5" fill="#b6c9e5" opacity=".055"/>`;
+      out+=`<text x="${left-10}" y="${barY+h/2+4}" text-anchor="end" fill="${INK}" font-size="12">${c.peakYear}</text>`;
+      if(!g.short)out+=`<text x="${left-10}" y="${barY+h/2+20}" text-anchor="end" fill="${MUTED}" font-size="11">${c.leftCensored?'초기 일부':c.rightCensored?'진행 중':'완료'}</text>`;
       out+=`<rect x="${left}" y="${barY}" width="${a-left}" height="${h}" fill="#72b9ae" rx="3"/><rect x="${a}" y="${barY}" width="${Math.max(1,end-a)}" height="${h}" fill="#cb9299" opacity="${c.endIsCandidate ? .6 : .9}" rx="3"${c.endIsCandidate?' stroke="#f0bac0" stroke-dasharray="3 3"':''}/>`;
-      if(a-left>65)out+=`<text x="${left+(a-left)/2}" y="${barY+h/2+4}" text-anchor="middle" fill="#0c171b" font-size="12" font-weight="600">${format(c.bullDays)}일</text>`;
-      if(end-a>45)out+=`<text x="${a+(end-a)/2}" y="${barY+h/2+4}" text-anchor="middle" fill="#171015" font-size="12" font-weight="600">${format(c.bearDays)}일</text>`;
+      if(a-left>65&&h>=14)out+=`<text x="${left+(a-left)/2}" y="${barY+h/2+4}" text-anchor="middle" fill="#0c171b" font-size="12" font-weight="600">${format(c.bullDays)}일</text>`;
+      if(end-a>45&&h>=14)out+=`<text x="${a+(end-a)/2}" y="${barY+h/2+4}" text-anchor="middle" fill="#171015" font-size="12" font-weight="600">${format(c.bearDays)}일</text>`;
     });
     svg.innerHTML=out;selections.set(svg,{key,index:selected});initialInspection=inspect();onInspect(initialInspection);
   }
@@ -183,7 +187,7 @@ function renderDuration({svg,dataset,onInspect}) {
 function renderPhases({svg,dataset,phaseLeg,onInspect}) {
   const g=geometry(svg),windows=phaseWindows(dataset,phaseLeg),key=`phases:${phaseLeg}`,saved=selections.get(svg);
   let selected=clamp(saved?.key===key?saved.index:windows.length-1,0,windows.length-1);
-  const left=g.small?66:113,plotTop=61,rowHeight=(g.B-plotTop)/windows.length,maxDays=Math.ceil(Math.max(...windows.map(c=>c.days))/100)*100;
+  const left=g.small?60:91,plotTop=g.short?35:53,plotBottom=g.H-10,rowHeight=(plotBottom-plotTop)/windows.length,maxDays=Math.ceil(Math.max(...windows.map(c=>c.days))/100)*100;
   const x=days=>left+days/maxDays*(g.W-left-g.R),isBull=phaseLeg==='bull';
   const title=`${isBull?'상승장':'하락장'} 안에서 반복된 흐름`,caption='색의 순서 = 실제 발생 순서 · 가로 길이 = 실제 일수';
   const note='각 날짜는 당시까지 알려진 자료로 한 가지 상태에만 분류합니다. 전체 상승·하락 구간의 경계는 사후에 정했으며, 국면 이름이 미래 방향을 보장하지 않습니다.';
@@ -196,18 +200,19 @@ function renderPhases({svg,dataset,phaseLeg,onInspect}) {
   }
   function draw(){
     let out=frame(svg,g,title,note);
-    for(const day of tickValues(0,maxDays,g.small?3:5)){const xx=x(day);out+=`<line x1="${xx}" x2="${xx}" y1="39" y2="${g.B+4}" stroke="${GRID}"/><text x="${xx}" y="26" text-anchor="middle" fill="${MUTED}" font-size="12">${format(day)}일</text>`;}
+    for(const day of tickValues(0,maxDays,g.small?3:5)){const xx=x(day);out+=`<line x1="${xx}" x2="${xx}" y1="${g.short?27:39}" y2="${plotBottom}" stroke="${GRID}"/><text x="${xx}" y="${g.short?18:26}" text-anchor="${xx>g.W-28?'end':'middle'}" fill="${MUTED}" font-size="12">${format(day)}일</text>`;}
     windows.forEach((row,i)=>{
-      const yy=plotTop+i*rowHeight,barY=yy+9,h=Math.min(31,rowHeight-29),selectedRow=i===selected;
-      if(selectedRow)out+=`<rect x="6" y="${yy-5}" width="${g.W-12}" height="${rowHeight-2}" rx="5" fill="#b6c9e5" opacity=".06"/>`;
-      out+=`<text x="${left-12}" y="${barY+14}" text-anchor="end" fill="${INK}" font-size="13">${row.peakYear}</text><text x="${left-12}" y="${barY+31}" text-anchor="end" fill="${MUTED}" font-size="${g.small?10:11}">${row.leftCensored?'초기 일부':row.rightCensored?'진행 중':'완료'}</text>`;
+      const yy=plotTop+i*rowHeight,h=Math.max(8,Math.min(31,rowHeight-(g.short?12:31))),barY=yy+(rowHeight-h)/2-(g.short?0:5),selectedRow=i===selected;
+      if(selectedRow)out+=`<rect x="6" y="${yy}" width="${g.W-12}" height="${rowHeight-2}" rx="5" fill="#b6c9e5" opacity=".06"/>`;
+      out+=`<text x="${left-10}" y="${barY+h/2+4}" text-anchor="end" fill="${INK}" font-size="12">${row.peakYear}</text>`;
+      if(!g.short)out+=`<text x="${left-10}" y="${barY+h/2+20}" text-anchor="end" fill="${MUTED}" font-size="11">${row.leftCensored?'초기 일부':row.rightCensored?'진행 중':'완료'}</text>`;
       out+=`<rect x="${left}" y="${barY}" width="${x(row.days)-left}" height="${h}" fill="#202a36"/>`;
       for(const segment of row.segments){
         const xx=x(segment.offset),width=x(segment.offset+segment.days)-xx;
         out+=`<rect x="${xx}" y="${barY}" width="${width}" height="${h}" fill="${PHASE_COLORS[segment.state]}" opacity="${selectedRow?1:.82}"><title>${esc(STATE_LABELS[segment.state])} · ${segment.days}일 · ${dateText(dateFromDay(D(row.startDate)+segment.offset+1))}–${dateText(dateFromDay(D(row.startDate)+segment.offset+segment.days))}</title></rect>`;
       }
       if(row.rightCensored&&!isBull)out+=`<rect x="${left}" y="${barY}" width="${x(row.days)-left}" height="${h}" fill="none" stroke="#dce5f1" stroke-dasharray="4 3"/>`;
-      out+=`<text x="${clamp(x(row.days),left+28,g.W-g.R)}" y="${barY+h+16}" text-anchor="end" fill="${MUTED}" font-size="12">${format(row.days)}일${row.rightCensored&&!isBull?' · 후보':''}</text>`;
+      if(!g.short)out+=`<text x="${clamp(x(row.days),left+28,g.W-g.R)}" y="${barY+h+16}" text-anchor="end" fill="${MUTED}" font-size="12">${format(row.days)}일${row.rightCensored&&!isBull?' · 후보':''}</text>`;
     });
     svg.innerHTML=out;selections.set(svg,{key,index:selected});initialInspection=inspect();onInspect(initialInspection);
   }
@@ -240,13 +245,13 @@ function renderPeriods({svg,dataset,period,metric,scope,onInspect}) {
     const min=Math.min(0,...values),max=Math.max(0,...values),pad=(max-min||1)*.12,low=min<0?min-pad:0,high=max>0?max+pad:0;
     const y=value=>g.B-(value-low)/(high-low||1)*(g.B-g.T),barSpace=(g.W-g.L-g.R)/rows.length,barWidth=Math.max(.6,barSpace*.72),x=i=>g.L+barSpace*(i+.5),zero=y(0);
     let out=frame(svg,g,title,note);
-    for(const v of tickValues(low,high)){const yy=y(v);out+=`<line x1="${g.L}" x2="${g.W-g.R}" y1="${yy}" y2="${yy}" stroke="${GRID}"/><text x="${g.L-9}" y="${yy+4}" text-anchor="end" fill="${MUTED}" font-size="12">${format(v,1)}${definition.unit}</text>`;}
-    out+=`<line x1="${g.L}" x2="${g.W-g.R}" y1="${zero}" y2="${zero}" stroke="#758193"/><text x="${g.L}" y="20" fill="${MUTED}" font-size="12">${esc(rows[0]?.period)} — ${esc(rows.at(-1)?.period)}</text>`;
+    for(const v of tickValues(low,high,g.ticks)){const yy=y(v);out+=`<line x1="${g.L}" x2="${g.W-g.R}" y1="${yy}" y2="${yy}" stroke="${GRID}"/><text x="${g.L-9}" y="${yy+4}" text-anchor="end" fill="${MUTED}" font-size="12">${format(v,1)}${definition.unit}</text>`;}
+    out+=`<line x1="${g.L}" x2="${g.W-g.R}" y1="${zero}" y2="${zero}" stroke="#758193"/><text x="${g.L}" y="${g.short?16:20}" fill="${MUTED}" font-size="12">${esc(rows[0]?.period)} — ${esc(rows.at(-1)?.period)}</text>`;
     rows.forEach((row,i)=>{const value=row[metric];if(!Number.isFinite(value))return;const yy=y(value),fill=metric==='returnPct'?(value<0?'#cf969f':'#7fc5b0'):metric==='maxDrawdownPct'?'#cf969f':GOLD;
       out+=`<rect x="${x(i)-barWidth/2}" y="${Math.min(zero,yy)}" width="${barWidth}" height="${Math.max(1,Math.abs(yy-zero))}" fill="${fill}" opacity="${i+start===selected?1:.7}"${!row.complete?' stroke="#e9eff6" stroke-width="1.2" stroke-dasharray="3 2"':''}><title>${esc(row.period)} · ${definition.label} ${format(value,1)}${definition.unit}</title></rect>`;
     });
-    const labelCount=g.small?4:7,stride=Math.max(1,Math.ceil(rows.length/labelCount));
-    rows.forEach((row,i)=>{if(i%stride!==0&&i!==rows.length-1)return;if(i===rows.length-1&&i%stride<stride*.6&&i!==0)return;out+=`<text x="${x(i)}" y="${g.B+25}" fill="${MUTED}" font-size="12" text-anchor="middle">${esc(row.period.replace('-Q','.Q'))}</text>`;});
+    const labelCount=Math.max(2,Math.min(7,Math.floor((g.W-g.L-g.R)/72))),stride=Math.max(1,Math.ceil(rows.length/labelCount));
+    rows.forEach((row,i)=>{if(i%stride!==0&&i!==rows.length-1)return;if(i===rows.length-1&&i%stride<stride*.6&&i!==0)return;const xx=x(i);out+=`<text x="${xx}" y="${g.axisY}" fill="${MUTED}" font-size="12" text-anchor="${xx>g.W-40?'end':i===0?'start':'middle'}">${esc(row.period.replace('-Q','.Q'))}</text>`;});
     const sx=x(selected-start);out+=`<line x1="${sx}" x2="${sx}" y1="${g.T}" y2="${g.B}" stroke="#e5edf7" opacity=".8" stroke-dasharray="4 4"/>`;
     svg.innerHTML=out;selections.set(svg,{key,index:selected});initialInspection=inspect();onInspect(initialInspection);
   }
@@ -256,6 +261,7 @@ function renderPeriods({svg,dataset,period,metric,scope,onInspect}) {
 
 function renderPeaks({svg,dataset,onInspect}) {
   const g=geometry(svg),analysis=peaks(dataset),rows=research(dataset).rows,key='peaks',saved=selections.get(svg);
+  if(g.short)g.T=44;
   const series=analysis.cycles.map((c,i)=>({...c,color:i===analysis.cycles.length-1?GOLD:COLORS[i],points:rows.filter(p=>p.date>=c.halvingDate&&p.date<=c.peak.date).map(p=>({...p,elapsed:p.day-D(c.halvingDate),value:p.price/c.peak.price*100}))}));
   let selected=clamp(saved?.key===key?saved.index:series.length-1,0,series.length-1);
   const maxDay=Math.ceil(Math.max(...series.map(s=>s.peak.dayAfterHalving))/100)*100;
@@ -266,10 +272,10 @@ function renderPeaks({svg,dataset,onInspect}) {
   function draw(){
     let out=frame(svg,g,title,note);
     out+=`<rect x="${g.L}" y="${y(100)}" width="${g.W-g.L-g.R}" height="${y(95)-y(100)}" fill="#f2b15a" opacity=".13"/>`;
-    for(const v of [0,25,50,75,100]){const yy=y(v);out+=`<line x1="${g.L}" x2="${g.W-g.R}" y1="${yy}" y2="${yy}" stroke="${GRID}"/><text x="${g.L-9}" y="${yy+4}" text-anchor="end" fill="${MUTED}" font-size="12">${v}%</text>`;}
-    out+=`<line x1="${g.L}" x2="${g.W-g.R}" y1="${y(95)}" y2="${y(95)}" stroke="${GOLD}" stroke-dasharray="4 4" opacity=".65"/><text x="${g.L}" y="20" fill="${MUTED}" font-size="12">원: 95% 첫 진입 · 사각: 최고값</text>`;
+    for(const v of (g.ticks<4?[0,50,100]:[0,25,50,75,100])){const yy=y(v);out+=`<line x1="${g.L}" x2="${g.W-g.R}" y1="${yy}" y2="${yy}" stroke="${GRID}"/><text x="${g.L-9}" y="${yy+4}" text-anchor="end" fill="${MUTED}" font-size="12">${v}%</text>`;}
+    out+=`<line x1="${g.L}" x2="${g.W-g.R}" y1="${y(95)}" y2="${y(95)}" stroke="${GOLD}" stroke-dasharray="4 4" opacity=".65"/><text x="${g.L}" y="${g.short?16:20}" fill="${MUTED}" font-size="12">원: 95% 첫 진입 · 사각: 최고값</text>`;
     const step=g.small?200:100;
-    for(let day=0;day<=maxDay;day+=step){const xx=x(day);out+=`<line x1="${xx}" x2="${xx}" y1="${g.T}" y2="${g.B}" stroke="${GRID}"/><text x="${xx}" y="${g.B+25}" fill="${MUTED}" text-anchor="middle" font-size="12">${day}일</text>`;}
+    for(let day=0;day<=maxDay;day+=step){const xx=x(day);out+=`<line x1="${xx}" x2="${xx}" y1="${g.T}" y2="${g.B}" stroke="${GRID}"/><text x="${xx}" y="${g.axisY}" fill="${MUTED}" text-anchor="${xx>g.W-28?'end':'middle'}" font-size="12">${day}일</text>`;}
     series.forEach((s,i)=>{out+=`<path d="${line(s.points,p=>x(p.elapsed),y)}" fill="none" stroke="${s.color}" stroke-width="${i===selected?2.4:1.4}" opacity="${i===selected?1:.55}"/>`;
       const firstX=x(s.firstEntry.dayAfterHalving),firstY=y(s.firstEntry.price/s.peak.price*100),peakX=x(s.peak.dayAfterHalving);
       out+=`<circle cx="${firstX}" cy="${firstY}" r="${i===selected?5:3.5}" fill="#10151c" stroke="${s.color}" stroke-width="2"/><rect x="${peakX-3.5}" y="${y(100)-3.5}" width="7" height="7" fill="${s.color}"/>`;

@@ -6,6 +6,7 @@ import { analyzePeakZones } from './peak-zones.js';
 import { analyzeCycleForecast } from './forecast-engine.js';
 import { renderPeakView } from './peak-view.js';
 import { renderForecastView, exportForecastSvg } from './forecast-view.js';
+import { initViewportWorkspace } from './viewport-workspace.js';
 import { initLabView } from './lab-view.js';
 import { initEvidenceView, showEvidenceView } from './evidence-view.js';
 
@@ -83,9 +84,11 @@ function persistUrl() {
   try { history.replaceState(null, '', `${location.pathname}${p.size ? `?${p}` : ''}`); } catch {}
 }
 document.documentElement.dataset.theme = 'dark';
+initViewportWorkspace(icon);
 const outlookController = initLabView();
 initEvidenceView();
 function syncPage() {
+  document.body.dataset.page=state.view;
   for (const view of ['outlook','compare','evidence','data']) document.querySelector(`#${view}-view`).hidden=state.view!==view;
   $$('[data-view]').forEach(n=>{const active=n.dataset.view===state.view;n.classList.toggle('active',active);if(active)n.setAttribute('aria-current','page');else n.removeAttribute('aria-current');});
   showEvidenceView(state.view==='evidence');
@@ -112,6 +115,7 @@ function render(recalculate = true) {
   $('#horizon').value = state.horizon;
   renderLegend(); renderChart(); renderTable(state.cursor); renderMethod(); renderData(); renderTiming(); renderResearch();
   outlookController.setDataset(state.dataset);
+  document.dispatchEvent(new CustomEvent('atlas:dataset',{detail:{latestObservationDate:state.dataset.prices.at(-1)[0]}}));
   $('#sidebar-asof').textContent=`관측 · ${state.dataset.prices.at(-1)[0].replaceAll('-','.')} UTC`;
   syncCursorInputs();
   $('#loading-state').hidden = true;
@@ -286,7 +290,7 @@ function renderMethod() {
   const link = (href,text) => `<a href="${href}" target="_blank" rel="noopener noreferrer">${text} ↗</a>`;
   $('#method-content').innerHTML = `<h3>01. 실제 일별 가격</h3><p>${link('https://coinmetrics.io/','Coin Metrics')} Community의 <code>PriceUSD</code>를 사용합니다. 각 날짜의 UTC 일말 기준가격이며 실시간 호가나 장중 고저가가 아닙니다. 관측 범위는 <strong>${c.metadata.firstDate}–${c.metadata.lastDate}</strong>, ${nfmt(c.metadata.count)}개 관측이며 내부 결측은 ${c.metadata.missingDayCount}일입니다. 갱신 실패 시 마지막으로 검증된 데이터를 유지합니다.</p><p>${link('https://github.com/coinmetrics/docs-website/blob/master/asset-metrics/market/priceusd.md','가격 지표 정의')} · ${link('https://gitbook-docs.coinmetrics.io/packages/coin-metrics-community-data','Community 데이터 안내')}</p><h3>02. 네 가지 출발점</h3><ul><li><strong>반감기:</strong> 2012-11-28, 2016-07-09, 2020-05-11, 2024-04-20의 UTC 일말 가격. ${link('https://bitcoin.org/en/halving','반감기 연혁')}</li><li><strong>고점:</strong> 원본의 역사적 시장 구간에 맞춰 2011·2013·2017·2021년 각각의 최고 일말값을 사용합니다. 2025년 연간 최고값도 추가하되, 최종 시장고점이 확정됐다는 의미가 아닌 <strong>잠정 비교 기준</strong>으로 표시합니다.</li><li><strong>저점:</strong> 위 역사 고점부터 뒤따르는 반감기 전날까지의 최소 일말값입니다. 구간이 끝나지 않은 2026년 잠정 저점은 포함하지 않습니다.</li><li><strong>이전 고점 돌파:</strong> 각 역사 저점 이후, 앞선 기준 고점의 일말가격을 처음 초과한 날짜입니다. 장중 돌파일과 다를 수 있습니다.</li></ul><p>이 소스의 2022년 저점은 <strong>11월 9일</strong>입니다. 거래소별 장중 저가와 일말 기준가격은 다르므로 널리 알려진 날짜를 그대로 입력하지 않고 원자료에서 계산합니다. 고점·저점의 사후 선택에는 미래 정보를 이용한 선택 편향이 있습니다.</p><h3>현재 선택: ${modeNames[state.mode]}</h3><div class="anchor-list"><table><thead><tr><th>사이클</th><th>기준일 UTC</th><th>시작 가격 USD</th><th>구분</th></tr></thead><tbody>${c.series.map(s=>`<tr><td>${s.label}</td><td>${s.date}</td><td>${money(s.price)}</td><td>${s.provisional?'잠정 시장고점':s.current?'최신 기준':'역사 기준'}</td></tr>`).join('')}</tbody></table></div><h3>03. 정규화와 시간축</h3><div class="method-formula">환산 가격 = 실제 가격 ÷ 해당 사이클 시작 가격 × 현재 시작 가격<br>100 기준 지수 = 실제 가격 ÷ 해당 사이클 시작 가격 × 100<br>수익률 = (실제 가격 ÷ 시작 가격 − 1) × 100%</div><p>가로축은 행 순서가 아닌 UTC 날짜 차이(D+0부터)입니다. 역사 경로는 시작일 뒤 최대 <strong>1,461일까지</strong> 표시하며 다음 반감기를 넘어갈 수 있습니다. 현재 경로는 마지막 관측까지만 표시합니다. 빈 날짜를 보간하거나 미래 가격을 생성하지 않습니다. 로그 눈금은 동일한 비율의 변화를 같은 간격으로 보여 줍니다.</p><p>차트 오른쪽의 음영은 현재 경과일 이후에 해당하는 <strong>과거의 관측 기록</strong>입니다. 예측 구간이 아닙니다.</p><h3>04. 원본 조사와 재구현 범위</h3><p>${link('https://www.bitcoincyclescomparison.com/','Bitcoin Cycles Comparison')}의 네 가지 시작 기준, 정규화, 로그 차트를 바탕으로 독립 구현했습니다. ${link('https://bitcointalk.org/index.php?topic=5512441.0','2024년 이용 기록과 원본 화면')}에서 동작을 교차 확인했습니다. 원본의 데이터 공급자와 계산 소스는 확인하지 못했으므로 가격과 기준일의 완전 일치를 주장하지 않습니다.</p><p>원본은 고점을 ‘다음 반감기 전 최고점’으로 설명하지만 2024년 신규 최고가 이전의 2021년 고점을 계속 기준으로 사용했습니다. 여기서는 혼동을 피하기 위해 고점의 기준 연도와 계산 규칙을 명시합니다. 정확한 1,461일 창, 한국어 UI, 100 지수, 데이터 표와 다운로드는 이 재구현의 선택입니다.</p><h3>05. 출처와 데이터 이용 조건</h3><p>가격 데이터 © Coin Metrics, ${link('https://creativecommons.org/licenses/by-nc/4.0/','CC BY-NC 4.0')}. 원자료를 BTC·USD·일별로 추출하고 정규화한 비상업 연구용 도구입니다. ${link('https://github.com/coinmetrics/data','공개 데이터 라이선스')}를 따릅니다. 금융상품의 매수·매도 권유 또는 미래 가격 예측을 제공하지 않습니다.</p><p>데이터 조회 시각: ${esc(c.metadata.retrievedAt || '번들 기준')}<br>최근 완료 관측: ${c.latest.date} UTC</p>`;
 }
-function showMethod() { closeExport(); if (!state.dataset) return toast('데이터를 불러온 뒤 방법론을 확인할 수 있습니다.'); renderMethod(); $('#method-dialog').showModal(); }
+function showMethod() { closeExport(); if (!state.dataset) return toast('데이터를 불러온 뒤 방법론을 확인할 수 있습니다.'); renderMethod(); $('#method-dialog').showModal(); document.dispatchEvent(new Event('method:open')); }
 $$('[data-method]').forEach(b => b.addEventListener('click', showMethod));
 $('#close-method').addEventListener('click', () => $('#method-dialog').close()); $('#method-done').addEventListener('click', () => $('#method-dialog').close());
 $('#method-dialog').addEventListener('click', e => { if(e.target === $('#method-dialog')) { const r=e.target.getBoundingClientRect(); if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom) e.target.close(); } });
@@ -301,10 +305,12 @@ function renderData() {
   $('#data-summary').innerHTML = `<div><label>관측 범위</label><strong>${rows[0][0]} — ${rows.at(-1)[0]}</strong></div><div><label>일별 관측 수</label><strong>${nfmt(rows.length)}개</strong></div><div><label>가격 정의</label><strong>USD · UTC 일말 · 1d</strong></div>`;
   const filter = $('#data-year').value;
   const filtered = rows.map((r,i)=>({date:r[0],price:r[1],change:i&&utcDay(r[0])-utcDay(rows[i-1][0])===1?(r[1]/rows[i-1][1]-1)*100:null})).filter(r=>filter==='all'||r.date.startsWith(filter)).reverse();
-  const pages = Math.max(1,Math.ceil(filtered.length/25)); state.dataPage = Math.max(0,Math.min(pages-1,state.dataPage));
+  const shell=$('#data-view .table-scroll');
+  const pageSize=Math.max(3,Math.floor((shell.clientHeight-34)/34)||12);
+  const pages = Math.max(1,Math.ceil(filtered.length/pageSize)); state.dataPage = Math.max(0,Math.min(pages-1,state.dataPage));
   $('#data-result-count').textContent = `${nfmt(filtered.length)}개 관측`;
-  $('#data-body').innerHTML = filtered.slice(state.dataPage*25,state.dataPage*25+25).map(r=>`<tr><td>${r.date}</td><td>${money(r.price,r.price<10?6:4)}</td><td class="${tone(r.change)}">${pct(r.change)}</td><td>PriceUSD</td></tr>`).join('');
-  $('#data-page-label').textContent = `${nfmt(state.dataPage+1)} / ${nfmt(pages)} 페이지 · 25행씩 표시`;
+  $('#data-body').innerHTML = filtered.slice(state.dataPage*pageSize,state.dataPage*pageSize+pageSize).map(r=>`<tr><td>${r.date}</td><td>${money(r.price,r.price<10?6:4)}</td><td class="${tone(r.change)}">${pct(r.change)}</td><td>PriceUSD</td></tr>`).join('');
+  $('#data-page-label').textContent = `${nfmt(state.dataPage+1)} / ${nfmt(pages)} 페이지 · ${pageSize}행씩 표시`;
   $('#data-prev').disabled = state.dataPage === 0; $('#data-next').disabled = state.dataPage === pages-1;
 }
 $$('[data-view]').forEach(b => b.addEventListener('click', () => {
@@ -358,12 +364,14 @@ async function refreshData({quiet=false}={}) {
     const previousDate=state.dataset?.prices.at(-1)[0]; state.dataset=next;
     try{localStorage.setItem('btc-cycles-daily-v1',JSON.stringify(next));}catch{}
     render();
+    document.dispatchEvent(new CustomEvent('atlas:data-update',{detail:{status:'success',checkedAt:new Date().toISOString(),latestObservationDate:next.prices.at(-1)[0]}}));
     button.title=`확인 완료: ${next.prices.at(-1)[0]} UTC`;
     if(!quiet)toast(next.prices.at(-1)[0]===previousDate?`최신 완료 관측은 ${previousDate} UTC입니다.`:`${next.prices.at(-1)[0]} UTC까지 데이터를 갱신했습니다.`);
   }catch(error){button.title='갱신에 실패했습니다. 검증된 이전 데이터를 표시합니다.';if(!quiet)toast(`갱신하지 못했습니다. ${state.dataset?.prices.at(-1)?.[0]||'저장된'} 기준 데이터를 유지합니다.`);}
   finally{clearTimeout(timer);refreshing=false;button.disabled=false;button.classList.remove('busy');}
 }
 $('#refresh-button').addEventListener('click',()=>{closeExport();refreshData();});
+let dataResizeTimer;new ResizeObserver(()=>{clearTimeout(dataResizeTimer);dataResizeTimer=setTimeout(()=>{if(state.view==='data')renderData();},100);}).observe($('#data-view'));
 let resizeTimer;new ResizeObserver(()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>renderChart(),100);}).observe($('#chart-stage'));
 let researchResizeTimer;const researchObserver=new ResizeObserver(()=>{clearTimeout(researchResizeTimer);researchResizeTimer=setTimeout(()=>renderResearch(),100);});researchObserver.observe($('#forecast-chart-stage'));researchObserver.observe($('#peak-chart-stage'));
 async function init() {

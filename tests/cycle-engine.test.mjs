@@ -69,7 +69,7 @@ check('Drawdown measures the loss from an earlier observed peak', () => {
   assert.equal(stats.drawdownTroughDate, '2020-01-03');
 });
 
-const data = JSON.parse(await readFile(new URL('../dist/data/btc-daily.json', import.meta.url), 'utf8'));
+const data = JSON.parse(await readFile(new URL('./fixtures/btc-daily-2026-10-20.json', import.meta.url), 'utf8'));
 check('Every real-data mode rebases all starting points to a common value', () => {
   for (const mode of ['halving', 'bottom', 'top', 'breakout']) {
     const result = buildComparison(data, { mode });

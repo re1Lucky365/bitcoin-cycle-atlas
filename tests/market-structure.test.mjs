@@ -8,7 +8,7 @@ import {
   analyzeMarketStructure, STATES,
 } from '../dist/market-structure.js';
 
-const data = JSON.parse(await readFile(new URL('../dist/data/btc-daily.json', import.meta.url), 'utf8'));
+const data = JSON.parse(await readFile(new URL('./fixtures/btc-daily-2026-10-20.json', import.meta.url), 'utf8'));
 const rows = (prices, start = '2020-01-01') => prices.map((price, index) => [dateFromDay(utcDay(start) + index), price]);
 const close = (a, b, tolerance = 1e-10) => assert.ok(Math.abs(a - b) <= tolerance * Math.max(1, Math.abs(b)), `${a} != ${b}`);
 

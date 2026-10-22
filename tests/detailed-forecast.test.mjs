@@ -6,7 +6,7 @@ import { utcDay, dateFromDay } from '../dist/cycle-engine.js';
 import { shiftCalendarMonths } from '../dist/cycle-timing.js';
 import { detectDirectionalChanges } from '../dist/market-structure.js';
 
-const data = JSON.parse(await readFile(new URL('../dist/data/btc-daily.json', import.meta.url), 'utf8'));
+const data = JSON.parse(await readFile(new URL('./fixtures/btc-daily-2026-10-20.json', import.meta.url), 'utf8'));
 const close = (a, b, tol = 1e-10) => assert.ok(Math.abs(a - b) <= tol * Math.max(1, Math.abs(b)), `${a} != ${b}`);
 const fast = { sampleCount: 16 };
 const base = buildDetailedForecast(data, fast);

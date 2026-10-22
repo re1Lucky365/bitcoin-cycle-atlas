@@ -1,0 +1,1165 @@
+{
+  "schemaVersion": "1.0",
+  "subject": "CryptoCon (@CryptoCon_) recent claim audit",
+  "compiledAsOf": "2026-10-22",
+  "timeZoneForObservation": "UTC",
+  "scope": {
+    "years": [
+      2025,
+      2026
+    ],
+    "notCompleteXAccountArchive": true,
+    "titleInventory": [
+      {
+        "year": 2025,
+        "url": "https://www.bitcoindatanewsletter.com/sitemap/2025",
+        "sourceRef": "turn182view0",
+        "listedNonNavigationItems": 87,
+        "titleScreenedItems": 87,
+        "bodyReadAll": false
+      },
+      {
+        "year": 2026,
+        "url": "https://www.bitcoindatanewsletter.com/sitemap/2026",
+        "sourceRef": "turn182view1",
+        "listedNonNavigationItems": 53,
+        "titleScreenedItems": 53,
+        "repeatedNavigationLinksExcluded": 2,
+        "knownChartModelLibraryPagesIncluded": 3,
+        "bodyReadAll": false
+      }
+    ],
+    "inventoryCaveat": "Sitemap counts are listed items, not a count of all Bitcoin analysis posts or all X posts. Paid content, deleted posts, edited history, replies, full videos and original media remain unexamined. Search index coverage is selective.",
+    "selectedLedgerRecords": 34,
+    "distinctDirectAuthorPublicationURLs": 24,
+    "originalXURLs": 9,
+    "accessMethod": "Public web search and source opens; direct X opens returned403. No login or paid-access bypass.",
+    "sourcePriority": [
+      "Direct dated author prose",
+      "Original X excerpt with dated embed corroboration",
+      "Author-hosted AI summary (not transcript verification)",
+      "Search-indexed X excerpt",
+      "Dated secondary reproduction"
+    ]
+  },
+  "data": {
+    "source": "https://community-api.coinmetrics.io/v4/timeseries/asset-metrics?assets=btc&metrics=PriceUSD&frequency=1d&start_time=2010-07-18&end_time=2026-10-21&page_size=10000",
+    "sourceName": "Coin Metrics Community API",
+    "metric": "PriceUSD",
+    "frequency": "1d",
+    "timezone": "UTC",
+    "priceDefinition": "USD price as of end of each labeled UTC day; not intraday high or spot quote",
+    "license": "CC BY-NC 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc/4.0/",
+    "attributionUrl": "https://coinmetrics.io/",
+    "retrievedAt": "2026-10-21T09:16:20.212060+00:00",
+    "firstDate": "2010-07-18",
+    "lastDate": "2026-10-20",
+    "count": 5939,
+    "missingDayCount": 0,
+    "rawSha256": "693094ea9309268ef608b97a4eaebac26eae2f8a128629c5c09416ffa8f9fb93",
+    "cors": "*"
+  },
+  "evaluationRules": {
+    "priceDefinition": "Coin Metrics PriceUSD UTC daily end-of-day observations; intraday exchange highs and self-reported execution prices are different measurements.",
+    "noFutureObservationsAfter": "2026-10-20",
+    "safetyOfClaims": "These are empirical comparisons and conditional scenarios, not mathematical proof of future prices.",
+    "noAggregateAccuracyRate": "Selected publications are not a complete pre-registered population; many repeat the same thesis. Ambiguous, qualitative and unexpired forecasts are not forced into win/loss scores.",
+    "versioning": "Keep each publication date, window and target immutable; a revised window does not overwrite the original.",
+    "highZoneLookAhead": "A threshold defined against the eventual peak uses future information and is retrospective only.",
+    "originalXTimestampInference": "When used: timestamp_ms=(int(status_id)>>22)+1288834974657. This identifies status creation time, not text edit history."
+  },
+  "metrics": {
+    "peak2025": {
+      "date": "2025-10-06",
+      "priceUSD": 124824.453666861
+    },
+    "september2025Maximum": {
+      "date": "2025-09-18",
+      "priceUSD": 117014.426762174
+    },
+    "2026ObservedMinimum": {
+      "date": "2026-06-30",
+      "priceUSD": 58525.0753614845,
+      "isConfirmedFinalCycleBottom": false
+    },
+    "lastObservation": {
+      "date": "2026-10-20",
+      "priceUSD": 82898.9101560549
+    },
+    "lastReturnFrom2026ObservedMinimum": 0.4164682342401713,
+    "lastReturnFrom2025Peak": -0.33587604254771664,
+    "target166754": {
+      "full2025PeakShortfallFraction": -0.25144552054606795,
+      "september2025PeakShortfallFraction": -0.29828114010953866,
+      "july4ToSeptember30PeakShortfallFraction": -0.2597318215919858
+    },
+    "reportedSale": {
+      "priceUSD": 112596.64,
+      "fractionOf2025Peak": 0.9020399184001613,
+      "additionalUpsideTo2025Peak": 0.1085983886096511,
+      "daysFromAug28AnnouncementToPeak": 39,
+      "daysFromAug29XPostToPeak": 38,
+      "executionIndependentlyVerified": false
+    },
+    "narrowOriginalWindowTimingError": {
+      "windowStart": "2025-11-07",
+      "windowEnd": "2025-12-19",
+      "actualPeakDaysBeforeStart": 32,
+      "actualPeakDaysBeforeCenter": 53
+    },
+    "highZoneSensitivity": [
+      {
+        "thresholdFractionOfEventual2025Peak": 0.9,
+        "firstDate": "2025-07-10",
+        "firstPriceUSD": 115873.903783752,
+        "leadDays": 88,
+        "observationsAtOrAboveThreshold": 69,
+        "windowObservations": 89,
+        "windowMDD": -0.12253649182941317
+      },
+      {
+        "thresholdFractionOfEventual2025Peak": 0.95,
+        "firstDate": "2025-07-13",
+        "firstPriceUSD": 118899.737107832,
+        "leadDays": 85,
+        "observationsAtOrAboveThreshold": 16,
+        "windowObservations": 86,
+        "windowMDD": -0.12253649182941317
+      },
+      {
+        "thresholdFractionOfEventual2025Peak": 0.97,
+        "firstDate": "2025-08-13",
+        "firstPriceUSD": 123442.67982225,
+        "leadDays": 54,
+        "observationsAtOrAboveThreshold": 5,
+        "windowObservations": 55,
+        "windowMDD": -0.12253649182941317
+      },
+      {
+        "thresholdFractionOfEventual2025Peak": 0.98,
+        "firstDate": "2025-08-13",
+        "firstPriceUSD": 123442.67982225,
+        "leadDays": 54,
+        "observationsAtOrAboveThreshold": 5,
+        "windowObservations": 55,
+        "windowMDD": -0.12253649182941317
+      },
+      {
+        "thresholdFractionOfEventual2025Peak": 0.99,
+        "firstDate": "2025-10-06",
+        "firstPriceUSD": 124824.453666861,
+        "leadDays": 0,
+        "observationsAtOrAboveThreshold": 1,
+        "windowObservations": 1,
+        "windowMDD": 0
+      }
+    ],
+    "july4ToSeptember30Maximum": {
+      "date": "2025-08-13",
+      "priceUSD": 123442.67982225
+    }
+  },
+  "modelFamilies": [
+    {
+      "id": "halving-cycle",
+      "summaryKo": "4년 달력과 단계별 초기·최종 고점/저점. 창 변경 이력을 보존해야 한다."
+    },
+    {
+      "id": "weekly-cycle",
+      "summaryKo": "저점→고점 주 수의 과거 비교. 152주/10월 예측은 다른 달력 창과 분리한다."
+    },
+    {
+      "id": "fibonacci-price",
+      "summaryKo": ".618 확장 목표. 166754달러 사례는 실제 최고가와 큰 괴리가 있었다."
+    },
+    {
+      "id": "fibonacci-time",
+      "summaryKo": "과거 날짜를 앵커로 하는 시간 비율. 사건 확률·오차분포를 제공하지 않는다."
+    },
+    {
+      "id": "bands-and-diminishing-returns",
+      "summaryKo": "Magic/Bear/Simple Bands, Golden Ratio, MA. 버전·피드·시점에 따라 밴드 값이 변한다."
+    },
+    {
+      "id": "momentum-and-patterns",
+      "summaryKo": "RSI·StochRSI·MACD·DPO·Aroon·약세 깃발은 대체로 같은 가격에서 유도되어 독립 증거 수로 합산할 수 없다."
+    },
+    {
+      "id": "onchain",
+      "summaryKo": "SOPR·NUPL·MVRV·Puell 등의 단계 비교. 계산식·공급자·날짜별 임계치가 없으면 재현성을 제한한다."
+    },
+    {
+      "id": "macro-and-flow",
+      "summaryKo": "M2·기관 유입·사업 주기 같은 외생 설명. 단순 동행·시차 선택은 원인이나 일정한 가속률의 증명이 아니다."
+    }
+  ],
+  "claims": [
+    {
+      "id": "cc-20250425-recovery",
+      "publishedDate": "2025-04-25",
+      "datePrecision": "calendar-day-on-author-page",
+      "title": "Bitcoin Strikes Back",
+      "url": "https://www.bitcoindatanewsletter.com/p/bitcoin-strikes-back",
+      "sourceRefs": [
+        "turn159search7"
+      ],
+      "sourceLevel": "primary",
+      "evidenceType": "author-public-introduction",
+      "modelFamilies": [
+        "onchain-phases",
+        "diminishing-curves"
+      ],
+      "summaryKo": "회복 이후 상승 지속 판단에 Puell 단계·Golden Diminishing Curves를 활용한다고 설명한다.",
+      "assessment": {
+        "status": "context",
+        "explanationKo": "공개 도입부에는 정량 시한·목표가 없어 적중률 계산에서 제외한다."
+      },
+      "readScope": "Public author introduction; paid remainder/video not accessed."
+    },
+    {
+      "id": "cc-20250602-slowest",
+      "publishedDate": "2025-06-02",
+      "datePrecision": "calendar-day-on-author-page",
+      "title": "The State of The Cycle",
+      "url": "https://www.bitcoindatanewsletter.com/p/the-state-of-the-cycle",
+      "sourceRefs": [
+        "turn172view1",
+        "turn161search21"
+      ],
+      "sourceLevel": "primary",
+      "evidenceType": "author-public-introduction",
+      "modelFamilies": [
+        "halving-cycle",
+        "stages"
+      ],
+      "summaryKo": "반복되는 상승 후 정체를 느린 사이클로 해석하며 첫 고점과 최종 상승 단계를 구분한다.",
+      "assessment": {
+        "status": "context",
+        "explanationKo": "일괄적인 주기 단축 주장과 다른 관점이다. 전체 유료 논거를 읽었다고 표시하지 않는다."
+      },
+      "readScope": "Public author introduction; paid remainder/video not accessed."
+    },
+    {
+      "id": "cc-20250613-slowest",
+      "publishedDate": "2025-06-13",
+      "datePrecision": "calendar-day-on-author-page",
+      "title": "The Slowest Cycle Yet",
+      "url": "https://www.bitcoindatanewsletter.com/p/the-slowest-cycle-yet",
+      "sourceRefs": [
+        "turn183view1"
+      ],
+      "sourceLevel": "primary",
+      "evidenceType": "author-public-introduction",
+      "modelFamilies": [
+        "halving-cycle",
+        "stages"
+      ],
+      "summaryKo": "첫 사이클 고점의 예상 기간이 6월에 끝나가며 이번 주기가 매우 느리다고 설명한다.",
+      "assessment": {
+        "status": "context",
+        "explanationKo": "고점 단계의 정의·가격 기준이 공개 도입부에 없어 일별 고점으로 임의 채점하지 않는다."
+      },
+      "readScope": "Public author introduction; paid remainder/video not accessed."
+    },
+    {
+      "id": "cc-20250613-october",
+      "publishedDate": "2025-06-13",
+      "datePrecision": "search-indexed-date",
+      "title": "152-week bottom-to-top timing",
+      "url": "https://x.com/CryptoCon_/status/1933580045546651799",
+      "sourceRefs": [
+        "turn165search0",
+        "turn167search3"
+      ],
+      "sourceLevel": "indexed",
+      "evidenceType": "indexed-x-with-dated-reproduction",
+      "modelFamilies": [
+        "weekly-cycle"
+      ],
+      "summaryKo": "저점에서 고점까지 약 152주라는 비교로 2025년 10월 고점을 제시했다.",
+      "assessment": {
+        "status": "window-match",
+        "explanationKo": "2025년 일별 종가 최고점 10월 6일은 당시 제시한 10월에 포함된다. 주기 이론 전체의 검증이나 확률 보장은 아니다."
+      },
+      "readScope": "Search-indexed text or identified secondary reproduction; original X page could not be opened.",
+      "prediction": {
+        "event": "cycle-top",
+        "start": "2025-10-01",
+        "end": "2025-10-31",
+        "priceUSD": null
+      },
+      "supportingUrls": [
+        "https://forklog.com/en/mayer-multiple-indicates-bitcoins-undervaluation/"
+      ],
+      "originalPostDateConfirmedByDatedEmbed": true
+    },
+    {
+      "id": "cc-20250616-alternatives",
+      "publishedDate": "2025-06-16",
+      "datePrecision": "calendar-day-on-author-page",
+      "title": "Battle of Theories",
+      "url": "https://www.bitcoindatanewsletter.com/p/battle-of-theories",
+      "sourceRefs": [
+        "turn183view2"
+      ],
+      "sourceLevel": "primary",
+      "evidenceType": "author-public-introduction",
+      "modelFamilies": [
+        "halving-cycle",
+        "institutional-cycle"
+      ],
+      "summaryKo": "2026년 연장·기관 주도 슈퍼사이클 등 경쟁 가설을 소개한다.",
+      "assessment": {
+        "status": "context",
+        "explanationKo": "제목과 도입부만으로 저자가 해당 대안들을 지지했다고 추론하지 않는다."
+      },
+      "readScope": "Public author introduction; paid remainder/video not accessed."
+    },
+    {
+      "id": "cc-202507-fib-revision",
+      "publishedDate": "2025-07-04",
+      "datePrecision": "secondary article last-updated day July4 confirmed on NewsBTC; original X post day unknown",
+      "title": "Fibonacci target timeline moved to September",
+      "url": "https://www.tradingview.com/news/newsbtc:f6f582711094b:0-bitcoin-price-to-see-52-increase-to-166-000-analyst-reveals-tight-timeline/",
+      "sourceRefs": [
+        "turn161search2",
+        "turn190view0",
+        "turn199search1"
+      ],
+      "sourceLevel": "secondary",
+      "evidenceType": "dated-secondary-report",
+      "modelFamilies": [
+        "fibonacci-price"
+      ],
+      "summaryKo": "NewsBTC 재전송 기사는 5.618 목표 166754달러의 시한을 9월로 바꾸었다고 전한다.",
+      "assessment": {
+        "status": "target-not-reached-by-deadline",
+        "explanationKo": "보도일 7월 4일부터 9월 30일까지 종가 최고는 123442.68달러로 목표보다 25.97% 낮았다. 9월만의 최고는 117014.43달러다. 원래 X 게시물의 전체 문맥·정확한 게시일은 미확보이다.",
+        "observationDefinition": "daily-close-only; intraday path not supplied by dataset"
+      },
+      "readScope": "Dated full secondary report; original X post not retrieved.",
+      "prediction": {
+        "event": "upside-price-target",
+        "start": "2025-07-04",
+        "end": "2025-09-30",
+        "priceUSD": 166754
+      },
+      "uncertainties": [
+        "Secondary text inconsistently abbreviates target as 160k,166k,166754; explicit model target166754 retained.",
+        "The report says timing had been revised several times.",
+        "Conditional next extension254162 is not treated as an unconditional forecast."
+      ],
+      "supportingUrls": [
+        "https://www.newsbtc.com/es/news/bitcoin/bitcoin-52-increase-to-166000/"
+      ]
+    },
+    {
+      "id": "cc-20250801-fib",
+      "publishedDate": "2025-08-01",
+      "datePrecision": "dated-embedded-original-post",
+      "title": "5.618 extension reaffirmed",
+      "url": "https://x.com/CryptoCon_/status/1951354699489353813",
+      "sourceRefs": [
+        "turn173view0",
+        "turn190view1"
+      ],
+      "sourceLevel": "indexed",
+      "evidenceType": "x-embed-reproduced-by-secondary",
+      "modelFamilies": [
+        "fibonacci-price"
+      ],
+      "summaryKo": "123000달러 부근의 고점 이후에도 5.618 확장 목표 166754달러를 재확인했다.",
+      "assessment": {
+        "status": "unmet-no-explicit-deadline",
+        "explanationKo": "해당 게시물에는 독립적인 달력 시한이 없다. 2025년 전체 종가 최고도 목표에 25.14% 미달했으나, 무기한 예측을 시한 실패로 바꾸지 않는다."
+      },
+      "readScope": "Search-indexed text or identified secondary reproduction; original X page could not be opened.",
+      "prediction": {
+        "event": "upside-price-target",
+        "start": "2025-08-01",
+        "end": null,
+        "priceUSD": 166754
+      },
+      "supportingUrls": [
+        "https://crypto.news/bitcoin-166k-inevitable-fibonacci-model/"
+      ],
+      "subsequentDecision": "cc-20250828-sale-alert"
+    },
+    {
+      "id": "cc-20250828-sale-alert",
+      "publishedDate": "2025-08-28",
+      "datePrecision": "calendar-day-on-author-page",
+      "title": "Cycle Top Urgent Alert, CryptoCon",
+      "url": "https://www.bitcoindatanewsletter.com/p/cycle-top-urgent-alert-cryptocon",
+      "sourceRefs": [
+        "turn183view0"
+      ],
+      "sourceLevel": "primary",
+      "evidenceType": "author-public-introduction",
+      "modelFamilies": [
+        "risk-decision"
+      ],
+      "summaryKo": "공개 도입부에서 비트코인과 알트코인을 모두 매도했다고 발표했다.",
+      "assessment": {
+        "status": "self-reported-action",
+        "explanationKo": "매도 의사결정의 발표는 직접 확인된다. 실제 체결은 독립 감사하지 않았고 가격은 다음날 X의 자기보고를 별도로 취급한다."
+      },
+      "readScope": "Public author introduction; paid remainder/video not accessed."
+    },
+    {
+      "id": "cc-20250828-cycle4",
+      "publishedDate": "2025-08-28",
+      "datePrecision": "calendar-day-on-author-page",
+      "title": "My Time in Cycle 4",
+      "url": "https://www.bitcoindatanewsletter.com/p/my-time-in-cycle-4",
+      "sourceRefs": [
+        "turn172view2"
+      ],
+      "sourceLevel": "primary",
+      "evidenceType": "author-public-introduction",
+      "modelFamilies": [
+        "risk-decision"
+      ],
+      "summaryKo": "사이클 고점 관련 중요한 의사결정을 설명하는 유료 영상의 공개 도입부이다.",
+      "assessment": {
+        "status": "context",
+        "explanationKo": "매매 내역·근거 전체는 읽지 않았다. 공개 매도 알림과 같은 의사결정 계열이며 독립 적중 사례로 세지 않는다."
+      },
+      "readScope": "Public author introduction; paid remainder/video not accessed."
+    },
+    {
+      "id": "cc-20250829-sale-x",
+      "publishedDate": "2025-08-29",
+      "datePrecision": "search-indexed-date",
+      "title": "Reported sale at $112,596.64; August top claim",
+      "url": "https://x.com/CryptoCon_/status/1961486003182403959",
+      "sourceRefs": [
+        "turn165search1",
+        "turn157search4",
+        "turn165search2"
+      ],
+      "sourceLevel": "indexed",
+      "evidenceType": "indexed-x-with-dated-reproduction",
+      "modelFamilies": [
+        "risk-decision",
+        "cycle-top"
+      ],
+      "summaryKo": "112596.64달러 매도와 8월 124000달러가 사이클 고점이었다는 판단을 공개했다.",
+      "assessment": {
+        "status": "mixed-action-versus-timing",
+        "explanationKo": "매도가의 최종 종가 고점 대비 비율은 90.204%다. 이후 10월 6일까지 10.86%의 추가 상승 여지가 있었으므로 8월이 최종 최고점이었다는 엄격한 명제는 맞지 않는다."
+      },
+      "readScope": "Search-indexed text or identified secondary reproduction; original X page could not be opened.",
+      "prediction": {
+        "event": "already-reached-cycle-top",
+        "start": "2025-08-01",
+        "end": "2025-08-31",
+        "priceUSD": 124000,
+        "reportedSalePriceUSD": 112596.64
+      },
+      "supportingUrls": [
+        "https://macroespeculador.substack.com/p/no-es-lo-que-parece"
+      ],
+      "reportedExecutionAudited": false,
+      "announcementDateSeparateFromExecutionDate": true
+    },
+    {
+      "id": "cc-20251201-retrospective",
+      "publishedDate": "2025-12-01",
+      "datePrecision": "search-indexed-date",
+      "title": "October–December retrospective timing window",
+      "url": "https://x.com/CryptoCon_/status/1995550863545266366",
+      "sourceRefs": [
+        "turn184search0",
+        "turn185search3"
+      ],
+      "sourceLevel": "indexed",
+      "evidenceType": "indexed-x",
+      "modelFamilies": [
+        "halving-cycle"
+      ],
+      "summaryKo": "10월 6일 고점을 10–12월의 3개월 창에 들어간 성공으로 해석한다.",
+      "assessment": {
+        "status": "retrospective-not-new-hit",
+        "explanationKo": "2023년의 11월 28일 ±21일이라는 좁은 창과 동일한 예측으로 소급 채점하면 안 된다. 원래 창의 시작 11월 7일보다 실제 고점이 32일 빠르다."
+      },
+      "readScope": "Search-indexed text or identified secondary reproduction; original X page could not be opened.",
+      "prediction": {
+        "event": "retrospective-top-window",
+        "start": "2025-10-01",
+        "end": "2025-12-31",
+        "priceUSD": null
+      },
+      "earlierNarrowWindow": {
+        "start": "2025-11-07",
+        "end": "2025-12-19",
+        "center": "2025-11-28",
+        "originalUrls": [
+          "https://x.com/CryptoCon_/status/1699859069383618986",
+          "https://x.com/CryptoCon_/status/1721180443616104500"
+        ],
+        "crossReference": "CRYPTOCON_EARLY research ledger maintained by sibling agent"
+      }
+    },
+    {
+      "id": "cc-20251204-cycle5",
+      "publishedDate": "2025-12-04",
+      "datePrecision": "calendar-day-on-author-page",
+      "title": "The Start of Cycle 5",
+      "url": "https://www.bitcoindatanewsletter.com/p/the-start-of-cycle-5",
+      "sourceRefs": [
+        "turn181search15"
+      ],
+      "sourceLevel": "primary",
+      "evidenceType": "author-public-introduction",
+      "modelFamilies": [
+        "halving-cycle"
+      ],
+      "summaryKo": "11월 28일이 지나면서 다섯 번째 사이클이 시작되었다고 표현한다.",
+      "assessment": {
+        "status": "context",
+        "explanationKo": "모형상 연도 경계와 거래 가능한 저점 확정은 다르다. 이 발언을 매수 신호로 바꾸지 않는다."
+      },
+      "readScope": "Public author introduction; paid remainder/video not accessed."
+    },
+    {
+      "id": "cc-20251211-bear",
+      "publishedDate": "2025-12-11",
+      "datePrecision": "calendar-day-on-author-page",
+      "title": "Not Your Average Breakdown",
+      "url": "https://www.bitcoindatanewsletter.com/p/not-your-average-breakdown",
+      "sourceRefs": [
+        "turn181search13"
+      ],
+      "sourceLevel": "primary",
+      "evidenceType": "author-public-introduction",
+      "modelFamilies": [
+        "halving-cycle",
+        "bear-market"
+      ],
+      "summaryKo": "하락장 초입에서 지지·반등 저항·다음 사이클 단계·저점 지표를 검토한다고 설명한다.",
+      "assessment": {
+        "status": "context",
+        "explanationKo": "공개 도입부에는 완결된 매매 규칙이 없다."
+      },
+      "readScope": "Public author introduction; paid remainder/video not accessed."
+    },
+    {
+      "id": "cc-20251219-magic-v2",
+      "publishedDate": "2025-12-19",
+      "datePrecision": "calendar-day-on-author-page",
+      "title": "Magic Bands V2",
+      "url": "https://www.bitcoindatanewsletter.com/p/magic-bands-v2",
+      "sourceRefs": [
+        "turn163view2",
+        "turn173search9"
+      ],
+      "sourceLevel": "primary",
+      "evidenceType": "author-hosted-ai-summary",
+      "modelFamilies": [
+        "magic-bands",
+        "momentum",
+        "diminishing-returns"
+      ],
+      "summaryKo": "공개 AI 요약은 가격 피드 교체와 사이클별 밴드 조정, 약 27000–30000달러 저점 밴드를 설명한다.",
+      "assessment": {
+        "status": "model-revision",
+        "explanationKo": "사후 변경된 데이터 피드·상단 밴드가 과거에 맞는다는 사실은 사전 예측력 검증을 대신하지 못한다. 상세 수치는 저자 게시 페이지의 AI 요약이며 원본 영상 대조는 미실시다."
+      },
+      "readScope": "Public author-hosted AI-generated summary; full video and transcript not verified.",
+      "prediction": {
+        "event": "dynamic-bottom-band-not-point-forecast",
+        "priceRangeUSD": [
+          27300,
+          30000
+        ],
+        "start": null,
+        "end": null
+      },
+      "revisionDetails": [
+        "AI recap says old BLX API stopped updating in August2025.",
+        "Top band is reduced one level per cycle in V2."
+      ],
+      "extremeScenarioUSD": 22000
+    },
+    {
+      "id": "cc-20260105-fomo",
+      "publishedDate": "2026-01-05",
+      "datePrecision": "calendar-day-on-author-page",
+      "title": "Feeling FOMO?",
+      "url": "https://www.bitcoindatanewsletter.com/p/feeling-fomo",
+      "sourceRefs": [
+        "turn161search20"
+      ],
+      "sourceLevel": "primary",
+      "evidenceType": "author-public-introduction",
+      "modelFamilies": [
+        "risk-decision",
+        "bear-market"
+      ],
+      "summaryKo": "상승하는 가격 때문에 하락장이 끝났다고 느끼는 심리를 지표와 비교한다.",
+      "assessment": {
+        "status": "context",
+        "explanationKo": "심리·맥락 설명으로 분류하며 가격 예측 성공 횟수로 세지 않는다."
+      },
+      "readScope": "Public author introduction; paid remainder/video not accessed."
+    },
+    {
+      "id": "cc-20260116-hive",
+      "publishedDate": "2026-01-16",
+      "datePrecision": "calendar-day-on-author-page",
+      "title": "The Hive",
+      "url": "https://www.bitcoindatanewsletter.com/p/the-hive",
+      "sourceRefs": [
+        "turn172view3",
+        "turn169search15"
+      ],
+      "sourceLevel": "primary",
+      "evidenceType": "author-hosted-ai-summary",
+      "modelFamilies": [
+        "halving-cycle",
+        "fibonacci-time",
+        "onchain"
+      ],
+      "summaryKo": "공개 AI 요약에는 2026년 말 저점, 2027·2028년 초기 고점과 2029년 두 고점 창이 제시되어 있다.",
+      "assessment": {
+        "status": "pending",
+        "explanationKo": "2026년 10월 22일 시점에 모든 제시된 미래 창의 판정이 끝나지 않았다. 원본 영상·트랜스크립트와 대조하지 않은 AI 요약의 달력은 선택 가능한 참고 오버레이로만 사용한다."
+      },
+      "readScope": "Public author-hosted AI-generated summary; full video and transcript not verified.",
+      "prediction": {
+        "event": "multi-stage-calendar",
+        "windows": [
+          {
+            "event": "cycle-bottom",
+            "start": "2026-11-01",
+            "end": "2027-01-31"
+          },
+          {
+            "event": "first-early-top",
+            "start": "2027-06-01",
+            "end": "2027-07-31"
+          },
+          {
+            "event": "second-early-top",
+            "start": "2028-04-01",
+            "end": "2028-08-31"
+          },
+          {
+            "event": "first-cycle-top",
+            "start": "2029-01-01",
+            "end": "2029-06-30"
+          },
+          {
+            "event": "final-cycle-top",
+            "start": "2029-10-01",
+            "end": "2029-12-31"
+          }
+        ],
+        "priceUSD": null
+      },
+      "mathematicalLimits": [
+        "Fixed Fibonacci time anchors do not supply calibrated event probabilities.",
+        "Price-derived indicators and timing fits are not independent replications."
+      ]
+    },
+    {
+      "id": "cc-20260123-wait",
+      "publishedDate": "2026-01-23",
+      "datePrecision": "calendar-day-on-author-page",
+      "title": "Chasing the Shiny Thing",
+      "url": "https://www.bitcoindatanewsletter.com/p/chasing-the-shiny-thing",
+      "sourceRefs": [
+        "turn181search6"
+      ],
+      "sourceLevel": "primary",
+      "evidenceType": "author-public-introduction",
+      "modelFamilies": [
+        "risk-decision"
+      ],
+      "summaryKo": "다른 자산의 최근 수익률을 따라가기보다 매수 기회를 기다리자는 관점이다.",
+      "assessment": {
+        "status": "context",
+        "explanationKo": "조건·시한 없는 행동 관점으로, 저점 날짜 예측과 분리한다."
+      },
+      "readScope": "Public author introduction; paid remainder/video not accessed."
+    },
+    {
+      "id": "cc-20260128-bear-overlay",
+      "publishedDate": "2026-01-28",
+      "datePrecision": "search-indexed-date",
+      "title": "Bear market overlay with 2014, 2018 and 2022",
+      "url": "https://x.com/CryptoCon_/status/2016592739022836180",
+      "sourceRefs": [
+        "turn184search1",
+        "turn185search2"
+      ],
+      "sourceLevel": "indexed",
+      "evidenceType": "indexed-x",
+      "modelFamilies": [
+        "bear-market-overlay"
+      ],
+      "summaryKo": "과거 하락장을 겹치면 9월 35000달러 부근에 경로가 모이고 저점 시기는 10–11월이라는 비교를 제시한다.",
+      "assessment": {
+        "status": "partial-horizon-elapsed",
+        "explanationKo": "9월 종가 최저는 75650.43달러로 35000달러 경로와 달랐다. 저점 창은 아직 끝나지 않았다. 이것은 별도 과거 경로 비교이며 11–1월 이론 창과 같다고 합치지 않는다."
+      },
+      "readScope": "Search-indexed text or identified secondary reproduction; original X page could not be opened.",
+      "prediction": {
+        "event": "normalized-bear-comparison",
+        "pathIntersection": {
+          "start": "2026-09-01",
+          "end": "2026-09-30",
+          "priceUSD": 35000
+        },
+        "bottomWindow": {
+          "start": "2026-10-01",
+          "end": "2026-11-30"
+        }
+      },
+      "assessmentScope": "Scenario overlay, not a proven unconditional guarantee; full chart unavailable."
+    },
+    {
+      "id": "cc-20260205-first-low",
+      "publishedDate": "2026-02-05",
+      "datePrecision": "calendar-day-on-author-page",
+      "title": "The First Low",
+      "url": "https://www.bitcoindatanewsletter.com/p/the-first-low",
+      "sourceRefs": [
+        "turn181search11"
+      ],
+      "sourceLevel": "primary",
+      "evidenceType": "author-public-introduction",
+      "modelFamilies": [
+        "onchain",
+        "technical-bottoms"
+      ],
+      "summaryKo": "일부 지표는 이미 저점을 시사하지만 전체 지표와 비교해야 한다고 설명한다.",
+      "assessment": {
+        "status": "context",
+        "explanationKo": "가능성을 논의한 도입부를 최종 저점 확정 선언으로 바꾸지 않는다."
+      },
+      "readScope": "Public author introduction; paid remainder/video not accessed."
+    },
+    {
+      "id": "cc-20260403-rolling",
+      "publishedDate": "2026-04-03",
+      "datePrecision": "calendar-day-on-author-page",
+      "title": "Keep the Cycle Rolling",
+      "url": "https://www.bitcoindatanewsletter.com/p/keep-the-cycle-rolling",
+      "sourceRefs": [
+        "turn163view1",
+        "turn173search7"
+      ],
+      "sourceLevel": "primary",
+      "evidenceType": "author-hosted-ai-summary",
+      "modelFamilies": [
+        "halving-cycle",
+        "simple-bands",
+        "SOPR"
+      ],
+      "summaryKo": "공개 AI 요약은 8–10월의 두 번째 저점 단계, 11–1월의 최종 저점, 약 42000달러 밴드를 제시한다.",
+      "assessment": {
+        "status": "pending",
+        "explanationKo": "단계별 시기와 동적 가격 밴드는 구분해야 한다. 마지막 저점 창은 아직 시작되지 않았고 AI 요약의 정확한 영상 검증도 남아 있다."
+      },
+      "readScope": "Public author-hosted AI-generated summary; full video and transcript not verified.",
+      "prediction": {
+        "event": "staged-bottom",
+        "windows": [
+          {
+            "event": "second-low",
+            "start": "2026-08-01",
+            "end": "2026-10-31"
+          },
+          {
+            "event": "final-cycle-bottom",
+            "start": "2026-11-01",
+            "end": "2027-01-31"
+          }
+        ],
+        "dynamicBandUSD": 42000
+      },
+      "retrospectivePhases": [
+        "AI recap identifies SOPR profit readings in March2024,November2024,July2025; these are not necessarily ultimate price highs."
+      ]
+    },
+    {
+      "id": "cc-20260410-flags",
+      "publishedDate": "2026-04-10",
+      "datePrecision": "UTC-day-inferred-from-X-snowflake; search-excerpt-context",
+      "title": "Second bear flag compared with 2022",
+      "url": "https://x.com/CryptoCon_/status/2042649159623200996",
+      "sourceRefs": [
+        "turn159search1"
+      ],
+      "sourceLevel": "indexed",
+      "evidenceType": "indexed-x",
+      "modelFamilies": [
+        "chart-patterns"
+      ],
+      "summaryKo": "2026년 두 번째 약세 깃발을 2022년의 연속 깃발과 비교하며 패턴의 불완전성도 인정한다.",
+      "assessment": {
+        "status": "context",
+        "explanationKo": "깃발의 정의·진입·실패 기준이 확보되지 않아 전략 수익률을 재현할 수 없다."
+      },
+      "readScope": "Search-indexed text or identified secondary reproduction; original X page could not be opened."
+    },
+    {
+      "id": "cc-20260429-bearbands",
+      "publishedDate": "2026-04-29",
+      "datePrecision": "search-indexed-date",
+      "title": "Bear Bands bottom region",
+      "url": "https://x.com/CryptoCon_/status/2049567830052425750",
+      "sourceRefs": [
+        "turn159search12"
+      ],
+      "sourceLevel": "indexed",
+      "evidenceType": "indexed-x",
+      "modelFamilies": [
+        "bear-bands"
+      ],
+      "summaryKo": "Bear Bands의 저점 영역을 약 28000달러로 제시한다.",
+      "assessment": {
+        "status": "unmet-no-explicit-deadline",
+        "explanationKo": "지표 밴드 값은 해당 날짜의 동적 기준이다. 그 가격 도달을 무조건 보장한 예측으로 바꾸지 않는다."
+      },
+      "readScope": "Search-indexed text or identified secondary reproduction; original X page could not be opened.",
+      "prediction": {
+        "event": "dynamic-bottom-band",
+        "priceUSD": 28000,
+        "start": null,
+        "end": null
+      }
+    },
+    {
+      "id": "cc-20260518-bounce",
+      "publishedDate": "2026-05-18",
+      "datePrecision": "calendar-day-on-author-page",
+      "title": "A Bounce from the Ceiling",
+      "url": "https://www.bitcoindatanewsletter.com/p/a-bounce-from-the-ceiling",
+      "sourceRefs": [
+        "turn181search10"
+      ],
+      "sourceLevel": "primary",
+      "evidenceType": "author-public-introduction",
+      "modelFamilies": [
+        "global-M2",
+        "chart-patterns",
+        "onchain"
+      ],
+      "summaryKo": "약세 깃발·글로벌 M2·지표를 근거로 추가 하락 가능성을 설명한다.",
+      "assessment": {
+        "status": "direction-consistent-not-formal-score",
+        "explanationKo": "이후 6월 저점이 관측되었지만 구체적인 목표·실패 기준이 없는 정성 발언이라 적중률 계산에서 제외한다."
+      },
+      "readScope": "Public author introduction; paid remainder/video not accessed."
+    },
+    {
+      "id": "cc-20260609-pseudo",
+      "publishedDate": "2026-06-09",
+      "datePrecision": "calendar-day-on-author-page",
+      "title": "Pseudo Double Bottom",
+      "url": "https://www.bitcoindatanewsletter.com/p/pseudo-double-bottom",
+      "sourceRefs": [
+        "turn181search2"
+      ],
+      "sourceLevel": "primary",
+      "evidenceType": "author-public-introduction",
+      "modelFamilies": [
+        "halving-cycle",
+        "onchain",
+        "model-weighting"
+      ],
+      "summaryKo": "모형에서 시간과 지표에 같은 비중을 두도록 바꾸었다고 밝히며 11월–1월을 유지한다.",
+      "assessment": {
+        "status": "method-revision",
+        "explanationKo": "모형 결합 가중치가 바뀌었다는 직접적인 공개 근거다. 변경 전후 성과를 한 전략처럼 합산하지 않는다."
+      },
+      "readScope": "Public author introduction; paid remainder/video not accessed.",
+      "prediction": {
+        "event": "cycle-bottom",
+        "start": "2026-11-01",
+        "end": "2027-01-31",
+        "priceUSD": null
+      }
+    },
+    {
+      "id": "cc-20260615-window",
+      "publishedDate": "2026-06-15",
+      "datePrecision": "UTC-day-inferred-from-X-snowflake; search-excerpt-context",
+      "title": "Bottom consensus versus November–January window",
+      "url": "https://x.com/CryptoCon_/status/2066560952258969973",
+      "sourceRefs": [
+        "turn159search10"
+      ],
+      "sourceLevel": "indexed",
+      "evidenceType": "indexed-x",
+      "modelFamilies": [
+        "halving-cycle"
+      ],
+      "summaryKo": "저점 확정이라는 시장 분위기와 달리 11월–1월 창을 유지한다.",
+      "assessment": {
+        "status": "pending",
+        "explanationKo": "향후 기간이므로 아직 결과를 확정하지 않는다. 검색 색인만 확보했다."
+      },
+      "readScope": "Search-indexed text or identified secondary reproduction; original X page could not be opened.",
+      "prediction": {
+        "event": "cycle-bottom",
+        "start": "2026-11-01",
+        "end": "2027-01-31",
+        "priceUSD": null
+      }
+    },
+    {
+      "id": "cc-20260629-low40",
+      "publishedDate": "2026-06-29",
+      "datePrecision": "calendar-day-on-author-page",
+      "title": "Waiting is the Money Maker",
+      "url": "https://www.bitcoindatanewsletter.com/p/waiting-is-the-money-maker",
+      "sourceRefs": [
+        "turn181search4"
+      ],
+      "sourceLevel": "primary",
+      "evidenceType": "author-public-introduction",
+      "modelFamilies": [
+        "bottom-indicators",
+        "halving-cycle"
+      ],
+      "summaryKo": "6만 달러 부근에서 더 낮은 가격을 예상하며 연말까지 4만 달러 초반 가능성을 제시한다.",
+      "assessment": {
+        "status": "pending",
+        "explanationKo": "데이터 마지막 날까지 4만 달러 초반은 관측되지 않았지만 2026년 말 기한은 아직 남아 있다. 뒤의 전망 수정도 함께 표시한다."
+      },
+      "readScope": "Public author introduction; paid remainder/video not accessed.",
+      "prediction": {
+        "event": "lower-bottom-region",
+        "start": "2026-06-29",
+        "end": "2026-12-31",
+        "priceText": "low 40ks",
+        "priceRangeUSD": null
+      },
+      "doNotInventExactBounds": true,
+      "subsequentRevisionIds": [
+        "cc-20260921-revision",
+        "cc-20261006-limbo"
+      ]
+    },
+    {
+      "id": "cc-20260707-building",
+      "publishedDate": "2026-07-07",
+      "datePrecision": "author-page-day; search/related-link sometimes July6",
+      "title": "Cycle Bottom Building Blocks",
+      "url": "https://www.bitcoindatanewsletter.com/p/cycle-bottom-building-blocks",
+      "sourceRefs": [
+        "turn161search12"
+      ],
+      "sourceLevel": "primary",
+      "evidenceType": "author-public-introduction",
+      "modelFamilies": [
+        "bottom-indicators"
+      ],
+      "summaryKo": "반등과 하락 모멘텀 약화만으로 하락장 종료를 확정하지 말자는 도입부다.",
+      "assessment": {
+        "status": "context",
+        "explanationKo": "페이지 본문 날짜는 7월 7일이지만 일부 검색·관련글 표시는 7월 6일이다. 날짜 불일치를 보존한다."
+      },
+      "readScope": "Public author introduction; paid remainder/video not accessed.",
+      "alternateIndexedDate": "2026-07-06"
+    },
+    {
+      "id": "cc-20260728-nottober",
+      "publishedDate": "2026-07-28",
+      "datePrecision": "calendar-day-on-author-page",
+      "title": "Not-Tober",
+      "url": "https://www.bitcoindatanewsletter.com/p/not-tober",
+      "sourceRefs": [
+        "turn183view4"
+      ],
+      "sourceLevel": "primary",
+      "evidenceType": "author-public-introduction",
+      "modelFamilies": [
+        "halving-cycle"
+      ],
+      "summaryKo": "대중적인 10월 저점 주장과 구분해 자신의 저점 창을 2026년 11월–2027년 1월로 명시한다.",
+      "assessment": {
+        "status": "pending",
+        "explanationKo": "시간 창은 저자 공개 도입부에서 직접 확인된다. 10월 22일 기준 아직 시작 전이다."
+      },
+      "readScope": "Public author introduction; paid remainder/video not accessed.",
+      "prediction": {
+        "event": "cycle-bottom",
+        "start": "2026-11-01",
+        "end": "2027-01-31",
+        "priceUSD": null
+      }
+    },
+    {
+      "id": "cc-20260828-stuck",
+      "publishedDate": "2026-08-28",
+      "datePrecision": "calendar-day-on-author-page",
+      "title": "Stuck in My Ways",
+      "url": "https://www.bitcoindatanewsletter.com/p/stuck-in-my-ways",
+      "sourceRefs": [
+        "turn163view0",
+        "turn181search9"
+      ],
+      "sourceLevel": "primary",
+      "evidenceType": "author-hosted-ai-summary",
+      "modelFamilies": [
+        "halving-cycle",
+        "technical-bottoms",
+        "magic-bands",
+        "moving-average"
+      ],
+      "summaryKo": "저자 도입부는 상승에도 사이클을 유지한다. AI 요약은 2·6월의 기술적 저점과 최종 저점을 구분한다.",
+      "assessment": {
+        "status": "pending-with-explicit-countercase",
+        "explanationKo": "AI 요약에 2022년과 닮은 두 단계 저점·고점의 다중 신호·사이클 변경 가능성이 함께 있다. 이는 단계 분리에 도움되나 일정한 가속률의 증명은 아니다."
+      },
+      "readScope": "Public author-hosted AI-generated summary; full video and transcript not verified.",
+      "prediction": {
+        "event": "preferred-cycle-bottom-window",
+        "start": "2026-11-01",
+        "end": "2027-01-31",
+        "priceText": "low-to-mid 40ks as plausible;29k band less likely",
+        "priceRangeUSD": null
+      },
+      "countercase": "Already-bottomed possibility explicitly acknowledged in hosted AI recap.",
+      "thresholdAtPublicationUSD": 83000,
+      "thresholdMustNotBeTreatedAsUnbrokenAfterSeptember2026": true
+    },
+    {
+      "id": "cc-20260909-no-fixed",
+      "publishedDate": "2026-09-09",
+      "datePrecision": "search-indexed-date",
+      "title": "Avoid locking onto one bottom price",
+      "url": "https://x.com/CryptoCon_/status/2097754044718833964",
+      "sourceRefs": [
+        "turn159search15"
+      ],
+      "sourceLevel": "indexed",
+      "evidenceType": "indexed-x",
+      "modelFamilies": [
+        "bottom-bands"
+      ],
+      "summaryKo": "하나의 저점 가격에 고정하지 말자는 취지로 밴드 접근을 설명한다.",
+      "assessment": {
+        "status": "qualifying-price-certainty",
+        "explanationKo": "과거의 특정 가격대를 현재도 확정 목표로 유지한다고 표시해서는 안 된다."
+      },
+      "readScope": "Search-indexed text or identified secondary reproduction; original X page could not be opened."
+    },
+    {
+      "id": "cc-20260921-revision",
+      "publishedDate": "2026-09-21",
+      "datePrecision": "calendar-day-on-author-page",
+      "title": "CryptoCon Gets It Wrong!",
+      "url": "https://www.bitcoindatanewsletter.com/p/cryptocon-gets-it-wrong",
+      "sourceRefs": [
+        "turn183view3"
+      ],
+      "sourceLevel": "primary",
+      "evidenceType": "author-public-introduction",
+      "modelFamilies": [
+        "model-revision"
+      ],
+      "summaryKo": "약 86000달러 도달은 판단을 유의미하게 바꾸므로 기존 관점에 머물 수 없다고 밝힌다.",
+      "assessment": {
+        "status": "explicit-outlook-change",
+        "explanationKo": "공개 도입부는 판단 변경을 확인하지만 유료 본문의 매수·매도 규모와 최종 결론은 알 수 없다. 변경을 부인하거나 전량 매수로 추정하면 안 된다."
+      },
+      "readScope": "Public author introduction; paid remainder/video not accessed."
+    },
+    {
+      "id": "cc-20261006-limbo",
+      "publishedDate": "2026-10-06",
+      "datePrecision": "calendar-day-on-author-page",
+      "title": "Trapped in Limbo",
+      "url": "https://www.bitcoindatanewsletter.com/p/trapped-in-limbo",
+      "sourceRefs": [
+        "turn183view6"
+      ],
+      "sourceLevel": "primary",
+      "evidenceType": "author-public-introduction",
+      "modelFamilies": [
+        "higher-low",
+        "halving-cycle"
+      ],
+      "summaryKo": "83000달러 위의 가격에서 더 높은 저점을 기다리면서도 11월–1월 창과 미충족 지표를 유지한다.",
+      "assessment": {
+        "status": "conditional-outlook",
+        "explanationKo": "6월보다 낮은 저점만 기다린다는 단일 경로에서 조건부 분기로 넓어졌다. 공개 도입부를 기준으로 정리한다."
+      },
+      "readScope": "Public author introduction; paid remainder/video not accessed."
+    },
+    {
+      "id": "cc-20261014-options",
+      "publishedDate": "2026-10-14",
+      "datePrecision": "calendar-day-on-author-page",
+      "title": "Exploring Your Options",
+      "url": "https://www.bitcoindatanewsletter.com/p/exploring-your-options",
+      "sourceRefs": [
+        "turn183view5"
+      ],
+      "sourceLevel": "primary",
+      "evidenceType": "author-public-introduction",
+      "modelFamilies": [
+        "higher-low",
+        "cycle-continuation"
+      ],
+      "summaryKo": "더 높은 저점과 사이클 지속의 근거, 이미 충족된 저점 신호와 남은 신호를 비교한다.",
+      "assessment": {
+        "status": "conditional-outlook",
+        "explanationKo": "확정된 미래 경로나 하나의 목표가로 환원할 수 없다."
+      },
+      "readScope": "Public author introduction; paid remainder/video not accessed."
+    },
+    {
+      "id": "cc-20261020-unfinished",
+      "publishedDate": "2026-10-20",
+      "datePrecision": "calendar-day-on-author-page",
+      "title": "Unfinished Business",
+      "url": "https://www.bitcoindatanewsletter.com/p/unfinished-business",
+      "sourceRefs": [
+        "turn181search3",
+        "turn173search1"
+      ],
+      "sourceLevel": "primary",
+      "evidenceType": "author-public-introduction",
+      "modelFamilies": [
+        "higher-low",
+        "cycle-bottom"
+      ],
+      "summaryKo": "58000달러 부근이 이미 저점일 근거를 인정하지만 가짜 저점 가능성과 재시험도 검토한다.",
+      "assessment": {
+        "status": "latest-uncertain",
+        "explanationKo": "조사 시점의 최신 공개 도입부는 상반된 가능성을 함께 다룬다. 최종 저점 확정 또는 추가 폭락 확정이라고 표현하지 않는다."
+      },
+      "readScope": "Public author introduction; paid remainder/video not accessed."
+    }
+  ],
+  "excludedOrUnscoredExamples": [
+    {
+      "url": "https://www.ainvest.com/news/bitcoin-cycle-peak-october-2025-cryptocon-2506/",
+      "sourceRef": "turn167search1",
+      "reason": "Secondary report has implausible historical top dates; not used for historical market data."
+    },
+    {
+      "url": "https://x.com/CryptoCon_/status/2080393540396343615",
+      "sourceRef": "turn159search5",
+      "reason": "Indexed year/window text conflicts with status timing; no precise date scoring."
+    },
+    {
+      "url": "https://x.com/CryptoCon_/status/2072063476265083003",
+      "sourceRef": "turn159search13",
+      "reason": "Crowd calendar/satirical bottom-in language should not be attributed as the author confirming a bottom."
+    },
+    {
+      "url": "https://x.com/CryptoCon_/status/1960025551844130922",
+      "sourceRef": "turn157search1",
+      "reason": "Optimistic fragment without chart context is insufficient for an exact scored prediction."
+    }
+  ]
+}

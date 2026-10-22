@@ -1,0 +1,1404 @@
+{
+  "schemaVersion": 1,
+  "retrievedAt": "2026-10-22",
+  "scope": {
+    "author": "CryptoCon",
+    "handle": "@CryptoCon_",
+    "throughDate": "2024-12-31",
+    "purpose": "동시대 주장과 수정 이력 추적. 예측의 진실성 또는 전체 계정 정확도를 보증하는 목록이 아님.",
+    "exhaustive": false
+  },
+  "coverage": {
+    "officialSitemapRoot": "https://www.bitcoindatanewsletter.com/sitemap",
+    "officialSitemapYearsFound": [
+      2021,
+      2022,
+      2023,
+      2024,
+      2025,
+      2026
+    ],
+    "inventoriedYears": [
+      {
+        "year": 2021,
+        "indexedItems": 9,
+        "explicitBitcoin": 9,
+        "explicitOtherAssets": 0,
+        "utilityOrAssetArchive": 0,
+        "ambiguous": 0,
+        "broadCandidateCount": 9,
+        "sitemapUrl": "https://www.bitcoindatanewsletter.com/sitemap/2021",
+        "sourceRef": "turn175view2"
+      },
+      {
+        "year": 2022,
+        "indexedItems": 6,
+        "explicitBitcoin": 5,
+        "explicitOtherAssets": 0,
+        "utilityOrAssetArchive": 0,
+        "ambiguous": 1,
+        "broadCandidateCount": 6,
+        "sitemapUrl": "https://www.bitcoindatanewsletter.com/sitemap/2022",
+        "sourceRef": "turn175view1"
+      },
+      {
+        "year": 2023,
+        "indexedItems": 141,
+        "explicitBitcoin": 24,
+        "explicitOtherAssets": 18,
+        "utilityOrAssetArchive": 1,
+        "ambiguous": 98,
+        "broadCandidateCount": 122,
+        "sitemapUrl": "https://www.bitcoindatanewsletter.com/sitemap/2023",
+        "sourceRef": "turn175view0"
+      },
+      {
+        "year": 2024,
+        "indexedItems": 196,
+        "explicitBitcoin": 14,
+        "explicitOtherAssets": 24,
+        "utilityOrAssetArchive": 31,
+        "ambiguous": 127,
+        "broadCandidateCount": 141,
+        "sitemapUrl": "https://www.bitcoindatanewsletter.com/sitemap/2024",
+        "sourceRef": "turn177view0"
+      }
+    ],
+    "totalIndexedItems": 352,
+    "titleScreening": {
+      "totalExplicitBitcoin": 52,
+      "totalBroadCandidates": 278,
+      "method": "연도별 본문 링크에서 공통 내비게이션0–6을 제외하고 링크ID별 중복 제거. 제목에Bitcoin/BTC/BitTime/BitX/Halving이 있으면 우선 명시BTC;나머지 Altcoin/Altseason/Ethereum/ETH/Solana/AGIX/Litecoin/Cardano/XRP는 기타자산;나머지Library/Archive/Research Models/Technical Analysis School/Welcome/Premium Charts/Premium Chat는자료·아카이브;나머지는불명. 광의후보=명시BTC+불명. 제목만의기계적스크리닝이며본문의관련성확정이아님."
+    },
+    "selectedDistinctOriginalUrls": 31,
+    "selectedFirstPartyNewsletterUrls": 15,
+    "fullPublicNewsletterBodiesRead": 5,
+    "partialNewsletterBodiesOrVideoIntrosRead": 10,
+    "indexedXRecords": 16,
+    "scopeLimits": [
+      "352개는공식사이트맵의제목·링크발견수이며352개본문을분석했다는뜻이아니다.",
+      "모든X게시물·답글·삭제글·비공개글·유료본문·영상전체를열람하지못했다.",
+      "선별목적표본으로서전체예측정확도나전체계정의실패율계산에사용할수없다.",
+      "원본X이미지와공식뉴스레터의과거시점해시·수정이력을확보하지못했다.",
+      "동일게시물의X/뉴스레터반복과기사재전송은별도독립증거로계산하지않는다."
+    ],
+    "selectionCriteria": [
+      "반감기·11월28달력의최초공개및변경",
+      "조기고점·6개월이동·횡보·복수고점논쟁",
+      "명시적인사전가격목표와시점",
+      "과거오류·수정·조건부표현",
+      "원문접근가능성과날짜검증가능성"
+    ]
+  },
+  "claims": [
+    {
+      "id": "cc-e-20210325",
+      "postedDate": "2021-03-25",
+      "datePrecision": "day",
+      "originalUrl": "https://www.bitcoindatanewsletter.com/p/bitcoin-data-newsletter-1",
+      "title": "Bitcoin Data Newsletter #1",
+      "paraphrase": "MVRV·Puell·HODL 지표를 종합해 당시 고점을 약 두 달 뒤로 추정했다. Pi Cycle은 과거 데이터에 맞춰 만들어진 지표이고 당시 첫 실제 시험이라는 이유로 매도 판단에서 제외했다.",
+      "modelFamily": [
+        "on-chain",
+        "momentum",
+        "Pi-Cycle"
+      ],
+      "claimType": "conditional-forecast",
+      "predictedDate": "2021-05",
+      "predictedDateRange": null,
+      "targetPrice": null,
+      "targetPriceRange": null,
+      "priceCurrency": "USD",
+      "eventKind": "cycle_top",
+      "observedSources": [
+        {
+          "url": "https://www.bitcoindatanewsletter.com/p/bitcoin-data-newsletter-1",
+          "level": "primary",
+          "refs": [
+            "turn177view2"
+          ],
+          "access": "full_public_text"
+        }
+      ],
+      "sourceLevel": "primary",
+      "accessLevel": "full_public_text",
+      "evidenceLimits": [
+        "약 두 달은 조건부 근사 시점이다.",
+        "지표별 계산 코드·원시 데이터는 확보하지 않았다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 2
+    },
+    {
+      "id": "cc-e-20210424",
+      "postedDate": "2021-04-24",
+      "datePrecision": "day",
+      "originalUrl": "https://www.bitcoindatanewsletter.com/p/bitcoin-data-newsletter",
+      "title": "Bitcoin Data Newsletter — Big Update",
+      "paraphrase": "64,000달러 부근을 이미 고점일 가능성이 큰 구간으로 보고, 낮아지는 고점으로 확인되면 매도하겠다는 계획을 설명했다. Pi Cycle을 배제했던 판단을 바꿨다. 연말 두 번째 상승 가능성도 명시적으로 남겨 두었다.",
+      "modelFamily": [
+        "market-structure",
+        "Pi-Cycle",
+        "on-chain"
+      ],
+      "claimType": "regime-assessment",
+      "predictedDate": null,
+      "predictedDateRange": null,
+      "targetPrice": 64000,
+      "targetPriceRange": null,
+      "priceCurrency": "USD",
+      "eventKind": "already-formed-top-zone",
+      "observedSources": [
+        {
+          "url": "https://www.bitcoindatanewsletter.com/p/bitcoin-data-newsletter",
+          "level": "primary",
+          "refs": [
+            "turn198view0"
+          ],
+          "access": "full_public_text"
+        }
+      ],
+      "sourceLevel": "primary",
+      "accessLevel": "full_public_text",
+      "evidenceLimits": [
+        "64,000은 미래 목표가가 아니라 이미 지나간 고점에 대한 판단이다.",
+        "이 글은 실제 매도 체결 증빙이 아니다.",
+        "후속 고점 가능성을 부정한 무조건적 예측으로 읽으면 안 된다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 1
+    },
+    {
+      "id": "cc-e-20221115",
+      "postedDate": "2022-11-15",
+      "datePrecision": "day",
+      "originalUrl": "https://www.bitcoindatanewsletter.com/p/what-happened-to-bitcoin",
+      "title": "What Happened to Bitcoin?",
+      "paraphrase": "FTX 이후 MVRV·피보나치 밴드·장기 보유 지표를 근거로 저점권 매집 의견을 냈다. 2021년 두 번째 69,000달러 고점을 예상하지 못했다고 인정했다.",
+      "modelFamily": [
+        "on-chain",
+        "Fibonacci-price",
+        "bottom-zone"
+      ],
+      "claimType": "regime-assessment",
+      "predictedDate": null,
+      "predictedDateRange": null,
+      "targetPrice": null,
+      "targetPriceRange": null,
+      "priceCurrency": "USD",
+      "eventKind": "bottom_zone",
+      "observedSources": [
+        {
+          "url": "https://www.bitcoindatanewsletter.com/p/what-happened-to-bitcoin",
+          "level": "primary",
+          "refs": [
+            "turn178view1"
+          ],
+          "access": "full_public_text"
+        }
+      ],
+      "sourceLevel": "primary",
+      "accessLevel": "full_public_text",
+      "evidenceLimits": [
+        "2022년 11월의 동시대 저점권 의견이며 정확한 최저점 날짜 예측은 아니다.",
+        "과거 매수가·매도가는 본인 진술이고 독립적인 거래 기록 검증은 없다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 1
+    },
+    {
+      "id": "cc-e-20221128",
+      "postedDate": "2022-11-28",
+      "datePrecision": "day",
+      "originalUrl": "https://www.bitcoindatanewsletter.com/p/why-you-should-probably-buy-bitcoin",
+      "title": "Why you should probably buy Bitcoin right now",
+      "paraphrase": "15,000~16,000달러 부근을 매력적인 매수 구간으로 보며 더 정확한 바닥만 기다리는 위험을 설명했다.",
+      "modelFamily": [
+        "bottom-zone"
+      ],
+      "claimType": "regime-assessment",
+      "predictedDate": null,
+      "predictedDateRange": null,
+      "targetPrice": null,
+      "targetPriceRange": {
+        "min": 15000,
+        "max": 16000,
+        "interpretation": "당시 평가한 저점권; 미래 목표 아님"
+      },
+      "priceCurrency": "USD",
+      "eventKind": "bottom_zone",
+      "observedSources": [
+        {
+          "url": "https://www.bitcoindatanewsletter.com/p/why-you-should-probably-buy-bitcoin",
+          "level": "primary",
+          "refs": [
+            "turn166search3"
+          ],
+          "access": "public_teaser_paid_body"
+        }
+      ],
+      "sourceLevel": "primary",
+      "accessLevel": "public_teaser_paid_body",
+      "evidenceLimits": [
+        "공개 도입부만 읽었으며 유료 본문은 확인하지 않았다.",
+        "개별 투자자에게 적용할 매수 권고로 전환하지 않는다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 3
+    },
+    {
+      "id": "cc-e-20221212",
+      "postedDate": "2022-12-12",
+      "datePrecision": "day",
+      "originalUrl": "https://www.bitcoindatanewsletter.com/p/why-its-risky-not-to-buy-bitcoin",
+      "title": "Why it’s Risky NOT to Buy Bitcoin Right Now",
+      "paraphrase": "당시 추가 하락을 뒷받침하는 데이터가 제한적이라고 보며 저점권에서 기다리기보다 축적하는 입장을 유지했다.",
+      "modelFamily": [
+        "bottom-zone"
+      ],
+      "claimType": "regime-assessment",
+      "predictedDate": null,
+      "predictedDateRange": null,
+      "targetPrice": null,
+      "targetPriceRange": null,
+      "priceCurrency": "USD",
+      "eventKind": "bottom_zone",
+      "observedSources": [
+        {
+          "url": "https://www.bitcoindatanewsletter.com/p/why-its-risky-not-to-buy-bitcoin",
+          "level": "primary",
+          "refs": [
+            "turn178view0"
+          ],
+          "access": "public_teaser_paid_body"
+        }
+      ],
+      "sourceLevel": "primary",
+      "accessLevel": "public_teaser_paid_body",
+      "evidenceLimits": [
+        "유료 본문은 확인하지 않았다.",
+        "공개 부분에서 확정적인 목표 가격이나 기한을 추출할 수 없다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 3
+    },
+    {
+      "id": "cc-e-20230103-x",
+      "postedDate": "2023-01-03",
+      "datePrecision": "day",
+      "originalUrl": "https://x.com/CryptoCon_/status/1610320481814552580",
+      "title": "November 28th Cycles Theory 최초 공개",
+      "paraphrase": "첫 반감기 날짜인 11월 28일을 기준으로 신고가·약세·축적·준비의 네 연차를 설명하는 이론을 제시했다.",
+      "modelFamily": [
+        "calendar-halving"
+      ],
+      "claimType": "model-introduction",
+      "predictedDate": null,
+      "predictedDateRange": null,
+      "targetPrice": null,
+      "targetPriceRange": null,
+      "priceCurrency": "USD",
+      "eventKind": null,
+      "observedSources": [
+        {
+          "url": "https://x.com/CryptoCon_/status/1610320481814552580",
+          "level": "indexed",
+          "refs": [
+            "turn189search2"
+          ],
+          "access": "search_index"
+        },
+        {
+          "url": "https://www.bitcoindatanewsletter.com/p/bitcoins-2024-roadmap",
+          "level": "primary",
+          "refs": [
+            "turn166search0"
+          ],
+          "access": "public_teaser_paid_body"
+        },
+        {
+          "url": "https://threadreaderapp.com/user/CryptoCon_",
+          "level": "secondary",
+          "refs": [
+            "turn187view1"
+          ],
+          "access": "third_party_transcription"
+        }
+      ],
+      "sourceLevel": "indexed",
+      "accessLevel": "search_index",
+      "evidenceLimits": [
+        "X 직접 열기는 403이었다. 색인과 본인의 후속 설명으로 출처·날짜를 확인했다.",
+        "공개가 2022년 11월 저점 이후이므로 그 저점을 이 모델의 사전예측 적중으로 계산하면 안 된다.",
+        "전체 X 스레드·이미지를 확보하지 않았다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 1
+    },
+    {
+      "id": "cc-e-20230109",
+      "postedDate": "2023-01-09",
+      "datePrecision": "day",
+      "originalUrl": "https://www.bitcoindatanewsletter.com/p/expecting-the-unexpected",
+      "title": "Expecting the Unexpected",
+      "paraphrase": "2023년 말~2024년 초 35,000~50,000달러 중간 고점 뒤 조정, 이후 2025년 본 고점이라는 시나리오를 제시했다. 이번에도 100,000달러에 못 미치는 최종 고점 가능성을 상대적으로 높게 평가했다.",
+      "modelFamily": [
+        "diminishing-returns",
+        "early-top",
+        "calendar-halving"
+      ],
+      "claimType": "conditional-forecast",
+      "predictedDate": null,
+      "predictedDateRange": {
+        "start": "2023-Q4",
+        "end": "2024-Q1",
+        "precision": "qualitative-quarter",
+        "interpretation": "late2023/early2024를 구간화한 중간 고점 시나리오"
+      },
+      "targetPrice": null,
+      "targetPriceRange": {
+        "min": 35000,
+        "max": 50000,
+        "interpretation": "중간 고점 시나리오"
+      },
+      "priceCurrency": "USD",
+      "eventKind": "early_top",
+      "observedSources": [
+        {
+          "url": "https://www.bitcoindatanewsletter.com/p/expecting-the-unexpected",
+          "level": "primary",
+          "refs": [
+            "turn198view1"
+          ],
+          "access": "full_public_text"
+        }
+      ],
+      "sourceLevel": "primary",
+      "accessLevel": "full_public_text",
+      "evidenceLimits": [
+        "가능성들의 순위를 매긴 글이며 단일한 확정 경로가 아니다.",
+        "100,000달러 미달 시나리오도 후속 평가에서 반드시 함께 보존해야 한다.",
+        "본문의 51% 공격 설명 등 모든 부수적 기술 주장을 사실로 채택하지 않았다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 1
+    },
+    {
+      "id": "cc-e-20230810-x",
+      "postedDate": "2023-08-10",
+      "datePrecision": "day",
+      "originalUrl": "https://x.com/CryptoCon_/status/1689686289379991585",
+      "title": "4년 주기와 조기 가격 움직임 논쟁",
+      "paraphrase": "비트코인 주기가 어디로 갈지에 관한 논쟁을 소개했다. 관련 글에서는 반감기 때문에 조기 가격 움직임을 배제하는 관점을 비판했다.",
+      "modelFamily": [
+        "cycle-timing-alternatives"
+      ],
+      "claimType": "discussion",
+      "predictedDate": null,
+      "predictedDateRange": null,
+      "targetPrice": null,
+      "targetPriceRange": null,
+      "priceCurrency": "USD",
+      "eventKind": null,
+      "observedSources": [
+        {
+          "url": "https://x.com/CryptoCon_/status/1689686289379991585",
+          "level": "indexed",
+          "refs": [
+            "turn194search1",
+            "turn196search0"
+          ],
+          "access": "search_index"
+        },
+        {
+          "url": "https://x.com/CryptoCon_/status/1689666326602579968",
+          "level": "indexed",
+          "refs": [
+            "turn194search0"
+          ],
+          "access": "search_index"
+        }
+      ],
+      "sourceLevel": "indexed",
+      "accessLevel": "search_index",
+      "evidenceLimits": [
+        "색인 문장만 확인했으며 구체적인 DXY·Elliott 모델, 날짜·목표가는 검증하지 못했다.",
+        "논쟁의 존재를 보여주는 자료이며 정량 예측 성과 집계에서 제외한다.",
+        "관련 두 게시물을 하나의 발견 항목으로 묶었다. 원장 수는 두 개로 부풀리지 않았다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 5
+    },
+    {
+      "id": "cc-e-20230907-x",
+      "postedDate": "2023-09-07",
+      "datePrecision": "day",
+      "originalUrl": "https://x.com/CryptoCon_/status/1699859069383618986",
+      "title": "November 28 모델을 Halving Cycles Theory로 확장",
+      "paraphrase": "기존 November 28 모델을 더 큰 Halving Cycles Theory의 일부로 소개했다.",
+      "modelFamily": [
+        "calendar-halving"
+      ],
+      "claimType": "model-revision",
+      "predictedDate": null,
+      "predictedDateRange": null,
+      "targetPrice": null,
+      "targetPriceRange": null,
+      "priceCurrency": "USD",
+      "eventKind": null,
+      "observedSources": [
+        {
+          "url": "https://x.com/CryptoCon_/status/1699859069383618986",
+          "level": "indexed",
+          "refs": [
+            "turn197search2"
+          ],
+          "access": "search_index"
+        }
+      ],
+      "sourceLevel": "indexed",
+      "accessLevel": "search_index",
+      "evidenceLimits": [
+        "제목·공개 색인으로 모델 명칭과 확장 사실을 확인했다.",
+        "이 색인만으로 전체 공식이나 모든 예측을 재구성하지 않았다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 4
+    },
+    {
+      "id": "cc-e-20231012-x",
+      "postedDate": "2023-10-12",
+      "datePrecision": "day",
+      "originalUrl": "https://x.com/CryptoCon_/status/1712521582483034371",
+      "title": "Gann Square: 89,000 또는 135,000달러",
+      "paraphrase": "Gann Square와 달력 주기를 결합해 해당 주기의 고점 후보를 89,000달러 또는 135,000달러로 제시했다.",
+      "modelFamily": [
+        "Gann",
+        "calendar-halving"
+      ],
+      "claimType": "conditional-forecast",
+      "predictedDate": null,
+      "predictedDateRange": null,
+      "targetPrice": null,
+      "targetPriceRange": {
+        "min": 89000,
+        "max": 135000,
+        "interpretation": "연속 구간이 아니라 서로 다른 두 후보 값"
+      },
+      "priceCurrency": "USD",
+      "eventKind": "cycle_top",
+      "observedSources": [
+        {
+          "url": "https://x.com/CryptoCon_/status/1712521582483034371",
+          "level": "indexed",
+          "refs": [
+            "turn197search0"
+          ],
+          "access": "search_index"
+        },
+        {
+          "url": "https://threadreaderapp.com/user/CryptoCon_",
+          "level": "secondary",
+          "refs": [
+            "turn187view1"
+          ],
+          "access": "third_party_transcription"
+        }
+      ],
+      "sourceLevel": "indexed",
+      "accessLevel": "search_index_and_transcription",
+      "evidenceLimits": [
+        "원문 이미지의 앵커·가격 축 설정을 검증하지 않았다.",
+        "두 후보 중 가까운 것만 사후에 선택해 단일한 사전예측처럼 계산하면 안 된다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 2
+    },
+    {
+      "id": "cc-e-20231017-x",
+      "postedDate": "2023-10-17",
+      "datePrecision": "day",
+      "originalUrl": "https://x.com/CryptoCon_/status/1714269018465415240",
+      "title": "여러 고점 모델의 약 130,000달러 합류",
+      "paraphrase": "여러 주기 실험에서 약 130,000달러가 겹친다고 보되 더 낮은 결과에도 대비한다고 했다. 달력 모델은 2025년 11월 28일 전후 21일을 가리켰다.",
+      "modelFamily": [
+        "price-cycle",
+        "calendar-halving"
+      ],
+      "claimType": "conditional-forecast",
+      "predictedDate": "2025-11-28",
+      "predictedDateRange": {
+        "start": "2025-11-07",
+        "end": "2025-12-19",
+        "precision": "day",
+        "interpretation": "11월28일 ±21일"
+      },
+      "targetPrice": 130000,
+      "targetPriceRange": null,
+      "priceCurrency": "USD",
+      "eventKind": "cycle_top",
+      "observedSources": [
+        {
+          "url": "https://x.com/CryptoCon_/status/1714269018465415240",
+          "level": "indexed",
+          "refs": [
+            "turn160search16",
+            "turn162search2"
+          ],
+          "access": "search_index"
+        },
+        {
+          "url": "https://cointelegraph.com/markets/btc-price-models-130k-target-024-bitcoin-halving",
+          "level": "secondary",
+          "refs": [
+            "turn168view3"
+          ],
+          "access": "publisher_article"
+        }
+      ],
+      "sourceLevel": "indexed",
+      "accessLevel": "search_index_and_secondary",
+      "evidenceLimits": [
+        "모델들이 같은 가격 데이터에서 파생됐다면 각각을 독립적인 검증으로 세면 안 된다.",
+        "가격 오차와 날짜 오차를 분리해 평가해야 한다.",
+        "Cointelegraph 재전송은 별개 분석가의 동의가 아니다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 1
+    },
+    {
+      "id": "cc-e-20231105-x",
+      "postedDate": "2023-11-05",
+      "datePrecision": "day",
+      "originalUrl": "https://x.com/CryptoCon_/status/1721180443616104500",
+      "title": "90,000~130,000달러와 2025년 11월 28일 ±21일",
+      "paraphrase": "해당 주기의 최종 고점 예상 범위를 90,000~130,000달러, 날짜를 2025년 11월 28일 전후 21일로 유지했다.",
+      "modelFamily": [
+        "calendar-halving",
+        "price-cycle"
+      ],
+      "claimType": "conditional-forecast",
+      "predictedDate": "2025-11-28",
+      "predictedDateRange": {
+        "start": "2025-11-07",
+        "end": "2025-12-19",
+        "precision": "day",
+        "interpretation": "11월28일 ±21일"
+      },
+      "targetPrice": null,
+      "targetPriceRange": {
+        "min": 90000,
+        "max": 130000,
+        "interpretation": "명시한 주기 고점 범위"
+      },
+      "priceCurrency": "USD",
+      "eventKind": "cycle_top",
+      "observedSources": [
+        {
+          "url": "https://x.com/CryptoCon_/status/1721180443616104500",
+          "level": "indexed",
+          "refs": [
+            "turn160search14"
+          ],
+          "access": "search_index"
+        },
+        {
+          "url": "https://www.tradingview.com/news/newsbtc:b40716a59094b:0-expert-predicts-date-for-next-bitcoin-cycle-high-of-130-000/",
+          "level": "secondary",
+          "refs": [
+            "turn154search17"
+          ],
+          "access": "indexed_syndication"
+        }
+      ],
+      "sourceLevel": "indexed",
+      "accessLevel": "search_index_and_secondary",
+      "evidenceLimits": [
+        "동일한 달력 모델의 반복이며 독립된 가설로 계산하지 않는다.",
+        "후속에 목표를 변경했다면 최초 목표와 수정 목표를 둘 다 남겨야 한다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 2
+    },
+    {
+      "id": "cc-e-20231114",
+      "postedDate": "2023-11-14",
+      "datePrecision": "day",
+      "originalUrl": "https://www.bitcoindatanewsletter.com/p/theories-collide",
+      "title": "Theories Collide — 약 6개월 앞선 지표 주기 가설",
+      "paraphrase": "가격의 최종 고점·저점과 기술 지표의 극값이 다른 시점에 나타난다고 보고, 지표 주기가 약 6개월 빨라졌을 수 있다는 대안을 제안했다. 2025년 5월 고점과 기존 11월 고점을 경쟁 시나리오로 비교했으며, 가설이 아직 증명되지 않았다고 밝혔다.",
+      "modelFamily": [
+        "alternate-cycle",
+        "indicator-price-divergence",
+        "calendar-halving"
+      ],
+      "claimType": "conditional-forecast",
+      "predictedDate": null,
+      "predictedDateRange": {
+        "start": "2025-05",
+        "end": "2025-11",
+        "precision": "alternative-months",
+        "interpretation": "연속 확률구간이 아니라 서로 경쟁하는 두 달력"
+      },
+      "targetPrice": null,
+      "targetPriceRange": null,
+      "priceCurrency": "USD",
+      "eventKind": "cycle_top",
+      "observedSources": [
+        {
+          "url": "https://www.bitcoindatanewsletter.com/p/theories-collide",
+          "level": "primary",
+          "refs": [
+            "turn156view0",
+            "turn170view1"
+          ],
+          "access": "full_public_text"
+        }
+      ],
+      "sourceLevel": "primary",
+      "accessLevel": "full_public_text",
+      "evidenceLimits": [
+        "지표 극값과 최종 가격 극값을 동일한 사건으로 취급하면 안 된다.",
+        "6개월은 이 글의 탐색적 가설이며 모든 주기·구간이 그만큼 빨라진다는 추정치가 아니다.",
+        "이미지의 수치와 전체 재현 코드는 확보하지 않았다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 1
+    },
+    {
+      "id": "cc-e-20231114-x",
+      "postedDate": "2023-11-14",
+      "datePrecision": "day",
+      "originalUrl": "https://x.com/CryptoCon_/status/1724454744310055093",
+      "title": "대안 달력: 2024년 5월 신고가·2025년 5월 고점 가능성",
+      "paraphrase": "기존 달력과 별도로 2024년 5월 11일까지 신고가, 2025년 5월 11일 부근 최종 고점 가능성을 언급했다.",
+      "modelFamily": [
+        "alternate-cycle",
+        "calendar-halving"
+      ],
+      "claimType": "conditional-forecast",
+      "predictedDate": "2025-05-11",
+      "predictedDateRange": null,
+      "targetPrice": null,
+      "targetPriceRange": null,
+      "priceCurrency": "USD",
+      "eventKind": "cycle_top",
+      "observedSources": [
+        {
+          "url": "https://x.com/CryptoCon_/status/1724454744310055093",
+          "level": "indexed",
+          "refs": [
+            "turn191search0"
+          ],
+          "access": "search_index"
+        }
+      ],
+      "sourceLevel": "indexed",
+      "accessLevel": "search_index",
+      "evidenceLimits": [
+        "공개 색인에 남은 대안 시나리오이며 확정적인 단일 경로가 아니다.",
+        "같은 날 뉴스레터의 대안 가설과 연관되므로 독립적인 교차검증으로 세지 않는다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 2
+    },
+    {
+      "id": "cc-e-20231202-x",
+      "postedDate": "2023-12-02",
+      "datePrecision": "day",
+      "originalUrl": "https://x.com/CryptoCon_/status/1731074379268649261",
+      "title": "달력 고점 목표 유지",
+      "paraphrase": "단기 탐욕에 주의하면서도 2025년 11월 28일 전후 21일이라는 주기 고점 일정은 유지했다.",
+      "modelFamily": [
+        "calendar-halving"
+      ],
+      "claimType": "conditional-forecast",
+      "predictedDate": "2025-11-28",
+      "predictedDateRange": {
+        "start": "2025-11-07",
+        "end": "2025-12-19",
+        "precision": "day",
+        "interpretation": "11월28일 ±21일"
+      },
+      "targetPrice": null,
+      "targetPriceRange": null,
+      "priceCurrency": "USD",
+      "eventKind": "cycle_top",
+      "observedSources": [
+        {
+          "url": "https://x.com/CryptoCon_/status/1731074379268649261",
+          "level": "indexed",
+          "refs": [
+            "turn197search1",
+            "turn154search20",
+            "turn200search0"
+          ],
+          "access": "search_index"
+        }
+      ],
+      "sourceLevel": "indexed",
+      "accessLevel": "search_index",
+      "evidenceLimits": [
+        "게시 일자는 X 검색 색인에서 확인한 12월2일을 사용했다. 이미지와 전체 스레드는 미확인이다.",
+        "반복 확인문이므로 별개의 예측 성공률 표본으로 취급하지 않는다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 4
+    },
+    {
+      "id": "cc-e-20240101",
+      "postedDate": "2024-01-01",
+      "datePrecision": "day",
+      "originalUrl": "https://www.bitcoindatanewsletter.com/p/bitcoins-2024-roadmap",
+      "title": "Bitcoin’s 2024 Roadmap",
+      "paraphrase": "45,000달러 부근의 중간 고점을 평가하고 다음 초기 고점 및 신고가 시점을 논의했다. November28 모델이 2023년 1월 처음 공개됐다고 본인이 설명했다.",
+      "modelFamily": [
+        "calendar-halving",
+        "BitTime"
+      ],
+      "claimType": "roadmap-and-retrospective",
+      "predictedDate": null,
+      "predictedDateRange": null,
+      "targetPrice": null,
+      "targetPriceRange": null,
+      "priceCurrency": "USD",
+      "eventKind": null,
+      "observedSources": [
+        {
+          "url": "https://www.bitcoindatanewsletter.com/p/bitcoins-2024-roadmap",
+          "level": "primary",
+          "refs": [
+            "turn166search0"
+          ],
+          "access": "public_teaser_paid_body"
+        }
+      ],
+      "sourceLevel": "primary",
+      "accessLevel": "public_teaser_paid_body",
+      "evidenceLimits": [
+        "유료 본문의 상세 로드맵은 확인하지 않았다.",
+        "과거 적중에 관한 자기 평가는 독립 검증이 아니다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 3
+    },
+    {
+      "id": "cc-e-20240306",
+      "postedDate": "2024-03-06",
+      "datePrecision": "day",
+      "originalUrl": "https://www.bitcoindatanewsletter.com/p/the-all-new-cycle-timing",
+      "title": "The All New Cycle Timing",
+      "paraphrase": "신고가가 빨리 형성되면서 최종 고점까지 충분히 앞당겨져 2024년 안에 나타날 가능성을 진지하게 검토한다고 밝혔다.",
+      "modelFamily": [
+        "accelerated-cycle"
+      ],
+      "claimType": "conditional-forecast",
+      "predictedDate": "2024",
+      "predictedDateRange": null,
+      "targetPrice": null,
+      "targetPriceRange": null,
+      "priceCurrency": "USD",
+      "eventKind": "cycle_top",
+      "observedSources": [
+        {
+          "url": "https://www.bitcoindatanewsletter.com/p/the-all-new-cycle-timing",
+          "level": "primary",
+          "refs": [
+            "turn178view3"
+          ],
+          "access": "public_teaser_paid_body"
+        }
+      ],
+      "sourceLevel": "primary",
+      "accessLevel": "public_teaser_paid_body",
+      "evidenceLimits": [
+        "잠정적 대안의 검토이고 무조건적인 고점 확정 선언은 아니다.",
+        "유료 본문 및 인용된 X의 전체 이미지·조건은 확인하지 않았다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 1
+    },
+    {
+      "id": "cc-e-20240531",
+      "postedDate": "2024-05-31",
+      "datePrecision": "day",
+      "originalUrl": "https://www.bitcoindatanewsletter.com/p/accelerated-possibilities",
+      "title": "Accelerated Possibilities",
+      "paraphrase": "월봉 RSI의 이중 고점, 볼린저밴드 흐름, 반감기 달력의 새로운 해석을 함께 비교한다고 소개했다.",
+      "modelFamily": [
+        "accelerated-cycle",
+        "RSI",
+        "Bollinger-Bands"
+      ],
+      "claimType": "method-discussion",
+      "predictedDate": null,
+      "predictedDateRange": null,
+      "targetPrice": null,
+      "targetPriceRange": null,
+      "priceCurrency": "USD",
+      "eventKind": null,
+      "observedSources": [
+        {
+          "url": "https://www.bitcoindatanewsletter.com/p/accelerated-possibilities",
+          "level": "primary",
+          "refs": [
+            "turn178view2"
+          ],
+          "access": "video_public_intro"
+        }
+      ],
+      "sourceLevel": "primary",
+      "accessLevel": "video_public_intro",
+      "evidenceLimits": [
+        "영상 본편·전체 전사문을 보지 않았다.",
+        "제목에서 구체적인 고점 날짜나 숫자를 만들어내지 않았다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 4
+    },
+    {
+      "id": "cc-e-20240610",
+      "postedDate": "2024-06-10",
+      "datePrecision": "day",
+      "originalUrl": "https://www.bitcoindatanewsletter.com/p/sooner-than-expected-video-newsletter",
+      "title": "Sooner Than Expected | Video Newsletter",
+      "paraphrase": "SPX와 비트코인 고점의 비교가 가까운 시기에 나타날 수 있는 주기 고점에 중요한 정보를 준다고 설명했다.",
+      "modelFamily": [
+        "cross-asset",
+        "accelerated-cycle"
+      ],
+      "claimType": "conditional-forecast",
+      "predictedDate": null,
+      "predictedDateRange": null,
+      "targetPrice": null,
+      "targetPriceRange": null,
+      "priceCurrency": "USD",
+      "eventKind": "cycle_top",
+      "observedSources": [
+        {
+          "url": "https://www.bitcoindatanewsletter.com/p/sooner-than-expected-video-newsletter",
+          "level": "primary",
+          "refs": [
+            "turn189view0"
+          ],
+          "access": "public_teaser_paid_video"
+        }
+      ],
+      "sourceLevel": "primary",
+      "accessLevel": "public_teaser_paid_video",
+      "evidenceLimits": [
+        "가까운 시기는 정량화된 날짜가 아니다.",
+        "유료 영상 본편·차트의 구체적 SPX 선행 기간은 확인하지 않았다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 1
+    },
+    {
+      "id": "cc-e-20240615",
+      "postedDate": "2024-06-15",
+      "datePrecision": "day",
+      "originalUrl": "https://www.bitcoindatanewsletter.com/p/awaiting-91k",
+      "title": "Awaiting 91k",
+      "paraphrase": "91,000달러를 기다리는 관점을 제목에 제시했고, Magic Bands와 20주 EMA를 관찰 항목으로 소개했다.",
+      "modelFamily": [
+        "Magic-Bands",
+        "moving-average"
+      ],
+      "claimType": "conditional-forecast",
+      "predictedDate": null,
+      "predictedDateRange": null,
+      "targetPrice": 91000,
+      "targetPriceRange": null,
+      "priceCurrency": "USD",
+      "eventKind": "next-price-level",
+      "observedSources": [
+        {
+          "url": "https://www.bitcoindatanewsletter.com/p/awaiting-91k",
+          "level": "primary",
+          "refs": [
+            "turn178view5"
+          ],
+          "access": "video_public_intro"
+        }
+      ],
+      "sourceLevel": "primary",
+      "accessLevel": "video_public_intro",
+      "evidenceLimits": [
+        "91,000은 제목에서 확인한 숫자다. 도달 기한은 공개 소개에서 확인되지 않았다.",
+        "영상을 보지 않았으므로 6월 내 도달 목표로 채점하지 않는다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 4
+    },
+    {
+      "id": "cc-e-20240701",
+      "postedDate": "2024-07-01",
+      "datePrecision": "day",
+      "originalUrl": "https://www.bitcoindatanewsletter.com/p/the-top-is-farther-than-it-appears",
+      "title": "The Top is Farther Than it Appears",
+      "paraphrase": "106,000달러를 최종 고점 또는 다음 중간 목표일 수 있다고 설명했다. 피보나치 3.618 부근 저항, 횡보 기간, 20주 EMA 재시험을 함께 관찰했다.",
+      "modelFamily": [
+        "Fibonacci-price",
+        "moving-average",
+        "consolidation"
+      ],
+      "claimType": "conditional-forecast",
+      "predictedDate": null,
+      "predictedDateRange": null,
+      "targetPrice": 106000,
+      "targetPriceRange": null,
+      "priceCurrency": "USD",
+      "eventKind": "next-price-level-or-cycle-top",
+      "observedSources": [
+        {
+          "url": "https://www.bitcoindatanewsletter.com/p/the-top-is-farther-than-it-appears",
+          "level": "primary",
+          "refs": [
+            "turn189view2"
+          ],
+          "access": "public_teaser_paid_body"
+        }
+      ],
+      "sourceLevel": "primary",
+      "accessLevel": "public_teaser_paid_body",
+      "evidenceLimits": [
+        "최종 고점인지 중간 목표인지 미리 고정되지 않아 엄밀한 고점 적중 평가에 바로 사용할 수 없다.",
+        "유료 본문의 구체적 일정은 확인하지 않았다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 1
+    },
+    {
+      "id": "cc-e-20240725-x",
+      "postedDate": "2024-07-25",
+      "datePrecision": "day",
+      "originalUrl": "https://x.com/CryptoCon_/status/1816575507649167864",
+      "title": "가격 외에 시간에도 피보나치 비율 적용",
+      "paraphrase": "피보나치를 가격뿐 아니라 시간 축에도 적용한다고 설명했다.",
+      "modelFamily": [
+        "Fibonacci-time"
+      ],
+      "claimType": "method-description",
+      "predictedDate": null,
+      "predictedDateRange": null,
+      "targetPrice": null,
+      "targetPriceRange": null,
+      "priceCurrency": "USD",
+      "eventKind": null,
+      "observedSources": [
+        {
+          "url": "https://x.com/CryptoCon_/status/1816575507649167864",
+          "level": "indexed",
+          "refs": [
+            "turn191search2"
+          ],
+          "access": "search_index"
+        },
+        {
+          "url": "https://www.bitcoindatanewsletter.com/p/return-of-the-halving-cycles",
+          "level": "primary",
+          "refs": [
+            "turn178view4"
+          ],
+          "access": "video_public_intro"
+        }
+      ],
+      "sourceLevel": "indexed",
+      "accessLevel": "search_index",
+      "evidenceLimits": [
+        "X 이미지를 완전하게 읽지 못해 이 게시물에 구체적인 날짜를 부여하지 않았다.",
+        "피보나치 시점 계산식은 시장이 그 날짜에 반전한다는 증명이 아니다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 3
+    },
+    {
+      "id": "cc-e-20240727",
+      "postedDate": "2024-07-27",
+      "datePrecision": "day",
+      "originalUrl": "https://www.bitcoindatanewsletter.com/p/return-of-the-halving-cycles",
+      "title": "Return of the Halving Cycles",
+      "paraphrase": "반감기 주기와 시간 피보나치를 다시 중심에 두고 2025년에 여러 고점이 생길 가능성을 소개했다.",
+      "modelFamily": [
+        "calendar-halving",
+        "Fibonacci-time",
+        "multiple-peaks"
+      ],
+      "claimType": "conditional-forecast",
+      "predictedDate": "2025",
+      "predictedDateRange": null,
+      "targetPrice": null,
+      "targetPriceRange": null,
+      "priceCurrency": "USD",
+      "eventKind": "multiple_cycle_peaks",
+      "observedSources": [
+        {
+          "url": "https://www.bitcoindatanewsletter.com/p/return-of-the-halving-cycles",
+          "level": "primary",
+          "refs": [
+            "turn178view4"
+          ],
+          "access": "video_public_intro"
+        }
+      ],
+      "sourceLevel": "primary",
+      "accessLevel": "video_public_intro",
+      "evidenceLimits": [
+        "공개 소개 문구만 확인했고 영상의 전체 분석은 확인하지 않았다.",
+        "3월의 2024년 고점 대안과 나란히 보존하되, 숨겨진 조건이 없는 단순한 모순이라고 단정하지 않는다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 1
+    },
+    {
+      "id": "cc-e-202408-fib-x",
+      "postedDate": "2024-08",
+      "datePrecision": "month",
+      "originalUrl": "https://x.com/CryptoCon_/status/1821951850121179380",
+      "title": "다음 피보나치 목표 109,236달러",
+      "paraphrase": "다음 확장 단계로 109,236달러와 약52% 상승을 제시했다. 당시의 2023년 대비 지연 패턴이 지속한다는 조건으로 2024년12월이 거론됐다.",
+      "modelFamily": [
+        "Fibonacci-price",
+        "analog-timing"
+      ],
+      "claimType": "conditional-forecast",
+      "predictedDate": "2024-12",
+      "predictedDateRange": null,
+      "targetPrice": 109236,
+      "targetPriceRange": null,
+      "priceCurrency": "USD",
+      "eventKind": "local_high",
+      "observedSources": [
+        {
+          "url": "https://x.com/CryptoCon_/status/1821951850121179380",
+          "level": "indexed",
+          "refs": [
+            "turn194search2",
+            "turn192search2"
+          ],
+          "access": "search_index"
+        },
+        {
+          "url": "https://cryptorank.io/news/feed/b31ee-fibonacci-extension-bitcoin",
+          "level": "secondary",
+          "refs": [
+            "turn166view2"
+          ],
+          "access": "NewsBTC_syndication"
+        },
+        {
+          "url": "https://www.binance.com/en-TR/square/post/11969220855993",
+          "level": "secondary",
+          "refs": [
+            "turn196search1"
+          ],
+          "access": "CryptoNewsLand_syndication"
+        }
+      ],
+      "sourceLevel": "indexed",
+      "accessLevel": "search_index_and_secondary",
+      "evidenceLimits": [
+        "정확한 게시 일자를 원문에서 확인하지 못해 월 단위로 기록했다.",
+        "가격은 원문 색인으로,12월 기한은 동시대 재전송 기사로 보완했다.",
+        "기사의 1개월 선행·지연 서술은 서로 불일치하므로 추가로 추론하지 않았다.",
+        "같은 X를 재인용한 기사들은 독립된 전망이 아니다.",
+        "원 단위 목표의 정확 적중과 근접은 구별해야 한다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 1
+    },
+    {
+      "id": "cc-e-20240811-x",
+      "postedDate": "2024-08-11",
+      "datePrecision": "day",
+      "originalUrl": "https://x.com/CryptoCon_/status/1822679529359397335",
+      "title": "RSI로 2024년3월 고점의 최종 여부 평가",
+      "paraphrase": "다주기 RSI를 근거로 3월이 최종 고점이 아니며 강세 기간이 더 남았다는 주장을 했다.",
+      "modelFamily": [
+        "RSI",
+        "cycle-stage"
+      ],
+      "claimType": "conditional-forecast",
+      "predictedDate": null,
+      "predictedDateRange": null,
+      "targetPrice": null,
+      "targetPriceRange": null,
+      "priceCurrency": "USD",
+      "eventKind": "bull-market-continuation",
+      "observedSources": [
+        {
+          "url": "https://x.com/CryptoCon_/status/1822679529359397335",
+          "level": "indexed",
+          "refs": [
+            "turn160search19"
+          ],
+          "access": "search_index"
+        },
+        {
+          "url": "https://cryptorank.io/news/feed/b31ee-fibonacci-extension-bitcoin",
+          "level": "secondary",
+          "refs": [
+            "turn166view2"
+          ],
+          "access": "NewsBTC_syndication"
+        }
+      ],
+      "sourceLevel": "indexed",
+      "accessLevel": "search_index_and_secondary",
+      "evidenceLimits": [
+        "색인과 기사에서 확인한 범위만 기록했다.",
+        "서로 다른 시간봉의 RSI는 같은 가격 자료를 변환한 것이므로 독립적인 표본이 아니다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 3
+    },
+    {
+      "id": "cc-e-202409-red-x",
+      "postedDate": "2024-09",
+      "datePrecision": "month",
+      "originalUrl": "https://x.com/CryptoCon_/status/1837522315988377778",
+      "title": "Red Year: 2024년11월28일~2025년11월28일",
+      "paraphrase": "강세 연차가2024년11월28일 시작해2025년11월28일까지 이어진다는 일정을 제시했다.",
+      "modelFamily": [
+        "calendar-halving"
+      ],
+      "claimType": "conditional-forecast",
+      "predictedDate": null,
+      "predictedDateRange": {
+        "start": "2024-11-28",
+        "end": "2025-11-28",
+        "precision": "day",
+        "interpretation": "강세 연차의 시작·종료;매일 상승한다는 뜻은 아님"
+      },
+      "targetPrice": null,
+      "targetPriceRange": null,
+      "priceCurrency": "USD",
+      "eventKind": "bull-year",
+      "observedSources": [
+        {
+          "url": "https://x.com/CryptoCon_/status/1837522315988377778",
+          "level": "indexed",
+          "refs": [
+            "turn192search3"
+          ],
+          "access": "search_index"
+        }
+      ],
+      "sourceLevel": "indexed",
+      "accessLevel": "search_index",
+      "evidenceLimits": [
+        "게시 일자는 월 단위만 확인했다.",
+        "정해진 달력에 대한 의견이며 보정된 통계 신뢰구간이 아니다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 3
+    },
+    {
+      "id": "cc-e-20240926-x",
+      "postedDate": "2024-09-26",
+      "datePrecision": "day",
+      "originalUrl": "https://x.com/CryptoCon_/status/1839366385278832721",
+      "title": "빠른3월 신고가 이후 다음11월 신고가 관찰",
+      "paraphrase": "이번 주기는 기존보다 앞서3월에 신고가를 만들었다고 설명하며,2주 일목균형표 교차와 함께11월의 다음 신고가 가능성을 관찰했다.",
+      "modelFamily": [
+        "Ichimoku",
+        "cycle-acceleration",
+        "calendar-halving"
+      ],
+      "claimType": "conditional-forecast",
+      "predictedDate": "2024-11",
+      "predictedDateRange": null,
+      "targetPrice": null,
+      "targetPriceRange": null,
+      "priceCurrency": "USD",
+      "eventKind": "new_all_time_high",
+      "observedSources": [
+        {
+          "url": "https://x.com/CryptoCon_/status/1839366385278832721",
+          "level": "indexed",
+          "refs": [
+            "turn154search12",
+            "turn191search1",
+            "turn193search0"
+          ],
+          "access": "search_index"
+        }
+      ],
+      "sourceLevel": "indexed",
+      "accessLevel": "search_index",
+      "evidenceLimits": [
+        "검색 색인으로 문장과 게시 일자를 확인했으며 전체 이미지 분석은 하지 않았다.",
+        "일부 단계가 빨랐다는 관찰이 최종 고점까지 같은 간격으로 빨라진다는 결론은 아니다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 2
+    },
+    {
+      "id": "cc-e-20241029-x",
+      "postedDate": "2024-10-29",
+      "datePrecision": "day",
+      "originalUrl": "https://x.com/CryptoCon_/status/1851311120117571921",
+      "title": "약7개월 횡보와 예정된 강세 연차",
+      "paraphrase": "오랜 횡보 뒤에도 강세 연차가 가능하며11월28일 달력은 유효하다는 견해를 밝혔다.",
+      "modelFamily": [
+        "consolidation",
+        "calendar-halving"
+      ],
+      "claimType": "conditional-forecast",
+      "predictedDate": "2024-11-28",
+      "predictedDateRange": null,
+      "targetPrice": null,
+      "targetPriceRange": null,
+      "priceCurrency": "USD",
+      "eventKind": "bull-market-resumption",
+      "observedSources": [
+        {
+          "url": "https://x.com/CryptoCon_/status/1851311120117571921",
+          "level": "indexed",
+          "refs": [
+            "turn193search3",
+            "turn189search7",
+            "turn200search2"
+          ],
+          "access": "search_index"
+        }
+      ],
+      "sourceLevel": "indexed",
+      "accessLevel": "search_index",
+      "evidenceLimits": [
+        "게시 날짜와 약7개월 횡보 설명은 X 검색 색인에서 확인했다.",
+        "횡보가 시간상 달력을 맞춘다는 인과 메커니즘이 검증된 것은 아니다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 3
+    },
+    {
+      "id": "cc-e-20241128-x",
+      "postedDate": "2024-11-28",
+      "datePrecision": "day",
+      "originalUrl": "https://x.com/CryptoCon_/status/1862142528939532706",
+      "title": "최종 고점2025년11월28일 ±21일 재확인",
+      "paraphrase": "주기 모델의 강세 연차 시작을 강조하고 다음 최종 고점을2025년11월28일 전후21일로 재확인했다.",
+      "modelFamily": [
+        "calendar-halving"
+      ],
+      "claimType": "conditional-forecast",
+      "predictedDate": "2025-11-28",
+      "predictedDateRange": {
+        "start": "2025-11-07",
+        "end": "2025-12-19",
+        "precision": "day",
+        "interpretation": "11월28일 ±21일"
+      },
+      "targetPrice": null,
+      "targetPriceRange": null,
+      "priceCurrency": "USD",
+      "eventKind": "cycle_top",
+      "observedSources": [
+        {
+          "url": "https://x.com/CryptoCon_/status/1862142528939532706",
+          "level": "indexed",
+          "refs": [
+            "turn154search0",
+            "turn154search1",
+            "turn160search3"
+          ],
+          "access": "search_index"
+        }
+      ],
+      "sourceLevel": "indexed",
+      "accessLevel": "search_index",
+      "evidenceLimits": [
+        "X 직접 열기는403이었다.",
+        "이전 연도와 같은 일정의 반복이므로 개별 독립 적중으로 세지 않는다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 2
+    },
+    {
+      "id": "cc-e-20241218-x",
+      "postedDate": "2024-12-18",
+      "datePrecision": "day",
+      "originalUrl": "https://x.com/CryptoCon_/status/1869469243429019937",
+      "title": "5.618 확장: 약166,000달러·공격적2025년2월",
+      "paraphrase": "다음5.618 확장 단계는 약166,000달러이고, 공격적인 시점 추정은2025년2월이라고 밝혔다. 이 단계 자체가 최종 강세장 고점이라는 뜻은 아니었다.",
+      "modelFamily": [
+        "Fibonacci-price",
+        "accelerated-target"
+      ],
+      "claimType": "conditional-forecast",
+      "predictedDate": "2025-02",
+      "predictedDateRange": null,
+      "targetPrice": 166000,
+      "targetPriceRange": null,
+      "priceCurrency": "USD",
+      "eventKind": "next-price-level",
+      "observedSources": [
+        {
+          "url": "https://x.com/CryptoCon_/status/1869469243429019937",
+          "level": "indexed",
+          "refs": [
+            "turn189search0",
+            "turn160search9"
+          ],
+          "access": "search_index"
+        },
+        {
+          "url": "https://www.tradingview.com/news/newsbtc:1d64cf229094b:0-bitcoin-price-crash-below-100-000-not-the-end-as-analyst-predicts-another-52-jump/",
+          "level": "secondary",
+          "refs": [
+            "turn187view0"
+          ],
+          "access": "NewsBTC_syndication"
+        }
+      ],
+      "sourceLevel": "indexed",
+      "accessLevel": "search_index_and_secondary",
+      "evidenceLimits": [
+        "원문 직접 열기는403이었지만 검색 색인에166k와2025년2월이 함께 나타난다.",
+        "NewsBTC 재전송의 제목은166k,본문은162k로 불일치한다. 원문 색인의166k를 우선했다.",
+        "'공격적 시점 추정'이라는 강도를 보존하며2월 도달을 보장한 문장으로 강화하지 않는다.",
+        "가격 목표와 마감 시점의 실패 여부는 이후 데이터로 별도 검증해야 한다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 1
+    },
+    {
+      "id": "cc-e-20241231",
+      "postedDate": "2024-12-31",
+      "datePrecision": "day",
+      "originalUrl": "https://www.bitcoindatanewsletter.com/p/2025-the-most-important-year",
+      "title": "2025, The Most Important Year",
+      "paraphrase": "12월의 얕은 조정 이후1월 상승 가능성을 논의하며 첫 번째 주기 고점과 최종 고점을 구분해야 한다고 설명했다.",
+      "modelFamily": [
+        "multiple-peaks",
+        "calendar-halving"
+      ],
+      "claimType": "conditional-forecast",
+      "predictedDate": "2025-01",
+      "predictedDateRange": null,
+      "targetPrice": null,
+      "targetPriceRange": null,
+      "priceCurrency": "USD",
+      "eventKind": "bull-market-continuation",
+      "observedSources": [
+        {
+          "url": "https://www.bitcoindatanewsletter.com/p/2025-the-most-important-year",
+          "level": "primary",
+          "refs": [
+            "turn189view1"
+          ],
+          "access": "public_teaser_paid_body"
+        }
+      ],
+      "sourceLevel": "primary",
+      "accessLevel": "public_teaser_paid_body",
+      "evidenceLimits": [
+        "유료 본문의 상세 시나리오는 확인하지 않았다.",
+        "본문에 나온 '첫 고점','echo high','최종 고점'은 서로 다른 사건이므로 하나로 합산하지 않는다."
+      ],
+      "verificationStatus": "claim-documented-outcome-not-scored",
+      "priority": 2
+    }
+  ]
+}

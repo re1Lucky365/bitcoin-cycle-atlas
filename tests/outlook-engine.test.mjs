@@ -5,7 +5,7 @@ import { utcDay, dateFromDay } from '../dist/cycle-engine.js';
 import { shiftCalendarMonths } from '../dist/cycle-timing.js';
 import { analyzeThreeYearOutlook, buildOutlookScenario, computeOutlookTiming, reconstructHistoricalOutlook, evaluateThreeYearModel } from '../dist/outlook-engine.js';
 
-const data = JSON.parse(await readFile(new URL('../dist/data/btc-daily.json', import.meta.url), 'utf8'));
+const data = JSON.parse(await readFile(new URL('./fixtures/btc-daily-2026-10-20.json', import.meta.url), 'utf8'));
 const outlook = analyzeThreeYearOutlook(data);
 const byId = Object.fromEntries(outlook.scenarios.map((scenario) => [scenario.id, scenario]));
 const close = (a, b, tolerance = 1e-11) => assert.ok(Math.abs(a - b) <= tolerance * Math.max(1, Math.abs(b)), `${a} differs from ${b}`);

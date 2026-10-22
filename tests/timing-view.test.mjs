@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { analyzeCycleTiming } from '../dist/cycle-timing.js';
 import { renderTimingView } from '../dist/timing-view.js';
 
-const data = JSON.parse(await readFile(new URL('../dist/data/btc-daily.json', import.meta.url)));
+const data = JSON.parse(await readFile(new URL('./fixtures/btc-daily-2026-10-20.json', import.meta.url)));
 const nodes = new Map();
 globalThis.document = { querySelector: selector => {
   if (!nodes.has(selector)) nodes.set(selector, {});

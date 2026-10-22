@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { analyzeCycleTiming, computeOnlineSignals, shiftCalendarMonths, calendarScenarioWindow } from '../dist/cycle-timing.js';
 import { utcDay, dateFromDay } from '../dist/cycle-engine.js';
 
-const bundled = JSON.parse(await readFile(new URL('../dist/data/btc-daily.json', import.meta.url), 'utf8'));
+const bundled = JSON.parse(await readFile(new URL('./fixtures/btc-daily-2026-10-20.json', import.meta.url), 'utf8'));
 // A dated evidence fixture remains reproducible when newer daily rows arrive.
 const data = { ...bundled, prices: bundled.prices.filter(([date]) => date <= '2026-10-20') };
 let checks = 0;

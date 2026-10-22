@@ -1,0 +1,106 @@
+name: Refresh completed BTC data
+
+on:
+  schedule:
+    # UTC 00:20, 06:20, 12:20, 18:20 = KST 09:20, 15:20, 21:20, 03:20.
+    # GitHub may delay scheduled jobs; the public metadata records the real check.
+    - cron: '20 0,6,12,18 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Serialize automatic publication with pages.yml. A new repository commit is
+# still checked explicitly below because a git push can occur while a job runs.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  refresh-and-build:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - name: Check out current main
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          fetch-depth: 1
+          # The scoped GITHUB_TOKEN is used only for the allowlisted commit.
+          # Checkout removes the temporary credential during its cleanup step.
+          persist-credentials: true
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Record checked-out revision
+        id: revision
+        run: echo "head=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - name: Fetch and validate completed UTC daily observations
+        shell: bash
+        run: |
+          node scripts/refresh-data.mjs | tee "$RUNNER_TEMP/data-refresh.json"
+          node --input-type=module <<'NODE'
+          import { readFile, appendFile } from 'node:fs/promises';
+          const result = JSON.parse(await readFile(`${process.env.RUNNER_TEMP}/data-refresh.json`, 'utf8'));
+          await appendFile(process.env.GITHUB_STEP_SUMMARY,
+            `## BTC observation refresh\n\nStatus: ${result.status}\n\nSuccessful check: ${result.checkedAt}\n\nLatest completed UTC observation: ${result.latestObservationDate}\n\nAppended daily rows: ${result.appendedRows}\n\nLast bundled data update: ${result.dataUpdatedAt}\n\nPublished research calculations and backtests are unchanged.\n`);
+          NODE
+      - name: Test code, fixed research fixtures and refreshed source data
+        run: npm test
+      - name: Verify the refreshed static site and standalone build
+        run: |
+          node scripts/verify-static.mjs
+          node scripts/build-standalone.mjs build/Bitcoin_Cycles_Comparison.html
+          node scripts/verify-static.mjs --standalone build/Bitcoin_Cycles_Comparison.html
+      - name: Commit only validated dataset and update metadata
+        shell: bash
+        env:
+          BASE_HEAD: ${{ steps.revision.outputs.head }}
+        run: |
+          git fetch --no-tags origin main
+          if [ "$(git rev-parse FETCH_HEAD)" != "$BASE_HEAD" ]; then
+            echo 'Remote main changed during validation. Aborting; a later run will retry from the new revision.'
+            exit 1
+          fi
+          git add -- dist/data/btc-daily.json dist/data-update.js
+          node --input-type=module <<'NODE'
+          import { execFile } from 'node:child_process';
+          import { promisify } from 'node:util';
+          const allowed = new Set(['dist/data/btc-daily.json', 'dist/data-update.js']);
+          const { stdout } = await promisify(execFile)('git', ['diff', '--cached', '--name-only', '-z']);
+          const staged = stdout.split('\0').filter(Boolean);
+          if (staged.some(file => !allowed.has(file))) throw new Error('Unexpected file staged for the data refresh');
+          NODE
+          if ! git diff --cached --quiet; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git commit -m 'data: refresh validated completed BTC observations'
+            # A concurrent push after the fetch makes this ordinary push fail.
+            # Never force-push, merge unrelated changes, or replace a newer main.
+            git push origin HEAD:main
+          fi
+      # GITHUB_TOKEN pushes do not trigger another Pages workflow. This same
+      # run therefore uploads and deploys the artifact it just tested.
+      - name: Upload the validated public site
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: dist
+          retention-days: 1
+  deploy:
+    needs: refresh-and-build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy the same validated refresh artifact
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

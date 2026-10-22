@@ -4,7 +4,7 @@ import test from 'node:test';
 import { analyzeCycleForecast, backtestAnalogueForecast, detectScenarioTurns, interpolateLogAnchors } from '../dist/forecast-engine.js';
 import { dateFromDay, utcDay } from '../dist/cycle-engine.js';
 
-const bundled = JSON.parse(await readFile(new URL('../dist/data/btc-daily.json', import.meta.url), 'utf8'));
+const bundled = JSON.parse(await readFile(new URL('./fixtures/btc-daily-2026-10-20.json', import.meta.url), 'utf8'));
 const data = { ...bundled, prices: bundled.prices.filter(([date]) => date <= '2026-10-20') };
 const forecast = analyzeCycleForecast(data);
 const close = (actual, expected, relative = 1e-11) => assert.ok(Math.abs(actual - expected) <= relative * Math.max(1, Math.abs(expected)), `${actual} differs from ${expected}`);

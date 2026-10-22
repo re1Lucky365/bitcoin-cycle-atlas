@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { analyzePeakZones } from '../dist/peak-zones.js';
 import { utcDay } from '../dist/cycle-engine.js';
 
-const bundled = JSON.parse(await readFile(new URL('../dist/data/btc-daily.json', import.meta.url), 'utf8'));
+const bundled = JSON.parse(await readFile(new URL('./fixtures/btc-daily-2026-10-20.json', import.meta.url), 'utf8'));
 const data = { ...bundled, prices: bundled.prices.filter(([date]) => date <= '2026-10-20') };
 const analysis = analyzePeakZones(data);
 const approx = (actual, expected, tolerance = 1e-9) => assert.ok(Math.abs(actual - expected) <= tolerance, `${actual} != ${expected}`);

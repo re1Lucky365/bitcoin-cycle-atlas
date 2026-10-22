@@ -1,3 +1,4 @@
+import { CRYPTOCON_EVIDENCE } from './cryptocon-evidence.js';
 import { EVIDENCE, EVIDENCE_SUPPLEMENTS } from './evidence-catalog.js';
 import { STRUCTURE_EVIDENCE, STRUCTURE_EVIDENCE_SUPPLEMENTS } from './structure-evidence.js';
 
@@ -7,9 +8,9 @@ const PRIORITY = [
   'cm-price-data','cm-price-definition','coinbase-candle-data','coinbase-candle-definition',
   'structure-bitcoin-consensus','bitcoin-halving-history','cm-community-scope',
   'fpp-forecast-methods','structure-directional-change','structure-stylized-facts',
-  'structure-fibonacci-null-paper','structure-white-reality-check','structure-lo-chart-patterns',
+  'cryptocon-audit-report','structure-fibonacci-null-paper','structure-white-reality-check','structure-lo-chart-patterns',
   'structure-ilay-halving-v3','structure-ilay-2024-repost',
-  'galaxy-cycle-duration','bitwise-march-early-bottom','structure-rekt-june2026',
+  'cryptocon-theories-collide','cryptocon-slowest-2025','cryptocon-revision-2026','cryptocon-unfinished','cryptocon-sale-alert','cryptocon-pseudo-bottom','cryptocon-limbo','galaxy-cycle-duration','bitwise-march-early-bottom','structure-rekt-june2026',
   'glassnode-july-discovery','cm-july-flows','reuters-september-sideways','cm-q3-wrap',
   'structure-imf-crypto-cycle','structure-nyfed-disconnect',
   'structure-china-2013','structure-cme-launch','structure-frbsf-futures',
@@ -22,7 +23,7 @@ const PRIORITY = [
   'bitwise-september-compass','glassnode-october-2026','blackrock-pullback-paper',
   'structure-reddit-fib-deadline','reddit-merkle-prediction','reddit-merkle-followup',
 ];
-const all=[...EVIDENCE,...STRUCTURE_EVIDENCE],byId=new Map(all.map(row=>[row.id,row]));
+const all=[...EVIDENCE,...STRUCTURE_EVIDENCE,...CRYPTOCON_EVIDENCE],byId=new Map(all.map(row=>[row.id,row]));
 const ordered=[...PRIORITY.map(id=>byId.get(id)),...all.filter(row=>!PRIORITY.includes(row.id))];
 const seen=new Set();
 export const RESEARCH_EVIDENCE=ordered.filter(row=>{if(!row)throw new Error('Missing priority source');const url=new URL(row.url).href;if(seen.has(url))return false;seen.add(url);return true;}).map((row,index)=>({...row,rank:index+1}));
