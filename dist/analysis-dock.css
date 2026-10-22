@@ -1,12 +1,8 @@
 /* Indicator controls stay inside the chart; there is no lower analysis dock. */
 .chart-indicator-manager{position:absolute;top:var(--indicator-top,75px);left:10px;z-index:9;width:max-content;max-width:min(620px,calc(100% - 95px));color:#aabbd0;font-size:10px;line-height:1.4;background:transparent;border:0;border-radius:0;box-shadow:none;text-shadow:0 1px 2px #10151c}
-.chart-indicator-manager[data-collapsed=true]{width:auto;min-width:0}
-.indicator-manager-heading{display:flex;align-items:center;gap:2px;width:max-content;max-width:100%;padding:0;min-height:22px}
-.indicator-manager-heading>span{flex:none;min-width:40px;font-size:9px;color:#7f95af}
 .chart-indicator-manager button,.analysis-window-heading button{display:grid;place-items:center;width:24px;height:24px;min-height:0;flex:none;margin:0;padding:4px;border:0;border-radius:3px;color:#91a8c4;background:transparent;cursor:pointer}
 .chart-indicator-manager button:hover,.analysis-window-heading button:hover{background:#29394f;color:#e1ebf8}
 .chart-indicator-manager svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
-.chart-indicator-manager[data-collapsed=true] #indicator-list-toggle svg{transform:rotate(-90deg)}
 .chart-indicator-list{max-height:min(360px,42dvh,max(0px,calc(var(--plot-height,700px) - var(--indicator-top,75px) - 115px)));overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#42536b66 transparent;padding:0 3px 0 0}
 .indicator-readout-date{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;margin:0;padding:0;border:0}
 .indicator-readout-date[hidden]{display:none}
@@ -22,10 +18,10 @@
 .indicator-row .indicator-row-action{width:24px;height:24px;padding:5px}
 /* Keep transparent controls in keyboard order. Focus reveals them before use. */
 @media(hover:hover) and (pointer:fine){
- .indicator-row-action,#indicator-visibility-all{opacity:0;pointer-events:none}
- .indicator-row:hover .indicator-row-action,.indicator-row:focus-within .indicator-row-action,.indicator-manager-heading:hover #indicator-visibility-all,.indicator-manager-heading:focus-within #indicator-visibility-all{opacity:1;pointer-events:auto}
+ .indicator-row-action{opacity:0;pointer-events:none}
+ .indicator-row:hover .indicator-row-action,.indicator-row:focus-within .indicator-row-action{opacity:1;pointer-events:auto}
 }
-@media(hover:none),(pointer:coarse){.indicator-row-action,#indicator-visibility-all{opacity:1;pointer-events:auto}}
+@media(hover:none),(pointer:coarse){.indicator-row-action{opacity:1;pointer-events:auto}}
 .indicator-empty{font-size:11px;color:#8ca0b9;padding:10px;margin:0;line-height:1.5}
 .indicator-library{width:min(720px,calc(100vw - 32px));max-width:720px;max-height:min(760px,calc(100dvh - 48px));padding:0;margin:auto;border:1px solid #36465c;border-radius:12px;background:#151e2b;color:#d9e4f3;box-shadow:0 24px 100px #0009;font-family:var(--font);overflow:hidden}
 .indicator-library[open]{display:flex;flex-direction:column}
@@ -43,18 +39,30 @@
 .indicator-categories button[aria-pressed=true]{background:#263d59;border-color:#45678f;color:#dcecff}
 .indicator-result-count{margin:0;padding:10px 24px 6px;font-size:10px;color:#7e96b1;flex:none}
 .indicator-library-results{overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;min-height:80px;padding:0 10px 12px;flex:1}
-.indicator-library-item{width:100%;display:flex;align-items:center;justify-content:space-between;gap:18px;border:0;border-radius:6px;background:transparent;color:#c8d7ea;padding:13px 14px;text-align:left;min-height:66px;font:inherit;cursor:pointer}
+.indicator-library-row{display:flex;align-items:center;gap:4px;border-radius:6px;min-width:0}
+.indicator-library-row[data-added=true]{background:#172b3c}
+.indicator-library-item{width:100%;display:flex;flex:1;min-width:0;align-items:center;justify-content:space-between;gap:18px;border:0;border-radius:6px;background:transparent;color:#c8d7ea;padding:13px 14px;text-align:left;min-height:66px;font:inherit;cursor:pointer}
 .indicator-library-item:hover{background:#213146}
 .indicator-library-item[aria-pressed=true]{background:#172b3c}
 .indicator-library-item[aria-pressed=true]:hover{background:#23394d}
 .indicator-library-item>span:first-child{display:flex;flex-direction:column;gap:4px;min-width:0}
 .indicator-library-item strong{font-size:13px;font-weight:500;line-height:1.4}
-.indicator-library-item small{font-size:11px;line-height:1.5;color:#839bb8}
+.indicator-library-item small:not(.indicator-library-value){font-size:11px;line-height:1.5;color:#839bb8}
+.indicator-library-item .indicator-library-value{font-size:11px;line-height:1.5;overflow-wrap:anywhere}
+.indicator-library-eye{display:grid;place-items:center;flex:none;width:40px;height:40px;min-height:40px;margin:0 4px 0 0;padding:10px;border:0;border-radius:5px;background:transparent;color:#a2c0df;cursor:pointer}
+.indicator-library-eye:hover{background:#2a4059;color:#e0edff}
+.indicator-library-eye svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .indicator-library-status{font-size:10px;white-space:nowrap;flex:none;color:#96c4e6}
 .indicator-library footer{padding:12px 24px;border-top:1px solid #2b394d;color:#839bb8;font-size:10px;line-height:1.6;flex:none}
+.indicator-library-options{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 14px;margin-bottom:6px}
+.indicator-list-option{display:inline-flex;flex-direction:row;align-items:center;gap:8px;min-height:40px;color:#bdd0e8;font-size:11px;cursor:pointer}
+.indicator-list-option input{width:16px;height:16px;min-height:0;margin:0;padding:0;accent-color:#82b5f7;flex:none;cursor:pointer}
+.indicator-library-options button{font:inherit;font-size:11px;line-height:1.5;color:#c5d7ed;background:#1b2b3e;border:1px solid #344b66;border-radius:4px;min-height:40px;padding:5px 10px}
+.indicator-library-options button:hover:not(:disabled){background:#293d55;border-color:#54769c}
+.indicator-library-help{margin:0;font-size:10px;line-height:1.6;color:#839bb8}
 .indicator-library :focus-visible,.chart-indicator-manager :focus-visible,.analysis-indicator-window :focus-visible{outline:2px solid #82b5f7;outline-offset:-2px}
 .analysis-indicator-windows{position:absolute;top:78px;right:10px;bottom:60px;width:min(640px,62%);max-width:calc(100% - 20px);z-index:8;display:flex;flex-direction:column;gap:10px;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;pointer-events:none;padding:0 3px 3px 0;box-sizing:border-box}
-.analysis-indicator-windows[hidden],.analysis-indicator-window[hidden],.chart-indicator-list[hidden]{display:none!important}
+.analysis-indicator-windows[hidden],.analysis-indicator-window[hidden],.chart-indicator-list[hidden],.chart-indicator-manager[hidden]{display:none!important}
 .analysis-indicator-window{pointer-events:auto;flex:0 0 auto;display:flex;flex-direction:column;height:330px;min-height:285px;max-height:75vh;resize:vertical;overflow:auto;box-sizing:border-box;background:#101923f5;border:1px solid #34465d;border-radius:7px;box-shadow:0 8px 30px #0006;color:#c7d6e8;padding:0 9px 8px;gap:5px}
 .analysis-indicator-window[data-active=true]{border-color:#5d84b2}
 .analysis-window-heading{display:flex;align-items:center;gap:5px;min-height:32px;flex:none;border-bottom:1px solid #2a3b50;margin:0 -9px;padding:3px 7px 3px 11px;background:#172231}

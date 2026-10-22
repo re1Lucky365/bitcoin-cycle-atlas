@@ -1,5 +1,5 @@
-import { CHART_INTERVALS,isIntradayInterval } from './ohlc-data.js?v=1.10.3';
-import { MAGNET_MODES, MAGNET_LABELS, normalizeMagnetMode } from './chart-magnet.js?v=1.10.3';
+import { CHART_INTERVALS,isIntradayInterval } from './ohlc-data.js?v=1.10.4';
+import { MAGNET_MODES, MAGNET_LABELS, normalizeMagnetMode } from './chart-magnet.js?v=1.10.4';
 const $ = selector => document.querySelector(selector);
 
 const paths = {

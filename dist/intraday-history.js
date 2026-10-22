@@ -1,4 +1,4 @@
-import { chartInterval } from './ohlc-data.js?v=1.10.3';
+import { chartInterval } from './ohlc-data.js?v=1.10.4';
 
 // A viewport budget, not a history-start date: panning can keep requesting older
 // windows. The latest saved window is retained separately for Reset.

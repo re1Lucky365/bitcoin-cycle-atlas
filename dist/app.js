@@ -1,17 +1,17 @@
-import { buildComparison, getAnchors, getPointAtDay, comparisonToCsv, validateDataset, utcDay } from './cycle-engine.js?v=1.10.3';
-import { fetchLatestDataset } from './data-source.js?v=1.10.3';
-import { inspectPublishedDataset, shouldCheckPublishedSnapshot } from './published-data.js?v=1.10.3';
-import { analyzeCycleTiming } from './cycle-timing.js?v=1.10.3';
-import { renderTimingView } from './timing-view.js?v=1.10.3';
-import { analyzePeakZones } from './peak-zones.js?v=1.10.3';
-import { analyzeCycleForecast } from './forecast-engine.js?v=1.10.3';
-import { renderPeakView } from './peak-view.js?v=1.10.3';
-import { renderForecastView, exportForecastSvg } from './forecast-view.js?v=1.10.3';
+import { buildComparison, getAnchors, getPointAtDay, comparisonToCsv, validateDataset, utcDay } from './cycle-engine.js?v=1.10.4';
+import { fetchLatestDataset } from './data-source.js?v=1.10.4';
+import { inspectPublishedDataset, shouldCheckPublishedSnapshot } from './published-data.js?v=1.10.4';
+import { analyzeCycleTiming } from './cycle-timing.js?v=1.10.4';
+import { renderTimingView } from './timing-view.js?v=1.10.4';
+import { analyzePeakZones } from './peak-zones.js?v=1.10.4';
+import { analyzeCycleForecast } from './forecast-engine.js?v=1.10.4';
+import { renderPeakView } from './peak-view.js?v=1.10.4';
+import { renderForecastView, exportForecastSvg } from './forecast-view.js?v=1.10.4';
 // Changed release modules use a versioned URL so a cached v1.5 module cannot
 // leave a new long-horizon page running the old three-year workbench.
-import { initViewportWorkspace } from './viewport-workspace.js?v=1.10.3';
-import { initLabView } from './lab-view.js?v=1.10.3';
-import { initEvidenceView, showEvidenceView } from './evidence-view.js?v=1.10.3';
+import { initViewportWorkspace } from './viewport-workspace.js?v=1.10.4';
+import { initLabView } from './lab-view.js?v=1.10.4';
+import { initEvidenceView, showEvidenceView } from './evidence-view.js?v=1.10.4';
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];

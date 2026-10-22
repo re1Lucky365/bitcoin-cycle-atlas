@@ -1,4 +1,4 @@
-import { utcDay } from './cycle-engine.js?v=1.10.3';
+import { utcDay } from './cycle-engine.js?v=1.10.4';
 
 /** All coordinates use original prices; factor affects only the choice of ticks. */
 export function createPriceScale(values,{scale='log',top=0,bottom=1,tickCount=6,factor=1,paddingRatio=null}={}) {

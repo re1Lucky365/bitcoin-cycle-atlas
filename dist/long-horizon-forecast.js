@@ -1,8 +1,8 @@
-import { HALVINGS, utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.10.3';
-import { buildDetailedForecast } from './detailed-forecast.js?v=1.10.3';
-import { computeRollingStates, detectDirectionalChanges } from './market-structure.js?v=1.10.3';
-import { LONG_HORIZON_CLAIMS, LONG_HORIZON_REVIEW_DATE } from './long-horizon-evidence.js?v=1.10.3';
-import { calibrateCycleTiming } from './cycle-calibration.js?v=1.10.3';
+import { HALVINGS, utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.10.4';
+import { buildDetailedForecast } from './detailed-forecast.js?v=1.10.4';
+import { computeRollingStates, detectDirectionalChanges } from './market-structure.js?v=1.10.4';
+import { LONG_HORIZON_CLAIMS, LONG_HORIZON_REVIEW_DATE } from './long-horizon-evidence.js?v=1.10.4';
+import { calibrateCycleTiming } from './cycle-calibration.js?v=1.10.4';
 
 const DAYS_PER_YEAR = 365.25;
 const BLOCKS_PER_DAY = 144;

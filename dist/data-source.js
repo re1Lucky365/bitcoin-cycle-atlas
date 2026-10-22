@@ -3,7 +3,7 @@
  * are accepted. The caller owns stale-data handling and the bundled fallback.
  * API pagination contract: https://docs.coinmetrics.io/api/v4/
  */
-import { HALVINGS, utcDay, validateDataset } from './cycle-engine.js?v=1.10.3';
+import { HALVINGS, utcDay, validateDataset } from './cycle-engine.js?v=1.10.4';
 
 export const COMMUNITY_ENDPOINT = 'https://community-api.coinmetrics.io/v4/timeseries/asset-metrics';
 export const START_DATE = '2010-07-18';
