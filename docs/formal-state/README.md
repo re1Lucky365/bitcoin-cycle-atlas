@@ -2,7 +2,7 @@
 
 Audit base: [`e15ae31a4223d127244b6d630ae4b7c910f653ef`](https://github.com/twoimo/bitcoin-cycle-atlas/tree/e15ae31a4223d127244b6d630ae4b7c910f653ef).
 
-Last code/model correspondence review: [`d4e27dbb18cbe00af733779723b9db9406e243ef`](https://github.com/twoimo/bitcoin-cycle-atlas/tree/d4e27dbb18cbe00af733779723b9db9406e243ef). The committed ownership paths were checked against the model and the formal gate was rerun successfully; the results below were unchanged.
+Last code/model correspondence review: [`780a33ccdaf5d5eb502249ab47ecf9d660858724`](https://github.com/twoimo/bitcoin-cycle-atlas/tree/780a33ccdaf5d5eb502249ab47ecf9d660858724). Compared with the preceding review, the covered controller changed only its cache-version import URLs. Request ownership behavior, the model, bounds, and mutation selector remain unchanged. The formal gate and all 30 implementation regressions were rerun successfully against the committed source; the state counts below were unchanged. This synchronization does not extend the TLA+ proof to workspace saving, command search, indicator templates, CSV export, chart rendering, or first-screen initialization.
 
 **The current ownership guard passed this audit.** No existing asynchronous overwrite defect was reproduced. The red/green comparison is a deliberate negative control: remove one guard, observe failure, then compare against the existing correct code. It is not evidence that this audit repaired a production race.
 
@@ -59,7 +59,7 @@ The negative control removes only the guard immediately after the saved snapshot
 node scripts/verify-market-state.mjs
 ```
 
-Requires Node 24+ and Java 11+. The script downloads and verifies official [TLC 1.7.4](https://github.com/tlaplus/tlaplus/releases/tag/v1.7.4), or accepts `TLA2TOOLS` pointing to the same jar. Its SHA-256 is `936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88`. The current controller SHA-256 at correspondence review is `f1ac6e876f7271f7fc5d17e591cdb5488fd85246be49c57e1566786ba4e5c4ce`.
+Requires Node 24+ and Java 11+. The script downloads and verifies official [TLC 1.7.4](https://github.com/tlaplus/tlaplus/releases/tag/v1.7.4), or accepts `TLA2TOOLS` pointing to the same jar. Its SHA-256 is `936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88`. The current controller SHA-256 at correspondence review is `dce96066268bb4e5ff0f5b81fe182904d6cb7d711172886872de3d387b6b7bee`.
 
 ## Statecharts
 

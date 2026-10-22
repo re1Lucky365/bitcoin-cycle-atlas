@@ -1,8 +1,10 @@
-import { CHART_INTERVALS,isIntradayInterval } from './ohlc-data.js?v=1.10.5';
-import { MAGNET_MODES, MAGNET_LABELS, normalizeMagnetMode } from './chart-magnet.js?v=1.10.5';
+import { CHART_INTERVALS,isIntradayInterval } from './ohlc-data.js?v=1.11.0';
+import { MAGNET_MODES, MAGNET_LABELS, normalizeMagnetMode } from './chart-magnet.js?v=1.11.0';
+import { mountWorkspaceTools } from './workspace-tools.js?v=1.11.0';
 const $ = selector => document.querySelector(selector);
 
 const paths = {
+  search:'<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/>',
   more:'<circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>',
   candles:'<path d="M7 2v4m0 10v6M17 2v8m0 8v4"/><rect x="4" y="6" width="6" height="10"/><rect x="14" y="10" width="6" height="8"/>',
   line:'<path d="m3 17 5-7 5 4 8-11"/>',
@@ -81,7 +83,9 @@ export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlSto
   const spacer=document.createElement('span');spacer.className='workbench-spacer';
   const chartType=button('candles','가격 표시 · 캔들로 변경',{'id':'workbench-chart-type','aria-pressed':'false'});chartType.onclick=()=>command('chart-type',chartType.getAttribute('aria-pressed')==='true'?'line':'candles');
   const chartMenu=button('more','차트 빠른 조작 · 우클릭 / Shift+F10',{'id':'workbench-chart-menu','aria-haspopup':'menu','aria-controls':'atlas-chart-context-menu'});chartMenu.onclick=()=>command('context-menu');
-  heading.append(symbol,frequency,chartType,menu,scenario,spacer,chartMenu,save,settingButton);stage.prepend(heading);
+  const workspaceButton=button('search','작업 화면·명령 검색 · Ctrl/⌘ K',{'id':'workbench-workspace'});
+  heading.append(symbol,frequency,chartType,menu,scenario,spacer,workspaceButton,chartMenu,save,settingButton);stage.prepend(heading);
+  const workspaceTools=mountWorkspaceTools({trigger:workspaceButton,plot,openReader,closeReader});
   const marketInfo=document.createElement('div');marketInfo.className='workbench-market-info';marketInfo.hidden=true;
   const marketStatus=document.createElement('span');marketStatus.id='workbench-market-status';marketStatus.setAttribute('role','status');marketStatus.setAttribute('aria-live','polite');
   const marketRefresh=button('refresh','거래소 캔들 새로 조회',{'id':'workbench-market-refresh'});marketRefresh.onclick=()=>command('refresh-market');marketInfo.append(marketStatus,marketRefresh);plot.append(marketInfo);
@@ -185,7 +189,7 @@ export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlSto
     nodes[next].focus({preventScroll:true});nodes[next].click();
   };
   const handleKey=event=>{
-    if(event.defaultPrevented||document.body.dataset.page!=='outlook'||event.ctrlKey||event.metaKey||event.target.closest?.('input,textarea,select,[contenteditable=true],#chart-reader,#indicator-library,#chart-indicator-manager,.analysis-indicator-window,.chart-context-menu'))return;
+    if(event.defaultPrevented||document.body.dataset.page!=='outlook'||event.ctrlKey||event.metaKey||event.target.closest?.('input,textarea,select,[contenteditable=true],#chart-reader,#indicator-library,#workspace-dialog,#chart-indicator-manager,.analysis-indicator-window,.chart-context-menu'))return;
     if(workspace.dataset.chartMode!=='price')return;
     const key=event.key.toLowerCase(),intraday=plot.dataset.intraday==='true';
     if(event.altKey){
@@ -203,5 +207,5 @@ export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlSto
   scale.setAttribute('aria-keyshortcuts','Alt+L');goDate.setAttribute('aria-keyshortcuts','Alt+G');
   document.addEventListener('atlas:workbench-state',handleState);
   document.addEventListener('keydown',handleKey);intervalButtons.addEventListener('keydown',handleIntervalKey);
-  return {destroy(){document.removeEventListener('atlas:workbench-state',handleState);document.removeEventListener('keydown',handleKey);intervalButtons.removeEventListener('keydown',handleIntervalKey);document.removeEventListener('pointerdown',dismissMagnet,true);document.removeEventListener('focusin',dismissMagnet);document.removeEventListener('scroll',scrollMagnet,true);document.removeEventListener('visibilitychange',visibilityMagnet);window.removeEventListener('resize',resizeMagnet);window.removeEventListener('blur',resizeMagnet);magnetMenu.remove();}};
+  return {destroy(){workspaceTools.destroy();document.removeEventListener('atlas:workbench-state',handleState);document.removeEventListener('keydown',handleKey);intervalButtons.removeEventListener('keydown',handleIntervalKey);document.removeEventListener('pointerdown',dismissMagnet,true);document.removeEventListener('focusin',dismissMagnet);document.removeEventListener('scroll',scrollMagnet,true);document.removeEventListener('visibilitychange',visibilityMagnet);window.removeEventListener('resize',resizeMagnet);window.removeEventListener('blur',resizeMagnet);magnetMenu.remove();}};
 }

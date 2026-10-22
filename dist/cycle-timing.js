@@ -3,7 +3,7 @@
  * Extrema and pairing a signal to an eventual low are retrospective selections.
  * No small-sample timing comparison here proves a predictive market law.
  */
-import { DAY_MS, HALVINGS, utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.10.5';
+import { DAY_MS, HALVINGS, utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.11.0';
 
 const BASELINES = Object.freeze({ previous: [2020], recent2: [2016, 2020], all3: [2012, 2016, 2020] });
 const PEAK_YEARS = [2013, 2017, 2021];

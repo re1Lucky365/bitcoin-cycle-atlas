@@ -1,4 +1,4 @@
-import { utcDay } from './cycle-engine.js?v=1.10.5';
+import { utcDay } from './cycle-engine.js?v=1.11.0';
 
 const $ = selector => document.querySelector(selector);
 const fmt = (value, digits = 1) => value == null ? '—' : new Intl.NumberFormat('en-US', { maximumFractionDigits: digits }).format(value);

@@ -17,11 +17,12 @@ export function mountMobileWorkspace({workspace,stage,plot,reader,closeReader}) 
     ['미래 가정','#workbench-scenario','<path d="m3 18 7-8 5 3 6-9M10 10l5 10 6-4"/>'],
     ['SVG 저장','#lab-svg','<path d="M12 3v12m-4-4 4 4 4-4M5 16v5h14v-5"/>'],
     ['차트 빠른 조작','#workbench-chart-menu','<path d="M4 6h16M4 12h16M4 18h16"/>'],
+    ['작업 화면·공유','#workbench-workspace','<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M15 9v11"/>'],
   ]){
     const b=make('',label,path);b.className='workbench-icon mobile-extra-action';b.dataset.mobileTarget=target;
     b.onclick=()=>{
       const kind=target==='#atlas-display-options'?'settings':target==='#workbench-scenario'?'scenarios':null;
-      close(target==='#lab-svg');
+      close(target==='#lab-svg'||target==='#workbench-workspace');
       if(kind)doc.dispatchEvent(new CustomEvent('atlas:open-detail',{detail:{kind,focus:true,opener:details}}));
       else doc.querySelector(target)?.click();
     };mobileActions.append(b);
@@ -43,7 +44,11 @@ export function mountMobileWorkspace({workspace,stage,plot,reader,closeReader}) 
   }
   tools.onclick=()=>toggle('tools',tools);details.onclick=()=>toggle('details',details);backdrop.onclick=()=>close();
   const onKey=event=>{
-    if(!active||event.target.closest?.('.workbench-magnet-menu'))return;
+    if(!active)return;
+    // The top modal owns Tab/Escape even if an external opener omitted the
+    // notification. Never restore a tray opener over the modal's focus.
+    if(event.target.closest?.('dialog[open]')){close(false);return;}
+    if(event.target.closest?.('.workbench-magnet-menu'))return;
     if(event.key==='Escape'){event.preventDefault();event.stopImmediatePropagation();close();return;}
     if(event.key==='Tab'){
       const node=active==='tools'?sidebar:rail;
@@ -54,10 +59,11 @@ export function mountMobileWorkspace({workspace,stage,plot,reader,closeReader}) 
     }
   };
   const onPanel=event=>{if(event.detail?.open)close(false);};
-  const onCommand=event=>{if(active&&['tool','span','chart-type','frequency'].includes(event.detail?.action))close(false);};
+  const onModal=()=>close(false);
+  const onCommand=event=>{if(active&&['tool','span','chart-type','frequency'].includes(event.detail?.action))close();};
   const onPage=event=>{if(active&&event.target.closest?.('[data-view]'))close(false);};
   const sync=()=>{close(false);workspace.dataset.mobile=String(media.matches);};
   const onState=event=>{for(const node of mobileActions.children){if(node.dataset.mobileTarget==='#workbench-scenario')node.hidden=Boolean(event.detail.intraday);}};
-  media.addEventListener('change',sync);doc.addEventListener('keydown',onKey,true);doc.addEventListener('atlas:panel-state',onPanel);doc.addEventListener('atlas:chart-command',onCommand);rail.addEventListener('click',onPage);doc.addEventListener('atlas:workbench-state',onState);sync();
-  return {destroy(){close(false);media.removeEventListener('change',sync);doc.removeEventListener('keydown',onKey,true);doc.removeEventListener('atlas:panel-state',onPanel);doc.removeEventListener('atlas:chart-command',onCommand);rail.removeEventListener('click',onPage);doc.removeEventListener('atlas:workbench-state',onState);tools.remove();details.remove();home.remove();mobileActions.remove();backdrop.remove();}};
+  media.addEventListener('change',sync);doc.addEventListener('keydown',onKey,true);doc.addEventListener('atlas:panel-state',onPanel);doc.addEventListener('atlas:modal-open',onModal);doc.addEventListener('atlas:chart-command',onCommand);rail.addEventListener('click',onPage);doc.addEventListener('atlas:workbench-state',onState);sync();
+  return {destroy(){close(false);media.removeEventListener('change',sync);doc.removeEventListener('keydown',onKey,true);doc.removeEventListener('atlas:panel-state',onPanel);doc.removeEventListener('atlas:modal-open',onModal);doc.removeEventListener('atlas:chart-command',onCommand);rail.removeEventListener('click',onPage);doc.removeEventListener('atlas:workbench-state',onState);tools.remove();details.remove();home.remove();mobileActions.remove();backdrop.remove();}};
 }

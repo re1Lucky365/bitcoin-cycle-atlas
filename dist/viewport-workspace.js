@@ -1,10 +1,10 @@
-import { DATA_UPDATE } from './data-update.js?v=1.10.5';
-import { mountWorkbenchChrome } from './workbench-chrome.js?v=1.10.5';
-import { mountResearchWorkbench } from './research-workbench.js?v=1.10.5';
-import { mountAnalysisIndicators } from './analysis-dock.js?v=1.10.5';
-import { mountIndicatorWorkbench } from './indicator-workbench.js?v=1.10.5';
-import { inspectionPanelAction } from './inspection-policy.js?v=1.10.5';
-import { mountMobileWorkspace } from './mobile-workspace.js?v=1.10.5';
+import { DATA_UPDATE } from './data-update.js?v=1.11.0';
+import { mountWorkbenchChrome } from './workbench-chrome.js?v=1.11.0';
+import { mountResearchWorkbench } from './research-workbench.js?v=1.11.0';
+import { mountAnalysisIndicators } from './analysis-dock.js?v=1.11.0';
+import { mountIndicatorWorkbench } from './indicator-workbench.js?v=1.11.0';
+import { inspectionPanelAction } from './inspection-policy.js?v=1.11.0';
+import { mountMobileWorkspace } from './mobile-workspace.js?v=1.11.0';
 
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

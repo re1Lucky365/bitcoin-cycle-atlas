@@ -1,17 +1,17 @@
-import { buildComparison, getAnchors, getPointAtDay, comparisonToCsv, validateDataset, utcDay } from './cycle-engine.js?v=1.10.5';
-import { fetchLatestDataset } from './data-source.js?v=1.10.5';
-import { inspectPublishedDataset, shouldCheckPublishedSnapshot } from './published-data.js?v=1.10.5';
-import { analyzeCycleTiming } from './cycle-timing.js?v=1.10.5';
-import { renderTimingView } from './timing-view.js?v=1.10.5';
-import { analyzePeakZones } from './peak-zones.js?v=1.10.5';
-import { analyzeCycleForecast } from './forecast-engine.js?v=1.10.5';
-import { renderPeakView } from './peak-view.js?v=1.10.5';
-import { renderForecastView, exportForecastSvg } from './forecast-view.js?v=1.10.5';
+import { buildComparison, getAnchors, getPointAtDay, comparisonToCsv, validateDataset, utcDay } from './cycle-engine.js?v=1.11.0';
+import { fetchLatestDataset } from './data-source.js?v=1.11.0';
+import { inspectPublishedDataset, shouldCheckPublishedSnapshot } from './published-data.js?v=1.11.0';
+import { analyzeCycleTiming } from './cycle-timing.js?v=1.11.0';
+import { renderTimingView } from './timing-view.js?v=1.11.0';
+import { analyzePeakZones } from './peak-zones.js?v=1.11.0';
+import { analyzeCycleForecast } from './forecast-engine.js?v=1.11.0';
+import { renderPeakView } from './peak-view.js?v=1.11.0';
+import { renderForecastView, exportForecastSvg } from './forecast-view.js?v=1.11.0';
 // Changed release modules use a versioned URL so a cached v1.5 module cannot
 // leave a new long-horizon page running the old three-year workbench.
-import { initViewportWorkspace } from './viewport-workspace.js?v=1.10.5';
-import { initLabView } from './lab-view.js?v=1.10.5';
-import { initEvidenceView, showEvidenceView } from './evidence-view.js?v=1.10.5';
+import { initViewportWorkspace } from './viewport-workspace.js?v=1.11.0';
+import { initLabView } from './lab-view.js?v=1.11.0';
+import { initEvidenceView, showEvidenceView } from './evidence-view.js?v=1.11.0';
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -51,9 +51,12 @@ const icon = name => `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">$
 $$('[data-icon]').forEach(el => el.innerHTML = icon(el.dataset.icon));
 
 const params = new URLSearchParams(location.search);
+// Old comparison links used `unit`; new links keep its choice separate from
+// the atlas viewport, which can change while the comparison remains hidden.
+const comparisonUnit = params.get('compare-unit') ?? (params.has('legacy') ? params.get('unit') : null);
 const state = {
   mode: ['halving','bottom','top','breakout'].includes(params.get('mode')) ? params.get('mode') : 'halving',
-  unit: params.get('unit') === 'indexed' ? 'indexed' : 'rebased',
+  unit: comparisonUnit === 'indexed' ? 'indexed' : 'rebased',
   scale: params.get('scale') === 'linear' ? 'linear' : 'log',
   horizon: ['365','730','1461','current','all'].includes(params.get('range')) ? params.get('range') : '1461',
   cursor: /^\d{1,5}$/.test(params.get('day') || '') ? Number(params.get('day')) : null,
@@ -69,21 +72,23 @@ const state = {
 let toastTimer;
 function toast(message) { $('#toast').textContent = message; $('#toast').hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => $('#toast').hidden = true, 4200); }
 function persistUrl() {
-  const p = new URLSearchParams();
-  const currentParams=new URLSearchParams(location.search);
-  for(const key of ['chart','span','assumption','granularity','type','axis','align','interval','measure','scope','phase','legacy','dock','audit','indicators','indicator-hide','indicator-list','magnet'])if(currentParams.has(key))p.set(key,currentParams.get(key));
-  if (state.view !== 'outlook') p.set('page',state.view);
-  if (state.mode !== 'halving') p.set('mode', state.mode);
-  if (state.unit !== 'rebased') p.set('unit', state.unit);
-  if (state.scale !== 'log') p.set('scale', state.scale);
-  if (state.horizon !== '1461') p.set('range', state.horizon);
-  if (state.cursor != null && state.cursor !== state.comparison?.currentDays) p.set('day', String(state.cursor));
-  if (state.hidden.size) p.set('hide', [...state.hidden].join(','));
-  if (state.timingBaseline !== 'recent2') p.set('baseline', state.timingBaseline);
-  if (state.analysisView !== 'forecast') p.set('analysis', state.analysisView);
-  if (state.peakThreshold !== .95) p.set('zone', String(state.peakThreshold));
-  if (state.forecastView !== 'macro') p.set('future', state.forecastView);
-  if (state.forecastScenario !== 'bottom-holds') p.set('scenario', state.forecastScenario);
+  // Only rewrite parameters owned by this page/comparison controller. The
+  // atlas owns its current unit, viewport, indicators and analysis settings.
+  const p = new URLSearchParams(location.search);
+  for (const [key, value] of [
+    ['page', state.view !== 'outlook' ? state.view : null],
+    ['mode', state.mode !== 'halving' ? state.mode : null],
+    ['compare-unit', p.has('legacy') || state.view === 'compare' || state.unit !== 'rebased' ? state.unit : null],
+    ['scale', state.scale !== 'log' ? state.scale : null],
+    ['range', state.horizon !== '1461' ? state.horizon : null],
+    ['day', state.cursor != null && state.cursor !== state.comparison?.currentDays ? String(state.cursor) : null],
+    ['hide', state.hidden.size ? [...state.hidden].join(',') : null],
+    ['baseline', state.timingBaseline !== 'recent2' ? state.timingBaseline : null],
+    ['analysis', state.analysisView !== 'forecast' ? state.analysisView : null],
+    ['zone', state.peakThreshold !== .95 ? String(state.peakThreshold) : null],
+    ['future', state.forecastView !== 'macro' ? state.forecastView : null],
+    ['scenario', state.forecastScenario !== 'bottom-holds' ? state.forecastScenario : null],
+  ]) value === null ? p.delete(key) : p.set(key, value);
   try { history.replaceState(null, '', `${location.pathname}${p.size ? `?${p}` : ''}`); } catch {}
 }
 document.documentElement.dataset.theme = 'dark';

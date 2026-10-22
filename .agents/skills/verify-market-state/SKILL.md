@@ -10,7 +10,7 @@ Keep this promise: **a canceled or superseded request never replaces or notifies
 ## Coverage and synchronization
 
 - Covered implementation: `dist/market-data-controller.js`, `createMarketDataController`, specifically `load`, `cancel`, and the ownership checks before publishing network results, saved fallback results, or errors.
-- Last correspondence review: commit `d4e27dbb18cbe00af733779723b9db9406e243ef`. The committed `load` and `cancel` paths, post-await ownership guards, and publication continuations were checked against the model, then the formal gate was rerun successfully. Controller SHA-256: `f1ac6e876f7271f7fc5d17e591cdb5488fd85246be49c57e1566786ba4e5c4ce`.
+- Last correspondence review: commit `780a33ccdaf5d5eb502249ab47ecf9d660858724`. Compared with the preceding review, the covered controller changed only its cache-version import URLs; the `load` and `cancel` paths, post-await ownership guards, and publication continuations remain unchanged. The committed source was checked against the model, then the formal gate and all 30 implementation regressions were rerun successfully. Controller SHA-256: `dce96066268bb4e5ff0f5b81fe182904d6cb7d711172886872de3d387b6b7bee`.
 - Model: `verification/market-state/MarketRequests.tla`; configuration bounds requests to three generations and two intervals. `MarketRequestsBroken.tla` is a deliberate negative control, not an observed production bug.
 - Actual-code checks: `tests/market-data-controller.test.mjs`, `tests/intraday-history.test.mjs`, and `tests/market-request-ownership.test.mjs`.
 - Read `docs/formal-state/README.md` for the model-to-code mapping, assumptions, evidence, and chart commands. The intraday tests cover examples; pagination itself is outside the TLA+ proof.

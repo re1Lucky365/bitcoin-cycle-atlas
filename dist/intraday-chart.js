@@ -1,9 +1,9 @@
-import {createPriceScale} from './chart-math.js?v=1.10.5';
-import {chartInterval} from './ohlc-data.js?v=1.10.5';
-import {chartPaneLayout,volumePaneMarkup} from './chart-overlays.js?v=1.10.5';
-import { resolveMagnetPoint, advanceMeasurement, measurePriceAnchors, measurementOverlayMarkup, createMeasurementOverlay } from './chart-magnet.js?v=1.10.5';
-import { clearChartHover, coalescedChartHover } from './chart-hover.js?v=1.10.5';
-import { dateWindow, pixelExtrema } from './chart-window.js?v=1.10.5';
+import {createPriceScale} from './chart-math.js?v=1.11.0';
+import {chartInterval} from './ohlc-data.js?v=1.11.0';
+import {chartPaneLayout,volumePaneMarkup} from './chart-overlays.js?v=1.11.0';
+import { resolveMagnetPoint, advanceMeasurement, measurePriceAnchors, measurementOverlayMarkup, createMeasurementOverlay } from './chart-magnet.js?v=1.11.0';
+import { clearChartHover, coalescedChartHover, paintPriceCursor } from './chart-hover.js?v=1.11.0';
+import { dateWindow, pixelExtrema } from './chart-window.js?v=1.11.0';
 
 const numberFormats=new Map();
 const number=(value,digits=2)=>{if(!numberFormats.has(digits))numberFormats.set(digits,new Intl.NumberFormat('en-US',{maximumFractionDigits:digits}));return numberFormats.get(digits).format(value);};
@@ -56,7 +56,11 @@ export function drawIntradayChart({svg,series,chartType='candles',scale='log',un
   }
   s+='</g>';
   if(showVolume)s+=volumePaneMarkup({bars:rows,x:bar=>x(bar.time),left:L,right:W-R,top:volumeTop,bottom:volumeBottom,titleY:layout.volumeTitleY,titleFontSize:layout.volumeTitleFontSize,separatorY:layout.volumeSeparatorY,barWidth:width,source:series.source,clipId:`${svg.id}-volume-clip`}).markup;
-  const last=allRows.at(-1);if(last.time<=maxTime&&last.time>=minTime)s+=`<line x1="${L}" x2="${W-R}" y1="${y(last.close)}" y2="${y(last.close)}" stroke="#74ab9e" stroke-dasharray="3 5" opacity=".6"/>`;
+  const last=allRows.at(-1);
+  if(last.time<=maxTime&&last.time>=minTime){
+    const yy=y(last.close),labelTop=Math.max(T,Math.min(B-18,yy-9)),up=last.close>=last.open,color=up?'#2b6558':'#823c4c';
+    s+=`<g class="market-last-price" pointer-events="none"><title>${esc(series.source)} · 마지막 완료 봉 · ${timestamp(last.time)} UTC · ${esc(money(last.close))}</title><line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="${up?'#74ab9e':'#dd7e8d'}" stroke-dasharray="3 5" opacity=".6"/><rect x="${W-R}" y="${labelTop}" width="${R-2}" height="18" rx="2" fill="${color}"/><text x="${W-R+4}" y="${labelTop+13}" fill="#f0f5fa" font-size="10">${esc(price(last.close))}</text></g>`;
+  }
   s+=`<g id="${svg.id}-cross" pointer-events="none"><line class="cross-time" y1="${T}" y2="${bottom}" stroke="#adbed1" stroke-dasharray="3 3"/><line class="cross-price" x1="${L}" x2="${W-R}" stroke="#adbed1" stroke-dasharray="3 3"/><circle r="3" fill="#10151c" stroke="#d5e6f7"/><g class="market-price-tag"><rect x="${W-R}" width="${R-2}" height="18" rx="2" fill="#385466"/><text x="${W-R+4}" fill="#f0f5fa" font-size="10"/></g><g class="market-date-tag"><rect width="124" height="18" rx="2" fill="#39485b"/><text fill="#edf2f9" font-size="9" text-anchor="middle"/></g></g>`;
   s+=measurementOverlayMarkup(clip);
   svg.innerHTML=s;
@@ -68,7 +72,12 @@ export function drawIntradayChart({svg,series,chartType='candles',scale='log',un
   let active=initialTime?nearest(typeof initialTime==='number'?initialTime:Date.parse(initialTime)/1000):rows.length-1,cursor=active,lastHovered=-1,lastPointer=null;
 
   const hover=index=>{const row=rows[index],previous=rows[index-1];return {date:row.date,time:row.time,price:row.close,displayedPrice:row.close*factor,open:row.open,high:row.high,low:row.low,close:row.close,volume:row.volume,volumeSource:series.source,volumeUnit:'BTC',changePrice:row.close-row.open,changePct:(row.close/row.open-1)*100,previousCloseChangePct:previous?(row.close/previous.close-1)*100:null,kind:'observed',interval:interval.label,source:series.source,product:series.product,completed:true};};
-  function mark(index,hovered=false,anchor=null,notify=true){cursor=index;const row=rows[index],markPrice=anchor?.price??row.close,xx=x(row.time),yy=y(markPrice),tx=Math.max(L,Math.min(W-R-124,xx-62));vertical.setAttribute('x1',xx);vertical.setAttribute('x2',xx);horizontal.setAttribute('y1',yy);horizontal.setAttribute('y2',yy);dot.setAttribute('cx',xx);dot.setAttribute('cy',yy);priceTag.querySelector('rect').setAttribute('y',yy-9);priceTag.querySelector('text').setAttribute('y',yy+4);priceTag.querySelector('text').textContent=price(markPrice);dateTag.querySelector('rect').setAttribute('x',tx);dateTag.querySelector('rect').setAttribute('y',axisY-12);dateTag.querySelector('text').setAttribute('x',tx+62);dateTag.querySelector('text').setAttribute('y',axisY+1);dateTag.querySelector('text').textContent=timestamp(row.time);if(notify)onHover({...hover(index),hovered});}
+  function mark(index,hovered=false,anchor=null,notify=true,pointerY=null){
+    cursor=index;const row=rows[index],xx=x(row.time),tx=Math.max(L,Math.min(W-R-124,xx-62));
+    vertical.setAttribute('x1',xx);vertical.setAttribute('x2',xx);dot.setAttribute('cx',xx);
+    paintPriceCursor({horizontal,dot,tag:priceTag,axis,top:T,bottom:B,selectedPrice:anchor?.price??row.close,pointerY,formatPrice:price});
+    dateTag.querySelector('rect').setAttribute('x',tx);dateTag.querySelector('rect').setAttribute('y',axisY-12);dateTag.querySelector('text').setAttribute('x',tx+62);dateTag.querySelector('text').setAttribute('y',axisY+1);dateTag.querySelector('text').textContent=timestamp(row.time);if(notify)onHover({...hover(index),hovered});
+  }
   function inspection(index){const row=rows[index],snapshot=row.snapshot??series.snapshot,retrievedAt=row.retrievedAt||series.retrievedAt;return {label:`${timestamp(row.time)} UTC · ${interval.label} 완료 봉`,date:row.date,kind:'observed',fields:[{label:'시가 O',value:money(row.open)},{label:'고가 H',value:money(row.high)},{label:'저가 L',value:money(row.low)},{label:'종가 C',value:money(row.close)},{label:'거래량 · BTC',value:number(row.volume,6)},{label:'출처',value:`${series.source} · ${series.product}`}],note:`${snapshot?'저장 자료':'조회 자료'} · 수집 ${retrievedAt.replace('T',' ').slice(0,19)} UTC. 봉 시작 시각 기준이며 이 거래소 현물쌍의 물량입니다. ${series.gapCount?`${series.gapCount}개 빈 구간은 채우지 않았습니다.`:'완료된 실제 거래 봉만 표시합니다.'}`};}
   const measurementOverlay=createMeasurementOverlay(svg,{x:value=>x(Date.parse(value)/1000),y,left:L,right:W-R,top:T,bottom:B,small,formatPrice:money,formatDate:value=>timestamp(Date.parse(value)/1000).slice(5),formatChange:value=>`${value>0?'+':value<0?'−':''}${number(Math.abs(value),2)}%`,formatDuration:result=>{const minutes=result.deltaSeconds/60;return `${minutes>0?'+':''}${number(minutes,1)}분 · ${number(result.deltaSeconds/interval.seconds,1)}봉 간격`;}});
   const lookupMeasurement=value=>{const time=Date.parse(value)/1000,row=allRows[nearestIn(allRows,time)];return row.time===time?row:{date:value,price:NaN};};
@@ -85,9 +94,11 @@ export function drawIntradayChart({svg,series,chartType='candles',scale='log',un
   svg.onclick=event=>{hoverHandler.cancel();if(tool==='pan'||!inPlot(event))return;const index=fromPointer(event);if(tool==='measure'){const box=svg.getBoundingClientRect();if((event.clientY-box.top)/box.height*H>B)return;svg.focus({preventScroll:true});measure(index,anchorAt(index,event));}else commit(index,true);};
   function pointerPreview(event){
     if(event.pointerType==='touch'||!inPlot(event))return;const index=fromPointer(event),dataChanged=index!==lastHovered;
-    if(!dataChanged&&(tool!=='measure'||(lastPointer&&event.clientY===lastPointer.clientY&&Boolean(event.ctrlKey)===Boolean(lastPointer.ctrlKey)&&Boolean(event.metaKey)===Boolean(lastPointer.metaKey))))return;
-    lastHovered=index;const anchor=tool==='measure'?anchorAt(index,event):null;mark(index,true,anchor,dataChanged);
-    if(tool==='measure'){lastPointer=event;measurementOverlay.showSnap(anchor);if(measurementState&&!measurementState.endDate)renderMeasurement(anchor);}
+    if(!dataChanged&&lastPointer&&event.clientY===lastPointer.clientY&&Boolean(event.ctrlKey)===Boolean(lastPointer.ctrlKey)&&Boolean(event.metaKey)===Boolean(lastPointer.metaKey))return;
+    lastHovered=index;lastPointer=event;
+    const anchor=tool==='measure'?anchorAt(index,event):null,box=svg.getBoundingClientRect(),pointerY=tool==='measure'?null:(event.clientY-box.top)/box.height*H;
+    mark(index,true,anchor,dataChanged,pointerY);
+    if(tool==='measure'){measurementOverlay.showSnap(anchor);if(measurementState&&!measurementState.endDate)renderMeasurement(anchor);}
   }
   const hoverHandler=coalescedChartHover(svg,pointerPreview);svg.onpointermove=hoverHandler;
   svg.onpointerleave=()=>{hoverHandler.cancel();lastHovered=-1;lastPointer=null;mark(active);measurementOverlay.showSnap(null);if(measurementState&&!measurementState.endDate)renderMeasurement();};svg.onblur=null;

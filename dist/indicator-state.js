@@ -28,7 +28,8 @@ export function normalizeIndicatorState(value={}) {
   const added=ordered(Array.isArray(value.added)?value.added:defaults);
   const hidden=ordered((Array.isArray(value.hidden)?value.hidden:[]).filter(id=>added.includes(id)));
   const active=analyses.has(value.active)&&added.includes(value.active)&&!hidden.includes(value.active)?value.active:added.find(id=>analyses.has(id)&&!hidden.includes(id))||added.find(id=>analyses.has(id))||'cycles';
-  return {added,hidden,active,collapsed:value.collapsed===true};
+  const primary=ids.has(value.primary)&&added.includes(value.primary)?value.primary:null;
+  return {added,hidden,active,primary,collapsed:value.collapsed===true};
 }
 
 export function readIndicatorState(search='') {
@@ -39,7 +40,7 @@ export function readIndicatorState(search='') {
   if(!params.has('indicators')&&(analyses.has(legacy)||legacyCompare)){
     const mode=analyses.has(legacy)?legacy:'cycles';added.push(mode);if(params.get('dock')==='closed')hidden.push(mode);
   }
-  return normalizeIndicatorState({added,hidden,active:legacy,collapsed:params.get('indicator-list')==='closed'});
+  return normalizeIndicatorState({added,hidden,active:legacy,primary:params.get('indicator-primary'),collapsed:params.get('indicator-list')==='closed'});
 }
 
 export function writeIndicatorState(params,state) {
@@ -47,6 +48,7 @@ export function writeIndicatorState(params,state) {
   if(addedKey===defaultKey)params.delete('indicators');else params.set('indicators',addedKey);
   if(next.hidden.length)params.set('indicator-hide',next.hidden.join(','));else params.delete('indicator-hide');
   if(next.collapsed)params.set('indicator-list','closed');else params.delete('indicator-list');
+  if(next.primary)params.set('indicator-primary',next.primary);else params.delete('indicator-primary');
   if(next.added.some(id=>analyses.has(id)))params.set('chart',next.active);else params.delete('chart');
   params.delete('dock');
   return params;
@@ -55,9 +57,11 @@ export function writeIndicatorState(params,state) {
 export function isIndicatorVisible(state,id) {return state.added.includes(id)&&!state.hidden.includes(id);}
 export function visibleAnalysisIds(state) {return INDICATORS.filter(item=>item.analysis&&isIndicatorVisible(state,item.id)).map(item=>item.id);}
 
-export function changeIndicatorState(state,{action,id}) {
+export function changeIndicatorState(state,{action,id,state:replacement}) {
   const next=normalizeIndicatorState(state);
   if(action==='reset')return normalizeIndicatorState();
+  if(action==='replace')return replacement&&Array.isArray(replacement.added)?normalizeIndicatorState(replacement):next;
+  if(action==='primary')return id==null?{...next,primary:null}:next.added.includes(id)?{...next,primary:id}:next;
   if(action==='collapse')return {...next,collapsed:!next.collapsed};
   if(action==='show-all')return {...next,hidden:[]};
   if(action==='hide-all')return {...next,hidden:next.added.slice()};

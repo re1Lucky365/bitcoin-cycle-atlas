@@ -2,8 +2,8 @@
  * Daily-close market structure: causal state labels and confirmed pivots, with
  * separately marked retrospective macro windows. No intraday OHLC is inferred.
  */
-import { utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.10.5';
-import { shiftCalendarMonths } from './cycle-timing.js?v=1.10.5';
+import { utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.11.0';
+import { shiftCalendarMonths } from './cycle-timing.js?v=1.11.0';
 
 export const MARKET_STRUCTURE_VERSION = 'market-structure-v1';
 export const STATE_LABELS = Object.freeze({
