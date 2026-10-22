@@ -65,7 +65,7 @@ test('monthly and quarterly selection summaries name and show the selected metri
   }
 });
 
-test('all five dock analyses and their subviews render and navigate at compact panel sizes',()=>{
+test('all analysis indicators report explicit selection origin and keep automatic rendering separate',()=>{
   const definitions=[
     ...['trough','calendar','halving'].map(alignment=>({mode:'cycles',alignment})),
     {mode:'duration'},...['bull','bear'].map(phaseLeg=>({mode:'phases',phaseLeg})),{mode:'peaks'},
@@ -74,17 +74,44 @@ test('all five dock analyses and their subviews render and navigate at compact p
     ...['timing','thresholds','targets'].map(view=>({mode:'cryptocon',view}))
   ];
   for(const [width,height] of [[330,170],[660,180],[1200,220]])for(const definition of definitions){
-    const svg=svgStub(width,height),inspections=[];
+    const svg=svgStub(width,height),inspections=[],origins=[];
     const render=definition.mode==='cryptocon'?renderCryptoConAudit:renderAtlasAnalysis;
-    const c=render({svg,dataset,...definition,onInspect:detail=>inspections.push(detail)});
+    const options={svg,dataset,...definition,onInspect:(detail,origin)=>{inspections.push(detail);origins.push(origin);}};
+    const c=render(options);
     assert.equal(svg.getAttribute('viewBox'),`0 0 ${width} ${height}`);
     assert.ok(!/NaN|Infinity/.test(svg.innerHTML),`${definition.mode} has invalid SVG geometry`);
     assert.ok(c.title&&c.caption&&c.note&&c.legend.length);
     assert.equal(inspections.length,1,'the existing renderer emits an automatic initial inspection');
+    assert.deepEqual(origins[0],{user:false,origin:'render',openPanel:false});
     assert.equal(shouldPublishInspection({owner:'analysis',currentOwner:'price'}),false,'initial analysis cannot replace the price inspector');
     c.previous();c.next();svg.onkeydown({key:'Home',preventDefault(){}});svg.onclick({clientX:width/2,clientY:height/2});
-    assert.ok(inspections.length>=5);
+    assert.deepEqual(origins.slice(1).map(item=>item.origin),['navigation','navigation','keyboard','pointer']);
+    for(const key of ['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','End','Enter',' '])svg.onkeydown({key,preventDefault(){}});
+    c.selectDate('2025-10-06');assert.equal(origins.at(-1).origin,'date');
+    for(const origin of origins.slice(1)){assert.equal(origin.user,true);assert.equal(origin.openPanel,false);}
     for(const detail of inspections){assert.ok(detail.label);assert.ok(Array.isArray(detail.fields));if(definition.mode==='cycles')assert.equal(detail.date,null);}
     if(definition.mode==='cycles')assert.equal(analysisCalendarDate(inspections.at(-1)),null);
+    const selectedLabel=inspections.at(-1).label;render(options);
+    assert.equal(inspections.at(-1).label,selectedLabel,'geometry rerender restores the selected item');
+    assert.deepEqual(origins.at(-1),{user:false,origin:'render',openPanel:false},'restoring selection cannot claim ownership');
+  }
+});
+
+test('analysis pointer and keyboard callbacks retain user origin after a microtask boundary',async()=>{
+  for(const definition of [{mode:'periods'},{mode:'cryptocon',view:'timing'}]){
+    const svg=svgStub(660,230),render=definition.mode==='cryptocon'?renderCryptoConAudit:renderAtlasAnalysis;
+    let owner='price',selected={label:'이전 가격 선택'},lastOptions;
+    const onInspect=(detail,options)=>{
+      lastOptions=options;
+      if(!shouldPublishInspection({owner:'analysis',currentOwner:owner,user:options.user}))return;
+      if(options.user)owner='analysis';selected=detail;
+    };
+    render({svg,dataset,...definition,onInspect});assert.equal(selected.label,'이전 가격 선택');
+    await Promise.resolve();svg.onclick({clientX:330,clientY:115});
+    assert.equal(owner,'analysis');assert.equal(lastOptions.origin,'pointer');assert.equal(lastOptions.user,true);assert.notEqual(selected.label,'이전 가격 선택');
+    owner='countdown';selected={label:'D-day 근거'};
+    render({svg,dataset,...definition,onInspect});assert.equal(owner,'countdown');assert.equal(selected.label,'D-day 근거');
+    await Promise.resolve();svg.onkeydown({key:'Enter',preventDefault(){}});
+    assert.equal(owner,'analysis');assert.equal(lastOptions.origin,'keyboard');assert.equal(lastOptions.user,true);assert.equal(lastOptions.openPanel,false);assert.notEqual(selected.label,'D-day 근거');
   }
 });

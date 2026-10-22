@@ -1,7 +1,7 @@
 import { drawAtlasPriceChart as drawChart } from './atlas-price-chart.js?v=1.9.0';
-import { renderCryptoConAudit } from './cryptocon-audit.js';
+import { renderCryptoConAudit } from './cryptocon-audit.js?v=1.9.2';
 import { bindChartNavigation, panRange } from './chart-navigation.js?v=1.9.0';
-import { renderAtlasAnalysis } from './atlas-analysis.js';
+import { renderAtlasAnalysis } from './atlas-analysis.js?v=1.9.2';
 import { ANALYSIS_MODES, analysisCalendarDate, shouldPublishInspection, analysisSelectionSummary } from './analysis-dock.js?v=1.9.0';
 import { INDICATORS, readIndicatorState, writeIndicatorState, changeIndicatorState, isIndicatorVisible, visibleAnalysisIds } from './indicator-state.js?v=1.9.0';
 import { preparePriceViewData } from './price-view-data.js?v=1.9.0';
@@ -65,7 +65,7 @@ export function initLabView() {
   const state={dataset:null,base:null,analysis:null,models:new Map(),futureStates:new Map(),visible:false,compareVisible:false,scenario:valid('assumption',['base','accelerated','wait','late','stress'],'base'),frequency:valid('granularity',['daily','weekly'],'daily'),scale:valid('axis',['log','linear'],'log'),tool:'crosshair',measurement:null,unit:'usd',window:valid('span',['all','history','near'],'history'),atlasMode:'price',cryptoView:'timing',atlasAlignment:valid('align',['trough','calendar','halving'],'trough'),atlasPeriod:valid('interval',['monthly','quarterly'],'monthly'),atlasMetric:valid('measure',['returnPct','maxDrawdownPct','realizedVolPct','discoveryDays'],'returnPct'),atlasPhase:valid('phase',['macro','bull','bear'],'macro'),atlasScope:valid('scope',['recent','all'],'recent'),selectedDate:null,methodKey:null,selectedEvent:null,eventMode:'macro',eventPage:0,structureFrequency:'weekly',scope:'all',threshold:.12,alignment:'calendar',period:'monthly',periodPage:0,pending:false};
   function fail(error){console.error('Detailed research workspace',error);$('#lab-error').hidden=false;$('#lab-error').textContent='분석을 계산하지 못했습니다. 원자료와 계산 결과를 확인해 주세요.';}
   state.indicators=readIndicatorState(query);
-  state.atlasMode='price';state.analysisMode=state.indicators.active;state.analysisOpen=visibleAnalysisIds(state.indicators).length>0;state.priceController=null;state.analysisController=null;state.inspectionOwner='price';state.lastAnalysisDetail=null;state.lastPriceDetail=null;state.lastCountdownInspection=null;state.analysisUserIntent=false;
+  state.atlasMode='price';state.analysisMode=state.indicators.active;state.analysisOpen=visibleAnalysisIds(state.indicators).length>0;state.priceController=null;state.analysisController=null;state.inspectionOwner='price';state.lastAnalysisDetail=null;state.lastPriceDetail=null;state.lastCountdownInspection=null;
   state.analysisControllers=new Map();state.analysisDetails=new Map();state.analysisRenderKeys=new Map();state.analysisDataset=null;
   state.cryptoView=valid('audit',['timing','thresholds','targets'],'timing');
   state.priceRange=null;state.marketRange=null;state.chartRange=null;state.historyCategory='all';state.selectedHistoryEvent=null;
@@ -103,22 +103,12 @@ export function initLabView() {
   }
   function volumeMetadata(){const series=volumeState.series;if(!series)return null;const check=series.validation;return {source:series.source,firstDate:series.firstDate,lastDate:series.lastDate,retrievedAt:series.retrievedAt,count:series.bars.length,gapCount:series.coverage.gapCount,zeroCount:series.coverage.sourceZeroVolumeBars,validation:{status:check?.status,hourlyDays:check?.nativeResolution?.hourly?.completeDays,quarterHourlyDays:check?.nativeResolution?.quarterHourly?.completeDays,firstDate:check?.nativeResolution?.hourly?.firstDate,lastDate:check?.nativeResolution?.hourly?.lastDate,tradeMinutes:check?.baseUnit?.completedMinutes,overlapDays:check?.cachedCoinbase?.overlappingDays}};}
   const plot=$('.atlas-plot');
-  // A chart click pins a value and claims selection ownership without opening UI.
-  plot.addEventListener('click',event=>{if(state.tool==='crosshair'&&event.target.closest('#lab-chart')){state.isChartClick=true;queueMicrotask(()=>{state.isChartClick=false;});}},true);
   $('#lab-chart').addEventListener('keydown',event=>{
     if(state.tool!=='crosshair')return;
     if(['Enter',' '].includes(event.key)&&!event.target.closest('[data-next-turn],[data-history-event]')){event.preventDefault();showPriceInspection();}
   });
   const analysisCharts=new Map([...document.querySelectorAll('[data-analysis-svg]')].map(svg=>[svg.dataset.analysisSvg,svg]));
   const selectedAnalysisSvg=()=>analysisCharts.get(state.analysisMode);
-  const markAnalysisIntent=()=>{state.analysisUserIntent=true;queueMicrotask(()=>{state.analysisUserIntent=false;});};
-  for(const [mode,svg] of analysisCharts){
-    svg.addEventListener('click',()=>{activateAnalysis(mode);markAnalysisIntent();},true);
-    svg.addEventListener('keydown',event=>{
-      if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'].includes(event.key)){activateAnalysis(mode);markAnalysisIntent();}
-      if(['Enter',' '].includes(event.key)){event.preventDefault();activateAnalysis(mode);if(state.lastAnalysisDetail)inspect(state.lastAnalysisDetail,{owner:'analysis',user:true});}
-    },true);
-  }
   function resetChartRange(){state.priceRange=null;state.marketRange=null;state.window='history';state.selectedEvent=null;state.selectedHistoryEvent=null;document.dispatchEvent(new CustomEvent('atlas:close-detail'));schedule();}
   const chartNavigation=bindChartNavigation({element:plot,getTool:()=>state.tool,getRange:()=>state.visible&&state.atlasMode==='price'?state.chartRange:null,
     getContext:context=>state.priceController?.getSelection?.(context)||{label:'선택한 실제 자료 또는 가정',copyText:null},
@@ -152,7 +142,7 @@ export function initLabView() {
   }
   function inspect(detail,options={}){
     if(!detail)return;
-    const owner=options.owner||'price',user=Boolean(options.user||(owner==='price'&&state.isChartClick));
+    const owner=options.owner||'price',user=options.user===true;
     if(owner==='price')state.lastPriceDetail=detail;
     if(!shouldPublishInspection({owner,currentOwner:state.inspectionOwner,user}))return;
     if(user)state.inspectionOwner=owner;
@@ -191,13 +181,12 @@ export function initLabView() {
     state.analysisController=state.analysisControllers.get(mode)||null;state.lastAnalysisDetail=state.analysisDetails.get(mode)||null;
     publishIndicators();syncAtlasUrl();
   }
-  function inspectAnalysis(mode,detail){
+  function inspectAnalysis(mode,detail,{user=false}={}){
     state.analysisDetails.set(mode,detail);
-    const user=state.analysisUserIntent;
     if(user)activateAnalysis(mode);
     if(mode===state.analysisMode)state.lastAnalysisDetail=detail;
     publishAnalysisState({mode,detail,calendarDate:analysisDate(detail)});
-    if(mode===state.analysisMode)inspect(detail,{owner:'analysis',user});
+    if(mode===state.analysisMode)inspect(detail,{owner:'analysis',user,openPanel:false});
   }
   function drawAnalysisIndicators(){
     publishIndicators();
@@ -206,7 +195,7 @@ export function initLabView() {
     for(const mode of visible){
       const svg=analysisCharts.get(mode),key=[Math.round(svg.clientWidth),Math.round(svg.clientHeight),state.cryptoView,state.atlasPhase,state.atlasAlignment,state.atlasPeriod,state.atlasMetric,state.atlasScope].join('/');
       if(state.analysisRenderKeys.get(mode)===key)continue;
-      const onInspect=detail=>inspectAnalysis(mode,detail);
+      const onInspect=(detail,options)=>inspectAnalysis(mode,detail,options);
       const controller=mode==='cryptocon'?renderCryptoConAudit({svg,dataset:state.dataset,view:state.cryptoView,onInspect}):renderAtlasAnalysis({svg,dataset:state.dataset,mode:mode==='duration'&&state.atlasPhase!=='macro'?'phases':mode,phaseLeg:state.atlasPhase==='bear'?'bear':'bull',alignment:state.atlasAlignment,period:state.atlasPeriod,metric:state.atlasMetric,scope:state.atlasScope,onInspect});
       state.analysisControllers.set(mode,controller);state.analysisRenderKeys.set(mode,key);
       const detail=state.analysisDetails.get(mode);publishAnalysisState({mode,controller,detail,calendarDate:analysisDate(detail)});
@@ -217,8 +206,7 @@ export function initLabView() {
   function showPriceInspection(){state.inspectionOwner='price';if(state.lastPriceDetail)inspect(state.lastPriceDetail,{openPanel:false});updateNavigation();}
   function useAnalysisNavigation(direction){
     if(!state.analysisOpen||!state.analysisController)return;
-    state.analysisUserIntent=true;
-    try{state.analysisController[direction]?.();}finally{state.analysisUserIntent=false;}
+    state.analysisController[direction]?.();
     publishAnalysisState({controller:state.analysisController});updateNavigation();
   }
   function saveSvg(svg,name){const clone=svg.cloneNode(true);clone.removeAttribute('hidden');clone.setAttribute('xmlns','http://www.w3.org/2000/svg');clone.setAttribute('style','background:#10151c;font-family:Arial,sans-serif');clone.querySelector('[id$="-cross"]')?.remove();download(name,new XMLSerializer().serializeToString(clone),'image/svg+xml');}

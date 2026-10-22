@@ -91,14 +91,14 @@ export function renderCryptoConAudit({svg,dataset,onInspect=()=>{},view='timing'
       if(!g.short)out+=text(left,y+h/2+16,row.deadline?'9월 말 시한':row.id==='cycle-130k'?'2025년 고점 비교':'시한 없음',{size:10});
     });return out;
   }
-  function draw(){
+  function draw({user=false,origin='render'}={}){
     svg.innerHTML=view==='timing'?drawTiming():view==='thresholds'?drawThresholds():drawTargets();
-    selections.set(svg,{key,index:selected});initialInspection=inspect();onInspect(initialInspection);
+    selections.set(svg,{key,index:selected});initialInspection=inspect();onInspect(initialInspection,{user,origin,openPanel:false});
   }
-  function select(index){selected=clamp(Math.round(index),0,rows.length-1);draw();}
+  function select(index,origin='navigation'){selected=clamp(Math.round(index),0,rows.length-1);draw({user:true,origin});}
   svg.onpointermove=null;svg.onpointerleave=null;svg.onblur=null;svg.onpointerdown=null;
-  svg.onclick=event=>{const rect=svg.getBoundingClientRect(),scale=Math.min(rect.width/g.W,rect.height/g.H),y=(event.clientY-rect.top-(rect.height-g.H*scale)/2)/scale;select(Math.floor((y-g.T)/rowHeight));};
-  svg.onkeydown=event=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'].includes(event.key))return;event.preventDefault();select(event.key==='Home'?0:event.key==='End'?rows.length-1:selected+(['ArrowRight','ArrowDown'].includes(event.key)?1:-1));};
+  svg.onclick=event=>{const rect=svg.getBoundingClientRect(),scale=Math.min(rect.width/g.W,rect.height/g.H),y=(event.clientY-rect.top-(rect.height-g.H*scale)/2)/scale;select(Math.floor((y-g.T)/rowHeight),'pointer');};
+  svg.onkeydown=event=>{if(event.shiftKey||event.altKey||event.ctrlKey||event.metaKey||!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End','Enter',' '].includes(event.key))return;event.preventDefault();select(['Enter',' '].includes(event.key)?selected:event.key==='Home'?0:event.key==='End'?rows.length-1:selected+(['ArrowRight','ArrowDown'].includes(event.key)?1:-1),'keyboard');};
   draw();
-  return {...definition,initialInspection,previous(){select(selected-1);},next(){select(selected+1);},hasPrevious(){return selected>0;},hasNext(){return selected<rows.length-1;},selectDate(value){const day=utcDay(value);select(rows.reduce((best,row,index)=>Math.abs(utcDay(row.firstDate||row.published)-day)<Math.abs(utcDay(rows[best].firstDate||rows[best].published)-day)?index:best,0));}};
+  return {...definition,initialInspection,previous(){select(selected-1);},next(){select(selected+1);},hasPrevious(){return selected>0;},hasNext(){return selected<rows.length-1;},selectDate(value){const day=utcDay(value);select(rows.reduce((best,row,index)=>Math.abs(utcDay(row.firstDate||row.published)-day)<Math.abs(utcDay(rows[best].firstDate||rows[best].published)-day)?index:best,0),'date');}};
 }
