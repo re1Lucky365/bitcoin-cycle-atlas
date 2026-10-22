@@ -63,13 +63,15 @@ export function aggregateCandles(candles, intervalId) {
   return {candles:result,incompleteGroups};
 }
 
-export async function fetchMarketCandles({interval:intervalId='15m',signal,count=180,now=Date.now(),fetchImpl=globalThis.fetch}={}) {
+export async function fetchMarketCandles({interval:intervalId='15m',signal,count=180,now=Date.now(),start:requestedStart,end:requestedEnd,allowEmpty=false,fetchImpl=globalThis.fetch}={}) {
   const interval = chartInterval(intervalId);
   if (!Number.isInteger(count) || count < 2 || count > 300) throw new RangeError('Candle count must be 2–300');
   if (!Number.isFinite(now) || now <= 0) throw new RangeError('Invalid candle cutoff');
   const origin = intervalId==='weekly'?4*86400:0;
-  const end = Math.floor((Math.floor(now/1000)-origin)/interval.seconds)*interval.seconds+origin;
-  const start = end-count*interval.seconds;
+  const cutoff = Math.floor((Math.floor(now/1000)-origin)/interval.seconds)*interval.seconds+origin;
+  const end = requestedEnd ?? cutoff;
+  const start = requestedStart ?? end-count*interval.seconds;
+  if (![start,end].every(value=>Number.isSafeInteger(value)&&value>0&&(value-origin)%interval.seconds===0) || end<=start || end>cutoff || (end-start)/interval.seconds>300) throw new RangeError('Candle window must contain 1–300 completed, aligned intervals');
   const rawCandles = [], sourceUrls = [];
   let excludedUnfinished = 0;
   for (let cursor=start;cursor<end;cursor+=interval.sourceSeconds*290) {
@@ -85,9 +87,9 @@ export async function fetchMarketCandles({interval:intervalId='15m',signal,count
   }
   signal?.throwIfAborted?.();
   const aggregated = aggregateCandles(rawCandles,intervalId), candles=aggregated.candles;
-  if (!candles.length) throw new Error('No completed candles in the requested interval');
+  if (!candles.length&&!allowEmpty) throw new Error('No completed candles in the requested interval');
   const gapCount=candles.slice(1).reduce((sum,candle,index)=>sum+Math.max(0,Math.round((candle.time-candles[index].time)/interval.seconds)-1),0);
-  return {interval:intervalId,seconds:interval.seconds,candles,source:'Coinbase Exchange',product:'BTC-USD',retrievedAt:new Date(now).toISOString(),firstDate:candles[0].date,lastDate:candles.at(-1).date,excludedUnfinished,gapCount,incompleteGroups:aggregated.incompleteGroups,aggregation:interval.seconds===interval.sourceSeconds?'native':`${interval.seconds/interval.sourceSeconds} × ${interval.sourceSeconds}s`,sourceUrls,documentationUrl:CANDLE_DOCUMENTATION,completedOnly:true};
+  return {interval:intervalId,seconds:interval.seconds,candles,source:'Coinbase Exchange',product:'BTC-USD',retrievedAt:new Date(now).toISOString(),firstDate:candles[0]?.date??null,lastDate:candles.at(-1)?.date??null,requestedStart:start,requestedEnd:end,excludedUnfinished,gapCount,incompleteGroups:aggregated.incompleteGroups,aggregation:interval.seconds===interval.sourceSeconds?'native':`${interval.seconds/interval.sourceSeconds} × ${interval.sourceSeconds}s`,sourceUrls,documentationUrl:CANDLE_DOCUMENTATION,completedOnly:true};
 }
 
 /** Saved snapshots carry their original collection time, never the current time. */

@@ -1,4 +1,4 @@
-import { utcDay, dateFromDay } from './cycle-engine.js';
+import { utcDay, dateFromDay } from './cycle-engine.js?v=1.10.0';
 
 const MIN_DAYS = 30;
 const MIN_BARS = 12;
@@ -23,23 +23,26 @@ function rangeUnits(range) {
   if (values.some(value => !Number.isSafeInteger(value))) throw new RangeError('범위는 같은 봉 시간 간격에 맞아야 합니다.');
   const minimum = range.minSpan ?? (seconds ? MIN_BARS : MIN_DAYS);
   if (!Number.isSafeInteger(minimum) || minimum < 1) throw new RangeError('최소 표시 간격 수는 양의 정수여야 합니다.');
+  const maximum = range.maxSpan ?? values[0] + 1;
+  if (!Number.isSafeInteger(maximum) || maximum < Math.min(minimum, values[0] + 1)) throw new RangeError('최대 표시 간격 수는 최소 표시 간격 이상이어야 합니다.');
   return {
     min: 0, max: values[0], start: values[1], end: values[2],
     minimum: Math.min(minimum, values[0] + 1),
+    maximum: Math.min(maximum, values[0] + 1),
     encode: value => seconds ? min + value * step : dateFromDay(min + value),
   };
 }
 
 function boundedRange(range, start, length) {
   const units = rangeUnits(range), available = units.max + 1;
-  const count = clamp(Math.round(length), units.minimum, available);
+  const count = clamp(Math.round(length), units.minimum, units.maximum);
   const first = clamp(Math.round(start), 0, available - count);
   return { ...range, start: units.encode(first), end: units.encode(first + count - 1) };
 }
 
 export function fitRange(range) {
   const units = rangeUnits(range);
-  return { ...range, start: units.encode(0), end: units.encode(units.max) };
+  return boundedRange(range, units.max - units.maximum + 1, units.maximum);
 }
 
 export function zoomRange(range, factor, anchor = .5) {
@@ -48,7 +51,7 @@ export function zoomRange(range, factor, anchor = .5) {
   const units = rangeUnits(range);
   const normal = boundedRange(range, units.start, units.end - units.start + 1), current = rangeUnits(normal);
   const fraction = clamp(anchor, 0, 1), oldLength = current.end - current.start + 1;
-  const newLength = clamp(Math.round(oldLength * factor), current.minimum, current.max + 1);
+  const newLength = clamp(Math.round(oldLength * factor), current.minimum, current.maximum);
   const pivot = current.start + fraction * (oldLength - 1);
   return boundedRange(normal, pivot - fraction * (newLength - 1), newLength);
 }
@@ -65,7 +68,7 @@ export function panRange(range, fraction) {
 
 const sameScope = (a, b) => Boolean(a && b &&
   a.unit === b.unit && a.step === b.step && a.min === b.min && a.max === b.max &&
-  a.minSpan === b.minSpan && a.contextKey === b.contextKey);
+  a.minSpan === b.minSpan && a.maxSpan === b.maxSpan && a.contextKey === b.contextKey);
 const sameWindow = (a, b) => sameScope(a, b) && a.start === b.start && a.end === b.end;
 const icons = {
   left: '<path d="m14 6-6 6 6 6"/>',
@@ -121,7 +124,9 @@ export function bindChartNavigation({
   const announce = text => { if (onAnnounce) onAnnounce(text); else status.textContent = text; };
   const previousTouchAction = element.style.touchAction;
   element.style.touchAction = 'pan-y pinch-zoom';
-  let frame = null, pending = null, drag = null, suppressClickUntil = 0;
+  let frame = null, pending = null, drag = null, pinch = null, suppressClickUntil = 0;
+  const touches = new Map();
+  const completedPinchTouches = new Set();
   let menuState = null, lastPointer = null, destroyed = false;
   const listeners = [];
   const listen = (target, type, handler, options) => { target.addEventListener(type, handler, options);listeners.push([target, type, handler, options]); };
@@ -156,9 +161,10 @@ export function bindChartNavigation({
     try { if (element.hasPointerCapture?.(id)) element.releasePointerCapture(id); } catch { /* A cancelled pointer can already be gone. */ }
   }
   function cancelGesture() {
-    const previous = drag;drag = null;delete element.dataset.dragging;clearPending();
-    if (previous?.active) suppressClickUntil = Date.now() + 500;
+    const previous = drag,wasPinching=Boolean(pinch),captured=[...touches.keys()];drag = null;pinch=null;touches.clear();completedPinchTouches.clear();delete element.dataset.dragging;delete element.dataset.pinching;clearPending();
+    if (previous?.active||wasPinching) suppressClickUntil = Date.now() + 500;
     if (previous) releaseCapture(previous.id);
+    for(const id of captured)releaseCapture(id);
   }
   function closeMenu(restoreFocus = false) {
     if (menu.hidden) return;
@@ -196,13 +202,34 @@ export function bindChartNavigation({
     }
   }
   function pointerDown(event) {
-    if (event.pointerType === 'touch' && event.isPrimary === false) { cancelGesture();return; }
     const range = current(), rect = plotBounds();
-    if (!range || getTool() === 'measure' || event.button !== 0 || event.isPrimary === false || interactive(event.target) || !inside(event, rect)) return;
+    if (!range || getTool() === 'measure' || event.button !== 0 || (event.isPrimary === false&&event.pointerType!=='touch') || interactive(event.target) || !inside(event, rect)) return;
+    if(event.pointerType==='touch'){
+      if(event.isPrimary!==false)completedPinchTouches.clear();
+      if(touches.size>=2)return;
+      touches.set(event.pointerId,{x:event.clientX,y:event.clientY});
+      if(touches.size===2){
+        flush();drag=null;delete element.dataset.dragging;
+        const [a,b]=[...touches.values()];
+        pinch={range:current(),distance:Math.max(16,Math.hypot(a.x-b.x,a.y-b.y)),center:(a.x+b.x)/2,left:rect.left,width:rect.width};
+        element.dataset.pinching='true';closeMenu();focusChart();
+        for(const id of touches.keys()){try{element.setPointerCapture?.(id);}catch{}}
+        event.preventDefault();event.stopImmediatePropagation();return;
+      }
+    }
     closeMenu();suppressClickUntil = 0;
     drag = { id: event.pointerId, x: event.clientX, y: event.clientY, width: rect.width, range, active: false };
   }
   function pointerMove(event) {
+    if(pinch&&touches.has(event.pointerId)){
+      if(!sameScope(pinch.range,getRange())||getTool()==='measure'){cancelGesture();return;}
+      touches.set(event.pointerId,{x:event.clientX,y:event.clientY});
+      const [a,b]=[...touches.values()],distance=Math.max(16,Math.hypot(a.x-b.x,a.y-b.y)),center=(a.x+b.x)/2;
+      const zoomed=zoomRange(pinch.range,pinch.distance/distance,(pinch.center-pinch.left)/pinch.width);
+      enqueue(panRange(zoomed,(pinch.center-center)/pinch.width));
+      event.preventDefault();event.stopImmediatePropagation();return;
+    }
+    if(touches.has(event.pointerId))touches.set(event.pointerId,{x:event.clientX,y:event.clientY});
     if (element.contains(event.target) && inside(event, plotBounds())) lastPointer = { clientX: event.clientX, clientY: event.clientY };
     if (!drag || event.pointerId !== drag.id) return;
     if (!sameScope(drag.range, getRange()) || getTool() === 'measure' || (event.buttons === 0 && event.pointerType !== 'touch')) { cancelGesture();return; }
@@ -216,6 +243,15 @@ export function bindChartNavigation({
     enqueue(panRange(drag.range, -dx / drag.width));
   }
   function pointerUp(event) {
+    if(completedPinchTouches.delete(event.pointerId)){
+      event.preventDefault();event.stopImmediatePropagation();suppressClickUntil=Date.now()+500;return;
+    }
+    if(pinch&&touches.has(event.pointerId)){
+      event.preventDefault();event.stopImmediatePropagation();flush();
+      const captured=[...touches.keys()];for(const id of captured)if(id!==event.pointerId)completedPinchTouches.add(id);touches.clear();pinch=null;drag=null;delete element.dataset.pinching;delete element.dataset.dragging;
+      suppressClickUntil=Date.now()+500;for(const id of captured)releaseCapture(id);return;
+    }
+    touches.delete(event.pointerId);
     if (!drag || event.pointerId !== drag.id) return;
     const previous = drag;drag = null;delete element.dataset.dragging;
     if (previous.active) {
@@ -223,7 +259,7 @@ export function bindChartNavigation({
     }
     releaseCapture(previous.id);
   }
-  function pointerCancel(event) { if (drag?.id === event.pointerId) cancelGesture(); }
+  function pointerCancel(event) { if (drag?.id === event.pointerId||touches.has(event.pointerId)) cancelGesture(); }
   function click(event) {
     if (event.detail !== 0 && suppressClickUntil > Date.now() && !interactive(event.target)) {
       suppressClickUntil = 0;event.preventDefault();event.stopImmediatePropagation();
@@ -279,7 +315,7 @@ export function bindChartNavigation({
   }
   function keydown(event) {
     if (event.defaultPrevented || interactive(event.target)) return;
-    if (event.key === 'Escape' && drag) { event.preventDefault();event.stopImmediatePropagation();cancelGesture();return; }
+    if (event.key === 'Escape' && (drag||pinch)) { event.preventDefault();event.stopImmediatePropagation();cancelGesture();return; }
     const range = current();if (!range) return;
     let action = null;
     if (event.key === 'ContextMenu' || (event.shiftKey && event.key === 'F10')) action = 'menu';
@@ -343,13 +379,13 @@ export function bindChartNavigation({
   function update() {
     if (destroyed) return;
     const range = getRange();toolbar.hidden = !range;
-    if (!range || (drag && (!sameScope(drag.range, range) || getTool() === 'measure'))) cancelGesture();
+    if (!range || (drag && (!sameScope(drag.range, range) || getTool() === 'measure')) || (pinch&&(!sameScope(pinch.range,range)||getTool()==='measure'))) cancelGesture();
     if (pending && !sameScope(pending, range)) clearPending();
     if (menuState && !sameWindow(menuState.range, range)) closeMenu();
     if (!range) { suppressClickUntil = 0;return; }
     const units = rangeUnits(range), count = units.end - units.start + 1;
     buttons.get('in').disabled = count <= units.minimum;
-    buttons.get('out').disabled = units.start <= 0 && units.end >= units.max;
+    buttons.get('out').disabled = count >= units.maximum;
     buttons.get('left').disabled = units.start <= 0;
     buttons.get('right').disabled = units.end >= units.max;
   }

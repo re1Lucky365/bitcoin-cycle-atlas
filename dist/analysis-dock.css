@@ -1,17 +1,24 @@
 /* Indicator controls stay inside the chart; there is no lower analysis dock. */
-.chart-indicator-manager{position:absolute;top:var(--indicator-top,75px);left:10px;z-index:9;max-width:min(260px,calc(100% - 95px));color:#aabbd0;font-size:10px;line-height:1.4;background:#101722de;border:1px solid #293544a8;border-radius:5px;box-shadow:0 3px 10px #0002}
+.chart-indicator-manager{position:absolute;top:var(--indicator-top,75px);left:10px;z-index:9;width:min(320px,calc(100% - 95px));max-width:calc(100% - 95px);color:#aabbd0;font-size:10px;line-height:1.4;background:#101722ed;border:1px solid #293544a8;border-radius:6px;box-shadow:0 3px 10px #0002}
+.chart-indicator-manager[data-collapsed=true]{width:auto;min-width:140px}
 .indicator-manager-heading{display:flex;align-items:center;gap:3px;padding:2px 3px;min-height:25px}
 .indicator-manager-heading>span{flex:1;min-width:60px;font-size:10px;color:#9aacc3}
 .chart-indicator-manager button,.analysis-window-heading button{display:grid;place-items:center;width:24px;height:24px;min-height:0;flex:none;margin:0;padding:4px;border:0;border-radius:3px;color:#91a8c4;background:transparent;cursor:pointer}
 .chart-indicator-manager button:hover,.analysis-window-heading button:hover{background:#29394f;color:#e1ebf8}
 .chart-indicator-manager svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .chart-indicator-manager[data-collapsed=true] #indicator-list-toggle svg{transform:rotate(-90deg)}
-.chart-indicator-list{max-height:min(170px,30vh);overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;padding:0 3px 3px}
-.indicator-row{display:flex;align-items:center;gap:3px;min-height:24px;border-top:1px solid #25314066}
-.indicator-row .indicator-name{display:block;flex:1;min-width:0;width:auto;height:auto;padding:3px 5px;font-size:10px;line-height:1.5;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#bac9dc}
-.indicator-row[data-visible=false] .indicator-name{color:#728197;text-decoration:line-through}
+.chart-indicator-list{max-height:min(360px,42dvh);overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;padding:0 3px 3px}
+.indicator-readout-date{margin:0;padding:2px 8px 7px;font-size:9px;line-height:1.4;font-variant-numeric:tabular-nums;color:#7e96b2}
+.indicator-readout-date[hidden]{display:none}
+.indicator-row{display:flex;align-items:center;gap:3px;min-height:40px;border-top:1px solid #25314066}
+.indicator-row .indicator-name{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:1px;flex:1;min-width:0;width:auto;height:auto;padding:5px;font-size:10px;line-height:1.5;text-align:left;white-space:normal;overflow-wrap:anywhere;color:#bac9dc}
+.indicator-label{font-size:9px;line-height:1.5;color:#8ba0ba}
+.indicator-value{font-size:11px;line-height:1.4;font-weight:500;letter-spacing:.02em;font-variant-numeric:tabular-nums;color:#d4e1f2}
+.indicator-value[data-tone=up]{color:#71c8ac}.indicator-value[data-tone=down]{color:#e18c97}.indicator-value[data-tone=extended]{color:#81b5ed}.indicator-value[data-tone=scenario]{color:#d6b383}.indicator-value[data-tone=muted]{color:#8096b0;font-weight:400}
+.indicator-row[data-visible=false] .indicator-label{text-decoration:line-through}
+.indicator-row[data-visible=false] .indicator-value{opacity:.58}
 .indicator-row[data-unavailable=true] .indicator-name{opacity:.55}
-.indicator-row button{width:22px;height:22px;padding:4px}
+.indicator-row button{width:26px;height:30px;padding:5px}
 .indicator-empty{font-size:11px;color:#8ca0b9;padding:10px;margin:0;line-height:1.5}
 .indicator-library{width:min(720px,calc(100vw - 32px));max-width:720px;max-height:min(760px,calc(100dvh - 48px));padding:0;margin:auto;border:1px solid #36465c;border-radius:12px;background:#151e2b;color:#d9e4f3;box-shadow:0 24px 100px #0009;font-family:var(--font);overflow:hidden}
 .indicator-library[open]{display:flex;flex-direction:column}
@@ -72,13 +79,17 @@
 /* OHLC and provenance float with the plot; the price axis needs no header band. */
 .atlas-plot>#lab-metrics{left:10px;right:90px;max-width:620px;width:max-content;box-sizing:border-box;padding:2px 4px;border-radius:3px;background:#10151cd9;text-shadow:0 1px 2px #10151c}
 .atlas-plot>.workbench-market-info{left:10px;right:90px;max-width:560px;width:max-content;box-sizing:border-box;padding:0 4px;border-radius:3px;background:#10151cd9;text-shadow:0 1px 2px #10151c}
-.scenario-countdown{position:absolute;top:8px;right:88px;z-index:7;display:flex;flex-direction:column;align-items:flex-end;gap:4px;max-width:220px;min-height:0;margin:0;padding:7px 9px;border:1px solid #31445988;border-radius:5px;background:#111a25e6;color:#bdd0e8;text-align:right;cursor:pointer}
+.scenario-countdown{position:absolute;top:8px;right:88px;z-index:7;display:flex;flex-direction:column;align-items:stretch;gap:5px;max-width:220px;min-height:0;margin:0;padding:9px 11px;border:1px solid #33445899;border-radius:8px;background:#111a25ed;color:#bdd0e8;text-align:left;cursor:pointer;--countdown-accent:#93b9e4}
 .scenario-countdown[hidden]{display:none!important}
 .scenario-countdown:hover{border-color:#6287b1;background:#19283a}
-.countdown-caption{font-size:8px;line-height:1.4;color:#8b9eb7;white-space:nowrap}
-.countdown-main{display:flex;align-items:baseline;justify-content:flex-end;gap:8px;font-size:13px;line-height:1.3;font-weight:500}
-.countdown-main b{font-size:22px;line-height:1;letter-spacing:-.7px;font-variant-numeric:tabular-nums;color:#bddbff;font-weight:550}
-.countdown-current{font-size:9px;line-height:1.4;color:#91a9c4}
+.scenario-countdown[data-regime=advance]{--countdown-accent:#71c8ac}.scenario-countdown[data-regime=correction]{--countdown-accent:#e18c97}.scenario-countdown[data-regime=pullback]{--countdown-accent:#d6b383}.scenario-countdown[data-regime=bottom]{--countdown-accent:#81b5ed}
+.countdown-main{display:flex;align-items:center;justify-content:space-between;gap:14px;font-size:12px;line-height:1.35;font-weight:500}
+.countdown-next{display:flex;align-items:center;gap:6px;white-space:nowrap;color:#c4d3e4}
+.countdown-next:before{content:"";width:5px;height:5px;border-radius:50%;background:var(--countdown-accent);flex:none}
+.countdown-main b{font-size:21px;line-height:1;letter-spacing:-.5px;font-variant-numeric:tabular-nums;color:#d7e8ff;font-weight:550;white-space:nowrap}
+.countdown-meta{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:9px;line-height:1.4;color:#849cb8}
+.countdown-caption{font-size:8px;line-height:1.4;color:#b2a186;white-space:nowrap}
+.countdown-date{font-variant-numeric:tabular-nums}
 @media(max-width:1000px){.atlas-plot[data-countdown-visible=true]>#lab-metrics{max-width:calc(100% - 290px)}.atlas-plot[data-countdown-visible=true]>.workbench-market-info{max-width:calc(100% - 290px)}.scenario-countdown{right:80px;max-width:190px}.countdown-caption{font-size:7px}.countdown-main{font-size:11px}.countdown-main b{font-size:19px}}
 @media(max-width:620px){.atlas-plot>#lab-metrics{left:7px;right:68px;max-width:calc(100% - 82px)}.atlas-plot>.workbench-market-info{left:7px;right:68px;max-width:calc(100% - 82px)}.scenario-countdown{right:70px;top:76px;padding:5px 7px;max-width:180px}.atlas-plot[data-countdown-visible=true]>#lab-metrics,.atlas-plot[data-countdown-visible=true]>.workbench-market-info{max-width:calc(100% - 82px)}.analysis-indicator-windows{top:145px}}
 /* The actual plot width changes when the right inspector opens, even on a wide

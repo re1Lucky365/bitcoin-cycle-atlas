@@ -1,0 +1,15 @@
+/* A menu outside the rail remains usable when the rail becomes a mobile sheet. */
+#workbench-magnet{isolation:isolate}
+#workbench-magnet .icon{margin-top:-3px}
+.workbench-magnet-badge{position:absolute;bottom:1px;right:2px;font:600 8px/1.1 system-ui,sans-serif;color:inherit;background:var(--chrome-bg,#101722);border-radius:2px;padding:1px 2px;pointer-events:none}
+#workbench-magnet[aria-pressed=true] .workbench-magnet-badge{background:#22334a}
+.workbench-magnet-menu{position:fixed;z-index:1600;box-sizing:border-box;padding:5px;border:1px solid #3a4a60;border-radius:8px;background:#141e2b;color:#dce7f5;box-shadow:0 10px 28px #0008;max-height:calc(100dvh - 16px);overflow:auto;overscroll-behavior:contain}
+.workbench-magnet-menu[hidden]{display:none}
+.workbench-magnet-menu button{display:flex;flex-direction:column;align-items:flex-start;gap:4px;position:relative;width:100%;min-height:54px;padding:9px 24px 9px 11px;border:0;border-radius:5px;background:transparent;color:inherit;text-align:left;cursor:pointer}
+.workbench-magnet-menu button strong{font-size:12px;font-weight:600}
+.workbench-magnet-menu button small{font-size:10px;line-height:1.45;color:#a6b9d0}
+.workbench-magnet-menu button:hover,.workbench-magnet-menu button:focus-visible{background:#22334a;outline:2px solid #7bb6ee;outline-offset:-2px}
+.workbench-magnet-menu button[aria-checked=true]{background:#20334a;color:#a8d4ff}
+.workbench-magnet-menu button[aria-checked=true]::after{position:absolute;right:9px;top:12px;content:'✓';font-size:12px}
+.workbench-magnet-menu p{margin:6px 5px 3px;padding-top:8px;border-top:1px solid #2e3e52;font-size:10px;line-height:1.5;color:#a6b9d0}
+@media(pointer:coarse){#workbench-magnet{min-width:44px;min-height:44px}.workbench-magnet-menu button{min-height:60px;padding-top:11px;padding-bottom:11px}.workbench-magnet-menu button strong{font-size:13px}.workbench-magnet-menu button small,.workbench-magnet-menu p{font-size:11px}}

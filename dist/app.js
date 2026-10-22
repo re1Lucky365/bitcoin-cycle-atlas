@@ -1,17 +1,17 @@
-import { buildComparison, getAnchors, getPointAtDay, comparisonToCsv, validateDataset, utcDay } from './cycle-engine.js';
-import { fetchLatestDataset } from './data-source.js';
-import { inspectPublishedDataset, shouldCheckPublishedSnapshot } from './published-data.js?v=1.9.0';
-import { analyzeCycleTiming } from './cycle-timing.js';
-import { renderTimingView } from './timing-view.js';
-import { analyzePeakZones } from './peak-zones.js';
-import { analyzeCycleForecast } from './forecast-engine.js';
-import { renderPeakView } from './peak-view.js';
-import { renderForecastView, exportForecastSvg } from './forecast-view.js';
+import { buildComparison, getAnchors, getPointAtDay, comparisonToCsv, validateDataset, utcDay } from './cycle-engine.js?v=1.10.0';
+import { fetchLatestDataset } from './data-source.js?v=1.10.0';
+import { inspectPublishedDataset, shouldCheckPublishedSnapshot } from './published-data.js?v=1.10.0';
+import { analyzeCycleTiming } from './cycle-timing.js?v=1.10.0';
+import { renderTimingView } from './timing-view.js?v=1.10.0';
+import { analyzePeakZones } from './peak-zones.js?v=1.10.0';
+import { analyzeCycleForecast } from './forecast-engine.js?v=1.10.0';
+import { renderPeakView } from './peak-view.js?v=1.10.0';
+import { renderForecastView, exportForecastSvg } from './forecast-view.js?v=1.10.0';
 // Changed release modules use a versioned URL so a cached v1.5 module cannot
 // leave a new long-horizon page running the old three-year workbench.
-import { initViewportWorkspace } from './viewport-workspace.js?v=1.9.1';
-import { initLabView } from './lab-view.js?v=1.9.2';
-import { initEvidenceView, showEvidenceView } from './evidence-view.js?v=1.6.0';
+import { initViewportWorkspace } from './viewport-workspace.js?v=1.10.0';
+import { initLabView } from './lab-view.js?v=1.10.0';
+import { initEvidenceView, showEvidenceView } from './evidence-view.js?v=1.10.0';
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -71,7 +71,7 @@ function toast(message) { $('#toast').textContent = message; $('#toast').hidden 
 function persistUrl() {
   const p = new URLSearchParams();
   const currentParams=new URLSearchParams(location.search);
-  for(const key of ['chart','span','assumption','granularity','type','axis','align','interval','measure','scope','phase','legacy','dock','audit','indicators','indicator-hide','indicator-list'])if(currentParams.has(key))p.set(key,currentParams.get(key));
+  for(const key of ['chart','span','assumption','granularity','type','axis','align','interval','measure','scope','phase','legacy','dock','audit','indicators','indicator-hide','indicator-list','magnet'])if(currentParams.has(key))p.set(key,currentParams.get(key));
   if (state.view !== 'outlook') p.set('page',state.view);
   if (state.mode !== 'halving') p.set('mode', state.mode);
   if (state.unit !== 'rebased') p.set('unit', state.unit);
@@ -102,7 +102,8 @@ syncPage();
 
 function render(recalculate = true) {
   if (!state.dataset) return;
-  if (recalculate) {
+  const comparisonVisible=state.view==='compare';
+  if (comparisonVisible&&(recalculate||state.comparisonDataset!==state.dataset||!state.comparison)) {
     const anchors = getAnchors(state.dataset, state.mode);
     const elapsed = utcDay(state.dataset.prices.at(-1)[0]) - utcDay(anchors.at(-1).date);
     const horizon = state.horizon === 'current' ? elapsed : state.horizon === 'all' ? 'all' : Number(state.horizon);
@@ -110,17 +111,21 @@ function render(recalculate = true) {
     state.comparison.series.forEach((s, i) => s.color = s.current ? '#f2aa4c' : palette[i % palette.length]);
     if (state.comparison.series.every(s => state.hidden.has(s.id))) state.hidden.clear();
     state.cursor = Math.min(state.comparison.horizon, Math.max(0, state.cursor ?? state.comparison.currentDays));
+    state.comparisonDataset=state.dataset;
   }
+  if(comparisonVisible){
   $$('.anchor-tab').forEach(button => { const active = button.dataset.mode === state.mode; button.classList.toggle('active', active); button.setAttribute('aria-selected', String(active)); button.tabIndex = active ? 0 : -1; });
   $('#chart-panel').setAttribute('aria-labelledby', `tab-${state.mode}`);
   $$('[data-unit]').forEach(b => { b.classList.toggle('selected', b.dataset.unit === state.unit); b.setAttribute('aria-pressed', String(b.dataset.unit === state.unit)); });
   $$('[data-scale]').forEach(b => { b.classList.toggle('selected', b.dataset.scale === state.scale); b.setAttribute('aria-pressed', String(b.dataset.scale === state.scale)); });
   $('#horizon').value = state.horizon;
-  renderLegend(); renderChart(); renderTable(state.cursor); renderMethod(); renderData(); renderTiming(); renderResearch();
+  renderLegend(); renderChart(); renderTable(state.cursor); renderMethod(); renderResearch();
+  syncCursorInputs();
+  }
+  if(state.view==='data')renderData();
   outlookController.setDataset(state.dataset);
   document.dispatchEvent(new CustomEvent('atlas:dataset',{detail:{latestObservationDate:state.dataset.prices.at(-1)[0]}}));
   $('#sidebar-asof').textContent=`관측 · ${state.dataset.prices.at(-1)[0].replaceAll('-','.')} UTC`;
-  syncCursorInputs();
   $('#loading-state').hidden = true;
   persistUrl();
 }
@@ -148,10 +153,11 @@ function renderResearch() {
   $('#timing-analysis').hidden=state.analysisView!=='timing';
   $('#analysis-asof').textContent=`관측 종료 ${state.dataset.prices.at(-1)[0].replaceAll('-','.')} UTC`;
   try {
-    if(state.peakDataset!==state.dataset||state.peakAnalysis?.threshold!==state.peakThreshold||state.peakAnalysis?.baseline!==state.timingBaseline){
+    if(state.analysisView==='timing'||state.analysisView==='peak')renderTiming();
+    if(state.analysisView==='peak'&&(state.peakDataset!==state.dataset||state.peakAnalysis?.threshold!==state.peakThreshold||state.peakAnalysis?.baseline!==state.timingBaseline)){
       state.peakAnalysis=analyzePeakZones(state.dataset,{threshold:state.peakThreshold,baseline:state.timingBaseline});state.peakDataset=state.dataset;
     }
-    if(state.forecastDataset!==state.dataset||state.forecast?.methodology?.highZoneFraction!==state.peakThreshold){
+    if(state.analysisView==='forecast'&&(state.forecastDataset!==state.dataset||state.forecast?.methodology?.highZoneFraction!==state.peakThreshold)){
       state.forecast=analyzeCycleForecast(state.dataset,{highZoneFraction:state.peakThreshold});state.forecastDataset=state.dataset;
     }
     if(state.analysisView==='peak')renderPeakView(state.peakAnalysis,state.dataset,state.timing);
@@ -320,7 +326,7 @@ $$('[data-view]').forEach(b => b.addEventListener('click', () => {
   state.view = b.dataset.view;
   syncPage();
   closeExport();
-  if(state.view==='compare') requestAnimationFrame(()=>{renderChart();renderResearch();}); else if(state.view==='data') renderData();
+  if(state.view==='compare') requestAnimationFrame(()=>render()); else if(state.view==='data') renderData();
   persistUrl();
   window.scrollTo({top:0,behavior:'instant'});
 }));

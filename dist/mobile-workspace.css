@@ -1,0 +1,112 @@
+.mobile-workbench-button,.mobile-extra-actions,.mobile-workbench-backdrop,.mobile-chart-home{display:none}
+/* The plotted surface owns its gestures, while text and controls keep native zoom. */
+.atlas-plot>svg#lab-chart{touch-action:none}
+@media (max-width:620px){
+  :root{--sidebar-width:0px;--rail-width:0px;--mobile-top:env(safe-area-inset-top,0px);--mobile-bottom:env(safe-area-inset-bottom,0px)}
+  .workspace.atlas-details-layout,.workspace.atlas-details-layout[data-details-open=true]{margin:0;width:100%;height:100dvh;grid-template-columns:minmax(0,1fr) 0 0}
+  .atlas-sidebar,.workbench-rail{display:none}
+  .atlas-canvas-heading{height:calc(48px + var(--mobile-top));min-height:calc(48px + var(--mobile-top));padding:var(--mobile-top) 6px 0;gap:1px;overflow:visible;z-index:46}
+  .workbench-symbol{font-size:11px;padding:0 5px 0 2px;border:0;line-height:24px}
+  #workbench-frequency{flex:none;padding:0;border:0}
+  #workbench-frequency .lab-segmented{display:none}
+  #workbench-interval-select{display:block;width:58px;height:44px;min-height:44px;margin:0;padding:5px 16px 5px 6px;font-size:13px;border:0;background-color:transparent;color:#d3e3f6}
+  .atlas-canvas-heading>.workbench-icon{width:44px;height:44px;min-height:44px;max-width:44px;padding:11px;flex:none;border:0}
+  .atlas-canvas-heading>.workbench-icon .icon,.mobile-workbench-button svg{width:21px;height:21px}
+  .atlas-canvas-heading>#workbench-scenario,.atlas-canvas-heading>#workbench-chart-menu,.atlas-canvas-heading>#lab-svg,.atlas-canvas-heading>#atlas-display-options{display:none}
+  .atlas-canvas-heading .workbench-mode{width:44px;max-width:44px;padding:11px}
+  .atlas-canvas-heading #atlas-mode-name{display:none}
+  .mobile-workbench-button{display:flex}
+  body:not([data-page=outlook]) .mobile-chart-home{position:fixed;top:max(6px,var(--mobile-top));left:8px;z-index:48;display:flex;align-items:center;gap:5px;height:40px;min-height:40px;padding:6px 12px 6px 7px;border:1px solid #33465f;border-radius:6px;background:#142131;color:#c8dcf4;font-size:12px}
+  .mobile-chart-home svg{width:19px;height:19px}
+  body:not([data-page=outlook]) .workspace.atlas-details-layout>#main{padding-top:52px;box-sizing:border-box}
+  .atlas-plot{contain:layout paint}
+  .atlas-plot>#lab-metrics{top:8px;left:10px;right:10px;max-width:calc(100% - 20px);padding:0;gap:4px;min-height:0}
+  .readout-main{gap:7px;flex-wrap:wrap;white-space:normal;row-gap:1px}
+  .atlas-plot>.atlas-readout strong{font-size:16px;letter-spacing:-.3px}
+  .atlas-readout .atlas-symbol,.atlas-readout .atlas-day-change{font-size:10px}
+  .atlas-readout .atlas-day-change{display:inline}
+  .atlas-readout .atlas-observation-date{font-size:9px;margin-left:0}
+  .readout-detail,.readout-ohlc{flex-wrap:wrap;white-space:normal;overflow:visible;gap:3px 9px;font-size:10px;line-height:1.5;min-height:0}
+  .readout-detail>span,.readout-ohlc>span{white-space:nowrap}
+  .workbench-market-info{left:10px;right:10px;max-width:calc(100% - 20px);font-size:9px;line-height:16px}
+  .workbench-market-info #workbench-market-refresh{width:28px;height:24px;min-height:24px;padding:4px;flex:none}
+  .chart-indicator-manager{left:9px;max-width:calc(100% - 18px);box-shadow:none;background:#101923f5}
+  .chart-indicator-manager[data-collapsed=true]{width:128px;min-width:0}
+  .chart-indicator-manager[data-collapsed=true] #indicator-visibility-all{display:none}
+  .chart-indicator-manager[data-collapsed=true] .indicator-manager-heading{padding:0 2px;gap:0;min-height:36px}
+  .chart-indicator-manager[data-collapsed=true] .indicator-manager-heading>span{min-width:0;font-size:10px}
+  .chart-indicator-manager[data-collapsed=true] .indicator-manager-heading button{width:34px;height:36px}
+  .chart-indicator-manager[data-collapsed=false]{top:calc(var(--indicator-top,90px) + 44px);width:calc(100% - 18px)}
+  .chart-indicator-list{max-height:min(43dvh,360px);overscroll-behavior:contain}
+  .chart-indicator-manager .indicator-row button{min-width:40px;min-height:40px}
+  .chart-indicator-manager .indicator-name{font-size:11px}
+  .chart-indicator-manager .indicator-value{font-size:12px}
+  .atlas-plot .scenario-countdown{top:var(--indicator-top,90px);left:auto;right:9px;width:auto;max-width:calc(100% - 155px);min-width:0;min-height:36px;padding:5px 9px;box-shadow:none;border-radius:5px;background:#14202de8}
+  .scenario-countdown .countdown-main{font-size:11px;gap:8px;line-height:1.4}
+  .scenario-countdown .countdown-main b{font-size:18px;letter-spacing:-.5px}
+  .scenario-countdown .countdown-caption,.scenario-countdown .countdown-current{font-size:8px;line-height:1.4}
+  .atlas-plot>.lab-chart-foot{max-width:calc(100% - var(--plot-right-gap,65px) - 12px);padding:4px 6px;background:#101925f5;backdrop-filter:none}
+  .atlas-plot>.lab-chart-foot .lab-legend{gap:3px 8px}
+  .atlas-plot>.lab-chart-foot .lab-legend span{font-size:9px;line-height:13px}
+  .history-journal .journal-heading{min-height:36px;padding:0 4px;gap:2px}
+  .journal-heading button{min-height:36px;height:36px;font-size:10px;padding:5px 7px}
+  #journal-context{display:none}
+  #history-journal-toggle{margin-right:auto}
+  .workbench-bottom{height:calc(66px + var(--mobile-bottom));min-height:calc(66px + var(--mobile-bottom));grid-template-rows:40px 24px;padding:0 5px var(--mobile-bottom);gap:0}
+  .workbench-ranges{overflow-x:auto;scrollbar-width:none;min-width:0;flex-wrap:nowrap}
+  .workbench-ranges button,.workbench-axis button{height:40px;min-height:40px;min-width:35px;padding:5px;font-size:10px;flex:none}
+  .workbench-ranges .workbench-icon,.workbench-axis .workbench-icon{height:40px;min-width:34px;width:34px}
+  .workbench-status{height:24px}
+  .workbench-update{font-size:9px;height:24px}
+  .workbench-zone{font-size:9px}
+  .mobile-workbench-backdrop:not([hidden]){display:block;position:fixed;inset:calc(48px + var(--mobile-top)) 0 0;z-index:49;margin:0;padding:0;width:100%;height:auto;border:0;border-radius:0;background:#05090e85;touch-action:manipulation}
+  .atlas-sidebar[data-mobile-open=true]{display:flex;position:fixed;inset:calc(56px + var(--mobile-top)) 8px auto;width:calc(100% - 16px);height:auto;max-height:calc(100dvh - 110px);overflow:auto;z-index:52;border:1px solid #33455b;border-radius:9px;padding:10px;box-sizing:border-box;background:#141f2d;box-shadow:0 10px 28px #0008}
+  .atlas-sidebar .atlas-brand{display:none}
+  .atlas-sidebar[data-mobile-open=true] .workbench-tools{display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:center;gap:7px;margin:0}
+  .atlas-sidebar[data-mobile-open=true] .workbench-icon,.atlas-sidebar[data-mobile-open=true] #workbench-navigation .chart-navigation button{width:44px;height:44px;min-height:44px;padding:11px}
+  .atlas-sidebar[data-mobile-open=true] #workbench-clear{margin:0}
+  .atlas-sidebar[data-mobile-open=true] #workbench-navigation{margin:0;padding:8px 0 0;flex-basis:100%;width:100%}
+  .atlas-sidebar[data-mobile-open=true] #workbench-navigation .chart-navigation{flex-direction:row;justify-content:center;gap:12px}
+  .atlas-sidebar[data-mobile-open=true] #workbench-navigation [data-chart-navigation=left],.atlas-sidebar[data-mobile-open=true] #workbench-navigation [data-chart-navigation=right]{display:flex}
+  .workbench-rail[data-mobile-open=true]{display:flex;position:fixed;inset:calc(56px + var(--mobile-top)) 8px auto;width:calc(100% - 16px);height:auto;max-height:calc(100dvh - 76px - var(--mobile-bottom));overflow:auto;z-index:52;border:1px solid #33455b;border-radius:9px;padding:8px;box-sizing:border-box;background:#141f2d;box-shadow:0 10px 28px #0008;gap:6px;align-items:stretch}
+  .workbench-rail[data-mobile-open=true] nav,.mobile-extra-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;align-items:stretch;margin:0;padding:0 0 6px;width:100%}
+  .workbench-rail[data-mobile-open=true] button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:auto;height:auto;min-height:64px;padding:8px 4px;border-radius:5px;font-size:10px;line-height:1.4}
+  .workbench-rail[data-mobile-open=true] button::after{content:attr(aria-label);display:block;max-width:100%;font-size:10px;line-height:1.4;text-align:center;white-space:normal;overflow-wrap:anywhere}
+  .workbench-rail[data-mobile-open=true] button>span:last-child:not([data-icon]){display:none}
+  .workbench-rail[data-mobile-open=true] .workbench-help{min-height:40px;flex-direction:row;margin:0;border-top:1px solid #2b394d}
+  .chart-details-panel{position:fixed;inset:calc(54px + var(--mobile-top)) 6px calc(6px + var(--mobile-bottom));width:auto;height:auto;max-height:none;z-index:55;border:1px solid #354861;border-radius:10px;padding:10px 12px;box-shadow:0 14px 60px #000b;gap:8px}
+  .chart-details-panel .reader-heading{min-height:44px;padding:0 0 6px}
+  .chart-details-panel .reader-heading h2{font-size:14px}
+  .chart-details-panel .reader-heading button{width:44px;height:44px;flex:none}
+  .chart-details-panel .reader-body{font-size:13px;line-height:1.7}
+  .chart-details-panel .reader-body p,.chart-details-panel .reader-body li,.chart-details-panel .reader-body .reader-value{font-size:12px}
+  .chart-details-panel .reader-body[data-controls]{overflow-y:auto;overscroll-behavior:contain}
+  .chart-details-panel .atlas-settings-body select,.chart-details-panel .atlas-settings-body .atlas-control-set select{min-height:42px;height:42px;font-size:12px;max-width:62%}
+  .chart-details-panel .atlas-settings-body label{min-height:40px;font-size:12px}
+  .chart-details-panel .reader-pagination button,.chart-detail-actions button{width:44px;height:40px;min-height:40px}
+  .chart-detail-actions{height:46px;max-height:46px;gap:4px}
+  .chart-detail-actions input{height:40px;max-width:140px;width:140px;font-size:12px}
+  .indicator-library{width:calc(100vw - 16px);max-width:none;max-height:calc(100dvh - 24px - var(--mobile-top) - var(--mobile-bottom));border-radius:10px}
+  .indicator-library::backdrop{backdrop-filter:none}
+  .indicator-library-heading{padding:14px 16px 8px}
+  .indicator-library-heading h2{font-size:20px}
+  .indicator-library-heading>button{width:44px;height:44px;min-height:44px}
+  #indicator-library-description{padding:0 16px 12px;font-size:12px}
+  #indicator-search{width:calc(100% - 32px);margin:0 16px 10px;font-size:16px;min-height:44px}
+  .indicator-categories{padding:0 12px 8px;gap:2px}
+  .indicator-categories button{min-height:40px;padding:6px 10px;font-size:11px}
+  .indicator-result-count{padding:8px 16px 6px}
+  .indicator-library-item{min-height:72px;gap:8px;padding:12px 8px}
+  .indicator-library-item small{font-size:11px}
+  .indicator-library-status{font-size:10px}
+  .indicator-library footer{padding:10px 16px}
+  .analysis-indicator-windows{left:8px;right:8px;width:auto;max-width:none;top:calc(var(--indicator-top,90px) + 46px);bottom:30px}
+  .analysis-indicator-window{height:300px;min-height:240px;max-height:68dvh;box-shadow:none}
+  .analysis-window-heading{min-height:40px}
+  .analysis-window-heading button{min-width:40px;min-height:40px}
+  .analysis-window-selection>button{min-height:36px}
+  .chart-context-menu button{min-height:44px;font-size:12px}
+}
+@media (max-width:360px){.atlas-canvas-heading{padding-left:3px;padding-right:3px}.workbench-symbol{font-size:10px;padding-right:2px}#workbench-interval-select{width:54px}.atlas-canvas-heading .workbench-spacer{display:none}}
+@media (max-width:620px) and (max-height:500px){.atlas-canvas-heading{min-height:44px;height:44px}.workbench-bottom{height:42px;min-height:42px;grid-template-rows:40px}.workbench-status,.history-journal{display:none}.chart-indicator-list{max-height:45dvh}.chart-details-panel{inset:6px}.scenario-countdown .countdown-current{display:none}}
+@media (prefers-reduced-motion:reduce){.journal-chevron{transition:none}.chart-indicator-manager,.scenario-countdown,.indicator-library{scroll-behavior:auto}}

@@ -1,4 +1,5 @@
-import { CHART_INTERVALS,isIntradayInterval } from './ohlc-data.js';
+import { CHART_INTERVALS,isIntradayInterval } from './ohlc-data.js?v=1.10.0';
+import { MAGNET_MODES, MAGNET_LABELS, normalizeMagnetMode } from './chart-magnet.js?v=1.10.0';
 const $ = selector => document.querySelector(selector);
 
 const paths = {
@@ -8,6 +9,8 @@ const paths = {
   refresh:'<path d="M20 7v5h-5M4 17v-5h5"/><path d="M6 6a8 8 0 0 1 13 2M5 16a8 8 0 0 0 13 2"/>',
   crosshair:'<path d="M12 2v5m0 10v5M2 12h5m10 0h5"/><circle cx="12" cy="12" r="4"/>',
   pan:'<path d="M8 12V7a2 2 0 0 1 4 0v5-7a2 2 0 0 1 4 0v7-5a2 2 0 0 1 4 0v8c0 5-3 7-7 7-3 0-5-2-7-5l-3-4a2 2 0 0 1 3-2l2 2"/>',
+  magnet:'<path d="M4 3h5v9a3 3 0 0 0 6 0V3h5v9a8 8 0 0 1-16 0V3Z"/><path d="M4 7h5m6 0h5"/>',
+  magnetStrong:'<path d="M4 3h5v9a3 3 0 0 0 6 0V3h5v9a8 8 0 0 1-16 0V3Z"/><path d="M4 7h5m6 0h5M12 2v6m-2-2 2 2 2-2"/>',
   ruler:'<path d="m3 16 13-13 5 5L8 21 3 16Zm8-8 2 2m2-6 2 2M7 12l2 2m-6 2 2 2"/>',
   clear:'<path d="M4 7h16M9 7V4h6v3M7 7l1 14h8l1-14M10 11v6m4-6v6"/>',
   settings:'<path d="M5 3v18M12 3v18M19 3v18M2 8h6m1 8h6m1-10h6"/>',
@@ -20,7 +23,7 @@ const paths = {
 };
 
 export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlStore,liveControls,openReader,closeReader,isReaderOpen}) {
-  const glyph=name=>paths[name]?`<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">${paths[name]}</svg>`:icon(name);
+  const glyph=name=>paths[name]?`<svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${paths[name]}</svg>`:icon(name);
   const command=(action,value)=>document.dispatchEvent(new CustomEvent('atlas:chart-command',{detail:{action,value}}));
   const button=(name,label,attributes={})=>{
     const node=document.createElement('button');node.type='button';node.className='workbench-icon';
@@ -87,6 +90,36 @@ export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlSto
   for(const [name,glyphName,label] of [['crosshair','crosshair','십자선 · C · 클릭 고정 / 드래그 이동'],['pan','pan','차트 이동 · H · 좌클릭 드래그'],['measure','ruler','두 지점 측정 · M']]){
     const node=button(glyphName,label,{'data-chart-tool':name,'aria-pressed':String(name==='crosshair')});node.setAttribute('aria-keyshortcuts',{crosshair:'C',pan:'H',measure:'M'}[name]);node.onclick=()=>command('tool',name);left.append(node);
   }
+  let magnetMode='off';
+  const magnet=button('magnet','자석 · 끄기 · 설정',{'id':'workbench-magnet','aria-pressed':'false','aria-expanded':'false','aria-haspopup':'menu','aria-controls':'workbench-magnet-menu','aria-keyshortcuts':'Alt+M'});
+  const magnetBadge=document.createElement('span');magnetBadge.className='workbench-magnet-badge';magnetBadge.setAttribute('aria-hidden','true');magnetBadge.textContent='OFF';magnet.append(magnetBadge);left.append(magnet);
+  const magnetMenu=document.createElement('div');magnetMenu.id='workbench-magnet-menu';magnetMenu.className='workbench-magnet-menu';magnetMenu.hidden=true;magnetMenu.setAttribute('role','menu');magnetMenu.setAttribute('aria-label','자석 모드');
+  const magnetDescriptions={off:'포인터 가격에 자유롭게 놓기',weak:'가까운 시가·고가·저가·종가에 붙이기',strong:'거리와 무관하게 가장 가까운 OHLC에 붙이기'};
+  for(const value of MAGNET_MODES){
+    const option=document.createElement('button');option.type='button';option.dataset.magnetMode=value;option.setAttribute('role','menuitemradio');option.setAttribute('aria-checked',String(value==='off'));option.tabIndex=value==='off'?0:-1;
+    const label=document.createElement('strong'),description=document.createElement('small');label.textContent=MAGNET_LABELS[value];description.textContent=magnetDescriptions[value];option.append(label,description);option.onclick=()=>{command('magnet',value);closeMagnet(true);};magnetMenu.append(option);
+  }
+  const magnetHint=document.createElement('p');magnetHint.textContent='두 지점 측정에 적용 · Ctrl/⌘로 일시 전환';magnetMenu.append(magnetHint);document.body.append(magnetMenu);
+  function closeMagnet(focus=false){if(magnetMenu.hidden)return;magnetMenu.hidden=true;magnet.setAttribute('aria-expanded','false');if(focus)magnet.focus({preventScroll:true});}
+  function openMagnet(){
+    if(!magnetMenu.hidden){closeMagnet(true);return;}
+    magnetMenu.hidden=false;magnet.setAttribute('aria-expanded','true');
+    const bounds=magnet.getBoundingClientRect(),width=Math.max(120,Math.min(284,window.innerWidth-16));magnetMenu.style.width=`${width}px`;
+    magnetMenu.style.left=`${Math.max(8,Math.min(window.innerWidth-width-8,bounds.right+7))}px`;
+    magnetMenu.style.top=`${Math.max(8,Math.min(window.innerHeight-magnetMenu.offsetHeight-8,bounds.top))}px`;
+    for(const option of magnetMenu.querySelectorAll('[data-magnet-mode]'))option.tabIndex=option.dataset.magnetMode===magnetMode?0:-1;
+    magnetMenu.querySelector(`[data-magnet-mode="${magnetMode}"]`)?.focus({preventScroll:true});
+  }
+  magnet.onclick=openMagnet;
+  magnetMenu.addEventListener('keydown',event=>{
+    event.stopPropagation();const items=[...magnetMenu.querySelectorAll('button')],index=items.indexOf(event.target);
+    if(event.key==='Escape'){event.preventDefault();closeMagnet(true);}
+    else if(event.key==='Tab'){event.preventDefault();closeMagnet(true);}
+    else if(['ArrowDown','ArrowUp','Home','End'].includes(event.key)){event.preventDefault();const next=event.key==='Home'?0:event.key==='End'?items.length-1:(index+(event.key==='ArrowDown'?1:-1)+items.length)%items.length;items.forEach((item,i)=>item.tabIndex=i===next?0:-1);items[next].focus();}
+  });
+  const dismissMagnet=event=>{if(!magnetMenu.hidden&&!magnetMenu.contains(event.target)&&!magnet.contains(event.target))closeMagnet();};
+  const resizeMagnet=()=>closeMagnet(),scrollMagnet=event=>{if(!magnetMenu.contains(event.target))closeMagnet();},visibilityMagnet=()=>{if(document.hidden)closeMagnet();};
+  document.addEventListener('pointerdown',dismissMagnet,true);document.addEventListener('focusin',dismissMagnet);document.addEventListener('scroll',scrollMagnet,true);document.addEventListener('visibilitychange',visibilityMagnet);window.addEventListener('resize',resizeMagnet);window.addEventListener('blur',resizeMagnet);
   const clear=button('clear','측정 지우기',{'id':'workbench-clear'});clear.disabled=true;clear.onclick=()=>command('clear-measurement');left.append(clear);
   const navigation=document.createElement('div');navigation.id='workbench-navigation';left.append(navigation);
   $('.atlas-brand').after(left);
@@ -100,7 +133,7 @@ export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlSto
   const help=tools.querySelector('[data-reader=guide]');help.className='workbench-icon workbench-help';help.innerHTML=icon('info');help.title='차트 사용법';help.setAttribute('aria-label',help.title);panelButton(help,'guide');right.append(help);workspace.append(right);
   const bottom=document.createElement('footer');bottom.className='workbench-bottom';bottom.setAttribute('aria-label','표시 기간과 가격 눈금');
   const ranges=document.createElement('div');ranges.className='workbench-ranges';ranges.setAttribute('role','group');ranges.setAttribute('aria-label','차트 표시 기간');
-  for(const [value,label,title] of [['near','6개월','가까운 6개월 · 최근 45일 포함'],['all','장기 전망','검증한 자료의 마지막 목표 연도까지'],['history','전체','2010년부터 장기 전망까지']]){
+  for(const [value,label,title] of [['focus','4년','최근 2년 + 앞으로 2년 · 기본 보기'],['near','6개월','가까운 6개월 · 최근 45일 포함'],['all','장기 전망','검증한 자료의 마지막 목표 연도까지'],['history','전체','2010년부터 장기 전망까지']]){
     const node=document.createElement('button');node.type='button';node.textContent=label;node.title=title;node.setAttribute('aria-label',title);node.dataset.chartSpan=value;node.setAttribute('aria-pressed','false');node.onclick=()=>command('span',value);ranges.append(node);
   }
   const goDate=panelButton(button('calendar','날짜로 이동'),'selection');goDate.id='workbench-go-date';
@@ -119,9 +152,9 @@ export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlSto
   const live=document.createElement('span');live.id='workbench-announcement';live.className='lab-visually-hidden';live.setAttribute('role','status');live.setAttribute('aria-live','polite');stage.append(live);
   $('#lab-metrics').removeAttribute('aria-live');
   const handleState=event=>{
-    const s=event.detail,price=s.mode==='price',intraday=price&&isIntradayInterval(s.frequency),candles=s.chartType==='candles';plot.dataset.tool=intraday&&s.tool==='measure'?'crosshair':s.tool;plot.dataset.intraday=String(intraday);workspace.dataset.chartMode=s.mode;
+    const s=event.detail,price=s.mode==='price',intraday=price&&isIntradayInterval(s.frequency),candles=s.chartType==='candles';plot.dataset.tool=s.tool;plot.dataset.intraday=String(intraday);workspace.dataset.chartMode=s.mode;
     workspace.dataset.analysisMode=s.analysisMode||'';
-    left.hidden=!price;left.querySelector('[data-chart-tool=measure]').hidden=intraday;clear.hidden=intraday;chartMenu.hidden=!price;chartMenu.disabled=s.navigationAvailable===false;scenario.hidden=!price||intraday;layerButton.hidden=!price;ranges.hidden=!price||intraday;axis.hidden=!price;next.hidden=!price||intraday;goDate.hidden=!price||intraday;chartType.hidden=!price;
+    left.hidden=!price;left.querySelector('[data-chart-tool=measure]').hidden=false;clear.hidden=false;chartMenu.hidden=!price;chartMenu.disabled=s.navigationAvailable===false;scenario.hidden=!price||intraday;layerButton.hidden=!price;ranges.hidden=!price||intraday;axis.hidden=!price;next.hidden=!price||intraday;goDate.hidden=!price||intraday;chartType.hidden=!price;
     intervalSelect.value=s.frequency||'daily';
     for(const node of intervalButtons.querySelectorAll('button')){const selected=node.dataset.labFrequency===s.frequency;node.setAttribute('aria-pressed',String(selected));node.tabIndex=selected?0:-1;}
     chartType.setAttribute('aria-pressed',String(candles));chartType.innerHTML=glyph(candles?'candles':'line');chartType.title=`${candles?'캔들':'선'} 표시 · ${candles?'선':'캔들'}으로 변경`;chartType.setAttribute('aria-label',chartType.title);
@@ -133,6 +166,9 @@ export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlSto
     for(const node of document.querySelectorAll('[data-workbench-scenario]'))node.setAttribute('aria-pressed',String(node.dataset.workbenchScenario===s.scenario));
     for(const node of ranges.querySelectorAll('[data-chart-span]'))node.setAttribute('aria-pressed',String(!s.customRange&&node.dataset.chartSpan===s.window));
     scale.textContent=s.scale==='linear'?'선형':'로그';scale.setAttribute('aria-pressed',String(s.scale!=='linear'));scale.setAttribute('aria-label',`${s.scale==='linear'?'선형':'로그'} 가격 눈금 · ${s.scale==='linear'?'로그로':'선형으로'} 변경`);
+    magnetMode=normalizeMagnetMode(s.magnet);if(magnet.dataset.magnetMode!==magnetMode)magnet.querySelector('.icon').innerHTML=paths[magnetMode==='strong'?'magnetStrong':'magnet'];magnet.dataset.magnetMode=magnetMode;magnet.setAttribute('aria-pressed',String(magnetMode!=='off'));magnetBadge.textContent={off:'OFF',weak:'약',strong:'강'}[magnetMode];
+    magnet.title=`자석 · ${MAGNET_LABELS[magnetMode]} · 두 지점 측정 · Alt+M`;magnet.setAttribute('aria-label',`${magnet.title} · 설정`);
+    for(const option of magnetMenu.querySelectorAll('[data-magnet-mode]'))option.setAttribute('aria-checked',String(option.dataset.magnetMode===magnetMode));
     clear.disabled=!s.measurement;
     const validSeconds=value=>Number.isSafeInteger(value)&&Math.abs(value)<8640000000000;
     const timeText=value=>new Date(value*1000).toISOString().slice(0,16).replace('T',' ');
@@ -155,16 +191,17 @@ export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlSto
     if(event.altKey){
       if(key==='r'){event.preventDefault();command('fit');}
       else if(key==='l'){event.preventDefault();command('scale');}
+      else if(key==='m'){event.preventDefault();command('magnet',MAGNET_MODES[(MAGNET_MODES.indexOf(magnetMode)+1)%MAGNET_MODES.length]);}
       else if(key==='g'&&!intraday){event.preventDefault();goDate.click();}
       else if(key==='z'){event.preventDefault();plot.querySelector('svg[data-plot-left]:not([hidden])')?.focus({preventScroll:true});}
       return;
     }
     if(key==='?'){event.preventDefault();openReader('guide',{focus:true,opener:document.activeElement});return;}
     const tool={c:'crosshair',h:'pan',m:'measure'}[key];
-    if(tool&&(!intraday||tool!=='measure')){event.preventDefault();command('tool',tool);}
+    if(tool){event.preventDefault();command('tool',tool);}
   };
   scale.setAttribute('aria-keyshortcuts','Alt+L');goDate.setAttribute('aria-keyshortcuts','Alt+G');
   document.addEventListener('atlas:workbench-state',handleState);
   document.addEventListener('keydown',handleKey);intervalButtons.addEventListener('keydown',handleIntervalKey);
-  return {destroy(){document.removeEventListener('atlas:workbench-state',handleState);document.removeEventListener('keydown',handleKey);intervalButtons.removeEventListener('keydown',handleIntervalKey);}};
+  return {destroy(){document.removeEventListener('atlas:workbench-state',handleState);document.removeEventListener('keydown',handleKey);intervalButtons.removeEventListener('keydown',handleIntervalKey);document.removeEventListener('pointerdown',dismissMagnet,true);document.removeEventListener('focusin',dismissMagnet);document.removeEventListener('scroll',scrollMagnet,true);document.removeEventListener('visibilitychange',visibilityMagnet);window.removeEventListener('resize',resizeMagnet);window.removeEventListener('blur',resizeMagnet);magnetMenu.remove();}};
 }

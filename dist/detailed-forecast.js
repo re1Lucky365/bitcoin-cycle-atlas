@@ -1,6 +1,6 @@
-import { HALVINGS, utcDay, dateFromDay, validateDataset } from './cycle-engine.js';
-import { shiftCalendarMonths } from './cycle-timing.js';
-import { computeRollingStates } from './market-structure.js';
+import { HALVINGS, utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.10.0';
+import { shiftCalendarMonths } from './cycle-timing.js?v=1.10.0';
+import { computeRollingStates } from './market-structure.js?v=1.10.0';
 
 /**
  * Conditional historical-block scenarios, not a probability-calibrated forecast.

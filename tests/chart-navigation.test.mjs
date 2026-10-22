@@ -316,3 +316,57 @@ test('floating indicator windows and their non-button children keep their own wh
   }
   h.controller.destroy();
 });
+
+test('a bounded intraday viewport can keep panning beyond the initial cache',()=>{
+  const long={...intraday,min:firstTime-100000*900,maxSpan:6000};
+  const wide=zoomRange(long,1000);
+  assert.equal(barCount(wide),6000);
+  assert.equal(barCount(fitRange(long)),6000);
+  assert.ok(panRange(wide,-1).start<wide.start);
+  assert.equal(barCount(panRange(wide,-1)),6000);
+  const h=navigationHarness(wide);h.controller.update();
+  assert.equal(h.controller.toolbar.children.find(b=>b.dataset.chartNavigation==='out')?.disabled??h.controller.toolbar.children[1].disabled,true);
+  h.controller.destroy();
+  assert.throws(()=>zoomRange({...long,maxSpan:3},2),RangeError);
+});
+
+test('two-finger pinch zooms about its center, batches moves, and suppresses the trailing tap',()=>{
+  const h=navigationHarness();
+  h.fire('pointerdown',{pointerType:'touch',pointerId:1,clientX:350});
+  h.fire('pointerdown',{pointerType:'touch',pointerId:2,clientX:650,isPrimary:false});
+  assert.equal(h.element.dataset.pinching,'true');
+  h.pointer('pointermove',{pointerType:'touch',pointerId:2,clientX:800,isPrimary:false});
+  h.pointer('pointermove',{pointerType:'touch',pointerId:1,clientX:200});
+  assert.equal(h.frames.size,1);h.flush();
+  assert.equal(length(h.range),50);
+  assert.equal(h.changes.length,1);
+  h.pointer('pointerup',{pointerType:'touch',pointerId:2,isPrimary:false});
+  assert.equal(h.element.dataset.pinching,undefined);
+  assert.equal(h.element.capture.size,0);
+  assert.equal(h.fire('click').defaultPrevented,true);
+  h.controller.destroy();
+});
+
+test('pinch cancellation or an interval switch cancels stale work and releases both pointers',()=>{
+  const h=navigationHarness();
+  h.fire('pointerdown',{pointerType:'touch',pointerId:1,clientX:350});
+  h.fire('pointerdown',{pointerType:'touch',pointerId:2,clientX:650,isPrimary:false});
+  h.pointer('pointermove',{pointerType:'touch',pointerId:2,clientX:800,isPrimary:false});
+  h.range=intraday;h.controller.update();h.flush();
+  assert.equal(h.changes.length,0);assert.equal(h.element.capture.size,0);assert.equal(h.element.dataset.pinching,undefined);
+  h.controller.destroy();
+});
+
+test('a remaining pinch finger held beyond the first release still suppresses its trailing tap',()=>{
+  const h=navigationHarness(),realNow=Date.now;let time=1000;Date.now=()=>time;
+  try{
+    h.fire('pointerdown',{pointerType:'touch',pointerId:1,clientX:350});
+    h.fire('pointerdown',{pointerType:'touch',pointerId:2,clientX:650,isPrimary:false});
+    h.pointer('pointermove',{pointerType:'touch',pointerId:2,clientX:800,isPrimary:false});h.flush();
+    h.pointer('pointerup',{pointerType:'touch',pointerId:2,isPrimary:false});
+    time+=1500;
+    assert.equal(h.pointer('pointerup',{pointerType:'touch',pointerId:1}).defaultPrevented,true);
+    assert.equal(h.fire('click').defaultPrevented,true);
+    assert.equal(h.fire('click',{detail:0}).defaultPrevented,false);
+  }finally{Date.now=realNow;h.controller.destroy();}
+});

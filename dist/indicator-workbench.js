@@ -1,4 +1,5 @@
-import { INDICATORS, readIndicatorState, normalizeIndicatorState, isIndicatorVisible, searchIndicators } from './indicator-state.js?v=1.9.0';
+import { INDICATORS, readIndicatorState, normalizeIndicatorState, isIndicatorVisible, searchIndicators } from './indicator-state.js?v=1.10.0';
+import {indicatorReadout,indicatorReadoutDate} from './indicator-readouts.js?v=1.10.0';
 
 const ICONS={eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',hidden:'<path d="m3 3 18 18M10 5a12 12 0 0 1 2 0c6.5 0 10 7 10 7a20 20 0 0 1-3 4M6 6a20 20 0 0 0-4 6s3.5 7 10 7a12 12 0 0 0 5-1"/>',close:'<path d="m6 6 12 12M6 18 18 6"/>',add:'<path d="M12 5v14M5 12h14"/>',chevron:'<path d="m6 9 6 6 6-6"/>'};
 const glyph=name=>`<svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[name]}</svg>`;
@@ -12,6 +13,8 @@ export function countdownPresentation(value={}) {
 export function mountIndicatorWorkbench({plot,stage}) {
   const doc=plot.ownerDocument;
   let state=readIndicatorState(location.search),category='전체',intraday=false,cycle=null,countdown=null,countdownKey='',listKey='',dialogKey='',opener=null;
+  let readoutFrame=0;
+  const readoutRows=new Map(),readoutContext={selection:null,workbench:{},cycle:null,analyses:new Map()};
   const command=(action,id)=>doc.dispatchEvent(new CustomEvent('atlas:indicator-command',{detail:{action,id}}));
   const makeButton=(label,icon,action)=>{const b=doc.createElement('button');b.type='button';b.title=label;b.setAttribute('aria-label',label);b.innerHTML=glyph(icon);b.onclick=action;return b;};
   const manager=doc.createElement('section');manager.id='chart-indicator-manager';manager.className='chart-indicator-manager';manager.setAttribute('aria-label','추가한 인디케이터');
@@ -22,14 +25,26 @@ export function mountIndicatorWorkbench({plot,stage}) {
   const all=makeButton('추가한 인디케이터 모두 숨기기','eye',()=>command(state.added.some(id=>isIndicatorVisible(state,id))?'hide-all':'show-all'));all.id='indicator-visibility-all';
   header.append(collapse,count,all,add);
   const list=doc.createElement('div');list.id='chart-indicator-list';list.className='chart-indicator-list';
-  manager.append(header,list);plot.append(manager);
+  list.setAttribute('role','list');
+  const readoutDate=doc.createElement('p');readoutDate.id='indicator-readout-date';readoutDate.className='indicator-readout-date';
+  manager.append(header,readoutDate,list);plot.append(manager);
   const countdownBox=doc.createElement('button');countdownBox.type='button';countdownBox.id='scenario-countdown';countdownBox.className='scenario-countdown';countdownBox.hidden=true;countdownBox.setAttribute('aria-label','다음 국면 D-day의 가정과 근거 보기');
   countdownBox.onclick=()=>doc.dispatchEvent(new CustomEvent('atlas:countdown-detail'));plot.append(countdownBox);
   // Observe only these small overlays, never the price path. A narrow plot can
   // stack the HUD beneath an expanded manager without a reserved chart header.
+  const readoutNode=plot.querySelector('#lab-metrics'),sourceNode=plot.querySelector('.workbench-market-info');
   const overlaySizes=new WeakMap(),overlayResize=new ResizeObserver(entries=>{
-    for(const entry of entries){const height=Math.ceil(entry.borderBoxSize?.[0]?.blockSize??entry.contentRect.height+2);if(overlaySizes.get(entry.target)===height)continue;overlaySizes.set(entry.target,height);if(height>2)plot.style.setProperty(entry.target===manager?'--indicator-manager-height':'--countdown-height',`${height}px`);}
-  });overlayResize.observe(manager);overlayResize.observe(countdownBox);
+    let offsetChanged=false;
+    for(const entry of entries){
+      const height=Math.ceil(entry.borderBoxSize?.[0]?.blockSize??entry.contentRect.height);
+      if(overlaySizes.get(entry.target)===height)continue;overlaySizes.set(entry.target,height);
+      const property=entry.target===manager?'--indicator-manager-height':entry.target===countdownBox?'--countdown-height':entry.target===readoutNode?'--readout-height':'--source-height';
+      plot.style.setProperty(property,`${height}px`);
+      if(entry.target===readoutNode||entry.target===sourceNode)offsetChanged=true;
+    }
+    if(offsetChanged)updateOverlayOffsets();
+  });
+  for(const node of [manager,countdownBox,readoutNode,sourceNode])if(node)overlayResize.observe(node);
 
   const dialog=doc.createElement('dialog');dialog.id='indicator-library';dialog.className='indicator-library';dialog.setAttribute('aria-labelledby','indicator-library-title');dialog.setAttribute('aria-describedby','indicator-library-description');
   const dialogHeader=doc.createElement('header');dialogHeader.className='indicator-library-heading';
@@ -52,42 +67,66 @@ export function mountIndicatorWorkbench({plot,stage}) {
     for(const [id,selector] of [['readout','#lab-metrics'],['source','.workbench-market-info'],['legend','.lab-chart-foot']]){
       const node=plot.querySelector(selector);if(node)node.hidden=!isIndicatorVisible(state,id);
     }
-    const top=(isIndicatorVisible(state,'readout')?43:0)+(isIndicatorVisible(state,'source')?24:0)+8;
-    const indicatorTop=`${top}px`,sourceTop=`${isIndicatorVisible(state,'readout')?47:7}px`;
-    if(plot.style.getPropertyValue('--indicator-top')!==indicatorTop)plot.style.setProperty('--indicator-top',indicatorTop);
-    if(plot.style.getPropertyValue('--source-top')!==sourceTop)plot.style.setProperty('--source-top',sourceTop);
+    updateOverlayOffsets();
     countdownBox.hidden=!isIndicatorVisible(state,'countdown')||intraday||!countdown;
     plot.dataset.countdownVisible=String(!countdownBox.hidden);
   }
-  function paintCountdown(){
-    if(!countdown)return;const key=JSON.stringify([countdown.status,countdown.dday,countdown.nextLabel,countdown.currentLabel,countdown.holdDays,countdown.currentUntil,countdown.currentRightCensored,countdown.minimumRunDays,countdown.asOf,countdown.asOfAgeDays,countdown.note]);if(key===countdownKey)return;countdownKey=key;
-    const presentation=countdownPresentation(countdown);
-    const label=doc.createElement('span');label.className='countdown-caption';label.textContent=presentation.caption;
-    const main=doc.createElement('strong');main.className='countdown-main';
-    const dday=doc.createElement('b');dday.textContent=presentation.dday;const next=doc.createElement('span');next.textContent=presentation.next;main.append(dday,next);
-    const current=doc.createElement('span');current.className='countdown-current';current.textContent=presentation.current;
-    countdownBox.replaceChildren(label,main,current);countdownBox.title=`${countdown.note||'같은 미래 가격 경로에서 계산한 조건부 국면입니다.'}\n관측 ${countdown.asOf||'—'} UTC · ${countdown.asOfAgeDays??'—'}일 경과 · 클릭하여 가정 보기`;
-    countdownBox.setAttribute('aria-label',`${label.textContent} · ${main.textContent} · ${current.textContent} · 가정과 근거 보기`);
+  function updateOverlayOffsets(){
+    // Actual wrapped text height is measured by ResizeObserver, never by a
+    // pointer handler. Position changes cannot resize these absolute overlays.
+    const sourceTop=7+(isIndicatorVisible(state,'readout')?(overlaySizes.get(readoutNode)??36)+4:0);
+    const indicatorTop=sourceTop+(isIndicatorVisible(state,'source')?(overlaySizes.get(sourceNode)??20)+6:0);
+    for(const [property,value] of [['--source-top',sourceTop],['--indicator-top',indicatorTop]])if(plot.style.getPropertyValue(property)!==`${value}px`)plot.style.setProperty(property,`${value}px`);
   }
+  function paintCountdown(){
+    if(!countdown)return;const key=JSON.stringify([countdown.status,countdown.dday,countdown.date,countdown.nextKey,countdown.nextLabel,countdown.currentLabel,countdown.holdDays,countdown.currentUntil,countdown.currentRightCensored,countdown.minimumRunDays,countdown.asOf,countdown.asOfAgeDays,countdown.note]);if(key===countdownKey)return;countdownKey=key;
+    const presentation=countdownPresentation(countdown);
+    const main=doc.createElement('strong');main.className='countdown-main';
+    const next=doc.createElement('span');next.className='countdown-next';next.textContent=countdown.status==='upcoming'?`다음 ${presentation.next}`:presentation.next;
+    const dday=doc.createElement('b');dday.textContent=presentation.dday;main.append(next,dday);
+    const meta=doc.createElement('span');meta.className='countdown-meta';
+    const label=doc.createElement('span');label.className='countdown-caption';label.textContent='가정';
+    const date=doc.createElement('time');date.className='countdown-date';date.textContent=countdown.date?countdown.date.replaceAll('-','.'):`${countdown.minimumRunDays||7}일 유지 조건`;if(countdown.date)date.dateTime=countdown.date;
+    meta.append(label,date);countdownBox.dataset.regime=countdown.nextKey||'unknown';
+    countdownBox.replaceChildren(main,meta);countdownBox.title=`${presentation.caption}\n${presentation.current}\n${countdown.note||'같은 미래 가격 경로에서 계산한 조건부 국면입니다.'}\n관측 ${countdown.asOf||'—'} UTC · ${countdown.asOfAgeDays??'—'}일 경과 · 클릭하여 가정 보기`;
+    countdownBox.setAttribute('aria-label',`${presentation.caption} · ${next.textContent} · ${dday.textContent}${countdown.date?` · ${countdown.date}`:''} · ${presentation.current} · 가정과 근거 보기`);
+  }
+  function paintReadouts(){
+    if(readoutFrame)cancelAnimationFrame(readoutFrame);readoutFrame=0;if(state.collapsed)return;
+    const date=indicatorReadoutDate(readoutContext.selection);if(readoutDate.textContent!==date)readoutDate.textContent=date;
+    for(const {item,row,value,name} of readoutRows.values()){
+      const detail=indicatorReadout(item,readoutContext);
+      if(value.textContent!==detail.value)value.textContent=detail.value;
+      if(value.dataset.tone!==detail.tone)value.dataset.tone=detail.tone;
+      if(name.title!==detail.title)name.title=detail.title;
+      if(row.dataset.value!==detail.value)row.dataset.value=detail.value;
+    }
+  }
+  // Hover only touches existing value nodes, at most once per animation frame.
+  // Hidden/collapsed rows retain their data without layout work until reopened.
+  function scheduleReadouts(){if(!state.collapsed&&!readoutFrame)readoutFrame=requestAnimationFrame(paintReadouts);}
   function paintList(){
-    applyDisplay();manager.dataset.collapsed=String(state.collapsed);list.hidden=state.collapsed;
+    applyDisplay();manager.dataset.collapsed=String(state.collapsed);list.hidden=state.collapsed;readoutDate.hidden=state.collapsed;
     collapse.setAttribute('aria-expanded',String(!state.collapsed));collapse.title=state.collapsed?'인디케이터 목록 펼치기':'인디케이터 목록 접기';collapse.setAttribute('aria-label',collapse.title);
     count.textContent=`지표 ${state.added.length}`;const hasVisible=state.added.some(id=>isIndicatorVisible(state,id));all.innerHTML=glyph(hasVisible?'eye':'hidden');all.title=`추가한 인디케이터 모두 ${hasVisible?'숨기기':'표시'}`;all.setAttribute('aria-label',all.title);
-    const key=JSON.stringify([state,intraday,cycle?.label,cycle?.shiftDays,cycle?.color]);if(key===listKey)return;listKey=key;
+    const key=JSON.stringify([state.added,state.hidden,intraday]);if(key===listKey){scheduleReadouts();return;}listKey=key;
     const focused=doc.activeElement?.closest?.('[data-indicator-row]')?.dataset.indicatorRow,action=doc.activeElement?.dataset.indicatorAction;
-    list.replaceChildren();
+    list.replaceChildren();readoutRows.clear();
     for(const item of INDICATORS.filter(item=>state.added.includes(item.id))){
       const visible=isIndicatorVisible(state,item.id),unavailable=intraday&&item.dailyOnly,row=doc.createElement('div');row.className='indicator-row';row.dataset.indicatorRow=item.id;row.dataset.visible=String(visible);row.dataset.unavailable=String(Boolean(unavailable));
-      const name=doc.createElement(item.analysis?'button':'span');name.className='indicator-name';name.textContent=item.label;
+      row.setAttribute('role','listitem');
+      const name=doc.createElement(item.analysis?'button':'div');name.className='indicator-name';
+      const label=doc.createElement('span');label.className='indicator-label';label.textContent=item.label;
+      const value=doc.createElement('strong');value.className='indicator-value';value.textContent='자료 대기';name.append(label,value);
       if(item.analysis){name.type='button';name.title=`${item.label} 분석 창으로 이동`;name.onclick=()=>{if(!visible)command('visibility',item.id);command('activate',item.id);const window=doc.getElementById(`analysis-window-${item.id}`);window?.scrollIntoView({block:'nearest',inline:'nearest'});window?.querySelector('svg')?.focus({preventScroll:true});};}
-      if(item.id==='cycle-timing'&&cycle){name.textContent=`사이클 시계 · ${cycle.label}`;name.style.color=cycle.color;name.title=`관측 기반 조건부 보정 · ${Number.isFinite(cycle.appliedShiftDays??cycle.shiftDays)?`${(cycle.appliedShiftDays??cycle.shiftDays)>0?'+':''}${Math.round(cycle.appliedShiftDays??cycle.shiftDays)}일`:'근거 대기'} · 색상은 매매 신호가 아닙니다.`;}
       if(unavailable)name.title=`${item.description} · 1D·1W에서 표시됩니다.`;
       const eye=makeButton(`${item.label} ${visible?'숨기기':'표시'}`,visible?'eye':'hidden',()=>command('visibility',item.id));eye.dataset.indicatorAction='visibility';eye.setAttribute('aria-pressed',String(visible));
       const remove=makeButton(`${item.label} 삭제`,'close',()=>command('remove',item.id));remove.dataset.indicatorAction='remove';
-      row.append(name,eye,remove);list.append(row);
+      row.append(name,eye,remove);list.append(row);readoutRows.set(item.id,{item,row,value,name});
     }
     if(!state.added.length){const empty=doc.createElement('p');empty.className='indicator-empty';empty.textContent='추가한 지표가 없습니다.';list.append(empty);}
     if(focused&&action)(list.querySelector(`[data-indicator-row="${focused}"] [data-indicator-action="${action}"]`)||add).focus({preventScroll:true});
+    paintReadouts();
   }
   function paintDialog(){
     const key=JSON.stringify([state.added,state.hidden,category,search.value,intraday]);if(key===dialogKey)return;dialogKey=key;
@@ -113,9 +152,11 @@ export function mountIndicatorWorkbench({plot,stage}) {
     if(event.shiftKey&&doc.activeElement===first){event.preventDefault();last?.focus();}else if(!event.shiftKey&&doc.activeElement===last){event.preventDefault();first?.focus();}
   });
   const onOpen=event=>open(event.detail?.opener);
-  const onState=event=>{state=normalizeIndicatorState(event.detail.indicators||state);cycle=event.detail.cycleCalibration||cycle;paintList();if(dialog.open)paintDialog();};
-  const onWorkbench=event=>{intraday=Boolean(event.detail.intraday);countdown=event.detail.countdown||countdown;paintCountdown();paintList();if(dialog.open)paintDialog();};
-  doc.addEventListener('atlas:indicator-library',onOpen);doc.addEventListener('atlas:indicator-state',onState);doc.addEventListener('atlas:workbench-state',onWorkbench);paintList();
+  const onState=event=>{state=normalizeIndicatorState(event.detail.indicators||state);cycle=event.detail.cycleCalibration||cycle;readoutContext.cycle=cycle;paintList();if(dialog.open)paintDialog();};
+  const onWorkbench=event=>{intraday=Boolean(event.detail.intraday);countdown=event.detail.countdown||countdown;readoutContext.workbench=event.detail;paintCountdown();paintList();if(dialog.open)paintDialog();};
+  const onReadout=event=>{readoutContext.selection=event.detail;scheduleReadouts();};
+  const onAnalysis=event=>{const detail=event.detail;if(!detail?.mode)return;readoutContext.analyses.set(detail.mode,{...readoutContext.analyses.get(detail.mode),...detail});scheduleReadouts();};
+  doc.addEventListener('atlas:indicator-library',onOpen);doc.addEventListener('atlas:indicator-state',onState);doc.addEventListener('atlas:workbench-state',onWorkbench);doc.addEventListener('atlas:readout',onReadout);doc.addEventListener('atlas:analysis-state',onAnalysis);paintList();
   for(const name of ['wheel','pointerdown','dblclick','contextmenu'])manager.addEventListener(name,event=>event.stopPropagation(),name==='wheel'?{passive:true}:undefined);
-  return {open,destroy(){doc.removeEventListener('atlas:indicator-library',onOpen);doc.removeEventListener('atlas:indicator-state',onState);doc.removeEventListener('atlas:workbench-state',onWorkbench);overlayResize.disconnect();dialog.remove();manager.remove();countdownBox.remove();}};
+  return {open,destroy(){doc.removeEventListener('atlas:indicator-library',onOpen);doc.removeEventListener('atlas:indicator-state',onState);doc.removeEventListener('atlas:workbench-state',onWorkbench);doc.removeEventListener('atlas:readout',onReadout);doc.removeEventListener('atlas:analysis-state',onAnalysis);if(readoutFrame)cancelAnimationFrame(readoutFrame);overlayResize.disconnect();dialog.remove();manager.remove();countdownBox.remove();}};
 }

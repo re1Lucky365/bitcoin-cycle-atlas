@@ -1,5 +1,5 @@
-import { buildCryptoConAudit, CRYPTOCON_AUDIT_SOURCE } from './cryptocon-audit-data.js';
-import { utcDay } from './cycle-engine.js';
+import { buildCryptoConAudit, CRYPTOCON_AUDIT_SOURCE } from './cryptocon-audit-data.js?v=1.10.0';
+import { utcDay } from './cycle-engine.js?v=1.10.0';
 
 const selections=new WeakMap(),cache=new WeakMap();
 const INK='#e1e8f0',MUTED='#aab7c8',GRID='#2a3442',GOLD='#edb66b',BLUE='#82b9dc',PURPLE='#baace3';

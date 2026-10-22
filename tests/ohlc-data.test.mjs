@@ -57,6 +57,13 @@ test('failed requests and abortion are visible, not an empty successful price se
   const controller=new AbortController();controller.abort();let called=false;
   await assert.rejects(fetchMarketCandles({signal:controller.signal,fetchImpl:async()=>{called=true;}}),{name:'AbortError'});assert.equal(called,false);
 });
+test('historical windows preserve exact UTC boundaries and can record a checked empty page',async()=>{
+  const calls=[],first=start-3600,last=start-1800;
+  const result=await fetchMarketCandles({interval:'1m',start:first,end:last,now:(start+86400)*1000,allowEmpty:true,fetchImpl:async url=>{calls.push(new URL(url));return {ok:true,json:async()=>[]};}});
+  assert.equal(Date.parse(calls[0].searchParams.get('start'))/1000,first);assert.equal(Date.parse(calls[0].searchParams.get('end'))/1000,last);
+  assert.equal(result.requestedStart,first);assert.equal(result.requestedEnd,last);assert.deepEqual(result.candles,[]);assert.equal(result.firstDate,null);
+  for(const window of [{start:first+1,end:last},{start:first,end:start+2*86400},{start:start-301*60,end:start}])await assert.rejects(fetchMarketCandles({interval:'1m',now:(start+86400)*1000,...window}),/window/);
+});
 test('snapshot preserves recorded time and rejects fabricated OHLC and unfinished bars',async()=>{
   const result=await fetchMarketCandles({interval:'15m',count:2,now:(start+1800)*1000,fetchImpl:async()=>({ok:true,json:async()=>[row(start),row(start+900)]})});
   const payload={version:1,source:'Coinbase Exchange',product:'BTC-USD',intervals:{'15m':result}};

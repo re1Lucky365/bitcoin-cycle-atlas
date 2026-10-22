@@ -1,0 +1,47 @@
+{
+  "description": "Bounded pure UTC date conversion cache; exact full JSON output preserved for production-128 model, volume fit, and volume projection.",
+  "scope": "One fresh Node process per version, same inputs and operation order. CPU-only walltime; not browser paint, interaction latency, or a mobile device benchmark. Timing values are descriptive, not pass/fail gates.",
+  "node": "v24.19.0",
+  "asOf": "2026-10-21",
+  "settings": {
+    "referenceDate": "2026-10-22",
+    "seed": 20261022,
+    "sampleCount": 128,
+    "blockDays": 28
+  },
+  "rows": {
+    "observed": 5940,
+    "futurePath": 8838,
+    "volume": 5544
+  },
+  "cache": {
+    "kind": "validated UTC date label to integer day",
+    "maximumEntries": 32768,
+    "eviction": "FIFO",
+    "financialValuesCached": false
+  },
+  "beforeMs": {
+    "hiddenComparison": 35.49,
+    "hiddenTiming": 130.37,
+    "cycleCalibration": 65.02,
+    "longHorizon128": 798.52,
+    "rollingStatesRepeated": 200.93,
+    "volumeFit": 192.39,
+    "volumeProjection": 37.89
+  },
+  "afterMs": {
+    "hiddenComparison": 38.22,
+    "hiddenTiming": 48.62,
+    "cycleCalibration": 45.55,
+    "longHorizon128": 560.42,
+    "rollingStatesRepeated": 165.69,
+    "volumeFit": 104.23,
+    "volumeProjection": 33.72
+  },
+  "exactJsonSha256": {
+    "model": "4d404b7355e90ee8e96b82d9c7b059a3334ae8ce49ed05b4d7795b8d3b03d554",
+    "volumeFit": "aed8dfbd68c41782beb82c26c85ac8dae7a475704e82aee49644115baefec069",
+    "volumeProjection": "dae530db428c668d6fc420e0d24f8901b3f1cff93c8f5b546064220cf9c45584"
+  },
+  "equivalent": true
+}

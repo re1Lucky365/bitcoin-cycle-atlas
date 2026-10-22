@@ -1,4 +1,4 @@
-import { utcDay, dateFromDay } from './cycle-engine.js';
+import { utcDay, dateFromDay } from './cycle-engine.js?v=1.10.0';
 
 const DAY_SECONDS = 86400;
 const DAYS_PER_YEAR = 365.25;

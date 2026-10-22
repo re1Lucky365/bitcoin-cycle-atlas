@@ -1,8 +1,8 @@
 /** Observed-data charts for the unified workspace; no forecast mathematics here. */
-import { getMacroCycles, aggregateCloseBars, computeRollingStates, STATE_LABELS } from './market-structure.js';
-import { analyzePeakZones } from './peak-zones.js';
-import { utcDay, dateFromDay, getAnchors } from './cycle-engine.js';
-import { shiftCalendarMonths } from './cycle-timing.js';
+import { getMacroCycles, aggregateCloseBars, computeRollingStates, STATE_LABELS } from './market-structure.js?v=1.10.0';
+import { analyzePeakZones } from './peak-zones.js?v=1.10.0';
+import { utcDay, dateFromDay, getAnchors } from './cycle-engine.js?v=1.10.0';
+import { shiftCalendarMonths } from './cycle-timing.js?v=1.10.0';
 
 const cache = new WeakMap();
 const selections = new WeakMap();

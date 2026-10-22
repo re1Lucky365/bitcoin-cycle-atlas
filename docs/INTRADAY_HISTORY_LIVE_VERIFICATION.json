@@ -1,0 +1,74 @@
+{
+  "checkedAt": "2026-10-22T13:49:32.280Z",
+  "scope": "Actual public Coinbase Exchange API; completed historical candles only",
+  "cases": [
+    {
+      "interval": "1m",
+      "status": "ready",
+      "error": null,
+      "beforeCount": 180,
+      "afterCount": 727,
+      "requestedStart": "2026-10-21T23:46:00.000Z",
+      "firstDate": "2026-10-21T23:46:00.000Z",
+      "lastDate": "2026-10-22T11:52:00.000Z",
+      "olderCandles": 547,
+      "earliestActualCandle": {
+        "time": 1792626360,
+        "date": "2026-10-21T23:46:00.000Z",
+        "open": 84187.11,
+        "high": 84194.65,
+        "low": 84147,
+        "close": 84180.05,
+        "volume": 1.97983438,
+        "retrievedAt": "2026-10-22T13:49:32.663Z",
+        "snapshot": false
+      },
+      "requests": [
+        {
+          "url": "https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=60&start=2026-10-22T04%3A05%3A00.000Z&end=2026-10-22T08%3A53%3A00.000Z",
+          "status": 200
+        },
+        {
+          "url": "https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=60&start=2026-10-21T23%3A46%3A00.000Z&end=2026-10-22T04%3A05%3A00.000Z",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "interval": "4h",
+      "status": "ready",
+      "error": null,
+      "beforeCount": 180,
+      "afterCount": 363,
+      "requestedStart": "2026-08-22T20:00:00.000Z",
+      "firstDate": "2026-08-22T20:00:00.000Z",
+      "lastDate": "2026-10-22T04:00:00.000Z",
+      "olderCandles": 183,
+      "earliestActualCandle": {
+        "time": 1787428800,
+        "date": "2026-08-22T20:00:00.000Z",
+        "open": 77417.01,
+        "high": 77473.45,
+        "low": 76767.01,
+        "close": 77054.44,
+        "volume": 668.10242718,
+        "retrievedAt": "2026-10-22T13:49:33.411Z",
+        "snapshot": false
+      },
+      "requests": [
+        {
+          "url": "https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=3600&start=2026-09-10T08%3A00%3A00.000Z&end=2026-09-22T08%3A00%3A00.000Z",
+          "status": 200
+        },
+        {
+          "url": "https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=3600&start=2026-08-29T08%3A00%3A00.000Z&end=2026-09-10T08%3A00%3A00.000Z",
+          "status": 200
+        },
+        {
+          "url": "https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=3600&start=2026-08-22T20%3A00%3A00.000Z&end=2026-08-29T08%3A00%3A00.000Z",
+          "status": 200
+        }
+      ]
+    }
+  ]
+}

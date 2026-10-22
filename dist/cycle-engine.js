@@ -17,7 +17,17 @@ export const HALVINGS = Object.freeze([
 const HISTORICAL_TOP_YEARS = [2011, 2013, 2017, 2021];
 const COLORS = ['#a696ef', '#67aafa', '#49c8ae', '#f0a956', '#ef9154'];
 
+// Calendar labels are immutable across price revisions and model scenarios.
+// Repeated validation, moving windows and source anchors reuse only this pure
+// conversion, never prices or fitted results. FIFO bounds memory on long visits.
+const utcDayCache = new Map();
+const UTC_DAY_CACHE_LIMIT = 32768;
+
 export function utcDay(date) {
+  if (typeof date === 'string') {
+    const cached = utcDayCache.get(date);
+    if (cached !== undefined) return cached;
+  }
   if (typeof date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
     throw new TypeError(`Invalid UTC date label: ${String(date)}`);
   }
@@ -25,7 +35,10 @@ export function utcDay(date) {
   if (!Number.isFinite(millis) || new Date(millis).toISOString().slice(0, 10) !== date) {
     throw new TypeError(`Invalid calendar date: ${date}`);
   }
-  return millis / DAY_MS;
+  const day = millis / DAY_MS;
+  if (utcDayCache.size >= UTC_DAY_CACHE_LIMIT) utcDayCache.delete(utcDayCache.keys().next().value);
+  utcDayCache.set(date, day);
+  return day;
 }
 
 export function dateFromDay(day) {
