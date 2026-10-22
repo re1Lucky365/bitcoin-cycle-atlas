@@ -194,3 +194,38 @@ body[data-page=compare] .footer{display:flex}
 .atlas-plot>svg{cursor:crosshair}
 .atlas-plot[data-dragging=true],.atlas-plot[data-dragging=true]>svg{cursor:grabbing;user-select:none}
 @media(max-width:600px),(hover:none){.chart-navigation{opacity:.85;bottom:26px}.chart-navigation button{width:28px;height:28px}}
+
+/* Chart information lives on the canvas; detail controls use the right dock. */
+.atlas-chart-stage>.lab-chart-meta,.atlas-chart-stage>.atlas-inspector{display:none!important}
+.atlas-plot>.atlas-readout{position:absolute;inset:6px 10px auto;z-index:2;display:flex;align-items:baseline;flex-wrap:nowrap;gap:9px;min-height:0;margin:0;padding:0;border:0;background:transparent;pointer-events:none;color:#a9b9cc;font-size:11px;line-height:18px;white-space:nowrap}
+.atlas-plot>.atlas-readout .atlas-symbol{font-weight:550;color:#c0d0e2}
+.atlas-plot>.atlas-readout strong{font-size:15px;font-weight:600;letter-spacing:-.2px;color:#e3ecf7}
+.atlas-readout .atlas-day-change{font-size:10px}
+.atlas-readout .atlas-observation-date{min-width:0;overflow:hidden;text-overflow:ellipsis;color:#8b9db4;font-size:10px}
+.atlas-plot>.lab-chart-foot{position:absolute;inset:auto 9px 2px;z-index:2;display:flex;min-height:0;max-height:28px;margin:0;padding:0;border:0;background:transparent;pointer-events:none;overflow:hidden}
+.atlas-plot>.lab-chart-foot .lab-legend{gap:1px 10px;min-width:0;line-height:12px}
+.atlas-plot>.lab-chart-foot .lab-legend span{font-size:9px;line-height:12px;white-space:nowrap}
+.atlas-plot>.lab-chart-foot .lab-caveat{display:none}
+.atlas-plot[data-mode=price]>.lab-chart-foot .lab-legend{flex-wrap:nowrap}
+.atlas-chart-commands{display:flex;align-items:center;gap:1px;margin-left:5px;flex:none}
+.atlas-chart-commands button{display:grid;place-items:center;width:27px;height:26px;min-height:0;padding:4px;border:0;border-radius:3px;background:transparent;color:#a9bfd5}
+.atlas-chart-commands button:hover,.atlas-chart-commands button[aria-expanded=true]{background:#243347;color:#dbe8fa}
+.atlas-chart-commands .icon{width:16px;height:16px}
+.atlas-canvas-heading #atlas-mode-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.atlas-canvas-heading #atlas-update-status{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.atlas-canvas-heading .atlas-settings,.atlas-canvas-heading .atlas-mode-menu{flex:none}
+.atlas-plot .chart-navigation{bottom:57px}
+.atlas-plot [data-next-turn]:hover rect,.atlas-plot [data-next-turn]:focus-visible rect{fill:#263e55;stroke:#8ab6d5;stroke-width:1}
+.atlas-plot [data-next-turn]:focus-visible{outline:none}
+@media(max-width:620px){
+  .atlas-plot>.atlas-readout{inset:5px 8px auto;gap:6px;font-size:10px}
+  .atlas-plot>.atlas-readout strong{font-size:13px}
+  .atlas-readout .atlas-day-change,.atlas-readout .atlas-observation-date{font-size:9px}
+  .atlas-chart-commands{margin-left:1px;gap:0}
+  .atlas-chart-commands button{width:25px;height:25px}
+  .atlas-plot>.lab-chart-foot{left:7px;right:5px}
+  .atlas-plot>.lab-chart-foot .lab-legend{gap:1px 7px}
+  .atlas-plot>.lab-chart-foot .lab-legend span{font-size:8px}
+  .atlas-plot>.lab-chart-foot .lab-legend i{width:9px}
+  .atlas-plot .chart-navigation{bottom:55px}
+}

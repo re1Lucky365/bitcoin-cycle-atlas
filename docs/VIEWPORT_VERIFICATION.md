@@ -14,7 +14,7 @@ TradingView의 [공식 화면 구성](https://www.tradingview.com/support/soluti
 |---|---|---|
 | `npm test` | PASS | 12개 테스트 파일 통과, 실패·건너뜀 0. 가격·주기·구조·미래 경로·자료 처리·CryptoCon 계산·자동 갱신·날짜 탐색을 포함한다. |
 | 정적 참조 검사 | PASS | 상대 경로와 배포 기본 경로, 단일 HTML 내 자체 포함 리소스를 확인했다. 임시 브라우저 검수 페이지는 배포에서 제외한다. |
-| 단일 HTML | PASS | 25개 모듈과 5,939개 고정 관측을 포함한 파일을 만들고 실제 브라우저에서 가격 그래프·메뉴·CryptoCon 검증 그래프를 열었다. 최종 공개 자료의 행 수는 자동 갱신 후 달라질 수 있다. |
+| 단일 HTML | PASS | 25개 모듈과 초기 5,939개 관측을 포함한 파일을 만들고 실제 브라우저에서 가격 그래프·메뉴·CryptoCon 검증 그래프를 열었다. 최종 v1.3 다운로드 HTML에는 5,940개 관측이 포함되며 실제 브라우저에서 14:41 KST 확인 시각을 표시했다. |
 | 고정 연구 표본 | PASS | 기존 2026-10-20 자료를 테스트 fixture로 분리했다. 과거 수치의 기대값은 변경하지 않았다. |
 | 자동 갱신 실패 경로 | PASS | 완료된 UTC 날짜만 수용, 날짜·양수 가격·연속성·기존 기록 보존, 오류 시 원본 보존을 확인했다. |
 | 외부 주장 계산 | PASS | 임계값별 선행일·체류일·MDD·원래 날짜 창·가격 목표의 기한 내 부족분을 독립 검산했다. |
@@ -51,8 +51,8 @@ TradingView의 [공식 화면 구성](https://www.tradingview.com/support/soluti
 |---|---|
 | 변경 커밋의 CI·Pages | PASS. 기능 커밋 `78615ece4ad5efff41fa24529049d16348a2a79c`의 [CI](https://github.com/twoimo/bitcoin-cycle-atlas/actions/runs/39729387874)와 [Pages](https://github.com/twoimo/bitcoin-cycle-atlas/actions/runs/39729387922) 성공. 공개 사이트에서 새 화면 확인. |
 | 정기 자료 갱신 첫 수동 실행 | PASS. [실행 39729446829](https://github.com/twoimo/bitcoin-cycle-atlas/actions/runs/39729446829)의 자료 검증·테스트·커밋·Pages 배포 모두 성공. `6e7a3252af336843cab00e8728c6137888c5db40`에 2026-10-21 완료 일봉을 추가했다. 5,940행. |
-| 실제 관측일·확인 시각 표시 | CI가 기록한 확인 시각은 2026-10-22 05:41:30.989 UTC / 14:41 KST, 관측 종료는 2026-10-21 UTC다. 브라우저의 공개 반영 확인을 마친 뒤 결과를 보완한다. |
-| v1.3.0 릴리스·8개 산출물 | 동일 소스에서 단일 HTML·연구 PNG·두 계산 JSON·연구 문서·소스 ZIP·메타데이터·체크섬을 만드는 Release 워크플로를 사용한다. 게시 결과와 다운로드 검증은 [릴리스](https://github.com/twoimo/bitcoin-cycle-atlas/releases)와 [Release 실행](https://github.com/twoimo/bitcoin-cycle-atlas/actions/workflows/release.yml)에 기록된다. |
+| 실제 관측일·확인 시각 표시 | PASS. CI가 기록한 확인 시각은 2026-10-22 05:41:30.989 UTC / 14:41 KST, 관측 종료는 2026-10-21 UTC다. 공개 사이트와 최종 다운로드 HTML의 실제 화면에서 같은 관측일·14:41 KST 표시를 확인했다. |
+| v1.3.0 릴리스·8개 산출물 | PASS. 소스 `bba55a8f0a2d15b4191558b8e9bf9b7374b7bf4c`의 [v1.3.0](https://github.com/twoimo/bitcoin-cycle-atlas/releases/tag/v1.3.0) 게시. [Release 실행](https://github.com/twoimo/bitcoin-cycle-atlas/actions/runs/39730092114) 성공. 첨부 8개의 이름·바이트 크기·SHA-256이 동일 커밋의 로컬 패키지와 모두 일치했다. GitHub 기본 소스 압축 2개는 별도다. |
 
 ## 남는 범위
 

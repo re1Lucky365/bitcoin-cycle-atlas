@@ -58,6 +58,11 @@
 | 설명·자료 목록·원자료 접근 확인 | PASS. 선택 정보·수식·설명 페이지, 87개 자료·16개 CryptoCon 필터, 원자료 표 확인. |
 | 공개 사이트 배포 | PASS. 기능 CI [39729387874](https://github.com/twoimo/bitcoin-cycle-atlas/actions/runs/39729387874), Pages [39729387922](https://github.com/twoimo/bitcoin-cycle-atlas/actions/runs/39729387922). 공개 URL에서 새 아이콘·우측 축·탐색 도구 확인. |
 | 정기 갱신 첫 수동 실행·실제 반영 | PASS. [39729446829](https://github.com/twoimo/bitcoin-cycle-atlas/actions/runs/39729446829)의 자료 검증·테스트·커밋·동일 실행 Pages 배포 성공. 2026-10-21까지 5,940행. |
-| 릴리스·다운로드 산출물 검증 | 게시 시 Release workflow가 동일 커밋의 테스트·8개 산출물·체크섬 검증을 수행한다. 실제 발행 결과는 [릴리스와 첨부 파일](https://github.com/twoimo/bitcoin-cycle-atlas/releases) 및 최종 검증 기록에서 확인한다. |
+| 릴리스·다운로드 산출물 검증 | PASS. 정확한 소스 `bba55a8f0a2d15b4191558b8e9bf9b7374b7bf4c`의 [v1.3.0](https://github.com/twoimo/bitcoin-cycle-atlas/releases/tag/v1.3.0). [Release 실행](https://github.com/twoimo/bitcoin-cycle-atlas/actions/runs/39730092114) 성공, 첨부 8개 크기·SHA-256과 로컬 패키지 일치. |
 
 검토 결과는 `PASS`, `ISSUES`, `BLOCKED`로 남긴다. 발견한 결함을 수정한 뒤에는 영향을 받는 실제 동작을 다시 확인한다. 남은 접근 제한과 아직 도래하지 않은 예측의 평가를 완료 결과로 합치지 않는다.
+
+
+## v1.4 후속 분업
+
+우측 패널의 구현, 현재 모델 입력 감사, 반응형 브라우저 검수를 별도 담당자로 나눴다. 통합 담당자는 차트 안 표시·클릭·키보드 연결과 릴리스 패키지를 맡았다. 모바일 grid 폭과 십자선 클릭 문제를 실제 브라우저에서 찾아 수정한 뒤 재확인했다. 세부 증거는 [v1.4 검증](RIGHT_PANEL_VERIFICATION.md)에 남긴다. 기간·가격 가정을 데이터에서 학습한 결과로 표현하지 않도록 코드와 문서를 직접 대조했다.

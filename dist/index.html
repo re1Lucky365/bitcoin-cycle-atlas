@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="./lab.css">
   <link rel="stylesheet" href="./atlas.css">
   <link rel="stylesheet" href="./viewport.css">
+  <link rel="stylesheet" href="./chart-details-panel.css">
 </head>
 <body>
   <a class="skip-link" href="#main">본문으로 이동</a>
@@ -52,7 +53,7 @@
             <div class="atlas-control-actions"><button id="atlas-reset" class="atlas-quiet-button">처음 화면</button><details id="atlas-display-options" class="atlas-settings"><summary>표시 설정</summary><div class="atlas-settings-body"><fieldset><legend>가격 표시 간격</legend><div class="lab-segmented"><button data-lab-frequency="daily" aria-pressed="true">일별</button><button data-lab-frequency="weekly" aria-pressed="false">주별</button></div></fieldset><label>가격 단위<select id="lab-unit"><option value="usd">달러 가격</option><option value="indexed">최근 가격 = 100</option></select></label><label><input id="lab-band" type="checkbox" checked>다른 예시 경로의 범위</label><label><input id="lab-turns" type="checkbox" checked>고점·저점 표시</label><label><input id="atlas-drawdown" type="checkbox">최고가에서 떨어진 폭</label><label><input id="atlas-states" type="checkbox">상승·횡보·하락 흐름</label><label><input id="lab-fib" type="checkbox">최근 구간의 되돌림 비율</label><p>표시 설정은 ‘가격과 미래’ 그래프에 적용됩니다.</p><div class="atlas-setting-downloads"><button id="lab-svg" class="atlas-quiet-button">그래프 저장</button><button id="lab-json" class="atlas-quiet-button">계산 자료 저장</button></div></div></details></div>
           </div>
           <div class="lab-chart-meta"><span id="lab-chart-title">가격과 미래 흐름</span><span id="atlas-axis-note">달러 · 같은 상승률은 같은 높이</span></div>
-          <div id="lab-chart-stage" class="lab-chart-stage atlas-chart-stage"><svg id="lab-chart" role="img" tabindex="0" aria-label="실제 비트코인 가격과 미래 가정의 그래프. 누르거나 좌우 방향키로 값을 확인하세요."></svg><svg id="atlas-analysis-chart" role="img" tabindex="0" aria-label="과거 사이클 비교 그래프. 누르거나 좌우 방향키로 값을 확인하세요." hidden></svg><div id="lab-tooltip" class="lab-tooltip" hidden></div></div>
+          <div id="lab-chart-stage" class="lab-chart-stage atlas-chart-stage"><svg id="lab-chart" role="group" tabindex="0" aria-label="실제 비트코인 가격과 미래 가정의 그래프. 누르거나 좌우 방향키로 값을 확인하세요."></svg><svg id="atlas-analysis-chart" role="img" tabindex="0" aria-label="과거 사이클 비교 그래프. 누르거나 좌우 방향키로 값을 확인하세요." hidden></svg><div id="lab-tooltip" class="lab-tooltip" hidden></div></div>
           <div class="lab-chart-foot"><div id="atlas-chart-legend" class="lab-legend"></div><span id="atlas-chart-caveat" class="lab-caveat">미래는 가정에 따른 예시</span></div>
           <div class="atlas-inspector" aria-label="선택한 날짜와 구간의 값">
             <div class="atlas-inspector-top"><div><span id="atlas-inspector-kind" class="atlas-kind">실제 관측</span><strong id="atlas-inspector-title">그래프를 눌러 확인하세요</strong></div><div class="atlas-inspector-actions"><label id="atlas-date-label" class="atlas-date-input"><span class="lab-visually-hidden">확인할 날짜</span><input id="atlas-date" type="date" aria-label="확인할 날짜"></label><button id="atlas-inspect-prev" aria-label="이전 고점·저점">← 이전</button><button id="atlas-inspect-next" aria-label="다음 고점·저점">다음 →</button><button id="atlas-latest">최근 관측</button></div></div>
@@ -61,6 +62,7 @@
           <div id="atlas-event-rail" class="atlas-event-rail" aria-label="주요 미래 시점"></div>
         </section>
         <div class="atlas-under-chart"><p id="atlas-chart-note">흰 실선은 실제 가격, 금색 점선은 미래 가정의 예시입니다. 그래프를 눌러 자세히 보세요.</p><details class="atlas-guide"><summary>차트 읽는 법</summary><div><p><strong>실선 = 실제 가격.</strong> 점선은 선택한 가정으로 만든 예시이며, 그날 그 가격이 된다는 예측은 아닙니다.</p><p><strong>고점·저점은 나중에 확인됩니다.</strong> 반대 방향으로 12% 움직인 뒤 확인하므로, 가격이 꺾인 날과 확인한 날을 나눠 보여 줍니다.</p><p><strong>D-day는 계산 기준일부터 센 날짜입니다.</strong> 여러 예시의 첫 전환 날짜를 요약한 값이며, 화면의 점선 한 개가 그날 꺾인다는 뜻은 아닙니다.</p><p><strong>음영은 예시들의 범위입니다.</strong> 실제 미래가 그 안에 들어갈 확률 80%를 뜻하지 않습니다. 과거 검증에서 일관된 예측 우위는 확인되지 않았습니다.</p><p><strong>세로축은 상승률을 비교하는 눈금입니다.</strong> $10에서 $20, $100에서 $200처럼 두 배 상승하면 같은 높이만큼 이동합니다.</p></div></details></div>
+        <div id="atlas-model-info" hidden></div>
         <details id="atlas-exact-details" class="lab-details"><summary>정확한 수치 · 계산식 · 과거 검증</summary><div class="lab-details-body"><div class="lab-section-head"><h2>미래 가정의 주요 날짜</h2><div class="lab-segmented"><button data-lab-events="macro" aria-pressed="true">큰 주기의 기준</button><button data-lab-events="local" aria-pressed="false">예시의 고저점</button></div></div><div class="lab-table-scroll"><table class="lab-table"><thead id="lab-events-head"></thead><tbody id="lab-events-body"></tbody></table></div><div id="lab-events-foot" class="lab-table-foot"></div><div id="lab-method"></div><p><a href="https://github.com/twoimo/bitcoin-cycle-atlas/blob/main/docs/MARKET_STRUCTURE_METHOD.md" target="_blank" rel="noopener noreferrer">과거 구간·월·분기·되돌림 계산 근거 ↗</a> · <a href="?page=compare&amp;legacy=1">이전 상세 분석 도구 ↗</a></p></div></details>
         <p id="lab-error" class="lab-error" role="alert" hidden></p>
       </section>

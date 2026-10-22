@@ -74,9 +74,9 @@ function logTicks(min,max) {
 function geometry(svg) {
   const width=Math.max(1,Math.round(svg.clientWidth||svg.parentElement?.clientWidth||1000)),small=width<650;
   const height=Math.max(1,Math.round(svg.clientHeight||svg.parentElement?.clientHeight||500)),short=height<330;
-  const top=short?30:39,bottom=height-(short?30:40);
+  const top=short?30:39,bottom=height-(short?54:62);
   return {W:width,H:height,L:small?49:64,R:small?16:26,T:top,B:bottom,small,short,
-    ticks:Math.max(2,Math.min(5,Math.floor((bottom-top)/38))),axisY:height-9};
+    ticks:Math.max(2,Math.min(5,Math.floor((bottom-top)/38))),axisY:height-33};
 }
 function frame(svg,g,title,description) {
   svg.setAttribute('viewBox',`0 0 ${g.W} ${g.H}`);svg.setAttribute('role','img');svg.setAttribute('tabindex','0');

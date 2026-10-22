@@ -13,7 +13,7 @@ const signed=value=>`${value<0?'−':value>0?'+':''}${number(Math.abs(value),2)}
 function geometry(svg){
   const W=Math.max(1,Math.round(svg.clientWidth||svg.parentElement?.clientWidth||1000));
   const H=Math.max(1,Math.round(svg.clientHeight||svg.parentElement?.clientHeight||400));
-  return {W,H,small:W<620,short:H<290,L:W<620?67:121,R:W<620?20:35,T:H<290?32:44,B:H-(H<290?25:34)};
+  return {W,H,small:W<620,short:H<290,L:W<620?67:121,R:W<620?20:35,T:H<290?32:44,B:H-(H<290?51:60)};
 }
 
 function sources(claim){
@@ -57,7 +57,7 @@ export function renderCryptoConAudit({svg,dataset,onInspect=()=>{},view='timing'
     const min=utcDay('2025-01-01'),max=utcDay('2025-12-31'),x=value=>g.L+(utcDay(value)-min)/(max-min)*(g.W-g.L-g.R);
     let out=background();
     const months=g.small?[1,4,7,10,12]:[1,3,5,7,9,11,12];
-    for(const month of months){const value=`2025-${String(month).padStart(2,'0')}-01`,xx=x(value);out+=`<line x1="${xx}" x2="${xx}" y1="${g.T}" y2="${g.B}" stroke="${GRID}"/>`+text(xx,g.H-8,`${month}월`,{anchor:'middle'});}
+    for(const month of months){const value=`2025-${String(month).padStart(2,'0')}-01`,xx=x(value);out+=`<line x1="${xx}" x2="${xx}" y1="${g.T}" y2="${g.B}" stroke="${GRID}"/>`+text(xx,g.H-34,`${month}월`,{anchor:'middle'});}
     rows.forEach((row,index)=>{
       const y=yy(index),h=Math.max(8,Math.min(g.short?12:24,rowHeight*.4)),color=row.kind==='retrospective'?MUTED:row.kind==='alternative'?GOLD:PURPLE;
       out+=text(g.L-8,y+4,row.shortLabel,{anchor:'end',color:INK});
@@ -71,7 +71,7 @@ export function renderCryptoConAudit({svg,dataset,onInspect=()=>{},view='timing'
   function drawThresholds(){
     const left=g.small?47:82,right=g.small?36:55,max=100,x=value=>left+value/max*(g.W-left-right);
     let out=background();
-    for(const n of [0,25,50,75,100]){const xx=x(n);out+=`<line x1="${xx}" x2="${xx}" y1="${g.T}" y2="${g.B}" stroke="${GRID}"/>`+text(xx,g.H-8,`${n}`,{anchor:'middle',size:10});}
+    for(const n of [0,25,50,75,100]){const xx=x(n);out+=`<line x1="${xx}" x2="${xx}" y1="${g.T}" y2="${g.B}" stroke="${GRID}"/>`+text(xx,g.H-34,`${n}`,{anchor:'middle',size:10});}
     out+=text(g.W-4,15,'선행일',{anchor:'end',size:10});
     rows.forEach((row,index)=>{const y=yy(index),h=Math.max(8,Math.min(g.short?13:22,rowHeight*.44));out+=text(left-9,y+4,`${number(row.ratio*100)}%`,{anchor:'end',color:INK});
       out+=row.leadDays?`<rect x="${left}" y="${y-h/2}" width="${x(row.leadDays)-left}" height="${h}" rx="2" fill="${BLUE}" fill-opacity="${index===selected?'.95':'.55'}"/>`:`<circle cx="${left}" cy="${y}" r="3" fill="${BLUE}"/>`;
@@ -82,7 +82,7 @@ export function renderCryptoConAudit({svg,dataset,onInspect=()=>{},view='timing'
   function drawTargets(){
     const left=g.small?64:110,right=g.small?23:35,max=180000,x=value=>left+value/max*(g.W-left-right);
     let out=background();
-    for(const n of [0,50000,100000,150000]){const xx=x(n);out+=`<line x1="${xx}" x2="${xx}" y1="${g.T}" y2="${g.B}" stroke="${GRID}"/>`+text(xx,g.H-8,`${n/1000}k`,{anchor:'middle',size:10});}
+    for(const n of [0,50000,100000,150000]){const xx=x(n);out+=`<line x1="${xx}" x2="${xx}" y1="${g.T}" y2="${g.B}" stroke="${GRID}"/>`+text(xx,g.H-34,`${n/1000}k`,{anchor:'middle',size:10});}
     out+=text(g.W-5,15,'USD',{anchor:'end',size:10});
     rows.forEach((row,index)=>{const y=yy(index),h=Math.max(9,Math.min(g.short?16:25,rowHeight*.32));out+=text(left-8,y+4,row.shortLabel,{anchor:'end',color:INK,size:g.small?9:12});
       out+=`<rect x="${left}" y="${y-h/2}" width="${Math.max(0,x(row.observedPeak?.price||0)-left)}" height="${h}" rx="2" fill="${BLUE}" fill-opacity="${index===selected?'.9':'.5'}"/>`;

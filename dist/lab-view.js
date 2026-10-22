@@ -51,6 +51,17 @@ export function initLabView() {
   const state={dataset:null,base:null,analysis:null,models:new Map(),futureStates:new Map(),visible:false,compareVisible:false,scenario:valid('assumption',['base','accelerated','wait','late','stress'],'base'),frequency:valid('granularity',['daily','weekly'],'daily'),unit:'usd',window:valid('span',['all','history','near','0','1','2'],'all'),atlasMode:valid('chart',['price','cycles','duration','peaks','periods','cryptocon'],query.get('page')==='compare'&&!query.has('legacy')?'cycles':'price'),cryptoView:'timing',atlasAlignment:valid('align',['trough','calendar','halving'],'trough'),atlasPeriod:valid('interval',['monthly','quarterly'],'monthly'),atlasMetric:valid('measure',['returnPct','maxDrawdownPct','realizedVolPct','discoveryDays'],'returnPct'),atlasPhase:valid('phase',['macro','bull','bear'],'macro'),atlasScope:valid('scope',['recent','all'],'recent'),controller:null,selectedDate:null,methodKey:null,selectedEvent:null,eventMode:'macro',eventPage:0,structureFrequency:'weekly',scope:'all',threshold:.12,alignment:'calendar',period:'monthly',periodPage:0,pending:false};
   function fail(error){console.error('Detailed research workspace',error);$('#lab-error').hidden=false;$('#lab-error').textContent='분석을 계산하지 못했습니다. 원자료와 계산 결과를 확인해 주세요.';}
   state.priceRange=null;state.chartRange=null;
+  const plot=$('.atlas-plot');
+  plot.prepend($('#lab-metrics'));plot.append($('.lab-chart-foot'));
+  const commands=document.createElement('div');commands.className='atlas-chart-commands';
+  commands.append($('[data-reader="selection"]'),$('[data-reader="math"]'));
+  $('#atlas-update-status').before(commands);
+  $('#chart-detail-actions').append($('#atlas-date-label'),$('#atlas-inspect-prev'),$('#atlas-inspect-next'),$('#atlas-latest'));
+  // A genuine chart click opens details; redraws and resizing only refresh them.
+  plot.addEventListener('click',event=>{if(event.target.closest('#lab-chart,#atlas-analysis-chart')){state.isChartClick=true;queueMicrotask(()=>{state.isChartClick=false;});}},true);
+  for(const svg of [$('#lab-chart'),$('#atlas-analysis-chart')])svg.addEventListener('keydown',event=>{
+    if(['Enter',' '].includes(event.key)&&!event.target.closest('[data-next-turn]')){event.preventDefault();document.dispatchEvent(new CustomEvent('atlas:open-detail',{detail:{kind:'selection',focus:false}}));}
+  });
   const chartNavigation=bindChartNavigation({element:$('.atlas-plot'),getRange:()=>state.visible&&state.atlasMode==='price'?state.chartRange:null,onRangeChange:range=>{state.priceRange={start:range.start,end:range.end};state.selectedEvent=null;schedule();},onReset:()=>{state.priceRange=null;state.window='all';state.selectedEvent=null;schedule();}});
   function base(){
     if(state.base)return state.base;
@@ -78,18 +89,18 @@ export function initLabView() {
   function inspect(detail,options={}){
     if(options.user){state.selectedEvent=null;queueMicrotask(updateNavigation);}
     if(!detail)return;
-    document.dispatchEvent(new CustomEvent('atlas:inspection',{detail}));
     const labels={observed:'관측',simulated:'가정',assumption:'가정',distribution:'모의 요약'};
     $('#atlas-inspector-kind').textContent=labels[detail.kind]||'실제 관측';$('#atlas-inspector-kind').dataset.kind=detail.kind;
     $('#atlas-inspector-title').textContent=detail.label;
     $('#atlas-inspector-values').innerHTML=(detail.fields||[]).map(f=>`<div><span>${esc(f.label)}</span><strong>${esc(f.value)}</strong></div>`).join('');
     $('#atlas-inspector-note').textContent=detail.note||'';
     if(detail.date&&state.atlasMode==='price'){state.selectedDate=detail.date;$('#atlas-date').value=detail.date;}
+    document.dispatchEvent(new CustomEvent('atlas:inspection',{detail:{...detail,userInitiated:Boolean((options.openPanel??options.user)||state.isChartClick)}}));
   }
   function renderReadout(m,b,next){
-    const last=b.rows.at(-1),current=b.daily.current;
-    $('#lab-metrics').innerHTML=`<div class="atlas-observed-summary"><span class="atlas-observed-label">BTC · ${dateLabel(m.asOf)} UTC</span><div class="atlas-observed-main"><strong>${usd(last.price)}</strong><span class="atlas-state-pill">${esc(STATE_LABELS[current.state])}</span></div></div><div class="atlas-next-summary"><span class="atlas-next-label">다음 전환 · 가정</span><div class="atlas-next-heading"><strong>${next?.type==='low'?'반등 후보':next?.type==='high'?'조정 후보':'범위 밖'}</strong>${next?`<button id="atlas-focus-next" title="전환 후보 구간 확대">D-${nf(next.days)}</button>`:''}</div></div><p class="atlas-next-range">${next?`<b>${dateLabel(next.date)}</b><br><span>${dateLabel(next.lowerDate)}–${dateLabel(next.upperDate)}</span>`:''}</p>`;
-    if(next)$('#atlas-focus-next').onclick=()=>focusEvent(next.type);
+    const last=b.rows.at(-1),previous=b.rows.at(-2),change=previous?(last.price/previous.price-1)*100:0;
+    $('#lab-metrics').innerHTML=`<span class="atlas-symbol">BTC / USD</span><strong>${usd(last.price)}</strong><span class="atlas-day-change ${tone(change)}">${pct(change)}</span><span class="atlas-observation-date">${dateLabel(m.asOf)} UTC</span>`;
+    $('#lab-metrics').title=`마지막 완료 일말 가격 · ${dateLabel(m.asOf)} UTC · 전일 대비 ${pct(change)}`;
     $('#lab-asof').textContent=`실제 자료 ${dateLabel(m.asOf)}까지 · UTC`;
     $('#atlas-reference').textContent=`계산 기준 ${dateLabel(m.referenceDate)}`;
     $('#sidebar-reference').textContent=`계산 기준 · ${dateLabel(m.referenceDate)}`;
@@ -99,8 +110,12 @@ export function initLabView() {
     try{
       const focusId=document.activeElement?.id,focusEventId=document.activeElement?.dataset?.atlasEvent;
       const m=model(),b=base(),next=nextTurnInfo(m),priceMode=state.atlasMode==='price';
+      plot.dataset.mode=state.atlasMode;$('#lab-metrics').hidden=!priceMode;
       $('#lab-chart').toggleAttribute('hidden',!priceMode);$('#atlas-analysis-chart').toggleAttribute('hidden',priceMode);$('#lab-tooltip').hidden=true;
       $('#atlas-price-controls').hidden=!priceMode;$('#atlas-cycle-controls').hidden=state.atlasMode!=='cycles';$('#atlas-period-controls').hidden=state.atlasMode!=='periods';
+      $('[data-lab-frequency]').closest('fieldset').hidden=!priceMode;
+      for(const id of ['lab-unit','lab-band','lab-turns','lab-fib','atlas-drawdown','atlas-states'])$(`#${id}`).closest('label').hidden=!priceMode;
+      $('#lab-json').hidden=!priceMode;
       $('#atlas-duration-controls').hidden=state.atlasMode!=='duration';
       $('#atlas-cryptocon-controls').hidden=state.atlasMode!=='cryptocon';
       $('#atlas-cryptocon-view').value=state.cryptoView;
@@ -125,7 +140,7 @@ export function initLabView() {
         const actualTurns=b.pivots.pivots.map(p=>({date:p.eventDate,price:p.eventPrice,type:p.type,confirmationDate:p.confirmationDate}));
         if(state.selectedEvent?.startsWith('macro-')&&!m.events[Number(state.selectedEvent.split('-')[1])]?.inHorizon)state.selectedEvent=null;
         const activeMarker=['low','high'].includes(state.selectedEvent)?turnInfo(m,state.selectedEvent):next;
-        state.controller=drawChart({svg:$('#lab-chart'),tooltip:$('#lab-tooltip'),rows:allRows,start,end:chartEnd,split:m.asOf,frequency:state.frequency,unit:state.unit,denominator:last.price,band:$('#lab-band').checked,turns:[...actualTurns,...m.localTurns],showTurns:$('#lab-turns').checked,events:m.events.filter(e=>e.inHorizon),states:state.futureStates.get(state.scenario),fib:$('#lab-fib').checked?currentFib():[],nextTurn:activeMarker,showDrawdown:$('#atlas-drawdown').checked,showStates:$('#atlas-states').checked,onInspect:inspect,selectedDate:state.selectedDate||m.asOf});
+        state.controller=drawChart({svg:$('#lab-chart'),tooltip:$('#lab-tooltip'),rows:allRows,start,end:chartEnd,split:m.asOf,frequency:state.frequency,unit:state.unit,denominator:last.price,band:$('#lab-band').checked,turns:[...actualTurns,...m.localTurns],showTurns:$('#lab-turns').checked,events:m.events.filter(e=>e.inHorizon),states:state.futureStates.get(state.scenario),fib:$('#lab-fib').checked?currentFib():[],nextTurn:activeMarker,onNextTurn:()=>focusEvent(activeMarker.type),showDrawdown:$('#atlas-drawdown').checked,showStates:$('#atlas-states').checked,onInspect:inspect,selectedDate:state.selectedDate||m.asOf});
         $('#atlas-date').min=b.rows[0].date;$('#atlas-date').max=end;
         $('#lab-chart-title').textContent=`${dateLabel(start)} — ${dateLabel(chartEnd)} · ${state.frequency==='daily'?'일별':'주별'} 가격`;
         $('#atlas-axis-note').textContent=state.unit==='usd'?'USD · 로그':'최근 = 100 · 로그';
@@ -146,6 +161,7 @@ export function initLabView() {
       }
       renderEvents(m);const methodKey=`${m.asOf}/${m.scenario.id||state.scenario}`;if(methodKey!==state.methodKey){renderForecastMethod(m);state.methodKey=methodKey;}
       $('#lab-error').hidden=true;updateNavigation();chartNavigation.update();syncAtlasUrl();
+      if(state.openEventPanel){state.openEventPanel=false;const chart=$('#lab-chart');chart.focus({preventScroll:true});document.dispatchEvent(new CustomEvent('atlas:open-detail',{detail:{kind:'selection',focus:false,opener:chart}}));}
       if(focusId)document.getElementById(focusId)?.focus({preventScroll:true});else if(focusEventId)document.querySelector(`[data-atlas-event="${focusEventId}"]`)?.focus({preventScroll:true});
     }catch(error){fail(error);}
   }
@@ -162,7 +178,7 @@ export function initLabView() {
   }
   function focusEvent(id){
     const m=model(),e=['low','high'].includes(id)?turnInfo(m,id):m.events[Number(id.split('-')[1])];if(!e)return;
-    state.priceRange=null;state.atlasMode='price';state.selectedDate=e.date;state.window=['low','high'].includes(id)?'near':String(Math.min(2,Math.max(0,Math.floor((D(e.date)-D(m.referenceDate))/365.25))));state.selectedEvent=id;schedule();
+    state.priceRange=null;state.atlasMode='price';state.selectedDate=e.date;state.window=['low','high'].includes(id)?'near':String(Math.min(2,Math.max(0,Math.floor((D(e.date)-D(m.referenceDate))/365.25))));state.selectedEvent=id;state.openEventPanel=true;schedule();
   }
   function inspectEvent(m,id){
     if(['low','high'].includes(id)){const e=turnInfo(m,id);if(!e)return;inspect({label:`첫 ${id==='low'?'저점':'고점'} 시기의 중앙값 · ${dateLabel(e.date)}`,date:e.date,kind:'distribution',fields:[{label:'후보일까지 · 계산 기준일 대비',value:`D-${nf(e.days)}`},{label:'여러 경로의 날짜 범위',value:`${dateLabel(e.lowerDate)}–${dateLabel(e.upperDate)}`},{label:'전환 뒤 방향 후보',value:e.direction},{label:'계산 기준일',value:dateLabel(m.referenceDate)}],note:'여러 예시 경로에서 첫 고점·저점이 나온 날짜를 요약했습니다. 금색 점선 한 개의 전환점이나 확정된 시장 일정이 아닙니다.'});}
@@ -184,7 +200,8 @@ export function initLabView() {
   }
   function renderForecastMethod(m){
     const assumptions=m.assumptions||{},training=m.training||{},diagnostics=m.diagnostics||{};
-    $('#lab-method').innerHTML=`<h3>큰 시계와 작은 움직임</h3><p>명목 48개월 시계와 약 3년 상승·1년 하락은 사용자가 선택한 조건입니다. 과거 잔차를 28일 블록으로 재표본해 조정, 반등, 횡보가 반복되는 일별 경로를 만듭니다. 차트의 한 선은 128개 중 실제로 생성된 대표 경로이며, 날짜별 중앙값을 이어 붙인 선이 아닙니다.</p><div class="lab-formula">N = 이전 관측 고점 + 48개월<br>Z = N − A, &nbsp; P = N − A + D<br>log P*(t) = 거시 기준선(t) + R(t) − (t/T)R(T)</div><p>A는 고점권 선행 기간, D는 그 이후 머무는 기간입니다. 선행이 빨라도 머무는 기간이 같이 늘면 최종 고점은 빨라지지 않습니다. 블록 잔차의 연결 조건은 현재 가격과 표시 범위 밖의 다음 거시 저점 기준 가격을 잇습니다. 마지막 기준 가격은 모형에 의해 고정되며, 중간 고저점이나 2026년 저점 유지 조건은 강제하지 않습니다.</p><h3>범위와 고저점의 의미</h3><p>음영은 동일 가정에서 발생한 경로의 날짜별 10·90 분위수입니다. 80%의 실제 미래를 포괄한다는 뜻이 아닙니다. 12% 반대 방향 이동 뒤에만 고저점을 확인하며, 표에는 발생일과 모의 확인일을 분리했습니다. D-day는 연구 기준일에서 조건부 모의 중앙일까지 남은 달력 일수입니다. 후보 구간은 각 경로의 첫 고점·첫 저점 날짜의 10–90 분위수이며, 특정일 도달 확률이나 시장의 확정 일정이 아닙니다. 주봉은 일말 자료를 재집계한 값으로 장중 캔들이 아닙니다.</p><h3>과거 검증과 반증</h3>${simpleTable(['평가 기간','모형 중앙경로 MAPE','가격 고정 MAPE','모형 로그오차','가격 고정 로그오차','범위 안의 실제값','기점 / 거시 회차'],FORECAST_VALIDATION.summary.map(r=>[r.horizon,nf(r.median.mapePct,2)+'%',nf(r.flat.mapePct,2)+'%',nf(r.median.meanAbsoluteLogError,3),nf(r.flat.meanAbsoluteLogError,3),`${r.envelopeCovered}/${r.samples}`,`${r.samples} / ${r.distinctMacroCohorts}`]))}<p><strong>MAPE 기준으로는 모든 평가 기간에서 가격 고정 기준선보다 오차가 컸습니다.</strong> 장기 2·3년의 평균 절대 로그오차는 모형이 더 작았습니다. MAPE는 과소예측보다 과대예측에 큰 벌점을 주므로 두 척도를 함께 봅니다. 표본이 작아 일관된 예측 우위는 확인되지 않았습니다. 10–90% 경로 범위도 실제 결과의 80%를 포괄하지 못했습니다.</p><p>평가 시점 이후 자료를 학습에 쓰지 않는 과거 시점 검증을 시행하고, 동일 시점·기간의 가격 고정 기준선과 비교합니다. 겹치는 시점은 독립 표본으로 세지 않습니다. 검증 수치와 기존 모형의 실패 기록은 아래 원문에서 확인할 수 있습니다.</p><p><a href="${REPORT_ROOT}DETAILED_FORECAST_METHOD.md" target="_blank" rel="noopener noreferrer">새 모형 수식 · 같은 조건의 과거 검증 ↗</a> &nbsp; <a href="${REPORT_ROOT}DETAILED_FORECAST_RESULTS.json" target="_blank" rel="noopener noreferrer">전체 경로 · 진단 JSON ↗</a></p><h3>D-day의 민감도</h3>${simpleTable(['변경 조건','첫 저점 중앙일','첫 고점 중앙일','모의 MDD 중앙값'],FORECAST_SENSITIVITY.map(r=>[r.group==='block-length'?`블록 ${r.parameters.blockDays}일`:r.group==='seed'?`시드 ${r.parameters.seed}`:`변동성 ×${r.parameters.volatilityMultiplier}`,dateLabel(r.firstLowMedianDate),dateLabel(r.firstHighMedianDate),nf(r.mddPct.p50,1)+'%']))}<p>예를 들어 변동성 배율만 바꿔도 첫 고점 중앙일이 크게 달라집니다. 현재 국면의 길이와 미래 전환일을 확정하는 수학적 증명으로 해석하지 않습니다.</p><p class="lab-small-note">이 경로의 학습 자료는 ${esc(m.asOf)}까지입니다. 위 검증표·민감도는 2026-10-20 자료로 발행한 고정 연구 결과이며 다른 시나리오나 새 자료 갱신의 적중률을 뜻하지 않습니다. 종가와 장중 고저가, 제공자 간 가격 차이로 기준일이 달라질 수 있습니다. 큰 주기의 붕괴, 유동성·시장 구조 변화, 실제 낙폭이 모형 범위를 벗어나는 경우 재추정이 필요합니다.</p><details><summary>이 계산의 상세 설정</summary><pre class="lab-formula">${esc(JSON.stringify({assumptions,training,diagnostics},null,2))}</pre></details>`;
+    $('#atlas-model-info').innerHTML=`<h3>가격 기반 조건부 시뮬레이션</h3><p><b>실제 입력</b> · ${esc(state.dataset.prices[0][0])}–${esc(m.asOf)}의 일말 가격·날짜. 로그수익률과 가격 국면을 계산합니다.</p><p><b>변동성</b> · 최근 90일 변동성에 맞춘 역사 잔차를 재표본화합니다. 미래의 변동성 변화는 따로 추정하지 않습니다.</p><p><b>기간 가정</b> · 48개월 시계, 명목 36개월 상승·12개월 하락, 고점권 선행·체류 기간. 역사적 지속기간 분포를 학습한 값이 아닙니다.</p><p><b>가격 가정</b> · 관측 고점 비율에 지수 0.75를 적용하고 다음 거시 저점 낙폭을 50%로 둡니다. 회귀 추정값이 아닙니다.</p><p><b>미반영</b> · 시가총액·공급·거래량·유동성·ETF 자금 흐름.</p><p><b>검증</b> · 3년 중앙값 경로 MAPE 203.09%, 가격 고정 86.25%. 6개 기점·2개 회차의 사후 평가이며 예측 우위는 입증되지 않았습니다.</p><p><a href="${REPORT_ROOT}MODEL_SCOPE.md" target="_blank" rel="noopener noreferrer">입력·가정·검증 전체 근거 ↗</a></p>`;
+    $('#lab-method').innerHTML=`<h3>큰 시계와 작은 움직임</h3><p>명목 48개월 시계와 약 3년 상승·1년 하락은 사용자가 선택한 조건입니다. 이 기간과 고점권 선행·체류 기간은 지정한 가정이며, 역사적 국면의 지속기간 분포를 학습한 결과가 아닙니다. 과거 잔차를 가변 길이 블록으로 재표본합니다. 기하분포의 평균 모수는 28일이며, 길이는 7–84일로 제한하고 자료 경계에서 줄입니다. 차트의 한 선은 128개 중 실제로 생성된 대표 경로이며, 날짜별 중앙값을 이어 붙인 선이 아닙니다.</p><div class="lab-formula">N = 이전 관측 고점 + 48개월<br>Z = N − A, &nbsp; P = N − A + D<br>log P*(t) = log B(t) + R(t) − (t/T)R(T)</div><p>B(t)는 거시 가격 기준선, A는 고점권 선행 기간, D는 그 이후 머무는 기간입니다. 선행이 빨라도 머무는 기간이 같이 늘면 최종 고점은 빨라지지 않습니다. 블록 잔차의 연결 조건은 현재 가격과 표시 범위 밖의 다음 거시 저점 기준 가격을 잇습니다. 마지막 기준 가격은 모형에 의해 고정되며, 중간 고저점이나 2026년 저점 유지 조건은 강제하지 않습니다. 잔차의 크기는 최근 90일 로그수익률 변동성에 맞춥니다. 미래 가격 기준의 지수 0.75와 다음 거시 저점 낙폭 50%는 회귀 추정값이 아닌 설정이며, 시가총액·공급·거래량·자금 흐름은 입력하지 않습니다.</p><h3>범위와 고저점의 의미</h3><p>음영은 동일 가정에서 발생한 경로의 날짜별 10·90 분위수입니다. 80%의 실제 미래를 포괄한다는 뜻이 아닙니다. 12% 반대 방향 이동 뒤에만 고저점을 확인하며, 표에는 발생일과 모의 확인일을 분리했습니다. D-day는 연구 기준일에서 조건부 모의 중앙일까지 남은 달력 일수입니다. 후보 구간은 각 경로의 첫 고점·첫 저점 날짜의 10–90 분위수이며, 특정일 도달 확률이나 시장의 확정 일정이 아닙니다. 주봉은 일말 자료를 재집계한 값으로 장중 캔들이 아닙니다.</p><h3>과거 검증과 반증</h3>${simpleTable(['평가 기간','모형 중앙경로 MAPE','가격 고정 MAPE','모형 로그오차','가격 고정 로그오차','범위 안의 실제값','기점 / 거시 회차'],FORECAST_VALIDATION.summary.map(r=>[r.horizon,nf(r.median.mapePct,2)+'%',nf(r.flat.mapePct,2)+'%',nf(r.median.meanAbsoluteLogError,3),nf(r.flat.meanAbsoluteLogError,3),`${r.envelopeCovered}/${r.samples}`,`${r.samples} / ${r.distinctMacroCohorts}`]))}<p><strong>MAPE 기준으로는 모든 평가 기간에서 가격 고정 기준선보다 오차가 컸습니다.</strong> 2·3년의 절대 로그오차는 가격 고정보다 작았지만, 같은 거시 가정의 잔차 없는 단순 기준선보다 컸습니다. MAPE는 과대 예측 오차에 상한이 없고 과소 예측 오차는 100% 이내이며, 절대 로그오차는 같은 배수의 과대·과소 예측을 대칭적으로 평가합니다. 현 모형을 검증된 예측기라고 부를 수 없습니다. 표본이 작아 일관된 예측 우위는 확인되지 않았습니다. 10–90% 경로 범위도 실제 결과의 80%를 포괄하지 못했습니다.</p><p>각 과거 기점까지의 관측으로 잔차 풀과 평균을 다시 계산했습니다. 다만 모형 구조·설정·평가 기점은 과거를 알고 선택했으므로 사전 등록된 미래 검증이 아닙니다. 결과는 2024-12-31까지이며, 3년 평가는 겹치는 6개 기점·2개 거시 회차입니다. 전체 수치와 이전 모형의 실패 기록은 아래 원문에서 확인할 수 있습니다.</p><p><a href="${REPORT_ROOT}DETAILED_FORECAST_METHOD.md" target="_blank" rel="noopener noreferrer">새 모형 수식 · 같은 조건의 과거 검증 ↗</a> &nbsp; <a href="${REPORT_ROOT}DETAILED_FORECAST_RESULTS.json" target="_blank" rel="noopener noreferrer">전체 경로 · 진단 JSON ↗</a></p><h3>D-day의 민감도</h3>${simpleTable(['변경 조건','첫 저점 중앙일','첫 고점 중앙일','모의 MDD 중앙값'],FORECAST_SENSITIVITY.map(r=>[r.group==='block-length'?`블록 모수 ${r.parameters.blockDays}일`:r.group==='seed'?`시드 ${r.parameters.seed}`:`변동성 ×${r.parameters.volatilityMultiplier}`,dateLabel(r.firstLowMedianDate),dateLabel(r.firstHighMedianDate),nf(r.mddPct.p50,1)+'%']))}<p>예를 들어 변동성 배율만 바꿔도 첫 고점 중앙일이 크게 달라집니다. 현재 국면의 길이와 미래 전환일을 확정하는 수학적 증명으로 해석하지 않습니다.</p><p class="lab-small-note">이 경로에 사용한 가격 관측은 ${esc(m.asOf)}까지입니다. 위 검증표·민감도는 2026-10-20 자료로 발행한 고정 연구 결과이며 다른 시나리오나 새 자료 갱신의 적중률을 뜻하지 않습니다. 종가와 장중 고저가, 제공자 간 가격 차이로 기준일이 달라질 수 있습니다. 큰 주기의 붕괴, 유동성·시장 구조 변화, 실제 낙폭이 모형 범위를 벗어나는 경우 재추정이 필요합니다.</p><details><summary>이 계산의 상세 설정</summary><pre class="lab-formula">${esc(JSON.stringify({assumptions,training,diagnostics},null,2))}</pre></details>`;
   }
   function structure(){
     if(!state.analysis||state.analysis.parameters?.threshold!==state.threshold)state.analysis=analyzeMarketStructure(state.dataset,{threshold:state.threshold});
