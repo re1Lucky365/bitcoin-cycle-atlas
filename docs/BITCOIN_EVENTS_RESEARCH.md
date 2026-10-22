@@ -1,14 +1,14 @@
 # 비트코인 역사 사건: 차트 표시용 조사 기록
 
-검토 기준일: **2026-10-22**. 구현: `dist/bitcoin-events.js`. 검증: `tests/bitcoin-events.test.mjs`. 작업 시작 기준 커밋: `f48c0d79a7922c7f460057629ae58e8a8b12c004`.
+검토 기준일: **2026-10-22**. 구현: `dist/bitcoin-events.js`. 검증: `tests/bitcoin-events.test.mjs`. 작업 시작 기준 커밋: `f48c0d79a7922c7f460057629ae58e8a8b12c004`. 관세 사건 보강의 기준 커밋: `c35bdeb309a186c08393ef92a89eb97e08d0ed3b`.
 
-2009년 제네시스부터 2025년 미국 전략적 비트코인 준비자산 행정명령까지 **39개 사건**을 선정했다. 총 83개 출처 참조, 고유 URL 74개를 연결했다. 같은 문서의 반복 참조를 독립된 검증으로 세지 않는다. 2026년 10월 22일까지 확인한 자료를 사용하며, 검토 기준일 뒤의 사건이나 예정된 반감기·전망·가격 목표는 역사 사건 목록에 넣지 않는다. 이 목록은 완전한 연대기나 최신 뉴스 피드가 아니다.
+2009년 제네시스부터 2025년 10월의 미국 대중국 추가 관세 예고까지 **43개 사건**을 선정했다. 총 98개 출처 참조, 고유 URL 89개를 연결했다. 같은 문서의 반복 참조를 독립된 검증으로 세지 않는다. 2026년 10월 22일까지 확인한 자료를 사용하며, 검토 기준일 뒤의 사건이나 예정된 반감기·전망·가격 목표는 역사 사건 목록에 넣지 않는다. 이 목록은 완전한 연대기나 최신 뉴스 피드가 아니다.
 
 ## 선정과 해석 원칙
 
 세계적인 관심을 받았던 프로토콜 변화, 금융상품 진입, 규제·정책, 국가·기업 채택, 거래소·수탁 위험, 거시경제 맥락을 균형 있게 보여 주기 위한 편집 목록이다. 검색량·언론 보도량·국가별 관심도를 계량한 인기순위가 아니다. 영어권과 미국의 공시·법원 자료 접근성이 높아 미국 제도권 사건 비중이 크다. 특정 연도가 비어 있다고 그해 중요한 사건이 없었다는 뜻은 아니다.
 
-분류는 사건의 성격을 나타내며 호재·악재 점수가 아니다. 중요도 3은 넓은 차트에서 먼저 보여 줄 편집상 우선순위, 2는 확대 시 보완할 맥락, 1은 세부 이정표다. 중요도 3 사건은 19개다. 사건 뒤 가격이 움직였다는 시간적 인접성만으로 인과를 주장하지 않는다. 이 데이터에는 기대수익률, 매매 신호, 가격 충격 점수, 확률이 없다.
+분류는 사건의 성격을 나타내며 호재·악재 점수가 아니다. 중요도 3은 넓은 차트에서 먼저 보여 줄 편집상 우선순위, 2는 확대 시 보완할 맥락, 1은 세부 이정표다. 중요도 3 사건은 22개다. 사건 뒤 가격이 움직였다는 시간적 인접성만으로 인과를 주장하지 않는다. 이 데이터에는 기대수익률, 매매 신호, 가격 충격 점수, 확률이 없다.
 
 기업 발표는 회사가 무엇을 공시했는지 확인하는 1차 자료다. 회사의 전망이나 해명까지 독립적으로 입증하는 것은 아니다. 거래소 장애·수탁자 손실은 비트코인 합의 규칙의 실패와 구분한다. 입법·법원 판단·규제 승인을 현재의 모든 법적 의무를 설명하는 자료로 일반화하지 않는다.
 
@@ -56,6 +56,25 @@ Bitcoin Core v29.0의 메인넷 파라미터에서 세그윗 높이 481,824, 탭
 CME의 2025년 회고 연대표에는 3차 반감기를 2018년으로 쓰는 등 다른 사건에 오류가 있어, 이를 전체 연대기의 근거로 복사하지 않았다. CME 선물은 당시 출시 공지와 실제 개장 보도를 사용했고, 반감기 날짜는 원장을 직접 조회했다. 주요 사건 중 일부가 나중에 작성된 자료로 확인된 경우도 사건일과 출처 게시일을 분리했다. 테라의 2022년 붕괴 대표일을 뒷받침하는 SEC 배상계획은 2026년 8월 자료이지만, 사건 자체를 2026년 사건으로 넣지 않았다.
 
 `publishedAt: null`은 게시일이 없는 원장 조회 화면 또는 게시일을 확인하지 못한 지속 갱신 사건 관리 페이지다. 검토일을 발표일로 채우지 않는다. 모든 출처의 `accessedAt`은 2026-10-22다. 원문은 수정·이전·차단될 수 있고 링크가 영구히 유지된다는 보장은 없다.
+
+## 2025년 관세 사건 보강: 발표·시행·시장 관측의 구분
+
+‘관세빔’ 검색으로 찾을 수 있도록 네 사건에 선택적 `keywords` 배열을 추가했다. 이 표현은 검색 별칭이며 공식 정책 명칭이나 계량한 시장 충격의 이름이 아니다. 차트 라벨은 ‘美 상호관세 발표’, ‘대중 추가관세 예고’처럼 확인된 행위를 표시한다. 네 사건은 모두 거시경제 분류다. 2월 1일은 후속 정책을 이해하는 맥락으로 중요도 2, 세계적 관세 체계 발표·90일 유예·미중 추가 관세 예고는 넓은 차트의 편집 우선순위 3을 부여했다. 인기도·예측력·하락 또는 상승 규모의 순위는 아니다.
+
+백악관 원문과 Federal Register의 GovInfo 공식 PDF를 우선 읽고, 사건 당시 Reuters·Bloomberg News 보도로 발표일과 시장 상황을 대조했다. 같은 행정명령의 백악관 게시본과 연방관보 PDF는 두 개의 독립적인 관측이 아니다. 2월 3일 캐나다·멕시코 유예는 2월 1일 항목의 후속 맥락으로 묶었다. 하루마다 이어지는 가격 헤드라인을 각각 새 사건으로 늘리지 않았으며, 2025년의 모든 관세 조치·협상·법원 판단을 수록한 목록도 아니다.
+
+| 차트에 놓는 날짜 | 명령 또는 발언이 정한 시행 시점 | 별도로 확인한 BTC 보도·관측 시점 |
+|---|---|---|
+| 2025-02-01 발표 | 당초 2월 4일 예정. 캐나다·멕시코는 2월 3일 명령으로 3월 4일 00:01 미국 동부시간까지 연기 | Reuters 가격 관측은 2월 3일 09:41 UTC, 기사 게시는 13:06 UTC. 발표 보도 자체의 UTC 게시일은 2월 2일 |
+| 2025-04-02 서명·발표 | 기본 추가 관세 4월 5일, 국가별 차등 관세 4월 9일 각각 00:01 EDT(04:01 UTC) | Reuters 기사 4월 3일 14:13 UTC. 정확한 가격 관측 시각은 제시되지 않아 임의로 채우지 않음 |
+| 2025-04-09 유예 발표 | 4월 10일 00:01 EDT(04:01 UTC)부터. 기본 추가 10%는 유지, 중국은 유예 대상에서 제외 | Bloomberg News 기사 4월 9일 20:13 UTC, Reuters 시장 논평 21:03 UTC. 서로 다른 시점·요약 기준 |
+| 2025-10-10 추가 관세 예고 | 11월 1일 또는 상황에 따라 그 이전이라는 발언. 실제 시행을 확인한 사건으로 표시하지 않음 | 발언 기록 20:50 UTC, Reuters 가격 관측 21:20 UTC, 기사 게시 22:54 UTC로 구별 |
+
+각 행의 실제 원문 URL과 발표·게시일은 아래 사건별 출처 표에 연결했다. 보도 속 BTC 가격은 이 앱의 Bitstamp·Coinbase 캔들을 재구성하는 입력으로 쓰지 않는다. 거래소·호가·기준 가격·보도 갱신 시점이 다를 수 있으므로 앱의 일봉 종가와 일치해야 하는 값도 아니다. 관세 단독의 효과를 식별한 사건 연구나 인과모형은 수행하지 않았으며, 동시기 유동성·레버리지·다른 뉴스의 영향을 분리했다는 주장을 하지 않는다.
+
+10월 10일은 특히 날짜를 재확인했다. [UCSB의 원문 전재](https://www.presidency.ucsb.edu/documents/truth-social-posts-october-10-2025)는 시각을 Pacific time으로 명시하고 구체적인 추가 100% 발언을 13:50에 기록한다. 해당 날짜의 일광절약시간을 적용하면 **13:50 PDT = 16:50 EDT = 20:50 UTC, 모두 2025-10-10**이다. 이 환산은 원문의 시간대와 IANA `America/Los_Angeles`·`America/New_York`를 이용한 계산이며, 별도의 뉴스 피드 수신 시각을 측정한 것이 아니다. 이 항목도 `source-calendar-day`로 유지해 블록 헤더 전용 `timestampUtc` 계약과 혼동하지 않는다.
+
+[원래 Truth Social 주소](https://truthsocial.com/@realDonaldTrump/posts/115351840469973590)는 직접 자동 조회에서 JavaScript 안내만 반환했다. 원문 본문·게시 시각은 UCSB 전재로 확인하고 발표 내용·날짜는 Reuters 보도로 대조했다. UCSB 출처의 `publishedAt`은 원래 발언의 문서 날짜이며 UCSB의 아카이브 입수일을 뜻하지 않는다. Bloomberg News는 공개된 기사 앞부분의 수치·날짜만 사용했으며 로그인 뒤 본문을 읽었다고 주장하지 않는다. Reuters의 4월 9일 자료는 시장 논평이므로 틱 데이터나 학술적인 인과 검증으로 취급하지 않는다.
 
 ## 차트 연동 계약
 
@@ -105,7 +124,11 @@ CME의 2025년 회고 연대표에는 3차 반감기를 2018년으로 쓰는 등
 | 2024-07-12 | 독일 압수 BTC 매각 | 시장·거래소 | 2 |
 | 2025-01-23 | SEC 수탁 회계지침 | 규제·제도 | 1 |
 | 2025-01-29 | 엘살바도르 법 개정 | 규제·제도 | 2 |
+| 2025-02-01 | 美 3개국 관세 발표 | 거시경제 | 2 |
 | 2025-03-06 | 미국 BTC 준비자산 | 규제·제도 | 3 |
+| 2025-04-02 | 美 상호관세 발표 | 거시경제 | 3 |
+| 2025-04-09 | 상호관세 90일 유예 | 거시경제 | 3 |
+| 2025-10-10 | 대중 추가관세 예고 | 거시경제 | 3 |
 
 ## 사건별 원문·발표일·근거 한계
 
@@ -684,6 +707,26 @@ ID: `el-salvador-reform-2025` · 분류: 규제·제도 · 편집 표시 우선�
 | IMF | 2025-02-26 | 1차 기록·공식 자료 | [New 40-month Extended Fund Facility arrangement for El Salvador](https://www.imf.org/en/news/articles/2025/02/26/pr25043-el-salvador-imf-approves-new-40-month-us1-bn-eff-arr) |
 | Reuters | 2025-01-30 | 독립 보도·후속 분석 | [Lawmakers in El Salvador rush new bitcoin reform after IMF deal](https://www.reuters.com/world/americas/lawmakers-el-salvador-rush-new-bitcoin-reform-after-imf-deal-2025-01-30/) |
 
+### 2025-02-01 · 트럼프의 캐나다·멕시코·중국 관세 발표
+
+ID: `trump-three-country-tariffs-2025` · 분류: 거시경제 · 편집 표시 우선순위: 2
+
+트럼프가 캐나다·멕시코산 수입품에 추가 25%, 중국산에 추가 10% 관세를 발표했다. 캐나다산 에너지에는 10% 예외를 뒀다. Reuters는 2월 3일 09:41 UTC의 BTC를 95,730.35달러, 당일 6.2% 하락으로 보도했다. 캐나다·멕시코 조치는 2월 3일 별도 명령으로 시행이 연기됐다.
+
+**날짜 기준:** 백악관 발표와 당시 Reuters 보도가 확인한 2월 1일 발표일이다. Reuters 발표 보도의 UTC 게시 날짜는 2월 2일이다. 당초 2월 4일 시행 예정, 2월 3일 시장 반응·시행 연기와 구분한다.
+
+**근거 한계:** 캐나다·멕시코 조치는 2월 3일 명령에서 3월 4일까지 연기됐다. 중국 조치까지 함께 연기된 것으로 해석하지 않는다. 보도된 BTC 가격은 특정 관측 시점의 값이며 UTC 일봉 종가가 아니다. 관세 뉴스만의 독립적인 가격 효과를 추정한 결과가 아니다.
+
+**검색 별칭:** 관세빔 · 트럼프 · 관세 · Trump · tariff · 캐나다 · 멕시코 · 중국
+
+| 발행자 | 발표·게시일 | 자료 성격 | 확인 자료 |
+|---|---|---|---|
+| The White House | 2025-02-01 | 1차 기록·공식 자료 | [Fact Sheet: President Donald J. Trump Imposes Tariffs on Imports from Canada, Mexico and China](https://www.whitehouse.gov/fact-sheets/2025/02/fact-sheet-president-donald-j-trump-imposes-tariffs-on-imports-from-canada-mexico-and-china/) |
+| Reuters | 2025-02-02 | 독립 보도·후속 분석 | [Trump launches trade war with tariffs on Mexico, Canada and China](https://www.reuters.com/business/trump-readies-order-steep-tariffs-goods-mexico-canada-china-2025-02-01/) |
+| The White House | 2025-02-03 | 1차 기록·공식 자료 | [Progress on the Situation at Our Northern Border](https://www.whitehouse.gov/presidential-actions/2025/02/progress-on-the-situation-at-our-northern-border/) |
+| The White House | 2025-02-03 | 1차 기록·공식 자료 | [Progress on the Situation at Our Southern Border](https://www.whitehouse.gov/presidential-actions/2025/02/progress-on-the-situation-at-our-southern-border/) |
+| Reuters | 2025-02-03 | 독립 보도·후속 분석 | [Bitcoin drops to 3-week low as Trump tariffs rattle markets](https://www.reuters.com/markets/currencies/bitcoin-slides-below-100000-tariffs-rattle-markets-2025-02-02/) |
+
 ### 2025-03-06 · 미국 전략적 비트코인 준비자산 행정명령
 
 ID: `us-bitcoin-reserve-2025` · 분류: 규제·제도 · 편집 표시 우선순위: 3
@@ -699,8 +742,63 @@ ID: `us-bitcoin-reserve-2025` · 분류: 규제·제도 · 편집 표시 우선�
 | The White House | 2025-03-06 | 1차 기록·공식 자료 | [Establishment of the Strategic Bitcoin Reserve and United States Digital Asset Stockpile](https://www.whitehouse.gov/presidential-actions/2025/03/establishment-of-the-strategic-bitcoin-reserve-and-united-states-digital-asset-stockpile/) |
 | Reuters | 2025-03-07 | 독립 보도·후속 분석 | [Trump signs order to establish strategic bitcoin reserve](https://www.reuters.com/technology/trump-signs-order-establish-strategic-bitcoin-reserve-white-house-crypto-czar-2025-03-07/) |
 
+### 2025-04-02 · 트럼프의 상호관세 행정명령 발표
+
+ID: `trump-reciprocal-tariffs-2025` · 분류: 거시경제 · 편집 표시 우선순위: 3
+
+트럼프가 기본 추가 10%와 국가별 차등 상호관세를 정한 행정명령에 서명했다. 예외 품목·대상과 별도 시행일이 있는 조치다. 다음 날인 4월 3일 Reuters는 BTC 3.9% 하락을 보도했다.
+
+**날짜 기준:** 행정명령 14257의 서명·발표일 4월 2일이다. 기본 관세는 4월 5일, 국가별 관세는 4월 9일 각각 00:01 미국 동부 일광절약시간에 시행하도록 정했다. 연방관보 게재일은 4월 7일이다.
+
+**근거 한계:** 발표·예정 시행·관보 게재 날짜를 구분한다. 해당 세율이 이후 수정 없이 계속 유지됐다는 뜻은 아니다. 4월 3일 14:13 UTC는 Reuters 기사 게시 시각이다. 기사 속 변동률의 정확한 관측 시각이나 UTC 일봉 수익률로 사용하지 않는다. 시간적 인접성만으로 가격 인과를 단정하지 않는다.
+
+**검색 별칭:** 관세빔 · 트럼프 · 관세 · Trump · tariff · 상호관세 · 해방의 날 · Liberation Day
+
+| 발행자 | 발표·게시일 | 자료 성격 | 확인 자료 |
+|---|---|---|---|
+| The White House | 2025-04-02 | 1차 기록·공식 자료 | [Regulating Imports with a Reciprocal Tariff to Rectify Trade Practices that Contribute to Large and Persistent Annual United States Goods Trade Deficits](https://www.whitehouse.gov/presidential-actions/2025/04/regulating-imports-with-a-reciprocal-tariff-to-rectify-trade-practices-that-contribute-to-large-and-persistent-annual-united-states-goods-trade-deficits/) |
+| Federal Register / GovInfo | 2025-04-07 | 1차 기록·공식 자료 | [Executive Order 14257 — 90 FR 15041](https://www.govinfo.gov/content/pkg/FR-2025-04-07/pdf/2025-06063.pdf) |
+| Reuters | 2025-04-03 | 독립 보도·후속 분석 | [U.S. crypto stocks slide as Trump's sweeping tariffs jolt markets](https://www.reuters.com/markets/us-crypto-stocks-slide-trumps-sweeping-tariffs-jolt-markets-2025-04-03/) |
+
+### 2025-04-09 · 미국의 국가별 상호관세 90일 유예 발표
+
+ID: `trump-tariff-pause-2025` · 분류: 거시경제 · 편집 표시 우선순위: 3
+
+트럼프가 중국을 제외한 국가별 상호관세의 90일 유예를 발표했다. 기본 추가 10% 관세는 유지됐다. 당일 Bloomberg News는 BTC가 장중 최대 7.7% 올라 82,967달러를 기록했다고 보도했고 Reuters도 상승을 전했다.
+
+**날짜 기준:** 행정명령 14266의 서명·발표일 4월 9일이다. 명령상 유예 적용은 4월 10일 00:01 미국 동부 일광절약시간부터이며, 연방관보에는 4월 15일 게재됐다.
+
+**근거 한계:** 중국을 포함한 모든 관세의 철회가 아니다. 이 명령의 90일 기간은 7월 9일 00:01 미국 동부 일광절약시간까지로 정해졌으며, 그 뒤의 정책을 단정하지 않는다. Bloomberg의 20:13 UTC, Reuters의 21:03 UTC는 기사 게시 시각이다. 장중 최대 상승률과 다른 시점의 시장 요약은 같은 기준의 수익률이 아니다. 시장 반응 보도만으로 독립적인 인과효과를 입증하지 않는다.
+
+**검색 별칭:** 관세빔 · 트럼프 · 관세 · Trump · tariff · 상호관세 · 90일 · 유예
+
+| 발행자 | 발표·게시일 | 자료 성격 | 확인 자료 |
+|---|---|---|---|
+| The White House | 2025-04-09 | 1차 기록·공식 자료 | [Modifying Reciprocal Tariff Rates to Reflect Trading Partner Retaliation and Alignment](https://www.whitehouse.gov/presidential-actions/2025/04/modifying-reciprocal-tariff-rates-to-reflect-trading-partner-retaliation-and-alignment/) |
+| Federal Register / GovInfo | 2025-04-15 | 1차 기록·공식 자료 | [Executive Order 14266 — 90 FR 15625](https://www.govinfo.gov/content/pkg/FR-2025-04-15/pdf/2025-06462.pdf) |
+| Bloomberg News | 2025-04-09 | 독립 보도·후속 분석 | [Bitcoin Surges After Trump Hits Pause on Some Tariff Measures](https://news.bloomberglaw.com/capital-markets/bitcoin-rebounds-as-investors-seek-refuge-from-tariff-onslaught) |
+| Reuters | 2025-04-09 | 시장 논평·당시 보도 | [Trading Day: Boom! Trump tariff pause sparks monster rally](https://www.reuters.com/markets/global-markets-trading-day-graphics-2025-04-09/) |
+
+### 2025-10-10 · 트럼프의 대중국 추가 100% 관세 예고
+
+ID: `trump-china-tariff-threat-2025` · 분류: 거시경제 · 편집 표시 우선순위: 3
+
+트럼프가 기존 관세에 더해 중국산 수입품에 100% 관세를 추가하겠다고 밝혔다. 11월 1일 또는 상황에 따라 그 이전을 예고한 발언이다. Reuters는 10월 10일 21:20 UTC의 BTC를 104,782달러, 8.4% 하락으로 보도했다.
+
+**날짜 기준:** 원문을 전재한 UCSB 기록은 게시 시각을 10월 10일 13:50 미국 태평양시간으로 명시한다. 해당 날짜의 PDT를 환산하면 같은 날 16:50 EDT·20:50 UTC이므로 차트 날짜도 10월 10일이다.
+
+**근거 한계:** 이 사건은 추가 관세의 시행 예고 발언이다. 당시 즉시 시행됐거나 예고한 11월 1일에 실제 시행됐다는 기록으로 사용하지 않는다. Truth Social 직접 본문은 자동 조회에서 JavaScript 안내만 반환했다. 발언 원문·시각은 UCSB 전재, 내용·발표일은 당시 Reuters 보도로 교차 확인했다. 원문의 중국 정책에 관한 주장을 별도로 입증한 것은 아니다. Reuters 가격 관측은 21:20 UTC이며 기사 게시 시각 22:54 UTC와 다르다. 거래소별 시세·청산 집계나 UTC 일봉 종가를 대체하지 않으며 관세 단독의 가격 효과를 뜻하지 않는다.
+
+**검색 별칭:** 관세빔 · 트럼프 · 관세 · Trump · tariff · 중국 · 100% · 무역갈등
+
+| 발행자 | 발표·게시일 | 자료 성격 | 확인 자료 |
+|---|---|---|---|
+| Donald J. Trump / UCSB American Presidency Project 원문 전재 | 2025-10-10 | 1차 기록·공식 자료 | [Truth Social Posts of October 10, 2025](https://www.presidency.ucsb.edu/documents/truth-social-posts-october-10-2025) |
+| Reuters | 2025-10-10 | 독립 보도·후속 분석 | [US will impose additional 100% tariff on Chinese imports from November, Trump says](https://www.reuters.com/world/china/us-will-impose-additional-100-tariff-chinese-imports-november-trump-says-2025-10-10/) |
+| Reuters | 2025-10-10 | 독립 보도·후속 분석 | [Bitcoin extends decline to $104,782 as Trump escalates US-China trade war](https://www.reuters.com/business/bitcoin-down-55-114505-2025-10-10/) |
+
 ## 실행 검증
 
-`node --test --test-isolation=none --test-reporter=tap tests/bitcoin-events.test.mjs`로 9개 테스트를 실제 실행했다. 출처·날짜·중복 ID·검토일 상한·7개 블록 타임스탬프, 공시와 거래 개시의 날짜 구분, 양끝 포함 필터, 미래 예측 영역에서 역사 사건이 생성되지 않는 조건, 분류와 중요도 조합, 표시 수 제한 후 순서, 잘못된 입력, 중첩 객체의 불변성을 검증한다.
+`node --test --test-isolation=none --test-reporter=tap tests/bitcoin-events.test.mjs`로 관세 보강 뒤 10개 테스트를 실제 실행했다. 출처·날짜·중복 ID·검토일 상한·7개 블록 타임스탬프, 네 관세 사건의 발표일·유예 시행일·검색 별칭·PDT/EDT/UTC 날짜 일치, 공시와 거래 개시의 날짜 구분, 양끝 포함 필터, 미래 예측 영역에서 역사 사건이 생성되지 않는 조건, 분류와 중요도 조합, 표시 수 제한 후 순서, 잘못된 입력, 중첩 객체의 불변성을 검증한다.
 
-이 검증은 데이터 계약과 회귀 방지에 대한 것이다. 39개 사건의 정치적·경제적 의미에 대한 완전한 학술 검증이나 모든 링크의 영구 가용성을 보증하지 않는다. 이벤트의 화면 배치·클릭·모바일 겹침은 별도의 렌더러 통합 검증 대상이다.
+이 검증은 데이터 계약과 회귀 방지에 대한 것이다. 43개 사건의 정치적·경제적 의미에 대한 완전한 학술 검증이나 모든 링크의 영구 가용성을 보증하지 않는다. 이벤트의 화면 배치·클릭·모바일 겹침은 별도의 렌더러 통합 검증 대상이다.

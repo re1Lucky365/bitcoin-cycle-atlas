@@ -1,29 +1,33 @@
 # Bitcoin Cycle Atlas
 
-**v1.6.0 — 실제 비트코인 가격과 출처가 있는 장기 경제 가정을 한 차트에서 비교하는 한국어 사이트**입니다. 고정된 3년 표시 제한을 없앴습니다. 기본 ‘장기 전망’은 최근 1년의 실제 가격부터, 검토한 원문의 마지막 목표 연도인 **2050년 말**까지 이어집니다. N년을 고르는 별도 입력은 없습니다. [표시 종료일 규칙](dist/long-horizon-forecast.js)
+**v1.8.0 — 실제 비트코인 가격과 출처가 있는 장기 경제 가정을 한 차트에서 비교하는 한국어 사이트**입니다. 고정된 3년 표시 제한을 없앴습니다. 기본 ‘전체’ 범위는 실제 가격 이력부터 검토한 원문의 마지막 목표 연도인 **2050년 말**까지 이어집니다. 주 가격 차트는 유지하고, 다섯 분석은 그 아래에서 펼칩니다. N년을 고르는 별도 입력은 없습니다. [표시 종료일 규칙](dist/long-horizon-forecast.js)
 
 **[통합 차트 열기](https://twoimo.github.io/bitcoin-cycle-atlas/)** · **[사용 안내](docs/GRAPH_WORKSPACE_GUIDE.md)** · **[장기 전망 리서치](docs/LONG_HORIZON_RESEARCH.md)** · **[모델의 반영 범위](docs/MODEL_SCOPE.md)** · **[리서치 표](https://twoimo.github.io/bitcoin-cycle-atlas/?page=evidence)** · **[릴리스](https://github.com/twoimo/bitcoin-cycle-atlas/releases)** · **[Actions](https://github.com/twoimo/bitcoin-cycle-atlas/actions)**
 
 ## 처음 사용할 때
 
 1. **실제 자료와 미래 가정을 구분합니다.** 과거 실선은 Coin Metrics의 완료된 UTC 일말 가격입니다. 미래 점선은 선택한 경제 가정과 역사 수익률을 결합한 예시이며, 음영은 경제 가정 사이의 범위입니다. 오른쪽 아래 범례에서 표시를 확인합니다.
-2. **분·시간 간격이나 캔들로 바꿉니다.** 상단에서 `1m · 5m · 15m · 30m · 1h · 4h · 1D · 1W`를 고르고 캔들 아이콘으로 선·캔들을 전환합니다. 분·시간 화면은 Coinbase BTC-USD의 완료된 실제 봉만 보여 줍니다. 일·주 화면은 실제 캔들과 장기 미래 점선을 함께 표시합니다.
-3. **날짜를 눌러 값과 출처를 읽습니다.** 선택한 실제 봉에는 시가·고가·저가·종가·거래량이, 미래 날짜에는 가정 가격·가치평가 기준·변동성 가정이 표시됩니다. 상단의 임시 호버 값과 우측의 고정한 선택 값을 구분합니다.
+2. **분·시간 간격이나 캔들로 바꿉니다.** 상단에서 `1m · 5m · 15m · 30m · 1h · 4h · 1D · 1W`를 고르고 캔들 아이콘으로 선·캔들을 전환합니다. 분·시간 화면은 Coinbase BTC-USD의 완료된 실제 봉만 보여 줍니다. 일·주 화면은 Bitstamp BTC/USD의 실제 캔들·거래량과 장기 미래 점선을 함께 표시합니다.
+3. **날짜를 눌러 값과 출처를 읽습니다.** 선택한 실제 봉에는 시가·고가·저가·종가·거래량이, 미래 날짜에는 가정 가격·가치평가 기준·변동성 가정과, 제공 가능한 구간의 조건부 거래량이 표시됩니다. 상단의 임시 호버 값과 우측의 고정한 선택 값을 구분합니다.
 4. **하단 ‘장기 전망’으로 전체 미래를 다시 봅니다.** 기본 범위에서 처음 캔들로 바꾸면 일봉은 최근 180일, 주봉은 최근 560일과 이후 30일로 확대합니다. 장기 전망 데이터는 유지되며 하단 ‘장기 전망’ 또는 맞춤 아이콘으로 2050년까지 복원합니다. [화면 연결](dist/lab-view.js)
+5. **분석은 가격 아래에서 펼칩니다.** 4년 비교·구간 길이·고점권 도달·월·분기·CryptoCon 검증을 하단 분석 도크에서 고릅니다. 가격 차트와 선택은 유지되며, 달력 날짜가 있는 분석만 ‘가격 차트에서 보기’로 연결합니다.
+6. **역사 사건과 원문을 확인합니다.** 43개 사건의 점·이름을 표시하며 확대하면 더 많은 이름이 보입니다. 전체 사건 목록에서 `관세빔`을 검색하면 검증한 2025년 관세 사건 4개를 찾습니다. 발표·시행·시장 반응 날짜와 출처를 구별합니다. [사건 조사 기록](docs/BITCOIN_EVENTS_RESEARCH.md)
 
 ## 차트와 조작
 
-| 위치 | v1.6에서 제공하는 것 |
+| 위치 | v1.8에서 제공하는 것 |
 |---|---|
-| **상단** | 8개 분·시간·일·주 간격, 선·캔들 전환, 여섯 분석 그래프, 다섯 경제 가정, SVG 저장, 설정 |
+| **상단** | 8개 분·시간·일·주 간격, 선·캔들 전환, 분석 패널 열기·접기, 다섯 경제 가정, 주 가격 SVG 저장, 설정 |
 | **좌측** | 일·주 가격 화면의 십자선·이동·두 지점 측정·확대·축소·기본 범위 복원 |
-| **차트 안** | 실제 값과 미래 가정의 구분, 거래소 조회 상태·새로고침, 오른쪽 아래 범례 |
-| **우측** | 선택 데이터와 출처, 레이어, 장기 모형·발행량·연도별 가정·원문 비교, 리서치·원자료·도움말 |
-| **하단** | 일·주 화면의 ‘6개월 · 장기 전망 · 전체’, 날짜 이동, 로그·선형 축, 기본 범위 맞춤, 자료 갱신 정보 |
+| **차트 안** | 상시 주 가격, 실제 거래량 막대와 조건부 미래 거래량, 확대에 따른 사건 이름, 거래소 조회 상태·새로고침, 오른쪽 아래 범례 |
+| **우측** | 선택 데이터·사건·거래량 출처, 레이어, 장기 모형·발행량·연도별 가정·원문 비교, 리서치·원자료·도움말 |
+| **하단** | 다섯 분석의 접이식 도크·별도 SVG 저장, 주요 사건 목록, 일·주 화면의 ‘6개월 · 장기 전망 · 전체’, 날짜 이동, 로그·선형 축, 기본 범위 맞춤, 갱신 정보 |
 
 상단 간격은 **값을 묶는 시간 단위**, 하단 기간은 **화면에 보이는 날짜 범위**입니다. ‘6개월’은 계산 기준일의 45일 전부터 6개월 뒤까지, ‘장기 전망’은 마지막 일말 관측의 1년 전부터 2050년 말까지, ‘전체’는 전체 관측 이력부터 2050년 말까지 보여 줍니다. 현재의 2050년은 원문 목표 연도에서 도출한 값이며 모든 자료에 고정하는 예측 상수가 아닙니다. [범위 계산](dist/lab-view.js), [출처 선정](dist/long-horizon-forecast.js)
 
-분·시간 화면에서는 장기 시나리오·측정·날짜 범위 이동처럼 지원하지 않는 조작을 숨깁니다. 조회한 완료 봉을 선 또는 캔들로 선택하고, 방향키로 이전·다음 봉을 읽을 수 있습니다. 작은 화면에서는 8개 간격을 선택 메뉴로 제공하며 범례를 오른쪽 아래에서 줄바꿈하도록 배치합니다. 이는 [현재 UI 구현](dist/workbench-chrome.js)과 [반응형 스타일](dist/chart-details-panel.css)의 설명이며, 모든 기기의 검수를 완료했다는 뜻은 아닙니다.
+분·시간 화면에서는 장기 시나리오·두 지점 측정·일·주 전용 기간 버튼을 숨깁니다. 휠 확대·드래그 이동은 분·시간 화면에서도 사용할 수 있습니다. 조회한 완료 봉을 선 또는 캔들로 선택하고, 방향키로 이전·다음 봉을 읽을 수 있습니다. 작은 화면에서는 8개 간격을 선택 메뉴로 제공하며 범례를 오른쪽 아래에서 줄바꿈하도록 배치합니다. 이는 [현재 UI 구현](dist/workbench-chrome.js)과 [반응형 스타일](dist/chart-details-panel.css)의 설명이며, 모든 기기의 검수를 완료했다는 뜻은 아닙니다.
+
+주 가격과 아래 다섯 분석은 각각의 축을 사용합니다. 분석 선택·확대 화면을 가격의 공통 달력축으로 강제하지 않습니다.
 
 | 그래프 | 확인할 내용 |
 |---|---|
@@ -63,10 +67,12 @@ $$
 ## 실제 가격·캔들·갱신 상태
 
 - **Coin Metrics 일말 가격**은 장기 관측 이력, 국면 비교, 미래 점선의 출발값입니다.
-- **Coinbase Exchange BTC-USD OHLCV**는 실제 거래소 캔들입니다. 30분·4시간·주봉은 누락 없이 이어진 실제 기초 봉으로 집계합니다. 일말 가격 한 개에서 시가·고가·저가를 만들지 않습니다.
+- **Bitstamp BTC/USD OHLCV**는 일·주 화면의 실제 캔들과 BTC 거래량입니다. 주봉은 연속된 완료 일봉 7개로 집계하며, 부분 주와 누락을 채우지 않습니다.
+- **Coinbase Exchange BTC-USD OHLCV**는 분·시간 화면의 실제 캔들과 BTC 거래량입니다. 30분·4시간은 누락 없이 이어진 실제 기초 봉으로 집계합니다. 일말 가격 한 개에서 시가·고가·저가를 만들지 않습니다.
 - **일·주 캔들의 제공 범위 이전**은 기존 일말 가격선으로 남깁니다. 장기 모형의 마지막 관측일 이후 거래소 봉을 미래 가정에 섞지 않습니다. 거래소와 일말 지수의 가격 차이는 출처와 함께 표시합니다.
-- **분·시간 봉은 완료 자료만** 표시합니다. 진행 중인 봉·미래 캔들·없는 구간의 보간값은 만들지 않습니다. 거래소 조회는 간격의 첫 선택과 명시적 새로고침에서 이루어지며 자동 폴링은 없습니다.
-- **조회 실패 시** 검증한 저장 봉 또는 이전 조회를 쓰며 원래 수집 시각을 유지합니다. 사용할 자료가 없으면 실패 상태를 보여 줍니다. [OHLC 자료·집계·검증 방법](docs/OHLC_CHART_METHOD.md)
+- **분·시간 봉은 완료 자료만** 표시합니다. 진행 중인 봉·미래 캔들·없는 구간의 보간값은 만들지 않습니다. 초기 표시는 검증한 저장본을 우선 사용하고 명시적 새로고침으로 새 조회를 시도하며, 자동 폴링은 없습니다.
+- **조회 실패 시** 검증한 저장 봉 또는 이전 조회를 쓰며 원래 수집 시각을 유지합니다. 사용할 자료가 없으면 실패 상태를 보여 줍니다. [분·시간 OHLC 처리](docs/OHLC_CHART_METHOD.md), [일·주 OHLC·거래량 검증](docs/VOLUME_METHOD.md)
+- **미래 거래량**은 Bitstamp BTC/USD의 일평균 BTC 수량을 대상으로 한 조건부 모형값입니다. 실제 막대와 다른 점선·음영으로 장기 가격과 같은 끝 연도까지 표시하며, 미래 체결·캔들을 만들지 않습니다. 현재 순차 검증은 최근 90일 활동을 유지하는 기준모형을 선택했으므로 중앙 BTC 수량은 평평합니다. 가격·변동성·거래소 점유율 등 가정의 범위는 별도이며 보정된 확률구간이 아닙니다. 세계 전체 거래량이나 발행량과도 다릅니다. [모형·실제 검증 결과](docs/VOLUME_FORECAST_MODEL.md), [문헌과 시장구조 대조](docs/VOLUME_FORECAST_RESEARCH.md)
 
 일말 자료와 거래소 봉의 마지막 관측 시각, 조회 시각, 연구 검토일은 서로 다릅니다. 자동 배포 작업은 매일 03:20·09:20·15:20·21:20 KST에 완료 일말 자료를 확인하고 거래소 저장 봉 갱신을 시도하도록 구성돼 있습니다. 실제 실행은 지연될 수 있으며, 자료 수집 실패 시 마지막 유효 자료와 그 날짜를 보존합니다. 과거 연구 보고서·검증표는 자동으로 다시 쓰지 않습니다. [브라우저 갱신](dist/app.js), [갱신 워크플로](.github/workflows/refresh-data.yml)
 
@@ -78,11 +84,14 @@ $$
 | [장기 전망 심층 리서치](docs/LONG_HORIZON_RESEARCH.md) | 가격·금·변동성·주기 종료 주장, 판본·산술·반론 대조 |
 | [장기 모형 기술 설명](docs/LONG_HORIZON_MODEL.md) | 학술·프로토콜 근거와 계산 구조의 영문 설명 |
 | [현재 모델의 범위](docs/MODEL_SCOPE.md) | 실제 입력, 경제 기준, 자체 가정, 미반영 요소와 검증 한계 |
-| [실제 OHLC 방법](docs/OHLC_CHART_METHOD.md) | 공급자·완료 봉·집계·공백·실패 처리 |
+| [실제 OHLC 방법](docs/OHLC_CHART_METHOD.md) / [일·주 거래량 검증](docs/VOLUME_METHOD.md) | Coinbase 분·시간, Bitstamp 일·주 공급자·완료 봉·집계·공백·실패 처리 |
+| [거래량 모형](docs/VOLUME_FORECAST_MODEL.md) / [문헌 대조](docs/VOLUME_FORECAST_RESEARCH.md) | 조건부 미래 수량·순차 검증·기준선 선택·불확실성의 범위 |
+| [역사 사건 조사](docs/BITCOIN_EVENTS_RESEARCH.md) | 43개 사건·관세 4개·날짜 해석·원문·편집 우선순위 |
+| [작업공간 검증](docs/WORKBENCH_VERIFICATION.md) / [TradingView 조사](docs/TRADINGVIEW_DEEP_AUDIT.md) | 자동 검사와 실제 브라우저 관측, 공개 접근 범위와 남은 검증 |
 | [장기 모형](dist/long-horizon-forecast.js) / [출처 원장](dist/long-horizon-evidence.js) | 표시 종료일·연도별 가정·발행량과 출처 메타데이터 |
 | [시장 자료 제어](dist/market-data-controller.js) / [OHLC 처리](dist/ohlc-data.js) | 요청 취소·저장 자료·수치 검증·집계 |
 | [가격 차트](dist/atlas-price-chart.js) / [분·시간 차트](dist/intraday-chart.js) | 실제·미래 구분, 캔들·선·선택 정보 |
-| [통합 화면](dist/lab-view.js) / [도구 모음](dist/workbench-chrome.js) | 차트 전환·기간·조작 상태 연결 |
+| [통합 화면](dist/lab-view.js) / [분석 도크](dist/analysis-dock.js) / [도구 모음](dist/workbench-chrome.js) | 상시 주 가격·다섯 분석·각 선택 상태·기간·조작 연결 |
 
 ## 재현
 
@@ -99,19 +108,22 @@ python3 -m http.server 8000 --directory dist
 
 ```bash
 node scripts/refresh-ohlc.mjs
+node scripts/refresh-volume.mjs
 ```
 
-단일 HTML은 `build/Bitcoin_Cycles_Comparison.html`에 생성됩니다. CSS·모듈·일말 자료·거래소 저장 봉을 내장하며, 새 자료 조회와 외부 원문 열기에는 네트워크를 사용합니다. 테스트와 정적 검사는 구현·자료의 계약을 확인하며 장기 예측 정확도나 모든 브라우저의 검수를 대신하지 않습니다. 배포·릴리스의 실제 완료 여부는 해당 커밋의 [Actions](https://github.com/twoimo/bitcoin-cycle-atlas/actions)와 [릴리스](https://github.com/twoimo/bitcoin-cycle-atlas/releases)에서 확인합니다.
+저장된 거래량 원문을 이용한 오프라인 재검증은 `node scripts/refresh-volume.mjs --verify`로 실행합니다.
 
-원본 [Bitcoin Cycles Comparison](https://www.bitcoincyclescomparison.com/)의 역사 비교 개념에서 출발한 독립 구현입니다. Coin Metrics 가격 자료에는 제공자의 [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) 조건이 적용됩니다. 거래소 캔들은 별도의 Coinbase 출처이며, 데이터 조건을 코드 전체의 라이선스 선언으로 해석하지 않습니다.
+단일 HTML은 `build/Bitcoin_Cycles_Comparison.html`에 생성됩니다. CSS·모듈·일말 자료·거래소 저장 봉·거래량 자료를 내장하며, 새 자료 조회와 외부 원문 열기에는 네트워크를 사용합니다. 테스트와 정적 검사는 구현·자료의 계약을 확인하며 장기 예측 정확도나 모든 브라우저의 검수를 대신하지 않습니다. 배포·릴리스의 실제 완료 여부는 해당 커밋의 [Actions](https://github.com/twoimo/bitcoin-cycle-atlas/actions)와 [릴리스](https://github.com/twoimo/bitcoin-cycle-atlas/releases)에서 확인합니다.
+
+원본 [Bitcoin Cycles Comparison](https://www.bitcoincyclescomparison.com/)의 역사 비교 개념에서 출발한 독립 구현입니다. Coin Metrics 가격 자료에는 제공자의 [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) 조건이 적용됩니다. 거래소 캔들과 거래량은 Bitstamp·Coinbase의 별도 출처이며, 데이터 조건을 코드 전체의 라이선스 선언으로 해석하지 않습니다.
 
 ## ARCHIVED — 이전 연구 스냅샷과 화면 기록
 
-**아래는 v1.5 이하의 발행 연구·화면 기록입니다.** ‘3년’, D-day, 128개 경로의 10–90% 범위와 평가 수치는 당시 모형·스냅샷을 설명합니다. 현재 v1.6의 표시 기간, 경제 가정 범위 또는 장기 모형 성능을 뜻하지 않습니다. 당시 가격 연구는 2026-10-20 UTC 자료를 사용했고 웹 화면의 갱신 자료와 다를 수 있습니다.
+**아래는 v1.5 이하의 발행 연구·화면 기록입니다.** ‘3년’, D-day, 128개 경로의 10–90% 범위와 평가 수치는 당시 모형·스냅샷을 설명합니다. 현재 v1.8의 표시 기간, 경제 가정 범위 또는 장기 모형 성능을 뜻하지 않습니다. 당시 가격 연구는 2026-10-20 UTC 자료를 사용했고 웹 화면의 갱신 자료와 다를 수 있습니다.
 
 이전 보고서: [3년 상세 모형](docs/DETAILED_FORECAST_METHOD.md) · [계산 결과](docs/DETAILED_FORECAST_RESULTS.json) · [v1.0 모형](docs/THREE_YEAR_MODEL.md) · [시장 구조 방법](docs/MARKET_STRUCTURE_METHOD.md) · [시장 구조 결과](docs/MARKET_STRUCTURE_RESULTS.json) · [교차 검증](docs/STRUCTURE_CROSS_VALIDATION.md) · [CryptoCon 감사](docs/CRYPTOCON_AUDIT.md) · [리서치 우선순위](docs/RESEARCH_PRIORITY.md).
 
-이전 UI 기록: [v1.5 다섯 영역 검증](docs/FIVE_REGION_VERIFICATION.md) · [TradingView 구성 조사](docs/TRADINGVIEW_WORKSPACE_RESEARCH.md) · [v1.4 패널 검증](docs/RIGHT_PANEL_VERIFICATION.md) · [시장 구조 검증](docs/STRUCTURE_VERIFICATION.md). 아래 이미지는 해당 이전 버전이며 v1.6 화면 캡처가 아닙니다.
+이전 UI 기록: [v1.5 다섯 영역 검증](docs/FIVE_REGION_VERIFICATION.md) · [TradingView 구성 조사](docs/TRADINGVIEW_WORKSPACE_RESEARCH.md) · [v1.4 패널 검증](docs/RIGHT_PANEL_VERIFICATION.md) · [시장 구조 검증](docs/STRUCTURE_VERIFICATION.md). 아래 이미지는 해당 이전 버전이며 v1.8 화면 캡처가 아닙니다.
 
 ![ARCHIVED — v1.5 당시 다섯 영역 통합 차트](docs/figures/Trading_Workspace.jpg)
 

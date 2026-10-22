@@ -87,6 +87,19 @@ test('offer, disclosure, approval, trading and completion dates remain distinct'
   assert.equal(byId('sab-122-2025').date, '2025-01-23', 'announcement, not January 30 effective date');
 });
 
+test('tariff events preserve announcement dates, policy qualifications and searchable common aliases', () => {
+  const tariffs=[['trump-three-country-tariffs-2025','2025-02-01'],['trump-reciprocal-tariffs-2025','2025-04-02'],['trump-tariff-pause-2025','2025-04-09'],['trump-china-tariff-threat-2025','2025-10-10']];
+  for(const [id,date] of tariffs){
+    const item=byId(id);assert.equal(item.date,date);assert.equal(item.category,'macro');
+    assert.ok(item.keywords.includes('관세빔'));assert.ok(item.sources.some(source=>source.type==='primary'));
+    assert.ok(item.sources.some(source=>source.type==='secondary'));assert.ok(Object.isFrozen(item.keywords));
+  }
+  const pause=byId('trump-tariff-pause-2025');assert.match(pause.dateBasis,/4월 10일/);assert.match(pause.description,/중국.*제외/);assert.match(pause.description,/10%.*유지/);
+  const threat=byId('trump-china-tariff-threat-2025');assert.match(threat.title,/예고/);assert.match(threat.dateBasis,/20:50 UTC/);
+  assert.equal(new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date('2025-10-10T20:50:00Z')),'13:50');
+  assert.match(threat.limitations.join(' '),/즉시 시행됐거나/);
+});
+
 test('inclusive date boundaries allow adjacent-day markers and an exact single-day view', () => {
   assert.deepEqual(getVisibleBitcoinEvents({ startDate: '2024-01-10', endDate: '2024-01-11' }).map(event => event.id), [
     'us-spot-etp-approval-2024', 'us-spot-etp-trading-2024',
@@ -107,7 +120,7 @@ test('category and importance filters combine without mutating the caller filter
   assert.deepEqual(filtered.map(event => event.id), ['halving-2012', 'halving-2016', 'halving-2020', 'halving-2024']);
   assert.deepEqual([...categories], ['protocol']);
   assert.deepEqual(getVisibleBitcoinEvents({ categories: [] }), []);
-  assert.deepEqual(getVisibleBitcoinEvents({ categories: ['macro'] }).map(event => event.id), ['who-pandemic-2020']);
+  assert.deepEqual(getVisibleBitcoinEvents({ categories: ['macro'] }).map(event => event.id), ['who-pandemic-2020', 'trump-three-country-tariffs-2025', 'trump-reciprocal-tariffs-2025', 'trump-tariff-pause-2025', 'trump-china-tariff-threat-2025']);
 });
 
 test('a constrained marker budget selects editorial priorities and returns chronological order', () => {

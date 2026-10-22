@@ -1,0 +1,32 @@
+.analysis-dock{--analysis-dock-height:40px;flex:0 0 var(--analysis-dock-height);height:var(--analysis-dock-height);min-height:40px;overflow:hidden;display:flex;flex-direction:column;background:#10151d;border-top:1px solid #2b3644;color:#c6d1df;position:relative}
+.analysis-dock-header{height:39px;min-height:39px;display:flex;align-items:center;gap:10px;padding:0 10px;border-bottom:1px solid transparent}
+.analysis-dock[data-open=true] .analysis-dock-header{border-bottom-color:#263241}
+.analysis-dock-label{font-size:10px;letter-spacing:.08em;color:#7f90a5;flex:none}
+.analysis-dock-tabs{display:flex;align-items:center;gap:3px;overflow-x:auto;min-width:0;flex:1;scrollbar-width:thin}
+.analysis-dock-tabs button{white-space:nowrap;flex:none;border:1px solid transparent;background:none;color:#98a8bd;border-radius:4px;padding:5px 9px;font-size:11px;font-weight:500;line-height:1.4}
+.analysis-dock-tabs button:hover{background:#1b2531;color:#e6edf7}
+.analysis-dock-tabs button[aria-selected=true]{border-color:#37485b;color:#d5e0ef}
+.analysis-dock[data-open=true] .analysis-dock-tabs button[aria-selected=true]{background:#26374a;border-color:#567491;color:#f0f5fc}
+.analysis-dock button:focus-visible,.analysis-dock select:focus-visible,.analysis-chart-viewport svg:focus-visible{outline:2px solid #8db9e6;outline-offset:-2px}
+.analysis-dock-toggle{border:0;background:none;color:#9db4d0;font-size:10px;white-space:nowrap;padding:5px 2px;flex:none}
+.analysis-dock-body{min-height:0;flex:1;overflow:auto;scrollbar-width:thin;padding:7px 9px 6px;display:flex;flex-direction:column;gap:5px}
+.analysis-dock-meta{flex:none;display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 12px}
+.analysis-dock-meta h3{margin:0;font-size:11px;font-weight:600;color:#dae4f1}
+.analysis-dock-meta p{margin:0;font-size:10px;line-height:1.35;color:#8499b2}
+.analysis-dock-legend{display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;font-size:9px;margin-left:auto;color:#a3b0c2}
+.analysis-dock-legend span{white-space:nowrap;display:flex;align-items:center;gap:5px}
+.analysis-dock-legend i{display:inline-block;width:16px;border-top:2px solid}
+.analysis-dock-controls{flex:none;min-height:26px}
+.analysis-dock-controls .atlas-control-set{display:flex;align-items:center;flex-wrap:wrap;gap:7px 14px;margin:0;padding:0;border:0}
+.analysis-dock-controls label{display:flex;flex-direction:row;flex:none;align-items:center;gap:6px;font-size:10px;color:#91a3bb;margin:0;min-width:0}
+.analysis-dock-controls select{width:auto;max-width:220px;min-height:25px;font-size:10px;background:#17212d;border:1px solid #354458;border-radius:4px;color:#d6dfeb;padding:2px 24px 2px 6px}
+.analysis-dock-controls .atlas-control-hint{font-size:9px;color:#7f91a9;line-height:1.35}
+.analysis-chart-viewport{position:relative;flex:1 0 164px;min-height:164px;overflow:hidden}
+.analysis-chart-viewport>svg{position:absolute;inset:0;display:block;width:100%;height:100%;touch-action:pan-y}
+.analysis-dock-selection{flex:none;display:flex;align-items:center;gap:4px;min-height:25px}
+.analysis-dock-selection>button{background:#182332;border:1px solid #304057;border-radius:3px;color:#b5c6dc;white-space:nowrap;font-size:10px;padding:4px 7px}
+.analysis-dock-selection>button:disabled{opacity:.38;cursor:default}
+.analysis-dock-selection>.analysis-selection-summary{flex:1;min-width:0;text-overflow:ellipsis;overflow:hidden;text-align:left;background:transparent;border-color:transparent;color:#afbed1}
+.analysis-dock-note{flex:none;margin:0;color:#758aa3;font-size:9px;line-height:1.4}
+@media(max-width:900px){.analysis-dock-header{padding:0 6px;gap:5px}.analysis-dock-tabs button{padding:5px 7px;font-size:10px}.analysis-dock-label{display:none}.analysis-dock-meta{gap:3px 8px}.analysis-dock-legend{margin-left:0}.analysis-dock-controls .atlas-control-hint{display:none}.analysis-dock-note{font-size:9px}.analysis-dock-controls select{max-width:180px}}
+@media(max-width:540px){.analysis-dock-header{gap:4px}.analysis-dock-tabs{gap:1px}.analysis-dock-tabs button{font-size:9px;padding:5px 6px}.analysis-dock-toggle{font-size:9px}.analysis-dock-body{padding:6px}.analysis-dock-controls .atlas-control-set{gap:5px 8px}.analysis-dock-controls label{font-size:9px}.analysis-dock-controls select{font-size:9px;max-width:155px}.analysis-dock-selection>button{font-size:9px;padding:4px 5px}#analysis-save-svg{display:none}.analysis-chart-viewport{min-height:170px;flex-basis:170px}}

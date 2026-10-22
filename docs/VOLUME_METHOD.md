@@ -2,6 +2,8 @@
 
 검토일: **2026-10-22 UTC**. 구현 출발 커밋: `f48c0d79a7922c7f460057629ae58e8a8b12c004`.
 
+1.8부터 미래 거래량의 별도 조건부 시나리오를 추가했다. **이 문서는 실제 관측 막대의 검증 계약**을 설명한다. 미래 점선의 수식·검증은 [VOLUME_FORECAST_MODEL.md](VOLUME_FORECAST_MODEL.md), 문헌과 시장구조 대조는 [VOLUME_FORECAST_RESEARCH.md](VOLUME_FORECAST_RESEARCH.md)에 있으며, 관측 저장본에 미래 봉을 추가하지 않는다.
+
 ## 표시하는 값과 실제 범위
 
 일봉·주봉의 거래량은 **Bitstamp BTC/USD 현물 시장에서 해당 기간에 거래된 BTC 수량**이다. 달러 거래대금, 전 세계 거래소 합계, 비트코인 온체인 전송량, 파생상품 거래량을 뜻하지 않는다. 일봉·주봉 캔들의 OHLC도 같은 Bitstamp 응답에서 가져오므로 그 가격과 거래량의 거래소가 일치한다. 기존 CoinMetrics 종가 선 및 예측 기준 가격, Coinbase 분·시간 봉은 서로 다른 데이터 계열이며 출처를 구별해야 한다.

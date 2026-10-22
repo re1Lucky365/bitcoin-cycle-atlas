@@ -8,8 +8,8 @@ import { renderPeakView } from './peak-view.js';
 import { renderForecastView, exportForecastSvg } from './forecast-view.js';
 // Changed release modules use a versioned URL so a cached v1.5 module cannot
 // leave a new long-horizon page running the old three-year workbench.
-import { initViewportWorkspace } from './viewport-workspace.js?v=1.7.0';
-import { initLabView } from './lab-view.js?v=1.7.1';
+import { initViewportWorkspace } from './viewport-workspace.js?v=1.8.0';
+import { initLabView } from './lab-view.js?v=1.8.0';
 import { initEvidenceView, showEvidenceView } from './evidence-view.js?v=1.6.0';
 
 const $ = (selector) => document.querySelector(selector);
@@ -70,7 +70,7 @@ function toast(message) { $('#toast').textContent = message; $('#toast').hidden 
 function persistUrl() {
   const p = new URLSearchParams();
   const currentParams=new URLSearchParams(location.search);
-  for(const key of ['chart','span','assumption','granularity','axis','align','interval','measure','scope','phase','legacy'])if(currentParams.has(key))p.set(key,currentParams.get(key));
+  for(const key of ['chart','span','assumption','granularity','type','axis','align','interval','measure','scope','phase','legacy','dock','audit'])if(currentParams.has(key))p.set(key,currentParams.get(key));
   if (state.view !== 'outlook') p.set('page',state.view);
   if (state.mode !== 'halving') p.set('mode', state.mode);
   if (state.unit !== 'rebased') p.set('unit', state.unit);

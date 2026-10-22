@@ -1,16 +1,18 @@
-import { drawAtlasPriceChart as drawChart } from './atlas-price-chart.js?v=1.7.1';
+import { drawAtlasPriceChart as drawChart } from './atlas-price-chart.js?v=1.8.0';
 import { renderCryptoConAudit } from './cryptocon-audit.js';
 import { bindChartNavigation, panRange } from './chart-navigation.js?v=1.7.0';
 import { renderAtlasAnalysis } from './atlas-analysis.js';
+import { ANALYSIS_MODES, readAnalysisDockState, writeAnalysisDockState, analysisCalendarDate, shouldPublishInspection } from './analysis-dock.js?v=1.8.0';
 import { buildLongHorizonForecast } from './long-horizon-forecast.js';
 import { longHorizonMethodMarkup } from './long-horizon-view.js';
 import { CHART_INTERVALS, chartInterval, isIntradayInterval } from './ohlc-data.js';
-import { drawIntradayChart } from './intraday-chart.js?v=1.7.0';
+import { drawIntradayChart } from './intraday-chart.js?v=1.8.0';
 import { createMarketDataController, marketStatusText } from './market-data-controller.js?v=1.7.0';
 import { parseVolumeSnapshot, aggregateWeeklyVolume } from './volume-data.js?v=1.7.0';
-import { BITCOIN_EVENTS } from './bitcoin-events.js?v=1.7.0';
-import { historicalEventDetail } from './research-workbench.js?v=1.7.0';
-import { formatBtcVolume } from './chart-overlays.js?v=1.7.0';
+import { fitVolumeForecastModel, projectVolumeForecast } from './volume-forecast.js?v=1.8.0';
+import { BITCOIN_EVENTS } from './bitcoin-events.js?v=1.8.0';
+import { historicalEventDetail } from './research-workbench.js?v=1.8.0';
+import { formatBtcVolume } from './chart-overlays.js?v=1.8.0';
 import { analyzeMarketStructure, computeRollingStates, detectDirectionalChanges, STATE_LABELS } from './market-structure.js';
 import { utcDay, dateFromDay } from './cycle-engine.js';
 import { shiftCalendarMonths } from './cycle-timing.js';
@@ -55,20 +57,24 @@ function simpleTable(headers, rows) {
 export function initLabView() {
   const query=new URLSearchParams(location.search);
   const valid=(name,values,fallback)=>values.includes(query.get(name))?query.get(name):fallback;
-  const state={dataset:null,base:null,analysis:null,models:new Map(),futureStates:new Map(),visible:false,compareVisible:false,scenario:valid('assumption',['base','accelerated','wait','late','stress'],'base'),frequency:valid('granularity',['daily','weekly'],'daily'),scale:valid('axis',['log','linear'],'log'),tool:'crosshair',measurement:null,unit:'usd',window:valid('span',['all','history','near'],'history'),atlasMode:valid('chart',['price','cycles','duration','peaks','periods','cryptocon'],query.get('page')==='compare'&&!query.has('legacy')?'cycles':'price'),cryptoView:'timing',atlasAlignment:valid('align',['trough','calendar','halving'],'trough'),atlasPeriod:valid('interval',['monthly','quarterly'],'monthly'),atlasMetric:valid('measure',['returnPct','maxDrawdownPct','realizedVolPct','discoveryDays'],'returnPct'),atlasPhase:valid('phase',['macro','bull','bear'],'macro'),atlasScope:valid('scope',['recent','all'],'recent'),controller:null,selectedDate:null,methodKey:null,selectedEvent:null,eventMode:'macro',eventPage:0,structureFrequency:'weekly',scope:'all',threshold:.12,alignment:'calendar',period:'monthly',periodPage:0,pending:false};
+  const state={dataset:null,base:null,analysis:null,models:new Map(),futureStates:new Map(),visible:false,compareVisible:false,scenario:valid('assumption',['base','accelerated','wait','late','stress'],'base'),frequency:valid('granularity',['daily','weekly'],'daily'),scale:valid('axis',['log','linear'],'log'),tool:'crosshair',measurement:null,unit:'usd',window:valid('span',['all','history','near'],'history'),atlasMode:'price',cryptoView:'timing',atlasAlignment:valid('align',['trough','calendar','halving'],'trough'),atlasPeriod:valid('interval',['monthly','quarterly'],'monthly'),atlasMetric:valid('measure',['returnPct','maxDrawdownPct','realizedVolPct','discoveryDays'],'returnPct'),atlasPhase:valid('phase',['macro','bull','bear'],'macro'),atlasScope:valid('scope',['recent','all'],'recent'),selectedDate:null,methodKey:null,selectedEvent:null,eventMode:'macro',eventPage:0,structureFrequency:'weekly',scope:'all',threshold:.12,alignment:'calendar',period:'monthly',periodPage:0,pending:false};
   function fail(error){console.error('Detailed research workspace',error);$('#lab-error').hidden=false;$('#lab-error').textContent='분석을 계산하지 못했습니다. 원자료와 계산 결과를 확인해 주세요.';}
+  const initialDock=readAnalysisDockState(query);
+  state.atlasMode='price';state.analysisMode=initialDock.mode;state.analysisOpen=initialDock.open;state.priceController=null;state.analysisController=null;state.inspectionOwner='price';state.lastAnalysisDetail=null;state.lastPriceDetail=null;state.analysisUserIntent=false;
+  state.cryptoView=valid('audit',['timing','thresholds','targets'],'timing');
   state.priceRange=null;state.marketRange=null;state.chartRange=null;state.historyCategory='all';state.selectedHistoryEvent=null;
   state.frequency=valid('granularity',CHART_INTERVALS.map(item=>item.id),'daily');
   state.chartType=valid('type',['line','candles'],'line');
   state.marketSelectedTime=null;
   state.candleFitDone=false;
   const marketData=createMarketDataController({preferSnapshot:true,onChange:()=>schedule(),readEmbedded:()=>document.getElementById('embedded-ohlc-data')?.textContent});
-  let volumeState={status:'idle',series:null,error:null},volumeCache=new Map();
+  let volumeState={status:'idle',series:null,error:null},volumeCache=new Map(),volumeModelCache=new Map(),volumeProjectionCache=new Map();
+  state.volumeProjection=null;
   async function loadVolume({force=false}={}){
     if(volumeState.status==='loading'||(!force&&volumeState.status!=='idle'))return;
     volumeState={...volumeState,status:'loading',error:null};
     try{const embedded=$('#embedded-volume-data')?.textContent;let payload;if(embedded)payload=JSON.parse(embedded);else{const response=await fetch('./data/btc-volume.json',{credentials:'omit',cache:'no-cache',signal:AbortSignal.timeout(12000)});if(!response.ok)throw new Error(`거래량 자료 HTTP ${response.status}`);payload=await response.json();}
-      volumeState={status:'ready',series:parseVolumeSnapshot(payload),error:null};volumeCache.clear();
+      volumeState={status:'ready',series:parseVolumeSnapshot(payload),error:null};volumeCache.clear();volumeModelCache.clear();volumeProjectionCache.clear();
     }catch(error){volumeState={...volumeState,status:'error',error:error.message};}
     schedule();
   }
@@ -76,17 +82,35 @@ export function initLabView() {
     if(!volumeState.series)return null;const key=`${asOf}/${state.frequency}`;if(volumeCache.has(key))return volumeCache.get(key);
     const daily=volumeState.series.bars.filter(bar=>bar.date<=asOf),result=state.frequency==='weekly'?aggregateWeeklyVolume(daily,{asOf,source:volumeState.series.source}):{...volumeState.series,bars:daily};volumeCache.set(key,result);return result;
   }
+  function forecastVolume(m){
+    if(!volumeState.series)return null;
+    const modelKey=`${m.asOf}/${volumeState.series.retrievedAt}`,key=`${modelKey}/${state.scenario}/${state.frequency}/${m.displayEnd}`;
+    if(volumeProjectionCache.has(key))return volumeProjectionCache.get(key);
+    try{
+      if(!volumeModelCache.has(modelKey))volumeModelCache.set(modelKey,fitVolumeForecastModel(volumeState.series.bars,{asOf:m.asOf,source:volumeState.series.source}));
+      const fitted=volumeModelCache.get(modelKey),assumptions=m.longHorizon?.assumptions;
+      const result=projectVolumeForecast(fitted,m.path,{asOf:m.asOf,endDate:m.displayEnd,frequency:state.frequency,terminalVolatility:(assumptions?.terminalVolatilityPct??20)/100*(m.assumptions?.volatilityMultiplier??1),volatilityHalfLifeYears:assumptions?.volatilityHalfLifeYears??8});
+      volumeProjectionCache.set(key,result);return result;
+    }catch(error){const result={status:'unavailable',reason:'거래량 모형을 계산하지 못했습니다. 실제 관측은 계속 표시합니다.'};volumeProjectionCache.set(key,result);console.warn('Volume scenario unavailable',error);return result;}
+  }
   function volumeMetadata(){const series=volumeState.series;if(!series)return null;const check=series.validation;return {source:series.source,firstDate:series.firstDate,lastDate:series.lastDate,retrievedAt:series.retrievedAt,count:series.bars.length,gapCount:series.coverage.gapCount,zeroCount:series.coverage.sourceZeroVolumeBars,validation:{status:check?.status,hourlyDays:check?.nativeResolution?.hourly?.completeDays,quarterHourlyDays:check?.nativeResolution?.quarterHourly?.completeDays,firstDate:check?.nativeResolution?.hourly?.firstDate,lastDate:check?.nativeResolution?.hourly?.lastDate,tradeMinutes:check?.baseUnit?.completedMinutes,overlapDays:check?.cachedCoinbase?.overlappingDays}};}
   const plot=$('.atlas-plot');
   // A genuine chart click opens details; redraws and resizing only refresh them.
-  plot.addEventListener('click',event=>{if(event.target.closest('#atlas-analysis-chart')||(state.tool==='crosshair'&&event.target.closest('#lab-chart'))){state.isChartClick=true;queueMicrotask(()=>{state.isChartClick=false;});}},true);
-  for(const svg of [$('#lab-chart'),$('#atlas-analysis-chart')])svg.addEventListener('keydown',event=>{
-    if(state.atlasMode==='price'&&state.tool!=='crosshair')return;
-    if(['Enter',' '].includes(event.key)&&!event.target.closest('[data-next-turn],[data-history-event]')){event.preventDefault();document.dispatchEvent(new CustomEvent('atlas:open-detail',{detail:{kind:'selection',focus:false}}));}
+  plot.addEventListener('click',event=>{if(state.tool==='crosshair'&&event.target.closest('#lab-chart')){state.isChartClick=true;queueMicrotask(()=>{state.isChartClick=false;});}},true);
+  $('#lab-chart').addEventListener('keydown',event=>{
+    if(state.tool!=='crosshair')return;
+    if(['Enter',' '].includes(event.key)&&!event.target.closest('[data-next-turn],[data-history-event]')){event.preventDefault();showPriceInspection();document.dispatchEvent(new CustomEvent('atlas:open-detail',{detail:{kind:'selection',focus:false}}));}
   });
+  const analysisSvg=$('#atlas-analysis-chart');
+  const markAnalysisIntent=()=>{state.analysisUserIntent=true;queueMicrotask(()=>{state.analysisUserIntent=false;});};
+  analysisSvg.addEventListener('click',markAnalysisIntent,true);
+  analysisSvg.addEventListener('keydown',event=>{
+    if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'].includes(event.key))markAnalysisIntent();
+    if(['Enter',' '].includes(event.key)){event.preventDefault();if(state.lastAnalysisDetail)inspect(state.lastAnalysisDetail,{owner:'analysis',user:true});}
+  },true);
   function resetChartRange(){state.priceRange=null;state.marketRange=null;state.window='history';state.selectedEvent=null;state.selectedHistoryEvent=null;document.dispatchEvent(new CustomEvent('atlas:close-detail'));schedule();}
   const chartNavigation=bindChartNavigation({element:plot,getTool:()=>state.tool,getRange:()=>state.visible&&state.atlasMode==='price'?state.chartRange:null,
-    getContext:context=>state.controller?.getSelection?.(context)||{label:'선택한 실제 자료 또는 가정',copyText:null},
+    getContext:context=>state.priceController?.getSelection?.(context)||{label:'선택한 실제 자료 또는 가정',copyText:null},
     onAnnounce:text=>{if($('#workbench-announcement'))$('#workbench-announcement').textContent=text;},
     onRangeChange:range=>{if(range.unit==='seconds')state.marketRange={start:range.start,end:range.end};else state.priceRange={start:range.start,end:range.end};state.chartRange={...state.chartRange,...range};state.selectedEvent=null;state.selectedHistoryEvent=null;schedule();},onReset:resetChartRange});
   $('#workbench-navigation').append(chartNavigation.toolbar);
@@ -109,35 +133,64 @@ export function initLabView() {
   }
   function syncAtlasUrl(){
     const p=new URLSearchParams(location.search);
-    for(const [key,value,defaultValue] of [['chart',state.atlasMode,'price'],['span',state.window,'history'],['assumption',state.scenario,'base'],['granularity',state.frequency,'daily'],['axis',state.scale,'log'],['align',state.atlasAlignment,'trough'],['interval',state.atlasPeriod,'monthly'],['measure',state.atlasMetric,'returnPct'],['scope',state.atlasScope,'recent'],['phase',state.atlasPhase,'macro']])value===defaultValue?p.delete(key):p.set(key,value);
+    writeAnalysisDockState(p,{mode:state.analysisMode,open:state.analysisOpen});
+    for(const [key,value,defaultValue] of [['span',state.window,'history'],['assumption',state.scenario,'base'],['granularity',state.frequency,'daily'],['axis',state.scale,'log'],['align',state.atlasAlignment,'trough'],['interval',state.atlasPeriod,'monthly'],['measure',state.atlasMetric,'returnPct'],['scope',state.atlasScope,'recent'],['phase',state.atlasPhase,'macro'],['audit',state.cryptoView,'timing']])value===defaultValue?p.delete(key):p.set(key,value);
     state.chartType==='line'?p.delete('type'):p.set('type',state.chartType);
     if(p.get('page')==='compare'&&!p.has('legacy'))p.delete('page');
     try{history.replaceState(null,'',`${location.pathname}${p.size?'?'+p:''}`);}catch{}
   }
   function inspect(detail,options={}){
-    if(options.user&&detail?.kind!=='history'){state.selectedEvent=null;state.selectedHistoryEvent=null;queueMicrotask(updateNavigation);}
     if(!detail)return;
+    const owner=options.owner||'price',user=Boolean(options.user||(owner==='price'&&state.isChartClick));
+    if(owner==='price')state.lastPriceDetail=detail;
+    if(!shouldPublishInspection({owner,currentOwner:state.inspectionOwner,user}))return;
+    if(user)state.inspectionOwner=owner;
+    if(user&&owner==='price'&&detail.kind!=='history'){state.selectedEvent=null;state.selectedHistoryEvent=null;}
+    queueMicrotask(updateNavigation);
     const labels={observed:'관측',simulated:'가정',assumption:'가정',distribution:'모의 요약',history:'역사 사건'};
     $('#atlas-inspector-kind').textContent=labels[detail.kind]||'실제 관측';$('#atlas-inspector-kind').dataset.kind=detail.kind;
     $('#atlas-inspector-title').textContent=detail.label;
     $('#atlas-inspector-values').innerHTML=(detail.fields||[]).map(f=>`<div><span>${esc(f.label)}</span><strong>${esc(f.value)}</strong></div>`).join('');
     $('#atlas-inspector-note').textContent=detail.note||'';
-    if(detail.date&&state.atlasMode==='price'){
+    if(detail.date&&owner==='price'&&detail.kind!=='history'){
       if(isIntradayInterval(state.frequency))state.marketSelectedTime=detail.date;
       else{state.selectedDate=detail.date;$('#atlas-date').value=detail.date;}
     }
-    if(options.user&&$('#workbench-announcement'))$('#workbench-announcement').textContent=`${detail.label} · ${labels[detail.kind]||'관측'} · ${detail.fields?.[0]?.value||''}`;
-    document.dispatchEvent(new CustomEvent('atlas:inspection',{detail:{...detail,userInitiated:Boolean((options.openPanel??options.user)||state.isChartClick)}}));
+    if(user&&$('#workbench-announcement'))$('#workbench-announcement').textContent=`${detail.label} · ${labels[detail.kind]||'관측'} · ${detail.fields?.[0]?.value||''}`;
+    document.dispatchEvent(new CustomEvent('atlas:inspection',{detail:{...detail,owner,analysisMode:owner==='analysis'?state.analysisMode:null,userInitiated:Boolean(options.openPanel??user)}}));
   }
+  function analysisDate(){return analysisCalendarDate(state.lastAnalysisDetail,{firstDate:state.dataset?.prices[0]?.[0],lastDate:state.dataset?.prices.at(-1)?.[0]});}
+  function publishAnalysisState(extra={}){document.dispatchEvent(new CustomEvent('atlas:analysis-state',{detail:{mode:state.analysisMode,open:state.analysisOpen,...extra}}));}
+  function inspectAnalysis(detail){
+    state.lastAnalysisDetail=detail;
+    publishAnalysisState({detail,calendarDate:analysisDate()});
+    inspect(detail,{owner:'analysis',user:state.analysisUserIntent});
+  }
+  function drawAnalysisDock(){
+    publishAnalysisState();
+    if(!state.analysisOpen){state.analysisController=null;return;}
+    state.analysisController=state.analysisMode==='cryptocon'?renderCryptoConAudit({svg:analysisSvg,dataset:state.dataset,view:state.cryptoView,onInspect:inspectAnalysis}):renderAtlasAnalysis({svg:analysisSvg,dataset:state.dataset,mode:state.analysisMode==='duration'&&state.atlasPhase!=='macro'?'phases':state.analysisMode,phaseLeg:state.atlasPhase==='bear'?'bear':'bull',alignment:state.atlasAlignment,period:state.atlasPeriod,metric:state.atlasMetric,scope:state.atlasScope,onInspect:inspectAnalysis});
+    publishAnalysisState({controller:state.analysisController,detail:state.lastAnalysisDetail,calendarDate:analysisDate()});
+  }
+  function showPriceInspection(){state.inspectionOwner='price';if(state.lastPriceDetail)inspect(state.lastPriceDetail,{openPanel:false});updateNavigation();}
+  function useAnalysisNavigation(direction){
+    if(!state.analysisOpen||!state.analysisController)return;
+    state.analysisUserIntent=true;
+    try{state.analysisController[direction]?.();}finally{state.analysisUserIntent=false;}
+    publishAnalysisState({controller:state.analysisController});updateNavigation();
+  }
+  function saveSvg(svg,name){const clone=svg.cloneNode(true);clone.removeAttribute('hidden');clone.setAttribute('xmlns','http://www.w3.org/2000/svg');clone.setAttribute('style','background:#10151c;font-family:Arial,sans-serif');clone.querySelector('[id$="-cross"]')?.remove();download(name,new XMLSerializer().serializeToString(clone),'image/svg+xml');}
   function renderHover(detail){
     if(!detail||state.atlasMode!=='price')return;
     const future=detail.kind==='simulated',label=future?'가정':'관측',intraday=isIntradayInterval(state.frequency),ohlc=Number.isFinite(detail.open);
     const displayPrice=state.unit==='indexed'?nf(detail.displayedPrice??detail.price/base().rows.at(-1).price*100,1):usd(detail.price,intraday||detail.price<10?2:0),change=Number.isFinite(detail.changePct)?pct(detail.changePct):'—';
     $('#lab-metrics').dataset.kind=detail.kind;
     const shownDate=intraday?detail.date.slice(0,16).replace('T',' '):dateLabel(detail.date),values=ohlc?`<span class="readout-ohlc"><span>O <b>${usd(detail.open,2)}</b></span><span>H <b>${usd(detail.high,2)}</b></span><span>L <b>${usd(detail.low,2)}</b></span><span>C <b>${usd(detail.close,2)}</b></span></span>`:'';
-    const volume=Number.isFinite(detail.volume)?`<span class="readout-volume" title="${esc(detail.volumeSource||detail.source)} BTC/USD 현물">Vol <b>${formatBtcVolume(detail.volume)}</b> BTC</span>`:'';
+    const projectedVolume=detail.volumeKind==='scenario',volumeUnit=projectedVolume?`BTC/${state.frequency==='weekly'?'주':'일'}`:'BTC';
+    const volumeTitle=projectedVolume?`${detail.volumeSource} 관측 기반 조건부 평균 · ${detail.volumeStartDate}–${detail.volumeEndDate} UTC · ${formatBtcVolume(detail.volumeLower)}–${formatBtcVolume(detail.volumeUpper)} BTC · 실체결이나 확률구간이 아닙니다.`:`${detail.volumeSource||detail.source} BTC/USD 현물`;
+    const volume=Number.isFinite(detail.volume)?`<span class="readout-volume${projectedVolume?' is-projected':''}" title="${esc(volumeTitle)}">Vol${projectedVolume?' 가정':''} <b>${formatBtcVolume(detail.volume)}</b> ${volumeUnit}</span>`:'';
     $('#lab-metrics').innerHTML=`<span class="readout-main"><span class="atlas-symbol">${chartInterval(state.frequency).label}<span class="readout-kind">${label}</span></span><strong>${displayPrice}</strong><span class="atlas-day-change ${tone(detail.changePct)}">${change}</span><span class="atlas-observation-date">${shownDate} UTC</span></span><span class="readout-detail">${values}${volume}</span>`;
-    $('#lab-metrics').title=ohlc?`${detail.source} BTC-USD · ${shownDate} UTC · O ${usd(detail.open,2)} H ${usd(detail.high,2)} L ${usd(detail.low,2)} C ${usd(detail.close,2)} · 시가 대비 ${change} · ${nf(detail.volume,6)} BTC`:`${label} · ${shownDate} UTC · Coin Metrics 일말 가격 ${usd(detail.price)} · 전일 대비 ${change}${detail.volumeSource?` · ${detail.volumeSource} 거래량 ${nf(detail.volume,6)} BTC`:''}`;
+    $('#lab-metrics').title=ohlc?`${detail.source} BTC-USD · ${shownDate} UTC · O ${usd(detail.open,2)} H ${usd(detail.high,2)} L ${usd(detail.low,2)} C ${usd(detail.close,2)} · 시가 대비 ${change} · ${nf(detail.volume,6)} BTC`:`${label} · ${shownDate} UTC · ${future?'조건부 예시 가격':'Coin Metrics 일말 가격'} ${usd(detail.price)} · 전일 대비 ${change}${detail.volumeSource?` · ${detail.volumeSource} ${projectedVolume?'가정 평균 거래량':'거래량'} ${nf(detail.volume,6)} ${volumeUnit}`:''}`;
   }
   function renderReadout(m,b,next){
     const last=b.rows.at(-1),previous=b.rows.at(-2),change=previous?(last.price/previous.price-1)*100:0;
@@ -150,28 +203,25 @@ export function initLabView() {
     if(!state.dataset||!state.visible)return;
     try{
       const focusId=document.activeElement?.id,focusEventId=document.activeElement?.dataset?.atlasEvent;
-      const m=model(),b=base(),next=nextTurnInfo(m),priceMode=state.atlasMode==='price',intraday=priceMode&&isIntradayInterval(state.frequency);
-      plot.dataset.mode=state.atlasMode;plot.dataset.intraday=String(intraday);$('#lab-metrics').hidden=!priceMode;
-      $('#lab-chart').toggleAttribute('hidden',!priceMode);$('#atlas-analysis-chart').toggleAttribute('hidden',priceMode);$('#lab-tooltip').hidden=true;
-      $('#atlas-price-controls').hidden=!priceMode;$('#atlas-cycle-controls').hidden=state.atlasMode!=='cycles';$('#atlas-period-controls').hidden=state.atlasMode!=='periods';
-      $('[data-lab-frequency]').closest('fieldset').hidden=!priceMode;
-      for(const id of ['lab-unit','lab-band','lab-turns','lab-fib','atlas-drawdown','atlas-states'])$(`#${id}`).closest('label').hidden=!priceMode||(intraday&&id!=='lab-unit');
-      $('#lab-json').hidden=!priceMode;
-      $('#atlas-duration-controls').hidden=state.atlasMode!=='duration';
-      $('#atlas-cryptocon-controls').hidden=state.atlasMode!=='cryptocon';
+      const m=model(),b=base(),next=nextTurnInfo(m),intraday=isIntradayInterval(state.frequency);
+      plot.dataset.mode='price';plot.dataset.intraday=String(intraday);$('#lab-metrics').hidden=false;
+      $('#lab-chart').removeAttribute('hidden');$('#lab-tooltip').hidden=true;
+      $('#atlas-price-controls').hidden=false;
+      $('[data-lab-frequency]').closest('fieldset').hidden=false;
+      for(const id of ['lab-unit','lab-band','lab-turns','lab-fib','atlas-drawdown','atlas-states'])$(`#${id}`).closest('label').hidden=intraday&&id!=='lab-unit';
+      $('#lab-json').hidden=false;
       $('#atlas-cryptocon-view').value=state.cryptoView;
-      $('#atlas-date-label').hidden=!priceMode||intraday;$('#atlas-latest').hidden=!priceMode;$('#atlas-event-rail').hidden=!priceMode||intraday;
-      document.querySelectorAll('[data-atlas-mode]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.atlasMode===state.atlasMode)));
-      $('#atlas-mode-name').textContent=document.querySelector(`[data-atlas-mode="${state.atlasMode}"]`).textContent;
+      $('#atlas-event-rail').hidden=intraday;
       $('#lab-scenario').value=state.scenario;$('#lab-window').value=state.window;$('#lab-unit').value=state.unit;
       $('#atlas-phase').value=state.atlasPhase;$('#atlas-alignment').value=state.atlasAlignment;$('#atlas-period').value=state.atlasPeriod;$('#atlas-measure').value=state.atlasMetric;$('#atlas-period-scope').value=state.atlasScope;
       document.querySelectorAll('[data-lab-frequency]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.labFrequency===state.frequency)));
       renderReadout(m,b,next);
-      if(priceMode&&volumeState.status==='idle')void loadVolume();
+      if(volumeState.status==='idle')void loadVolume();
       const history=historicalSeries(m.asOf);
       const needsMarket=intraday;
       if(needsMarket&&marketData.get(state.frequency).status==='idle')void marketData.load(state.frequency);
       const market=needsMarket?marketData.get(state.frequency):null;
+      state.volumeProjection=intraday?null:forecastVolume(m);
       if(intraday){
         state.chartRange=null;
         if(market.series){
@@ -180,11 +230,11 @@ export function initLabView() {
           const selectedRange=previousRange&&previousRange.end>=min&&previousRange.start<=max?panRange({unit:'seconds',...previousRange,min,max,step:interval.seconds,minSpan:12},0):{start:min,end:max};
           if(previousRange)state.marketRange={start:selectedRange.start,end:selectedRange.end};
           state.chartRange={unit:'seconds',...selectedRange,min,max,step:interval.seconds,minSpan:12,contextKey:`market:${state.frequency}:${market.series.retrievedAt}`};
-          state.controller=drawIntradayChart({range:state.chartRange,tool:state.tool,showVolume:$('#atlas-volume').checked,svg:$('#lab-chart'),series:market.series,chartType:state.chartType,scale:state.scale,unit:state.unit,onHover:renderHover,onInspect:inspect,selectedTime:state.marketSelectedTime});
+          state.priceController=drawIntradayChart({range:state.chartRange,tool:state.tool,showVolume:$('#atlas-volume').checked,svg:$('#lab-chart'),series:market.series,chartType:state.chartType,scale:state.scale,unit:state.unit,onHover:renderHover,onInspect:inspect,selectedTime:state.marketSelectedTime});
           $('#lab-chart-title').textContent=`${chartInterval(state.frequency).label} · ${market.series.firstDate.slice(0,16).replace('T',' ')} — ${market.series.lastDate.slice(0,16).replace('T',' ')} UTC`;
           $('#lab-asof').textContent=`완료 봉 ${market.series.lastDate.slice(0,16).replace('T',' ')} UTC까지`;
         }else{
-          state.controller=null;
+          state.priceController=null;
           const svg=$('#lab-chart');svg.onclick=null;svg.onpointermove=null;svg.onpointerleave=null;svg.onkeydown=null;
           svg.setAttribute('viewBox','0 0 1000 500');svg.innerHTML=`<text x="500" y="240" text-anchor="middle" fill="#b8c9dc" font-size="17">${market.status==='error'?'거래소 자료를 불러오지 못했습니다. 새로고침으로 다시 시도하세요.':'완료된 거래소 봉을 불러오는 중입니다.'}</text>`;
           $('#lab-metrics').innerHTML=`<span class="atlas-symbol">${chartInterval(state.frequency).label}</span><span>Coinbase BTC-USD · ${market.status==='error'?'연결 확인 필요':'조회 중'}</span>`;
@@ -197,7 +247,7 @@ export function initLabView() {
         $('#atlas-chart-caveat').textContent='완료 봉';
         $('#atlas-chart-note').textContent=`${marketStatusText(market)}. 미완성 봉과 빈 구간은 채우지 않습니다. 장기 전망은 1D·1W에서 같은 차트에 이어 표시합니다.`;
         $('#atlas-inspect-prev').setAttribute('aria-label','이전 완료 봉');$('#atlas-inspect-next').setAttribute('aria-label','다음 완료 봉');
-      }else if(priceMode){
+      }else{
         const last=b.rows.at(-1);let peak=Math.max(...b.rows.map(r=>r.price));
         const future=m.path.filter(r=>r.date>m.asOf).map(r=>{peak=Math.max(peak,r.price);return {...r,drawdownPct:(r.price/peak-1)*100};});
         const allRows=[...b.rows,...future],ref=m.referenceDate,end=m.displayEnd;
@@ -211,7 +261,7 @@ export function initLabView() {
         if(state.selectedEvent?.startsWith('macro-')&&!m.events[Number(state.selectedEvent.split('-')[1])]?.inHorizon)state.selectedEvent=null;
         const activeMarker=['low','high'].includes(state.selectedEvent)?turnInfo(m,state.selectedEvent):next;
         const observedCandles=history?.bars||[];
-        state.controller=drawChart({svg:$('#lab-chart'),tooltip:$('#lab-tooltip'),rows:allRows,start,end:chartEnd,split:m.asOf,frequency:state.frequency,chartType:state.chartType,observedCandles,candleSource:history?.source||'Bitstamp',volumeBars:history?.bars||[],volumeSource:history?.source||'Bitstamp',showVolume:$('#atlas-volume').checked,historicalEvents:BITCOIN_EVENTS.filter(event=>state.historyCategory==='all'||event.category===state.historyCategory),showHistoricalEvents:$('#atlas-history-events').checked,onHistoricalEvent:id=>focusHistoricalEvent(id,false),scale:state.scale,tool:state.tool,measurement:state.measurement,onMeasurement:value=>{state.measurement=value;if(value)state.selectedDate=value.endDate||value.startDate;schedule();},onHover:renderHover,unit:state.unit,denominator:last.price,band:$('#lab-band').checked,turns:[...actualTurns,...m.localTurns],showTurns:$('#lab-turns').checked,events:m.events.filter(e=>e.inHorizon),states:state.futureStates.get(state.scenario),fib:$('#lab-fib').checked?currentFib():[],nextTurn:activeMarker,onNextTurn:()=>focusEvent(activeMarker.type),showDrawdown:$('#atlas-drawdown').checked,showStates:$('#atlas-states').checked,onInspect:inspect,selectedDate:state.selectedDate||m.asOf});
+        state.priceController=drawChart({svg:$('#lab-chart'),tooltip:$('#lab-tooltip'),rows:allRows,start,end:chartEnd,split:m.asOf,frequency:state.frequency,chartType:state.chartType,observedCandles,candleSource:history?.source||'Bitstamp',volumeBars:history?.bars||[],volumeProjection:state.volumeProjection,volumeSource:history?.source||'Bitstamp',showVolume:$('#atlas-volume').checked,historicalEvents:BITCOIN_EVENTS.filter(event=>state.historyCategory==='all'||event.category===state.historyCategory),showHistoricalEvents:$('#atlas-history-events').checked,activeHistoricalEventId:state.selectedHistoryEvent,onHistoricalEvent:id=>focusHistoricalEvent(id,false),scale:state.scale,tool:state.tool,measurement:state.measurement,onMeasurement:value=>{state.measurement=value;if(value)state.selectedDate=value.endDate||value.startDate;schedule();},onHover:renderHover,unit:state.unit,denominator:last.price,band:$('#lab-band').checked,turns:[...actualTurns,...m.localTurns],showTurns:$('#lab-turns').checked,events:m.events.filter(e=>e.inHorizon),states:state.futureStates.get(state.scenario),fib:$('#lab-fib').checked?currentFib():[],nextTurn:activeMarker,onNextTurn:()=>focusEvent(activeMarker.type),showDrawdown:$('#atlas-drawdown').checked,showStates:$('#atlas-states').checked,onInspect:inspect,selectedDate:state.selectedDate||m.asOf});
         $('#atlas-date').min=b.rows[0].date;$('#atlas-date').max=end;
         $('#lab-chart-title').textContent=`${dateLabel(start)} — ${dateLabel(chartEnd)} · ${state.frequency==='daily'?'일별':'주별'} 가격`;
         $('#atlas-axis-note').textContent=`${state.unit==='usd'?'USD':'최근 = 100'} · ${state.scale==='linear'?'선형':'로그'}`;
@@ -224,17 +274,12 @@ export function initLabView() {
         renderEventRail(m);
         if(state.selectedEvent){inspectEvent(m,state.selectedEvent);}
         if(state.selectedHistoryEvent){const event=BITCOIN_EVENTS.find(event=>event.id===state.selectedHistoryEvent);if(event)inspect(historicalEventDetail(event),{openPanel:false});}
-      }else{
-        state.controller=state.atlasMode==='cryptocon'?renderCryptoConAudit({svg:$('#atlas-analysis-chart'),dataset:state.dataset,view:state.cryptoView,onInspect:inspect}):renderAtlasAnalysis({svg:$('#atlas-analysis-chart'),dataset:state.dataset,mode:state.atlasMode==='duration'&&state.atlasPhase!=='macro'?'phases':state.atlasMode,phaseLeg:state.atlasPhase==='bear'?'bear':'bull',alignment:state.atlasAlignment,period:state.atlasPeriod,metric:state.atlasMetric,scope:state.atlasScope,onInspect:inspect});
-        const c=state.controller;$('#lab-chart-title').textContent=c.title;$('#atlas-axis-note').textContent=c.caption;
-        $('#atlas-chart-legend').innerHTML=c.legend.map(item=>`<span><i style="border-color:${esc(item.color)};border-top-style:${item.dashed?'dashed':'solid'}"></i>${esc(item.label)}</span>`).join('');
-        $('#atlas-chart-caveat').textContent=state.atlasMode==='cryptocon'?'선택 주장 · 사후 검증':'실제 관측';$('#atlas-chart-note').textContent=c.note;
-        $('#atlas-inspect-prev').textContent='←';$('#atlas-inspect-next').textContent='→';
-        const item=state.atlasMode==='cryptocon'?'주장':state.atlasMode==='periods'?'기간':state.atlasMode==='cycles'?'경과일':'사이클';$('#atlas-inspect-prev').setAttribute('aria-label',`이전 ${item}`);$('#atlas-inspect-next').setAttribute('aria-label',`다음 ${item}`);
       }
+      drawAnalysisDock();
       renderEvents(m);const methodKey=`${m.asOf}/${m.scenario.id||state.scenario}`;if(methodKey!==state.methodKey){renderForecastMethod(m);state.methodKey=methodKey;}
       $('#lab-error').hidden=true;updateNavigation();chartNavigation.update();syncAtlasUrl();
-      document.dispatchEvent(new CustomEvent('atlas:workbench-state',{detail:{mode:state.atlasMode,scenario:state.scenario,frequency:state.frequency,chartType:state.chartType,intraday,asOf:m.asOf,intervalLabel:chartInterval(state.frequency).label,marketSeries:market?.series,volumeMeta:volumeMetadata(),volumeError:volumeState.error,marketStatus:intraday?marketStatusText(market):volumeState.series?`${state.chartType==='candles'?'캔들·거래량':'거래량'} · Bitstamp BTC/USD · ${volumeState.series.retrievedAt.slice(0,16).replace('T',' ')} UTC 수집${state.chartType==='line'?' · 가격선 Coin Metrics':''}`:volumeState.error?'거래량 조회 실패 · 가격선은 이용 가능':'거래량 자료 불러오는 중',marketLoading:intraday?market?.status==='loading':volumeState.status==='loading',navigationAvailable:Boolean(state.chartRange),scale:state.scale,tool:state.tool,measurement:state.measurement,window:state.window,customRange:Boolean(intraday?state.marketRange:state.priceRange),start:state.chartRange?.start,end:state.chartRange?.end,next}}));
+      const historyLabels=$('#lab-chart').dataset;
+      document.dispatchEvent(new CustomEvent('atlas:workbench-state',{detail:{mode:'price',analysisMode:state.analysisMode,analysisOpen:state.analysisOpen,inspectionOwner:state.inspectionOwner,historicalEventsVisible:$('#atlas-history-events').checked&&!intraday,historicalLabelMeta:{mode:historyLabels.historyLabelMode,labels:Number(historyLabels.historyLabelCount||0),total:Number(historyLabels.historyEventCount||0),hidden:Number(historyLabels.historyHiddenLabelCount||0)},scenario:state.scenario,frequency:state.frequency,chartType:state.chartType,intraday,asOf:m.asOf,intervalLabel:chartInterval(state.frequency).label,marketSeries:market?.series,volumeMeta:volumeMetadata(),volumeForecast:state.volumeProjection?{status:state.volumeProjection.status,reason:state.volumeProjection.reason,summary:state.volumeProjection.summary,annual:state.volumeProjection.annual,diagnostics:state.volumeProjection.diagnostics}:null,volumeError:volumeState.error,marketStatus:intraday?marketStatusText(market):volumeState.series?`${state.chartType==='candles'?'캔들·거래량':'거래량'} · Bitstamp BTC/USD · ${volumeState.series.retrievedAt.slice(0,16).replace('T',' ')} UTC 수집${state.chartType==='line'?' · 가격선 Coin Metrics':''}`:volumeState.error?'거래량 조회 실패 · 가격선은 이용 가능':'거래량 자료 불러오는 중',marketLoading:intraday?market?.status==='loading':volumeState.status==='loading',navigationAvailable:Boolean(state.chartRange),scale:state.scale,tool:state.tool,measurement:state.measurement,window:state.window,customRange:Boolean(intraday?state.marketRange:state.priceRange),start:state.chartRange?.start,end:state.chartRange?.end,next}}));
       if(state.openEventPanel){state.openEventPanel=false;const chart=$('#lab-chart');chart.focus({preventScroll:true});document.dispatchEvent(new CustomEvent('atlas:open-detail',{detail:{kind:'selection',focus:false,opener:chart}}));}
       if(focusId)document.getElementById(focusId)?.focus({preventScroll:true});else if(focusEventId)document.querySelector(`[data-atlas-event="${focusEventId}"]`)?.focus({preventScroll:true});
     }catch(error){fail(error);}
@@ -261,7 +306,7 @@ export function initLabView() {
   }
   function focusEvent(id){
     const m=model(),e=['low','high'].includes(id)?turnInfo(m,id):m.events[Number(id.split('-')[1])];if(!e)return;
-    state.selectedHistoryEvent=null;state.priceRange=null;state.atlasMode='price';state.selectedDate=e.date;state.window=['low','high'].includes(id)?'near':'all';state.selectedEvent=id;state.openEventPanel=true;schedule();
+    state.inspectionOwner='price';state.selectedHistoryEvent=null;state.priceRange=null;state.atlasMode='price';state.selectedDate=e.date;state.window=['low','high'].includes(id)?'near':'all';state.selectedEvent=id;state.openEventPanel=true;schedule();
   }
   function inspectEvent(m,id){
     if(['low','high'].includes(id)){const e=turnInfo(m,id);if(!e)return;inspect({label:`첫 ${id==='low'?'저점':'고점'} 시기의 중앙값 · ${dateLabel(e.date)}`,date:e.date,kind:'distribution',fields:[{label:'후보일까지 · 계산 기준일 대비',value:`D-${nf(e.days)}`},{label:'여러 경로의 날짜 범위',value:`${dateLabel(e.lowerDate)}–${dateLabel(e.upperDate)}`},{label:'전환 뒤 방향 후보',value:e.direction},{label:'계산 기준일',value:dateLabel(m.referenceDate)}],note:'여러 예시 경로에서 첫 고점·저점이 나온 날짜를 요약했습니다. 금색 점선 한 개의 전환점이나 확정된 시장 일정이 아닙니다.'});}
@@ -336,13 +381,28 @@ export function initLabView() {
   const schedule=()=>{if(state.pending)return;state.pending=true;setTimeout(()=>{state.pending=false;drawOutlook();drawStructure();},0);};
   function selectFrequency(value){
     if(!CHART_INTERVALS.some(interval=>interval.id===value))return;
-    marketData.cancel();state.frequency=value;state.marketRange=null;state.selectedHistoryEvent=null;state.marketSelectedTime=null;state.measurement=null;state.tool='crosshair';
+    marketData.cancel();state.inspectionOwner='price';state.frequency=value;state.marketRange=null;state.selectedHistoryEvent=null;state.marketSelectedTime=null;state.measurement=null;state.tool='crosshair';
     state.selectedEvent=null;state.priceRange=null;schedule();
   }
   $('#lab-scenario').onchange=e=>{state.scenario=e.target.value;state.measurement=null;state.eventPage=0;schedule();};
+  document.addEventListener('atlas:analysis-command',event=>{
+    const {action,value}=event.detail||{};
+    if(action==='select'&&ANALYSIS_MODES.some(mode=>mode.id===value)){state.analysisMode=value;state.analysisOpen=true;state.lastAnalysisDetail=null;}
+    else if(action==='toggle'){state.analysisOpen=!state.analysisOpen;if(!state.analysisOpen&&state.inspectionOwner==='analysis')showPriceInspection();}
+    else if(action==='previous'||action==='next'){useAnalysisNavigation(action);return;}
+    else if(action==='inspect'){if(state.lastAnalysisDetail)inspect(state.lastAnalysisDetail,{owner:'analysis',user:true});return;}
+    else if(action==='save'){if(state.analysisOpen&&state.analysisController)saveSvg(analysisSvg,`Bitcoin_Analysis_${state.analysisMode}.svg`);return;}
+    else if(action==='locate-date'){
+      const date=analysisDate();if(!date||!state.dataset)return;
+      marketData.cancel();if(isIntradayInterval(state.frequency))state.frequency='daily';state.marketRange=null;state.marketSelectedTime=null;state.selectedDate=date;state.selectedHistoryEvent=null;state.selectedEvent=null;state.inspectionOwner='price';state.tool='crosshair';
+      const first=base().rows[0].date,last=model().displayEnd;state.priceRange={start:dateFromDay(Math.max(D(first),D(date)-120)),end:dateFromDay(Math.min(D(last),D(date)+120))};state.window='history';state.openEventPanel=true;
+    }else return;
+    publishAnalysisState();schedule();
+  });
   document.addEventListener('atlas:chart-command',event=>{
     if(!state.dataset||state.atlasMode!=='price')return;
     const {action,value}=event.detail;
+    if(action==='price-inspection'){showPriceInspection();return;}
     if(action==='context-menu'){chartNavigation.openMenu();return;}
     if(action==='tool'&&['crosshair','pan','measure'].includes(value)){
       state.tool=value;if(value!=='measure'&&state.measurement&&!state.measurement.endDate)state.measurement=null;
@@ -372,22 +432,26 @@ export function initLabView() {
   for(const button of document.querySelectorAll('[data-lab-frequency]'))button.onclick=()=>selectFrequency(button.dataset.labFrequency);
   for(const button of document.querySelectorAll('[data-lab-events]'))button.onclick=()=>{state.eventMode=button.dataset.labEvents;state.eventPage=0;document.querySelectorAll('[data-lab-events]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));if(state.dataset)renderEvents(model());};
   $('#lab-json').onclick=()=>{if(state.dataset)download('Bitcoin_Long_Horizon_Scenarios.json',JSON.stringify(model(),null,2));};
-  $('#lab-svg').onclick=()=>{const clone=$(state.atlasMode==='price'?'#lab-chart':'#atlas-analysis-chart').cloneNode(true);clone.setAttribute('xmlns','http://www.w3.org/2000/svg');clone.setAttribute('style','background:#10151c;font-family:Arial,sans-serif');clone.querySelector('[id$="-cross"]')?.remove();download(`Bitcoin_Cycles_${state.atlasMode}.svg`,new XMLSerializer().serializeToString(clone),'image/svg+xml');};
-  for(const button of document.querySelectorAll('[data-atlas-mode]'))button.onclick=()=>{state.atlasMode=button.dataset.atlasMode;$('#atlas-display-options').open=false;schedule();};
+  $('#lab-svg').onclick=()=>saveSvg($('#lab-chart'),'Bitcoin_Price_and_Future.svg');
   $('#atlas-phase').onchange=e=>{state.atlasPhase=e.target.value;schedule();};
   $('#atlas-alignment').onchange=e=>{state.atlasAlignment=e.target.value;schedule();};
   $('#atlas-period').onchange=e=>{state.atlasPeriod=e.target.value;schedule();};
   $('#atlas-measure').onchange=e=>{state.atlasMetric=e.target.value;schedule();};
   $('#atlas-period-scope').onchange=e=>{state.atlasScope=e.target.value;schedule();};
-  function updateNavigation(){const c=state.controller;$('#atlas-inspect-prev').disabled=state.atlasMode==='price'&&Boolean(c?.hasPrevious)&&!c.hasPrevious();$('#atlas-inspect-next').disabled=state.atlasMode==='price'&&Boolean(c?.hasNext)&&!c.hasNext();}
-  $('#atlas-inspect-prev').onclick=()=>{state.controller?.previous();updateNavigation();};$('#atlas-inspect-next').onclick=()=>{state.controller?.next();updateNavigation();};
-  $('#atlas-date').onchange=e=>{if(!e.target.value||!e.target.validity.valid)return;const m=model(),v=e.target.value;state.selectedHistoryEvent=null;state.priceRange=null;state.selectedEvent=null;state.selectedDate=v;state.window=v<m.asOf?'history':'all';schedule();};
-  $('#atlas-latest').onclick=()=>{state.marketRange=null;state.selectedHistoryEvent=null;state.priceRange=null;state.selectedEvent=null;state.marketSelectedTime=null;state.selectedDate=model().asOf;if(state.window!=='history'&&state.window!=='all'&&state.window!=='near')state.window='all';schedule();};
+  function updateNavigation(){
+    const analysis=state.inspectionOwner==='analysis',c=analysis?state.analysisController:state.priceController;
+    $('#atlas-inspect-prev').disabled=typeof c?.previous!=='function'||Boolean(c?.hasPrevious)&&!c.hasPrevious();$('#atlas-inspect-next').disabled=typeof c?.next!=='function'||Boolean(c?.hasNext)&&!c.hasNext();
+    $('#atlas-date-label').hidden=analysis||isIntradayInterval(state.frequency);$('#atlas-latest').hidden=analysis;
+    const item=analysis?(state.analysisMode==='cycles'?'경과일':state.analysisMode==='periods'?'기간':'분석 항목'):isIntradayInterval(state.frequency)?'완료 봉':'고점·저점';$('#atlas-inspect-prev').setAttribute('aria-label',`이전 ${item}`);$('#atlas-inspect-next').setAttribute('aria-label',`다음 ${item}`);
+  }
+  $('#atlas-inspect-prev').onclick=()=>{if(state.inspectionOwner==='analysis')useAnalysisNavigation('previous');else state.priceController?.previous();updateNavigation();};$('#atlas-inspect-next').onclick=()=>{if(state.inspectionOwner==='analysis')useAnalysisNavigation('next');else state.priceController?.next();updateNavigation();};
+  $('#atlas-date').onchange=e=>{if(!e.target.value||!e.target.validity.valid)return;const m=model(),v=e.target.value;state.inspectionOwner='price';state.selectedHistoryEvent=null;state.priceRange=null;state.selectedEvent=null;state.selectedDate=v;state.window=v<m.asOf?'history':'all';schedule();};
+  $('#atlas-latest').onclick=()=>{state.inspectionOwner='price';state.marketRange=null;state.selectedHistoryEvent=null;state.priceRange=null;state.selectedEvent=null;state.marketSelectedTime=null;state.selectedDate=model().asOf;if(state.window!=='history'&&state.window!=='all'&&state.window!=='near')state.window='all';schedule();};
   $('#atlas-cryptocon-view').onchange=e=>{state.cryptoView=e.target.value;schedule();};
-  $('#atlas-reset').onclick=()=>{state.marketRange=null;state.selectedHistoryEvent=null;state.priceRange=null;state.atlasMode='price';state.scenario='base';state.frequency='daily';state.chartType='line';state.marketSelectedTime=null;marketData.cancel();state.scale='log';state.tool='crosshair';state.measurement=null;state.unit='usd';state.window='history';state.selectedDate=null;state.selectedEvent=null;state.atlasAlignment='trough';state.atlasPhase='macro';state.atlasPeriod='monthly';state.atlasMetric='returnPct';state.atlasScope='recent';for(const id of ['lab-band','lab-turns','atlas-volume','atlas-history-events'])$(`#${id}`).checked=true;for(const id of ['lab-fib','atlas-states','atlas-drawdown'])$(`#${id}`).checked=false;$('#atlas-display-options').open=false;schedule();};
+  $('#atlas-reset').onclick=()=>{state.analysisMode='cycles';state.analysisOpen=false;state.inspectionOwner='price';state.lastAnalysisDetail=null;state.marketRange=null;state.selectedHistoryEvent=null;state.priceRange=null;state.atlasMode='price';state.scenario='base';state.frequency='daily';state.chartType='line';state.marketSelectedTime=null;marketData.cancel();state.scale='log';state.tool='crosshair';state.measurement=null;state.unit='usd';state.window='history';state.selectedDate=null;state.selectedEvent=null;state.atlasAlignment='trough';state.atlasPhase='macro';state.atlasPeriod='monthly';state.atlasMetric='returnPct';state.atlasScope='recent';for(const id of ['lab-band','lab-turns','atlas-volume','atlas-history-events'])$(`#${id}`).checked=true;for(const id of ['lab-fib','atlas-states','atlas-drawdown'])$(`#${id}`).checked=false;$('#atlas-display-options').open=false;schedule();};
   document.addEventListener('click',e=>{if(!$('#atlas-display-options').contains(e.target))$('#atlas-display-options').open=false;});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('#atlas-display-options').open=false;document.querySelector('.atlas-guide').open=false;}});
-  let plotSize='';new ResizeObserver(entries=>{const r=entries[0].contentRect,key=`${Math.round(r.width)}x${Math.round(r.height)}`;if(key!==plotSize){plotSize=key;schedule();}}).observe(document.querySelector('.atlas-plot'));
+  const chartSizes=new WeakMap(),chartResize=new ResizeObserver(entries=>{let changed=false;for(const entry of entries){const r=entry.contentRect,key=`${Math.round(r.width)}x${Math.round(r.height)}`;if(key!==chartSizes.get(entry.target)){chartSizes.set(entry.target,key);changed=true;}}if(changed)schedule();});chartResize.observe(plot);chartResize.observe($('#analysis-chart-viewport'));
   let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(schedule,120);});
   $('#structure-scope').onchange=e=>{state.scope=e.target.value;state.periodPage=0;schedule();};$('#structure-alignment').onchange=e=>{state.alignment=e.target.value;schedule();};$('#structure-threshold').onchange=e=>{state.threshold=Number(e.target.value);state.analysis=null;schedule();};
   for(const button of document.querySelectorAll('[data-structure-frequency]'))button.onclick=()=>{state.structureFrequency=button.dataset.structureFrequency;document.querySelectorAll('[data-structure-frequency]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));schedule();};
@@ -395,5 +459,5 @@ export function initLabView() {
   $('#structure-prev').onclick=()=>{state.periodPage=Math.max(0,state.periodPage-1);renderPeriods(structure());};$('#structure-next').onclick=()=>{state.periodPage++;renderPeriods(structure());};
   $('#structure-json').onclick=()=>{if(state.dataset)download('Bitcoin_Market_Structure.json',JSON.stringify(structure(),null,2));};
   $('#legacy-comparison').addEventListener('toggle',()=>{if($('#legacy-comparison').open)window.dispatchEvent(new Event('resize'));});
-  return {setDataset(dataset){if(state.dataset===dataset)return;if(state.selectedDate===state.dataset?.prices.at(-1)?.[0])state.selectedDate=null;state.dataset=dataset;state.base=null;state.analysis=null;state.models.clear();state.futureStates.clear();state.methodKey=null;schedule();},show(value){state.visible=value;if(value)schedule();},showCompare(value){state.compareVisible=value;if(value)schedule();}};
+  return {setDataset(dataset){if(state.dataset===dataset)return;if(state.selectedDate===state.dataset?.prices.at(-1)?.[0])state.selectedDate=null;state.dataset=dataset;state.base=null;state.analysis=null;state.models.clear();state.futureStates.clear();volumeProjectionCache.clear();state.volumeProjection=null;state.methodKey=null;schedule();},show(value){state.visible=value;if(value)schedule();},showCompare(value){state.compareVisible=value;if(value)schedule();}};
 }

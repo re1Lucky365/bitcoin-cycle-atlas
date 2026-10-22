@@ -275,3 +275,32 @@ body:not([data-page=outlook]) .workbench-detail-tools>[data-reader=selection],bo
   .workbench-detail-tools{gap:2px;padding-bottom:5px}
 }
 @media(max-height:570px){.journal-items{max-height:90px}.journal-event{min-height:68px;gap:3px;padding:7px 9px}.workbench-detail-tools{gap:0}.workbench-help{min-height:28px;height:28px}}
+
+/* Readout, source and the in-plot observation badge each have their own row. */
+.atlas-plot>.atlas-readout{inset:8px 12px auto;gap:4px;line-height:16px}
+.readout-main{width:max-content;max-width:100%;gap:9px}
+.readout-main>.atlas-symbol,.readout-main>strong,.readout-main>.atlas-day-change{flex:none}
+.readout-main>.atlas-observation-date{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#96acc4}
+.readout-detail{font-size:10px;line-height:14px;min-height:14px}
+.workbench-market-info{top:47px;min-height:18px;line-height:14px;font-size:10px;gap:6px}
+.history-event-preview{visibility:hidden;pointer-events:none}
+.history-event-marker:hover .history-event-preview,.history-event-marker:focus .history-event-preview{visibility:visible}
+.readout-volume.is-projected{color:#d5ad71}
+.volume-scenario-badge{color:#d9b87e;border-color:#6f5936;background:#332b20}
+.volume-scenario-table{overflow-x:auto;margin:14px 0}
+.volume-scenario-table table{width:100%;border-collapse:collapse;font-size:11px;font-variant-numeric:tabular-nums}
+.volume-scenario-table caption{text-align:left;color:#a9bad0;margin-bottom:8px;font-size:11px}
+.volume-scenario-table th,.volume-scenario-table td{padding:8px 5px;border-bottom:1px solid #29394b;text-align:right;white-space:nowrap}
+.volume-scenario-table th:first-child{text-align:left}
+.volume-scenario-table thead th{color:#91a7bd;font-weight:500}
+.volume-scenario-table td:nth-child(2){color:#dfbb81}
+.volume-panel .source-stats small{display:block;color:#91a4bb;font-size:10px;margin-top:3px}
+.volume-observed-sources{border-top:1px solid #304257;margin-top:20px;padding-top:14px}
+.volume-observed-sources>summary{cursor:pointer;color:#c7d9ed;font-weight:600;margin-bottom:12px}
+.volume-research-links{display:flex;flex-wrap:wrap;gap:8px 14px}
+.volume-intraday-note{padding:10px;background:#152336;border-radius:5px;color:#adc4dc}
+@media(max-width:620px){
+ .atlas-plot>.atlas-readout{inset:7px 8px auto;gap:3px;line-height:15px}
+ .readout-main{gap:5px}.readout-detail{font-size:9px;line-height:13px;min-height:13px}
+ .workbench-market-info{top:44px;font-size:9px;line-height:13px}
+}

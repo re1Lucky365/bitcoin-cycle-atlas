@@ -378,6 +378,20 @@ const events = [
     ],
   },
   {
+    id: 'trump-three-country-tariffs-2025', date: '2025-02-01', label: '美 3개국 관세 발표', title: '트럼프의 캐나다·멕시코·중국 관세 발표', category: 'macro', importance: 2,
+    keywords: ['관세빔', '트럼프', '관세', 'Trump', 'tariff', '캐나다', '멕시코', '중국'],
+    description: '트럼프가 캐나다·멕시코산 수입품에 추가 25%, 중국산에 추가 10% 관세를 발표했다. 캐나다산 에너지에는 10% 예외를 뒀다. Reuters는 2월 3일 09:41 UTC의 BTC를 95,730.35달러, 당일 6.2% 하락으로 보도했다. 캐나다·멕시코 조치는 2월 3일 별도 명령으로 시행이 연기됐다.',
+    dateBasis: '백악관 발표와 당시 Reuters 보도가 확인한 2월 1일 발표일이다. Reuters 발표 보도의 UTC 게시 날짜는 2월 2일이다. 당초 2월 4일 시행 예정, 2월 3일 시장 반응·시행 연기와 구분한다.',
+    limitations: ['캐나다·멕시코 조치는 2월 3일 명령에서 3월 4일까지 연기됐다. 중국 조치까지 함께 연기된 것으로 해석하지 않는다.', '보도된 BTC 가격은 특정 관측 시점의 값이며 UTC 일봉 종가가 아니다. 관세 뉴스만의 독립적인 가격 효과를 추정한 결과가 아니다.'],
+    sources: [
+      source('The White House', 'Fact Sheet: President Donald J. Trump Imposes Tariffs on Imports from Canada, Mexico and China', 'https://www.whitehouse.gov/fact-sheets/2025/02/fact-sheet-president-donald-j-trump-imposes-tariffs-on-imports-from-canada-mexico-and-china/', '2025-02-01'),
+      source('Reuters', 'Trump launches trade war with tariffs on Mexico, Canada and China', 'https://www.reuters.com/business/trump-readies-order-steep-tariffs-goods-mexico-canada-china-2025-02-01/', '2025-02-02', 'secondary'),
+      source('The White House', 'Progress on the Situation at Our Northern Border', 'https://www.whitehouse.gov/presidential-actions/2025/02/progress-on-the-situation-at-our-northern-border/', '2025-02-03'),
+      source('The White House', 'Progress on the Situation at Our Southern Border', 'https://www.whitehouse.gov/presidential-actions/2025/02/progress-on-the-situation-at-our-southern-border/', '2025-02-03'),
+      source('Reuters', 'Bitcoin drops to 3-week low as Trump tariffs rattle markets', 'https://www.reuters.com/markets/currencies/bitcoin-slides-below-100000-tariffs-rattle-markets-2025-02-02/', '2025-02-03', 'secondary'),
+    ],
+  },
+  {
     id: 'us-bitcoin-reserve-2025', date: '2025-03-06', label: '미국 BTC 준비자산', title: '미국 전략적 비트코인 준비자산 행정명령', category: 'regulation', importance: 3,
     description: '미국 대통령이 전략적 비트코인 준비자산을 수립하는 행정명령에 서명했다. 초기 구성은 적법하게 몰수된 정부 보유 BTC를 바탕으로 하도록 했다.',
     dateBasis: '백악관이 명시한 행정명령 서명일 3월 6일이다. 다음 날 UTC 보도 날짜와 구분한다.',
@@ -385,6 +399,43 @@ const events = [
     sources: [
       source('The White House', 'Establishment of the Strategic Bitcoin Reserve and United States Digital Asset Stockpile', 'https://www.whitehouse.gov/presidential-actions/2025/03/establishment-of-the-strategic-bitcoin-reserve-and-united-states-digital-asset-stockpile/', '2025-03-06'),
       source('Reuters', 'Trump signs order to establish strategic bitcoin reserve', 'https://www.reuters.com/technology/trump-signs-order-establish-strategic-bitcoin-reserve-white-house-crypto-czar-2025-03-07/', '2025-03-07', 'secondary'),
+    ],
+  },
+  {
+    id: 'trump-reciprocal-tariffs-2025', date: '2025-04-02', label: '美 상호관세 발표', title: '트럼프의 상호관세 행정명령 발표', category: 'macro', importance: 3,
+    keywords: ['관세빔', '트럼프', '관세', 'Trump', 'tariff', '상호관세', '해방의 날', 'Liberation Day'],
+    description: '트럼프가 기본 추가 10%와 국가별 차등 상호관세를 정한 행정명령에 서명했다. 예외 품목·대상과 별도 시행일이 있는 조치다. 다음 날인 4월 3일 Reuters는 BTC 3.9% 하락을 보도했다.',
+    dateBasis: '행정명령 14257의 서명·발표일 4월 2일이다. 기본 관세는 4월 5일, 국가별 관세는 4월 9일 각각 00:01 미국 동부 일광절약시간에 시행하도록 정했다. 연방관보 게재일은 4월 7일이다.',
+    limitations: ['발표·예정 시행·관보 게재 날짜를 구분한다. 해당 세율이 이후 수정 없이 계속 유지됐다는 뜻은 아니다.', '4월 3일 14:13 UTC는 Reuters 기사 게시 시각이다. 기사 속 변동률의 정확한 관측 시각이나 UTC 일봉 수익률로 사용하지 않는다. 시간적 인접성만으로 가격 인과를 단정하지 않는다.'],
+    sources: [
+      source('The White House', 'Regulating Imports with a Reciprocal Tariff to Rectify Trade Practices that Contribute to Large and Persistent Annual United States Goods Trade Deficits', 'https://www.whitehouse.gov/presidential-actions/2025/04/regulating-imports-with-a-reciprocal-tariff-to-rectify-trade-practices-that-contribute-to-large-and-persistent-annual-united-states-goods-trade-deficits/', '2025-04-02'),
+      source('Federal Register / GovInfo', 'Executive Order 14257 — 90 FR 15041', 'https://www.govinfo.gov/content/pkg/FR-2025-04-07/pdf/2025-06063.pdf', '2025-04-07'),
+      source('Reuters', 'U.S. crypto stocks slide as Trump\'s sweeping tariffs jolt markets', 'https://www.reuters.com/markets/us-crypto-stocks-slide-trumps-sweeping-tariffs-jolt-markets-2025-04-03/', '2025-04-03', 'secondary'),
+    ],
+  },
+  {
+    id: 'trump-tariff-pause-2025', date: '2025-04-09', label: '상호관세 90일 유예', title: '미국의 국가별 상호관세 90일 유예 발표', category: 'macro', importance: 3,
+    keywords: ['관세빔', '트럼프', '관세', 'Trump', 'tariff', '상호관세', '90일', '유예'],
+    description: '트럼프가 중국을 제외한 국가별 상호관세의 90일 유예를 발표했다. 기본 추가 10% 관세는 유지됐다. 당일 Bloomberg News는 BTC가 장중 최대 7.7% 올라 82,967달러를 기록했다고 보도했고 Reuters도 상승을 전했다.',
+    dateBasis: '행정명령 14266의 서명·발표일 4월 9일이다. 명령상 유예 적용은 4월 10일 00:01 미국 동부 일광절약시간부터이며, 연방관보에는 4월 15일 게재됐다.',
+    limitations: ['중국을 포함한 모든 관세의 철회가 아니다. 이 명령의 90일 기간은 7월 9일 00:01 미국 동부 일광절약시간까지로 정해졌으며, 그 뒤의 정책을 단정하지 않는다.', 'Bloomberg의 20:13 UTC, Reuters의 21:03 UTC는 기사 게시 시각이다. 장중 최대 상승률과 다른 시점의 시장 요약은 같은 기준의 수익률이 아니다. 시장 반응 보도만으로 독립적인 인과효과를 입증하지 않는다.'],
+    sources: [
+      source('The White House', 'Modifying Reciprocal Tariff Rates to Reflect Trading Partner Retaliation and Alignment', 'https://www.whitehouse.gov/presidential-actions/2025/04/modifying-reciprocal-tariff-rates-to-reflect-trading-partner-retaliation-and-alignment/', '2025-04-09'),
+      source('Federal Register / GovInfo', 'Executive Order 14266 — 90 FR 15625', 'https://www.govinfo.gov/content/pkg/FR-2025-04-15/pdf/2025-06462.pdf', '2025-04-15'),
+      source('Bloomberg News', 'Bitcoin Surges After Trump Hits Pause on Some Tariff Measures', 'https://news.bloomberglaw.com/capital-markets/bitcoin-rebounds-as-investors-seek-refuge-from-tariff-onslaught', '2025-04-09', 'secondary'),
+      source('Reuters', 'Trading Day: Boom! Trump tariff pause sparks monster rally', 'https://www.reuters.com/markets/global-markets-trading-day-graphics-2025-04-09/', '2025-04-09', 'secondary'),
+    ],
+  },
+  {
+    id: 'trump-china-tariff-threat-2025', date: '2025-10-10', label: '대중 추가관세 예고', title: '트럼프의 대중국 추가 100% 관세 예고', category: 'macro', importance: 3,
+    keywords: ['관세빔', '트럼프', '관세', 'Trump', 'tariff', '중국', '100%', '무역갈등'],
+    description: '트럼프가 기존 관세에 더해 중국산 수입품에 100% 관세를 추가하겠다고 밝혔다. 11월 1일 또는 상황에 따라 그 이전을 예고한 발언이다. Reuters는 10월 10일 21:20 UTC의 BTC를 104,782달러, 8.4% 하락으로 보도했다.',
+    dateBasis: '원문을 전재한 UCSB 기록은 게시 시각을 10월 10일 13:50 미국 태평양시간으로 명시한다. 해당 날짜의 PDT를 환산하면 같은 날 16:50 EDT·20:50 UTC이므로 차트 날짜도 10월 10일이다.',
+    limitations: ['이 사건은 추가 관세의 시행 예고 발언이다. 당시 즉시 시행됐거나 예고한 11월 1일에 실제 시행됐다는 기록으로 사용하지 않는다.', 'Truth Social 직접 본문은 자동 조회에서 JavaScript 안내만 반환했다. 발언 원문·시각은 UCSB 전재, 내용·발표일은 당시 Reuters 보도로 교차 확인했다. 원문의 중국 정책에 관한 주장을 별도로 입증한 것은 아니다.', 'Reuters 가격 관측은 21:20 UTC이며 기사 게시 시각 22:54 UTC와 다르다. 거래소별 시세·청산 집계나 UTC 일봉 종가를 대체하지 않으며 관세 단독의 가격 효과를 뜻하지 않는다.'],
+    sources: [
+      source('Donald J. Trump / UCSB American Presidency Project 원문 전재', 'Truth Social Posts of October 10, 2025', 'https://www.presidency.ucsb.edu/documents/truth-social-posts-october-10-2025', '2025-10-10'),
+      source('Reuters', 'US will impose additional 100% tariff on Chinese imports from November, Trump says', 'https://www.reuters.com/world/china/us-will-impose-additional-100-tariff-chinese-imports-november-trump-says-2025-10-10/', '2025-10-10', 'secondary'),
+      source('Reuters', 'Bitcoin extends decline to $104,782 as Trump escalates US-China trade war', 'https://www.reuters.com/business/bitcoin-down-55-114505-2025-10-10/', '2025-10-10', 'secondary'),
     ],
   },
 ];
