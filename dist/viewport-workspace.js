@@ -2,7 +2,7 @@ import { DATA_UPDATE } from './data-update.js?v=1.11.0';
 import { mountWorkbenchChrome } from './workbench-chrome.js?v=1.11.0';
 import { mountResearchWorkbench } from './research-workbench.js?v=1.11.0';
 import { mountAnalysisIndicators } from './analysis-dock.js?v=1.11.0-indicators.1';
-import { mountIndicatorWorkbench } from './indicator-workbench.js?v=1.11.0-indicators.1';
+import { mountIndicatorWorkbench } from './indicator-workbench.js?v=1.11.0-milestones.1';
 import { inspectionPanelAction } from './inspection-policy.js?v=1.11.0';
 import { mountMobileWorkspace } from './mobile-workspace.js?v=1.11.0';
 
@@ -111,7 +111,7 @@ export function initViewportWorkspace(icon) {
   const stage=$('#lab-chart-stage'),plot=document.createElement('div');plot.className='atlas-plot';
   plot.append(...stage.childNodes);stage.append(plot);
   plot.prepend($('#lab-metrics'));plot.append($('.lab-chart-foot'));
-  stage.append($('.lab-chart-meta'),$('.atlas-inspector'),$('#atlas-event-rail'));
+  stage.append($('#atlas-cycle-panel'),$('.lab-chart-meta'),$('.atlas-inspector'),$('#atlas-event-rail'));
   const tools=document.createElement('div');tools.className='atlas-canvas-tools';
   tools.innerHTML='<button data-reader="selection">값·근거</button><button data-reader="guide">읽는 법</button><button data-reader="math">계산식</button><button data-reader="update" id="atlas-update-status" title="자동 갱신 상태"></button>';
   stage.append(tools);

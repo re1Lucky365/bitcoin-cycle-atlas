@@ -29,7 +29,7 @@ export function wrapExportText(text,width,fontSize=11){
   if(line.trim())lines.push(line.trim());return lines;
 }
 
-export function createChartSvgExport(svg,{title='BTCUSD',readout='',source='',note='',countdown=''}={}){
+export function createChartSvgExport(svg,{title='BTCUSD',readout='',source='',note='',countdown='',panels=[],legend=[]}={}){
   if(!svg)throw new TypeError('저장할 차트가 없습니다.');
   const box=(svg.getAttribute('viewBox')||'').trim().split(/[\s,]+/u).map(Number);
   const width=box.length===4?box[2]:svg.clientWidth,height=box.length===4?box[3]:svg.clientHeight;
@@ -38,20 +38,38 @@ export function createChartSvgExport(svg,{title='BTCUSD',readout='',source='',no
   const readableWidth=Math.max(80,width-28),head=[...wrapExportText(title,readableWidth,14).map(text=>({text,size:14,color:'#dce8f7'})),...wrapExportText(readout,readableWidth,11).map(text=>({text,size:11,color:'#b5cce6'}))];
   if(countdown)head.push(...wrapExportText(countdown,readableWidth,10).map(text=>({text,size:10,color:'#94b4d9'})));
   const foot=[...wrapExportText(source,readableWidth,10),...wrapExportText(note,readableWidth,10)];
-  const top=18+head.reduce((sum,line)=>sum+line.size+5,0),bottom=18+foot.length*15,total=top+height+bottom;
+  const extra=panels.filter(Boolean).map(panel=>{
+    const viewBox=(panel.getAttribute('viewBox')||'').trim().split(/[\s,]+/u).map(Number);
+    if(viewBox.length!==4||!viewBox.every(Number.isFinite)||viewBox[2]<=0||viewBox[3]<=0)throw new RangeError('추가 차트의 크기가 올바르지 않습니다.');
+    return {panel,height:viewBox[3]*width/viewBox[2]};
+  });
+  const legendItems=legend.filter(item=>item?.label&&/^#[0-9a-f]{6}$/i.test(item.color||''));
+  const legendColumns=Math.max(1,Math.min(6,Math.floor(readableWidth/132))),legendHeight=legendItems.length?Math.ceil(legendItems.length/legendColumns)*24+12:0;
+  const chartHeight=height+extra.reduce((sum,item)=>sum+item.height+8,0);
+  const top=18+head.reduce((sum,line)=>sum+line.size+5,0),bottom=18+foot.length*15,total=top+chartHeight+legendHeight+bottom;
   const root=make('svg',{xmlns:NS,width:Math.round(width),height:Math.round(total),viewBox:`0 0 ${width} ${total}`,role:'img','aria-label':title});
   root.setAttribute('style','background:#10151c;font-family:Arial,"Noto Sans KR",sans-serif;font-variant-numeric:tabular-nums');
   root.append(make('title',{},title),make('desc',{},[readout,countdown,source,note].filter(Boolean).join(' · ')),make('rect',{width:'100%',height:'100%',fill:'#10151c'}));
   let yy=17;for(const line of head){yy+=line.size;root.append(make('text',{x:14,y:yy,fill:line.color,'font-size':line.size},line.text));yy+=5;}
-  const clone=svg.cloneNode(true);clone.removeAttribute('id');clone.removeAttribute('class');clone.removeAttribute('hidden');clone.removeAttribute('tabindex');clone.setAttribute('x','0');clone.setAttribute('y',String(top));clone.setAttribute('width',String(width));clone.setAttribute('height',String(height));
-  clone.removeAttribute('style');
-  for(const node of clone.querySelectorAll('[id$="-cross"],.history-event-preview,.chart-magnet-preview,.chart-snap-feedback,.chart-measurement[data-pending="true"],script,foreignObject'))node.remove();
-  for(const node of [clone,...clone.querySelectorAll('*')]){
-    node.removeAttribute('tabindex');node.removeAttribute('role');
-    for(const attr of [...node.attributes])if(attr.name.startsWith('on'))node.removeAttribute(attr.name);
+  function copyChart(sourceChart,y,chartHeight){
+    const clone=sourceChart.cloneNode(true);clone.removeAttribute('id');clone.removeAttribute('class');clone.removeAttribute('hidden');clone.removeAttribute('tabindex');clone.setAttribute('x','0');clone.setAttribute('y',String(y));clone.setAttribute('width',String(width));clone.setAttribute('height',String(chartHeight));
+    clone.removeAttribute('style');
+    for(const node of clone.querySelectorAll('[id$="-cross"],.history-event-preview,.cycle-marker-preview,.chart-magnet-preview,.chart-snap-feedback,.chart-measurement[data-pending="true"],script,foreignObject'))node.remove();
+    for(const node of [clone,...clone.querySelectorAll('*')]){
+      node.removeAttribute('tabindex');node.removeAttribute('role');
+      for(const attr of [...node.attributes])if(attr.name.startsWith('on'))node.removeAttribute(attr.name);
+    }
+    root.append(clone);
   }
-  root.append(clone,make('line',{x1:14,x2:width-14,y1:top+height+1,y2:top+height+1,stroke:'#2b3c50'}));
-  yy=top+height+17;for(const text of foot){root.append(make('text',{x:14,y:yy,fill:'#91a9c3','font-size':10},text));yy+=15;}
+  copyChart(svg,top,height);
+  let chartY=top+height;
+  for(const item of extra){chartY+=8;copyChart(item.panel,chartY,item.height);chartY+=item.height;}
+  for(let i=0;i<legendItems.length;i++){
+    const item=legendItems[i],column=i%legendColumns,row=Math.floor(i/legendColumns),xx=20+column*(readableWidth/legendColumns),ly=chartY+18+row*24;
+    root.append(make('circle',{cx:xx,cy:ly,r:5.5,fill:item.color,'fill-opacity':.17,stroke:item.color,'stroke-width':1.5}),make('text',{x:xx+12,y:ly+4,fill:item.color,'font-size':10},item.label));
+  }
+  root.append(make('line',{x1:14,x2:width-14,y1:top+chartHeight+legendHeight+1,y2:top+chartHeight+legendHeight+1,stroke:'#2b3c50'}));
+  yy=top+chartHeight+legendHeight+17;for(const text of foot){root.append(make('text',{x:14,y:yy,fill:'#91a9c3','font-size':10},text));yy+=15;}
   const Serializer=doc.defaultView?.XMLSerializer||XMLSerializer;
   return '<?xml version="1.0" encoding="UTF-8"?>\n'+new Serializer().serializeToString(root);
 }

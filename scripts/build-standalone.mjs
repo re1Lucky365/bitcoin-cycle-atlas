@@ -21,7 +21,7 @@ async function inlineModule(file) {
   return url;
 }
 let html = await readFile(resolve(dist, 'index.html'), 'utf8');
-for (const file of ['styles.css', 'compact.css', 'outlook.css', 'lab.css', 'atlas.css', 'viewport.css', 'chart-details-panel.css', 'analysis-dock.css', 'chart-magnet.css', 'mobile-workspace.css', 'workspace-tools.css']) {
+for (const file of ['styles.css', 'compact.css', 'outlook.css', 'lab.css', 'atlas.css', 'viewport.css', 'chart-details-panel.css', 'analysis-dock.css', 'chart-magnet.css', 'mobile-workspace.css', 'workspace-tools.css', 'cycle-milestones.css']) {
   // Font URLs contain semicolons in their weight lists. Consume the complete
   // url(...) before its terminating semicolon so :root stays valid CSS.
   const css = (await readFile(resolve(dist, file), 'utf8')).replace(/@import\s+url\(\s*(?:"[^"]*"|'[^']*'|[^)]*)\s*\)\s*;/g, '');
