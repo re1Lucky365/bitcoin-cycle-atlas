@@ -1,0 +1,63 @@
+{
+  "source": "Actual browser download from export preview",
+  "capturedAt": "2026-10-23T10:30:34.223Z",
+  "rowCount": 3004,
+  "header": [
+    "chart_date_utc",
+    "candle_open_utc",
+    "interval",
+    "source",
+    "currency",
+    "open",
+    "high",
+    "low",
+    "close",
+    "volume_btc",
+    "kind"
+  ],
+  "firstRow": {
+    "chart_date_utc": "2026-06-20T00:00:00.000Z",
+    "candle_open_utc": "2026-06-20T00:00:00.000Z",
+    "interval": "1h",
+    "source": "Coinbase Exchange",
+    "currency": "USD",
+    "open": "63475.08",
+    "high": "63718.8",
+    "low": "63406.8",
+    "close": "63464",
+    "volume_btc": "221.78285991",
+    "kind": "observed"
+  },
+  "lastRow": {
+    "chart_date_utc": "2026-10-23T03:00:00.000Z",
+    "candle_open_utc": "2026-10-23T03:00:00.000Z",
+    "interval": "1h",
+    "source": "Coinbase Exchange",
+    "currency": "USD",
+    "open": "81849.38",
+    "high": "81919.62",
+    "low": "81586.26",
+    "close": "81769.15",
+    "volume_btc": "91.7300652",
+    "kind": "observed"
+  },
+  "sourceValues": [
+    "Coinbase Exchange"
+  ],
+  "kindValues": [
+    "observed"
+  ],
+  "currencyValues": [
+    "USD"
+  ],
+  "intervalValues": [
+    "1h"
+  ],
+  "allOHLCValid": true,
+  "allVolumeNonnegative": true,
+  "strictlyOrdered": true,
+  "bytes": 397908,
+  "sha256": "8a7fa169ccf1a6a83b9d583565cb89614b2e5c721b9a0df63215fd40bf91747c",
+  "displayModeWhenExported": "percent with inverted price scale; CSV remains raw USD",
+  "limits": "This receipt validates the downloaded Coinbase 1h CSV. PNG/SVG preview and generation were observed separately; no PNG/SVG downloaded file content is claimed here."
+}

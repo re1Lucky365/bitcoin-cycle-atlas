@@ -400,8 +400,11 @@ test('an empty intraday window keeps navigation geometry and clears stale point 
   const svg = svgFixture(), series = marketSeries();
   drawIntradayChart({ svg, series });
   const controller = drawIntradayChart({ svg, series, range: { start: monday + 61, end: monday + 179 } });
-  assert.equal(controller, null);
-  for (const name of ['onclick', 'onpointermove', 'onpointerleave', 'onkeydown']) assert.equal(svg[name], null);
+  assert.equal(controller.getDate(), null);assert.equal(controller.getSelection(),null);assert.ok(controller.getPriceScale());
+  for (const name of ['onpointermove', 'onpointerleave']) assert.equal(svg[name], null);
+  assert.equal(svg.onclick({target:{closest:()=>null}}),false);
+  svg.onkeydown({key:'Home',target:{closest:()=>null}});
+  assert.equal(svg.dataset.visiblePointCount,'0');
   assert.ok(Number(svg.dataset.plotRight) > Number(svg.dataset.plotLeft));
   assert.match(svg.innerHTML, /완료된 거래 봉이 없습니다/);
 });
@@ -441,7 +444,9 @@ test('an empty daily window clears handlers that reference rows from a preceding
   const options = { svg, rows: bars.map(row => ({ date: row.date, price: row.close })), start: '2026-10-12', end: '2026-10-15', split: '2026-10-15', showVolume: false, showDrawdown: false };
   drawAtlasPriceChart(options);
   assert.equal(typeof svg.onclick, 'function');
-  assert.equal(drawAtlasPriceChart({ ...options, start: '2026-09-01', end: '2026-09-30' }), null);
-  for (const name of ['onclick', 'onpointermove', 'onpointerleave', 'onkeydown']) assert.equal(svg[name], null);
-  assert.match(svg.innerHTML, /아직 자료가 없습니다/);
+  const empty=drawAtlasPriceChart({ ...options, start: '2026-09-01', end: '2026-09-30' });
+  assert.equal(empty.getDate(),null);assert.equal(empty.getSelection(),null);assert.ok(empty.getPriceScale());
+  for (const name of ['onpointermove', 'onpointerleave']) assert.equal(svg[name], null);
+  assert.equal(svg.onclick({target:{closest:()=>null}}),false);svg.onkeydown({key:'Home',target:{closest:()=>null}});
+  assert.equal(svg.dataset.visiblePointCount,'0');assert.match(svg.innerHTML, /가격 자료가 없습니다/);
 });

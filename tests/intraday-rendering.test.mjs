@@ -42,6 +42,6 @@ test('a narrow viewport searches a much larger source array logarithmically inst
 test('empty windows replace stale values with unavailable readout and distinguish loading, errors and checked gaps',()=>{
   for(const [historyStatus,copy] of [['loading',/불러오고/],['error',/조회에 실패/],['ready',/거래 봉이 없습니다/]]){
     const svg=svgFixture(360);let value;const control=drawIntradayChart({svg,series:series([candle(10)]),range:{start,end:start+60},historyStatus,onHover:detail=>{value=detail;}});
-    assert.equal(control,null);assert.equal(value.kind,'unavailable');assert.equal(value.completed,false);assert.ok(Number.isNaN(value.price));assert.match(svg.innerHTML,copy);
+    assert.equal(control.getDate(),null);assert.equal(control.getSelection(),null);assert.ok(control.getPriceScale());assert.equal(svg.dataset.visiblePointCount,'0');assert.equal(value.kind,'unavailable');assert.equal(value.completed,false);assert.ok(Number.isNaN(value.price));assert.match(svg.innerHTML,copy);
   }
 });

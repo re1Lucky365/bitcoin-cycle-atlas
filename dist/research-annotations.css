@@ -1,0 +1,27 @@
+.research-annotation {cursor:pointer;outline:none}
+.research-annotation:focus-visible .research-annotation-line,.research-annotation:hover .research-annotation-line {stroke-width:3}
+.research-annotation:focus-visible .research-annotation-label rect {stroke:#fff;stroke-width:2}
+.research-annotations-dialog {width:min(780px,calc(100vw - 24px));max-height:calc(100dvh - 32px);padding:20px;border:1px solid #41546b;border-radius:12px;background:#101923;color:#dce8f7;box-shadow:0 20px 80px #0009;font:13px/1.6 system-ui,sans-serif}
+.research-annotations-dialog::backdrop {background:#0009}
+.research-annotations-dialog header {display:flex;justify-content:space-between;align-items:center;gap:12px}
+.research-annotations-dialog h2 {font-size:18px;margin:0}
+.research-annotations-dialog button,.research-annotations-dialog input,.research-annotations-dialog textarea,.research-annotations-dialog select {font:inherit;color:inherit;background:#172638;border:1px solid #40556d;border-radius:5px;padding:7px 10px}
+.research-annotations-dialog button {cursor:pointer;min-height:36px}
+.research-annotations-dialog button:disabled {opacity:.5;cursor:default}
+.research-annotations-dialog :focus-visible {outline:2px solid #8fc4ff;outline-offset:3px}
+.research-annotations-help {color:#a9bbce;font-size:12px;margin:10px 0}
+.research-annotations-status {min-height:20px;color:#b8d7ff}
+.research-annotations-list {display:grid;gap:7px;max-height:240px;overflow:auto;margin:12px 0}
+.research-annotation-row {display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 10px;padding:8px;border:1px solid #304254;border-radius:6px}
+.research-annotation-row.is-selected {border-color:#8bb7eb;background:#14283b}
+.research-annotation-row>button {text-align:left;border-left:4px solid var(--annotation-color,#84bfff);overflow-wrap:anywhere}
+.research-annotation-row small {grid-column:1/-1;color:#a9bbce;overflow-wrap:anywhere}
+.research-annotation-actions {display:flex;gap:4px;align-items:center}
+.research-annotation-actions button {padding:5px 8px;font-size:11px}
+.research-annotations-editor {display:grid;grid-template-columns:1fr 1fr;gap:10px;padding-top:14px;border-top:1px solid #304254}
+.research-annotations-editor[hidden] {display:none}
+.research-annotations-editor label {display:grid;gap:4px;min-width:0}
+.research-annotations-editor label:first-child,.research-annotations-editor label:has(textarea),.research-annotations-editor p {grid-column:1/-1}
+.research-annotations-editor input,.research-annotations-editor textarea,.research-annotations-editor select {min-width:0;width:100%;box-sizing:border-box}
+.research-annotation-metadata {font-size:11px;color:#acc4de;overflow-wrap:anywhere;margin:0}
+@media(max-width:560px){.research-annotations-dialog{padding:14px}.research-annotation-row{grid-template-columns:1fr}.research-annotation-actions{justify-content:flex-end}.research-annotations-editor{grid-template-columns:1fr}.research-annotations-editor>*{grid-column:1!important}}

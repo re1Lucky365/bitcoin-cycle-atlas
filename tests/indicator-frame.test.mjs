@@ -2,7 +2,8 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {readFile} from 'node:fs/promises';
 import {runInNewContext} from 'node:vm';
-import {INDICATORS} from '../dist/indicator-state.js';
+import {INDICATORS,normalizeIndicatorState} from '../dist/indicator-state.js';
+import {indicatorSettings,indicatorSupportsInterval} from '../dist/indicator-settings.js';
 import {indicatorReadout,indicatorReadoutDate} from '../dist/indicator-readouts.js';
 
 const source=await readFile(new URL('../dist/indicator-workbench.js',import.meta.url),'utf8');
@@ -11,13 +12,13 @@ const eventSource=source.slice(source.indexOf('  const onWorkbench='),source.ind
 const observed={date:'2026-10-21',price:84176.08,kind:'observed',frequency:'daily',unit:'usd'};
 const classified={...observed,marketState:'range',marketStateLabel:'좁은 범위에서 횡보'};
 
-function mountedRows({boot='ready',dialogOpen=false}={}){
+function mountedRows({boot='ready',dialogOpen=false,settings={}}={}){
   const item=INDICATORS.find(item=>item.id==='states');
   const makeRow=()=>({item,row:{dataset:{}},value:{textContent:'자료 대기',dataset:{}},name:{title:''}});
   const chart=makeRow(),library=makeRow(),readoutDate={textContent:''};
   const frames=new Map();let frameId=0;
   const context={
-    indicatorReadout,indicatorReadoutDate,
+    indicatorReadout,indicatorReadoutDate,indicatorSettings,indicatorSupportsInterval,state:normalizeIndicatorState({added:['states'],settings}),
     doc:{documentElement:{dataset:{boot}}},manager:{hidden:false},dialog:{open:dialogOpen},readoutDate,
     readoutRows:new Map([['states',chart]]),dialogReadoutRows:new Map([['states',library]]),
     readoutContext:{selection:observed,workbench:{},cycle:null,analyses:new Map()},
@@ -79,4 +80,10 @@ test('a completed selection change consumes stale hover work and synchronizes ob
   h.select(observed);h.settle();
   for(const row of [h.chart,h.library])assert.equal(row.value.textContent,'국면 분류 대기');
   assert.equal(h.readoutDate.textContent,'2026.10.21 UTC · 선택');
+});
+
+test('hidden value settings preserve the latest coalesced observation without making the graph unavailable',()=>{
+  const h=mountedRows({dialogOpen:true,settings:{states:{values:false}}});h.select(classified);h.settle();
+  for(const row of [h.chart,h.library]){assert.equal(row.value.hidden,true);assert.equal(row.value.textContent,classified.marketStateLabel);assert.equal(row.row.dataset.value,classified.marketStateLabel);}
+  assert.equal(h.frames.size,0);
 });

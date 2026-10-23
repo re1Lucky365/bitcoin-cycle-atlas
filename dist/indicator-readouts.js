@@ -1,4 +1,4 @@
-import {formatBtcVolume} from './chart-overlays.js?v=1.11.0';
+import {formatBtcVolume} from './chart-overlays.js?v=1.13.0-research.1';
 
 const formatters=new Map();
 const number=(value,digits=2)=>{if(!formatters.has(digits))formatters.set(digits,new Intl.NumberFormat('en-US',{maximumFractionDigits:digits}));return formatters.get(digits).format(value);};
@@ -21,12 +21,15 @@ export function indicatorReadout(item,{selection=null,workbench={},cycle=null,an
   switch(id){
     case 'readout': {
       if(!finite(selected.price))return missing(selected.kind==='unavailable'?'선택 범위에 가격 없음':'가격 자료 대기');
-      const value=selected.unit==='indexed'&&finite(selected.displayedPrice)?`${number(selected.displayedPrice)} · 지수`:money(selected.price);
+      const unit=selected.unit||selected.display?.unit||'usd',display=selected.display||{};
+      const shown=display.available===false?null:finite(selected.displayedPrice)?selected.displayedPrice:finite(display.factor)?selected.price*display.factor+(display.offset||0):null;
+      const value=unit==='usd'?money(selected.price):!finite(shown)?'표시 기준 가격 없음':unit==='percent'?`${number(shown)}% · 표시 시작 대비`:`${number(shown)} · 지수 · ${unit==='indexed-start'?'표시 시작':'최근 관측'} = 100`;
+      const basis=unit==='usd'?'':`${unit==='percent'?'표시 시작 대비 %':unit==='indexed-start'?'표시 시작 = 100':'최근 관측 = 100'}${display.baseDate?` · 기준 ${date(display.baseDate)} UTC`:''}${finite(display.basePrice)?` · 기준 가격 ${money(display.basePrice)}`:''} · 원래 가격 ${money(selected.price)}`;
       const ohlc=finite(selected.open)?`O ${money(selected.open)} · H ${money(selected.high)} · L ${money(selected.low)} · C ${money(selected.close)}`:'';
       const change=finite(selected.previousClose)&&selected.previousClose>0&&finite(selected.changePct)?selected.changePct:null;
       const previous=finite(change)?`직전 봉 종가 대비 ${percent(change)} · 기준 ${money(selected.previousClose)}${selected.previousCloseDate?` (${date(selected.previousCloseDate)} UTC)`:''}`:'직전 봉 자료 없음';
       const fromOpen=finite(selected.fromOpenChangePct)?`시가 대비 ${percent(selected.fromOpenChangePct)}`:'';
-      return output(`${future?'가정 ':''}${value}${finite(change)?`  전봉 ${percent(change)}`:''}`,[context,ohlc,previous,fromOpen].filter(Boolean).join(' · '),future?'scenario':change>0?'up':change<0?'down':'neutral');
+      return output(`${future?'가정 ':''}${value}${finite(change)?`  전봉 ${percent(change)}`:''}`,[context,basis,ohlc,previous,fromOpen].filter(Boolean).join(' · '),future?'scenario':change>0?'up':change<0?'down':'neutral');
     }
     case 'volume': {
       if(!finite(selected.volume)||selected.volume<0)return missing(workbench.marketLoading?'Vol 불러오는 중':'Vol 자료 없음');

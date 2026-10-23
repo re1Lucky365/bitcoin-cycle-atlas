@@ -34,9 +34,10 @@ class Element extends Surface {
     selector=selector.replace(/:not\(([^)]+)\)/g,(_,part)=>{if(this.matches(part))excluded=true;return '';});
     if(excluded)return false;
     if(selector===':disabled')return Boolean(this.disabled);
-    const tag=selector.match(/^[\w-]+/)?.[0];if(tag&&tag!==this.tagName)return false;
-    const id=selector.match(/#([\w-]+)/)?.[1];if(id&&this.id!==id)return false;
-    for(const [,name]of selector.matchAll(/\.([\w-]+)/g))if(!(this.className||'').split(/\s+/).includes(name))return false;
+    const structural=selector.replace(/\[[^\]]+\]/g,'');
+    const tag=structural.match(/^[\w-]+/)?.[0];if(tag&&tag!==this.tagName)return false;
+    const id=structural.match(/#([\w-]+)/)?.[1];if(id&&this.id!==id)return false;
+    for(const [,name]of structural.matchAll(/\.([\w-]+)/g))if(!(this.className||'').split(/\s+/).includes(name))return false;
     for(const [,name,wanted]of selector.matchAll(/\[([\w-]+)(?:="([^"]*)")?\]/g)){
       let value=name.startsWith('data-')?this.dataset[name.slice(5).replace(/-([a-z])/g,(_,letter)=>letter.toUpperCase())]:name==='hidden'?this.hidden?true:undefined:name==='open'?this.open?true:undefined:this.getAttribute(name);
       if(value==null||wanted!==undefined&&String(value)!==wanted)return false;
@@ -145,6 +146,44 @@ test('folded rows keep the current selected value and reveal it immediately on e
   assert.equal(f.node('chart-indicator-list').hidden,false);
   assert.match(f.node('chart-indicator-list').querySelector('.indicator-value').textContent,/1\.23k BTC/);
   assert.match(f.node('indicator-readout-date').textContent,/2026\.10\.21/);
+});
+
+test('real settings hide only values, retain fresh hidden values and restore focus to the rebuilt row',t=>{
+  const f=fixture(t,{search:'indicators=volume'}),path=f.price.innerHTML;
+  const row=()=>f.node('chart-indicator-list').querySelector('[data-indicator-row="volume"]');
+  const gear=row().querySelector('[data-indicator-action="settings"]');gear.focus();gear.click();
+  const dialog=f.node('indicator-settings');assert.equal(dialog.open,true);
+  const values=dialog.querySelector('[data-setting="values"]');values.checked=false;values.onchange();
+  assert.equal(f.state.settings.volume.values,false);assert.equal(isIndicatorVisible(f.state,'volume'),true);assert.deepEqual(f.state.hidden,[]);
+  f.doc.dispatchEvent({type:'atlas:readout',detail:{date:'2026-10-22',price:84000,volume:4321,volumeSource:'Bitstamp',frequency:'daily',kind:'observed'}});f.flush();
+  assert.equal(row().querySelector('.indicator-value').hidden,true);assert.match(row().querySelector('.indicator-value').textContent,/4\.32k BTC/);assert.equal(f.price.innerHTML,path);
+  values.checked=true;values.onchange();assert.equal(row().querySelector('.indicator-value').hidden,false);assert.match(row().querySelector('.indicator-value').textContent,/4\.32k BTC/);
+  dialog.close();assert.equal(f.doc.activeElement,row().querySelector('[data-indicator-action="settings"]'),'settings updates rebuild the list without losing the return control');
+});
+
+test('setting interval conditions keep eye visibility and unsupported controls out of the editor',t=>{
+  const f=fixture(t,{search:'indicators=volume,range,cycles,periods'});
+  const open=id=>f.doc.dispatchEvent({type:'atlas:indicator-settings-open',detail:{id}});
+  open('range');const dialog=f.node('indicator-settings');
+  assert.equal(dialog.querySelector('[data-setting="lineWidth"]'),null);assert.equal(dialog.querySelector('[data-setting="axisLabels"]'),null);assert.ok(dialog.querySelector('[data-setting="fillOpacity"]'));assert.equal(dialog.querySelector('[data-setting="interval.1m"]'),null);
+  const daily=dialog.querySelector('[data-setting="interval.daily"]');daily.checked=false;daily.onchange();
+  assert.equal(isIndicatorVisible(f.state,'range'),true);assert.equal(isIndicatorVisible(f.state,'range','daily'),false);assert.equal(isIndicatorVisible(f.state,'range','weekly'),true);
+  f.doc.dispatchEvent({type:'atlas:workbench-state',detail:{frequency:'daily',intraday:false}});
+  const row=f.node('chart-indicator-list').querySelector('[data-indicator-row="range"]');assert.equal(row.dataset.unavailable,'true');assert.equal(row.querySelector('[data-indicator-action="visibility"]').getAttribute('aria-pressed'),'true');
+  dialog.close();open('cycles');assert.ok(dialog.querySelector('[data-setting="inputs.alignment"]'));assert.equal(dialog.querySelector('[data-setting="inputs.period"]'),null);
+  const alignment=dialog.querySelector('[data-setting="inputs.alignment"]');alignment.value='halving';alignment.onchange();assert.equal(f.state.settings.cycles.inputs.alignment,'halving');
+  dialog.close();open('periods');const metric=dialog.querySelector('[data-setting="inputs.metric"]');metric.value='realizedVolPct';metric.onchange();assert.equal(f.state.settings.periods.inputs.metric,'realizedVolPct');
+  assert.equal(dialog.querySelector('[data-setting="lineWidth"]'),null);assert.ok(dialog.querySelector('[data-setting="fillOpacity"]'));
+});
+
+test('settings remain reachable through the library when mobile legend is fully folded, without fake display-control gears',t=>{
+  const f=fixture(t,{mobile:true,search:'indicators=readout,source,legend,volume'});f.controller.open(f.opener);
+  const library=f.node('indicator-library');assert.equal(f.node('chart-indicator-list').hidden,true);
+  for(const id of ['readout','source','legend'])assert.equal(library.querySelector(`[data-library-indicator="${id}"] [data-library-action="settings"]`),null);
+  const gear=library.querySelector('[data-library-indicator="volume"] [data-library-action="settings"]');gear.click();const dialog=f.node('indicator-settings');assert.equal(dialog.open,true);
+  const width=dialog.querySelector('[data-setting="lineWidth"]');width.value='1.75';width.onchange();assert.equal(f.state.settings.volume.lineWidth,1.75);assert.equal(f.state.collapsed,true);
+  dialog.close();assert.equal(f.doc.activeElement,library.querySelector('[data-library-indicator="volume"] [data-library-action="settings"]'));
+  assert.deepEqual(readIndicatorState(f.query,{mobile:false}).settings,f.state.settings);
 });
 
 test('study folding leaves the upper context card anchored while wrapped readout changes move the whole HUD stack',t=>{

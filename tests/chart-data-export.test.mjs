@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { createObservedChartCsv, createChartSvgExport, chartRasterSize, createChartPngExport } from '../dist/chart-export.js';
+import {captureChartExportSnapshot,copyChartSnapshotImage} from '../dist/chart-export-workbench.js';
 
 test('visible price CSV contains every original observation, no gap fill or future model rows',()=>{
   const rows=[{date:'2026-10-01',price:100},{date:'2026-10-02',price:110},{date:'2026-10-04',price:90},{date:'2026-10-05',price:120},{date:'2026-10-06',price:999}];
@@ -106,4 +107,25 @@ test('SVG export keeps periods inside the price chart and strips transient inter
   assert.doesNotMatch(exported,/TRANSIENT_INTERVAL_PREVIEW|cycle-interval-preview|tabindex=|onclick=|role="button"/);
   assert.match(exported,/BOTTOM/);assert.match(exported,/CYCLE TOP/);
   assert.equal(serialize(svg),before,'export sanitizes only its clone, keeping live chart interactions intact');
+});
+
+test('workspace export snapshots only visible expanded panes with their own labels and axes, without duplicate overlays',()=>{
+  const f=rasterFixture(),doc=f.svg.ownerDocument,make=(name)=>{const panel=new VectorNode('svg',doc);panel.setAttribute('viewBox','0 0 400 180');const text=new VectorNode('text',doc);text.textContent=name;panel.append(text);return panel;};
+  const context={svg:f.svg,frequency:'daily',range:{start:'2026-10-01',end:'2026-10-21'},asOf:'2026-10-21',rows:[{date:'2026-10-21',price:100}],imageOptions:{title:'BTCUSD · USD',source:'SOURCE BEFORE'},panels:[{svg:make('VISIBLE AXIS'),title:'Drawdown pane',note:'Own percentage axis'},{svg:make('HIDDEN AXIS'),title:'Hidden pane',hidden:true},{svg:make('MINIMIZED AXIS'),title:'Minimized pane',minimized:true}]};
+  const snapshot=captureChartExportSnapshot(context);assert.equal(snapshot.panels.length,1);assert.deepEqual(snapshot.excludedPanels,['Hidden pane','Minimized pane']);
+  assert.match(snapshot.images.workspace,/VISIBLE AXIS|Drawdown pane|Own percentage axis/);assert.doesNotMatch(snapshot.images.workspace,/HIDDEN AXIS|MINIMIZED AXIS/);assert.doesNotMatch(snapshot.images.main,/VISIBLE AXIS/);
+  assert.equal((snapshot.images.workspace.match(/<svg\b/g)||[]).length,3);context.panels[0].svg.children[0].textContent='CHANGED AXIS';context.imageOptions.source='SOURCE AFTER';context.rows[0].price=999;
+  assert.match(snapshot.images.workspace,/SOURCE BEFORE/);assert.doesNotMatch(snapshot.images.workspace,/CHANGED AXIS|SOURCE AFTER/);assert.doesNotMatch(snapshot.datasets[0].csv,/999/);
+});
+
+test('PNG serialization captures geometry and metadata before pending fonts or image decoding can observe new state',async()=>{
+  const f=rasterFixture(),doc=f.svg.ownerDocument;let releaseFont,sourceBlob;doc.fonts.ready=new Promise(resolve=>{releaseFont=resolve;});doc.defaultView.URL.createObjectURL=blob=>{sourceBlob=blob;return 'blob:test-chart';};
+  const path=new VectorNode('path',doc);path.setAttribute('d','M10 20L30 40');f.svg.append(path);const options={title:'SNAPSHOT BEFORE',source:'OLD SOURCE'},pending=createChartPngExport(f.svg,options);
+  path.setAttribute('d','M999 999L888 888');options.title='SNAPSHOT AFTER';options.source='NEW SOURCE';releaseFont();await pending;
+  const serialized=await sourceBlob.text();assert.match(serialized,/M10 20L30 40/);assert.match(serialized,/SNAPSHOT BEFORE/);assert.match(serialized,/OLD SOURCE/);assert.doesNotMatch(serialized,/999|SNAPSHOT AFTER|NEW SOURCE/);
+});
+
+test('image clipboard starts write synchronously with the fixed PNG promise and releases resources after encoding',async()=>{
+  const f=rasterFixture(),doc=f.svg.ownerDocument;let wrote=false,payload;doc.defaultView.ClipboardItem=class{constructor(value){payload=value;}};doc.defaultView.navigator={clipboard:{write(items){wrote=true;assert.equal(items.length,1);return Promise.resolve(payload['image/png']).then(blob=>assert.equal(blob.type,'image/png'));}}};
+  const vector=createChartSvgExport(f.svg),pending=copyChartSnapshotImage(vector,doc);assert.equal(wrote,true,'clipboard write remains inside the initiating user gesture');await pending;assert.equal(f.canvas.width,0);assert.deepEqual(f.calls.revoked,['blob:test-chart']);
 });

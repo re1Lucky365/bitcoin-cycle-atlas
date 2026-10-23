@@ -1,9 +1,32 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { normalizeWorkspaceRange, readWorkspaceViewport, writeWorkspaceViewport, workspaceQuery, cleanWorkspaceQuery, readWorkspaces, saveWorkspace, writeWorkspaces, WORKSPACE_STORAGE_KEY, searchWorkspaceCommands } from '../dist/workspace-state.js';
+import { normalizeWorkspaceRange, readWorkspaceViewport, writeWorkspaceViewport, readWorkspaceAxisOptions, readWorkspacePriceDomain, workspaceQuery, cleanWorkspaceQuery, readWorkspaces, saveWorkspace, writeWorkspaces, WORKSPACE_STORAGE_KEY, searchWorkspaceCommands } from '../dist/workspace-state.js';
 import { normalizeIndicatorState, writeIndicatorState, readIndicatorState } from '../dist/indicator-state.js';
 
 const memory = () => { const values=new Map();return {getItem:key=>values.get(key),setItem:(key,value)=>values.set(key,value)}; };
+
+test('free-pan empty viewports and raw negative linear bounds survive saved links',()=>{
+  const params=new URLSearchParams('axis=linear');
+  const query=workspaceQuery(params,{frequency:'daily',unit:'percent',range:{start:'1890-01-01',end:'1891-01-01'},priceDomain:{min:-100,max:100},invertScale:true,priceOnlyAuto:true});
+  const restored=new URLSearchParams(query);
+  assert.deepEqual(readWorkspaceViewport(restored),{unit:'percent',range:{start:'1890-01-01',end:'1891-01-01'}});
+  assert.deepEqual(readWorkspacePriceDomain(restored),{min:-100,max:100});
+  assert.deepEqual(readWorkspaceAxisOptions(restored),{invertScale:true,priceOnlyAuto:true});
+  const start=Date.parse('2350-01-01T00:00:00Z')/1000;
+  assert.deepEqual(normalizeWorkspaceRange({start,end:start+3600*20},'1h'),{start,end:start+3600*20});
+  assert.equal(normalizeWorkspaceRange({start:'1799-12-31',end:'1801-01-01'}),null);
+});
+
+test('new display units, indicator settings and pane geometry are restored together',()=>{
+  const indicators=normalizeIndicatorState({added:['cycles','periods'],settings:{cycles:{lineWidth:2.5,values:false,axisLabels:false,inputs:{alignment:'halving'},intervals:['daily']},periods:{fillOpacity:.3,inputs:{period:'quarterly',metric:'realizedVolPct',scope:'all'}}},paneOrder:['periods','cycles'],paneHeights:{cycles:480,periods:340},maximized:'periods'});
+  const params=writeIndicatorState(new URLSearchParams('axis=log'),indicators);
+  const query=workspaceQuery(params,{unit:'indexed-start',range:{start:'2020-01-01',end:'2022-01-01'},priceDomain:{min:-10,max:200}});
+  const restored=new URLSearchParams(query);
+  assert.deepEqual(readIndicatorState(restored),indicators);
+  assert.equal(readWorkspaceViewport(restored).unit,'indexed-start');
+  assert.deepEqual(readWorkspacePriceDomain(restored),{min:-10,max:200});
+  const storage=memory();saveWorkspace(storage,[],{name:'독립 연구 창',query});assert.equal(readWorkspaces(storage)[0].query,query);
+});
 
 test('sharing a panned indexed workspace retains hidden indicators, a folded legend and minimized panes',()=>{
   const indicators=normalizeIndicatorState({added:['volume','states','periods'],hidden:['states'],minimized:['periods'],active:'periods',primary:'volume',collapsed:true});

@@ -1,0 +1,1501 @@
+{
+  "startedAt": "2026-10-23T10:38:34.021630+00:00",
+  "packageVersion": "1.13.0",
+  "gitBase": "a71cdc3765fc7913dc0d9c57c94365619a4bcb0b",
+  "nodeVersion": "v24.19.0",
+  "gates": [
+    {
+      "name": "npm-test",
+      "command": [
+        "npm",
+        "test"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 16.57,
+      "nodeRunnerStats": {
+        "tests": 66,
+        "suites": 0,
+        "pass": 66,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "name": "verify-cycle",
+      "command": [
+        "npm",
+        "run",
+        "verify:cycle"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 1.021,
+      "nodeRunnerStats": {}
+    },
+    {
+      "name": "verify-performance",
+      "command": [
+        "npm",
+        "run",
+        "verify:performance",
+        "--",
+        "--output",
+        "validation/performance-report.json"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 0.493,
+      "nodeRunnerStats": {}
+    },
+    {
+      "name": "verify-static",
+      "command": [
+        "npm",
+        "run",
+        "verify:static"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 4.295,
+      "nodeRunnerStats": {}
+    },
+    {
+      "name": "build-standalone",
+      "command": [
+        "npm",
+        "run",
+        "build:standalone"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 1.374,
+      "nodeRunnerStats": {}
+    },
+    {
+      "name": "verify-standalone-static",
+      "command": [
+        "node",
+        "scripts/verify-static.mjs",
+        "--standalone",
+        "build/Bitcoin_Cycles_Comparison.html"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 4.973,
+      "nodeRunnerStats": {}
+    },
+    {
+      "name": "verify-formal",
+      "command": [
+        "npm",
+        "run",
+        "verify:formal"
+      ],
+      "exitCode": 0,
+      "attempts": [
+        {
+          "sandbox": "default",
+          "exitCode": 1,
+          "reason": "spawnSync java EPERM: environment process permission restriction"
+        },
+        {
+          "sandbox": "require_escalated",
+          "exitCode": 0
+        }
+      ]
+    }
+  ],
+  "directTests": {
+    "files": 66,
+    "nodeTestFiles": 61,
+    "nodeCases": 572,
+    "nodePassed": 572,
+    "nodeFailed": 0,
+    "nodeSkipped": 0,
+    "customFiles": 5,
+    "customCases": 44,
+    "customCountsVerified": true,
+    "failedFiles": [],
+    "results": [
+      {
+        "file": "tests/analysis-dock.test.mjs",
+        "command": [
+          "node",
+          "tests/analysis-dock.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 5.867,
+        "stats": {
+          "tests": 8,
+          "suites": 0,
+          "pass": 8,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/analysis-export.test.mjs",
+        "command": [
+          "node",
+          "tests/analysis-export.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 1.079,
+        "stats": {
+          "tests": 4,
+          "suites": 0,
+          "pass": 4,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/analysis-focus.test.mjs",
+        "command": [
+          "node",
+          "tests/analysis-focus.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.445,
+        "stats": {
+          "tests": 10,
+          "suites": 0,
+          "pass": 10,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/app-workspace-url.test.mjs",
+        "command": [
+          "node",
+          "tests/app-workspace-url.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.301,
+        "stats": {
+          "tests": 4,
+          "suites": 0,
+          "pass": 4,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/bitcoin-events.test.mjs",
+        "command": [
+          "node",
+          "tests/bitcoin-events.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.469,
+        "stats": {
+          "tests": 10,
+          "suites": 0,
+          "pass": 10,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/boot-shell.test.mjs",
+        "command": [
+          "node",
+          "tests/boot-shell.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.643,
+        "stats": {
+          "tests": 5,
+          "suites": 0,
+          "pass": 5,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/calendar-cache.test.mjs",
+        "command": [
+          "node",
+          "tests/calendar-cache.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.976,
+        "stats": {
+          "tests": 3,
+          "suites": 0,
+          "pass": 3,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/chart-cursor.test.mjs",
+        "command": [
+          "node",
+          "tests/chart-cursor.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.586,
+        "stats": {
+          "tests": 17,
+          "suites": 0,
+          "pass": 17,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/chart-data-export.test.mjs",
+        "command": [
+          "node",
+          "tests/chart-data-export.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.266,
+        "stats": {
+          "tests": 11,
+          "suites": 0,
+          "pass": 11,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/chart-display-modes.test.mjs",
+        "command": [
+          "node",
+          "tests/chart-display-modes.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 1.033,
+        "stats": {
+          "tests": 14,
+          "suites": 0,
+          "pass": 14,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/chart-export-workbench.test.mjs",
+        "command": [
+          "node",
+          "tests/chart-export-workbench.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.282,
+        "stats": {
+          "tests": 8,
+          "suites": 0,
+          "pass": 8,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/chart-go-to.test.mjs",
+        "command": [
+          "node",
+          "tests/chart-go-to.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.275,
+        "stats": {
+          "tests": 8,
+          "suites": 0,
+          "pass": 8,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/chart-hover.test.mjs",
+        "command": [
+          "node",
+          "tests/chart-hover.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.177,
+        "stats": {
+          "tests": 4,
+          "suites": 0,
+          "pass": 4,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/chart-magnet.test.mjs",
+        "command": [
+          "node",
+          "tests/chart-magnet.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.356,
+        "stats": {
+          "tests": 8,
+          "suites": 0,
+          "pass": 8,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/chart-math.test.mjs",
+        "command": [
+          "node",
+          "tests/chart-math.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.222,
+        "stats": {
+          "tests": 6,
+          "suites": 0,
+          "pass": 6,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/chart-navigation.test.mjs",
+        "command": [
+          "node",
+          "tests/chart-navigation.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.365,
+        "stats": {
+          "tests": 29,
+          "suites": 0,
+          "pass": 29,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/chart-overlays.test.mjs",
+        "command": [
+          "node",
+          "tests/chart-overlays.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.629,
+        "stats": {
+          "tests": 26,
+          "suites": 0,
+          "pass": 26,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/chart-performance.test.mjs",
+        "command": [
+          "node",
+          "tests/chart-performance.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 1.569,
+        "stats": {
+          "tests": 13,
+          "suites": 0,
+          "pass": 13,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/chart-presets.test.mjs",
+        "command": [
+          "node",
+          "tests/chart-presets.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.283,
+        "stats": {
+          "tests": 2,
+          "suites": 0,
+          "pass": 2,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/chart-touch-tracking.test.mjs",
+        "command": [
+          "node",
+          "tests/chart-touch-tracking.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.387,
+        "stats": {
+          "tests": 6,
+          "suites": 0,
+          "pass": 6,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/chart-tradingview-parity.test.mjs",
+        "command": [
+          "node",
+          "tests/chart-tradingview-parity.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.423,
+        "stats": {
+          "tests": 9,
+          "suites": 0,
+          "pass": 9,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/chart-viewport-navigation.test.mjs",
+        "command": [
+          "node",
+          "tests/chart-viewport-navigation.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.193,
+        "stats": {
+          "tests": 11,
+          "suites": 0,
+          "pass": 11,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/cryptocon-audit.test.mjs",
+        "command": [
+          "node",
+          "tests/cryptocon-audit.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.358,
+        "stats": {
+          "tests": 5,
+          "suites": 0,
+          "pass": 5,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/cycle-calibration-pipeline.test.mjs",
+        "command": [
+          "node",
+          "tests/cycle-calibration-pipeline.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 7.684,
+        "stats": {
+          "tests": 5,
+          "suites": 0,
+          "pass": 5,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/cycle-calibration.test.mjs",
+        "command": [
+          "node",
+          "tests/cycle-calibration.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 5.912,
+        "stats": {
+          "tests": 11,
+          "suites": 0,
+          "pass": 11,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/cycle-engine.test.mjs",
+        "command": [
+          "node",
+          "tests/cycle-engine.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.322,
+        "stats": {},
+        "customCases": 10,
+        "expectedCustomCases": 10,
+        "customCountVerified": true,
+        "customPassLines": 10
+      },
+      {
+        "file": "tests/cycle-interval-overlay.test.mjs",
+        "command": [
+          "node",
+          "tests/cycle-interval-overlay.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.148,
+        "stats": {
+          "tests": 13,
+          "suites": 0,
+          "pass": 13,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/cycle-milestones-view.test.mjs",
+        "command": [
+          "node",
+          "tests/cycle-milestones-view.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.165,
+        "stats": {
+          "tests": 20,
+          "suites": 0,
+          "pass": 20,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/cycle-milestones.test.mjs",
+        "command": [
+          "node",
+          "tests/cycle-milestones.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.404,
+        "stats": {
+          "tests": 14,
+          "suites": 0,
+          "pass": 14,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/cycle-period-bottom-layout.test.mjs",
+        "command": [
+          "node",
+          "tests/cycle-period-bottom-layout.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 2.723,
+        "stats": {
+          "tests": 7,
+          "suites": 0,
+          "pass": 7,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/cycle-price-alignment.test.mjs",
+        "command": [
+          "node",
+          "tests/cycle-price-alignment.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 1.047,
+        "stats": {
+          "tests": 11,
+          "suites": 0,
+          "pass": 11,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/cycle-selection.test.mjs",
+        "command": [
+          "node",
+          "tests/cycle-selection.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.555,
+        "stats": {
+          "tests": 4,
+          "suites": 0,
+          "pass": 4,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/cycle-timing.test.mjs",
+        "command": [
+          "node",
+          "tests/cycle-timing.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.665,
+        "stats": {},
+        "customCases": 12,
+        "expectedCustomCases": 12,
+        "customCountVerified": true,
+        "customPassLines": 12
+      },
+      {
+        "file": "tests/data-source.test.mjs",
+        "command": [
+          "node",
+          "tests/data-source.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.378,
+        "stats": {},
+        "customCases": 10,
+        "expectedCustomCases": 10,
+        "customCountVerified": true,
+        "customPassLines": 10
+      },
+      {
+        "file": "tests/detailed-forecast.test.mjs",
+        "command": [
+          "node",
+          "tests/detailed-forecast.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 9.759,
+        "stats": {
+          "tests": 20,
+          "suites": 0,
+          "pass": 20,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/export-research-workbench.test.mjs",
+        "command": [
+          "node",
+          "tests/export-research-workbench.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.562,
+        "stats": {
+          "tests": 4,
+          "suites": 0,
+          "pass": 4,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/forecast-engine.test.mjs",
+        "command": [
+          "node",
+          "tests/forecast-engine.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.404,
+        "stats": {
+          "tests": 14,
+          "suites": 0,
+          "pass": 14,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/indicator-frame.test.mjs",
+        "command": [
+          "node",
+          "tests/indicator-frame.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.132,
+        "stats": {
+          "tests": 8,
+          "suites": 0,
+          "pass": 8,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/indicator-preferences.test.mjs",
+        "command": [
+          "node",
+          "tests/indicator-preferences.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.103,
+        "stats": {
+          "tests": 5,
+          "suites": 0,
+          "pass": 5,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/indicator-readouts.test.mjs",
+        "command": [
+          "node",
+          "tests/indicator-readouts.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.163,
+        "stats": {
+          "tests": 12,
+          "suites": 0,
+          "pass": 12,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/indicator-settings.test.mjs",
+        "command": [
+          "node",
+          "tests/indicator-settings.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.117,
+        "stats": {
+          "tests": 6,
+          "suites": 0,
+          "pass": 6,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/indicator-state.test.mjs",
+        "command": [
+          "node",
+          "tests/indicator-state.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.155,
+        "stats": {
+          "tests": 17,
+          "suites": 0,
+          "pass": 17,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/indicator-workbench.test.mjs",
+        "command": [
+          "node",
+          "tests/indicator-workbench.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.23,
+        "stats": {
+          "tests": 14,
+          "suites": 0,
+          "pass": 14,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/inspection-policy.test.mjs",
+        "command": [
+          "node",
+          "tests/inspection-policy.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.161,
+        "stats": {
+          "tests": 4,
+          "suites": 0,
+          "pass": 4,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/intraday-history.test.mjs",
+        "command": [
+          "node",
+          "tests/intraday-history.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.455,
+        "stats": {
+          "tests": 12,
+          "suites": 0,
+          "pass": 12,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/intraday-rendering.test.mjs",
+        "command": [
+          "node",
+          "tests/intraday-rendering.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.623,
+        "stats": {
+          "tests": 4,
+          "suites": 0,
+          "pass": 4,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/long-horizon-forecast.test.mjs",
+        "command": [
+          "node",
+          "tests/long-horizon-forecast.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 9.89,
+        "stats": {
+          "tests": 12,
+          "suites": 0,
+          "pass": 12,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/market-data-controller.test.mjs",
+        "command": [
+          "node",
+          "tests/market-data-controller.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.167,
+        "stats": {
+          "tests": 10,
+          "suites": 0,
+          "pass": 10,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/market-request-ownership.test.mjs",
+        "command": [
+          "node",
+          "tests/market-request-ownership.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.135,
+        "stats": {
+          "tests": 8,
+          "suites": 0,
+          "pass": 8,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/market-structure.test.mjs",
+        "command": [
+          "node",
+          "tests/market-structure.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 3.706,
+        "stats": {
+          "tests": 13,
+          "suites": 0,
+          "pass": 13,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/mobile-workspace.test.mjs",
+        "command": [
+          "node",
+          "tests/mobile-workspace.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.099,
+        "stats": {
+          "tests": 3,
+          "suites": 0,
+          "pass": 3,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/ohlc-data.test.mjs",
+        "command": [
+          "node",
+          "tests/ohlc-data.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.113,
+        "stats": {
+          "tests": 10,
+          "suites": 0,
+          "pass": 10,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/outlook-engine.test.mjs",
+        "command": [
+          "node",
+          "tests/outlook-engine.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 2.18,
+        "stats": {
+          "tests": 11,
+          "suites": 0,
+          "pass": 11,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/peak-zones.test.mjs",
+        "command": [
+          "node",
+          "tests/peak-zones.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.45,
+        "stats": {},
+        "customCases": 10,
+        "expectedCustomCases": 10,
+        "customCountVerified": true,
+        "customPassLines": 10
+      },
+      {
+        "file": "tests/price-axis.test.mjs",
+        "command": [
+          "node",
+          "tests/price-axis.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.3,
+        "stats": {
+          "tests": 6,
+          "suites": 0,
+          "pass": 6,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/published-data.test.mjs",
+        "command": [
+          "node",
+          "tests/published-data.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 1.784,
+        "stats": {
+          "tests": 5,
+          "suites": 0,
+          "pass": 5,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/refresh-data.test.mjs",
+        "command": [
+          "node",
+          "tests/refresh-data.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 1.078,
+        "stats": {
+          "tests": 8,
+          "suites": 0,
+          "pass": 8,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/research-annotations.test.mjs",
+        "command": [
+          "node",
+          "tests/research-annotations.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.164,
+        "stats": {
+          "tests": 8,
+          "suites": 0,
+          "pass": 8,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/research-workbench.test.mjs",
+        "command": [
+          "node",
+          "tests/research-workbench.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.175,
+        "stats": {
+          "tests": 1,
+          "suites": 0,
+          "pass": 1,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/scenario-countdown.test.mjs",
+        "command": [
+          "node",
+          "tests/scenario-countdown.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 5.132,
+        "stats": {
+          "tests": 9,
+          "suites": 0,
+          "pass": 9,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/timing-view.test.mjs",
+        "command": [
+          "node",
+          "tests/timing-view.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.467,
+        "stats": {},
+        "customCases": 2,
+        "expectedCustomCases": 2,
+        "customCountVerified": true,
+        "customPassLines": 0
+      },
+      {
+        "file": "tests/volume-data.test.mjs",
+        "command": [
+          "node",
+          "tests/volume-data.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.29,
+        "stats": {
+          "tests": 13,
+          "suites": 0,
+          "pass": 13,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/volume-forecast.test.mjs",
+        "command": [
+          "node",
+          "tests/volume-forecast.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.966,
+        "stats": {
+          "tests": 12,
+          "suites": 0,
+          "pass": 12,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/workspace-history.test.mjs",
+        "command": [
+          "node",
+          "tests/workspace-history.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.091,
+        "stats": {
+          "tests": 5,
+          "suites": 0,
+          "pass": 5,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/workspace-price-axis.test.mjs",
+        "command": [
+          "node",
+          "tests/workspace-price-axis.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.169,
+        "stats": {
+          "tests": 2,
+          "suites": 0,
+          "pass": 2,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      },
+      {
+        "file": "tests/workspace-state.test.mjs",
+        "command": [
+          "node",
+          "tests/workspace-state.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationSeconds": 0.09,
+        "stats": {
+          "tests": 10,
+          "suites": 0,
+          "pass": 10,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "customCases": 0
+      }
+    ],
+    "aggregateCases": 616
+  },
+  "standaloneArtifact": {
+    "path": "build/Bitcoin_Cycles_Comparison.html",
+    "bytes": 16758597,
+    "sha256": "84ad5e576786e16a0cfccb5a252233c16f53e4c042e91ae2671d15113a0c7793"
+  },
+  "completedAt": "2026-10-23T10:40:45.274861+00:00",
+  "sourceHashCheck": {
+    "filesBefore": 193,
+    "filesAfter": 193,
+    "unchanged": true,
+    "changed": [],
+    "scope": [
+      "dist/**",
+      "tests/**",
+      "scripts/**",
+      "verification/**",
+      "package*.json"
+    ],
+    "excludes": [
+      "docs/**",
+      "README.md",
+      "build/**",
+      "validation/**"
+    ]
+  },
+  "allPassed": true,
+  "gateMetrics": {
+    "verify-cycle": {
+      "status": "verified",
+      "asOf": "2026-10-22",
+      "version": "causal-cycle-clock-v1",
+      "observationCount": 5941,
+      "state": "shortened",
+      "shiftDays": -52,
+      "referenceCount": 3,
+      "futureApplied": true,
+      "futureAppliedShiftDays": -52,
+      "futureReason": "causal-daily-clock-applied",
+      "sourcePricesSha256": "fbbe7ca83daac9656f76e513f87f74262359b612955cc8614284b6b6f5e905db",
+      "output": "dist/data/cycle-calibration.json"
+    },
+    "verify-static": {
+      "status": "ok",
+      "files": 100,
+      "checkedReferences": 203,
+      "basePath": "/bitcoin-cycle-atlas/",
+      "standalone": null
+    },
+    "build-standalone": {
+      "file": "Bitcoin_Cycles_Comparison.html",
+      "bytes": 16758597,
+      "modules": 72,
+      "embeddedObservations": 5941
+    },
+    "verify-standalone-static": {
+      "status": "ok",
+      "files": 100,
+      "checkedReferences": 203,
+      "basePath": "/bitcoin-cycle-atlas/",
+      "standalone": "build/Bitcoin_Cycles_Comparison.html"
+    },
+    "verify-performance": {
+      "status": "PASS",
+      "asOf": "2026-10-22",
+      "scope": "Deterministic renderer/search/selection checks; Node SVG boundary, not browser paint or input-latency measurement.",
+      "observedPriceRows": 5941,
+      "observedCandleRows": 5545,
+      "observedVolumeShapes": 5545,
+      "svgElements": 103,
+      "svgElementBudget": 120,
+      "sourceSelectionDates": [
+        "2011-08-18",
+        "2019-03-21",
+        "2026-10-22"
+      ],
+      "complexity": [
+        {
+          "sourceRows": 1024,
+          "visibleRows": 9,
+          "sourceReads": 29,
+          "maxReads": 33,
+          "displayPoints": 1024,
+          "maxDisplayPoints": 4004
+        },
+        {
+          "sourceRows": 16384,
+          "visibleRows": 9,
+          "sourceReads": 37,
+          "maxReads": 41,
+          "displayPoints": 2296,
+          "maxDisplayPoints": 4004
+        },
+        {
+          "sourceRows": 131072,
+          "visibleRows": 9,
+          "sourceReads": 43,
+          "maxReads": 47,
+          "displayPoints": 3978,
+          "maxDisplayPoints": 4004
+        }
+      ],
+      "moduleHashes": {
+        "atlas-price-chart.js": "cf2afb828f2741816a8ed9cf4986ce26b6bfa45c0ac8e86e14ccdd5d6c51f62f",
+        "chart-overlays.js": "01ab95bedff500867a7b679ec394527c6eb8302bbb74d3b5a351278051628e36",
+        "chart-window.js": "ff1527876a0185e8f8a52211170c696bde98f0120c6f0ddde58cea987daaf7cd",
+        "chart-navigation.js": "dc34ceb23878a46ecac5ae7acdf63c356ba2c7546e3235f91d099b52e4a6538b"
+      }
+    },
+    "verify-formal": {
+      "tool": {
+        "name": "TLC",
+        "version": "1.7.4",
+        "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+      },
+      "bounds": {
+        "requestGenerations": 3,
+        "intervals": [
+          "1m",
+          "5m"
+        ],
+        "property": "NoStaleDisplay"
+      },
+      "model": {
+        "MarketRequests": {
+          "outcome": "pass",
+          "generatedStates": 5955,
+          "distinctStates": 2081,
+          "remainingStates": 0
+        },
+        "MarketRequestsBroken": {
+          "outcome": "expected invariant violation",
+          "generatedStates": 151,
+          "distinctStates": 109,
+          "remainingStates": 79
+        }
+      },
+      "implementation": {
+        "regression": "pass",
+        "mutation": "expected assertion failure",
+        "sourceSha256": "dce96066268bb4e5ff0f5b81fe182904d6cb7d711172886872de3d387b6b7bee",
+        "mutatedSourceSha256": "18d1ac6de0cb495dc161cf0001af81978bd922051fea4aacdaf8d0ad865dc19a"
+      },
+      "limitations": [
+        "Bounded abstract model, not a whole-program proof",
+        "No pricing, numerical, history-pagination, wall-clock or liveness proof"
+      ]
+    }
+  },
+  "gitDiffCheck": {
+    "exitCode": 0
+  },
+  "browserVerificationScope": "See ../RESEARCH_WORKFLOWS_2026-10-23.md section 9. Automated cases are not physical-device results."
+}

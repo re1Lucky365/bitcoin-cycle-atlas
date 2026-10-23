@@ -1,7 +1,10 @@
-import {createPriceScale,barPriceChange} from './chart-math.js?v=1.12.0-tv-parity.1';
-import { priceAxisMarkup } from './price-axis.js?v=1.12.0-tv-parity.1';
+import {createPriceScale,barPriceChange} from './chart-math.js?v=1.13.0-research.1';
+import { priceAxisMarkup, timeAxisMarkup } from './price-axis.js?v=1.13.0-research.1';
+import { createPriceDisplay, formatDisplayPrice } from './price-display.js?v=1.13.0-research.1';
+import { retainPriceViewport, renderEmptyPriceViewport } from './empty-price-chart.js?v=1.13.0-research.1';
+import { researchAnnotationsMarkup } from './research-annotations.js?v=1.13.0-research.1';
 import {chartInterval} from './ohlc-data.js?v=1.11.0';
-import {chartPaneLayout,volumePaneMarkup} from './chart-overlays.js?v=1.11.0';
+import {chartPaneLayout,volumePaneMarkup} from './chart-overlays.js?v=1.13.0-research.1';
 import { resolveMagnetPoint, advanceMeasurement, measurePriceAnchors, measurementOverlayMarkup, createMeasurementOverlay } from './chart-magnet.js?v=1.11.0';
 import { clearChartHover, clearChartHoverPointer, getChartHoverPointer, rememberChartHoverPointer, coalescedChartHover, paintPriceCursor } from './chart-hover.js?v=1.12.1-cursor-hud.1';
 import { dateWindow, pixelExtrema } from './chart-window.js?v=1.11.0';
@@ -12,24 +15,26 @@ const money=value=>`$${number(value,value<1?6:2)}`;
 const timestamp=time=>new Date(time*1000).toISOString().slice(0,16).replace('T',' ');
 const esc=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 
-export function drawIntradayChart({svg,series,chartType='candles',scale='log',priceDomain=null,unit='usd',tool='crosshair',magnet='off',measurement=null,onMeasurement=()=>{},range=null,historyStatus='ready',showVolume=true,headerInset=70,onHover=()=>{},onInspect=()=>{},selectedTime=null}) {
+export function drawIntradayChart({svg,series,chartType='candles',scale='log',priceDomain=null,invertScale=false,priceOnlyAuto=false,researchAnnotations=[],activeAnnotationId=null,onAnnotation=null,activeResearchAnnotationId=null,onResearchAnnotation=()=>{},scenarioId=null,unit='usd',tool='crosshair',magnet='off',measurement=null,onMeasurement=()=>{},range=null,historyStatus='ready',showVolume=true,headerInset=70,onHover=()=>{},onInspect=()=>{},selectedTime=null}) {
   clearChartHover(svg,{preservePointer:true});
+  const selectedAnnotation=activeAnnotationId??activeResearchAnnotationId,activateAnnotation=onAnnotation||onResearchAnnotation;
   const allRows=series.candles,interval=chartInterval(series.interval);
-  if(!allRows.length)throw new RangeError('The market chart needs completed candles');
+  if(!allRows.length&&(!Number.isFinite(range?.start)||!Number.isFinite(range?.end)))throw new RangeError('An empty market chart needs an explicit UTC range');
   const W=Math.max(1,Math.round(svg.clientWidth||1100)),H=Math.max(1,Math.round(svg.clientHeight||500)),small=W<600;
   const layout=chartPaneLayout({width:W,height:H,volume:showVolume,top:Number.isFinite(headerInset)?Math.max(12,headerInset):70});
   const {left:L,right:R,top:T,axisY,bottom,priceBottom:B,volumeTop,volumeBottom}=layout;
   const minTime=range?.start??allRows[0].time-interval.seconds,maxTime=range?.end??allRows.at(-1).time+interval.seconds;
   const rows=dateWindow(allRows,minTime,maxTime,row=>row.time);
-  const x=time=>L+(time-minTime)/(maxTime-minTime)*(W-L-R);
+  const x=time=>L+(time-minTime)/Math.max(1,maxTime-minTime)*(W-L-R);
   svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
   Object.assign(svg.dataset,{plotLeft:String(L),plotRight:String(W-R),plotTop:String(T),plotBottom:String(bottom),priceBottom:String(B),scale,chartType,interval:series.interval,historyLabelCount:'0',historyEventCount:'0'});
   svg.parentElement?.style.setProperty('--plot-bottom-gap',`${H-bottom+6}px`);svg.parentElement?.style.setProperty('--plot-right-gap',`${R+7}px`);
   Object.assign(svg.dataset,{visiblePointCount:String(rows.length),observedCandleCount:String(rows.length),candleRendering:'none'});
-  if(!rows.length){clearChartHoverPointer(svg);svg.innerHTML=`<text x="${Math.max(L+8,W/2)}" y="${Math.max(T+24,H/2-12)}" text-anchor="middle" fill="#9eb2ca" font-size="12"><tspan x="${W/2}" dy="0">${historyStatus==='loading'?'이 구간의 과거 봉을 불러오고 있습니다.':historyStatus==='error'?'과거 자료 조회에 실패했습니다.':'이 구간에는 완료된 거래 봉이 없습니다.'}</tspan><tspan x="${W/2}" dy="21">조회한 빈 구간은 채우지 않습니다.</tspan></text>`;svg.onclick=svg.onpointermove=svg.onpointerleave=svg.onkeydown=svg.onkeyup=null;onHover({date:new Date(minTime*1000).toISOString(),interval:interval.label,source:series.source,kind:'unavailable',completed:false,price:NaN,volume:NaN});return null;}
-  const factor=unit==='indexed'?100/allRows.at(-1).close:1;
-  const axis=createPriceScale(rows.flatMap(row=>chartType==='candles'?[row.low,row.high]:[row.close]),{scale,top:T,bottom:B,tickCount:Math.max(2,Math.min(7,Math.floor((B-T)/45))),factor,paddingRatio:.12,domain:priceDomain});
-  const y=axis.y,price=value=>unit==='indexed'?number(value*factor):money(value);
+  if(!rows.length)return renderEmptyPriceViewport({svg,layout,width:W,height:H,start:minTime,end:maxTime,seconds:true,scale,priceDomain,unit,denominator:allRows.at(-1)?.close,denominatorDate:allRows.at(-1)?.date,fallbackPrice:allRows.at(-1)?.close,invertScale,tool,message:historyStatus==='loading'?'이 구간의 과거 봉을 불러오고 있습니다.':historyStatus==='error'?'과거 자료 조회에 실패했습니다.':'이 구간에는 완료된 거래 봉이 없습니다.',onHover,source:series.source,frequency:series.interval,researchAnnotations,activeResearchAnnotationId:selectedAnnotation,onResearchAnnotation:activateAnnotation,scenarioId});
+  const display=createPriceDisplay({unit,rows,denominator:allRows.at(-1).close,denominatorDate:allRows.at(-1).date,scale}),{factor,offset,effectiveScale}=display;
+  const axis=createPriceScale(rows.flatMap(row=>chartType==='candles'?[row.low,row.high]:[row.close]),{scale:effectiveScale,top:T,bottom:B,tickCount:Math.max(2,Math.min(7,Math.floor((B-T)/45))),factor,offset,inverted:invertScale,paddingRatio:.12,domain:priceDomain});
+  const y=axis.y,price=value=>formatDisplayPrice(value,display,unit==='usd'&&Math.abs(value)<1?6:2);
+  retainPriceViewport(svg,axis);Object.assign(svg.dataset,{scale:effectiveScale,unit,invertScale:String(Boolean(invertScale)),timeAxisTop:String(bottom+8)});
   const clip=`${svg.id}-market-clip`,axisClip=`${svg.id}-price-axis-clip`,width=Math.max(.7,Math.min(14,(W-L-R)*interval.seconds/(maxTime-minTime)*.68));
   let s=`<title>${esc(series.source)} BTC-USD · ${interval.label} · ${chartType==='candles'?'캔들':'종가 선'}</title><desc>거래소가 제공한 완료 봉의 시가·고가·저가·종가와 BTC 거래량입니다. 빈 구간은 채우지 않습니다. 시간은 UTC입니다.</desc><defs><clipPath id="${clip}"><rect x="${L}" y="${T}" width="${W-L-R}" height="${B-T}"/></clipPath><clipPath id="${axisClip}"><rect x="${W-R}" y="${T}" width="${R}" height="${B-T}"/></clipPath></defs>`;
   for(const tick of axis.ticks){const yy=y(tick);s+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#26323e"/><text x="${W-R+7}" y="${yy+4}" fill="#acbacb" font-size="11">${esc(price(tick))}</text>`;}
@@ -62,21 +67,23 @@ export function drawIntradayChart({svg,series,chartType='candles',scale='log',pr
     const yy=y(last.close),labelTop=Math.max(T,Math.min(B-18,yy-9)),up=last.close>=last.open,color=up?'#2b6558':'#823c4c';
     s+=`<g class="market-last-price" pointer-events="none"><title>${esc(series.source)} · 마지막 완료 봉 · ${timestamp(last.time)} UTC · ${esc(money(last.close))}</title><line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="${up?'#74ab9e':'#dd7e8d'}" stroke-dasharray="3 5" opacity=".6"/><rect x="${W-R}" y="${labelTop}" width="${R-2}" height="18" rx="2" fill="${color}"/><text x="${W-R+4}" y="${labelTop+13}" fill="#f0f5fa" font-size="10">${esc(price(last.close))}</text></g>`;
   }
+  const annotations=researchAnnotationsMarkup({annotations:researchAnnotations,start:minTime,end:maxTime,x:({date:value})=>x(typeof value==='number'?value:Date.parse(value)/1000),y,left:L,right:W-R,top:T,bottom:B,clipId:clip,activeId:selectedAnnotation,scenarioId});
+  s+=annotations.markup;svg.dataset.researchAnnotationCount=String(annotations.visibleCount);
   s+=`<g id="${svg.id}-cross" pointer-events="none"><line class="cross-time" y1="${T}" y2="${bottom}" stroke="#adbed1" stroke-dasharray="3 3"/><line class="cross-price" clip-path="url(#${clip})" x1="${L}" x2="${W-R}" stroke="#adbed1" stroke-dasharray="3 3"/><circle clip-path="url(#${clip})" r="3" fill="#10151c" stroke="#d5e6f7"/><g class="market-price-tag" clip-path="url(#${axisClip})"><rect x="${W-R}" width="${R-2}" height="18" rx="2" fill="#385466"/><text x="${W-R+4}" fill="#f0f5fa" font-size="10"/></g><g class="market-date-tag"><rect width="124" height="18" rx="2" fill="#39485b"/><text fill="#edf2f9" font-size="9" text-anchor="middle"/></g></g>`;
   s+=measurementOverlayMarkup(clip);
-  s+=priceAxisMarkup({left:W-R,right:W,top:T,bottom:B});
+  s+=priceAxisMarkup({left:W-R,right:W,top:T,bottom:B})+timeAxisMarkup({left:L,right:W-R,top:bottom+8,bottom:H});
   svg.innerHTML=s;
   const cross=svg.querySelector('[id$="-cross"]'),vertical=cross.querySelector('.cross-time'),horizontal=cross.querySelector('.cross-price'),dot=cross.querySelector('circle'),priceTag=cross.querySelector('.market-price-tag'),dateTag=cross.querySelector('.market-date-tag');
   const nearestIn=(values,time)=>{let left=0,right=values.length-1;while(left<right){const mid=(left+right)>>1;if(values[mid].time<time)left=mid+1;else right=mid;}return left>0&&time-values[left-1].time<values[left].time-time?left-1:left;};
   const nearest=time=>nearestIn(rows,time);
   let measurementState=measurement?{...measurement,endDate:measurement.endDate??null}:null;
   const initialTime=tool==='measure'&&measurementState?(measurementState.endDate||measurementState.startDate):selectedTime;
-  let active=initialTime?nearest(typeof initialTime==='number'?initialTime:Date.parse(initialTime)/1000):rows.length-1,cursor=active,lastHovered=-1,lastPointer=null;
-  let hoverSelection=initialTime?(typeof initialTime==='number'?initialTime:Date.parse(initialTime)/1000):rows[active].time;
+  let active=initialTime!=null?nearest(typeof initialTime==='number'?initialTime:Date.parse(initialTime)/1000):rows.length-1,cursor=active,lastHovered=-1,lastPointer=null;
+  let hoverSelection=initialTime!=null?(typeof initialTime==='number'?initialTime:Date.parse(initialTime)/1000):rows[active].time;
   const hoverContext=()=>['intraday',allRows,series.interval,series.source,series.product,chartType,tool,measurementState?.startDate,measurementState?.endDate,measurementState?.startPrice,measurementState?.endPrice];
   const retainedPointer=getChartHoverPointer(svg,hoverContext(),hoverSelection);
 
-  const hover=index=>{const row=rows[index],previous=allRows[nearestIn(allRows,row.time)-1];return {date:row.date,time:row.time,price:row.close,displayedPrice:row.close*factor,open:row.open,high:row.high,low:row.low,close:row.close,volume:row.volume,volumeSource:series.source,volumeUnit:'BTC',...barPriceChange(row.close,previous?.close,row.open),previousCloseDate:previous?.date??null,changeInterval:interval.label,kind:'observed',interval:interval.label,source:series.source,product:series.product,completed:true};};
+  const hover=index=>{const row=rows[index],previous=allRows[nearestIn(allRows,row.time)-1];return {date:row.date,time:row.time,price:row.close,displayedPrice:display.toDisplay(row.close),display:display.metadata,open:row.open,high:row.high,low:row.low,close:row.close,volume:row.volume,volumeSource:series.source,volumeUnit:'BTC',...barPriceChange(row.close,previous?.close,row.open),previousCloseDate:previous?.date??null,changeInterval:interval.label,kind:'observed',interval:interval.label,source:series.source,product:series.product,completed:true};};
   function mark(index,hovered=false,anchor=null,notify=true,pointerY=null){
     cursor=index;const row=rows[index],xx=x(row.time),tx=Math.max(L,Math.min(W-R-124,xx-62));
     vertical.setAttribute('x1',xx);vertical.setAttribute('x2',xx);dot.setAttribute('cx',xx);
@@ -84,7 +91,7 @@ export function drawIntradayChart({svg,series,chartType='candles',scale='log',pr
     if(!Number.isFinite(pointerY)&&((anchor?.price??row.close)<axis.min||(anchor?.price??row.close)>axis.max))for(const node of [horizontal,dot,priceTag])node.setAttribute('visibility','hidden');
     dateTag.querySelector('rect').setAttribute('x',tx);dateTag.querySelector('rect').setAttribute('y',axisY-12);dateTag.querySelector('text').setAttribute('x',tx+62);dateTag.querySelector('text').setAttribute('y',axisY+1);dateTag.querySelector('text').textContent=timestamp(row.time);if(notify)onHover({...hover(index),hovered});
   }
-  function inspection(index){const row=rows[index],snapshot=row.snapshot??series.snapshot,retrievedAt=row.retrievedAt||series.retrievedAt;return {label:`${timestamp(row.time)} UTC · ${interval.label} 완료 봉`,date:row.date,kind:'observed',fields:[{label:'시가 O',value:money(row.open)},{label:'고가 H',value:money(row.high)},{label:'저가 L',value:money(row.low)},{label:'종가 C',value:money(row.close)},{label:'거래량 · BTC',value:number(row.volume,6)},{label:'출처',value:`${series.source} · ${series.product}`}],note:`${snapshot?'저장 자료':'조회 자료'} · 수집 ${retrievedAt.replace('T',' ').slice(0,19)} UTC. 봉 시작 시각 기준이며 이 거래소 현물쌍의 물량입니다. ${series.gapCount?`${series.gapCount}개 빈 구간은 채우지 않았습니다.`:'완료된 실제 거래 봉만 표시합니다.'}`};}
+  function inspection(index){const row=rows[index],snapshot=row.snapshot??series.snapshot,retrievedAt=row.retrievedAt||series.retrievedAt;return {label:`${timestamp(row.time)} UTC · ${interval.label} 완료 봉`,date:row.date,kind:'observed',fields:[...(unit==='usd'?[]:[{label:display.label,value:price(row.close)},{label:'표시 기준 · UTC',value:`${display.baseDate} · ${money(display.basePrice)}`}]),{label:'시가 O',value:money(row.open)},{label:'고가 H',value:money(row.high)},{label:'저가 L',value:money(row.low)},{label:'종가 C',value:money(row.close)},{label:'거래량 · BTC',value:number(row.volume,6)},{label:'출처',value:`${series.source} · ${series.product}`}],note:`${snapshot?'저장 자료':'조회 자료'} · 수집 ${retrievedAt.replace('T',' ').slice(0,19)} UTC. 봉 시작 시각 기준이며 이 거래소 현물쌍의 물량입니다. ${series.gapCount?`${series.gapCount}개 빈 구간은 채우지 않았습니다.`:'완료된 실제 거래 봉만 표시합니다.'}`};}
   const measurementOverlay=createMeasurementOverlay(svg,{x:value=>x(Date.parse(value)/1000),y,left:L,right:W-R,top:T,bottom:B,small,formatPrice:money,formatDate:value=>timestamp(Date.parse(value)/1000).slice(5),formatChange:value=>`${value>0?'+':value<0?'−':''}${number(Math.abs(value),2)}%`,formatDuration:result=>{const minutes=result.deltaSeconds/60;return `${minutes>0?'+':''}${number(minutes,1)}분 · ${number(result.deltaSeconds/interval.seconds,1)}봉 간격`;}});
   const lookupMeasurement=value=>{const time=Date.parse(value)/1000,row=allRows[nearestIn(allRows,time)];return row.time===time?row:{date:value,price:NaN};};
   function renderMeasurement(preview=null){measurementOverlay.paint(measurePriceAnchors(measurementState,{lookup:lookupMeasurement,preview}),Boolean(measurementState&&!measurementState.endDate));}
@@ -97,9 +104,9 @@ export function drawIntradayChart({svg,series,chartType='candles',scale='log',pr
   function commit(index,user=false,openPanel=user){hoverHandler.cancel();clearChartHoverPointer(svg);lastHovered=-1;lastPointer=null;active=Math.max(0,Math.min(rows.length-1,index));if(user)hoverSelection=rows[active].time;mark(active);onInspect(inspection(active),{user,openPanel});}
   const fromPointer=event=>{const box=svg.getBoundingClientRect(),px=(event.clientX-box.left)/box.width*W;return nearest(minTime+(Math.max(L,Math.min(W-R,px))-L)/(W-L-R)*(maxTime-minTime));};
   const inPlot=event=>{const box=svg.getBoundingClientRect(),px=(event.clientX-box.left)/box.width*W,py=(event.clientY-box.top)/box.height*H;return px>=L&&px<=W-R&&py>=T&&py<=bottom;};
-  svg.onclick=event=>{hoverHandler.cancel();clearChartHoverPointer(svg);if(tool==='pan'||!inPlot(event))return;const index=fromPointer(event);if(tool==='measure'){const box=svg.getBoundingClientRect();if((event.clientY-box.top)/box.height*H>B)return;svg.focus({preventScroll:true});measure(index,anchorAt(index,event));}else commit(index,true);};
+  svg.onclick=event=>{hoverHandler.cancel();clearChartHoverPointer(svg);const annotation=event.target?.closest?.('[data-research-annotation]');if(annotation){activateAnnotation(annotation.dataset.researchAnnotation,{user:true});return;}if(tool==='pan'||!inPlot(event))return;const index=fromPointer(event);if(tool==='measure'){const box=svg.getBoundingClientRect();if((event.clientY-box.top)/box.height*H>B)return;svg.focus({preventScroll:true});measure(index,anchorAt(index,event));}else commit(index,true);};
   function pointerPreview(event){
-    if(event.pointerType==='touch'||!inPlot(event)){clearChartHoverPointer(svg);return false;}
+    if(event.pointerType==='touch'||event.target?.closest?.('[data-research-annotation]')||!inPlot(event)){clearChartHoverPointer(svg);return false;}
     rememberChartHoverPointer(svg,hoverContext(),event,[hoverSelection,rows[active].time]);
     const index=fromPointer(event),dataChanged=index!==lastHovered;
     if(!dataChanged&&lastPointer&&event.clientY===lastPointer.clientY&&Boolean(event.ctrlKey)===Boolean(lastPointer.ctrlKey)&&Boolean(event.metaKey)===Boolean(lastPointer.metaKey))return true;
@@ -110,12 +117,13 @@ export function drawIntradayChart({svg,series,chartType='candles',scale='log',pr
     return true;
   }
   const hoverHandler=coalescedChartHover(svg,pointerPreview);svg.onpointermove=hoverHandler;
-  svg.onpointerleave=()=>{hoverHandler.cancel();clearChartHoverPointer(svg);lastHovered=-1;lastPointer=null;mark(active);measurementOverlay.showSnap(null);if(measurementState&&!measurementState.endDate)renderMeasurement();};svg.onblur=null;
+  svg.onpointerleave=event=>{if(event?.pointerType==='touch')return;hoverHandler.cancel();clearChartHoverPointer(svg);lastHovered=-1;lastPointer=null;mark(active);measurementOverlay.showSnap(null);if(measurementState&&!measurementState.endDate)renderMeasurement();};svg.onblur=null;
   svg.onkeyup=event=>{hoverHandler.cancel();if(tool==='measure'&&lastPointer&&['Control','Meta'].includes(event.key))pointerPreview({clientX:lastPointer.clientX,clientY:lastPointer.clientY,pointerType:lastPointer.pointerType,ctrlKey:event.ctrlKey,metaKey:event.metaKey});};
   svg.onkeydown=event=>{
     hoverHandler.cancel();
     if(tool==='measure'&&lastPointer&&['Control','Meta'].includes(event.key)){pointerPreview({clientX:lastPointer.clientX,clientY:lastPointer.clientY,pointerType:lastPointer.pointerType,ctrlKey:event.ctrlKey,metaKey:event.metaKey});return;}
     if(['Enter',' ','ArrowLeft','ArrowRight','Home','End','Escape'].includes(event.key))clearChartHoverPointer(svg);
+    const annotation=event.target?.closest?.('[data-research-annotation]');if(annotation){if(['Enter',' '].includes(event.key)){event.preventDefault();event.stopPropagation();activateAnnotation(annotation.dataset.researchAnnotation,{user:true});}return;}
     if(event.shiftKey||event.altKey||event.ctrlKey||event.metaKey)return;
     if(tool==='measure'&&['Enter',' '].includes(event.key)){event.preventDefault();event.stopPropagation();if(!event.repeat)measure(cursor);return;}
     if(tool==='measure'&&event.key==='Escape'){event.preventDefault();event.stopPropagation();measurementState=null;renderMeasurement();measurementOverlay.showSnap(null);onMeasurement(null);return;}
@@ -129,5 +137,5 @@ export function drawIntradayChart({svg,series,chartType='candles',scale='log',pr
     if(tool!=='measure')onInspect(inspection(active),{user:false,openPanel:false});
   }else if(tool==='measure')mark(active);else commit(active);
 
-  return {getPriceScale(){return {...axis,left:L,right:W-R};},getSelection({anchor}={}){const index=Number.isFinite(anchor)?nearest(minTime+Math.max(0,Math.min(1,anchor))*(maxTime-minTime)):cursor;const detail=inspection(index);return {label:detail.label,copyText:[detail.label,...detail.fields.map(field=>`${field.label}: ${field.value}`),detail.note].join('\n')};},selectDate(value){commit(nearest(Date.parse(value)/1000),true);},previous(){commit(active-1,true);},next(){commit(active+1,true);},getDate(){return rows[active].date;},hasPrevious(){return active>0;},hasNext(){return active<rows.length-1;}};
+  return {previewPointer(point){if(svg.onpointermove!==hoverHandler)return false;hoverHandler.cancel();return pointerPreview({...point,pointerType:'mouse',target:svg});},clearPreview(){if(svg.onpointermove!==hoverHandler)return false;svg.onpointerleave();return true;},getPriceScale(){return {...axis,left:L,right:W-R,display:display.metadata};},getSelection({anchor}={}){const index=Number.isFinite(anchor)?nearest(minTime+Math.max(0,Math.min(1,anchor))*(maxTime-minTime)):cursor;const detail=inspection(index);return {label:detail.label,copyText:[detail.label,...detail.fields.map(field=>`${field.label}: ${field.value}`),detail.note].join('\n')};},selectDate(value){commit(nearest(Date.parse(value)/1000),true);},previous(){commit(active-1,true);},next(){commit(active+1,true);},getDate(){return rows[active].date;},hasPrevious(){return active>0;},hasNext(){return active<rows.length-1;}};
 }

@@ -1,13 +1,15 @@
 import { utcDay } from './cycle-engine.js?v=1.11.0';
 import { CHART_INTERVALS, isIntradayInterval } from './ohlc-data.js?v=1.11.0';
 import { INTRADAY_MAX_VISIBLE_BARS } from './intraday-history.js?v=1.11.0';
-import { normalizePriceDomain } from './price-axis.js?v=1.12.0-tv-parity.1';
+import { normalizePriceDomain } from './price-axis.js?v=1.13.0-research.1';
+import { PRICE_UNITS, isStartPriceUnit } from './price-display.js?v=1.13.0-research.1';
 
 export const WORKSPACE_STORAGE_KEY = 'atlas.workspaces.v1';
 export const MAX_WORKSPACES = 8;
-const keys = new Set(['span','magnet','assumption','granularity','axis','align','interval','measure','scope','phase','audit','type','indicators','indicator-hide','indicator-minimize','indicator-list','indicator-primary','cycle-relation','cycle-panel','chart','unit','view-start','view-end','price-min','price-max']);
+const keys = new Set(['span','magnet','assumption','granularity','axis','align','interval','measure','scope','phase','audit','type','indicators','indicator-hide','indicator-minimize','indicator-list','indicator-primary','indicator-settings','pane-order','pane-heights','pane-maximized','cycle-relation','cycle-panel','chart','unit','view-start','view-end','price-min','price-max','axis-inverted','price-only-auto']);
+const MIN_TIME=Date.parse('1800-01-01T00:00:00Z')/1000,MAX_TIME=Date.parse('2400-12-31T23:59:59Z')/1000;
 const validDate = value => {
-  if (typeof value !== 'string' || !/^20\d{2}-\d{2}-\d{2}$/.test(value)) return false;
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value) || value<'1800-01-01' || value>'2400-12-31') return false;
   try { utcDay(value); return true; } catch { return false; }
 };
 
@@ -17,7 +19,7 @@ export function normalizeWorkspaceRange(range, frequency = 'daily') {
   if (isIntradayInterval(frequency)) {
     const step = CHART_INTERVALS.find(item => item.id === frequency).seconds;
     const { start, end } = range;
-    if (![start,end].every(value => Number.isSafeInteger(value) && value >= 1230940800 && value < 4102444800 && value % step === 0) || end <= start || (end-start)/step+1 > INTRADAY_MAX_VISIBLE_BARS) return null;
+    if (![start,end].every(value => Number.isSafeInteger(value) && value >= MIN_TIME && value <= MAX_TIME && value % step === 0) || end <= start || (end-start)/step+1 > INTRADAY_MAX_VISIBLE_BARS) return null;
     return { start, end };
   }
   if (!validDate(range.start) || !validDate(range.end) || range.end <= range.start) return null;
@@ -26,28 +28,33 @@ export function normalizeWorkspaceRange(range, frequency = 'daily') {
 
 export function readWorkspaceViewport(params) {
   const frequency = params.get('granularity') || 'daily';
-  const read = key => isIntradayInterval(frequency) ? (/^\d{10}$/.test(params.get(key) || '') ? Number(params.get(key)) : NaN) : params.get(key);
-  return { unit:params.get('unit') === 'indexed' ? 'indexed' : 'usd', range:normalizeWorkspaceRange({start:read('view-start'),end:read('view-end')},frequency) };
+  const read = key => isIntradayInterval(frequency) ? (/^-?\d{1,11}$/.test(params.get(key) || '') ? Number(params.get(key)) : NaN) : params.get(key);
+  return { unit:PRICE_UNITS.includes(params.get('unit')) ? params.get('unit') : 'usd', range:normalizeWorkspaceRange({start:read('view-start'),end:read('view-end')},frequency) };
+}
+
+export function readWorkspaceAxisOptions(params) {
+  return {invertScale:params.get('axis-inverted')==='1',priceOnlyAuto:params.get('price-only-auto')==='1'};
 }
 
 export function readWorkspacePriceDomain(params) {
   const read = key => params.has(key) && params.get(key).trim() !== '' ? Number(params.get(key)) : NaN;
-  return normalizePriceDomain({min:read('price-min'),max:read('price-max')},{scale:params.get('axis') === 'linear' ? 'linear' : 'log'});
+  return normalizePriceDomain({min:read('price-min'),max:read('price-max')},{scale:params.get('axis') === 'linear'||isStartPriceUnit(params.get('unit')) ? 'linear' : 'log'});
 }
 
-export function writeWorkspaceViewport(params, { frequency = 'daily', unit = 'usd', range = null, priceDomain = null } = {}) {
-  unit === 'indexed' ? params.set('unit','indexed') : params.delete('unit');
+export function writeWorkspaceViewport(params, { frequency = 'daily', unit = 'usd', range = null, priceDomain = null, invertScale, priceOnlyAuto } = {}) {
+  PRICE_UNITS.includes(unit)&&unit!=='usd' ? params.set('unit',unit) : params.delete('unit');
+  for(const [key,value] of [['axis-inverted',invertScale??params.get('axis-inverted')==='1'],['price-only-auto',priceOnlyAuto??params.get('price-only-auto')==='1']])value?params.set(key,'1'):params.delete(key);
   const valid = normalizeWorkspaceRange(range,frequency);
   for (const key of ['start','end']) valid ? params.set(`view-${key}`,String(valid[key])) : params.delete(`view-${key}`);
-  const price = normalizePriceDomain(priceDomain,{scale:params.get('axis') === 'linear' ? 'linear' : 'log'});
+  const price = normalizePriceDomain(priceDomain,{scale:params.get('axis') === 'linear'||isStartPriceUnit(unit) ? 'linear' : 'log'});
   for (const key of ['min','max']) price ? params.set(`price-${key}`,String(price[key])) : params.delete(`price-${key}`);
   return params;
 }
 
 export function cleanWorkspaceQuery(query) {
-  if (typeof query !== 'string' || query.length > 5000) return '';
+  if (typeof query !== 'string' || query.length > 24000) return '';
   const source = new URLSearchParams(query), result = new URLSearchParams();
-  for (const [key,value] of source) if (keys.has(key) && value.length <= 500) result.set(key,value);
+  for (const [key,value] of source) if (keys.has(key) && value.length <= (key==='indicator-settings'?8000:key==='pane-heights'?1200:500)) result.set(key,value);
   const view = readWorkspaceViewport(result);
   writeWorkspaceViewport(result,{frequency:result.get('granularity') || 'daily',...view,priceDomain:readWorkspacePriceDomain(result)});
   result.sort();

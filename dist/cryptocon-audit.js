@@ -29,7 +29,7 @@ const VIEWS={
   targets:{title:'CryptoCon · 목표 가격과 관측 결과',caption:'USD · UTC 일말 최고값 비교',note:'표시한 목표와 실제 일말 가격을 동일한 기준으로 비교합니다. 장중 최고가나 자기보고 체결가는 검증하지 않습니다. 시한이 없는 주장은 시한 실패로 채점하지 않습니다.',legend:[{label:'관측 창의 최고 일말 가격',color:BLUE},{label:'공개된 목표',color:GOLD}]}
 };
 
-export function renderCryptoConAudit({svg,dataset,onInspect=()=>{},view='timing'}){
+export function renderCryptoConAudit({svg,dataset,onInspect=()=>{},view='timing',presentation=()=>{}}){
   if(!VIEWS[view])view='timing';
   if(!cache.has(dataset))cache.set(dataset,buildCryptoConAudit(dataset));
   const audit=cache.get(dataset),g=geometry(svg),definition=VIEWS[view],rows=view==='timing'?audit.timing:view==='thresholds'?audit.thresholds:audit.targets;
@@ -37,7 +37,8 @@ export function renderCryptoConAudit({svg,dataset,onInspect=()=>{},view='timing'
   let selected=clamp(saved?.key===key?saved.index:view==='thresholds'?1:view==='timing'?1:0,0,rows.length-1),initialInspection;
   const rowHeight=(g.B-g.T)/rows.length;
   const yy=index=>g.T+(index+.5)*rowHeight;
-  const text=(x,y,value,{color=MUTED,size=g.small?10:12,anchor='start',weight=400}={})=>`<text x="${x}" y="${y}" fill="${color}" font-size="${size}" text-anchor="${anchor}" font-weight="${weight}">${esc(value)}</text>`;
+  svg.setAttribute('data-indicator-layer','cryptocon');
+  const text=(x,y,value,{color=MUTED,size=g.small?10:12,anchor='start',weight=400,axis=false}={})=>`<text${axis?' data-indicator-axis-label':''} x="${x}" y="${y}" fill="${color}" font-size="${size}" text-anchor="${anchor}" font-weight="${weight}">${esc(value)}</text>`;
   function inspect(){
     const row=rows[selected];
     if(view==='timing')return {label:`${row.title} · ${date(row.published)} 발행`,date:audit.peak.date,kind:row.kind==='retrospective'?'observed':'assumption',
@@ -57,11 +58,11 @@ export function renderCryptoConAudit({svg,dataset,onInspect=()=>{},view='timing'
     const min=utcDay('2025-01-01'),max=utcDay('2025-12-31'),x=value=>g.L+(utcDay(value)-min)/(max-min)*(g.W-g.L-g.R);
     let out=background();
     const months=g.small?[1,4,7,10,12]:[1,3,5,7,9,11,12];
-    for(const month of months){const value=`2025-${String(month).padStart(2,'0')}-01`,xx=x(value);out+=`<line x1="${xx}" x2="${xx}" y1="${g.T}" y2="${g.B}" stroke="${GRID}"/>`+text(xx,g.H-34,`${month}월`,{anchor:'middle'});}
+    for(const month of months){const value=`2025-${String(month).padStart(2,'0')}-01`,xx=x(value);out+=`<line x1="${xx}" x2="${xx}" y1="${g.T}" y2="${g.B}" stroke="${GRID}"/>`+text(xx,g.H-34,`${month}월`,{anchor:'middle',axis:true});}
     rows.forEach((row,index)=>{
       const y=yy(index),h=Math.max(8,Math.min(g.short?12:24,rowHeight*.4)),color=row.kind==='retrospective'?MUTED:row.kind==='alternative'?GOLD:PURPLE;
       out+=text(g.L-8,y+4,row.shortLabel,{anchor:'end',color:INK});
-      out+=`<rect x="${x(row.start)}" y="${y-h/2}" width="${Math.max(2,x(row.end)-x(row.start))}" height="${h}" rx="2" fill="${color}" fill-opacity="${row.kind==='retrospective'?'.1':'.46'}" stroke="${color}"${row.kind==='retrospective'?' stroke-dasharray="4 3"':''}/>`;
+      out+=`<rect data-indicator-fill x="${x(row.start)}" y="${y-h/2}" width="${Math.max(2,x(row.end)-x(row.start))}" height="${h}" rx="2" fill="${color}" fill-opacity="${row.kind==='retrospective'?'.1':'.46'}" stroke="${color}"${row.kind==='retrospective'?' stroke-dasharray="4 3"':''}/>`;
       if(row.center)out+=`<line x1="${x(row.center)}" x2="${x(row.center)}" y1="${y-h/2-3}" y2="${y+h/2+3}" stroke="${color}" stroke-width="2"/>`;
       if(!g.short)out+=text(g.L-8,y+20,row.kind==='retrospective'?'사후 설명':row.kind==='alternative'?'조건부 대안':'사전 전망',{anchor:'end',size:10});
     });
@@ -71,10 +72,10 @@ export function renderCryptoConAudit({svg,dataset,onInspect=()=>{},view='timing'
   function drawThresholds(){
     const left=g.small?47:82,right=g.small?36:55,max=100,x=value=>left+value/max*(g.W-left-right);
     let out=background();
-    for(const n of [0,25,50,75,100]){const xx=x(n);out+=`<line x1="${xx}" x2="${xx}" y1="${g.T}" y2="${g.B}" stroke="${GRID}"/>`+text(xx,g.H-34,`${n}`,{anchor:'middle',size:10});}
+    for(const n of [0,25,50,75,100]){const xx=x(n);out+=`<line x1="${xx}" x2="${xx}" y1="${g.T}" y2="${g.B}" stroke="${GRID}"/>`+text(xx,g.H-34,`${n}`,{anchor:'middle',size:10,axis:true});}
     out+=text(g.W-4,15,'선행일',{anchor:'end',size:10});
     rows.forEach((row,index)=>{const y=yy(index),h=Math.max(8,Math.min(g.short?13:22,rowHeight*.44));out+=text(left-9,y+4,`${number(row.ratio*100)}%`,{anchor:'end',color:INK});
-      out+=row.leadDays?`<rect x="${left}" y="${y-h/2}" width="${x(row.leadDays)-left}" height="${h}" rx="2" fill="${BLUE}" fill-opacity="${index===selected?'.95':'.55'}"/>`:`<circle cx="${left}" cy="${y}" r="3" fill="${BLUE}"/>`;
+      out+=row.leadDays?`<rect data-indicator-fill x="${left}" y="${y-h/2}" width="${x(row.leadDays)-left}" height="${h}" rx="2" fill="${BLUE}" fill-opacity="${index===selected?'.95':'.55'}"/>`:`<circle data-indicator-fill cx="${left}" cy="${y}" r="3" fill="${BLUE}"/>`;
       out+=text(x(row.leadDays)+7,y+4,`${row.leadDays}일`,{color:INK,size:11});
       if(!g.short)out+=text(left,y+h/2+14,`${date(row.firstDate)} · ${row.aboveDays}/${row.windowDays}일 체류`,{size:10});
     });return out;
@@ -82,10 +83,10 @@ export function renderCryptoConAudit({svg,dataset,onInspect=()=>{},view='timing'
   function drawTargets(){
     const left=g.small?64:110,right=g.small?23:35,max=180000,x=value=>left+value/max*(g.W-left-right);
     let out=background();
-    for(const n of [0,50000,100000,150000]){const xx=x(n);out+=`<line x1="${xx}" x2="${xx}" y1="${g.T}" y2="${g.B}" stroke="${GRID}"/>`+text(xx,g.H-34,`${n/1000}k`,{anchor:'middle',size:10});}
+    for(const n of [0,50000,100000,150000]){const xx=x(n);out+=`<line x1="${xx}" x2="${xx}" y1="${g.T}" y2="${g.B}" stroke="${GRID}"/>`+text(xx,g.H-34,`${n/1000}k`,{anchor:'middle',size:10,axis:true});}
     out+=text(g.W-5,15,'USD',{anchor:'end',size:10});
     rows.forEach((row,index)=>{const y=yy(index),h=Math.max(9,Math.min(g.short?16:25,rowHeight*.32));out+=text(left-8,y+4,row.shortLabel,{anchor:'end',color:INK,size:g.small?9:12});
-      out+=`<rect x="${left}" y="${y-h/2}" width="${Math.max(0,x(row.observedPeak?.price||0)-left)}" height="${h}" rx="2" fill="${BLUE}" fill-opacity="${index===selected?'.9':'.5'}"/>`;
+      out+=`<rect data-indicator-fill x="${left}" y="${y-h/2}" width="${Math.max(0,x(row.observedPeak?.price||0)-left)}" height="${h}" rx="2" fill="${BLUE}" fill-opacity="${index===selected?'.9':'.5'}"/>`;
       out+=`<line x1="${x(row.target)}" x2="${x(row.target)}" y1="${y-h/2-5}" y2="${y+h/2+5}" stroke="${GOLD}" stroke-width="2"/>`;
       out+=text(x(row.target),y-h/2-8,`${number(row.target/1000,row.target%1000?1:0)}k`,{anchor:'middle',color:GOLD,size:10});
       if(!g.short)out+=text(left,y+h/2+16,row.deadline?'9월 말 시한':row.id==='cycle-130k'?'2025년 고점 비교':'시한 없음',{size:10});
@@ -93,6 +94,7 @@ export function renderCryptoConAudit({svg,dataset,onInspect=()=>{},view='timing'
   }
   function draw({user=false,origin='render'}={}){
     svg.innerHTML=view==='timing'?drawTiming():view==='thresholds'?drawThresholds():drawTargets();
+    presentation(svg);
     selections.set(svg,{key,index:selected});initialInspection=inspect();onInspect(initialInspection,{user,origin,openPanel:false});
   }
   function select(index,origin='navigation'){selected=clamp(Math.round(index),0,rows.length-1);draw({user:true,origin});}
@@ -100,5 +102,11 @@ export function renderCryptoConAudit({svg,dataset,onInspect=()=>{},view='timing'
   svg.onclick=event=>{const rect=svg.getBoundingClientRect(),scale=Math.min(rect.width/g.W,rect.height/g.H),y=(event.clientY-rect.top-(rect.height-g.H*scale)/2)/scale;select(Math.floor((y-g.T)/rowHeight),'pointer');};
   svg.onkeydown=event=>{if(event.shiftKey||event.altKey||event.ctrlKey||event.metaKey||!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End','Enter',' '].includes(event.key))return;event.preventDefault();select(['Enter',' '].includes(event.key)?selected:event.key==='Home'?0:event.key==='End'?rows.length-1:selected+(['ArrowRight','ArrowDown'].includes(event.key)?1:-1),'keyboard');};
   draw();
-  return {...definition,initialInspection,previous(){select(selected-1);},next(){select(selected+1);},hasPrevious(){return selected>0;},hasNext(){return selected<rows.length-1;},selectDate(value){const day=utcDay(value);select(rows.reduce((best,row,index)=>Math.abs(utcDay(row.firstDate||row.published)-day)<Math.abs(utcDay(rows[best].firstDate||rows[best].published)-day)?index:best,0),'date');}};
+  return {...definition,initialInspection,
+    exportData(){
+      const fields=view==='timing'?[['id','원문 주장 ID'],['title','그때 제시한 주장'],['published','공개일 UTC'],['kind','사전 전망·대안·사후 설명'],['start','날짜 창 시작 UTC'],['end','날짜 창 끝 UTC'],['center','당시 중심일 UTC'],['peakDate','실제 최고 종가 UTC'],['peakPriceUsd','실제 최고 종가 USD'],['daysFromCenter','중심일 대비 실제 고점 일수'],['daysFromWindowStart','창 시작 대비 실제 고점 일수'],['assessment','비교 상태'],['evidence','근거 접근 수준'],['url','원문 URL'],['supportingUrl','보조 근거 URL'],['note','제약']]:view==='thresholds'?[['ratio','최종 최고가 대비 비율 0..1'],['firstDate','기준 첫 도달 UTC'],['firstPrice','첫 도달 실제 가격 USD'],['peakDate','최고 종가 UTC'],['peakPrice','최고 종가 USD'],['leadDays','최고가까지 선행일'],['aboveDays','기준 이상 관측 일수'],['windowDays','비교 창 관측 일수'],['maxDrawdownPct','비교 창 최대 낙폭 %']]:[['id','원문 주장 ID'],['title','공개된 가격 목표'],['published','공개일 UTC'],['target','목표 가격 USD'],['observationStart','관측 창 시작 UTC'],['observedThrough','실제 관측 끝 UTC'],['deadline','원문 시한 UTC 또는 빈칸'],['peakDate','관측 창 최고 종가 UTC'],['peakPriceUsd','관측 창 최고 종가 USD'],['gapPct','목표 대비 최고가 차이 %'],['reached','기준일까지 일말 도달'],['assessment','시한과 도달 비교 상태'],['evidence','근거 접근 수준'],['url','원문 URL'],['supportingUrl','보조 근거 URL'],['note','제약']];
+      const exported=rows.map(row=>view==='timing'?{...row,peakDate:audit.peak.date,peakPriceUsd:audit.peak.price}:view==='targets'?{...row,peakDate:row.observedPeak?.date||null,peakPriceUsd:row.observedPeak?.price??null}:{...row});
+      return {id:'cryptocon',label:definition.title,source:`${audit.priceDefinition}${view==='thresholds'?'':' · 공개 주장 원문 URL과 근거 접근 수준은 각 행에 기재'}`,interval:view==='thresholds'?'daily retrospective thresholds':'published claims',unit:view==='timing'?'UTC dates; elapsed days; observed price USD':view==='thresholds'?'USD; ratio 0..1; days; maxDrawdownPct %':'USD; gapPct %; UTC dates',kind:'analysis',rows:exported,columns:fields.map(([key,label])=>({key,label})),note:`${definition.note} 연구 기준일 ${audit.asOf}, 실제 자료 ${audit.observedThrough}까지. 독립 분석 축이며 사후 비교는 미래 예측이나 거래 결과가 아닙니다.`};
+    },
+    previous(){select(selected-1);},next(){select(selected+1);},hasPrevious(){return selected>0;},hasNext(){return selected<rows.length-1;},selectDate(value){const day=utcDay(value);select(rows.reduce((best,row,index)=>Math.abs(utcDay(row.firstDate||row.published)-day)<Math.abs(utcDay(rows[best].firstDate||rows[best].published)-day)?index:best,0),'date');}};
 }
