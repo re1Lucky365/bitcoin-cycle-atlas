@@ -51,45 +51,28 @@ function priceSegments(points) {
 function labelAt(item, y, { bounds, placed, obstacles, segments }) {
   const available = item.x2 - item.x1 - 12;
   if (available <= 0) return null;
+  const dense = item.lanePitch < 18, fontSize = dense ? 8 : 10, height = dense ? 10 : 14, labelGap = dense ? 1 : 3;
   const variants = [
-    { mode: 'full', text: `${item.relation.label} · ${item.duration}`, top: y - 18, height: 14, penalty: 0 },
-    { mode: 'compact', text: `${item.relation.label}\n${item.duration}`, top: y - 24, height: 22, width: Math.max(textWidth(item.relation.label) * .8, textWidth(item.duration) * .9) + 4, penalty: 36 },
-    { mode: 'duration', text: item.duration, top: y - 18, height: 14, penalty: item.active ? 320 : 240 },
+    { mode: 'full', text: `${item.relation.label} · ${item.duration}`, top: y - height / 2, height, fontSize, baseline: y + 3, penalty: 0 },
+    { mode: 'compact', text: `${item.relation.label}\n${item.duration}`, top: y - 24, height: 22, fontSize: 10, width: Math.max(textWidth(item.relation.label) * .8, textWidth(item.duration) * .9) + 4, penalty: 36 },
+    { mode: 'duration', text: item.duration, top: y - height / 2, height, fontSize, baseline: y + 3, penalty: item.active ? 320 : 240 },
   ];
   let best = null;
   for (const variant of variants) {
-    const width = variant.width ?? textWidth(variant.text) + 4;
-    if (width > available || variant.top < bounds.top + 1) continue;
+    const width = variant.width ?? textWidth(variant.text) * variant.fontSize / 10 + 4;
+    if (width > available || variant.top < bounds.top + 1 || variant.top + variant.height > bounds.bottom) continue;
     const start = item.x1 + 6, end = item.x2 - width - 6, center = (start + end) / 2;
     for (const x of new Set([center, start, end, (start + center) / 2, (center + end) / 2])) {
       const box = { x, y: variant.top, width, height: variant.height };
-      if (obstacles.some(other => intersects(box, other, 2)) || placed.some(other => (other.labelBox && intersects(box, other.labelBox, 3)) || intersects(box, { x: other.x1, y: other.y - 2, width: other.x2 - other.x1, height: 4 }, 1))) continue;
+      if (obstacles.some(other => intersects(box, other, 2)) || placed.some(other => (other.labelBox && intersects(box, other.labelBox, labelGap)) || intersects(box, { x: other.x1, y: other.y - 2, width: other.x2 - other.x1, height: 4 }, 1))) continue;
       const priceHits = segments.reduce((count, segment) => count + Number(segmentIntersectsBox(segment, box)), 0);
       // Relation names carry the meaning. Prefer the smaller two-line name to
       // a bare number even when a price segment makes the name less convenient.
       const score = priceHits * 4 + variant.penalty + Math.abs(x - center) / Math.max(1, item.x2 - item.x1);
-      if (!best || score < best.score) best = { ...box, text: variant.text, mode: variant.mode, score };
+      if (!best || score < best.score) best = { ...box, text: variant.text, mode: variant.mode, fontSize: variant.fontSize, baseline: variant.baseline, score };
     }
   }
   return best;
-}
-
-function laneAt(item, slot, preferred, context) {
-  const { placed, obstacles, segments } = context, { y } = slot;
-  const lineBox = { x: item.x1, y: y - 2, width: item.x2 - item.x1, height: 4 };
-  let collisions = 0, overlap = 0, labelCrossings = 0;
-  for (const other of placed) {
-    const shared = horizontalOverlap(item, other, 5);
-    if (shared > 0 && Math.abs(other.y - y) < 6) { collisions++; overlap += shared; }
-    if (other.labelBox && intersects(lineBox, other.labelBox, 1)) labelCrossings += other.active ? 2 : 1;
-  }
-  const obstacleHits = obstacles.reduce((count, box) => count + Number(intersects(lineBox, box, 2)), 0);
-  const priceHits = segments.reduce((count, segment) => count + Number(segmentIntersectsBox(segment, lineBox)), 0);
-  const labelBox = labelAt(item, y, context), reused = placed.some(other => Math.abs(other.y - y) < .5);
-  // A relation has a soft preferred lane. Empty x spans can share an occupied
-  // lane, while overlapping spans cost far more than moving to another lane.
-  const score = collisions * 100000 + overlap * 10 + labelCrossings * 100000 + obstacleHits * 2200 + priceHits * 12 + Math.abs(slot.index - preferred) * .35 + slot.index * .12 + (reused ? 0 : 5) + (slot.compact ? 30 : 0) + (labelBox ? labelBox.score : item.active ? 1200 : 400);
-  return { y, lane: slot.index, compact: Boolean(slot.compact), labelBox, score, collisions, labelCrossings };
 }
 
 function wrapText(text, width) {
@@ -147,7 +130,7 @@ function spanMarkup(item) {
   }
   if (labelBox) {
     const center = fmt(labelBox.x + labelBox.width / 2);
-    markup += `<text class="cycle-interval-duration cycle-interval-label" x="${center}" y="${fmt(labelBox.y + 11)}" text-anchor="middle" font-size="10" font-weight="${active ? 700 : 600}" fill="${color}" paint-order="stroke" stroke="#101a27" stroke-width="${labelBox.mode === 'compact' ? 2.3 : 3}" stroke-linejoin="round" pointer-events="visiblePainted">`;
+    markup += `<text class="cycle-interval-duration cycle-interval-label" x="${center}" y="${fmt(labelBox.baseline ?? labelBox.y + 11)}" text-anchor="middle" font-size="${labelBox.fontSize}" font-weight="${active ? 700 : 600}" fill="${color}" paint-order="stroke" stroke="#101a27" stroke-width="${labelBox.mode === 'compact' ? 2.3 : 3}" stroke-linejoin="round" pointer-events="visiblePainted">`;
     markup += labelBox.mode === 'compact' ? `<tspan class="cycle-interval-relation-label" x="${center}" y="${fmt(y - 14)}" font-size="8">${esc(relation.label)}</tspan><tspan x="${center}" y="${fmt(y - 4)}" font-size="9">${esc(item.duration)}</tspan>` : esc(labelBox.text);
     markup += '</text>';
   }
@@ -158,49 +141,66 @@ function spanMarkup(item) {
 /**
  * Internal SVG group only. x receives the original endpoint as { date }; right
  * is the absolute price-plot edge. clipId refers to the caller's price clip.
- * All visible valid spans survive crowding; labels use available space only.
+ * Every valid visible span remains in a bounded bottom band. Relation rows and
+ * original-date subtracks are independent of zoom, price values and selection.
+ * Labels use horizontal room first and may be omitted; title/ARIA and the
+ * caller's interval selection remain available without adding chart height.
  */
 export function cycleIntervalsOverlayMarkup({ intervals = [], start, end, x, left, right, top, bottom, clipId = 'price', relation = 'all', activeIntervalId = null, activeMarkerId = null, obstacles = [], pricePoints = [] } = {}) {
   const displayedRelations = relationById.has(relation) ? INTERVAL_RELATIONS.filter(item => item.id === relation) : [...INTERVAL_RELATIONS];
   const rows = displayedRelations.map(item => ({ ...item, spans: [], active: false, related: false }));
-  const empty = { markup: '', visibleCount: 0, labelCount: 0, hiddenLabelCount: 0, items: [], rows, relations: rows, lanes: [] };
+  const empty = { markup: '', visibleCount: 0, labelCount: 0, hiddenLabelCount: 0, items: [], rows, relations: rows, lanes: [], bandTop: null, bandBottom: null };
   const first = dayOf(start), last = dayOf(end);
   if (first === null || last === null || last <= first || ![left, right, top, bottom].every(finite) || right <= left || bottom <= top || typeof x !== 'function') return empty;
-  const bounds = { left, right, top, bottom }, selectedRelations = new Set(displayedRelations.map(item => item.id)), items = [];
+  // This is an annotation region inside the unchanged price plot, not reserved
+  // layout space. Its height never depends on the visible data, HUDs or prices.
+  const bandTop = bottom - Math.min(200, (bottom - top) * .4), bandBottom = bottom;
+  const bounds = { left, right, top: bandTop, bottom: bandBottom }, selectedRelations = new Set(displayedRelations.map(item => item.id)), candidates = [], items = [];
   for (const interval of Array.isArray(intervals) ? intervals : []) {
     if (!interval?.id || !selectedRelations.has(interval.relation)) continue;
     const from = dayOf(interval.startDate), to = dayOf(interval.endDate);
-    if (from === null || to === null || to <= from || to <= first || from >= last) continue;
+    if (from === null || to === null || to <= from) continue;
+    const item = { interval, relation: relationById.get(interval.relation), first: from, last: to };
+    candidates.push(item);
+    if (to <= first || from >= last) continue;
     const rawX1 = project(x, interval.startDate), rawX2 = project(x, interval.endDate);
     if (rawX1 === null || rawX2 === null || rawX2 <= rawX1) continue;
     const x1 = clamp(rawX1, left, right), x2 = clamp(rawX2, left, right);
     if (x2 <= x1) continue;
-    items.push({ interval, relation: relationById.get(interval.relation), first: from, last: to, days: to - from, duration: durationLabel(to - from), rawX1, rawX2, x1, x2, clippedStart: from < first || rawX1 < left, clippedEnd: to > last || rawX2 > right, active: interval.id === activeIntervalId, related: Boolean(activeMarkerId && (interval.fromId === activeMarkerId || interval.toId === activeMarkerId)) });
+    Object.assign(item, { days: to - from, duration: durationLabel(to - from), rawX1, rawX2, x1, x2, clippedStart: from < first || rawX1 < left, clippedEnd: to > last || rawX2 > right, active: interval.id === activeIntervalId, related: Boolean(activeMarkerId && (interval.fromId === activeMarkerId || interval.toId === activeMarkerId)) });
+    items.push(item);
   }
   const safeObstacles = (Array.isArray(obstacles) ? obstacles : []).filter(box => box && [box.x, box.y, box.width, box.height].every(finite) && box.width > 0 && box.height > 0);
-  const segments = priceSegments(pricePoints), slots = [];
-  for (let y = bottom - 7; y >= top + 19; y -= 22) slots.push({ y, index: slots.length });
-  if (!slots.length) slots.push({ y: (top + bottom) / 2, index: 0 });
-  const compactSlots = [];
-  // Short mobile plots may have fewer than nine normal lanes. Extra thin-line
-  // slots preserve overlapping relationships without allocating another pane.
-  for (let y = bottom - 7; y >= top + 4; y -= 7) if (!slots.some(slot => Math.abs(slot.y - y) < 6)) compactSlots.push({ y, index: Math.max(0, (bottom - 7 - y) / 22), compact: true });
-  const placed = [], order = new Map(displayedRelations.map((item, index) => [item.id, index]));
-  for (const item of [...items].sort((a, b) => Number(b.active) - Number(a.active) || Number(b.related) - Number(a.related) || (b.x2 - b.x1) - (a.x2 - a.x1) || order.get(a.relation.id) - order.get(b.relation.id) || a.first - b.first || String(a.interval.id).localeCompare(String(b.interval.id)))) {
-    const preferred = Math.min(order.get(item.relation.id), slots.length - 1);
-    const context = { bounds, placed, obstacles: safeObstacles.filter(box => box.x < item.x2 + 2 && box.x + box.width > item.x1 - 2), segments: segments.filter(segment => Math.max(segment.x1, segment.x2) >= item.x1 && Math.min(segment.x1, segment.x2) <= item.x2) };
-    let best = null;
-    for (const slot of slots) { const candidate = laneAt(item, slot, preferred, context); if (!best || candidate.score < best.score) best = candidate; }
-    if (best.collisions || best.labelCrossings) for (const slot of compactSlots) { const candidate = laneAt(item, slot, preferred, context); if (candidate.score < best.score) best = candidate; }
-    Object.assign(item, { y: best.y, lane: best.lane, compact: best.compact, labelBox: best.labelBox, labelMode: best.labelBox?.mode || 'hidden', crowded: Boolean(best.collisions || best.labelCrossings), capHeight: Math.min(3, best.y - top, bottom - best.y) });
-    item.previewBox = previewFor(item, bounds);
-    placed.push(item);
+  const segments = priceSegments(pricePoints), order = new Map(displayedRelations.map((item, index) => [item.id, index]));
+  const byDate = (a, b) => a.first - b.first || a.last - b.last || String(a.interval.id).localeCompare(String(b.interval.id));
+  let trackCount = 0;
+  for (const row of rows) {
+    const ends = [], spans = candidates.filter(item => item.relation.id === row.id).sort(byDate);
+    row.lane = trackCount;
+    for (const item of spans) {
+      let track = ends.findIndex(end => end <= item.first);
+      if (track < 0) track = ends.length;
+      ends[track] = item.last;
+      item.lane = trackCount + track;
+      item.subtrack = track;
+    }
+    row.trackCount = Math.max(1, ends.length);
+    trackCount += row.trackCount;
   }
-  // Supplemental lanes may pass through a label placed earlier. Repack text
-  // against every final line, in selection order; preserve all arrows and drop
-  // only a label that cannot be shortened or shifted into clear space.
-  for (const item of items) item.labelBox = null;
-  for (const item of placed) {
+  const bandHeight = bandBottom - bandTop, lowest = bandBottom - Math.min(7, bandHeight / 4), highest = bandTop + Math.min(8, bandHeight / 4);
+  const lanePitch = trackCount > 1 ? Math.min(22, Math.max(0, (lowest - highest) / (trackCount - 1))) : 22;
+  items.sort((a, b) => order.get(a.relation.id) - order.get(b.relation.id) || a.subtrack - b.subtrack || byDate(a, b));
+  for (const item of items) {
+    item.y = lowest - item.lane * lanePitch;
+    item.lanePitch = lanePitch;
+    item.compact = lanePitch < 18;
+    item.labelBox = null;
+    item.capHeight = Math.min(3, lanePitch / 3, item.y - bandTop, bandBottom - item.y);
+    item.previewBox = previewFor(item, bounds);
+  }
+  // Selection only prioritizes readable text and foreground painting. It never
+  // moves a row; dense layouts drop text before crossing a neighboring line.
+  for (const item of [...items].sort((a, b) => Number(b.active) - Number(a.active) || Number(b.related) - Number(a.related))) {
     item.labelBox = labelAt(item, item.y, { bounds, placed: items.filter(other => other !== item), obstacles: safeObstacles.filter(box => box.x < item.x2 + 2 && box.x + box.width > item.x1 - 2), segments: segments.filter(segment => Math.max(segment.x1, segment.x2) >= item.x1 && Math.min(segment.x1, segment.x2) <= item.x2) });
     item.labelMode = item.labelBox?.mode || 'hidden';
     item.crowded = items.some(other => other !== item && Math.abs(other.y - item.y) < 6 && horizontalOverlap(item, other, 5) > 0);
@@ -211,6 +211,6 @@ export function cycleIntervalsOverlayMarkup({ intervals = [], start, end, x, lef
     row.related = row.spans.some(item => item.related);
   }
   const labelCount = items.filter(item => item.labelBox).length;
-  const markup = `<g class="cycle-interval-overlay" clip-path="url(#${esc(clipId)})" data-cycle-interval-count="${items.length}" data-cycle-interval-label-count="${labelCount}" data-cycle-relation-count="${rows.length}" pointer-events="none">${[...items].sort((a, b) => Number(a.active) - Number(b.active) || Number(a.related) - Number(b.related)).map(spanMarkup).join('')}</g>`;
-  return { markup, visibleCount: items.length, labelCount, hiddenLabelCount: items.length - labelCount, items, rows, relations: rows, lanes: [...new Set(items.map(item => item.y))].sort((a, b) => b - a) };
+  const markup = `<g class="cycle-interval-overlay" clip-path="url(#${esc(clipId)})" data-band-top="${fmt(bandTop)}" data-band-bottom="${fmt(bandBottom)}" data-cycle-interval-count="${items.length}" data-cycle-interval-label-count="${labelCount}" data-cycle-relation-count="${rows.length}" pointer-events="none">${[...items].sort((a, b) => Number(a.active) - Number(b.active) || Number(a.related) - Number(b.related)).map(spanMarkup).join('')}</g>`;
+  return { markup, visibleCount: items.length, labelCount, hiddenLabelCount: items.length - labelCount, items, rows, relations: rows, lanes: [...new Set(items.map(item => item.y))].sort((a, b) => b - a), bandTop, bandBottom };
 }

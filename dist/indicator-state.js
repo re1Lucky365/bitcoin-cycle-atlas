@@ -2,7 +2,7 @@
 export const INDICATORS = Object.freeze([
   {id:'readout',label:'가격 · OHLC 읽기',category:'표시',description:'왼쪽 위의 가격, 날짜, 시가·고가·저가·종가',default:true},
   {id:'source',label:'자료 출처',category:'표시',description:'가격·거래량 제공자와 수집 시각',default:true},
-  {id:'legend',label:'차트 범례',category:'표시',description:'오른쪽 아래의 실제 가격·미래 가정 범례',default:true},
+  {id:'legend',label:'차트 범례',category:'표시',description:'오른쪽 위의 실제 가격·미래 가정·사이클 색상 범례',default:true},
   {id:'countdown',label:'다음 국면 · D-day',category:'가격 지표',description:'미래 경로에서 7일 유지되는 다음 국면까지 · 조건부 가정',default:true,dailyOnly:true},
   {id:'volume',label:'거래량',category:'가격 지표',description:'실제 BTC 수량과 장기 조건부 거래량',control:'atlas-volume',default:true},
   {id:'history',label:'역사 사건',category:'가격 지표',description:'확대 수준에 맞춘 사건 이름과 원문',control:'atlas-history-events',default:true,dailyOnly:true},

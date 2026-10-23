@@ -1,4 +1,4 @@
-import { cycleIntervalsOverlayMarkup } from './cycle-interval-overlay.js?v=1.11.0-milestones.4';
+import { cycleIntervalsOverlayMarkup } from './cycle-interval-overlay.js?v=1.12.1-cursor-hud.1';
 import { milestoneMarkersMarkup } from './cycle-milestones-view.js?v=1.11.0-milestones.4';
 import { MILESTONE_TYPES } from './cycle-milestones.js?v=1.11.0-milestones.4';
 import { utcDay } from './cycle-engine.js?v=1.11.0';
@@ -10,7 +10,7 @@ import { priceAxisMarkup } from './price-axis.js?v=1.12.0-tv-parity.1';
 
 import { resolveMagnetPoint, advanceMeasurement, measurePriceAnchors, measurementOverlayMarkup, createMeasurementOverlay } from './chart-magnet.js?v=1.11.0';
 
-import { clearChartHover, coalescedChartHover, paintPriceCursor } from './chart-hover.js?v=1.11.0';
+import { clearChartHover, clearChartHoverPointer, getChartHoverPointer, rememberChartHoverPointer, coalescedChartHover, paintPriceCursor } from './chart-hover.js?v=1.12.1-cursor-hud.1';
 
 import { dateWindow, intervalAtDate, lowerBoundDate, upperBoundDate, pixelExtrema } from './chart-window.js?v=1.11.0';
 
@@ -46,7 +46,7 @@ function dailyRuns(rows,omit=()=>false){
 
 /** Rendering and inspection only. It never changes prices, paths or model dates. */
 export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency='daily',chartType='line',observedCandles=[],candleSource='Bitstamp',volumeBars=[],volumeProjection=null,volumeSource='Bitstamp',showVolume=false,historicalEvents=[],cycleCalibration=null,showCycleTiming=false,headerInset=null,showHistoricalEvents=true,activeHistoricalEventId=null,onHistoricalEvent=()=>{},stateStepDays=1,unit='usd',denominator=1,scale='log',priceDomain=null,tool='crosshair',magnet='off',measurement=null,onMeasurement=()=>{},onHover=()=>{},band=false,turns=[],showTurns=true,cycleMarkers=[],showCycleMarkers=true,activeCycleMarkerId=null,activeCycleMarkerIds=[],activeCycleInterval=null,onCycleMarker=()=>{},cycleIntervals=[],showCycleIntervals=false,cycleRelation='all',cycleOverlayObstacles=[],onCycleInterval=()=>{},events=[],states=[],fib=[],historical=false,nextTurn=null,showNextTurnLabel=true,onNextTurn=()=>{},showDrawdown=true,showStates=false,threshold=.12,onInspect=()=>{},selectedDate}){
-  clearChartHover(svg);
+  clearChartHover(svg,{preservePointer:true});
   // Match the allocated viewport instead of shrinking a fixed-height drawing.
   // An explicitly enabled secondary band stays present even in a short chart.
   const W=Math.max(1,Math.round(svg.clientWidth||svg.parentElement?.clientWidth||1100)),H=Math.max(1,Math.round(svg.clientHeight||svg.parentElement?.clientHeight||500)),small=W<600,compactHeight=H<320;
@@ -54,6 +54,7 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   const {left:L,right:R,top:T,axisY,priceBottom,ddTop,ddBottom,stateTop,stateBottom,volumeTop,volumeBottom,cycleTop,cycleBottom}=layout,stateHeight=stateBottom-stateTop,ddHeight=ddBottom-ddTop;
   const minDay=dayOf(start),maxDay=dayOf(end),span=Math.max(1,maxDay-minDay),xday=d=>L+(d-minDay)/span*(W-L-R),x=p=>xday(dayOf(p.date));
   svg.dataset.cycleIntervalCount='0';svg.dataset.cycleIntervalLabelCount='0';svg.dataset.cycleMarkerCount='0';svg.dataset.cycleMarkerLabelCount='0';svg.dataset.historyLabelCount='0';svg.dataset.historyEventCount='0';svg.dataset.historyLabelMode='off';svg.dataset.historyHiddenLabelCount='0';
+  delete svg.dataset.cycleIntervalBandTop;delete svg.dataset.cycleIntervalBandBottom;
   const originalVisible=dateWindow(rows,start,end).filter(p=>p.price>0);
   const visibleCycleMarkers=showCycleMarkers?cycleMarkers.filter(marker=>{
     if(!marker?.id||!milestoneTypeIds.has(marker.type)||typeof marker.date!=='string'||marker.date<start||marker.date>end||!Number.isFinite(marker.price)||marker.price<=0)return false;
@@ -67,7 +68,7 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   const coveredDays=new Set();for(const c of candleRows)for(let day=dayOf(c.startDate);day<=dayOf(c.endDate);day++)coveredDays.add(day);
   const covered=date=>coveredDays.has(dayOf(date));
   const visible=candleRows.length?originalVisible.filter(p=>!covered(p.date)||candleByDate.has(p.date)).map(p=>candleByDate.has(p.date)?{...p,coinMetricsPrice:p.price,price:candleByDate.get(p.date).close,candle:candleByDate.get(p.date)}:p):originalVisible;
-  if(!visible.length){svg.onclick=svg.onpointermove=svg.onpointerleave=svg.onkeydown=svg.onkeyup=null;delete svg.dataset.plotLeft;delete svg.dataset.plotRight;svg.innerHTML='<text x="24" y="60" fill="#c6d0dd">이 기간에는 아직 자료가 없습니다.</text>';return null;}
+  if(!visible.length){clearChartHoverPointer(svg);svg.onclick=svg.onpointermove=svg.onpointerleave=svg.onkeydown=svg.onkeyup=null;delete svg.dataset.plotLeft;delete svg.dataset.plotRight;svg.innerHTML='<text x="24" y="60" fill="#c6d0dd">이 기간에는 아직 자료가 없습니다.</text>';return null;}
   // The same pre-pixel-reduction vertices back the weekly path and cursor.
   // Daily milestone anchors remain exact, even between completed Sunday closes.
   const observed=visible.filter(p=>!split||p.date<=split);
@@ -165,18 +166,34 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   if(nextTurn&&nextTurn.date>=start&&nextTurn.date<=end){const xx=xday(dayOf(nextTurn.date)),headerFixed=small||fullHistory,anchor=headerFixed||xx>W-190?'end':'start',tx=headerFixed?W-R:anchor==='end'?xx-7:xx+7,label=`${nextTurn.type==='high'?'조정':'반등'} 후보 · D-${nf(nextTurn.days)}`,width=132,left=anchor==='end'?tx-width:tx-5,badgeY=Math.max(2,T-29);s+=`<line x1="${xx}" x2="${xx}" y1="${T}" y2="${bottom}" stroke="#9bc8e8" stroke-dasharray="4 5" opacity=".8"/>`;if(showNextTurnLabel)s+=`<g data-next-turn="${nextTurn.type}" role="button" tabindex="0" aria-label="${esc(label)} · 날짜와 범위 보기" style="cursor:pointer"><title>가정 · ${date(nextTurn.date)} · ${date(nextTurn.lowerDate)}–${date(nextTurn.upperDate)}</title><rect x="${left}" y="${badgeY}" width="${width+5}" height="23" rx="3" fill="#172737"/><text x="${tx}" y="${badgeY+15}" text-anchor="${anchor}" fill="#badcf2" font-size="11">${esc(label)}</text></g>`;}
   if(!fullHistory&&!small){let lastX=-999;for(const event of events.filter(p=>p.date>=start&&p.date<=end)){const xx=xday(dayOf(event.date)),yy=xx-lastX<140?T+30:T+16;lastX=xx;s+=`<line x1="${xx}" x2="${xx}" y1="${yy+8}" y2="${priceBottom}" stroke="#bca176" stroke-dasharray="2 6" opacity=".45"/><text x="${Math.min(W-R-5,xx)}" y="${yy}" text-anchor="${xx>W-180?'end':'start'}" fill="#c6ad88" font-size="11">${esc(event.shortLabel||event.label)}</text>`;}}
   const milestoneLayer=showCycleMarkers?milestoneMarkersMarkup({markers:cycleMarkers,start,end,x,y,left:L,right:W-R,top:T,bottom:priceBottom,clipId:`${svg.id}-milestone-clip`,activeMarkerId:activeCycleMarkerId,activeMarkerIds:activeCycleMarkerIds,activeInterval:activeCycleInterval}):null;
+  let updateCycleOverlayObstacles=()=>null;
   if(showCycleIntervals){
-    const obstacles=[...cycleOverlayObstacles];
+    const markerObstacles=[];
     for(const point of milestoneLayer?.markers||[]){
-      obstacles.push({x:point.x-point.radius-3,y:point.y-point.radius-3,width:2*point.radius+6,height:2*point.radius+6});
-      if(point.box)obstacles.push(point.box);
+      markerObstacles.push({x:point.x-point.radius-3,y:point.y-point.radius-3,width:2*point.radius+6,height:2*point.radius+6});
+      if(point.box)markerObstacles.push(point.box);
     }
     const stride=Math.max(1,Math.ceil(selectionRows.length/Math.max(24,W/4)));
     const pricePoints=selectionRows.filter((_,index)=>index%stride===0||index===selectionRows.length-1).flatMap(point=>point.candle?[{x:x(point),y:y(point.candle.high)},{x:x(point),y:y(point.candle.low)}]:[{x:x(point),y:y(point.price)}]);
     const periodClip=`${svg.id}-cycle-periods`;
     s+=`<defs><clipPath id="${periodClip}"><rect x="${L}" y="${T}" width="${W-L-R}" height="${priceBottom-T}"/></clipPath></defs>`;
-    const periods=cycleIntervalsOverlayMarkup({intervals:cycleIntervals,start,end,x,left:L,right:W-R,top:T,bottom:priceBottom,clipId:periodClip,relation:cycleRelation,activeIntervalId:activeCycleInterval?.id,activeMarkerId:activeCycleMarkerId,obstacles,pricePoints});
-    s+=periods.markup;svg.dataset.cycleIntervalCount=String(periods.visibleCount);svg.dataset.cycleIntervalLabelCount=String(periods.labelCount);
+    const renderPeriods=obstacles=>cycleIntervalsOverlayMarkup({intervals:cycleIntervals,start,end,x,left:L,right:W-R,top:T,bottom:priceBottom,clipId:periodClip,relation:cycleRelation,activeIntervalId:activeCycleInterval?.id,activeMarkerId:activeCycleMarkerId,obstacles:[...(obstacles||[]),...markerObstacles],pricePoints});
+    const periodMetadata=periods=>{svg.dataset.cycleIntervalCount=String(periods.visibleCount);svg.dataset.cycleIntervalLabelCount=String(periods.labelCount);if(Number.isFinite(periods.bandTop)&&Number.isFinite(periods.bandBottom)){svg.dataset.cycleIntervalBandTop=String(periods.bandTop);svg.dataset.cycleIntervalBandBottom=String(periods.bandBottom);}return {visibleCount:periods.visibleCount,labelCount:periods.labelCount,bandTop:periods.bandTop,bandBottom:periods.bandBottom};};
+    const periods=renderPeriods(cycleOverlayObstacles);let periodMarkup=periods.markup;
+    s+=`<g class="cycle-interval-overlay-layer">${periodMarkup}</g>`;periodMetadata(periods);
+    // HUD wrapping only affects period labels. Replacing the entire price SVG
+    // here would reset a live pointer to the selected observation on every size
+    // change and could create a readout → resize → redraw feedback loop.
+    updateCycleOverlayObstacles=obstacles=>{
+      if(svg.onpointermove!==hoverHandler)return null;
+      const layer=svg.querySelector('.cycle-interval-overlay-layer');if(!layer)return null;
+      const next=renderPeriods(obstacles),metadata=periodMetadata(next);
+      if(next.markup===periodMarkup)return {...metadata,changed:false};
+      const focus=svg.ownerDocument?.activeElement?.closest?.('[data-cycle-interval]'),focusId=focus?.closest?.('.cycle-interval-overlay-layer')===layer?focus.dataset.cycleInterval:null;
+      periodMarkup=next.markup;layer.innerHTML=periodMarkup;
+      if(focusId)[...layer.querySelectorAll('[data-cycle-interval]')].find(node=>node.dataset.cycleInterval===focusId)?.focus({preventScroll:true});
+      return {...metadata,changed:true};
+    };
   }
   if(milestoneLayer){s+=milestoneLayer.markup;svg.dataset.cycleMarkerCount=String(milestoneLayer.markers.length);svg.dataset.cycleMarkerLabelCount=String(milestoneLayer.labelCount);}
 
@@ -190,6 +207,9 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   let measurementState=measurement?{...measurement,endDate:measurement.endDate??null}:null;
   const initialDate=tool==='measure'&&measurementState?(measurementState.endDate||measurementState.startDate):(selectedDate||split||selectionRows.at(-1).date);
   let active=nearest(selectionRows,dayOf(initialDate)),pinned=false,cursor=active,lastHovered=-1,lastPointer=null;
+  let hoverSelection=initialDate;
+  const hoverContext=()=>['daily',rows,frequency,chartType,tool,split,measurementState?.startDate,measurementState?.endDate,measurementState?.startPrice,measurementState?.endPrice];
+  const retainedPointer=getChartHoverPointer(svg,hoverContext(),hoverSelection);
   const previousClosePoint=point=>{
     if(point.candle){const previous=observedCandles[lowerBoundDate(observedCandles,point.candle.endDate,candleDate)-1];return previous?{date:candleDate(previous),price:previous.close}:null;}
     let index=lowerBoundDate(rows,point.date)-1;
@@ -238,8 +258,9 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
     dateTag.querySelector('rect').setAttribute('x',tx);dateTag.querySelector('rect').setAttribute('y',axisY-12);dateTag.querySelector('text').setAttribute('x',tx+40);dateTag.querySelector('text').setAttribute('y',axisY+1);dateTag.querySelector('text').textContent=p.date;
   }
 
-  function commit(index,pin=true,user=pin){lastHovered=-1;active=Math.max(0,Math.min(selectionRows.length-1,index));pinned=pin;mark(active);if(tooltip)tooltip.hidden=true;onHover(hoverInfo(active,false));onInspect(inspection(active),{user,openPanel:pin});}
+  function commit(index,pin=true,user=pin){hoverHandler.cancel();clearChartHoverPointer(svg);lastHovered=-1;lastPointer=null;active=Math.max(0,Math.min(selectionRows.length-1,index));if(user)hoverSelection=selectionRows[active].date;pinned=pin;mark(active);if(tooltip)tooltip.hidden=true;onHover(hoverInfo(active,false));onInspect(inspection(active),{user,openPanel:pin});}
   function measure(index,anchor=null){
+    hoverHandler.cancel();clearChartHoverPointer(svg);lastHovered=-1;lastPointer=null;
     active=Math.max(0,Math.min(selectionRows.length-1,index));const point=anchor||anchorAt(active);mark(active,point);onHover(hoverInfo(active,false));
     measurementState=advanceMeasurement(measurementState,point);
     renderMeasurement();measurementOverlay.showSnap(point);onMeasurement({...measurementState});
@@ -247,25 +268,28 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
 
   function fromPointer(e){const target=e.target.closest?.('[data-date]');if(target)return nearest(selectionRows,dayOf(target.dataset.date));const rect=svg.getBoundingClientRect(),px=(e.clientX-rect.left)/rect.width*W;return nearest(selectionRows,minDay+(Math.max(L,Math.min(W-R,px))-L)/(W-L-R)*span);}
   const inPlot=e=>{const box=svg.getBoundingClientRect(),px=(e.clientX-box.left)/box.width*W,py=(e.clientY-box.top)/box.height*H;return px>=L&&px<=W-R&&py>=T&&py<=bottom;};
-  svg.onclick=e=>{hoverHandler.cancel();const interval=e.target.closest?.('[data-cycle-interval]');if(interval){onCycleInterval(interval.dataset.cycleInterval);return;}const cycle=e.target.closest?.('[data-cycle-marker]');if(cycle){onCycleMarker(cycle.dataset.cycleMarker);return;}const history=e.target.closest?.('[data-history-event]');if(history){onHistoricalEvent(history.dataset.historyEvent);return;}if(e.target.closest?.('[data-next-turn]')){onNextTurn();return;}if(tool==='pan'||!inPlot(e))return;if(tool==='measure'){const box=svg.getBoundingClientRect();if((e.clientY-box.top)/box.height*H>priceBottom)return;svg.focus({preventScroll:true});measure(fromPointer(e),anchorAt(fromPointer(e),e));return;}commit(fromPointer(e));};
+  svg.onclick=e=>{hoverHandler.cancel();clearChartHoverPointer(svg);const interval=e.target.closest?.('[data-cycle-interval]');if(interval){onCycleInterval(interval.dataset.cycleInterval);return;}const cycle=e.target.closest?.('[data-cycle-marker]');if(cycle){onCycleMarker(cycle.dataset.cycleMarker);return;}const history=e.target.closest?.('[data-history-event]');if(history){onHistoricalEvent(history.dataset.historyEvent);return;}if(e.target.closest?.('[data-next-turn]')){onNextTurn();return;}if(tool==='pan'||!inPlot(e))return;if(tool==='measure'){const box=svg.getBoundingClientRect();if((e.clientY-box.top)/box.height*H>priceBottom)return;svg.focus({preventScroll:true});measure(fromPointer(e),anchorAt(fromPointer(e),e));return;}commit(fromPointer(e));};
   function pointerPreview(e){
-    if(e.pointerType==='touch'||e.target?.closest?.('[data-next-turn],[data-history-event],[data-cycle-marker],[data-cycle-interval]')||!inPlot(e))return;
+    if(e.pointerType==='touch'||e.target?.closest?.('[data-next-turn],[data-history-event],[data-cycle-marker],[data-cycle-interval]')||!inPlot(e)){clearChartHoverPointer(svg);return false;}
+    rememberChartHoverPointer(svg,hoverContext(),e,[hoverSelection,selectionRows[active].date]);
     const index=fromPointer(e),dataChanged=index!==lastHovered;
-    if(!dataChanged&&lastPointer&&e.clientY===lastPointer.clientY&&Boolean(e.ctrlKey)===Boolean(lastPointer.ctrlKey)&&Boolean(e.metaKey)===Boolean(lastPointer.metaKey))return;
+    if(!dataChanged&&lastPointer&&e.clientY===lastPointer.clientY&&Boolean(e.ctrlKey)===Boolean(lastPointer.ctrlKey)&&Boolean(e.metaKey)===Boolean(lastPointer.metaKey))return true;
     lastHovered=index;lastPointer=e;
     const anchor=tool==='measure'?anchorAt(index,e):null,box=svg.getBoundingClientRect(),pointerY=tool==='measure'?null:(e.clientY-box.top)/box.height*H;
     mark(index,anchor,pointerY);if(dataChanged)onHover(hoverInfo(index,true));
     if(tool==='measure'){measurementOverlay.showSnap(anchor);if(measurementState&&!measurementState.endDate)renderMeasurement(anchor);}
     if(tooltip)tooltip.hidden=true;
+    return true;
   }
   const hoverHandler=coalescedChartHover(svg,pointerPreview);svg.onpointermove=hoverHandler;
-  svg.onpointerleave=()=>{hoverHandler.cancel();lastHovered=-1;lastPointer=null;mark(active);measurementOverlay.showSnap(null);onHover(hoverInfo(active,false));if(measurementState&&!measurementState.endDate)renderMeasurement();if(tooltip)tooltip.hidden=true;};
+  svg.onpointerleave=()=>{hoverHandler.cancel();clearChartHoverPointer(svg);lastHovered=-1;lastPointer=null;mark(active);measurementOverlay.showSnap(null);onHover(hoverInfo(active,false));if(measurementState&&!measurementState.endDate)renderMeasurement();if(tooltip)tooltip.hidden=true;};
   svg.onkeyup=e=>{hoverHandler.cancel();if(tool==='measure'&&lastPointer&&['Control','Meta'].includes(e.key))pointerPreview({clientX:lastPointer.clientX,clientY:lastPointer.clientY,pointerType:lastPointer.pointerType,target:lastPointer.target,ctrlKey:e.ctrlKey,metaKey:e.metaKey});};
 
   svg.onblur=()=>{if(tooltip&&!pinned)tooltip.hidden=true;};
   svg.onkeydown=e=>{
     hoverHandler.cancel();
     if(tool==='measure'&&lastPointer&&['Control','Meta'].includes(e.key)){pointerPreview({clientX:lastPointer.clientX,clientY:lastPointer.clientY,pointerType:lastPointer.pointerType,target:lastPointer.target,ctrlKey:e.ctrlKey,metaKey:e.metaKey});return;}
+    if(['Enter',' ','ArrowLeft','ArrowRight','Home','End','Escape'].includes(e.key))clearChartHoverPointer(svg);
     const interval=e.target.closest?.('[data-cycle-interval]');if(interval&&['Enter',' '].includes(e.key)){e.preventDefault();e.stopPropagation();onCycleInterval(interval.dataset.cycleInterval);return;}
     const cycle=e.target.closest?.('[data-cycle-marker]');if(cycle&&['Enter',' '].includes(e.key)){e.preventDefault();e.stopPropagation();onCycleMarker(cycle.dataset.cycleMarker);return;}
     const history=e.target.closest?.('[data-history-event]');if(history&&['Enter',' '].includes(e.key)){e.preventDefault();e.stopPropagation();onHistoricalEvent(history.dataset.historyEvent);return;}
@@ -280,6 +304,8 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
     else commit(index,false,true);
   };
   renderMeasurement();
-  if(tool==='measure'){mark(active);onHover(hoverInfo(active,false));}else commit(active,false);
-  return {getPriceScale(){return {...priceScale,left:L,right:W-R};},getSelection({anchor}={}){const index=Number.isFinite(anchor)?nearest(selectionRows,minDay+Math.max(0,Math.min(1,anchor))*span):cursor;const detail=inspection(index);return {label:detail.label,copyText:[detail.label,...detail.fields.map(field=>`${field.label}: ${field.value}`),detail.note].join('\n')};},selectDate(value){commit(nearest(selectionRows,dayOf(value)));},previous(){const previous=visibleTurns.filter(p=>p.date<selectionRows[active].date).at(-1);commit(previous?nearest(selectionRows,dayOf(previous.date)):0);},next(){const next=visibleTurns.find(p=>p.date>selectionRows[active].date);commit(next?nearest(selectionRows,dayOf(next.date)):selectionRows.length-1);},getDate(){return selectionRows[active].date;},hasPrevious(){return visibleTurns.some(p=>p.date<selectionRows[active].date);},hasNext(){return visibleTurns.some(p=>p.date>selectionRows[active].date);}};
+  if(retainedPointer&&pointerPreview({...retainedPointer,target:svg})){
+    if(tool!=='measure')onInspect(inspection(active),{user:false,openPanel:false});
+  }else if(tool==='measure'){mark(active);onHover(hoverInfo(active,false));}else commit(active,false);
+  return {updateCycleOverlayObstacles,getPriceScale(){return {...priceScale,left:L,right:W-R};},getSelection({anchor}={}){const index=Number.isFinite(anchor)?nearest(selectionRows,minDay+Math.max(0,Math.min(1,anchor))*span):cursor;const detail=inspection(index);return {label:detail.label,copyText:[detail.label,...detail.fields.map(field=>`${field.label}: ${field.value}`),detail.note].join('\n')};},selectDate(value){commit(nearest(selectionRows,dayOf(value)));},previous(){const previous=visibleTurns.filter(p=>p.date<selectionRows[active].date).at(-1);commit(previous?nearest(selectionRows,dayOf(previous.date)):0);},next(){const next=visibleTurns.find(p=>p.date>selectionRows[active].date);commit(next?nearest(selectionRows,dayOf(next.date)):selectionRows.length-1);},getDate(){return selectionRows[active].date;},hasPrevious(){return visibleTurns.some(p=>p.date<selectionRows[active].date);},hasNext(){return visibleTurns.some(p=>p.date>selectionRows[active].date);}};
 }

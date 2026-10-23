@@ -1,6 +1,24 @@
 // One pending pointer update per chart. Replacing a drawing cancels its old
 // callback, so an earlier viewport cannot repaint a newer chart's readout.
 const pendingCharts = new WeakMap();
+const pointerCharts = new WeakMap();
+
+// Retain only coordinates and semantic scope, never an SVG event target that
+// becomes detached on redraw. A hover is a preview, not the committed point.
+export function rememberChartHoverPointer(element, context, event, selections = []) {
+  if(event.pointerType==='touch'||!Number.isFinite(event.clientX)||!Number.isFinite(event.clientY))return;
+  pointerCharts.set(element,{context:[...context],selections:[...selections],pointer:{clientX:event.clientX,clientY:event.clientY,pointerType:event.pointerType||'mouse',ctrlKey:Boolean(event.ctrlKey),metaKey:Boolean(event.metaKey)}});
+}
+
+export function getChartHoverPointer(element, context, selection) {
+  const saved=pointerCharts.get(element);
+  // A caller may accept or reject a renderer's non-user selection update.
+  // Both its original intent and the clamped visible point are valid aliases;
+  // a different explicit offscreen selection must still invalidate the hover.
+  return saved&&saved.context.length===context.length&&saved.context.every((value,index)=>Object.is(value,context[index]))&&(selection===undefined||saved.selections.some(value=>Object.is(value,selection)))?{...saved.pointer}:null;
+}
+
+export function clearChartHoverPointer(element) { pointerCharts.delete(element); }
 
 // A pointer's price-axis position is separate from the selected candle's close.
 // The series dot stays on the source value; secondary panes have no USD cursor.
@@ -19,9 +37,10 @@ export function paintPriceCursor({ horizontal, dot, tag, axis, top, bottom, sele
   tag.querySelector('text').textContent = formatPrice(price);
 }
 
-export function clearChartHover(element) {
+export function clearChartHover(element,{preservePointer=false}={}) {
   pendingCharts.get(element)?.cancel();
   pendingCharts.delete(element);
+  if(!preservePointer)clearChartHoverPointer(element);
 }
 
 export function coalescedChartHover(element, paint) {

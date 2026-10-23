@@ -19,8 +19,7 @@
   body:not([data-page=outlook]) .mobile-chart-home{position:fixed;top:max(6px,var(--mobile-top));left:8px;z-index:48;display:flex;align-items:center;gap:5px;height:40px;min-height:40px;padding:6px 12px 6px 7px;border:1px solid #33465f;border-radius:6px;background:#142131;color:#c8dcf4;font-size:12px}
   .mobile-chart-home svg{width:19px;height:19px}
   body:not([data-page=outlook]) .workspace.atlas-details-layout>#main{padding-top:52px;box-sizing:border-box}
-  .atlas-plot{contain:layout paint;--mobile-legend-top:var(--indicator-top,90px);--mobile-countdown-height:0px;--mobile-countdown-gap:0px}
-  .atlas-plot[data-countdown-visible=true]{--mobile-countdown-height:var(--countdown-height,48px);--mobile-countdown-gap:8px}
+  .atlas-plot{contain:layout paint;--mobile-legend-top:calc(var(--indicator-top,90px) + var(--chart-hud-countdown-height,0px) + var(--chart-hud-legend-height,0px) + var(--chart-hud-gap,0px));--mobile-countdown-height:0px;--mobile-countdown-gap:0px}
   .atlas-plot>#lab-metrics,.atlas-plot[data-countdown-visible=true]>#lab-metrics{top:8px;left:10px;right:10px;max-width:calc(100% - 20px);padding:0;gap:4px;min-height:0}
   .readout-main{gap:7px;flex-wrap:wrap;white-space:normal;row-gap:1px}
   .atlas-plot>.atlas-readout strong{font-size:16px;letter-spacing:-.3px}
@@ -41,7 +40,7 @@
   .chart-indicator-manager .indicator-name{font-size:10px}
   .chart-indicator-manager .indicator-value{font-size:11px}
   .chart-indicator-manager .indicator-label,.chart-indicator-manager .indicator-value{background:#10151cd9;box-shadow:0 0 0 2px #10151cd9;border-radius:1px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
-  .atlas-plot .scenario-countdown{top:calc(var(--mobile-legend-top) + var(--indicator-manager-height,0px) + 8px);left:auto;right:calc(var(--plot-right-gap,65px) + 8px);width:auto;max-width:calc(100% - var(--plot-right-gap,65px) - 28px);min-width:0;min-height:36px;padding:5px 9px;box-shadow:none;border-radius:5px;background:#14202de8}
+  .atlas-plot .scenario-countdown{top:var(--indicator-top,90px);left:auto;right:var(--plot-right-gap,65px);width:var(--chart-hud-width,430px);max-width:calc(100% - var(--plot-right-gap,65px) - 20px);min-width:0;min-height:32px;padding:5px 7px;box-shadow:none;border-radius:6px;background:#152132ed}
   .scenario-countdown .countdown-main{font-size:11px;gap:8px;line-height:1.4}
   .scenario-countdown .countdown-main b{font-size:18px;letter-spacing:-.5px}
   .scenario-countdown .countdown-caption,.scenario-countdown .countdown-current{font-size:8px;line-height:1.4}
@@ -107,7 +106,7 @@
   .indicator-library-row{gap:0}.indicator-library-item{gap:6px;padding-left:5px;padding-right:5px}
   .indicator-template-panel{padding:2px 16px 12px}.indicator-template-form input{font-size:16px;min-height:44px}.indicator-template-form button{min-height:44px}
   .indicator-preference-status{padding:7px 16px}
-  .analysis-indicator-windows,.atlas-plot[data-countdown-visible=true]>.analysis-indicator-windows{left:8px;right:8px;width:auto;max-width:none;--analysis-stack-top:calc(var(--mobile-legend-top) + var(--indicator-manager-height,0px) + var(--mobile-countdown-height,0px) + var(--mobile-countdown-gap,0px) + 8px);--analysis-bottom-gap:30px}
+  .analysis-indicator-windows,.atlas-plot[data-countdown-visible=true]>.analysis-indicator-windows{left:8px;right:8px;width:auto;max-width:none;--analysis-stack-top:calc(var(--mobile-legend-top) + var(--indicator-manager-height,0px) + 8px);--analysis-bottom-gap:30px}
   .analysis-indicator-window{min-height:300px;box-shadow:none}
   .analysis-window-heading{min-height:40px}
   .analysis-window-heading button{min-width:40px;min-height:40px}

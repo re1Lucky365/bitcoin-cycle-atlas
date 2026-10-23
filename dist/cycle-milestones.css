@@ -15,18 +15,40 @@
 .cycle-interval.is-related .cycle-interval-duration{text-decoration:underline;text-underline-offset:3px}
 .cycle-interval .cycle-interval-label,.cycle-interval .cycle-interval-duration{paint-order:stroke;stroke:#10151c;stroke-width:3px;stroke-linejoin:round}
 
-/* Use horizontal room first: the four price keys and six milestone keys share
-   one broad legend; annotations never allocate another pane or resize the SVG. */
-.atlas-plot{container-type:inline-size;container-name:price-plot}
-.atlas-plot>.lab-chart-foot:has(.cycle-legend){inset:auto var(--plot-right-gap,80px) var(--plot-bottom-gap,59px) auto;display:block;width:max-content;max-width:calc(100% - var(--plot-right-gap,80px) - 16px);max-height:none;overflow:visible;margin:0;padding:5px 8px;box-sizing:border-box;pointer-events:auto;background:#101925ed;border:1px solid #304154;border-radius:4px}
-.atlas-plot>.lab-chart-foot .lab-legend:has(.cycle-legend){display:grid;grid-template-columns:auto minmax(0,1fr);align-items:start;gap:4px 14px}
-.price-legend{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px 10px;align-items:center;min-height:16px}
-.atlas-plot>.lab-chart-foot .cycle-legend{display:grid;grid-template-columns:repeat(6,max-content);gap:3px 11px;min-width:0;max-width:100%;margin:0;padding:0 0 0 12px;border-left:1px solid #354355;box-sizing:border-box}
-.atlas-plot>.lab-chart-foot .cycle-legend span{display:flex;align-items:center;gap:4px;font-size:9px;line-height:14px;white-space:nowrap}
-.atlas-chart-stage .cycle-legend-item>svg{width:13px;height:13px;min-width:13px;flex:none}
-.atlas-plot>.lab-chart-foot .cycle-legend .cycle-legend-note{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:2px 9px;max-width:100%;margin:0;color:#9aadc4;white-space:normal}
+/* The upper-right context card shares one edge with the price scale. Its two
+   independently visible pieces use observed heights; the SVG never changes size. */
+.atlas-plot{container-type:inline-size;container-name:price-plot;--chart-hud-width:430px;--chart-hud-top:8px;--chart-hud-countdown-height:0px;--chart-hud-legend-height:0px;--chart-hud-gap:0px}
+.atlas-plot[data-countdown-visible=true]{--chart-hud-countdown-height:var(--countdown-height,32px)}
+.atlas-plot:has(>.lab-chart-foot:not([hidden])){--chart-hud-legend-height:var(--chart-legend-height,54px)}
+.atlas-plot:is([data-countdown-visible=true],:has(>.lab-chart-foot:not([hidden]))){--chart-hud-gap:8px}
+.atlas-plot>.scenario-countdown{inset:var(--chart-hud-top) var(--plot-right-gap,80px) auto auto;display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:12px;width:var(--chart-hud-width);max-width:calc(100% - var(--plot-right-gap,80px) - 20px);min-width:0;min-height:32px;box-sizing:border-box;margin:0;padding:6px 9px;border:1px solid #34455a;border-radius:6px;background:#152132ed;box-shadow:none}
+.atlas-plot>.scenario-countdown .countdown-main{display:flex;align-items:center;gap:9px;min-width:0;margin:0;font-size:11px;line-height:16px;font-weight:500}
+.atlas-plot>.scenario-countdown .countdown-main b{font-size:18px;line-height:18px;letter-spacing:-.4px}
+.atlas-plot>.scenario-countdown .countdown-next{gap:5px;white-space:normal;line-height:15px}
+.atlas-plot>.scenario-countdown .countdown-meta{display:flex;align-items:center;justify-content:flex-end;gap:7px;flex:none;margin-left:auto;font-size:9px;line-height:14px}
+.atlas-plot>.scenario-countdown .countdown-caption{font-size:8px;line-height:14px;color:#c1ac8c}
+.atlas-plot>.scenario-countdown .countdown-date{color:#9db2cd;white-space:nowrap}
+.atlas-plot>.scenario-countdown:hover{border-color:#6788af;background:#1b2c42}
+.atlas-plot>.scenario-countdown:focus-visible{outline:2px solid #8ab5e8;outline-offset:2px}
+.atlas-plot:has(>.lab-chart-foot:not([hidden]))>.scenario-countdown{border-bottom:0;border-radius:6px 6px 0 0}
+.atlas-plot[data-countdown-visible=true]>.lab-chart-foot{border-radius:0 0 6px 6px;border-top-color:#2a3b50}
+.atlas-plot>.lab-chart-foot{inset:calc(var(--chart-hud-top) + var(--chart-hud-countdown-height)) var(--plot-right-gap,80px) auto auto;width:var(--chart-hud-width);max-width:calc(100% - var(--plot-right-gap,80px) - 20px);max-height:none;margin:0;padding:5px 9px;box-sizing:border-box;pointer-events:auto;background:#111c2aee;border:1px solid #34455a;border-radius:6px;overflow:visible;z-index:7}
+.atlas-plot>.lab-chart-foot .lab-legend{width:100%;min-width:0;justify-content:flex-start;text-align:left}
+.atlas-plot>.lab-chart-foot .lab-legend:has(.cycle-legend){display:grid;grid-template-columns:minmax(0,1fr);align-items:start;gap:5px}
+.price-legend{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:3px 11px;align-items:center;min-height:13px}
+.atlas-plot>.lab-chart-foot .price-legend>span{gap:4px;font-size:9px;line-height:13px}
+.atlas-plot>.lab-chart-foot .cycle-legend{display:grid;grid-template-columns:repeat(6,max-content);justify-content:space-between;gap:3px 7px;min-width:0;max-width:100%;margin:0;padding:5px 0 0;border-left:0;border-top:1px solid #2b3b4e;box-sizing:border-box}
+.atlas-plot>.lab-chart-foot .cycle-legend span{display:flex;align-items:center;gap:4px;font-size:9px;line-height:13px;white-space:nowrap}
+.atlas-chart-stage .cycle-legend-item>svg{width:12px;height:12px;min-width:12px;flex:none}
+.atlas-plot>.lab-chart-foot .cycle-legend .cycle-legend-note{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:2px 9px;max-width:100%;margin:0;color:#9aadc4;white-space:normal}
 .atlas-plot>.lab-chart-foot .cycle-legend .cycle-legend-note span{font-size:8px;line-height:12px}
-.atlas-chart-stage .cycle-style-sample>svg{display:block;width:30px;height:16px;min-width:30px;flex:none;color:#9fb4cb}
+.atlas-chart-stage .cycle-style-sample>svg{display:block;width:26px;height:14px;min-width:26px;flex:none;color:#9fb4cb}
+/* The split-column rule must not participate in a narrow plot's cascade:
+   :is() inherits the readout ID's specificity for every matched child. */
+@container price-plot (width > 850px){
+ .atlas-plot:is([data-countdown-visible=true],:has(>.lab-chart-foot:not([hidden])))>:is(#lab-metrics,.workbench-market-info,.chart-indicator-manager){max-width:min(620px,calc(100% - var(--plot-right-gap,80px) - var(--chart-hud-width) - 26px))}
+ .atlas-plot>.analysis-indicator-windows{--analysis-stack-top:max(78px,calc(8px + var(--chart-hud-countdown-height) + var(--chart-hud-legend-height) + var(--chart-hud-gap)))}
+}
 
 /* The previous bottom pane is replaced by a menu in the existing header. */
 .cycle-chart-controls{flex:none;min-width:0;margin:0;padding:0}
@@ -57,16 +79,28 @@
 .cycle-reference table{width:100%;border-collapse:collapse;font-size:10px;white-space:nowrap}
 .cycle-reference th,.cycle-reference td{border-bottom:1px solid #304257;padding:5px 8px;text-align:left;color:#b7c8dd}
 .cycle-reference th{font-weight:500;color:#d5e1f1;background:#17283b}
-@container price-plot (max-width:880px){
- .atlas-plot>.lab-chart-foot .lab-legend:has(.cycle-legend){grid-template-columns:minmax(0,1fr);gap:4px}
- .atlas-plot>.lab-chart-foot .cycle-legend{padding:4px 0 0;border-left:0;border-top:1px solid #354355}
+/* Stack below OHLC/provenance on narrow plots. Expanding studies scrolls
+   beneath this anchored card, so the card itself never jumps down the chart. */
+@container price-plot (max-width:850px){
+ .atlas-plot>:is(.scenario-countdown,.lab-chart-foot){--chart-hud-top:var(--indicator-top,75px)}
+ .atlas-plot:is([data-countdown-visible=true],:has(>.lab-chart-foot:not([hidden])))>:is(#lab-metrics,.workbench-market-info){max-width:calc(100% - 20px)}
+ .atlas-plot>.chart-indicator-manager,.atlas-plot:is([data-countdown-visible=true],:has(>.lab-chart-foot:not([hidden])))>.chart-indicator-manager{top:calc(var(--indicator-top,75px) + var(--chart-hud-countdown-height) + var(--chart-hud-legend-height) + var(--chart-hud-gap));max-width:calc(100% - var(--plot-right-gap,80px) - 20px)}
+ .atlas-plot .chart-indicator-list{max-height:min(180px,25dvh,max(32px,calc(var(--plot-height,600px) - var(--indicator-top,75px) - var(--chart-hud-countdown-height) - var(--chart-hud-legend-height) - 150px)))}
+ .atlas-plot>.analysis-indicator-windows,.atlas-plot[data-countdown-visible=true]>.analysis-indicator-windows{--analysis-stack-top:calc(var(--indicator-top,75px) + var(--chart-hud-countdown-height) + var(--chart-hud-legend-height) + var(--indicator-manager-height,0px) + var(--chart-hud-gap) + 8px)}
 }
-@container price-plot (max-width:570px){
- .atlas-plot>.lab-chart-foot .cycle-legend{grid-template-columns:repeat(3,minmax(0,1fr));gap:2px 7px}
- .atlas-plot>.lab-chart-foot .cycle-legend span{font-size:8px;line-height:13px;gap:3px}
+@container price-plot (max-width:540px){
+ .atlas-plot>.lab-chart-foot .lab-legend:has(.cycle-legend){gap:4px}
+ .atlas-plot>.lab-chart-foot .cycle-legend{grid-template-columns:repeat(3,minmax(0,1fr));gap:2px 7px;padding-top:4px}
+ .atlas-plot>.lab-chart-foot .cycle-legend span{font-size:8px;line-height:12px;gap:3px}
  .atlas-plot>.lab-chart-foot .cycle-legend .cycle-legend-note{justify-content:flex-start;column-gap:6px}
  .atlas-plot>.lab-chart-foot .cycle-legend .cycle-legend-status-label{display:none}
  .atlas-chart-stage .cycle-style-sample>svg{width:22px;min-width:22px;height:13px}
+ .atlas-plot>.lab-chart-foot .price-legend{gap:2px 7px;min-height:12px}
+ .atlas-plot>.lab-chart-foot .price-legend>span{gap:3px;font-size:8px;line-height:12px}
+ .atlas-plot>.scenario-countdown{gap:7px;padding:5px 7px}
+ .atlas-plot>.scenario-countdown .countdown-main{font-size:10px;gap:7px}
+ .atlas-plot>.scenario-countdown .countdown-main b{font-size:16px;line-height:18px}
+ .atlas-plot>.scenario-countdown .countdown-meta{gap:5px;font-size:8px}
 }
 @media(min-width:621px) and (max-width:1000px){
  .cycle-chart-menu{position:fixed;top:46px;left:calc(var(--sidebar-width,44px) + 8px);right:calc(var(--rail-width,38px) + 8px);width:auto;max-width:none;max-height:calc(100dvh - 58px)}
@@ -77,13 +111,7 @@
  .cycle-panel-heading h2 small{display:none}
  .cycle-panel-actions{padding:8px;gap:6px}
  .cycle-chart-menu button{min-height:34px}
- .atlas-plot>.lab-chart-foot:has(.cycle-legend){max-width:calc(100% - var(--plot-right-gap,68px) - 12px);padding:4px 6px}
- .price-legend{gap:3px 7px}
- /* Both HUDs use their natural compact heights; the absolute SVG keeps its
-    original price geometry and the total viewport height does not grow. */
- .atlas-plot:has(>.lab-chart-foot:not([hidden]) .cycle-legend){display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto auto var(--plot-bottom-gap,59px);row-gap:0}
- .atlas-plot:has(>.lab-chart-foot:not([hidden]) .cycle-legend)>.lab-chart-foot{position:relative;inset:auto;grid-area:3/1;align-self:end;justify-self:end;margin:0 var(--plot-right-gap,68px) 0 0}
- .atlas-plot:has(>.lab-chart-foot:not([hidden]) .cycle-legend)>.scenario-countdown{position:relative;inset:auto;grid-area:2/1;align-self:end;justify-self:end;width:max-content;box-sizing:border-box;margin:0 calc(var(--plot-right-gap,65px) + 8px) 8px 10px}
+ .atlas-plot>.lab-chart-foot{padding:4px 7px}
 }
 @media(max-width:350px){
  .atlas-canvas-heading #workbench-interval-select{width:50px;padding-left:4px;padding-right:14px}

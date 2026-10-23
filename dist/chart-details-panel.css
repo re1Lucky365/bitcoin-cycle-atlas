@@ -209,8 +209,8 @@ body:not([data-page=outlook]) .workbench-detail-tools>[data-reader=selection],bo
   .atlas-plot>.lab-chart-foot .lab-legend span{font-size:8px;line-height:12px}
 }
 
-/* The legend is inside the plotting rectangle, above the time axis. */
-.atlas-plot>.lab-chart-foot{inset:auto var(--plot-right-gap,80px) var(--plot-bottom-gap,58px) auto;left:auto;right:var(--plot-right-gap,80px);bottom:var(--plot-bottom-gap,58px);width:max-content;max-width:calc(100% - var(--plot-right-gap,80px) - 16px);max-height:none;box-sizing:border-box;justify-content:flex-end;padding:5px 7px;border:1px solid #293748;border-radius:4px;background:#101925dd;backdrop-filter:blur(4px);z-index:4}
+/* Shared legend placement is completed by the upper-right context HUD rules. */
+.atlas-plot>.lab-chart-foot{position:absolute;inset:calc(var(--chart-hud-top,8px) + var(--chart-hud-countdown-height,0px)) var(--plot-right-gap,80px) auto auto;width:var(--chart-hud-width,430px);max-width:calc(100% - var(--plot-right-gap,80px) - 20px);max-height:none;min-height:0;margin:0;box-sizing:border-box;justify-content:flex-start;padding:5px 9px;border:1px solid #34455a;border-radius:6px;background:#111c2aee;backdrop-filter:blur(4px);z-index:7}
 .atlas-plot>.lab-chart-foot .lab-legend{flex-wrap:wrap;gap:4px 11px;justify-content:flex-end}
 .atlas-plot>.lab-chart-foot .lab-legend span{font-size:9px;line-height:12px;color:#afbed0}
 .atlas-plot>.atlas-readout{display:flex;flex-direction:column;align-items:flex-start;gap:3px;max-width:calc(100% - 90px);pointer-events:none}
@@ -273,7 +273,7 @@ body:not([data-page=outlook]) .workbench-detail-tools>[data-reader=selection],bo
   .atlas-plot>.atlas-readout{max-width:calc(100% - 70px);gap:2px}
   .readout-main{gap:5px}.readout-ohlc{display:none}.readout-detail{font-size:8px;gap:6px}
   .workbench-market-info{top:44px;max-width:calc(100% - 78px);font-size:8px}
-  .atlas-plot>.lab-chart-foot{inset:auto var(--plot-right-gap,68px) var(--plot-bottom-gap,59px) auto;max-width:calc(100% - var(--plot-right-gap,68px) - 12px);padding:3px 5px}
+  .atlas-plot>.lab-chart-foot{inset:calc(var(--chart-hud-top,8px) + var(--chart-hud-countdown-height,0px)) var(--plot-right-gap,68px) auto auto;max-width:calc(100% - var(--plot-right-gap,68px) - 20px);padding:4px 7px}
   .atlas-plot>.lab-chart-foot .lab-legend{gap:2px 7px}.atlas-plot>.lab-chart-foot .lab-legend span{font-size:8px;line-height:11px}
   .journal-heading{gap:2px;padding:1px 3px}.journal-heading button{font-size:9px;padding:3px 5px}#journal-context{display:none}#history-journal-toggle{margin-right:auto}.journal-event{flex-basis:130px;min-height:78px}
   .journal-items{max-height:115px}.chart-context-menu{width:218px;font-size:10px}
