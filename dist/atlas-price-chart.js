@@ -1,5 +1,6 @@
-import { milestoneMarkersMarkup } from './cycle-milestones-view.js?v=1.11.0-milestones.3';
-import { MILESTONE_TYPES } from './cycle-milestones.js?v=1.11.0-milestones.3';
+import { cycleIntervalsOverlayMarkup } from './cycle-interval-overlay.js?v=1.11.0-milestones.4';
+import { milestoneMarkersMarkup } from './cycle-milestones-view.js?v=1.11.0-milestones.4';
+import { MILESTONE_TYPES } from './cycle-milestones.js?v=1.11.0-milestones.4';
 import { utcDay } from './cycle-engine.js?v=1.11.0';
 import { shiftCalendarMonths } from './cycle-timing.js?v=1.11.0';
 import { STATE_LABELS } from './market-structure.js?v=1.11.0';
@@ -43,7 +44,7 @@ function dailyRuns(rows,omit=()=>false){
 }
 
 /** Rendering and inspection only. It never changes prices, paths or model dates. */
-export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency='daily',chartType='line',observedCandles=[],candleSource='Bitstamp',volumeBars=[],volumeProjection=null,volumeSource='Bitstamp',showVolume=false,historicalEvents=[],cycleCalibration=null,showCycleTiming=false,headerInset=null,showHistoricalEvents=true,activeHistoricalEventId=null,onHistoricalEvent=()=>{},stateStepDays=1,unit='usd',denominator=1,scale='log',tool='crosshair',magnet='off',measurement=null,onMeasurement=()=>{},onHover=()=>{},band=false,turns=[],showTurns=true,cycleMarkers=[],showCycleMarkers=true,activeCycleMarkerId=null,activeCycleMarkerIds=[],activeCycleInterval=null,onCycleMarker=()=>{},events=[],states=[],fib=[],historical=false,nextTurn=null,showNextTurnLabel=true,onNextTurn=()=>{},showDrawdown=true,showStates=false,threshold=.12,onInspect=()=>{},selectedDate}){
+export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency='daily',chartType='line',observedCandles=[],candleSource='Bitstamp',volumeBars=[],volumeProjection=null,volumeSource='Bitstamp',showVolume=false,historicalEvents=[],cycleCalibration=null,showCycleTiming=false,headerInset=null,showHistoricalEvents=true,activeHistoricalEventId=null,onHistoricalEvent=()=>{},stateStepDays=1,unit='usd',denominator=1,scale='log',tool='crosshair',magnet='off',measurement=null,onMeasurement=()=>{},onHover=()=>{},band=false,turns=[],showTurns=true,cycleMarkers=[],showCycleMarkers=true,activeCycleMarkerId=null,activeCycleMarkerIds=[],activeCycleInterval=null,onCycleMarker=()=>{},cycleIntervals=[],showCycleIntervals=false,cycleRelation='all',cycleOverlayObstacles=[],onCycleInterval=()=>{},events=[],states=[],fib=[],historical=false,nextTurn=null,showNextTurnLabel=true,onNextTurn=()=>{},showDrawdown=true,showStates=false,threshold=.12,onInspect=()=>{},selectedDate}){
   clearChartHover(svg);
   // Match the allocated viewport instead of shrinking a fixed-height drawing.
   // An explicitly enabled secondary band stays present even in a short chart.
@@ -51,7 +52,7 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   const layout=chartPaneLayout({width:W,height:H,volume:showVolume,drawdown:showDrawdown,states:showStates,cycleTiming:showCycleTiming,top:Number.isFinite(headerInset)?Math.max(8,headerInset):compactHeight?62:70});
   const {left:L,right:R,top:T,axisY,priceBottom,ddTop,ddBottom,stateTop,stateBottom,volumeTop,volumeBottom,cycleTop,cycleBottom}=layout,stateHeight=stateBottom-stateTop,ddHeight=ddBottom-ddTop;
   const minDay=dayOf(start),maxDay=dayOf(end),span=Math.max(1,maxDay-minDay),xday=d=>L+(d-minDay)/span*(W-L-R),x=p=>xday(dayOf(p.date));
-  svg.dataset.cycleMarkerCount='0';svg.dataset.cycleMarkerLabelCount='0';svg.dataset.historyLabelCount='0';svg.dataset.historyEventCount='0';svg.dataset.historyLabelMode='off';svg.dataset.historyHiddenLabelCount='0';
+  svg.dataset.cycleIntervalCount='0';svg.dataset.cycleIntervalLabelCount='0';svg.dataset.cycleMarkerCount='0';svg.dataset.cycleMarkerLabelCount='0';svg.dataset.historyLabelCount='0';svg.dataset.historyEventCount='0';svg.dataset.historyLabelMode='off';svg.dataset.historyHiddenLabelCount='0';
   const originalVisible=dateWindow(rows,start,end).filter(p=>p.price>0);
   const visibleCycleMarkers=showCycleMarkers?cycleMarkers.filter(marker=>{
     if(!marker?.id||!milestoneTypeIds.has(marker.type)||typeof marker.date!=='string'||marker.date<start||marker.date>end||!Number.isFinite(marker.price)||marker.price<=0)return false;
@@ -96,7 +97,7 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   const projectedVolumeAt=date=>{const point=intervalAtDate(allProjectedVolume,date);return point?.kind==='scenario'&&split&&date>split?point:null;};
   const timingSeries=cycleCalibration?.series||[],visibleTiming=showCycleTiming?dateWindow(timingSeries,start,end):[];
   const clip=`${svg.id}-clip`,fullHistory=span>3000;
-  let s=`<title>${historical?'실제 비트코인 가격':'실제 비트코인 가격과 미래 가정'}</title><desc>실선은 실제 관측, 점선은 가정에 따른 가격 예시입니다. 그래프를 누르면 값을 고정해 읽을 수 있습니다. 미래 음영은 보정된 확률 구간이 아닙니다.</desc><defs><clipPath id="${clip}"><rect x="${L}" y="${T}" width="${W-L-R}" height="${bottom-T}"/></clipPath></defs>`;
+  let s=`<title>${historical?'실제 비트코인 가격':'실제 비트코인 가격과 미래 가정'}</title><desc>가격 실선은 실제 관측, 금색 가격 점선은 미래 가정입니다. 색 원과 기간선의 실선은 사후 기준, 점선은 잠정 또는 가정 기준입니다. 그래프를 누르면 값을 고정해 읽을 수 있습니다. 미래 음영은 보정된 확률 구간이 아닙니다.</desc><defs><clipPath id="${clip}"><rect x="${L}" y="${T}" width="${W-L-R}" height="${bottom-T}"/></clipPath></defs>`;
   for(const price of priceScale.ticks){const value=price*factor,yy=y(price);s+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#28323f"/><text x="${W-R+8}" y="${yy+4}" text-anchor="start" fill="#b0bbca" font-size="12">${unit==='usd'?'$':''}${compact(value)}</text>`;}
   let months=span>5000?(small?60:24):span>3000?(small?36:24):span>1100?(small?12:6):span>550?(small?6:3):span>270?3:1;
   let tick=`${start.slice(0,4)}-01-01`;while(dayOf(tick)<minDay)tick=shiftCalendarMonths(tick,months);
@@ -152,12 +153,22 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   }else{svg.dataset.historyLabelCount='0';svg.dataset.historyEventCount='0';svg.dataset.historyLabelMode='off';svg.dataset.historyHiddenLabelCount='0';}
   if(nextTurn&&nextTurn.date>=start&&nextTurn.date<=end){const xx=xday(dayOf(nextTurn.date)),headerFixed=small||fullHistory,anchor=headerFixed||xx>W-190?'end':'start',tx=headerFixed?W-R:anchor==='end'?xx-7:xx+7,label=`${nextTurn.type==='high'?'조정':'반등'} 후보 · D-${nf(nextTurn.days)}`,width=132,left=anchor==='end'?tx-width:tx-5,badgeY=Math.max(2,T-29);s+=`<line x1="${xx}" x2="${xx}" y1="${T}" y2="${bottom}" stroke="#9bc8e8" stroke-dasharray="4 5" opacity=".8"/>`;if(showNextTurnLabel)s+=`<g data-next-turn="${nextTurn.type}" role="button" tabindex="0" aria-label="${esc(label)} · 날짜와 범위 보기" style="cursor:pointer"><title>가정 · ${date(nextTurn.date)} · ${date(nextTurn.lowerDate)}–${date(nextTurn.upperDate)}</title><rect x="${left}" y="${badgeY}" width="${width+5}" height="23" rx="3" fill="#172737"/><text x="${tx}" y="${badgeY+15}" text-anchor="${anchor}" fill="#badcf2" font-size="11">${esc(label)}</text></g>`;}
   if(!fullHistory&&!small){let lastX=-999;for(const event of events.filter(p=>p.date>=start&&p.date<=end)){const xx=xday(dayOf(event.date)),yy=xx-lastX<140?T+30:T+16;lastX=xx;s+=`<line x1="${xx}" x2="${xx}" y1="${yy+8}" y2="${priceBottom}" stroke="#bca176" stroke-dasharray="2 6" opacity=".45"/><text x="${Math.min(W-R-5,xx)}" y="${yy}" text-anchor="${xx>W-180?'end':'start'}" fill="#c6ad88" font-size="11">${esc(event.shortLabel||event.label)}</text>`;}}
-  if(showCycleMarkers){
-    const markerClip=`${svg.id}-milestone-clip`;
-    s+=`<defs><clipPath id="${markerClip}"><rect x="${L}" y="${T}" width="${W-L-R}" height="${priceBottom-T}"/></clipPath></defs>`;
-    const layer=milestoneMarkersMarkup({markers:cycleMarkers,start,end,x,y,left:L,right:W-R,top:T,bottom:priceBottom,clipId:markerClip,activeMarkerId:activeCycleMarkerId,activeMarkerIds:activeCycleMarkerIds,activeInterval:activeCycleInterval});
-    s+=layer.markup;svg.dataset.cycleMarkerCount=String(layer.markers.length);svg.dataset.cycleMarkerLabelCount=String(layer.labelCount);
+  const milestoneLayer=showCycleMarkers?milestoneMarkersMarkup({markers:cycleMarkers,start,end,x,y,left:L,right:W-R,top:T,bottom:priceBottom,clipId:`${svg.id}-milestone-clip`,activeMarkerId:activeCycleMarkerId,activeMarkerIds:activeCycleMarkerIds,activeInterval:activeCycleInterval}):null;
+  if(showCycleIntervals){
+    const obstacles=[...cycleOverlayObstacles];
+    for(const point of milestoneLayer?.markers||[]){
+      obstacles.push({x:point.x-point.radius-3,y:point.y-point.radius-3,width:2*point.radius+6,height:2*point.radius+6});
+      if(point.box)obstacles.push(point.box);
+    }
+    const stride=Math.max(1,Math.ceil(visible.length/Math.max(24,W/4)));
+    const pricePoints=visible.filter((_,index)=>index%stride===0||index===visible.length-1).flatMap(point=>point.candle?[{x:x(point),y:y(point.candle.high)},{x:x(point),y:y(point.candle.low)}]:[{x:x(point),y:y(point.price)}]);
+    const periodClip=`${svg.id}-cycle-periods`;
+    s+=`<defs><clipPath id="${periodClip}"><rect x="${L}" y="${T}" width="${W-L-R}" height="${priceBottom-T}"/></clipPath></defs>`;
+    const periods=cycleIntervalsOverlayMarkup({intervals:cycleIntervals,start,end,x,left:L,right:W-R,top:T,bottom:priceBottom,clipId:periodClip,relation:cycleRelation,activeIntervalId:activeCycleInterval?.id,activeMarkerId:activeCycleMarkerId,obstacles,pricePoints});
+    s+=periods.markup;svg.dataset.cycleIntervalCount=String(periods.visibleCount);svg.dataset.cycleIntervalLabelCount=String(periods.labelCount);
   }
+  if(milestoneLayer){s+=milestoneLayer.markup;svg.dataset.cycleMarkerCount=String(milestoneLayer.markers.length);svg.dataset.cycleMarkerLabelCount=String(milestoneLayer.labelCount);}
+
   const latest=originalVisible.find(p=>p.date===split);
   if(latest){const yy=y(latest.price);s+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#7da89c" stroke-dasharray="2 5" opacity=".5"/><rect x="${W-R}" y="${yy-9}" width="${R-3}" height="18" rx="2" fill="#2b6558"/><text x="${W-R+5}" y="${yy+4}" fill="#edf8f3" font-size="${small?10:11}">${unit==='usd'?money(latest.price):nf(latest.price*factor,1)}</text>`;}
   s+=`<g id="${svg.id}-cross" pointer-events="none"><line class="cross-time" y1="${T}" y2="${bottom}" stroke="#afc4dd" stroke-dasharray="3 3" opacity=".6"/><line class="cross-price" x1="${L}" x2="${W-R}" stroke="#afc4dd" stroke-dasharray="3 3" opacity=".6"/><circle r="4" fill="#10151c" stroke="#f4dcac" stroke-width="1.5"/><g class="cross-price-tag"><rect x="${W-R}" width="${R-3}" height="18" rx="2" fill="#465366"/><text x="${W-R+5}" fill="#edf2f9" font-size="${small?10:11}"></text></g><g class="cross-date-tag"><rect width="80" height="18" rx="2" fill="#39485b"/><text fill="#edf2f9" font-size="10" text-anchor="middle"></text></g></g>`;
@@ -215,9 +226,9 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
 
   function fromPointer(e){const target=e.target.closest?.('[data-date]');if(target)return nearest(visible,dayOf(target.dataset.date));const rect=svg.getBoundingClientRect(),px=(e.clientX-rect.left)/rect.width*W;return nearest(visible,minDay+(Math.max(L,Math.min(W-R,px))-L)/(W-L-R)*span);}
   const inPlot=e=>{const box=svg.getBoundingClientRect(),px=(e.clientX-box.left)/box.width*W,py=(e.clientY-box.top)/box.height*H;return px>=L&&px<=W-R&&py>=T&&py<=bottom;};
-  svg.onclick=e=>{hoverHandler.cancel();const cycle=e.target.closest?.('[data-cycle-marker]');if(cycle){onCycleMarker(cycle.dataset.cycleMarker);return;}const history=e.target.closest?.('[data-history-event]');if(history){onHistoricalEvent(history.dataset.historyEvent);return;}if(e.target.closest?.('[data-next-turn]')){onNextTurn();return;}if(tool==='pan'||!inPlot(e))return;if(tool==='measure'){const box=svg.getBoundingClientRect();if((e.clientY-box.top)/box.height*H>priceBottom)return;svg.focus({preventScroll:true});measure(fromPointer(e),anchorAt(fromPointer(e),e));return;}commit(fromPointer(e));};
+  svg.onclick=e=>{hoverHandler.cancel();const interval=e.target.closest?.('[data-cycle-interval]');if(interval){onCycleInterval(interval.dataset.cycleInterval);return;}const cycle=e.target.closest?.('[data-cycle-marker]');if(cycle){onCycleMarker(cycle.dataset.cycleMarker);return;}const history=e.target.closest?.('[data-history-event]');if(history){onHistoricalEvent(history.dataset.historyEvent);return;}if(e.target.closest?.('[data-next-turn]')){onNextTurn();return;}if(tool==='pan'||!inPlot(e))return;if(tool==='measure'){const box=svg.getBoundingClientRect();if((e.clientY-box.top)/box.height*H>priceBottom)return;svg.focus({preventScroll:true});measure(fromPointer(e),anchorAt(fromPointer(e),e));return;}commit(fromPointer(e));};
   function pointerPreview(e){
-    if(e.pointerType==='touch'||e.target?.closest?.('[data-next-turn],[data-history-event],[data-cycle-marker]')||!inPlot(e))return;
+    if(e.pointerType==='touch'||e.target?.closest?.('[data-next-turn],[data-history-event],[data-cycle-marker],[data-cycle-interval]')||!inPlot(e))return;
     const index=fromPointer(e),dataChanged=index!==lastHovered;
     if(!dataChanged&&lastPointer&&e.clientY===lastPointer.clientY&&Boolean(e.ctrlKey)===Boolean(lastPointer.ctrlKey)&&Boolean(e.metaKey)===Boolean(lastPointer.metaKey))return;
     lastHovered=index;lastPointer=e;
@@ -234,6 +245,7 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   svg.onkeydown=e=>{
     hoverHandler.cancel();
     if(tool==='measure'&&lastPointer&&['Control','Meta'].includes(e.key)){pointerPreview({clientX:lastPointer.clientX,clientY:lastPointer.clientY,pointerType:lastPointer.pointerType,target:lastPointer.target,ctrlKey:e.ctrlKey,metaKey:e.metaKey});return;}
+    const interval=e.target.closest?.('[data-cycle-interval]');if(interval&&['Enter',' '].includes(e.key)){e.preventDefault();e.stopPropagation();onCycleInterval(interval.dataset.cycleInterval);return;}
     const cycle=e.target.closest?.('[data-cycle-marker]');if(cycle&&['Enter',' '].includes(e.key)){e.preventDefault();e.stopPropagation();onCycleMarker(cycle.dataset.cycleMarker);return;}
     const history=e.target.closest?.('[data-history-event]');if(history&&['Enter',' '].includes(e.key)){e.preventDefault();e.stopPropagation();onHistoricalEvent(history.dataset.historyEvent);return;}
     if(e.shiftKey||e.altKey||e.ctrlKey||e.metaKey)return;

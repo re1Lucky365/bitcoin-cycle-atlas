@@ -1,0 +1,422 @@
+{
+  "scope": "In-price-graph cycle periods and width-first faithful legend; milestones.4",
+  "validatedAt": "2026-10-23T08:20:54.102575+00:00",
+  "baseCommit": "c04c39a41ff155102adeb1e4313cdb9482396eb2",
+  "nodeVersion": "v24.19.0",
+  "tests": {
+    "finishedAt": "2026-10-23T08:15:22.788028+00:00",
+    "fileCount": 51,
+    "filesPassed": 51,
+    "filesFailed": 0,
+    "nodeTests": {
+      "tests": 421,
+      "suites": 0,
+      "pass": 421,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "customChecksPassed": 44,
+    "totalCasesAndCustomChecksPassed": 465,
+    "failures": []
+  },
+  "finalFocused": {
+    "completedAt": "2026-10-23T08:20:30.378750+00:00",
+    "files": 9,
+    "filesPassed": 9,
+    "tests": 105,
+    "passed": 105,
+    "failed": 0,
+    "note": "Focused rerun against final source; subset of the earlier 465 checks, not additional distinct checks."
+  },
+  "gates": [
+    {
+      "name": "standalone-build",
+      "command": [
+        "npm",
+        "run",
+        "build:standalone"
+      ],
+      "exitCode": 0,
+      "seconds": 2.419,
+      "receipts": [
+        {
+          "file": "Bitcoin_Cycles_Comparison.html",
+          "bytes": 13681407,
+          "modules": 60,
+          "embeddedObservations": 5941
+        }
+      ]
+    },
+    {
+      "name": "static",
+      "command": [
+        "npm",
+        "run",
+        "verify:static"
+      ],
+      "exitCode": 0,
+      "seconds": 5.527,
+      "receipts": [
+        {
+          "status": "ok",
+          "files": 85,
+          "checkedReferences": 157,
+          "basePath": "/bitcoin-cycle-atlas/",
+          "standalone": null
+        }
+      ]
+    },
+    {
+      "name": "standalone-static",
+      "command": [
+        "node",
+        "scripts/verify-static.mjs",
+        "--standalone",
+        "build/Bitcoin_Cycles_Comparison.html"
+      ],
+      "exitCode": 0,
+      "seconds": 4.561,
+      "receipts": [
+        {
+          "status": "ok",
+          "files": 85,
+          "checkedReferences": 157,
+          "basePath": "/bitcoin-cycle-atlas/",
+          "standalone": "build/Bitcoin_Cycles_Comparison.html"
+        }
+      ]
+    },
+    {
+      "name": "cycle",
+      "command": [
+        "npm",
+        "run",
+        "verify:cycle"
+      ],
+      "exitCode": 0,
+      "seconds": 0.997,
+      "receipts": [
+        {
+          "status": "verified",
+          "asOf": "2026-10-22",
+          "version": "causal-cycle-clock-v1",
+          "observationCount": 5941,
+          "state": "shortened",
+          "shiftDays": -52,
+          "referenceCount": 3,
+          "futureApplied": true,
+          "futureAppliedShiftDays": -52,
+          "futureReason": "causal-daily-clock-applied",
+          "sourcePricesSha256": "fbbe7ca83daac9656f76e513f87f74262359b612955cc8614284b6b6f5e905db",
+          "output": "dist/data/cycle-calibration.json"
+        }
+      ]
+    },
+    {
+      "name": "performance",
+      "command": [
+        "npm",
+        "run",
+        "verify:performance"
+      ],
+      "exitCode": 0,
+      "seconds": 0.625,
+      "receipts": [
+        {
+          "status": "PASS",
+          "asOf": "2026-10-22",
+          "scope": "Deterministic renderer/search/selection checks; Node SVG boundary, not browser paint or input-latency measurement.",
+          "observedPriceRows": 5941,
+          "observedCandleRows": 5545,
+          "observedVolumeShapes": 5545,
+          "svgElements": 98,
+          "svgElementBudget": 120,
+          "sourceSelectionDates": [
+            "2011-08-18",
+            "2019-03-21",
+            "2026-10-22"
+          ],
+          "complexity": [
+            {
+              "sourceRows": 1024,
+              "visibleRows": 9,
+              "sourceReads": 29,
+              "maxReads": 33,
+              "displayPoints": 1024,
+              "maxDisplayPoints": 4004
+            },
+            {
+              "sourceRows": 16384,
+              "visibleRows": 9,
+              "sourceReads": 37,
+              "maxReads": 41,
+              "displayPoints": 2296,
+              "maxDisplayPoints": 4004
+            },
+            {
+              "sourceRows": 131072,
+              "visibleRows": 9,
+              "sourceReads": 43,
+              "maxReads": 47,
+              "displayPoints": 3978,
+              "maxDisplayPoints": 4004
+            }
+          ],
+          "moduleHashes": {
+            "atlas-price-chart.js": "4dd90c777f505d2b8bbef463681ef1b546acc304a4c5576e59e8d603c98752a2",
+            "chart-overlays.js": "aa3ff70d4973902c6aed460a5150a52aabccffcb8988679d71bb60b65156e9e3",
+            "chart-window.js": "ff1527876a0185e8f8a52211170c696bde98f0120c6f0ddde58cea987daaf7cd",
+            "chart-navigation.js": "a1b030756c17938cc767dda437a417dacbd50e2ccb1bd2d8837f36e0426edee8"
+          }
+        }
+      ]
+    }
+  ],
+  "formal": {
+    "rerun": false,
+    "reason": "No market-request ownership source, implementation regression, model, or formal verifier modifications in this overlay iteration. Source digest matches prior executed receipt.",
+    "verifiedUnchangedControllerSha256": "dce96066268bb4e5ff0f5b81fe182904d6cb7d711172886872de3d387b6b7bee",
+    "receipt": {
+      "tool": {
+        "name": "TLC",
+        "version": "1.7.4",
+        "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+      },
+      "bounds": {
+        "requestGenerations": 3,
+        "intervals": [
+          "1m",
+          "5m"
+        ],
+        "property": "NoStaleDisplay"
+      },
+      "model": {
+        "MarketRequests": {
+          "outcome": "pass",
+          "generatedStates": 5955,
+          "distinctStates": 2081,
+          "remainingStates": 0
+        },
+        "MarketRequestsBroken": {
+          "outcome": "expected invariant violation",
+          "generatedStates": 151,
+          "distinctStates": 109,
+          "remainingStates": 79
+        }
+      },
+      "implementation": {
+        "regression": "pass",
+        "mutation": "expected assertion failure",
+        "sourceSha256": "dce96066268bb4e5ff0f5b81fe182904d6cb7d711172886872de3d387b6b7bee",
+        "mutatedSourceSha256": "18d1ac6de0cb495dc161cf0001af81978bd922051fea4aacdaf8d0ad865dc19a"
+      },
+      "limitations": [
+        "Bounded abstract model, not a whole-program proof",
+        "No pricing, numerical, history-pagination, wall-clock or liveness proof"
+      ]
+    }
+  },
+  "sourceHashes": {
+    "dist/analysis-dock.js": "4e6958cdff762f4cb8f768c1a5c90b1b3fd79964d1cb625116c6cbc19b7b8b65",
+    "dist/app.js": "922858d6272e99bf0ea147b60bba7500315d8441becb3f075d2fe53d0aa2b680",
+    "dist/atlas-analysis.js": "1b9f3a591580586fe28d7b814a7dcd4fc67068ed6c1da9690af70a4e82501422",
+    "dist/atlas-price-chart.js": "4dd90c777f505d2b8bbef463681ef1b546acc304a4c5576e59e8d603c98752a2",
+    "dist/bitcoin-events.js": "871bc28763906dc15fe61c034388582914c0c018bd13f96af3162571d9295b22",
+    "dist/chart-export.js": "186ae4b944fa7cb41fceac60837110dec39fbe9a9c7404aae6f5a9655d2f6fc3",
+    "dist/chart-hover.js": "cc1c190558b99ff53daba9ba66107af1be397bbed841da52ccfe5b92ebfb5ff1",
+    "dist/chart-magnet.js": "e568efbd4da72482a9b825263d8d9da29e45cec47e39a83b2ff11e76b6dd4d9c",
+    "dist/chart-math.js": "5cf226b173ce45b18a8e557ae7beee1e32ac097d3f1b848159bdb7ecabd27b68",
+    "dist/chart-navigation.js": "a1b030756c17938cc767dda437a417dacbd50e2ccb1bd2d8837f36e0426edee8",
+    "dist/chart-overlays.js": "aa3ff70d4973902c6aed460a5150a52aabccffcb8988679d71bb60b65156e9e3",
+    "dist/chart-presets.js": "e48b255574ea382145e36fc2825a461779f3fded1b302895325c613a96bbb61a",
+    "dist/chart-window.js": "ff1527876a0185e8f8a52211170c696bde98f0120c6f0ddde58cea987daaf7cd",
+    "dist/cryptocon-audit-data.js": "c03b17ca9df54d4da6fbbaa7d3566db51ee450a47c3a2c9d4a28d457e777cf84",
+    "dist/cryptocon-audit.js": "a7f4e471a732adead847678e58d53d153dd2c790ba45fe611fb81e266b1c3648",
+    "dist/cryptocon-evidence.js": "06c8b9d57da468215219eb25cdf5be69877a6cee7cd3ee591d83ce378287a9de",
+    "dist/cycle-calibration.js": "0b1741900b5be39a89241946caa9cdab6fdf205295d80b2d93f6838205603e3c",
+    "dist/cycle-engine.js": "8df69ff434af015cddf61a1ea0ae17bb0cf6e409465a97a2c4762d7d014be301",
+    "dist/cycle-interval-overlay.js": "aada775036eeec008e142bcb0727eb029646d0c02effd6e5f8c117a32fbae310",
+    "dist/cycle-milestones-view.js": "57df49c5050fd6c12351e13e5a2dcfec926f591d777af8505fd7ac9a3c55b328",
+    "dist/cycle-milestones.js": "38aafe947d1389234fd2c9541ac53a45dd442b6eca73d430eb0b651a4dd4970d",
+    "dist/cycle-selection.js": "7fd67c069224576f8b2cc1bdcc825ddb8fc253fde7a282d6f77fa99e1a9eb17a",
+    "dist/cycle-timing.js": "8e8576879584f046bb818af8780d85fced9ce9e260b6a4d6ecea4a41d49d4c5e",
+    "dist/data-source.js": "578a337f60a029f8a826d41cf8459662a6fc42aa033de57d524c7d5a0ecd1f69",
+    "dist/data-update.js": "135cc34c10dd7a9ac48fcdc1d444952966c9e8315f851a13e7418751eb8eafe6",
+    "dist/detailed-forecast.js": "7ccb1d0d3dc5c33713a920e4235756820f45d43a82ea5e95173ee8cb84538e1d",
+    "dist/evidence-catalog.js": "38bb515bba7e4cbd208088bd71bfd50bceefd3403d8f096b0cadfe08bcec8e21",
+    "dist/evidence-index.js": "e1e8f78da48414308b009366908a832e6df32976feaf0956f1214dae3877bb1f",
+    "dist/evidence-view.js": "cebea7b13aed84b1b60a41c980f3f39f3828cbc886c25e454bb859fd23a44d13",
+    "dist/forecast-engine.js": "e013548729aba04546d9d1861592b3bee8a19dfabbedaa6d5be5a33d12419806",
+    "dist/forecast-validation.js": "8344bfd40d16a9a62173c818c9677f6378f04700892fbb02e8769d4c8d277135",
+    "dist/forecast-view.js": "e3dbb685f4cf9ad0b85c21b3a0b5f4dc3ad7b971bfdce94b850c7ad2f3a125fc",
+    "dist/indicator-preferences.js": "1b16f2ec9a279bd026e32826240cbaee463adab556d69db3f397277ee3399787",
+    "dist/indicator-readouts.js": "6335252e3e60b102fc579aacd5dd9fb295b66e4996d7294e13e2ff79924baef4",
+    "dist/indicator-state.js": "80b69c1186cf78af0f31e6914ee3be995802360b12207676e64e5f95126ca54b",
+    "dist/indicator-workbench.js": "ec084ee49b145501b1ce090214b4083b6cb0437431c66b798cb73e6bd675bf88",
+    "dist/inspection-policy.js": "fb5953349307dd3025382df412414ba96777d0cf07403d49c548a941d47b79e3",
+    "dist/intraday-chart.js": "11b15e8cb57a2296bf8b87c579e1fc580c655f4eddfcb5beacbf665ea3285ba4",
+    "dist/intraday-history.js": "1f260701c0e6173a044129ba4adaec3edfd42f175d05b212199d2aeda72f6333",
+    "dist/lab-view.js": "0f7caf50f2263237afdbaa1af45d7ea9f1ccb88048043cc58ae1360ac2098308",
+    "dist/long-horizon-evidence.js": "7b5f9fc162e0c621b6a7df9f0f3d77e76c274040e83b88b0a8301638cb29f2f8",
+    "dist/long-horizon-forecast.js": "d84cfbf94f8c8d57f091a3d8e00c5c4f616495928b024758aa35ba814b55dbac",
+    "dist/long-horizon-view.js": "a6cf5d1fdd529493e8ff1631c02ba4d4500616ab1fe43f962aa0bb87e916ba0f",
+    "dist/market-data-controller.js": "dce96066268bb4e5ff0f5b81fe182904d6cb7d711172886872de3d387b6b7bee",
+    "dist/market-structure.js": "c99fcdb8f6cc0eefaee1e691bf35f09fb8ebeb78d86a019927a37f10f3fcd32e",
+    "dist/mobile-preview.js": "5defdea2040132f8d776b92335782ab9a7b43b0cb995fd3705adbf0021fa48ee",
+    "dist/mobile-workspace.js": "9f02ccb355fc3ba0bc29ec16b780dc163a0921bea2822ad163761b306146c71b",
+    "dist/ohlc-data.js": "7b845620074845b64753ce624225d3a5955c37e1abe65d84e2209829734edce1",
+    "dist/outlook-engine.js": "039d92e78ff016b7f1c26914ef6998bdd289b2b4387166cc348d5f77c2e400b2",
+    "dist/outlook-view.js": "38cb1e1520ec790ec0dd9a0ba4d6da6c845f91285b0567dd1b46f8e041f57f49",
+    "dist/peak-view.js": "e0df8fc41d7008d1c30126de8c02d944ed56cbf7b21575499eb0774fba2d9966",
+    "dist/peak-zones.js": "5326df89b0fc2499af0c470c6769a09b9d54933fda96d40b442c5504e21a4feb",
+    "dist/price-view-data.js": "54548b35600e976a31c60d5f2dae6539fee841cf0bd5520f6bd253c90c871634",
+    "dist/published-data.js": "fe6a08e8ab8a23865077e259926ba3764b05be381efad9f306e2dc1a9ad6759c",
+    "dist/research-workbench.js": "393ff1d444e05bd017e3af69b75bbaf894db3dad9c994cc70457111f164c87fa",
+    "dist/scenario-countdown.js": "6f52883382cf9b8be94b1bf6f6072cfbb0b9d4cb9d97ed92add0ce7f44d35cae",
+    "dist/structure-evidence.js": "48fc1cb7f58207ebf6661034be667f5c17a4349e6d4805c65b8287b218a425ad",
+    "dist/timing-view.js": "e47f6f69db210f7cc3086ab7717c1f4231faaca8ec4506467a8ae019677dadba",
+    "dist/viewport-workspace.js": "48c0faeac5053d9f8b128d1b1a767a5ab1120e1a2d6eea7581d4e71effa021a0",
+    "dist/volume-data.js": "6148284252ae9cd5e7c50ed310483cc8fe634358476e89a76b48fc79061199cb",
+    "dist/volume-forecast.js": "9baa4b6ba2e9f80bf2dcc80112113bb11084dc0547eef884ca92a2e5ce7389a9",
+    "dist/workbench-chrome.js": "2978fbfbca995bc747aee1a990b91e96086725c59f755878d24de6dc5458b656",
+    "dist/workspace-state.js": "21852c9f00651183931893c46fd501caad00d60db4c5bc6e02d41d592fb82a39",
+    "dist/workspace-tools.js": "83bd307b7adfd2cc4bb5fed2212e585813b148ccfad416ade9560038931cee40",
+    "dist/analysis-dock.css": "abe01e2d2fb4b2ede3e711720322703dfb663fc6f89f1a27532d6c60618fc78b",
+    "dist/atlas.css": "cb3cd3cb3e632b27af68d65bbfc9ccc40ce4a3b8ea8ed7eaafcbca200eec7a93",
+    "dist/chart-details-panel.css": "fd063c8962fbe59e27318106b2329a49fee2688b8ebbbc49705586d0b042eb9e",
+    "dist/chart-magnet.css": "24c303c16064cc8885afd5a61058659a17e4b388baf5647189a10298fb8f0caa",
+    "dist/compact.css": "5b1b437d29faf29a3f439d492cb873fbd40859a6ab0a39cf99c35c73df43ccdb",
+    "dist/cycle-milestones.css": "3b8962851e34a9448b4ae23c23099164321bb0e7ae8db4aed94b88dab478fe62",
+    "dist/lab.css": "3604d8b26984ab9c5ef0c9a1eee81e1c4fd1b51cc5d91713df1918a8f94aa6e6",
+    "dist/mobile-workspace.css": "ac4baa0cef4457de260e48d0c94cf75261068fa6ce1fd9d351574836b0cc067c",
+    "dist/outlook.css": "e6926850639f54c42170232cd72adfa9afef45edd655af7aaa8ece53b5e8f9c8",
+    "dist/styles.css": "45c0bfb6d9dbce88f1c17f8cdf925b5647e319a1f1b09b9d704b79195b3b2faf",
+    "dist/viewport.css": "8db83d73eafde4413960fdca4c4221deb4813afc401c74a6e656befbb7c90720",
+    "dist/workspace-tools.css": "d1d93451904cfa3f7807c2eb63c65051f5414ebae216ee364314e84d1131bdf8"
+  },
+  "standaloneSha256": "ce7dee10b1f17b1a974bd635262180001e8fcdb798c18d8c2fe6ee0784c101f6",
+  "currentCssMissingFromStandalone": [],
+  "sourceChangedDuringFinalValidation": [],
+  "browser": {
+    "desktop": {
+      "viewport": [
+        1363,
+        936
+      ],
+      "body": [
+        1363,
+        936
+      ],
+      "scrollSize": [
+        1363,
+        936
+      ],
+      "priceSvg": [
+        1281,
+        833
+      ],
+      "legend": [
+        682.5625,
+        46
+      ],
+      "markers": 30,
+      "markerTypes": 6,
+      "periods": 44,
+      "relations": 9,
+      "labelModes": {
+        "full": 10,
+        "compact": 12,
+        "duration": 8,
+        "hidden": 14
+      },
+      "oldTimelinePresent": false
+    },
+    "futureSelection": {
+      "start": "2026-06-30",
+      "end": "2029-08-12",
+      "days": 1139,
+      "weeks": 162,
+      "remainingDays": 5,
+      "priceSvgWidth": 961,
+      "periodX": [
+        72.290249,
+        818.709751
+      ],
+      "markerAndGuideX": [
+        72.29,
+        818.71
+      ]
+    },
+    "periodOnly": {
+      "markers": 0,
+      "periods": 44,
+      "legendItems": 6
+    },
+    "periodHidden": {
+      "periods": 0,
+      "priceSvgHeight": 833,
+      "bodyHeight": 936
+    },
+    "mobile320": {
+      "viewport": [
+        320,
+        740
+      ],
+      "scrollSize": [
+        320,
+        740
+      ],
+      "legend": [
+        225.6875,
+        78
+      ],
+      "headerRight": 306.046875,
+      "indicatorListHeight": 96
+    },
+    "mobile390": {
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollSize": [
+        390,
+        844
+      ],
+      "legend": [
+        225.6875,
+        78
+      ],
+      "countdownLegendGap": 8
+    },
+    "tablet640": {
+      "viewport": [
+        640,
+        800
+      ],
+      "scrollWidth": 640,
+      "menu": {
+        "left": 52,
+        "right": 594,
+        "width": 542,
+        "height": 220
+      }
+    },
+    "appErrorsObserved": false,
+    "otherErrors": "Browser extension metadata errors; chrome-extension source, not app code",
+    "actualDownloadRetested": false
+  },
+  "limitations": [
+    "Node renderer boundary and deterministic source checks do not substitute for browser visual or interaction verification.",
+    "Formal receipt is reused from earlier actual run only after checking unchanged controller hash and no related source/model/test changes.",
+    "Browser responsive iframe does not measure physical device performance.",
+    "Exact UTC durations may differ from source BLX weekly annotations.",
+    "Hidden labels remain available via hover/focus/selection; all period strokes remain present."
+  ],
+  "screenshots": {
+    "docs/screenshots/cycle-in-chart-overview-20261023.jpg": "bed3cd5830b4db7b8214c7b4da72adbfa239a6121bbade9f247c30249a237c44",
+    "docs/screenshots/cycle-in-chart-selection-20261023.jpg": "558d3857313dea6560a02276b9c492fb1dc58b7b1ddcc81f79018700c8d49902",
+    "docs/screenshots/cycle-in-chart-mobile-320-20261023.jpg": "00b95e76269b23cf5afc50b0ea88df837386987644f174001c3a15839c0689a0"
+  }
+}
