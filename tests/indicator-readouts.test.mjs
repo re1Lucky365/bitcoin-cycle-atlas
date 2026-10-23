@@ -84,6 +84,19 @@ test('selection date, currency mode and observed source track the displayed poin
   assert.equal(indicatorReadoutDate(unavailable),'2026.10.10 10:00 UTC · 범위 · 자료 없음');
 });
 
+test('price values identify percent, start-index and latest-index units while keeping raw USD and the basis in provenance',()=>{
+  const original={...observed,price:110,previousClose:null,changePct:null,displayedPrice:10};
+  const percentage=read('readout',{selection:{...original,unit:'percent',display:{unit:'percent',baseDate:'2026-10-01',basePrice:100,factor:1,offset:-100}}});
+  assert.equal(percentage.value,'10% · 표시 시작 대비');assert.match(percentage.title,/기준 2026\.10\.01 UTC · 기준 가격 \$100 · 원래 가격 \$110/);
+  for(const [unit,label] of [['indexed','최근 관측'],['indexed-start','표시 시작']]){
+    const result=read('readout',{selection:{...original,unit,displayedPrice:110,display:{unit,baseDate:'2026-10-01',basePrice:100,factor:1,offset:0}}});
+    assert.equal(result.value,`110 · 지수 · ${label} = 100`);assert.match(result.title,/원래 가격 \$110/);
+  }
+  const metadataOnly=read('readout',{selection:{...original,unit:'percent',displayedPrice:undefined,display:{unit:'percent',factor:2,offset:-100,basePrice:50}}});
+  assert.equal(metadataOnly.value,'120% · 표시 시작 대비');
+  const unavailable=read('readout',{selection:{...original,unit:'indexed-start',displayedPrice:null,display:{available:false}}});assert.equal(unavailable.value,'표시 기준 가격 없음');assert.doesNotMatch(unavailable.value,/\$110/);
+});
+
 test('OHLC readout names the previous-close return even when the same candle rises from its open',()=>{
   const selected={...observed,price:105,open:100,high:108,low:99,close:105,...barPriceChange(105,110,100)};
   const result=read('readout',{selection:selected});

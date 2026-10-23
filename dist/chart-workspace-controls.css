@@ -1,0 +1,31 @@
+.workspace-history-controls{display:flex;align-items:center;gap:0;flex:none;margin-inline:2px;border-inline:1px solid #283548;padding-inline:2px}
+.workspace-history-controls .workbench-icon{width:30px;min-width:30px}
+.workspace-history-controls .workbench-icon:disabled{opacity:.3;cursor:default}
+.chart-touch-tracking-hint{position:absolute;left:50%;bottom:32px;transform:translateX(-50%);max-width:calc(100% - 100px);z-index:12;white-space:nowrap;padding:6px 11px;border:1px solid #647fa1;border-radius:16px;background:#14243bea;color:#d8e8fc;font:11px/1.35 system-ui,sans-serif;box-shadow:0 3px 14px #0004;cursor:pointer}
+.chart-touch-tracking-hint[hidden]{display:none}
+.chart-go-to-dialog{width:min(560px,calc(100vw - 24px));max-height:calc(100dvh - 24px);margin:auto;padding:18px;border:1px solid #40536c;border-radius:10px;background:#151e2b;color:#dbe6f5;box-shadow:0 20px 70px #0009;font:13px/1.6 system-ui,sans-serif;overflow:auto;box-sizing:border-box}
+.chart-go-to-dialog::backdrop{background:#050b14a6;backdrop-filter:blur(2px)}
+.chart-go-to-dialog *{box-sizing:border-box}
+.chart-go-to-dialog header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.chart-go-to-dialog h2{font-size:17px;margin:0}
+.chart-go-to-dialog p{overflow-wrap:anywhere;color:#aabed8;margin:9px 0;font-size:12px}
+.chart-go-to-dialog form{display:flex;flex-direction:column;gap:12px}
+.chart-go-to-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.chart-go-to-dialog label{display:flex;flex-direction:column;gap:5px;min-width:0;color:#adbed4}
+.chart-go-to-dialog input,.chart-go-to-dialog select{width:100%;min-width:0;max-width:100%;padding:9px 10px;border:1px solid #435975;border-radius:5px;background:#101824;color:#e7f0fc;font:inherit;color-scheme:dark}
+.chart-go-to-dialog button{min-height:34px;border:1px solid #4a6486;border-radius:5px;background:#23364f;color:#dfedff;padding:6px 12px;font:inherit;cursor:pointer}
+.chart-go-to-dialog button:disabled{opacity:.45;cursor:default}
+.chart-go-to-dialog [role=status]{min-height:1.5em;color:#a9cff5}
+.chart-go-to-dialog :focus-visible,.price-axis-options :focus-visible{outline:2px solid #89bcf3;outline-offset:2px}
+.price-axis-options{position:relative;flex:none}
+.price-axis-options>summary{list-style:none;cursor:pointer;border:1px solid transparent;border-radius:4px;min-height:28px;padding:4px 7px;color:#a8bad1;font:11px/1.5 system-ui,sans-serif;white-space:nowrap}
+.price-axis-options>summary::-webkit-details-marker{display:none}
+.price-axis-options[open]>summary{background:#22344d;border-color:#416082;color:#e0edff}
+.price-axis-options>div,.price-axis-options>fieldset{position:absolute;z-index:50;bottom:calc(100% + 7px);right:0;width:250px;max-width:calc(100vw - 24px);max-height:min(420px,75dvh);overflow:auto;padding:12px;border:1px solid #435c7d;border-radius:7px;background:#172435;box-shadow:0 10px 40px #0008;box-sizing:border-box}
+.price-axis-options label{display:flex;gap:8px;align-items:center;min-height:34px;color:#c0d2e9;font:12px/1.5 system-ui,sans-serif}
+.price-axis-options select{width:100%;min-width:0;border:1px solid #455e80;border-radius:4px;padding:7px;background:#0f1b2a;color:#dfedff;font:inherit;color-scheme:dark}
+.price-axis-options small,.price-axis-options p{display:block;color:#8fa7c4;font:11px/1.6 system-ui,sans-serif;overflow-wrap:anywhere}
+@media(max-width:620px){.workspace-history-controls{margin-inline:0;padding-inline:0}.workspace-history-controls .workbench-icon{width:28px;min-width:28px}.chart-go-to-dialog{padding:14px;width:calc(100vw - 16px)}.chart-go-to-dialog input,.chart-go-to-dialog select{font-size:16px}.chart-go-to-dialog button{min-height:42px}.chart-go-to-fields{grid-template-columns:1fr}.chart-touch-tracking-hint{bottom:24px;font-size:10px}.price-axis-options>summary{font-size:10px;padding-inline:5px}}
+@media(max-height:500px){.chart-go-to-dialog{padding:10px 14px}.chart-go-to-fields{grid-template-columns:repeat(2,minmax(0,1fr))}.chart-go-to-dialog p{margin:5px 0}.chart-go-to-dialog form{gap:7px}}
+
+fieldset.price-axis-options{margin:8px 0;padding:10px 0 0;border:0;border-top:1px solid #32465f;min-width:0}.price-axis-options legend{font-size:12px;color:#b1c9e4;padding-right:8px}.price-axis-options input[type=checkbox]{width:auto;margin:0}.chart-go-to-dialog .chart-go-to-error{color:#f4b4b9}.chart-go-to-actions{display:flex;justify-content:flex-end;gap:8px}.chart-go-to-fields label[hidden]{display:none}

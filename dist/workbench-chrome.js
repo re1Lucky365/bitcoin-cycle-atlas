@@ -1,6 +1,8 @@
 import { CHART_INTERVALS,isIntradayInterval } from './ohlc-data.js?v=1.11.0';
 import { MAGNET_MODES, MAGNET_LABELS, normalizeMagnetMode } from './chart-magnet.js?v=1.11.0';
-import { mountWorkspaceTools } from './workspace-tools.js?v=1.12.0-tv-parity.1';
+import { mountChartGoTo } from './chart-go-to.js?v=1.13.0-research.1';
+import { isStartPriceUnit } from './price-display.js?v=1.13.0-research.1';
+import { mountWorkspaceTools } from './workspace-tools.js?v=1.13.0-research.1';
 const $ = selector => document.querySelector(selector);
 
 const paths = {
@@ -39,6 +41,14 @@ export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlSto
     return node;
   }
   const settings=$('#atlas-display-options'),settingsBody=$('.atlas-settings-body');
+  const unitSelect=$('#lab-unit');
+  for(const [value,label] of [['percent','표시 시작 대비 %'],['indexed-start','표시 시작 = 100']]){if(![...unitSelect.options].some(option=>option.value===value)){const option=document.createElement('option');option.value=value;option.textContent=label;unitSelect.append(option);}}
+  const priceOptions=document.createElement('fieldset');priceOptions.className='price-axis-options';
+  const priceOptionsTitle=document.createElement('legend');priceOptionsTitle.textContent='가격축';priceOptions.append(priceOptionsTitle);
+  const priceChecks=new Map();
+  for(const [action,label,title] of [['invert-scale','가격축 뒤집기','큰 가격을 아래쪽으로 표시합니다. 원본 가격은 바뀌지 않습니다.'],['price-only-auto','가격 자료만 자동 맞춤','가격선·캔들의 범위에 자동 맞춥니다. 가정 범위와 기준점은 축 범위를 늘리지 않습니다.']]){const row=document.createElement('label'),input=document.createElement('input'),text=document.createElement('span');input.type='checkbox';input.dataset.priceAxisOption=action;input.onchange=()=>command(action,input.checked);text.textContent=label;row.title=title;row.append(input,text);priceOptions.append(row);priceChecks.set(action,input);}
+  const displayBasis=document.createElement('p');displayBasis.className='price-axis-basis';priceOptions.append(displayBasis);settingsBody.append(priceOptions);
+  const goTo=mountChartGoTo({document,onSubmit:result=>command('go-to',result)});
   const modeTabs=$('.atlas-mode-tabs'),controlSets=[...document.querySelectorAll('.atlas-controls>.atlas-control-set')];
   settingsBody.prepend(...controlSets);settingsBody.append($('#atlas-reset'));
   const frequency=$('[data-lab-frequency]').closest('fieldset');frequency.id='workbench-frequency';
@@ -140,8 +150,8 @@ export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlSto
   for(const [value,label,title] of [['focus','4년','최근 2년 + 앞으로 2년 · 기본 보기'],['near','6개월','가까운 6개월 · 최근 45일 포함'],['all','장기 전망','검증한 자료의 마지막 목표 연도까지'],['history','전체','2010년부터 장기 전망까지']]){
     const node=document.createElement('button');node.type='button';node.textContent=label;node.title=title;node.setAttribute('aria-label',title);node.dataset.chartSpan=value;node.setAttribute('aria-pressed','false');node.onclick=()=>command('span',value);ranges.append(node);
   }
-  const goDate=panelButton(button('calendar','날짜로 이동'),'selection');goDate.id='workbench-go-date';
-  goDate.onclick=()=>{command('price-inspection');openReader('selection',{focus:true,opener:goDate});requestAnimationFrame(()=>$('#atlas-date').focus({preventScroll:true}));};ranges.append(goDate);
+  const goDate=button('calendar','UTC 날짜·시간 또는 기간으로 이동 · Alt+G',{'aria-haspopup':'dialog','aria-controls':'chart-go-to-dialog'});goDate.id='workbench-go-date';
+  goDate.onclick=()=>goTo.open(goDate);ranges.append(goDate);
   const rangeLabel=document.createElement('span');rangeLabel.id='workbench-range-label';
   const axis=document.createElement('div');axis.className='workbench-axis';
   const scale=document.createElement('button');scale.type='button';scale.id='workbench-scale';scale.textContent='로그';scale.title='가격 눈금 · 로그 / 선형';scale.setAttribute('aria-label','로그 가격 눈금 · 선형으로 변경');scale.setAttribute('aria-pressed','true');scale.onclick=()=>command('scale');
@@ -157,8 +167,8 @@ export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlSto
   $('#lab-metrics').removeAttribute('aria-live');
   const handleState=event=>{
     const s=event.detail,price=s.mode==='price',intraday=price&&isIntradayInterval(s.frequency),candles=s.chartType==='candles';plot.dataset.tool=s.tool;plot.dataset.intraday=String(intraday);workspace.dataset.chartMode=s.mode;
-    workspace.dataset.analysisMode=s.analysisMode||'';
-    left.hidden=!price;left.querySelector('[data-chart-tool=measure]').hidden=false;clear.hidden=false;chartMenu.hidden=!price;chartMenu.disabled=s.navigationAvailable===false;scenario.hidden=!price||intraday;layerButton.hidden=!price;ranges.hidden=!price||intraday;axis.hidden=!price;next.hidden=!price||intraday;goDate.hidden=!price||intraday;chartType.hidden=!price;
+    workspace.dataset.analysisMode=s.analysisMode||'';goTo.update(s);
+    left.hidden=!price;left.querySelector('[data-chart-tool=measure]').hidden=false;clear.hidden=false;chartMenu.hidden=!price;chartMenu.disabled=s.navigationAvailable===false;scenario.hidden=!price||intraday;layerButton.hidden=!price;ranges.hidden=!price;axis.hidden=!price;next.hidden=!price||intraday;goDate.hidden=!price;chartType.hidden=!price;
     intervalSelect.value=s.frequency||'daily';
     for(const node of intervalButtons.querySelectorAll('button')){const selected=node.dataset.labFrequency===s.frequency;node.setAttribute('aria-pressed',String(selected));node.tabIndex=selected?0:-1;}
     chartType.setAttribute('aria-pressed',String(candles));chartType.innerHTML=glyph(candles?'candles':'line');chartType.title=`${candles?'캔들':'선'} 표시 · ${candles?'선':'캔들'}으로 변경`;chartType.setAttribute('aria-label',chartType.title);
@@ -168,8 +178,11 @@ export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlSto
     scenario.title=`미래 가정 · ${scenarioNames[s.scenario]?.[1]||''}`;scenario.setAttribute('aria-label',scenario.title);
     for(const node of document.querySelectorAll('[data-chart-tool]'))node.setAttribute('aria-pressed',String(node.dataset.chartTool===s.tool));
     for(const node of document.querySelectorAll('[data-workbench-scenario]'))node.setAttribute('aria-pressed',String(node.dataset.workbenchScenario===s.scenario));
-    for(const node of ranges.querySelectorAll('[data-chart-span]'))node.setAttribute('aria-pressed',String(!s.customRange&&node.dataset.chartSpan===s.window));
-    scale.textContent=s.scale==='linear'?'선형':'로그';scale.setAttribute('aria-pressed',String(s.scale!=='linear'));scale.setAttribute('aria-label',`${s.scale==='linear'?'선형':'로그'} 가격 눈금 · ${s.scale==='linear'?'로그로':'선형으로'} 변경`);
+    for(const node of ranges.querySelectorAll('[data-chart-span]')){node.hidden=intraday;node.setAttribute('aria-pressed',String(!s.customRange&&node.dataset.chartSpan===s.window));}
+    const display=s.display,linearOnly=isStartPriceUnit(s.unit),effectiveScale=display?.effectiveScale||(linearOnly?'linear':s.scale);
+    scale.textContent=`${s.unit==='percent'?'% · ':s.unit==='indexed-start'?'100 · ':''}${effectiveScale==='linear'?'선형':'로그'}`;scale.setAttribute('aria-pressed',String(effectiveScale!=='linear'));scale.disabled=linearOnly;scale.title=linearOnly?'표시 시작 기준 %와 100은 선형 눈금을 사용합니다.':`가격 눈금 · ${effectiveScale==='linear'?'로그로':'선형으로'} 변경`;scale.setAttribute('aria-label',scale.title);
+    unitSelect.value=s.unit||'usd';priceChecks.get('invert-scale').checked=Boolean(s.invertScale);priceChecks.get('price-only-auto').checked=Boolean(s.priceOnlyAuto);
+    displayBasis.textContent=s.unit==='usd'?'USD 원본 가격':display?.available===false?'현재 표시 구간에 기준으로 삼을 실제 가격이 없습니다.':`${display?.label||''} · 기준 ${display?.baseDate||'—'} UTC · $${Number.isFinite(display?.basePrice)?display.basePrice.toLocaleString('en-US',{maximumFractionDigits:6}):'—'}`;
     const automatic=s.priceAxisMode!=='manual';auto.setAttribute('aria-pressed',String(automatic));auto.textContent=automatic?'자동':'수동';auto.title=automatic?'가격축 자동 맞춤 켜짐 · 눌러 현재 가격 범위 고정':'가격축 수동 범위 · 눌러 자동 맞춤';auto.setAttribute('aria-label',auto.title);auto.disabled=s.navigationAvailable===false;plot.dataset.priceAxisMode=automatic?'auto':'manual';
     magnetMode=normalizeMagnetMode(s.magnet);if(magnet.dataset.magnetMode!==magnetMode)magnet.querySelector('.icon').innerHTML=paths[magnetMode==='strong'?'magnetStrong':'magnet'];magnet.dataset.magnetMode=magnetMode;magnet.setAttribute('aria-pressed',String(magnetMode!=='off'));magnetBadge.textContent={off:'OFF',weak:'약',strong:'강'}[magnetMode];
     magnet.title=`자석 · ${MAGNET_LABELS[magnetMode]} · 두 지점 측정 · Alt+M`;magnet.setAttribute('aria-label',`${magnet.title} · 설정`);
@@ -190,14 +203,14 @@ export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlSto
     nodes[next].focus({preventScroll:true});nodes[next].click();
   };
   const handleKey=event=>{
-    if(event.defaultPrevented||document.body.dataset.page!=='outlook'||event.ctrlKey||event.metaKey||event.target.closest?.('input,textarea,select,[contenteditable=true],#chart-reader,#indicator-library,#workspace-dialog,#chart-indicator-manager,.analysis-indicator-window,.chart-context-menu'))return;
+    if(event.defaultPrevented||document.body.dataset.page!=='outlook'||event.ctrlKey||event.metaKey||event.target.closest?.('input,textarea,select,[contenteditable=true],#chart-reader,#indicator-library,#workspace-dialog,#chart-indicator-manager,.analysis-indicator-window,.chart-context-menu,.chart-go-to-dialog'))return;
     if(workspace.dataset.chartMode!=='price')return;
     const key=event.key.toLowerCase(),intraday=plot.dataset.intraday==='true';
     if(event.altKey){
       if(key==='r'){event.preventDefault();command('fit');}
       else if(key==='l'){event.preventDefault();command('scale');}
       else if(key==='m'){event.preventDefault();command('magnet',MAGNET_MODES[(MAGNET_MODES.indexOf(magnetMode)+1)%MAGNET_MODES.length]);}
-      else if(key==='g'&&!intraday){event.preventDefault();goDate.click();}
+      else if(key==='g'){event.preventDefault();goDate.click();}
       else if(key==='z'){event.preventDefault();plot.querySelector('svg[data-plot-left]:not([hidden])')?.focus({preventScroll:true});}
       return;
     }
@@ -208,5 +221,5 @@ export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlSto
   scale.setAttribute('aria-keyshortcuts','Alt+L');goDate.setAttribute('aria-keyshortcuts','Alt+G');
   document.addEventListener('atlas:workbench-state',handleState);
   document.addEventListener('keydown',handleKey);intervalButtons.addEventListener('keydown',handleIntervalKey);
-  return {destroy(){workspaceTools.destroy();document.removeEventListener('atlas:workbench-state',handleState);document.removeEventListener('keydown',handleKey);intervalButtons.removeEventListener('keydown',handleIntervalKey);document.removeEventListener('pointerdown',dismissMagnet,true);document.removeEventListener('focusin',dismissMagnet);document.removeEventListener('scroll',scrollMagnet,true);document.removeEventListener('visibilitychange',visibilityMagnet);window.removeEventListener('resize',resizeMagnet);window.removeEventListener('blur',resizeMagnet);magnetMenu.remove();}};
+  return {destroy(){goTo.destroy();workspaceTools.destroy();document.removeEventListener('atlas:workbench-state',handleState);document.removeEventListener('keydown',handleKey);intervalButtons.removeEventListener('keydown',handleIntervalKey);document.removeEventListener('pointerdown',dismissMagnet,true);document.removeEventListener('focusin',dismissMagnet);document.removeEventListener('scroll',scrollMagnet,true);document.removeEventListener('visibilitychange',visibilityMagnet);window.removeEventListener('resize',resizeMagnet);window.removeEventListener('blur',resizeMagnet);magnetMenu.remove();}};
 }

@@ -1,4 +1,4 @@
-import { INDICATORS, normalizeIndicatorState, searchIndicators } from './indicator-state.js?v=1.12.1-cursor-hud.1';
+import { INDICATORS, normalizeIndicatorState, searchIndicators } from './indicator-state.js?v=1.13.0-research.1';
 
 export const INDICATOR_PREFERENCES_KEY='bitcoin-cycle-atlas.indicator-preferences.v1';
 export const MAX_INDICATOR_TEMPLATES=8;

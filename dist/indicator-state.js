@@ -1,4 +1,7 @@
-/** Chart membership and visibility are separate: a hidden indicator stays added. */
+import {normalizeIndicatorSettings,patchIndicatorSettings,indicatorSupportsInterval} from './indicator-settings.js?v=1.13.0-research.1';
+export {indicatorSettings,indicatorSupportsInterval,applyIndicatorPresentation} from './indicator-settings.js?v=1.13.0-research.1';
+
+/** Chart membership, eye visibility, values and pane geometry are separate. */
 export const INDICATORS = Object.freeze([
   {id:'readout',label:'가격 · OHLC 읽기',category:'표시',description:'왼쪽 위의 가격, 날짜, 시가·고가·저가·종가',default:true},
   {id:'source',label:'자료 출처',category:'표시',description:'가격·거래량 제공자와 수집 시각',default:true},
@@ -26,6 +29,11 @@ const analyses=new Set(INDICATORS.filter(item=>item.analysis).map(item=>item.id)
 const studies=new Set(INDICATORS.filter(item=>item.category!=='표시').map(item=>item.id));
 const defaults=INDICATORS.filter(item=>item.default).map(item=>item.id);
 const ordered=values=>{const wanted=new Set(values);return INDICATORS.filter(item=>wanted.has(item.id)).map(item=>item.id);};
+export const ANALYSIS_PANE_MIN_HEIGHT=240;
+export const ANALYSIS_PANE_MAX_HEIGHT=900;
+export const ANALYSIS_PANE_DEFAULT_HEIGHT=330;
+const paneHeight=value=>typeof value==='number'&&Number.isFinite(value)?Math.round(Math.min(ANALYSIS_PANE_MAX_HEIGHT,Math.max(ANALYSIS_PANE_MIN_HEIGHT,value))):null;
+const parseJson=value=>{try{return value&&value.length<=8000?JSON.parse(value):{};}catch{return {};}};
 
 export function normalizeIndicatorState(value={}) {
   const added=ordered(Array.isArray(value.added)?value.added:defaults);
@@ -33,7 +41,12 @@ export function normalizeIndicatorState(value={}) {
   const minimized=ordered((Array.isArray(value.minimized)?value.minimized:[]).filter(id=>analyses.has(id)&&added.includes(id)));
   const active=analyses.has(value.active)&&added.includes(value.active)&&!hidden.includes(value.active)?value.active:added.find(id=>analyses.has(id)&&!hidden.includes(id))||added.find(id=>analyses.has(id))||'cycles';
   const primary=ids.has(value.primary)&&added.includes(value.primary)?value.primary:null;
-  return {added,hidden,minimized,active,primary,collapsed:value.collapsed===true};
+  const analysisIds=added.filter(id=>analyses.has(id));
+  const paneOrder=[...new Set([...(Array.isArray(value.paneOrder)?value.paneOrder:[]),...analysisIds])].filter(id=>analysisIds.includes(id));
+  const paneHeights={};for(const id of analysisIds){const height=paneHeight(value.paneHeights?.[id]);if(height!==null&&height!==ANALYSIS_PANE_DEFAULT_HEIGHT)paneHeights[id]=height;}
+  const maximized=analysisIds.includes(value.maximized)?value.maximized:null;
+  const settings=normalizeIndicatorSettings(value.settings,added);
+  return {added,hidden,minimized,active,primary,collapsed:value.collapsed===true,settings,paneOrder,paneHeights,maximized};
 }
 
 export function readIndicatorState(search='',{mobile=globalThis.matchMedia?.('(max-width:620px)')?.matches??false}={}) {
@@ -45,7 +58,12 @@ export function readIndicatorState(search='',{mobile=globalThis.matchMedia?.('(m
     const mode=analyses.has(legacy)?legacy:'cycles';added.push(mode);if(params.get('dock')==='closed')hidden.push(mode);
   }
   const legend=params.get('indicator-list');
-  return normalizeIndicatorState({added,hidden,minimized:params.get('indicator-minimize')?.split(',')||[],active:legacy,primary:params.get('indicator-primary'),collapsed:legend==='closed'||legend!=='open'&&mobile});
+  const settings=parseJson(params.get('indicator-settings'));
+  // Migrate real calculation controls in older links; explicit new settings win.
+  if(!params.has('indicator-settings')&&settings&&typeof settings==='object'&&!Array.isArray(settings))for(const [id,key,param] of [['cycles','alignment','align'],['duration','phase','phase'],['periods','period','interval'],['periods','metric','measure'],['periods','scope','scope'],['cryptocon','view','audit']]){
+    if(params.has(param)&&!Object.hasOwn(settings[id]?.inputs||{},key))settings[id]={...settings[id],inputs:{...settings[id]?.inputs,[key]:params.get(param)}};
+  }
+  return normalizeIndicatorState({added,hidden,minimized:params.get('indicator-minimize')?.split(',')||[],active:legacy,primary:params.get('indicator-primary'),collapsed:legend==='closed'||legend!=='open'&&mobile,settings,paneOrder:params.get('pane-order')?.split(',')||[],paneHeights:parseJson(params.get('pane-heights')),maximized:params.get('pane-maximized')});
 }
 
 export function writeIndicatorState(params,state) {
@@ -56,15 +74,25 @@ export function writeIndicatorState(params,state) {
   // Both choices are explicit in shared/saved charts, even across device sizes.
   params.set('indicator-list',next.collapsed?'closed':'open');
   if(next.primary)params.set('indicator-primary',next.primary);else params.delete('indicator-primary');
+  // An explicit empty map separates new default inputs from unrelated legacy
+  // query controls, so writing then reading cannot silently revive stale inputs.
+  params.set('indicator-settings',JSON.stringify(next.settings));
+  const natural=next.added.filter(id=>analyses.has(id));
+  if(next.paneOrder.join(',')!==natural.join(','))params.set('pane-order',next.paneOrder.join(','));else params.delete('pane-order');
+  if(Object.keys(next.paneHeights).length)params.set('pane-heights',JSON.stringify(next.paneHeights));else params.delete('pane-heights');
+  if(next.maximized)params.set('pane-maximized',next.maximized);else params.delete('pane-maximized');
   if(next.added.some(id=>analyses.has(id)))params.set('chart',next.active);else params.delete('chart');
   params.delete('dock');
   return params;
 }
 
-export function isIndicatorVisible(state,id) {return state.added.includes(id)&&!state.hidden.includes(id);}
-export function visibleAnalysisIds(state) {return INDICATORS.filter(item=>item.analysis&&isIndicatorVisible(state,item.id)).map(item=>item.id);}
+export function isIndicatorVisible(state,id,frequency) {return state.added.includes(id)&&!state.hidden.includes(id)&&indicatorSupportsInterval(state,id,frequency);}
+export function visibleAnalysisIds(state,frequency) {
+  const normalized=normalizeIndicatorState(state),visible=normalized.paneOrder.filter(id=>isIndicatorVisible(normalized,id,frequency));
+  return normalized.maximized&&visible.includes(normalized.maximized)?[normalized.maximized]:visible;
+}
 
-export function changeIndicatorState(state,{action,id,state:replacement}) {
+export function changeIndicatorState(state,{action,id,state:replacement,patch,direction,height}) {
   const next=normalizeIndicatorState(state);
   if(action==='reset')return normalizeIndicatorState();
   if(action==='replace')return replacement&&Array.isArray(replacement.added)?normalizeIndicatorState(replacement):next;
@@ -73,7 +101,17 @@ export function changeIndicatorState(state,{action,id,state:replacement}) {
   if(action==='show-all')return {...next,hidden:next.hidden.filter(id=>!studies.has(id))};
   if(action==='hide-all')return normalizeIndicatorState({...next,hidden:[...next.hidden,...next.added.filter(id=>studies.has(id))]});
   if(!ids.has(id))return next;
-  if(action==='minimize')return analyses.has(id)&&next.added.includes(id)?normalizeIndicatorState({...next,minimized:next.minimized.includes(id)?next.minimized.filter(value=>value!==id):[...next.minimized,id]}):next;
+  if(action==='settings')return next.added.includes(id)?normalizeIndicatorState({...next,settings:patchIndicatorSettings(next,id,patch)}):next;
+  if(action==='settings-reset'){delete next.settings[id];return normalizeIndicatorState(next);}
+  if(action==='maximize')return analyses.has(id)&&next.added.includes(id)?normalizeIndicatorState({...next,maximized:next.maximized===id?null:id,minimized:next.minimized.filter(value=>value!==id),hidden:next.hidden.filter(value=>value!==id),active:id}):next;
+  if(action==='resize')return analyses.has(id)&&next.added.includes(id)&&paneHeight(height)!==null?normalizeIndicatorState({...next,paneHeights:{...next.paneHeights,[id]:paneHeight(height)}}):next;
+  if(action==='move'){
+    if(!analyses.has(id)||![-1,1].includes(direction))return next;
+    const index=next.paneOrder.indexOf(id),target=index+direction;
+    if(index>=0&&target>=0&&target<next.paneOrder.length)[next.paneOrder[index],next.paneOrder[target]]=[next.paneOrder[target],next.paneOrder[index]];
+    return next;
+  }
+  if(action==='minimize')return analyses.has(id)&&next.added.includes(id)?normalizeIndicatorState({...next,minimized:next.minimized.includes(id)?next.minimized.filter(value=>value!==id):[...next.minimized,id],maximized:next.maximized===id?null:next.maximized}):next;
   if(action==='activate')return analyses.has(id)&&isIndicatorVisible(next,id)?{...next,active:id}:next;
   if(action==='toggle')action=next.added.includes(id)?'remove':'add';
   if(action==='add'&&!next.added.includes(id)){next.added.push(id);next.hidden=next.hidden.filter(value=>value!==id);if(analyses.has(id))next.active=id;}

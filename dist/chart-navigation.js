@@ -1,5 +1,5 @@
 import { utcDay, dateFromDay } from './cycle-engine.js?v=1.11.0';
-import { normalizePriceDomain, scalePriceDomain } from './price-axis.js?v=1.12.0-tv-parity.1';
+import { normalizePriceDomain, scalePriceDomain, panPriceDomain } from './price-axis.js?v=1.13.0-research.1';
 
 const MIN_DAYS = 30;
 const MIN_BARS = 12;
@@ -24,12 +24,15 @@ function rangeUnits(range) {
   if (values.some(value => !Number.isSafeInteger(value))) throw new RangeError('범위는 같은 봉 시간 간격에 맞아야 합니다.');
   const minimum = range.minSpan ?? (seconds ? MIN_BARS : MIN_DAYS);
   if (!Number.isSafeInteger(minimum) || minimum < 1) throw new RangeError('최소 표시 간격 수는 양의 정수여야 합니다.');
-  const maximum = range.maxSpan ?? values[0] + 1;
-  if (!Number.isSafeInteger(maximum) || maximum < Math.min(minimum, values[0] + 1)) throw new RangeError('최대 표시 간격 수는 최소 표시 간격 이상이어야 합니다.');
+  const free = range.allowEmpty === true, maximum = range.maxSpan ?? Math.max(free ? minimum : 1, values[0] + 1);
+  if (!Number.isSafeInteger(maximum) || maximum < (free ? minimum : Math.min(minimum, values[0] + 1))) throw new RangeError('최대 표시 간격 수는 최소 표시 간격 이상이어야 합니다.');
+  const hardMin = seconds ? Math.ceil((Date.parse('1800-01-01T00:00:00Z')/1000-min)/step) : utcDay('1800-01-01')-min;
+  const hardMax = seconds ? Math.floor((Date.parse('2401-01-01T00:00:00Z')/1000-step-min)/step) : utcDay('2400-12-31')-min;
   return {
     min: 0, max: values[0], start: values[1], end: values[2],
-    minimum: Math.min(minimum, values[0] + 1),
-    maximum: Math.min(maximum, values[0] + 1),
+    minimum: free ? minimum : Math.min(minimum, values[0] + 1),
+    maximum: free ? Math.min(maximum,hardMax-hardMin+1) : Math.min(maximum, values[0] + 1),
+    free,hardMin,hardMax,
     encode: value => seconds ? min + value * step : dateFromDay(min + value),
   };
 }
@@ -37,13 +40,14 @@ function rangeUnits(range) {
 function boundedRange(range, start, length) {
   const units = rangeUnits(range), available = units.max + 1;
   const count = clamp(Math.round(length), units.minimum, units.maximum);
-  const first = clamp(Math.round(start), 0, available - count);
+  const first = units.free ? clamp(Math.round(start),units.hardMin,units.hardMax-count+1) : clamp(Math.round(start), 0, available - count);
   return { ...range, start: units.encode(first), end: units.encode(first + count - 1) };
 }
 
 export function fitRange(range) {
   const units = rangeUnits(range);
-  return boundedRange(range, units.max - units.maximum + 1, units.maximum);
+  const count=Math.min(units.max+1,units.maximum);
+  return boundedRange(range, units.max - count + 1, count);
 }
 
 export function zoomRange(range, factor, anchor = .5) {
@@ -69,7 +73,7 @@ export function panRange(range, fraction) {
 
 const sameScope = (a, b) => Boolean(a && b &&
   a.unit === b.unit && a.step === b.step && a.min === b.min && a.max === b.max &&
-  a.minSpan === b.minSpan && a.maxSpan === b.maxSpan && a.contextKey === b.contextKey);
+  a.minSpan === b.minSpan && a.maxSpan === b.maxSpan && a.allowEmpty === b.allowEmpty && a.contextKey === b.contextKey);
 const sameWindow = (a, b) => sameScope(a, b) && a.start === b.start && a.end === b.end;
 const icons = {
   left: '<path d="m14 6-6 6 6 6"/>',
@@ -82,7 +86,7 @@ const icons = {
 export function bindChartNavigation({
   element, getRange, getTool = () => 'crosshair', onRangeChange, onReset,
   getPriceAxis = () => null, onPriceRangeChange = null, onPriceReset = null,
-  getContext = () => null, onAnnounce, signal,
+  getContext = () => null, onAnnounce, onGestureStart = null, onGestureEnd = null, signal,
 }) {
   const document = element.ownerDocument, window = document.defaultView;
   const toolbar = document.createElement('div');
@@ -126,7 +130,14 @@ export function bindChartNavigation({
   const announce = text => { if (onAnnounce) onAnnounce(text); else status.textContent = text; };
   const previousTouchAction = element.style.touchAction;
   element.style.touchAction = 'pan-y pinch-zoom';
-  let frame = null, pending = null, priceFrame = null, pendingPrice = null, drag = null, pinch = null, suppressClickUntil = 0;
+  let frame = null, pending = null, pendingPanPrice = null, priceFrame = null, pendingPrice = null, drag = null, pinch = null, suppressClickUntil = 0;
+  let transaction = null, wheelTimer = null, finishOnFlush = false;
+  const delay = typeof window.setTimeout === 'function' ? window.setTimeout.bind(window) : globalThis.setTimeout;
+  const cancelDelay = typeof window.clearTimeout === 'function' ? window.clearTimeout.bind(window) : globalThis.clearTimeout;
+  function beginTransaction(label){if(transaction)return;transaction=label;onGestureStart?.(label);}
+  function finishTransaction(){if(wheelTimer!==null)cancelDelay(wheelTimer);wheelTimer=null;finishOnFlush=false;if(transaction){transaction=null;onGestureEnd?.();}}
+  function wheelTransaction(){beginTransaction('차트 확대·이동');if(onGestureStart||onGestureEnd){if(wheelTimer!==null)cancelDelay(wheelTimer);wheelTimer=delay(()=>{wheelTimer=null;flush();finishTransaction();},220);}}
+  function discrete(next,label='차트 범위 변경'){flush();finishTransaction();if(sameWindow(next,getRange()))return;beginTransaction(label);finishOnFlush=true;enqueue(next);}
   const touches = new Map();
   const completedPinchTouches = new Set();
   let menuState = null, lastPointer = null, destroyed = false;
@@ -134,13 +145,13 @@ export function bindChartNavigation({
   const listen = (target, type, handler, options) => { target.addEventListener(type, handler, options);listeners.push([target, type, handler, options]); };
   // Event labels are chart surfaces for wheel navigation, while their click,
   // pointer and keyboard activation keeps the usual interactive boundary.
-  const interactive = (target, allowHistoryWheel = false) => Boolean(target?.closest?.(`button,input,select,textarea,summary,a,[contenteditable=true],.analysis-indicator-windows,#chart-indicator-manager,[role=button]${allowHistoryWheel ? ':not(.history-event-marker):not(.cycle-interval):not(.cycle-milestone-marker)' : ''},[role=menu],[data-next-turn]`));
+  const interactive = (target, allowHistoryWheel = false) => Boolean(target?.closest?.(`button,input,select,textarea,summary,a,[contenteditable=true],.analysis-indicator-windows,#chart-indicator-manager,[role=button]${allowHistoryWheel ? ':not(.history-event-marker):not(.cycle-interval):not(.cycle-milestone-marker):not(.research-annotation)' : ''},[role=menu],[data-next-turn]`));
   const chartSvg = () => element.querySelector('svg[data-plot-left]:not([hidden])');
   const focusChart = () => chartSvg()?.focus?.({ preventScroll: true });
 
   function clearPending() {
     if (frame !== null) window.cancelAnimationFrame(frame);
-    frame = null;pending = null;
+    frame = null;pending = null;pendingPanPrice=null;
   }
   function clearPricePending() {
     if (priceFrame !== null) window.cancelAnimationFrame(priceFrame);
@@ -148,7 +159,11 @@ export function bindChartNavigation({
   }
   const validPriceScope = record => {
     const axis=getPriceAxis();
-    return Boolean(record&&sameWindow(record.range,getRange())&&record.tool===getTool()&&record.axis.scale===axis?.scale&&record.axis.top===axis?.top&&record.axis.bottom===axis?.bottom&&record.axis.right===axis?.right);
+    return Boolean(record&&sameWindow(record.range,getRange())&&record.tool===getTool()&&record.axis.scale===axis?.scale&&record.axis.inverted===axis?.inverted&&record.axis.top===axis?.top&&record.axis.bottom===axis?.bottom&&record.axis.right===axis?.right);
+  };
+  const validPanScope = record => {
+    const axis=getPriceAxis();
+    return Boolean(record&&sameScope(record.range,getRange())&&record.tool===getTool()&&record.axis.scale===axis?.scale&&record.axis.inverted===axis?.inverted&&record.axis.top===axis?.top&&record.axis.bottom===axis?.bottom&&record.axis.right===axis?.right);
   };
   function flushPrice() {
     if (priceFrame !== null) window.cancelAnimationFrame(priceFrame);
@@ -169,23 +184,28 @@ export function bindChartNavigation({
   function flush() {
     if (frame !== null) window.cancelAnimationFrame(frame);
     frame = null;
-    const next = pending;pending = null;
+    const next = pending,price=pendingPanPrice;pending = null;pendingPanPrice=null;
     const live = getRange();
-    if (!destroyed && sameScope(next, live) && !sameWindow(next, live)) onRangeChange(next);
+    if (!destroyed && sameScope(next, live) && (!price||validPanScope(price))) {
+      if(price&&typeof onPriceRangeChange==='function')onPriceRangeChange(price.domain);
+      if(!sameWindow(next,live))onRangeChange(next);
+    }
+    if(finishOnFlush)finishTransaction();
   }
-  function enqueue(next) {
+  function enqueue(next,priceDomain=null,gesture=null) {
     if (destroyed || !sameScope(next, getRange())) return;
-    pending = next;
+    pending = next;pendingPanPrice=priceDomain&&gesture?{domain:priceDomain,axis:gesture.axis,range:gesture.range,tool:gesture.tool}:null;
     if (frame === null) frame = window.requestAnimationFrame(flush);
   }
   function releaseCapture(id) {
     try { if (element.hasPointerCapture?.(id)) element.releasePointerCapture(id); } catch { /* A cancelled pointer can already be gone. */ }
   }
   function cancelGesture() {
-    const previous = drag,wasPinching=Boolean(pinch),captured=[...touches.keys()];drag = null;pinch=null;touches.clear();completedPinchTouches.clear();delete element.dataset.dragging;delete element.dataset.pinching;delete element.dataset.priceScaling;clearPending();clearPricePending();
+    const previous = drag,wasPinching=Boolean(pinch),captured=[...touches.keys()];drag = null;pinch=null;touches.clear();completedPinchTouches.clear();delete element.dataset.dragging;delete element.dataset.pinching;delete element.dataset.priceScaling;delete element.dataset.timeScaling;clearPending();clearPricePending();
     if (previous?.active||wasPinching) suppressClickUntil = Date.now() + 500;
     if (previous) releaseCapture(previous.id);
     for(const id of captured)releaseCapture(id);
+    finishTransaction();
   }
   function closeMenu(restoreFocus = false) {
     if (menu.hidden) return;
@@ -194,11 +214,11 @@ export function bindChartNavigation({
   }
   function reset() {
     cancelGesture();closeMenu();
-    if (!destroyed && getRange()) { onReset();announce('차트의 기본 표시 범위를 복원했습니다.'); }
+    if (!destroyed && getRange()) { beginTransaction('기본 범위 복원');onReset();finishTransaction();announce('차트의 기본 표시 범위를 복원했습니다.'); }
   }
   function resetPrice() {
     cancelGesture();closeMenu();
-    if (!destroyed && getPriceAxis() && typeof onPriceReset === 'function') { onPriceReset();announce('가격축을 보이는 가격 범위에 자동으로 맞췄습니다.'); }
+    if (!destroyed && getPriceAxis() && typeof onPriceReset === 'function') { beginTransaction('가격축 자동 맞춤');onPriceReset();finishTransaction();announce('가격축을 보이는 가격 범위에 자동으로 맞췄습니다.'); }
   }
   function plotBounds() {
     const svg = chartSvg(), rect = (svg || element).getBoundingClientRect();
@@ -220,6 +240,13 @@ export function bindChartNavigation({
     if (![right,top,bottom].every(Number.isFinite) || bottom <= top || right >= width) return null;
     return { left:rect.left+(right-(view?.x||0))/width*rect.width, top:rect.top+(top-(view?.y||0))/height*rect.height, width:(width-right)/width*rect.width, height:(bottom-top)/height*rect.height };
   }
+  function timeAxisBounds(){
+    const svg=chartSvg();if(!svg||svg.dataset.timeAxisTop===undefined)return null;
+    const rect=svg.getBoundingClientRect(),view=svg.viewBox?.baseVal,width=view?.width||svg.clientWidth||rect.width,height=view?.height||svg.clientHeight||rect.height;
+    const left=Number(svg.dataset.plotLeft),right=Number(svg.dataset.plotRight),top=Number(svg.dataset.timeAxisTop);
+    if(![left,right,top].every(Number.isFinite)||top>=height)return null;
+    return {left:rect.left+(left-(view?.x||0))/width*rect.width,top:rect.top+(top-(view?.y||0))/height*rect.height,width:(right-left)/width*rect.width,height:(height-top)/height*rect.height};
+  }
   const inside = (event, rect) => Boolean(rect && rect.width > 0 && rect.height > 0 && event.clientX >= rect.left && event.clientX <= rect.left + rect.width && event.clientY >= rect.top && event.clientY <= rect.top + rect.height);
 
   function wheel(event) {
@@ -227,7 +254,7 @@ export function bindChartNavigation({
     if (!range || event.ctrlKey || event.metaKey || interactive(event.target, true) || !inside(event, rect)) return;
     const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? rect.height : 1;
     if (!event.deltaX && !event.deltaY) return;
-    event.preventDefault();if(drag?.kind==='price')cancelGesture();closeMenu();
+    event.preventDefault();if(drag)cancelGesture();closeMenu();wheelTransaction();
     if (event.shiftKey || Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
       enqueue(panRange(range, clamp((event.deltaX || event.deltaY) * unit, -rect.width, rect.width) / rect.width));
     } else {
@@ -236,6 +263,7 @@ export function bindChartNavigation({
     }
   }
   function pointerDown(event) {
+    flush();finishTransaction();
     const range = current(), rect = plotBounds();
     if (drag?.kind === 'price' && drag.id !== event.pointerId) { cancelGesture();return; }
     if (range && event.button === 0 && event.isPrimary !== false && !interactive(event.target) && typeof onPriceRangeChange === 'function') {
@@ -246,6 +274,11 @@ export function bindChartNavigation({
         event.preventDefault();event.stopImmediatePropagation();return;
       }
     }
+    if(range&&event.button===0&&event.isPrimary!==false&&!interactive(event.target)&&inside(event,timeAxisBounds())){
+      cancelGesture();closeMenu();suppressClickUntil=0;
+      const bounds=timeAxisBounds();drag={kind:'time-scale',id:event.pointerId,x:event.clientX,y:event.clientY,width:bounds.width,range,tool:getTool(),anchor:(event.clientX-bounds.left)/bounds.width,active:false};
+      event.preventDefault();event.stopImmediatePropagation();return;
+    }
     if (!range || getTool() === 'measure' || event.button !== 0 || (event.isPrimary === false&&event.pointerType!=='touch') || interactive(event.target) || !inside(event, rect)) return;
     if(event.pointerType==='touch'){
       if(event.isPrimary!==false)completedPinchTouches.clear();
@@ -255,13 +288,14 @@ export function bindChartNavigation({
         flush();drag=null;delete element.dataset.dragging;
         const [a,b]=[...touches.values()];
         pinch={range:current(),tool:getTool(),distance:Math.max(16,Math.hypot(a.x-b.x,a.y-b.y)),center:(a.x+b.x)/2,left:rect.left,width:rect.width};
-        element.dataset.pinching='true';closeMenu();focusChart();
+        beginTransaction('차트 두 손가락 확대·이동');element.dataset.pinching='true';closeMenu();focusChart();
         for(const id of touches.keys()){try{element.setPointerCapture?.(id);}catch{}}
         event.preventDefault();event.stopImmediatePropagation();return;
       }
     }
     closeMenu();suppressClickUntil = 0;
-    drag = { kind:'time',id: event.pointerId, x: event.clientX, y: event.clientY, width: rect.width, range, tool:getTool(), active: false };
+    const axis=getPriceAxis(),axisBounds=priceAxisBounds(),canPanY=range.allowEmpty===true&&typeof onPriceRangeChange==='function'&&normalizePriceDomain(axis,{scale:axis?.scale})&&axisBounds&&event.clientY>=axisBounds.top&&event.clientY<=axisBounds.top+axisBounds.height;
+    drag = { kind:'time',id: event.pointerId, x: event.clientX, y: event.clientY, width: rect.width, range, tool:getTool(), pointerType:event.pointerType, axis:canPanY?{...axis}:null,priceHeight:axisBounds?.height,active: false };
   }
   function pointerMove(event) {
     if(drag?.kind==='price'&&event.pointerId===drag.id){
@@ -269,11 +303,17 @@ export function bindChartNavigation({
       const delta=event.clientY-drag.y;
       if(!drag.active){
         if(Math.abs(delta)<3)return;
-        drag.active=true;element.dataset.priceScaling='true';focusChart();
+        beginTransaction('가격축 확대·축소');drag.active=true;element.dataset.priceScaling='true';focusChart();
         try{element.setPointerCapture?.(event.pointerId);}catch{}
       }
       event.preventDefault();event.stopImmediatePropagation();
       enqueuePrice(scalePriceDomain(drag.axis,Math.exp(clamp(delta/drag.height,-1.5,1.5)*2)),drag);return;
+    }
+    if(drag?.kind==='time-scale'&&event.pointerId===drag.id){
+      if(!sameScope(drag.range,getRange())||getTool()!==drag.tool||(event.buttons===0&&event.pointerType!=='touch')){cancelGesture();return;}
+      const delta=event.clientX-drag.x;
+      if(!drag.active){if(Math.abs(delta)<3)return;beginTransaction('시간축 확대·축소');drag.active=true;element.dataset.timeScaling='true';focusChart();try{element.setPointerCapture?.(event.pointerId);}catch{}}
+      event.preventDefault();event.stopImmediatePropagation();enqueue(zoomRange(drag.range,Math.exp(clamp(delta/drag.width,-2,2)*2),drag.anchor));return;
     }
     if(pinch&&touches.has(event.pointerId)){
       if(!sameScope(pinch.range,getRange())||getTool()!==pinch.tool){cancelGesture();return;}
@@ -288,13 +328,21 @@ export function bindChartNavigation({
     if (!drag || event.pointerId !== drag.id) return;
     if (!sameScope(drag.range, getRange()) || getTool() !== drag.tool || (event.buttons === 0 && event.pointerType !== 'touch')) { cancelGesture();return; }
     const dx = event.clientX - drag.x, dy = event.clientY - drag.y;
+    if(drag.axis&&(drag.axis.scale!==getPriceAxis()?.scale||drag.axis.inverted!==getPriceAxis()?.inverted)){cancelGesture();return;}
     if (!drag.active) {
-      if (Math.abs(dx) < 5 || Math.abs(dx) < Math.abs(dy)) return;
-      drag.active = true;element.dataset.dragging = 'true';focusChart();
+      const twoDimensions=drag.axis&&(drag.pointerType!=='touch'||drag.tool==='pan');
+      if (twoDimensions?Math.hypot(dx,dy)<5:Math.abs(dx)<5||Math.abs(dx)<Math.abs(dy)) return;
+      beginTransaction('차트 위치 이동');drag.active = true;element.dataset.dragging = 'true';focusChart();
       try { element.setPointerCapture?.(event.pointerId); } catch { /* Window listeners still complete the gesture. */ }
     }
     event.preventDefault();event.stopImmediatePropagation();
-    enqueue(panRange(drag.range, -dx / drag.width));
+    if(drag.axis&&!drag.pricePanning&&Math.abs(dy)>=3){
+      // Horizontal drags retain Auto. If Y begins later in the same gesture,
+      // use the currently visible USD range, then retain it through a return
+      // to the original pointer Y instead of dropping the final zero offset.
+      drag.axis={...getPriceAxis()};drag.pricePanning=true;
+    }
+    enqueue(panRange(drag.range, -dx / drag.width),drag.pricePanning?panPriceDomain(drag.axis,dy/drag.priceHeight):null,drag);
   }
   function pointerUp(event) {
     if(completedPinchTouches.delete(event.pointerId)){
@@ -303,17 +351,27 @@ export function bindChartNavigation({
     if(pinch&&touches.has(event.pointerId)){
       event.preventDefault();event.stopImmediatePropagation();flush();
       const captured=[...touches.keys()];for(const id of captured)if(id!==event.pointerId)completedPinchTouches.add(id);touches.clear();pinch=null;drag=null;delete element.dataset.pinching;delete element.dataset.dragging;
-      suppressClickUntil=Date.now()+500;for(const id of captured)releaseCapture(id);return;
+      suppressClickUntil=Date.now()+500;for(const id of captured)releaseCapture(id);finishTransaction();return;
     }
     touches.delete(event.pointerId);
     if (!drag || event.pointerId !== drag.id) return;
-    const previous = drag;drag = null;delete element.dataset.dragging;delete element.dataset.priceScaling;
+    const previous = drag;drag = null;delete element.dataset.dragging;delete element.dataset.priceScaling;delete element.dataset.timeScaling;
     if (previous.active) {
       event.preventDefault();event.stopImmediatePropagation();if(previous.kind==='price')flushPrice();else flush();suppressClickUntil = Date.now() + 500;
     }
     releaseCapture(previous.id);
+    finishTransaction();
   }
   function pointerCancel(event) { if (drag?.id === event.pointerId||touches.has(event.pointerId)) cancelGesture(); }
+  function resumeTouchGesture(points){
+    if(destroyed||!Array.isArray(points)||points.length!==2||getTool()==='measure'||new Set(points.map(point=>point.pointerId)).size!==2||points.some(point=>![point.pointerId,point.clientX,point.clientY].every(Number.isFinite)))return false;
+    flush();cancelGesture();const range=getRange(),rect=plotBounds();if(!range||!rect.width)return false;
+    for(const point of points)touches.set(point.pointerId,{x:point.clientX,y:point.clientY});
+    const [a,b]=[...touches.values()];pinch={range,tool:getTool(),distance:Math.max(16,Math.hypot(a.x-b.x,a.y-b.y)),center:(a.x+b.x)/2,left:rect.left,width:rect.width};
+    beginTransaction('차트 두 손가락 확대·이동');element.dataset.pinching='true';closeMenu();focusChart();
+    for(const id of touches.keys())try{element.setPointerCapture?.(id);}catch{}
+    return true;
+  }
   function click(event) {
     if (event.detail !== 0 && suppressClickUntil > Date.now() && !interactive(event.target)) {
       suppressClickUntil = 0;event.preventDefault();event.stopImmediatePropagation();
@@ -323,6 +381,7 @@ export function bindChartNavigation({
     if(current()&&!event.ctrlKey&&!event.metaKey&&!event.altKey&&!interactive(event.target)&&typeof onPriceReset==='function'&&inside(event,priceAxisBounds())){
       event.preventDefault();event.stopImmediatePropagation();resetPrice();focusChart();return;
     }
+    if(current()&&!event.ctrlKey&&!event.metaKey&&!event.altKey&&!interactive(event.target)&&inside(event,timeAxisBounds())){event.preventDefault();event.stopImmediatePropagation();reset();focusChart();return;}
     if (!current() || getTool() === 'measure' || event.ctrlKey || event.metaKey || event.altKey || interactive(event.target) || !inside(event, plotBounds())) return;
     event.preventDefault();event.stopImmediatePropagation();reset();focusChart();
   }
@@ -387,14 +446,14 @@ export function bindChartNavigation({
     event.preventDefault();event.stopImmediatePropagation();
     if (action === 'menu') openMenu();
     else if (action === 'reset') reset();
-    else if (action === 'left' || action === 'right') enqueue(panRange(range, action === 'left' ? -.25 : .25));
-    else enqueue(zoomRange(range, action === 'in' ? .8 : 1.25));
+    else if (action === 'left' || action === 'right') discrete(panRange(range, action === 'left' ? -.25 : .25));
+    else discrete(zoomRange(range, action === 'in' ? .8 : 1.25));
   }
   for (const [action, button] of buttons) button.onclick = () => {
     const range = current();if (!range) return;
     if (action === 'reset') reset();
-    else if (action === 'left' || action === 'right') enqueue(panRange(range, action === 'left' ? -.25 : .25));
-    else enqueue(zoomRange(range, action === 'in' ? .8 : 1.25));
+    else if (action === 'left' || action === 'right') discrete(panRange(range, action === 'left' ? -.25 : .25));
+    else discrete(zoomRange(range, action === 'in' ? .8 : 1.25));
     focusChart();
   };
   for (const [action, button] of menuButtons) button.onclick = () => {
@@ -412,8 +471,8 @@ export function bindChartNavigation({
         );
       } catch { failed(); }
     } else if (action === 'reset') reset();
-    else if (action === 'fit') enqueue(fitRange(saved.range));
-    else enqueue(zoomRange(saved.range, action === 'in' ? .8 : 1.25, saved.anchor));
+    else if (action === 'fit') discrete(fitRange(saved.range));
+    else discrete(zoomRange(saved.range, action === 'in' ? .8 : 1.25, saved.anchor));
   };
   listen(element, 'wheel', wheel, { passive: false, capture: true });
   listen(element, 'pointerdown', pointerDown, true);
@@ -435,8 +494,11 @@ export function bindChartNavigation({
 
   function update() {
     if (destroyed) return;
+    // An explicit pan tool owns vertical touches. Crosshair mode still leaves
+    // an ordinary vertical swipe available to the page until tracking starts.
+    element.style.touchAction=getTool()==='pan'?'none':'pan-y pinch-zoom';
     const range = getRange();toolbar.hidden = !range;
-    if (!range || (drag && (drag.kind==='price'?!validPriceScope(drag):!sameScope(drag.range,range)||getTool()!==drag.tool)) || (pinch&&(!sameScope(pinch.range,range)||getTool()!==pinch.tool))) cancelGesture();
+    if (!range || (drag && (drag.kind==='price'?!validPriceScope(drag):!sameScope(drag.range,range)||getTool()!==drag.tool||(drag.axis&&!validPanScope(drag)))) || (pinch&&(!sameScope(pinch.range,range)||getTool()!==pinch.tool))) cancelGesture();
     if (pending && !sameScope(pending, range)) clearPending();
     if (pendingPrice && !validPriceScope(pendingPrice)) clearPricePending();
     if (menuState && !sameWindow(menuState.range, range)) closeMenu();
@@ -444,8 +506,8 @@ export function bindChartNavigation({
     const units = rangeUnits(range), count = units.end - units.start + 1;
     buttons.get('in').disabled = count <= units.minimum;
     buttons.get('out').disabled = count >= units.maximum;
-    buttons.get('left').disabled = units.start <= 0;
-    buttons.get('right').disabled = units.end >= units.max;
+    buttons.get('left').disabled = units.start <= (units.free?units.hardMin:0);
+    buttons.get('right').disabled = units.end >= (units.free?units.hardMax:units.max);
   }
   function destroy() {
     if (destroyed) return;
@@ -457,5 +519,5 @@ export function bindChartNavigation({
   }
   update();
   if (signal?.aborted) destroy();else signal?.addEventListener('abort', destroy, { once: true });
-  return { toolbar, menu, update, openMenu, resetPrice, cancelGesture, destroy };
+  return { toolbar, menu, update, openMenu, resetPrice, cancelGesture, resumeTouchGesture, destroy };
 }

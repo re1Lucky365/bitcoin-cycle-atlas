@@ -1,0 +1,27 @@
+{
+  "screenshots": [
+    {
+      "file": "max-zoom-free-pan.jpg",
+      "width": 1363,
+      "height": 936,
+      "bytes": 136888,
+      "sha256": "e823aaa1462e1d97dfe174a15ed26aa2ad4c86b10b37cb238ba480136dfe84c1"
+    },
+    {
+      "file": "mobile-320.jpg",
+      "width": 1363,
+      "height": 936,
+      "bytes": 63931,
+      "sha256": "3a2dfbdd0cbb24082f251088184abd38cf460de87adb38af42e71165fdc24e12"
+    },
+    {
+      "file": "workspace-panes.jpg",
+      "width": 1363,
+      "height": 936,
+      "bytes": 150033,
+      "sha256": "bfe69e770e1989c181da2fcf3c994ba5ba14c2c3a90b69a964575ea55f47cf38"
+    }
+  ],
+  "source": "Actual local preview browser UI, v1.13.0-research.1",
+  "mobileScope": "Responsive iframe layout only, not physical touch hardware"
+}

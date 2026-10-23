@@ -1,10 +1,13 @@
-import { INDICATORS, readIndicatorState, normalizeIndicatorState, isIndicatorVisible } from './indicator-state.js?v=1.12.1-cursor-hud.1';
-import {indicatorReadout,indicatorReadoutDate} from './indicator-readouts.js?v=1.12.0-tv-parity.1';
-import {INDICATOR_PREFERENCES_KEY,MAX_TEMPLATE_NAME,readIndicatorPreferences,writeIndicatorPreferences,toggleIndicatorFavorite,saveIndicatorTemplate,deleteIndicatorTemplate,indicatorLibraryItems,hasIndicatorTemplate} from './indicator-preferences.js?v=1.12.1-cursor-hud.1';
+import { INDICATORS, readIndicatorState, normalizeIndicatorState, isIndicatorVisible } from './indicator-state.js?v=1.13.0-research.1';
+import {indicatorReadout,indicatorReadoutDate} from './indicator-readouts.js?v=1.13.0-research.1';
+import {INDICATOR_SETTINGS,indicatorSettings,indicatorSupportsInterval} from './indicator-settings.js?v=1.13.0-research.1';
+import {mountIndicatorSettingsDialog} from './indicator-settings-dialog.js?v=1.13.0-research.1';
+import {INDICATOR_PREFERENCES_KEY,MAX_TEMPLATE_NAME,readIndicatorPreferences,writeIndicatorPreferences,toggleIndicatorFavorite,saveIndicatorTemplate,deleteIndicatorTemplate,indicatorLibraryItems,hasIndicatorTemplate} from './indicator-preferences.js?v=1.13.0-research.1';
 
 const ICONS={eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',hidden:'<path d="m3 3 18 18M10 5a12 12 0 0 1 2 0c6.5 0 10 7 10 7a20 20 0 0 1-3 4M6 6a20 20 0 0 0-4 6s3.5 7 10 7a12 12 0 0 0 5-1"/>',close:'<path d="m6 6 12 12M6 18 18 6"/>',expand:'<path d="m7 10 5 5 5-5"/>',collapse:'<path d="m7 14 5-5 5 5"/>'};
 const glyph=name=>`<svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[name]}</svg>`;
 ICONS.star='<path d="m12 3 2.8 5.7 6.3.9-4.5 4.4 1.1 6.2-5.7-3-5.7 3 1.1-6.2L2.9 9.6l6.3-.9L12 3Z"/>';
+ICONS.settings='<path d="M9 3h6l1 3 3 1 2 5-2 5-3 1-1 3H9l-1-3-3-1-2-5 2-5 3-1Z"/><circle cx="12" cy="12" r="3"/>';
 const LEGEND_LABELS={readout:'가격 · OHLC',source:'자료 출처',legend:'범례',countdown:'다음 국면',volume:'Vol',history:'역사 사건',range:'수요·채택 범위','cycle-timing':'사이클 시계',drawdown:'전고점 대비',states:'시장 국면',fibonacci:'피보나치'};
 
 /** Display controls already have their own HUD; only real indicators get value rows. */
@@ -27,6 +30,7 @@ export function mountIndicatorWorkbench({plot,stage}) {
   let readoutFrame=0;
   const readoutRows=new Map(),dialogReadoutRows=new Map(),readoutContext={selection:null,workbench:{},cycle:null,analyses:new Map()};
   const command=(action,id,extra={})=>doc.dispatchEvent(new CustomEvent('atlas:indicator-command',{detail:{action,id,...extra}}));
+  const settingsDialog=mountIndicatorSettingsDialog({doc,getState:()=>state,command});
   const makeButton=(label,icon,action)=>{const b=doc.createElement('button');b.type='button';b.title=label;b.setAttribute('aria-label',label);b.innerHTML=glyph(icon);b.onclick=action;return b;};
   const manager=doc.createElement('section');manager.id='chart-indicator-manager';manager.className='chart-indicator-manager indicator-legend';manager.setAttribute('aria-label','추가한 인디케이터');manager.setAttribute('aria-describedby','indicator-readout-date');
   const list=doc.createElement('div');list.id='chart-indicator-list';list.className='chart-indicator-list';
@@ -99,7 +103,7 @@ export function mountIndicatorWorkbench({plot,stage}) {
   const templateLabel=doc.createElement('label');templateLabel.htmlFor='indicator-template-name';templateLabel.textContent='현재 지표 조합 저장';
   const templateName=doc.createElement('input');templateName.id='indicator-template-name';templateName.placeholder='예: 장기 사이클 분석';templateName.maxLength=MAX_TEMPLATE_NAME;templateName.autocomplete='off';templateName.required=true;
   const templateSave=doc.createElement('button');templateSave.type='submit';templateSave.textContent='저장';templateForm.append(templateLabel,templateName,templateSave);
-  const templateNote=doc.createElement('p');templateNote.className='indicator-template-note';templateNote.textContent='이 브라우저에 최대 8개 저장합니다. 적용하면 지표 구성과 표시 여부만 바뀝니다. 가격 간격·기간·미래 가정은 유지됩니다.';
+  const templateNote=doc.createElement('p');templateNote.className='indicator-template-note';templateNote.textContent='이 브라우저에 최대 8개 저장합니다. 지표 구성·설정과 분석 창 순서·높이·접힘을 함께 복원합니다. 가격 간격·기간·미래 가정은 유지됩니다.';
   const templateRows=doc.createElement('div');templateRows.className='indicator-template-list';templatePanel.append(templateForm,templateNote,templateRows);
   const preferenceStatus=doc.createElement('p');preferenceStatus.className='indicator-preference-status';preferenceStatus.setAttribute('role','status');preferenceStatus.setAttribute('aria-live','polite');preferenceStatus.hidden=true;
   const footer=doc.createElement('footer');
@@ -154,7 +158,7 @@ export function mountIndicatorWorkbench({plot,stage}) {
       const node=plot.querySelector(selector);if(node)node.hidden=!isIndicatorVisible(state,id);
     }
     updateOverlayOffsets();
-    countdownBox.hidden=!isIndicatorVisible(state,'countdown')||intraday||!countdown;
+    countdownBox.hidden=!isIndicatorVisible(state,'countdown',readoutContext.workbench.frequency)||intraday||!countdown;
     plot.dataset.countdownVisible=String(!countdownBox.hidden);
   }
   function updateOverlayOffsets(){
@@ -183,8 +187,10 @@ export function mountIndicatorWorkbench({plot,stage}) {
       const detail=details.get(item.id),text=chart&&item.id==='volume'?detail.value.replace(/^Vol\s+/u,''):detail.value;
       if(value.textContent!==text)value.textContent=text;
       if(value.dataset.tone!==detail.tone)value.dataset.tone=detail.tone;
-      if(name.title!==detail.title)name.title=detail.title;
+      const title=detail.title+(!indicatorSupportsInterval(state,item.id,readoutContext.workbench.frequency)?' · 현재 가격 간격에서 그래프 자동 숨김 · 지표 설정에서 변경 가능':'');
+      if(name.title!==title)name.title=title;
       if(row.dataset.value!==detail.value)row.dataset.value=detail.value;
+      value.hidden=!indicatorSettings(state,item.id).values;
     }
   }
   function paintReadouts(){
@@ -205,19 +211,20 @@ export function mountIndicatorWorkbench({plot,stage}) {
     fold.hidden=!items.length;fold.setAttribute('aria-expanded',String(!state.collapsed));fold.innerHTML=glyph(state.collapsed?'expand':'collapse');fold.title=`지표 이름·값 ${state.collapsed?'펼치기':'접기'} · ${items.length}개`;fold.setAttribute('aria-label',fold.title);
     listVisible.checked=!state.collapsed;
     const hasVisible=items.some(item=>isIndicatorVisible(state,item.id));all.textContent=hasVisible?'지표 일괄 숨김':'지표 일괄 표시';all.disabled=!items.length;all.title=`가격·OHLC, 출처, 범례를 유지하고 지표를 ${hasVisible?'모두 숨기기':'모두 표시'}`;all.setAttribute('aria-label',all.title);
-    const key=JSON.stringify([state.added,state.hidden,state.collapsed,intraday]);if(key===listKey){scheduleReadouts();return;}listKey=key;
+    const key=JSON.stringify([state.added,state.hidden,state.collapsed,state.settings,intraday,readoutContext.workbench.frequency]);if(key===listKey){scheduleReadouts();return;}listKey=key;
     list.replaceChildren();readoutRows.clear();
     for(const item of items){
-      const visible=isIndicatorVisible(state,item.id),unavailable=intraday&&item.dailyOnly,row=doc.createElement('div');row.className='indicator-row';row.dataset.indicatorRow=item.id;row.dataset.visible=String(visible);row.dataset.unavailable=String(Boolean(unavailable));
+      const visible=isIndicatorVisible(state,item.id),unavailable=intraday&&item.dailyOnly||!indicatorSupportsInterval(state,item.id,readoutContext.workbench.frequency),row=doc.createElement('div');row.className='indicator-row';row.dataset.indicatorRow=item.id;row.dataset.visible=String(visible);row.dataset.unavailable=String(Boolean(unavailable));
       row.setAttribute('role','listitem');
       const name=doc.createElement(item.analysis?'button':'div');name.className='indicator-name';
       const label=doc.createElement('span');label.className='indicator-label';label.textContent=LEGEND_LABELS[item.id]||item.label;label.title=item.label;
       const value=doc.createElement('strong');value.className='indicator-value';value.textContent='자료 대기';name.append(label,value);
-      if(item.analysis){name.type='button';name.dataset.indicatorAction='inspect';name.title=`${item.label} 분석 창으로 이동`;name.onclick=()=>{if(!visible)command('visibility',item.id);if(state.minimized.includes(item.id))command('minimize',item.id);command('activate',item.id);const window=doc.getElementById(`analysis-window-${item.id}`);window?.scrollIntoView({block:'nearest',inline:'nearest'});window?.querySelector('svg')?.focus({preventScroll:true});};}
-      if(unavailable)name.title=`${item.description} · 1D·1W에서 표시됩니다.`;
+      if(item.analysis){name.type='button';name.dataset.indicatorAction='inspect';name.title=`${item.label} 분석 창으로 이동`;name.onclick=()=>{if(!visible)command('visibility',item.id);if(state.minimized.includes(item.id))command('minimize',item.id);if(state.maximized&&state.maximized!==item.id)command('maximize',item.id);command('activate',item.id);const window=doc.getElementById(`analysis-window-${item.id}`);window?.scrollIntoView({block:'nearest',inline:'nearest'});window?.querySelector('svg')?.focus({preventScroll:true});};}
+      if(unavailable)name.title=`${item.description} · 현재 가격 간격에서는 그래프가 표시되지 않습니다. 지표 설정에서 지원 간격을 확인하세요.`;
+      const settings=makeButton(`${item.label} 설정`,'settings',()=>settingsDialog.open(item.id,settings));settings.className='indicator-row-action';settings.dataset.indicatorAction='settings';
       const eye=makeButton(`${item.label} ${visible?'숨기기':'표시'}`,visible?'eye':'hidden',()=>command('visibility',item.id));eye.className='indicator-row-action';eye.dataset.indicatorAction='visibility';eye.setAttribute('aria-pressed',String(visible));
       const remove=makeButton(`${item.label} 삭제`,'close',()=>command('remove',item.id));remove.className='indicator-row-action';remove.dataset.indicatorAction='remove';
-      row.append(name,eye,remove);list.append(row);readoutRows.set(item.id,{item,row,value,name});
+      row.append(name);if(INDICATOR_SETTINGS[item.id])row.append(settings);row.append(eye,remove);list.append(row);readoutRows.set(item.id,{item,row,value,name});
     }
     if(focusedInManager){
       const shown=state.collapsed?[]:[...list.children],same=shown.find(row=>row.dataset.indicatorRow===focused),nearby=shown[Math.min(Math.max(focusedIndex,0),shown.length-1)];
@@ -229,7 +236,7 @@ export function mountIndicatorWorkbench({plot,stage}) {
     paintReadouts();
   }
   function paintDialog(){
-    const key=JSON.stringify([state.added,state.hidden,state.primary,preferences.favorites,category,view,search.value,intraday]);if(key===dialogKey)return;dialogKey=key;
+    const key=JSON.stringify([state.added,state.hidden,state.primary,state.settings,preferences.favorites,category,view,search.value,intraday]);if(key===dialogKey)return;dialogKey=key;
     for(const b of views.children)b.setAttribute('aria-pressed',String(b.dataset.indicatorView===view));
     const templates=view==='templates';search.hidden=templates;categories.hidden=templates||view!=='all';results.hidden=templates;templatePanel.hidden=!templates;
     if(templates){dialogReadoutRows.clear();paintTemplateRows();return;}
@@ -245,6 +252,7 @@ export function mountIndicatorWorkbench({plot,stage}) {
       if(added){
         const value=doc.createElement('small');value.className='indicator-library-value indicator-value';value.id=`indicator-library-value-${item.id}`;value.textContent='자료 대기';text.append(value);row.setAttribute('aria-describedby',value.id);
         const eye=makeButton(`${item.label} ${visible?'숨기기':'표시'}`,visible?'eye':'hidden',()=>command('visibility',item.id));eye.className='indicator-library-eye';eye.dataset.libraryAction='visibility';eye.setAttribute('aria-pressed',String(visible));eye.setAttribute('aria-describedby',value.id);wrapper.append(eye);
+        if(INDICATOR_SETTINGS[item.id]){const settings=makeButton(`${item.label} 설정`,'settings',()=>settingsDialog.open(item.id,settings));settings.className='indicator-library-eye';settings.dataset.libraryAction='settings';wrapper.append(settings);}
         dialogReadoutRows.set(item.id,{item,row:wrapper,value,name:row});
       }
       results.append(wrapper);
@@ -272,7 +280,7 @@ export function mountIndicatorWorkbench({plot,stage}) {
     if(event.shiftKey&&doc.activeElement===first){event.preventDefault();last?.focus();}else if(!event.shiftKey&&doc.activeElement===last){event.preventDefault();first?.focus();}
   });
   const onOpen=event=>open(event.detail?.opener);
-  const onState=event=>{state=normalizeIndicatorState(event.detail.indicators||state);cycle=event.detail.cycleCalibration||cycle;readoutContext.cycle=cycle;paintList();if(dialog.open)paintDialog();};
+  const onState=event=>{state=normalizeIndicatorState(event.detail.indicators||state);cycle=event.detail.cycleCalibration||cycle;readoutContext.cycle=cycle;paintList();if(dialog.open)paintDialog();settingsDialog.update();};
   const onWorkbench=event=>{
     intraday=Boolean(event.detail.intraday);countdown=event.detail.countdown||countdown;readoutContext.workbench=event.detail;paintCountdown();paintList();
     // A completed chart and its indicator values must share the same selection.
@@ -286,5 +294,5 @@ export function mountIndicatorWorkbench({plot,stage}) {
   doc.defaultView?.addEventListener('storage',onPreferences);
   doc.addEventListener('atlas:indicator-library',onOpen);doc.addEventListener('atlas:indicator-state',onState);doc.addEventListener('atlas:workbench-state',onWorkbench);doc.addEventListener('atlas:readout',onReadout);doc.addEventListener('atlas:analysis-state',onAnalysis);paintList();
   for(const name of ['wheel','pointerdown','dblclick','contextmenu'])manager.addEventListener(name,event=>event.stopPropagation(),name==='wheel'?{passive:true}:undefined);
-  return {open,destroy(){doc.removeEventListener('atlas:indicator-library',onOpen);doc.removeEventListener('atlas:indicator-state',onState);doc.removeEventListener('atlas:workbench-state',onWorkbench);doc.removeEventListener('atlas:readout',onReadout);doc.removeEventListener('atlas:analysis-state',onAnalysis);doc.defaultView?.removeEventListener('storage',onPreferences);if(readoutFrame)cancelAnimationFrame(readoutFrame);if(hudLayoutFrame)cancelAnimationFrame(hudLayoutFrame);overlayResize.disconnect();dialog.remove();manager.remove();countdownBox.remove();}};
+  return {open,destroy(){doc.removeEventListener('atlas:indicator-library',onOpen);doc.removeEventListener('atlas:indicator-state',onState);doc.removeEventListener('atlas:workbench-state',onWorkbench);doc.removeEventListener('atlas:readout',onReadout);doc.removeEventListener('atlas:analysis-state',onAnalysis);doc.defaultView?.removeEventListener('storage',onPreferences);if(readoutFrame)cancelAnimationFrame(readoutFrame);if(hudLayoutFrame)cancelAnimationFrame(hudLayoutFrame);overlayResize.disconnect();settingsDialog.destroy();dialog.remove();manager.remove();countdownBox.remove();}};
 }

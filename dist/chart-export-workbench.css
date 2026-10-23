@@ -1,0 +1,20 @@
+.chart-export-dialog {width:min(920px,calc(100vw - 24px));max-height:calc(100dvh - 28px);padding:20px;border:1px solid #41546b;border-radius:12px;background:#101923;color:#dce8f7;box-shadow:0 20px 80px #0009;font:13px/1.6 system-ui,sans-serif}
+.chart-export-dialog::backdrop {background:#0009}
+.chart-export-dialog header,.chart-export-dialog footer {display:flex;align-items:center;justify-content:space-between;gap:12px}
+.chart-export-dialog h2 {font-size:18px;margin:0}
+.chart-export-dialog button,.chart-export-dialog select {font:inherit;color:inherit;background:#172638;border:1px solid #40556d;border-radius:5px;padding:7px 10px;min-height:36px}
+.chart-export-dialog button {cursor:pointer}
+.chart-export-dialog button:disabled {opacity:.45;cursor:default}
+.chart-export-dialog :focus-visible {outline:2px solid #8fc4ff;outline-offset:3px}
+.chart-export-help {font-size:12px;color:#b1c3d7}
+.chart-export-controls {display:flex;flex-wrap:wrap;gap:12px;margin:12px 0}
+.chart-export-controls label {display:grid;gap:4px;min-width:180px;max-width:100%;flex:1}
+.chart-export-controls label[hidden] {display:none}
+.chart-export-controls select {width:100%;min-width:0}
+.chart-export-facts {display:grid;grid-template-columns:145px minmax(0,1fr);font-size:12px;gap:5px 12px;margin:12px 0;padding:12px;background:#142131;border-radius:6px}
+.chart-export-facts dt {color:#99b5d2}.chart-export-facts dd {margin:0;overflow-wrap:anywhere}
+.chart-export-preview {overflow:auto;max-height:48vh;min-height:70px;border:1px solid #304254;border-radius:6px;background:#10151c}
+.chart-export-preview img {display:block;width:100%;height:auto}.chart-export-preview pre {font-size:11px;line-height:1.6;margin:12px;white-space:pre;tab-size:2}
+.chart-export-status {min-height:20px;color:#b8d7ff;font-size:12px}
+.chart-export-dialog footer {justify-content:flex-end}.chart-export-download {background:#244e78!important}
+@media(max-width:560px){.chart-export-dialog{padding:14px}.chart-export-facts{grid-template-columns:1fr;gap:2px}.chart-export-facts dd{margin-bottom:6px}.chart-export-controls{gap:8px}.chart-export-preview{max-height:40vh}}

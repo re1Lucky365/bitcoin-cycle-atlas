@@ -1,10 +1,10 @@
 import { utcDay } from './cycle-engine.js?v=1.11.0';
-import { normalizePriceDomain } from './price-axis.js?v=1.12.0-tv-parity.1';
+import { normalizePriceDomain } from './price-axis.js?v=1.13.0-research.1';
 
 /** All coordinates use original prices; factor affects only the choice of ticks. */
-export function createPriceScale(values,{scale='log',top=0,bottom=1,tickCount=6,factor=1,paddingRatio=.12,domain=null}={}) {
+export function createPriceScale(values,{scale='log',top=0,bottom=1,tickCount=6,factor=1,offset=0,inverted=false,paddingRatio=.12,domain=null}={}) {
   if(!['log','linear'].includes(scale))throw new RangeError('Unknown price scale');
-  if(!Number.isFinite(factor)||factor<=0||!Number.isFinite(top)||!Number.isFinite(bottom)||top===bottom)throw new RangeError('Invalid price axis');
+  if(!Number.isFinite(factor)||factor<=0||!Number.isFinite(offset)||(scale==='log'&&offset!==0)||!Number.isFinite(top)||!Number.isFinite(bottom)||top===bottom)throw new RangeError('Invalid price axis');
   const prices=values.filter(value=>Number.isFinite(value)&&value>0);
   if(!prices.length)throw new RangeError('A price axis requires positive prices');
   const low=Math.min(...prices),high=Math.max(...prices),manual=domain===null?null:normalizePriceDomain(domain,{scale});
@@ -19,9 +19,9 @@ export function createPriceScale(values,{scale='log',top=0,bottom=1,tickCount=6,
   const reverse=scale==='log'?Math.exp:value=>value;
   const first=transform(min),extent=transform(max)-first;
   if(![min,max,first,extent].every(Number.isFinite)||max<=min||extent<=0||(scale==='log'&&min<=0))throw new RangeError('Price domain cannot be represented');
-  const y=value=>bottom-(transform(value)-first)/extent*(bottom-top);
-  const invert=pixel=>reverse(first+(bottom-pixel)/(bottom-top)*extent);
-  const count=Math.max(2,Math.min(64,Number.isFinite(tickCount)?Math.floor(tickCount)||6:6)),a=min*factor,b=max*factor;
+  const y=value=>inverted?top+(transform(value)-first)/extent*(bottom-top):bottom-(transform(value)-first)/extent*(bottom-top);
+  const invert=pixel=>reverse(first+(inverted?pixel-top:bottom-pixel)/(bottom-top)*extent);
+  const count=Math.max(2,Math.min(64,Number.isFinite(tickCount)?Math.floor(tickCount)||6:6)),a=min*factor+offset,b=max*factor+offset;
   if(![a,b].every(Number.isFinite)||b<=a||(scale==='log'&&a<=0))throw new RangeError('Price labels exceed the numeric range');
   const displayTicks=[];
   if(scale==='log'){
@@ -31,14 +31,14 @@ export function createPriceScale(values,{scale='log',top=0,bottom=1,tickCount=6,
     }
     if(displayTicks.length<2){displayTicks.length=0;const firstLog=Math.log(a),logSpan=Math.log(b)-firstLog;for(let i=0;i<count;i++)displayTicks.push(i===0?a:i===count-1?b:Math.exp(firstLog+logSpan*i/(count-1)));}
     const stride=Math.max(1,Math.ceil(displayTicks.length/count));
-    return {scale,min,max,top,bottom,mode:manual?'manual':'auto',y,invert,ticks:displayTicks.filter((_,i)=>i%stride===0).map(value=>value/factor)};
+    return {scale,min,max,top,bottom,inverted:Boolean(inverted),mode:manual?'manual':'auto',y,invert,ticks:displayTicks.filter((_,i)=>i%stride===0).map(value=>(value-offset)/factor)};
   }
   const rough=(b-a)/(count-1),magnitude=10**Math.floor(Math.log10(rough));
   const step=([1,2,2.5,5,10].find(value=>value>=rough/magnitude)||10)*magnitude;
   if(!Number.isFinite(step)||step<=0)throw new RangeError('Price ticks cannot be represented');
   const firstTick=Math.ceil(a/step);
   for(let index=0;index<count*4+16&&(firstTick+index)*step<=b+step*1e-9;index++)displayTicks.push(Number(((firstTick+index)*step).toPrecision(12)));
-  return {scale,min,max,top,bottom,mode:manual?'manual':'auto',y,invert,ticks:displayTicks.map(value=>value/factor)};
+  return {scale,min,max,top,bottom,inverted:Boolean(inverted),mode:manual?'manual':'auto',y,invert,ticks:displayTicks.map(value=>(value-offset)/factor)};
 }
 
 /** Header change compares completed closes; candle body direction stays open-based. */
