@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { createObservedChartCsv, createChartSvgExport } from '../dist/chart-export.js';
+import { createObservedChartCsv, createChartSvgExport, chartRasterSize, createChartPngExport } from '../dist/chart-export.js';
 
 test('visible price CSV contains every original observation, no gap fill or future model rows',()=>{
   const rows=[{date:'2026-10-01',price:100},{date:'2026-10-02',price:110},{date:'2026-10-04',price:90},{date:'2026-10-05',price:120},{date:'2026-10-06',price:999}];
@@ -30,6 +30,16 @@ test('an empty actual-data window fails explicitly instead of exporting simulate
   assert.throws(()=>createObservedChartCsv({rows:[{date:'2026-10-21',price:100}],asOf:'2026-10-21',range:{start:'2027-01-01',end:'2027-02-01'}}),/실제 관측값/);
 });
 
+test('PNG size preserves the aspect ratio and bounds phone memory for large snapshots',()=>{
+  assert.deepEqual(chartRasterSize(800,500),{width:1600,height:1000});
+  for(const [width,height] of [[12000,800],[400,20000],[10000,10000]]){
+    const size=chartRasterSize(width,height);
+    assert.ok(size.width<=4096&&size.height<=4096&&size.width*size.height<=12000000);
+    assert.ok(Math.abs(size.width/size.height-width/height)<.02);
+  }
+  for(const [width,height] of [[0,10],[Infinity,500],[-1,300]])assert.throws(()=>chartRasterSize(width,height),RangeError);
+});
+
 // A small SVG tree boundary harness: no layout or browser-rendering claim.
 class VectorNode {
   constructor(tag,doc){this.tagName=tag;this.ownerDocument=doc;this.values=new Map();this.children=[];this.textContent='';this.parentElement=null;}
@@ -51,6 +61,32 @@ class VectorNode {
   }
   querySelectorAll(selector){const selectors=selector.split(',').map(item=>item.trim()),matches=[];for(const child of this.children){if(selectors.some(item=>child.matches(item)))matches.push(child);matches.push(...child.querySelectorAll(selector));}return matches;}
 }
+
+function rasterFixture({imageError=false,blobError=false}={}){
+  const calls={revoked:[],draws:0},canvas={width:0,height:0,getContext:()=>({drawImage(){calls.draws++;}}),toBlob:callback=>callback(blobError?null:new Blob(['raster'],{type:'image/png'}))};
+  const serialize=node=>`<${node.tagName}${node.attributes.map(({name,value})=>` ${name}="${String(value).replaceAll('"','&quot;')}"`).join('')}>${node.textContent}${node.children.map(serialize).join('')}</${node.tagName}>`;
+  const doc={fonts:{ready:Promise.resolve()},createElement:()=>canvas,createElementNS:(_ns,tag)=>new VectorNode(tag,doc),defaultView:{
+    XMLSerializer:class{serializeToString(node){return serialize(node);}},
+    DOMParser:class{parseFromString(text){const root=text.match(/<svg\s[^>]+>/)[0];return {documentElement:{getAttribute:name=>root.match(new RegExp(` ${name}="([^"]+)"`))?.[1]}};}},
+    URL:{createObjectURL:()=> 'blob:test-chart',revokeObjectURL:url=>calls.revoked.push(url)},
+    Image:class{set src(_value){queueMicrotask(()=>imageError?this.onerror():this.onload());}}
+  }};
+  const svg=new VectorNode('svg',doc);svg.setAttribute('viewBox','0 0 800 400');
+  return {svg,canvas,calls};
+}
+
+test('PNG exports the source-labelled vector, releases its blob URL and clears the large canvas',async()=>{
+  const f=rasterFixture(),blob=await createChartPngExport(f.svg,{title:'BTCUSD · USD · 로그 · 기준 가정 · UTC',note:'조건부 시나리오'});
+  assert.equal(blob.type,'image/png');assert.equal(f.calls.draws,1);
+  assert.deepEqual(f.calls.revoked,['blob:test-chart']);assert.equal(f.canvas.width,0);assert.equal(f.canvas.height,0);
+});
+
+test('failed PNG decoding or encoding provides an SVG fallback and still releases its resources',async()=>{
+  for(const options of [{imageError:true},{blobError:true}]){
+    const f=rasterFixture(options);await assert.rejects(createChartPngExport(f.svg),/SVG 저장/);
+    assert.deepEqual(f.calls.revoked,['blob:test-chart']);assert.equal(f.canvas.width,0);assert.equal(f.canvas.height,0);
+  }
+});
 
 test('SVG export keeps periods inside the price chart and strips transient interval previews and activation attributes',()=>{
   const escape=value=>String(value).replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;');

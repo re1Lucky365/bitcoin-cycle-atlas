@@ -1,5 +1,5 @@
 import { CHART_INTERVALS } from './ohlc-data.js?v=1.11.0';
-import { readWorkspaces, saveWorkspace, writeWorkspaces, cleanWorkspaceQuery, workspaceQuery, searchWorkspaceCommands } from './workspace-state.js?v=1.11.0-milestones.4';
+import { readWorkspaces, saveWorkspace, writeWorkspaces, cleanWorkspaceQuery, workspaceQuery, readWorkspacePriceDomain, searchWorkspaceCommands } from './workspace-state.js?v=1.12.0-tv-parity.1';
 
 /** All actions delegate to the live chart, so the palette is another entrance to the same state. */
 export function mountWorkspaceTools({trigger, plot, openReader, closeReader}) {
@@ -35,7 +35,7 @@ export function mountWorkspaceTools({trigger, plot, openReader, closeReader}) {
   const onFeedback=event=>{toast.textContent=String(event.detail?.message || '');toast.hidden=!toast.textContent;win.clearTimeout(toastTimer);toastTimer=win.setTimeout(()=>{toast.hidden=true;},7000);};
   trigger.setAttribute('aria-haspopup','dialog');trigger.setAttribute('aria-controls',dialog.id);trigger.setAttribute('aria-expanded','false');
   trigger.setAttribute('aria-keyshortcuts','Control+K Meta+K');
-  const query=()=>latest?.shareQuery===undefined?null:workspaceQuery(new URLSearchParams(win.location.search),{frequency:latest.frequency,unit:latest.unit,range:{start:latest.start,end:latest.end}});
+  const query=()=>latest?.shareQuery===undefined?null:workspaceQuery(new URLSearchParams(win.location.search),{frequency:latest.frequency,unit:latest.unit,priceDomain:readWorkspacePriceDomain(new URLSearchParams(win.location.search)),range:{start:latest.start,end:latest.end}});
   function updateLink(){
     const value=query(),publicPage=/^https?:$/.test(win.location.protocol);
     link.value=value===null||!publicPage?'':`${win.location.origin}${win.location.pathname}${value?'?'+value:''}`;
@@ -91,7 +91,9 @@ export function mountWorkspaceTools({trigger, plot, openReader, closeReader}) {
       {label:'선택 데이터',description:'실제 관측값과 출처 확인',run:reader('selection')},
       {label:'날짜로 이동',description:'원하는 날짜의 관측·가정 보기',key:'Alt G',hidden:intraday,run:()=>doc.getElementById('workbench-go-date')?.click()},
       {label:'모델과 검증',description:'계산식과 자료의 한계',run:reader('math')},
-      {label:'차트 SVG 저장',description:'현재 주 가격 차트와 출처',keywords:'image export download',run:()=>doc.getElementById('lab-svg')?.click()},
+      {label:'차트 PNG 저장',description:'현재 주 가격 차트 · 가격축·가정·출처 포함',keywords:'image snapshot export download 사진 이미지',run:()=>dispatch('export-png')},
+      {label:'차트 SVG 저장',description:'편집 가능한 벡터 이미지 · 가격축·가정·출처 포함',keywords:'image vector export download',run:()=>dispatch('export-svg')},
+      {label:'가격축 자동 맞춤',description:latest?.priceAxisMode==='manual'?'현재 수동 · 표시 자료에 다시 맞춤':'현재 자동 · 현재 가격 범위 고정',keywords:'price axis auto scale reset',run:()=>dispatch('auto-scale')},
       {label:intraday?'현재 범위 완료 OHLC CSV':'현재 범위 일별 가격 CSV',description:intraday?'조회된 실제 완료 봉 · Coinbase · USD':'Coin Metrics 원본 일별 종가 · USD · 미래 가정 제외',keywords:'csv export data download 데이터 내보내기',disabled:!available,run:()=>dispatch('export-csv')},
       {label:'거래소 자료 새로 조회',description:'실제 완료 봉·거래량 갱신',keywords:'refresh',run:()=>dispatch('refresh-market')},
       {label:doc.fullscreenElement?'전체 화면 끝내기':'전체 화면',description:'차트 작업 공간 확대',keywords:'fullscreen',hidden:!doc.fullscreenEnabled,run:async()=>{try{if(doc.fullscreenElement)await doc.exitFullscreen();else await doc.documentElement.requestFullscreen();}catch{const announcement=doc.getElementById('workbench-announcement');if(announcement)announcement.textContent='이 브라우저에서 전체 화면을 열 수 없습니다.';}}},

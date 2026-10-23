@@ -1,23 +1,16 @@
-import { INDICATORS, readIndicatorState, normalizeIndicatorState, isIndicatorVisible } from './indicator-state.js?v=1.11.0-milestones.4';
-import {indicatorReadout,indicatorReadoutDate} from './indicator-readouts.js?v=1.11.0-milestones.4';
-import {INDICATOR_PREFERENCES_KEY,MAX_TEMPLATE_NAME,readIndicatorPreferences,writeIndicatorPreferences,toggleIndicatorFavorite,saveIndicatorTemplate,deleteIndicatorTemplate,indicatorLibraryItems,hasIndicatorTemplate} from './indicator-preferences.js?v=1.11.0-milestones.4';
+import { INDICATORS, readIndicatorState, normalizeIndicatorState, isIndicatorVisible } from './indicator-state.js?v=1.12.0-tv-parity.1';
+import {indicatorReadout,indicatorReadoutDate} from './indicator-readouts.js?v=1.12.0-tv-parity.1';
+import {INDICATOR_PREFERENCES_KEY,MAX_TEMPLATE_NAME,readIndicatorPreferences,writeIndicatorPreferences,toggleIndicatorFavorite,saveIndicatorTemplate,deleteIndicatorTemplate,indicatorLibraryItems,hasIndicatorTemplate} from './indicator-preferences.js?v=1.12.0-tv-parity.1';
 
-const ICONS={eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',hidden:'<path d="m3 3 18 18M10 5a12 12 0 0 1 2 0c6.5 0 10 7 10 7a20 20 0 0 1-3 4M6 6a20 20 0 0 0-4 6s3.5 7 10 7a12 12 0 0 0 5-1"/>',close:'<path d="m6 6 12 12M6 18 18 6"/>'};
+const ICONS={eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',hidden:'<path d="m3 3 18 18M10 5a12 12 0 0 1 2 0c6.5 0 10 7 10 7a20 20 0 0 1-3 4M6 6a20 20 0 0 0-4 6s3.5 7 10 7a12 12 0 0 0 5-1"/>',close:'<path d="m6 6 12 12M6 18 18 6"/>',expand:'<path d="m7 10 5 5 5-5"/>',collapse:'<path d="m7 14 5-5 5 5"/>'};
 const glyph=name=>`<svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[name]}</svg>`;
 ICONS.star='<path d="m12 3 2.8 5.7 6.3.9-4.5 4.4 1.1 6.2-5.7-3-5.7 3 1.1-6.2L2.9 9.6l6.3-.9L12 3Z"/>';
 const LEGEND_LABELS={readout:'가격 · OHLC',source:'자료 출처',legend:'범례',countdown:'다음 국면',volume:'Vol',history:'역사 사건',range:'수요·채택 범위','cycle-timing':'사이클 시계',drawdown:'전고점 대비',states:'시장 국면',fibonacci:'피보나치'};
-const HUD_INDICATORS=new Set(['readout','source','legend','countdown','history']);
 
 /** Display controls already have their own HUD; only real indicators get value rows. */
 export function chartIndicatorItems(state) {
   const items=INDICATORS.filter(item=>item.category!=='표시'&&state.added.includes(item.id));
   return [...items.filter(item=>item.id==='volume'),...items.filter(item=>item.id!=='volume')];
-}
-
-/** A compact legend changes presentation, never membership or chart layers. */
-export function mobilePrimaryIndicator(state,{intraday=false}={}) {
-  const eligible=chartIndicatorItems(state).filter(item=>isIndicatorVisible(state,item.id)&&!(intraday&&item.dailyOnly));
-  return (eligible.find(item=>item.id===state.primary)||eligible.find(item=>item.id==='volume')||eligible.find(item=>!HUD_INDICATORS.has(item.id))||eligible[0])?.id||null;
 }
 
 export function countdownPresentation(value={}) {
@@ -28,7 +21,7 @@ export function countdownPresentation(value={}) {
 
 export function mountIndicatorWorkbench({plot,stage}) {
   const doc=plot.ownerDocument;
-  let state=readIndicatorState(location.search),category='전체',view='all',intraday=false,expanded=true,cycle=null,countdown=null,countdownKey='',listKey='',dialogKey='',opener=null;
+  let state=readIndicatorState(location.search),category='전체',view='all',intraday=false,cycle=null,countdown=null,countdownKey='',listKey='',dialogKey='',opener=null;
   const storageProvider=()=>doc.defaultView.localStorage;
   let preferences=readIndicatorPreferences(storageProvider);
   let readoutFrame=0;
@@ -40,28 +33,49 @@ export function mountIndicatorWorkbench({plot,stage}) {
   list.setAttribute('role','list');
   const readoutDate=doc.createElement('p');readoutDate.id='indicator-readout-date';readoutDate.className='indicator-readout-date';
   const fold=doc.createElement('button');fold.type='button';fold.id='indicator-legend-toggle';fold.className='indicator-legend-toggle';fold.setAttribute('aria-controls',list.id);
-  fold.onclick=()=>{expanded=!expanded;paintList();};
+  fold.onclick=()=>command('collapse');
   manager.append(readoutDate,list,fold);plot.append(manager);
   const countdownBox=doc.createElement('button');countdownBox.type='button';countdownBox.id='scenario-countdown';countdownBox.className='scenario-countdown';countdownBox.hidden=true;countdownBox.setAttribute('aria-label','다음 국면 D-day의 가정과 근거 보기');
   countdownBox.onclick=()=>doc.dispatchEvent(new CustomEvent('atlas:countdown-detail'));plot.append(countdownBox);
   // Observe layout boxes, never the price path. Wrapped readouts determine the
   // legend position; the actual plot height bounds its scrollable overflow.
   const readoutNode=plot.querySelector('#lab-metrics'),sourceNode=plot.querySelector('.workbench-market-info');
-  let observedCountdownWidth=-1;
+  let observedCountdownWidth=-1,hudLayoutFrame=0,lastHudLayoutKey='';
+  const hudNodes=[manager,countdownBox,readoutNode,sourceNode].filter(Boolean),overlayGeometry=new WeakMap();
+  function scheduleHudLayoutChange(){
+    if(hudLayoutFrame)return;
+    hudLayoutFrame=requestAnimationFrame(()=>{
+      hudLayoutFrame=0;
+      // Read after the observer has applied CSS anchors: the countdown can move
+      // without resizing when the indicator legend above it folds or expands.
+      const origin=plot.getBoundingClientRect(),key=JSON.stringify(hudNodes.map(node=>{
+        if(node.hidden)return null;
+        const box=node.getBoundingClientRect();
+        return box.width>0&&box.height>0?[box.left-origin.left,box.top-origin.top,box.width,box.height]:null;
+      }));
+      if(key===lastHudLayoutKey)return;lastHudLayoutKey=key;
+      doc.dispatchEvent(new CustomEvent('atlas:hud-layout-change'));
+    });
+  }
   const overlaySizes=new WeakMap(),overlayResize=new ResizeObserver(entries=>{
-    let offsetChanged=false;
+    let offsetChanged=false,geometryChanged=false;
     for(const entry of entries){
+      const width=entry.borderBoxSize?.[0]?.inlineSize??entry.contentRect.width,height=entry.borderBoxSize?.[0]?.blockSize??entry.contentRect.height;
+      if(!Number.isFinite(width)||!Number.isFinite(height)||width<0||height<0)continue;
+      const sizeKey=`${width}/${height}`;
+      if(overlayGeometry.get(entry.target)!==sizeKey){overlayGeometry.set(entry.target,sizeKey);if(entry.target!==plot)geometryChanged=true;}
       if(entry.target===countdownBox){
-        const width=Math.ceil(entry.borderBoxSize?.[0]?.inlineSize??entry.contentRect.width);
-        if(Number.isFinite(width)&&width!==observedCountdownWidth){observedCountdownWidth=width;plot.style.setProperty('--countdown-width',`${width}px`);}
+        const pixels=Math.ceil(width);
+        if(pixels!==observedCountdownWidth){observedCountdownWidth=pixels;plot.style.setProperty('--countdown-width',`${pixels}px`);}
       }
-      const height=Math.ceil(entry.borderBoxSize?.[0]?.blockSize??entry.contentRect.height);
-      if(overlaySizes.get(entry.target)===height)continue;overlaySizes.set(entry.target,height);
+      const pixels=Math.ceil(height);
+      if(overlaySizes.get(entry.target)===pixels)continue;overlaySizes.set(entry.target,pixels);
       const property=entry.target===plot?'--plot-height':entry.target===manager?'--indicator-manager-height':entry.target===countdownBox?'--countdown-height':entry.target===readoutNode?'--readout-height':'--source-height';
-      plot.style.setProperty(property,`${height}px`);
+      plot.style.setProperty(property,`${pixels}px`);
       if(entry.target===readoutNode||entry.target===sourceNode)offsetChanged=true;
     }
     if(offsetChanged)updateOverlayOffsets();
+    if(geometryChanged)scheduleHudLayoutChange();
   });
   for(const node of [plot,manager,countdownBox,readoutNode,sourceNode])if(node)overlayResize.observe(node);
 
@@ -93,13 +107,11 @@ export function mountIndicatorWorkbench({plot,stage}) {
   const listOption=doc.createElement('label');listOption.className='indicator-list-option';
   const listVisible=doc.createElement('input');listVisible.type='checkbox';listVisible.id='indicator-list-visibility';listVisible.setAttribute('aria-controls','chart-indicator-list');
   listVisible.onchange=()=>{if(listVisible.checked!==!state.collapsed)command('collapse');};
-  listOption.append(listVisible,doc.createTextNode('차트에 지표 값 표시'));
-  const all=doc.createElement('button');all.type='button';all.id='indicator-visibility-all';all.onclick=()=>command(state.added.some(id=>isIndicatorVisible(state,id))?'hide-all':'show-all');
+  listOption.append(listVisible,doc.createTextNode('차트의 지표 이름·값 펼치기'));
+  const all=doc.createElement('button');all.type='button';all.id='indicator-visibility-all';all.onclick=()=>command(chartIndicatorItems(state).some(item=>isIndicatorVisible(state,item.id))?'hide-all':'show-all');
   options.append(listOption,all);
-  const primaryLabel=doc.createElement('label');primaryLabel.className='indicator-primary-option';primaryLabel.htmlFor='indicator-primary';primaryLabel.append(doc.createTextNode('접었을 때 대표 지표'));
-  const primary=doc.createElement('select');primary.id='indicator-primary';primary.onchange=()=>command('primary',primary.value||null);primaryLabel.append(primary);
-  const help=doc.createElement('p');help.className='indicator-library-help';help.textContent='차트에서는 추가한 지표 값을 모두 볼 수 있습니다. ‘접기’를 누르면 대표 지표만 남습니다. 선택한 지표가 숨겨졌거나 현재 가격 간격에서 지원되지 않으면 자동으로 대체됩니다.';
-  footer.append(options,primaryLabel,help);
+  const help=doc.createElement('p');help.className='indicator-library-help';help.textContent='작은 화살표는 지표 이름과 값만 접습니다. 차트에 그린 지표는 유지되며, 눈 아이콘으로 지표를 숨길 수 있습니다. 일괄 숨김은 가격·OHLC, 출처, 차트 범례를 유지합니다.';
+  footer.append(options,help);
   dialog.append(dialogHeader,description,views,search,categories,resultCount,results,templatePanel,preferenceStatus,footer);doc.body.append(dialog);
   templateName.addEventListener('input',()=>{templateSave.textContent=hasIndicatorTemplate(preferences,templateName.value)?'덮어쓰기':'저장';});
   templateForm.addEventListener('submit',event=>{
@@ -128,7 +140,7 @@ export function mountIndicatorWorkbench({plot,stage}) {
       const apply=doc.createElement('button');apply.type='button';apply.className='indicator-template-apply';apply.dataset.templateAction='apply';
       const name=doc.createElement('strong');name.textContent=template.name;
       const detail=doc.createElement('small');const visible=template.state.added.length-template.state.hidden.length;
-      detail.textContent=`${template.state.added.length}개 · ${visible}개 표시${template.state.primary?` · 대표 ${INDICATORS.find(item=>item.id===template.state.primary).label}`:''}`;
+      detail.textContent=`${template.state.added.length}개 · ${visible}개 표시 · 이름·값 ${template.state.collapsed?'접힘':'펼침'}${template.state.minimized.length?` · 분석 창 ${template.state.minimized.length}개 접힘`:''}`;
       apply.append(name,detail);apply.setAttribute('aria-label',`${template.name} 지표 조합 적용`);
       apply.onclick=()=>{command('replace',null,{state:template.state});announcePreference(`“${template.name}” 지표 조합을 적용했습니다.`);};
       const remove=makeButton(`${template.name} 템플릿 삭제`,'close',()=>{persistPreferences(deleteIndicatorTemplate(preferences,template.name),`“${template.name}” 템플릿을 삭제했습니다.`);paintTemplateRows();templateSave.textContent=hasIndicatorTemplate(preferences,templateName.value)?'덮어쓰기':'저장';templateName.focus();});remove.className='indicator-library-eye';remove.dataset.templateAction='remove';row.append(apply,remove);templateRows.append(row);
@@ -136,15 +148,6 @@ export function mountIndicatorWorkbench({plot,stage}) {
     if(!preferences.templates.length){const empty=doc.createElement('p');empty.className='indicator-empty';empty.textContent='저장한 조합이 없습니다. 현재 차트의 지표를 이름으로 저장해 다시 불러오세요.';templateRows.append(empty);}
     if(view==='templates')resultCount.textContent=`저장한 조합 ${preferences.templates.length}개 / 8개`;
     if(focused){const row=[...templateRows.children].find(node=>node.dataset.templateName===focused);(row?.querySelector(`[data-template-action="${action}"]`)||templateName).focus({preventScroll:true});}
-  }
-  function paintPrimary(){
-    const wanted=state.primary||'',items=chartIndicatorItems(state),eligible=items.filter(item=>isIndicatorVisible(state,item.id)&&!(intraday&&item.dailyOnly));
-    primary.replaceChildren();const automatic=doc.createElement('option');automatic.value='';automatic.textContent='자동 · 거래량 우선';primary.append(automatic);
-    for(const item of eligible){const option=doc.createElement('option');option.value=item.id;option.textContent=item.label;primary.append(option);}
-    if(wanted&&items.some(item=>item.id===wanted)&&!eligible.some(item=>item.id===wanted)){const option=doc.createElement('option');option.value=wanted;option.textContent=`${items.find(item=>item.id===wanted).label} · 현재 자동 대체`;option.disabled=true;primary.append(option);}
-    // Older links may prefer a display control. Keep that URL state intact,
-    // while presenting an actual indicator through the automatic fallback.
-    primary.value=items.some(item=>item.id===wanted)?wanted:'';
   }
   function applyDisplay(){
     for(const [id,selector] of [['readout','#lab-metrics'],['source','.workbench-market-info'],['legend','.lab-chart-foot']]){
@@ -197,31 +200,30 @@ export function mountIndicatorWorkbench({plot,stage}) {
   function paintList(){
     const focusedNode=doc.activeElement,focusedRow=focusedNode?.closest?.('[data-indicator-row]'),focused=focusedRow?.dataset.indicatorRow,action=focusedNode?.dataset.indicatorAction;
     const previousRows=[...list.children],focusedIndex=previousRows.indexOf(focusedRow),focusedInManager=manager.contains(focusedNode);
-    const items=chartIndicatorItems(state),foldedId=mobilePrimaryIndicator(state,{intraday})||items[0]?.id;
-    applyDisplay();manager.dataset.collapsed=String(state.collapsed);manager.dataset.expanded=String(expanded);manager.hidden=state.collapsed||!items.length;list.hidden=state.collapsed;readoutDate.hidden=state.collapsed;
-    fold.hidden=items.length<2;fold.setAttribute('aria-expanded',String(expanded));fold.textContent=expanded?'접기':`펼치기 · ${items.length}`;fold.setAttribute('aria-label',expanded?'지표 값 접기 · 대표 지표만 표시':`추가한 지표 값 ${items.length}개 펼치기`);
+    const items=chartIndicatorItems(state);
+    applyDisplay();manager.dataset.collapsed=String(state.collapsed);manager.hidden=!items.length;list.hidden=state.collapsed;readoutDate.hidden=state.collapsed;
+    fold.hidden=!items.length;fold.setAttribute('aria-expanded',String(!state.collapsed));fold.innerHTML=glyph(state.collapsed?'expand':'collapse');fold.title=`지표 이름·값 ${state.collapsed?'펼치기':'접기'} · ${items.length}개`;fold.setAttribute('aria-label',fold.title);
     listVisible.checked=!state.collapsed;
-    paintPrimary();
-    const hasVisible=state.added.some(id=>isIndicatorVisible(state,id));all.textContent=hasVisible?'모두 숨김':'모두 표시';all.disabled=!state.added.length;all.title=`추가한 인디케이터 모두 ${hasVisible?'숨기기':'표시'}`;all.setAttribute('aria-label',all.title);
-    const key=JSON.stringify([state.added,state.hidden,state.primary,state.collapsed,intraday,expanded]);if(key===listKey){scheduleReadouts();return;}listKey=key;
+    const hasVisible=items.some(item=>isIndicatorVisible(state,item.id));all.textContent=hasVisible?'지표 일괄 숨김':'지표 일괄 표시';all.disabled=!items.length;all.title=`가격·OHLC, 출처, 범례를 유지하고 지표를 ${hasVisible?'모두 숨기기':'모두 표시'}`;all.setAttribute('aria-label',all.title);
+    const key=JSON.stringify([state.added,state.hidden,state.collapsed,intraday]);if(key===listKey){scheduleReadouts();return;}listKey=key;
     list.replaceChildren();readoutRows.clear();
     for(const item of items){
-      const visible=isIndicatorVisible(state,item.id),unavailable=intraday&&item.dailyOnly,row=doc.createElement('div');row.className='indicator-row';row.dataset.indicatorRow=item.id;row.dataset.visible=String(visible);row.dataset.unavailable=String(Boolean(unavailable));row.dataset.mobilePrimary=String(item.id===foldedId);row.hidden=!expanded&&item.id!==foldedId;
+      const visible=isIndicatorVisible(state,item.id),unavailable=intraday&&item.dailyOnly,row=doc.createElement('div');row.className='indicator-row';row.dataset.indicatorRow=item.id;row.dataset.visible=String(visible);row.dataset.unavailable=String(Boolean(unavailable));
       row.setAttribute('role','listitem');
       const name=doc.createElement(item.analysis?'button':'div');name.className='indicator-name';
       const label=doc.createElement('span');label.className='indicator-label';label.textContent=LEGEND_LABELS[item.id]||item.label;label.title=item.label;
       const value=doc.createElement('strong');value.className='indicator-value';value.textContent='자료 대기';name.append(label,value);
-      if(item.analysis){name.type='button';name.dataset.indicatorAction='inspect';name.title=`${item.label} 분석 창으로 이동`;name.onclick=()=>{if(!visible)command('visibility',item.id);command('activate',item.id);const window=doc.getElementById(`analysis-window-${item.id}`);window?.scrollIntoView({block:'nearest',inline:'nearest'});window?.querySelector('svg')?.focus({preventScroll:true});};}
+      if(item.analysis){name.type='button';name.dataset.indicatorAction='inspect';name.title=`${item.label} 분석 창으로 이동`;name.onclick=()=>{if(!visible)command('visibility',item.id);if(state.minimized.includes(item.id))command('minimize',item.id);command('activate',item.id);const window=doc.getElementById(`analysis-window-${item.id}`);window?.scrollIntoView({block:'nearest',inline:'nearest'});window?.querySelector('svg')?.focus({preventScroll:true});};}
       if(unavailable)name.title=`${item.description} · 1D·1W에서 표시됩니다.`;
       const eye=makeButton(`${item.label} ${visible?'숨기기':'표시'}`,visible?'eye':'hidden',()=>command('visibility',item.id));eye.className='indicator-row-action';eye.dataset.indicatorAction='visibility';eye.setAttribute('aria-pressed',String(visible));
       const remove=makeButton(`${item.label} 삭제`,'close',()=>command('remove',item.id));remove.className='indicator-row-action';remove.dataset.indicatorAction='remove';
       row.append(name,eye,remove);list.append(row);readoutRows.set(item.id,{item,row,value,name});
     }
     if(focusedInManager){
-      const shown=[...list.children].filter(row=>!row.hidden),same=shown.find(row=>row.dataset.indicatorRow===focused),nearby=shown[Math.min(Math.max(focusedIndex,0),shown.length-1)];
+      const shown=state.collapsed?[]:[...list.children],same=shown.find(row=>row.dataset.indicatorRow===focused),nearby=shown[Math.min(Math.max(focusedIndex,0),shown.length-1)];
       const fallback=dialog.open?search:doc.querySelector('#atlas-mode-menu')||(opener?.isConnected?opener:null);
       const rowTarget=same||nearby;
-      const target=manager.hidden?fallback:focusedNode===fold&&!fold.hidden?fold:focused&&!expanded&&!same&&!fold.hidden?fold:rowTarget?.querySelector(`[data-indicator-action="${action||'visibility'}"]`)||rowTarget?.querySelector('[data-indicator-action]')||(!fold.hidden?fold:fallback);
+      const target=manager.hidden?fallback:state.collapsed||focusedNode===fold?fold:rowTarget?.querySelector(`[data-indicator-action="${action||'visibility'}"]`)||rowTarget?.querySelector('[data-indicator-action]')||(!fold.hidden?fold:fallback);
       target?.focus({preventScroll:true});
     }
     paintReadouts();
@@ -284,5 +286,5 @@ export function mountIndicatorWorkbench({plot,stage}) {
   doc.defaultView?.addEventListener('storage',onPreferences);
   doc.addEventListener('atlas:indicator-library',onOpen);doc.addEventListener('atlas:indicator-state',onState);doc.addEventListener('atlas:workbench-state',onWorkbench);doc.addEventListener('atlas:readout',onReadout);doc.addEventListener('atlas:analysis-state',onAnalysis);paintList();
   for(const name of ['wheel','pointerdown','dblclick','contextmenu'])manager.addEventListener(name,event=>event.stopPropagation(),name==='wheel'?{passive:true}:undefined);
-  return {open,destroy(){doc.removeEventListener('atlas:indicator-library',onOpen);doc.removeEventListener('atlas:indicator-state',onState);doc.removeEventListener('atlas:workbench-state',onWorkbench);doc.removeEventListener('atlas:readout',onReadout);doc.removeEventListener('atlas:analysis-state',onAnalysis);doc.defaultView?.removeEventListener('storage',onPreferences);if(readoutFrame)cancelAnimationFrame(readoutFrame);overlayResize.disconnect();dialog.remove();manager.remove();countdownBox.remove();}};
+  return {open,destroy(){doc.removeEventListener('atlas:indicator-library',onOpen);doc.removeEventListener('atlas:indicator-state',onState);doc.removeEventListener('atlas:workbench-state',onWorkbench);doc.removeEventListener('atlas:readout',onReadout);doc.removeEventListener('atlas:analysis-state',onAnalysis);doc.defaultView?.removeEventListener('storage',onPreferences);if(readoutFrame)cancelAnimationFrame(readoutFrame);if(hudLayoutFrame)cancelAnimationFrame(hudLayoutFrame);overlayResize.disconnect();dialog.remove();manager.remove();countdownBox.remove();}};
 }

@@ -110,7 +110,8 @@
 .workbench-ranges .icon,.workbench-axis .icon{width:16px;height:16px}
 .workbench-axis{margin-left:auto;padding-left:6px;border-left:1px solid var(--chrome-border)}
 #workbench-scale[aria-pressed=true]{color:var(--chrome-active)}
-.workbench-auto{color:#7e91aa;font-size:9px;margin-right:2px;cursor:help}
+.workbench-axis .workbench-auto{color:#9eafc4;font-size:10px;margin-right:2px;cursor:pointer}
+.workbench-axis .workbench-auto[aria-pressed=true]{color:var(--chrome-active);background:#1c2a3e}
 #workbench-range-label{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px;color:#75879e;font-variant-numeric:tabular-nums;margin-left:6px}
 .workbench-status{gap:7px;border-left:1px solid var(--chrome-border);padding-left:8px}
 .workbench-zone{color:#8d9db0;font-size:9px;cursor:help}
@@ -145,7 +146,7 @@
 .reader-resize:hover,.reader-resize:focus-visible{background:#6d97cf;outline:none}
 body:not([data-page=outlook]) .workbench-tools{display:none}
 body:not([data-page=outlook]) .workbench-detail-tools>[data-reader=selection],body:not([data-page=outlook]) .workbench-detail-tools>[data-reader=layers],body:not([data-page=outlook]) #workbench-next-turn{display:none}
-@media(max-width:1100px){#workbench-range-label{display:none}.workbench-auto{display:none}}
+@media(max-width:1100px){#workbench-range-label{display:none}}
 @media(max-width:900px){
   .reader-resize{display:none}
   .workspace.atlas-details-layout[data-details-open=true]{grid-template-columns:minmax(0,1fr) 0 var(--rail-width)}

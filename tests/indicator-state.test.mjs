@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {INDICATORS,normalizeIndicatorState,readIndicatorState,writeIndicatorState,changeIndicatorState,isIndicatorVisible,visibleAnalysisIds,searchIndicators} from '../dist/indicator-state.js';
 import {preparePriceViewData} from '../dist/price-view-data.js';
-import {countdownPresentation,mobilePrimaryIndicator,chartIndicatorItems} from '../dist/indicator-workbench.js';
+import {countdownPresentation,chartIndicatorItems} from '../dist/indicator-workbench.js';
 
 test('fresh chart shows the indicator legend without unsolicited research analysis windows',()=>{
   const state=readIndicatorState('');
@@ -47,8 +47,58 @@ test('explicit closed legend survives sharing while existing open links remain e
   const expanded=changeIndicatorState(closed,{action:'collapse'});
   assert.equal(expanded.collapsed,false);
   writeIndicatorState(params,expanded);
-  assert.equal(params.has('indicator-list'),false);
+  assert.equal(params.get('indicator-list'),'open');
   assert.deepEqual(readIndicatorState(params),expanded);
+});
+
+test('only a fresh mobile chart starts folded and either explicit choice survives device changes',()=>{
+  assert.equal(readIndicatorState('',{mobile:true}).collapsed,true);
+  assert.equal(readIndicatorState('',{mobile:false}).collapsed,false);
+  for(const mobile of [true,false])for(const collapsed of [true,false]){
+    const state=readIndicatorState(`indicator-list=${collapsed?'closed':'open'}`,{mobile});
+    assert.equal(state.collapsed,collapsed);
+    const params=writeIndicatorState(new URLSearchParams(),state);
+    assert.equal(readIndicatorState(params,{mobile:!mobile}).collapsed,collapsed);
+  }
+});
+
+test('legend folding never changes a single study or its price layer visibility',()=>{
+  for(const added of [['volume'],['readout','source','legend','volume','cycle-timing','periods']]){
+    const state=normalizeIndicatorState({added,hidden:['cycle-timing'],minimized:['periods']});
+    const closed=changeIndicatorState(state,{action:'collapse'});
+    assert.deepEqual({...closed,collapsed:false},state);
+    assert.deepEqual(changeIndicatorState(closed,{action:'collapse'}),state);
+  }
+});
+
+test('bulk study visibility leaves OHLC, source and chart legend choices unchanged',()=>{
+  for(const displayHidden of [[],['readout'],['source','legend']]){
+    const state=normalizeIndicatorState({added:INDICATORS.map(item=>item.id),hidden:displayHidden,minimized:['periods'],collapsed:true});
+    const hidden=changeIndicatorState(state,{action:'hide-all'});
+    for(const item of INDICATORS){
+      assert.equal(isIndicatorVisible(hidden,item.id),item.category==='표시'?!displayHidden.includes(item.id):false,item.id);
+    }
+    const shown=changeIndicatorState(hidden,{action:'show-all'});
+    assert.deepEqual(shown,state);
+  }
+});
+
+test('minimized analysis panes survive visibility and URL changes without removing a study',()=>{
+  let state=normalizeIndicatorState({added:['volume','cycles','periods'],hidden:['volume'],collapsed:true});
+  const original=structuredClone(state);
+  state=changeIndicatorState(state,{action:'minimize',id:'cycles'});
+  assert.deepEqual(state.minimized,['cycles']);assert.deepEqual(state.hidden,original.hidden);assert.deepEqual(state.added,original.added);
+  state=changeIndicatorState(state,{action:'visibility',id:'cycles'});
+  assert.deepEqual(state.minimized,['cycles']);assert.ok(state.hidden.includes('cycles'));
+  const restored=readIndicatorState(writeIndicatorState(new URLSearchParams(),state),{mobile:false});
+  assert.deepEqual(restored,state);
+  state=changeIndicatorState(restored,{action:'visibility',id:'cycles'});
+  state=changeIndicatorState(state,{action:'minimize',id:'cycles'});
+  assert.deepEqual(state,original);
+  assert.deepEqual(changeIndicatorState(state,{action:'minimize',id:'volume'}),state);
+  const invalid=normalizeIndicatorState({...state,minimized:['cycles','cycles','volume','peaks','invalid']});
+  assert.deepEqual(invalid.minimized,['cycles']);
+  assert.deepEqual(changeIndicatorState(invalid,{action:'remove',id:'cycles'}).minimized,[]);
 });
 
 test('legacy graph links migrate into optional in-chart indicators without a bottom dock',()=>{
@@ -69,20 +119,17 @@ test('unknown or duplicated IDs cannot create invalid controls; search combines 
   assert.ok(searchIndicators('','분석 창').every(x=>x.analysis));assert.deepEqual(searchIndicators('없는 지표 123'),[]);
 });
 
-test('a chosen folded readout survives sharing and falls back while hidden or unavailable',()=>{
+test('legacy primary fields survive existing shared links without defining the new legend fold',()=>{
   let state=changeIndicatorState(readIndicatorState(''),{action:'primary',id:'cycle-timing'});
-  assert.equal(mobilePrimaryIndicator(state),'cycle-timing');
-  assert.equal(mobilePrimaryIndicator(state,{intraday:true}),'volume');
   const params=writeIndicatorState(new URLSearchParams('granularity=1m'),state);
   assert.equal(params.get('indicator-primary'),'cycle-timing');
   assert.deepEqual(readIndicatorState(params),state);
   state=changeIndicatorState(state,{action:'visibility',id:'cycle-timing'});
-  assert.equal(mobilePrimaryIndicator(state),'volume');
+  assert.equal(state.primary,'cycle-timing');
   state=changeIndicatorState(state,{action:'visibility',id:'cycle-timing'});
-  assert.equal(mobilePrimaryIndicator(state),'cycle-timing');
+  assert.equal(state.primary,'cycle-timing');
   state=changeIndicatorState(state,{action:'remove',id:'cycle-timing'});
   assert.equal(state.primary,null);
-  assert.equal(mobilePrimaryIndicator(state),'volume');
   assert.equal(changeIndicatorState(state,{action:'primary',id:'missing'}).primary,null);
 });
 
@@ -98,17 +145,14 @@ test('chart value rows exclude duplicate display controls and preserve hidden in
   assert.deepEqual(chartIndicatorItems(normalizeIndicatorState({added:['readout','source','legend']})),[]);
 });
 
-test('legacy display-only primary links fall back to an actual indicator without rewriting URL state',()=>{
+test('legacy display-only primary links remain readable without restoring representative rows',()=>{
   for(const id of ['readout','source','legend']){
-    const state=readIndicatorState(`indicators=readout,source,legend,volume,cycle-timing&indicator-primary=${id}`);
-    assert.equal(mobilePrimaryIndicator(state),'volume');
+    const state=readIndicatorState(`indicators=readout,source,legend,volume,cycle-timing&indicator-primary=${id}&indicator-list=closed`);
     assert.equal(writeIndicatorState(new URLSearchParams(),state).get('indicator-primary'),id);
     assert.equal(state.primary,id);
+    assert.equal(state.collapsed,true);
+    assert.deepEqual(chartIndicatorItems(state).map(item=>item.id),['volume','cycle-timing']);
   }
-  const noSupported=normalizeIndicatorState({added:['readout','cycle-timing'],primary:'readout'});
-  assert.equal(mobilePrimaryIndicator(noSupported),'cycle-timing');
-  assert.equal(mobilePrimaryIndicator(noSupported,{intraday:true}),null);
-  assert.equal(mobilePrimaryIndicator(normalizeIndicatorState({added:['volume'],hidden:['volume']})),null);
 });
 
 test('applying an indicator template replaces only validated indicator state',()=>{

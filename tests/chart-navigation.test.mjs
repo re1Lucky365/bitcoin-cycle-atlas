@@ -402,3 +402,63 @@ test('a remaining pinch finger held beyond the first release still suppresses it
     assert.equal(h.fire('click',{detail:0}).defaultPrevented,false);
   }finally{Date.now=realNow;h.controller.destroy();}
 });
+
+test('cycle marker circles and label children allow wheel navigation without stealing activation',()=>{
+  const h=navigationHarness(),marker=h.document.createElement('g'),circle=h.document.createElement('circle'),label=h.document.createElement('text');
+  marker.setAttribute('class','cycle-milestone-marker cycle-marker');marker.setAttribute('role','button');marker.dataset.cycleMarker='peak';
+  marker.append(circle,label);h.svg.append(marker);
+  assert.equal(h.fire('wheel',{target:circle,deltaY:-180}).defaultPrevented,true);h.flush();assert.equal(h.changes.length,1);
+  assert.equal(h.fire('wheel',{target:label,shiftKey:true,deltaY:90}).defaultPrevented,true);h.flush();assert.equal(h.changes.length,2);
+  assert.equal(h.fire('pointerdown',{target:circle}).defaultPrevented,false);
+  assert.equal(h.fire('keydown',{target:label,key:'Home'}).defaultPrevented,false);
+  assert.equal(h.fire('wheel',{target:circle,ctrlKey:true,deltaY:-100}).defaultPrevented,false);
+});
+
+test('price-axis drag changes only the USD domain and its double click restores only price Auto',()=>{
+  let axis={min:80,max:125,scale:'log',top:50,bottom:350,right:930},resets=0;const prices=[];
+  const h=navigationHarness(range,{getPriceAxis:()=>axis,onPriceRangeChange:domain=>{prices.push(domain);axis={...axis,...domain,mode:'manual'};},onPriceReset:()=>resets++});
+  const before={...h.range};
+  assert.equal(h.fire('pointerdown',{clientX:960,clientY:150}).defaultPrevented,true);
+  h.pointer('pointermove',{clientX:960,clientY:200});h.pointer('pointermove',{clientX:960,clientY:230});
+  assert.equal(h.frames.size,1);assert.equal(prices.length,0);h.flush();
+  assert.equal(prices.length,1);assert.ok(axis.min<80&&axis.max>125);
+  assert.ok(Math.abs(Math.sqrt(axis.min*axis.max)-100)<1e-8,'log drag keeps the geometric midpoint');
+  assert.deepEqual(h.range,before);assert.equal(h.changes.length,0);
+  assert.equal(h.element.dataset.priceScaling,'true');assert.ok(h.element.hasPointerCapture(1));
+  h.pointer('pointerup',{clientX:960,clientY:230});assert.equal(h.element.dataset.priceScaling,undefined);assert.equal(h.element.hasPointerCapture(1),false);
+  assert.equal(h.fire('click',{clientX:960,clientY:230}).defaultPrevented,true);
+  assert.equal(h.fire('dblclick',{clientX:960,clientY:200}).defaultPrevented,true);
+  assert.equal(resets,1);assert.equal(h.resets,0);assert.deepEqual(h.range,before);
+});
+
+test('price-axis bounds respect scaled SVG geometry and leave volume, header and ordinary plot gestures alone',()=>{
+  const axis={min:80,max:120,scale:'linear',top:50,bottom:350,right:930},prices=[];
+  const h=navigationHarness(range,{getPriceAxis:()=>axis,onPriceRangeChange:domain=>prices.push(domain),onPriceReset:()=>{}});
+  h.svg.getBoundingClientRect=()=>({left:10,top:20,width:500,height:250,right:510,bottom:270});
+  for(const point of [{clientX:490,clientY:30},{clientX:490,clientY:230}])assert.equal(h.fire('pointerdown',point).defaultPrevented,false);
+  assert.equal(h.fire('pointerdown',{clientX:490,clientY:120,pointerType:'touch'}).defaultPrevented,true);
+  h.pointer('pointermove',{clientX:490,clientY:90,pointerType:'touch'});h.pointer('pointerup',{clientX:490,clientY:90,pointerType:'touch'});
+  assert.equal(prices.length,1);assert.ok(prices[0].min>80&&prices[0].max<120);
+  assert.equal(h.changes.length,0);
+  h.fire('pointerdown',{clientX:250,clientY:100});h.pointer('pointermove',{clientX:300,clientY:100});h.pointer('pointerup',{clientX:300,clientY:100});
+  assert.equal(h.changes.length,1);assert.equal(prices.length,1);
+});
+
+test('scope, scale, tool changes and cancellation discard pending price-axis frames',()=>{
+  for(const change of ['source','window','scale','layout','tool','cancel','auto','destroy']){
+    let axis={min:80,max:125,scale:'log',top:50,bottom:350,right:930};const prices=[];
+    const h=navigationHarness(range,{getPriceAxis:()=>axis,onPriceRangeChange:domain=>prices.push(domain),onPriceReset:()=>{}});
+    h.fire('pointerdown',{clientX:960,clientY:150});h.pointer('pointermove',{clientX:960,clientY:220});
+    assert.equal(h.frames.size,1);
+    if(change==='source')h.range={...h.range,contextKey:'new-source'};
+    else if(change==='window')h.range=panRange(h.range,.1);
+    else if(change==='scale')axis={...axis,scale:'linear'};
+    else if(change==='layout')axis={...axis,bottom:250};
+    else if(change==='tool')h.tool='pan';
+    else if(change==='cancel')h.pointer('pointercancel');
+    else if(change==='auto')h.controller.resetPrice();
+    else h.controller.destroy();
+    h.controller.update();h.flush();
+    assert.equal(prices.length,0,change);assert.equal(h.element.hasPointerCapture(1),false,change);
+  }
+});

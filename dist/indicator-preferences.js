@@ -1,4 +1,4 @@
-import { INDICATORS, normalizeIndicatorState, searchIndicators } from './indicator-state.js?v=1.11.0-milestones.4';
+import { INDICATORS, normalizeIndicatorState, searchIndicators } from './indicator-state.js?v=1.12.0-tv-parity.1';
 
 export const INDICATOR_PREFERENCES_KEY='bitcoin-cycle-atlas.indicator-preferences.v1';
 export const MAX_INDICATOR_TEMPLATES=8;

@@ -23,18 +23,20 @@ export const INDICATORS = Object.freeze([
 
 const ids=new Set(INDICATORS.map(item=>item.id));
 const analyses=new Set(INDICATORS.filter(item=>item.analysis).map(item=>item.id));
+const studies=new Set(INDICATORS.filter(item=>item.category!=='표시').map(item=>item.id));
 const defaults=INDICATORS.filter(item=>item.default).map(item=>item.id);
 const ordered=values=>{const wanted=new Set(values);return INDICATORS.filter(item=>wanted.has(item.id)).map(item=>item.id);};
 
 export function normalizeIndicatorState(value={}) {
   const added=ordered(Array.isArray(value.added)?value.added:defaults);
   const hidden=ordered((Array.isArray(value.hidden)?value.hidden:[]).filter(id=>added.includes(id)));
+  const minimized=ordered((Array.isArray(value.minimized)?value.minimized:[]).filter(id=>analyses.has(id)&&added.includes(id)));
   const active=analyses.has(value.active)&&added.includes(value.active)&&!hidden.includes(value.active)?value.active:added.find(id=>analyses.has(id)&&!hidden.includes(id))||added.find(id=>analyses.has(id))||'cycles';
   const primary=ids.has(value.primary)&&added.includes(value.primary)?value.primary:null;
-  return {added,hidden,active,primary,collapsed:value.collapsed===true};
+  return {added,hidden,minimized,active,primary,collapsed:value.collapsed===true};
 }
 
-export function readIndicatorState(search='') {
+export function readIndicatorState(search='',{mobile=globalThis.matchMedia?.('(max-width:620px)')?.matches??false}={}) {
   const params=search instanceof URLSearchParams?search:new URLSearchParams(search);
   const added=params.has('indicators')?params.get('indicators').split(','):defaults.slice();
   const hidden=params.get('indicator-hide')?.split(',')||[];
@@ -42,14 +44,17 @@ export function readIndicatorState(search='') {
   if(!params.has('indicators')&&(analyses.has(legacy)||legacyCompare)){
     const mode=analyses.has(legacy)?legacy:'cycles';added.push(mode);if(params.get('dock')==='closed')hidden.push(mode);
   }
-  return normalizeIndicatorState({added,hidden,active:legacy,primary:params.get('indicator-primary'),collapsed:params.get('indicator-list')==='closed'});
+  const legend=params.get('indicator-list');
+  return normalizeIndicatorState({added,hidden,minimized:params.get('indicator-minimize')?.split(',')||[],active:legacy,primary:params.get('indicator-primary'),collapsed:legend==='closed'||legend!=='open'&&mobile});
 }
 
 export function writeIndicatorState(params,state) {
   const next=normalizeIndicatorState(state),defaultKey=defaults.join(','),addedKey=next.added.join(',');
   if(addedKey===defaultKey)params.delete('indicators');else params.set('indicators',addedKey);
   if(next.hidden.length)params.set('indicator-hide',next.hidden.join(','));else params.delete('indicator-hide');
-  if(next.collapsed)params.set('indicator-list','closed');else params.delete('indicator-list');
+  if(next.minimized.length)params.set('indicator-minimize',next.minimized.join(','));else params.delete('indicator-minimize');
+  // Both choices are explicit in shared/saved charts, even across device sizes.
+  params.set('indicator-list',next.collapsed?'closed':'open');
   if(next.primary)params.set('indicator-primary',next.primary);else params.delete('indicator-primary');
   if(next.added.some(id=>analyses.has(id)))params.set('chart',next.active);else params.delete('chart');
   params.delete('dock');
@@ -65,9 +70,10 @@ export function changeIndicatorState(state,{action,id,state:replacement}) {
   if(action==='replace')return replacement&&Array.isArray(replacement.added)?normalizeIndicatorState(replacement):next;
   if(action==='primary')return id==null?{...next,primary:null}:next.added.includes(id)?{...next,primary:id}:next;
   if(action==='collapse')return {...next,collapsed:!next.collapsed};
-  if(action==='show-all')return {...next,hidden:[]};
-  if(action==='hide-all')return {...next,hidden:next.added.slice()};
+  if(action==='show-all')return {...next,hidden:next.hidden.filter(id=>!studies.has(id))};
+  if(action==='hide-all')return normalizeIndicatorState({...next,hidden:[...next.hidden,...next.added.filter(id=>studies.has(id))]});
   if(!ids.has(id))return next;
+  if(action==='minimize')return analyses.has(id)&&next.added.includes(id)?normalizeIndicatorState({...next,minimized:next.minimized.includes(id)?next.minimized.filter(value=>value!==id):[...next.minimized,id]}):next;
   if(action==='activate')return analyses.has(id)&&isIndicatorVisible(next,id)?{...next,active:id}:next;
   if(action==='toggle')action=next.added.includes(id)?'remove':'add';
   if(action==='add'&&!next.added.includes(id)){next.added.push(id);next.hidden=next.hidden.filter(value=>value!==id);if(analyses.has(id))next.active=id;}
