@@ -1,37 +1,58 @@
 import { utcDay } from './cycle-engine.js?v=1.11.0';
+import { normalizePriceDomain } from './price-axis.js?v=1.12.0-tv-parity.1';
 
 /** All coordinates use original prices; factor affects only the choice of ticks. */
-export function createPriceScale(values,{scale='log',top=0,bottom=1,tickCount=6,factor=1,paddingRatio=null}={}) {
+export function createPriceScale(values,{scale='log',top=0,bottom=1,tickCount=6,factor=1,paddingRatio=.12,domain=null}={}) {
   if(!['log','linear'].includes(scale))throw new RangeError('Unknown price scale');
   if(!Number.isFinite(factor)||factor<=0||!Number.isFinite(top)||!Number.isFinite(bottom)||top===bottom)throw new RangeError('Invalid price axis');
   const prices=values.filter(value=>Number.isFinite(value)&&value>0);
   if(!prices.length)throw new RangeError('A price axis requires positive prices');
-  const low=Math.min(...prices),high=Math.max(...prices);
+  const low=Math.min(...prices),high=Math.max(...prices),manual=domain===null?null:normalizePriceDomain(domain,{scale});
+  if(domain!==null&&!manual)throw new RangeError('Invalid manual price domain');
   let min,max;
   if(paddingRatio!==null&&(!Number.isFinite(paddingRatio)||paddingRatio<0||paddingRatio>1))throw new RangeError('Invalid price padding');
-  if(scale==='log'&&paddingRatio!==null){const padding=Math.max(Math.log(high/low),.002)*paddingRatio;min=low*Math.exp(-padding);max=high*Math.exp(padding);}
-  else if(scale==='log'){min=low*.82;max=high*1.19;}
-  else{const padding=(high-low||high*.2)*.1;min=Math.max(0,low-padding);max=high+padding;}
+  const paddingFraction=paddingRatio??.12;
+  if(manual){({min,max}=manual);}
+  else if(scale==='log'){const padding=Math.max(Math.log(high)-Math.log(low),.002)*Math.max(high===low ? .001 : 0,paddingFraction);min=low*Math.exp(-padding);max=high*Math.exp(padding);}
+  else{const padding=(high-low||high*.2)*Math.max(high===low ? .001 : 0,paddingFraction);min=Math.max(0,low-padding);max=high+padding;}
   const transform=scale==='log'?Math.log:value=>value;
   const reverse=scale==='log'?Math.exp:value=>value;
   const first=transform(min),extent=transform(max)-first;
+  if(![min,max,first,extent].every(Number.isFinite)||max<=min||extent<=0||(scale==='log'&&min<=0))throw new RangeError('Price domain cannot be represented');
   const y=value=>bottom-(transform(value)-first)/extent*(bottom-top);
   const invert=pixel=>reverse(first+(bottom-pixel)/(bottom-top)*extent);
-  const count=Math.max(2,Math.floor(tickCount)||6),a=min*factor,b=max*factor;
+  const count=Math.max(2,Math.min(64,Number.isFinite(tickCount)?Math.floor(tickCount)||6:6)),a=min*factor,b=max*factor;
+  if(![a,b].every(Number.isFinite)||b<=a||(scale==='log'&&a<=0))throw new RangeError('Price labels exceed the numeric range');
   const displayTicks=[];
   if(scale==='log'){
-    for(let exponent=Math.floor(Math.log10(a))-1;exponent<=Math.ceil(Math.log10(b))+1;exponent++)for(const multiplier of [1,2,5]){
+    const firstExponent=Math.max(-323,Math.floor(Math.log10(a))-1),lastExponent=Math.min(308,Math.ceil(Math.log10(b))+1);
+    for(let exponent=firstExponent;exponent<=lastExponent;exponent++)for(const multiplier of [1,2,5]){
       const value=multiplier*10**exponent;if(value>=a&&value<=b)displayTicks.push(value);
     }
-    if(displayTicks.length<2&&paddingRatio!==null){displayTicks.length=0;for(let i=0;i<count;i++)displayTicks.push(a*Math.pow(b/a,i/(count-1)));}
+    if(displayTicks.length<2){displayTicks.length=0;const firstLog=Math.log(a),logSpan=Math.log(b)-firstLog;for(let i=0;i<count;i++)displayTicks.push(i===0?a:i===count-1?b:Math.exp(firstLog+logSpan*i/(count-1)));}
     const stride=Math.max(1,Math.ceil(displayTicks.length/count));
-    return {scale,min,max,y,invert,ticks:displayTicks.filter((_,i)=>i%stride===0).map(value=>value/factor)};
+    return {scale,min,max,top,bottom,mode:manual?'manual':'auto',y,invert,ticks:displayTicks.filter((_,i)=>i%stride===0).map(value=>value/factor)};
   }
   const rough=(b-a)/(count-1),magnitude=10**Math.floor(Math.log10(rough));
   const step=([1,2,2.5,5,10].find(value=>value>=rough/magnitude)||10)*magnitude;
+  if(!Number.isFinite(step)||step<=0)throw new RangeError('Price ticks cannot be represented');
   const firstTick=Math.ceil(a/step);
-  for(let i=firstTick;i*step<=b+step*1e-9;i++)displayTicks.push(Number((i*step).toPrecision(12)));
-  return {scale,min,max,y,invert,ticks:displayTicks.map(value=>value/factor)};
+  for(let index=0;index<count*4+16&&(firstTick+index)*step<=b+step*1e-9;index++)displayTicks.push(Number(((firstTick+index)*step).toPrecision(12)));
+  return {scale,min,max,top,bottom,mode:manual?'manual':'auto',y,invert,ticks:displayTicks.map(value=>value/factor)};
+}
+
+/** Header change compares completed closes; candle body direction stays open-based. */
+export function barPriceChange(close, previousClose, open = null) {
+  const valid = value => Number.isFinite(value) && value > 0;
+  const previous = valid(previousClose) ? previousClose : null;
+  const changePrice = valid(close) && previous !== null ? close - previous : null;
+  const changePct = changePrice !== null ? changePrice / previous * 100 : null;
+  return {
+    changeBasis:'previous-close', previousClose:previous, changePrice, changePct,
+    previousCloseChangePct:changePct,
+    fromOpenChangePrice:valid(close)&&valid(open)?close-open:null,
+    fromOpenChangePct:valid(close)&&valid(open)?(close/open-1)*100:null,
+  };
 }
 
 /** Rows are chronological daily observations or model points, never weekly samples. */

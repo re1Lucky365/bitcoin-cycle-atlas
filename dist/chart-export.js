@@ -54,7 +54,7 @@ export function createChartSvgExport(svg,{title='BTCUSD',readout='',source='',no
   function copyChart(sourceChart,y,chartHeight){
     const clone=sourceChart.cloneNode(true);clone.removeAttribute('id');clone.removeAttribute('class');clone.removeAttribute('hidden');clone.removeAttribute('tabindex');clone.setAttribute('x','0');clone.setAttribute('y',String(y));clone.setAttribute('width',String(width));clone.setAttribute('height',String(chartHeight));
     clone.removeAttribute('style');
-    for(const node of clone.querySelectorAll('[id$="-cross"],.history-event-preview,.cycle-marker-preview,.cycle-interval-preview,.chart-magnet-preview,.chart-snap-feedback,.chart-measurement[data-pending="true"],script,foreignObject'))node.remove();
+    for(const node of clone.querySelectorAll('[id$="-cross"],.history-event-preview,.cycle-marker-preview,.cycle-interval-preview,.chart-magnet-preview,.chart-snap-feedback,.price-axis-interaction,.chart-measurement[data-pending="true"],script,foreignObject'))node.remove();
     for(const node of [clone,...clone.querySelectorAll('*')]){
       node.removeAttribute('tabindex');node.removeAttribute('role');
       for(const attr of [...node.attributes])if(attr.name.startsWith('on'))node.removeAttribute(attr.name);
@@ -66,10 +66,34 @@ export function createChartSvgExport(svg,{title='BTCUSD',readout='',source='',no
   for(const item of extra){chartY+=8;copyChart(item.panel,chartY,item.height);chartY+=item.height;}
   for(let i=0;i<legendItems.length;i++){
     const item=legendItems[i],column=i%legendColumns,row=Math.floor(i/legendColumns),xx=20+column*(readableWidth/legendColumns),ly=chartY+18+row*24;
-    root.append(make('circle',{cx:xx,cy:ly,r:5.5,fill:item.color,'fill-opacity':.17,stroke:item.color,'stroke-width':1.5}),make('text',{x:xx+12,y:ly+4,fill:item.color,'font-size':10},item.label));
+    root.append(make('circle',{cx:xx,cy:ly,r:item.id==='pit-stop'?4.29:5.5,fill:item.color,'fill-opacity':.17,stroke:item.color,'stroke-width':1.5}),make('text',{x:xx+12,y:ly+4,fill:item.color,'font-size':10},item.label));
   }
   root.append(make('line',{x1:14,x2:width-14,y1:top+chartHeight+legendHeight+1,y2:top+chartHeight+legendHeight+1,stroke:'#2b3c50'}));
   yy=top+chartHeight+legendHeight+17;for(const text of foot){root.append(make('text',{x:14,y:yy,fill:'#91a9c3','font-size':10},text));yy+=15;}
   const Serializer=doc.defaultView?.XMLSerializer||XMLSerializer;
   return '<?xml version="1.0" encoding="UTF-8"?>\n'+new Serializer().serializeToString(root);
+}
+
+/** Bound raster memory on phones and unusually tall exported charts. */
+export function chartRasterSize(width,height,{pixelRatio=2,maxEdge=4096,maxPixels=12000000}={}){
+  if(![width,height,pixelRatio,maxEdge,maxPixels].every(value=>Number.isFinite(value)&&value>0))throw new RangeError('이미지 크기가 올바르지 않습니다.');
+  const ratio=Math.min(pixelRatio,maxEdge/width,maxEdge/height,Math.sqrt(maxPixels/(width*height)));
+  return {width:Math.max(1,Math.floor(width*ratio)),height:Math.max(1,Math.floor(height*ratio))};
+}
+
+/** Rasterize the same source-labelled SVG used by vector export; no remote assets. */
+export async function createChartPngExport(svg,options={}){
+  const doc=svg?.ownerDocument,view=doc?.defaultView;
+  if(!view?.Image||!view?.URL?.createObjectURL)throw new Error('이 브라우저에서는 PNG 저장을 지원하지 않습니다. SVG 저장을 사용해 주세요.');
+  const vector=createChartSvgExport(svg,options),root=new view.DOMParser().parseFromString(vector,'image/svg+xml').documentElement;
+  await doc.fonts?.ready;
+  const size=chartRasterSize(Number(root.getAttribute('width')),Number(root.getAttribute('height'))),canvas=doc.createElement('canvas');
+  canvas.width=size.width;canvas.height=size.height;
+  const context=canvas.getContext('2d');if(!context)throw new Error('이미지를 만들 수 없습니다. SVG 저장을 사용해 주세요.');
+  const image=new view.Image(),url=view.URL.createObjectURL(new Blob([vector],{type:'image/svg+xml;charset=utf-8'}));
+  try{
+    await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=()=>reject(new Error('차트 이미지 변환에 실패했습니다. SVG 저장을 사용해 주세요.'));image.src=url;});
+    context.drawImage(image,0,0,size.width,size.height);
+    return await new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('PNG 파일을 만들지 못했습니다. SVG 저장을 사용해 주세요.')),'image/png'));
+  }finally{view.URL.revokeObjectURL(url);canvas.width=0;canvas.height=0;}
 }

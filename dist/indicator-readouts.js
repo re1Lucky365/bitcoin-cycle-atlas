@@ -23,7 +23,10 @@ export function indicatorReadout(item,{selection=null,workbench={},cycle=null,an
       if(!finite(selected.price))return missing(selected.kind==='unavailable'?'선택 범위에 가격 없음':'가격 자료 대기');
       const value=selected.unit==='indexed'&&finite(selected.displayedPrice)?`${number(selected.displayedPrice)} · 지수`:money(selected.price);
       const ohlc=finite(selected.open)?`O ${money(selected.open)} · H ${money(selected.high)} · L ${money(selected.low)} · C ${money(selected.close)}`:'';
-      return output(`${future?'가정 ':''}${value}${finite(selected.changePct)?`  ${percent(selected.changePct)}`:''}`,[context,ohlc,finite(selected.changePct)?`${finite(selected.open)?'시가':'직전 관측'} 대비 ${percent(selected.changePct)}`:''].filter(Boolean).join(' · '),future?'scenario':selected.changePct>0?'up':selected.changePct<0?'down':'neutral');
+      const change=finite(selected.previousClose)&&selected.previousClose>0&&finite(selected.changePct)?selected.changePct:null;
+      const previous=finite(change)?`직전 봉 종가 대비 ${percent(change)} · 기준 ${money(selected.previousClose)}${selected.previousCloseDate?` (${date(selected.previousCloseDate)} UTC)`:''}`:'직전 봉 자료 없음';
+      const fromOpen=finite(selected.fromOpenChangePct)?`시가 대비 ${percent(selected.fromOpenChangePct)}`:'';
+      return output(`${future?'가정 ':''}${value}${finite(change)?`  전봉 ${percent(change)}`:''}`,[context,ohlc,previous,fromOpen].filter(Boolean).join(' · '),future?'scenario':change>0?'up':change<0?'down':'neutral');
     }
     case 'volume': {
       if(!finite(selected.volume)||selected.volume<0)return missing(workbench.marketLoading?'Vol 불러오는 중':'Vol 자료 없음');

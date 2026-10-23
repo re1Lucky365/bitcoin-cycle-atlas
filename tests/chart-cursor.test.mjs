@@ -60,15 +60,16 @@ for (const kind of ['daily', 'intraday']) {
 
   test(`${kind} secondary pane hover keeps the time selection without showing a fake price-axis cursor`, () => {
     const h = chart(kind), priceBottom = Number(h.svg.dataset.priceBottom), plotBottom = Number(h.svg.dataset.plotBottom);
-    h.svg.onpointermove(h.event(125));
-    const event = h.event(125, { clientY: (priceBottom + plotBottom) / 2 });
+    const cursorPrice = h.axis.invert(Number(h.svg.dataset.plotTop) + 35);
+    h.svg.onpointermove(h.event(cursorPrice));
+    const event = h.event(cursorPrice, { clientY: (priceBottom + plotBottom) / 2 });
     h.svg.onpointermove(event);
     assert.equal(h.horizontal.attrs.get('visibility'), 'hidden');
     assert.equal(h.tag.attrs.get('visibility'), 'hidden');
     assert.equal(h.dot.attrs.get('visibility'), 'hidden');
     assert.equal(h.readouts.at(-1).price, 120);
     assert.ok(Number.isFinite(Number(h.cross.querySelector('.cross-time').attrs.get('x1'))));
-    h.svg.onpointermove(h.event(125));
+    h.svg.onpointermove(h.event(cursorPrice));
     assert.notEqual(h.horizontal.attrs.get('visibility'), 'hidden');
     assert.notEqual(h.tag.attrs.get('visibility'), 'hidden');
     h.svg.onpointerleave();

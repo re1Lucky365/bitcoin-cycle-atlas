@@ -30,11 +30,15 @@ test('preferences survive reload without changing a fresh or shared chart state'
   assert.match(values.get(INDICATOR_PREFERENCES_KEY),/사이클 연구/);
 });
 
-test('template replacement retains hidden, empty, collapsed and mobile preferences',()=>{
-  const state=normalizeIndicatorState({added:['volume','cycles'],hidden:['volume'],active:'cycles',primary:'cycles',collapsed:true});
+test('template replacement retains hidden studies, legend folding and independently minimized panes',()=>{
+  const state=normalizeIndicatorState({added:['volume','cycles'],hidden:['volume'],minimized:['cycles'],active:'cycles',primary:'cycles',collapsed:true});
   let saved=saveIndicatorTemplate({},'  Research  ',state);
   assert.equal(saved.error,null);assert.equal(saved.replaced,false);assert.equal(saved.template.name,'Research');
   assert.deepEqual(saved.template.state,state);
+  const applied=changeIndicatorState(readIndicatorState('',{mobile:false}),{action:'replace',state:saved.template.state});
+  assert.equal(applied.collapsed,true);assert.deepEqual(applied.minimized,['cycles']);assert.deepEqual(applied.hidden,['volume']);
+  const expanded=saveIndicatorTemplate(saved.preferences,'Expanded',{...state,collapsed:false});
+  assert.equal(changeIndicatorState(readIndicatorState('',{mobile:true}),{action:'replace',state:expanded.template.state}).collapsed,false);
   saved=saveIndicatorTemplate(saved.preferences,'research',normalizeIndicatorState({added:[]}));
   assert.equal(saved.replaced,true);assert.equal(saved.preferences.templates.length,1);assert.deepEqual(saved.template.state.added,[]);
   assert.equal(hasIndicatorTemplate(saved.preferences,' RESEARCH '),true);

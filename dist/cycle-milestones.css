@@ -79,7 +79,6 @@
  .cycle-chart-menu button{min-height:34px}
  .atlas-plot>.lab-chart-foot:has(.cycle-legend){max-width:calc(100% - var(--plot-right-gap,68px) - 12px);padding:4px 6px}
  .price-legend{gap:3px 7px}
- .atlas-plot[data-cycle-periods-visible=true] .chart-indicator-list{max-height:96px;overflow-y:auto;overscroll-behavior:contain}
  /* Both HUDs use their natural compact heights; the absolute SVG keeps its
     original price geometry and the total viewport height does not grow. */
  .atlas-plot:has(>.lab-chart-foot:not([hidden]) .cycle-legend){display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto auto var(--plot-bottom-gap,59px);row-gap:0}

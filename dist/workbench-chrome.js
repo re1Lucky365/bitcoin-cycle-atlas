@@ -1,6 +1,6 @@
 import { CHART_INTERVALS,isIntradayInterval } from './ohlc-data.js?v=1.11.0';
 import { MAGNET_MODES, MAGNET_LABELS, normalizeMagnetMode } from './chart-magnet.js?v=1.11.0';
-import { mountWorkspaceTools } from './workspace-tools.js?v=1.11.0-milestones.4';
+import { mountWorkspaceTools } from './workspace-tools.js?v=1.12.0-tv-parity.1';
 const $ = selector => document.querySelector(selector);
 
 const paths = {
@@ -79,7 +79,7 @@ export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlSto
   const scenario=panelButton(button('scenario','미래 가정 선택'),'scenarios');scenario.id='workbench-scenario';
   const scenarioName=document.createElement('span');scenarioName.id='workbench-scenario-name';scenarioName.textContent='기본 가정';scenario.append(scenarioName);
   const settingButton=panelButton(button('settings','차트 설정'),'settings');settingButton.id='atlas-display-options';settings.remove();
-  const save=$('#lab-svg');save.className='workbench-icon';save.innerHTML=icon('download');save.title='주 가격 차트 저장 · SVG';save.setAttribute('aria-label',save.title);
+  const save=$('#lab-svg');save.className='workbench-icon';save.innerHTML=icon('download');save.title='주 가격 차트 저장 · PNG';save.setAttribute('aria-label',save.title);
   const spacer=document.createElement('span');spacer.className='workbench-spacer';
   const chartType=button('candles','가격 표시 · 캔들로 변경',{'id':'workbench-chart-type','aria-pressed':'false'});chartType.onclick=()=>command('chart-type',chartType.getAttribute('aria-pressed')==='true'?'line':'candles');
   const chartMenu=button('more','차트 빠른 조작 · 우클릭 / Shift+F10',{'id':'workbench-chart-menu','aria-haspopup':'menu','aria-controls':'atlas-chart-context-menu'});chartMenu.onclick=()=>command('context-menu');
@@ -145,7 +145,7 @@ export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlSto
   const rangeLabel=document.createElement('span');rangeLabel.id='workbench-range-label';
   const axis=document.createElement('div');axis.className='workbench-axis';
   const scale=document.createElement('button');scale.type='button';scale.id='workbench-scale';scale.textContent='로그';scale.title='가격 눈금 · 로그 / 선형';scale.setAttribute('aria-label','로그 가격 눈금 · 선형으로 변경');scale.setAttribute('aria-pressed','true');scale.onclick=()=>command('scale');
-  const auto=document.createElement('span');auto.className='workbench-auto';auto.textContent='자동';auto.title='가격축은 표시 중인 데이터 범위에 자동으로 맞춥니다.';
+  const auto=document.createElement('button');auto.type='button';auto.id='workbench-auto-scale';auto.className='workbench-auto';auto.textContent='자동';auto.setAttribute('aria-pressed','true');auto.onclick=()=>command('auto-scale');
   const fit=button('fit','기본 범위로 · 0 / Alt+R / 차트 더블클릭',{'id':'workbench-fit','aria-keyshortcuts':'0 Alt+R'});fit.onclick=()=>command('fit');axis.append(scale,auto,fit);
   const update=$('#atlas-update-status');update.className='workbench-update';panelButton(update,'update');
   const zone=document.createElement('span');zone.className='workbench-zone';zone.textContent='UTC';zone.title='차트 날짜와 봉 시각의 기준 시간대';
@@ -170,6 +170,7 @@ export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlSto
     for(const node of document.querySelectorAll('[data-workbench-scenario]'))node.setAttribute('aria-pressed',String(node.dataset.workbenchScenario===s.scenario));
     for(const node of ranges.querySelectorAll('[data-chart-span]'))node.setAttribute('aria-pressed',String(!s.customRange&&node.dataset.chartSpan===s.window));
     scale.textContent=s.scale==='linear'?'선형':'로그';scale.setAttribute('aria-pressed',String(s.scale!=='linear'));scale.setAttribute('aria-label',`${s.scale==='linear'?'선형':'로그'} 가격 눈금 · ${s.scale==='linear'?'로그로':'선형으로'} 변경`);
+    const automatic=s.priceAxisMode!=='manual';auto.setAttribute('aria-pressed',String(automatic));auto.textContent=automatic?'자동':'수동';auto.title=automatic?'가격축 자동 맞춤 켜짐 · 눌러 현재 가격 범위 고정':'가격축 수동 범위 · 눌러 자동 맞춤';auto.setAttribute('aria-label',auto.title);auto.disabled=s.navigationAvailable===false;plot.dataset.priceAxisMode=automatic?'auto':'manual';
     magnetMode=normalizeMagnetMode(s.magnet);if(magnet.dataset.magnetMode!==magnetMode)magnet.querySelector('.icon').innerHTML=paths[magnetMode==='strong'?'magnetStrong':'magnet'];magnet.dataset.magnetMode=magnetMode;magnet.setAttribute('aria-pressed',String(magnetMode!=='off'));magnetBadge.textContent={off:'OFF',weak:'약',strong:'강'}[magnetMode];
     magnet.title=`자석 · ${MAGNET_LABELS[magnetMode]} · 두 지점 측정 · Alt+M`;magnet.setAttribute('aria-label',`${magnet.title} · 설정`);
     for(const option of magnetMenu.querySelectorAll('[data-magnet-mode]'))option.setAttribute('aria-checked',String(option.dataset.magnetMode===magnetMode));

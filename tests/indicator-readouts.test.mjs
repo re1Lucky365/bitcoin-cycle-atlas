@@ -2,9 +2,10 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {INDICATORS} from '../dist/indicator-state.js';
 import {indicatorReadout,indicatorReadoutDate} from '../dist/indicator-readouts.js';
+import {barPriceChange} from '../dist/chart-math.js';
 
 const read=(id,context)=>indicatorReadout(INDICATORS.find(item=>item.id===id),context);
-const observed={date:'2026-10-21',price:84023.24,open:82946.02,high:84842.65,low:82552.76,close:84023.24,changePct:1.2987,volume:2220,source:'Bitstamp',volumeSource:'Bitstamp',kind:'observed',frequency:'daily',unit:'usd'};
+const observed={date:'2026-10-21',price:84023.24,open:82946.02,high:84842.65,low:82552.76,close:84023.24,...barPriceChange(84023.24,83100,82946.02),previousCloseDate:'2026-10-20',volume:2220,source:'Bitstamp',volumeSource:'Bitstamp',kind:'observed',frequency:'daily',unit:'usd'};
 const workbench={chartType:'candles',historicalLabelMeta:{total:43,labels:9,hidden:34},countdown:{status:'upcoming',today:'2026-10-22',date:'2027-01-18',dday:'D-88',nextLabel:'하락',minimumRunDays:7},marketStatus:'Bitstamp BTC/USD · 2026-10-22 11:53 UTC 수집'};
 
 test('every library row has an explicit value or honest availability status',()=>{
@@ -81,4 +82,23 @@ test('selection date, currency mode and observed source track the displayed poin
   assert.equal(read('readout',{selection:unavailable}).value,'선택 범위에 가격 없음');
   assert.equal(read('volume',{selection:unavailable}).value,'Vol 자료 없음');
   assert.equal(indicatorReadoutDate(unavailable),'2026.10.10 10:00 UTC · 범위 · 자료 없음');
+});
+
+test('OHLC readout names the previous-close return even when the same candle rises from its open',()=>{
+  const selected={...observed,price:105,open:100,high:108,low:99,close:105,...barPriceChange(105,110,100)};
+  const result=read('readout',{selection:selected});
+  assert.equal(result.value,'$105  전봉 −4.55%');assert.equal(result.tone,'down');
+  assert.match(result.title,/직전 봉 종가 대비 −4\.55% · 기준 \$110/);
+  assert.match(result.title,/2026\.10\.20 UTC/);assert.match(result.title,/시가 대비 \+5%/);
+  assert.doesNotMatch(result.title,/시가 대비 −4\.55%/);
+});
+
+test('a first or unavailable preceding bar cannot substitute its open-to-close move for the header return',()=>{
+  for(const previousClose of [null,undefined,0,NaN]){
+    const selected={...observed,price:105,open:100,close:105,...barPriceChange(105,previousClose,100),previousCloseDate:null};
+    const result=read('readout',{selection:selected});
+    assert.equal(result.value,'$105');assert.equal(result.tone,'neutral');
+    assert.match(result.title,/직전 봉 자료 없음/);assert.match(result.title,/시가 대비 \+5%/);
+    assert.doesNotMatch(result.value,/%/);
+  }
 });

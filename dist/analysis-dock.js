@@ -62,9 +62,11 @@ export function mountAnalysisIndicators({stage,svg,modeTabs,controls}) {
     const header=doc.createElement('header');header.className='analysis-window-heading';
     const heading=doc.createElement('h3');heading.id=`analysis-window-title-${mode}`;heading.textContent=label;
     const axis=doc.createElement('span');axis.className='analysis-window-axis';axis.textContent='독립 분석 축';
-    const hide=doc.createElement('button');hide.type='button';hide.textContent='−';hide.title=`${label} 숨기기`;hide.setAttribute('aria-label',hide.title);hide.onclick=()=>indicator('visibility',mode);
+    const minimize=doc.createElement('button');minimize.type='button';minimize.textContent='−';minimize.title=`${label} 분석 창 접기`;minimize.setAttribute('aria-label',minimize.title);minimize.setAttribute('aria-expanded','true');minimize.setAttribute('aria-controls',`analysis-window-body-${mode}`);minimize.dataset.analysisAction='minimize';minimize.onclick=()=>indicator('minimize',mode);
+    const hide=doc.createElement('button');hide.type='button';hide.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>';hide.title=`${label} 숨기기`;hide.setAttribute('aria-label',hide.title);hide.dataset.analysisAction='visibility';hide.onclick=()=>indicator('visibility',mode);
     const remove=doc.createElement('button');remove.type='button';remove.textContent='×';remove.title=`${label} 삭제`;remove.setAttribute('aria-label',remove.title);remove.onclick=()=>indicator('remove',mode);
-    header.append(heading,axis,hide,remove);
+    header.append(heading,axis,minimize,hide,remove);
+    const body=doc.createElement('div');body.id=`analysis-window-body-${mode}`;body.className='analysis-window-body';
     const meta=doc.createElement('div');meta.className='analysis-window-meta';
     const title=doc.createElement('h4'),caption=doc.createElement('p'),legend=doc.createElement('div');caption.id=`analysis-caption-${mode}`;legend.className='analysis-window-legend';meta.append(title,caption,legend);
     const controlRow=doc.createElement('div');controlRow.className='analysis-window-controls';
@@ -79,9 +81,9 @@ export function mountAnalysisIndicators({stage,svg,modeTabs,controls}) {
     const save=doc.createElement('button');save.type='button';save.textContent='SVG';save.title=`${label} 그래프 저장`;save.setAttribute('aria-label',save.title);save.onclick=()=>command('save',mode);
     selection.append(prev,next,summary,locate,save);
     const note=doc.createElement('p');note.className='analysis-window-note';
-    card.append(header,meta,controlRow,viewport,selection,note);windows.append(card);
+    body.append(meta,controlRow,viewport,selection,note);card.append(header,body);windows.append(card);
     card.addEventListener('pointerdown',()=>command('activate',mode),true);card.addEventListener('focusin',()=>command('activate',mode));
-    views.set(mode,{card,chart,title,caption,legend,note,summary,locate,prev,next});
+    views.set(mode,{card,body,minimize,chart,title,caption,legend,note,summary,locate,prev,next});
   }
   modeTabs.remove();stage.querySelector('.atlas-plot').append(windows);
   function setState(event){
@@ -99,9 +101,14 @@ export function mountAnalysisIndicators({stage,svg,modeTabs,controls}) {
   }
   function indicators(event){
     const focused=doc.activeElement,focusedCard=focused?.closest?.('.analysis-indicator-window');
-    const {added=[],hidden=[],active}=event.detail.indicators||{};let count=0;
-    for(const [mode,view] of views){const visible=added.includes(mode)&&!hidden.includes(mode);view.card.hidden=!visible;view.card.dataset.active=String(mode===active);if(visible)count++;}
-    windows.hidden=!count;windows.dataset.count=String(count);
+    const {added=[],hidden=[],minimized=[],active}=event.detail.indicators||{};let count=0,minimizedCount=0;
+    for(const [mode,view] of views){
+      const visible=added.includes(mode)&&!hidden.includes(mode),folded=minimized.includes(mode),focusInBody=view.body.contains(focused);
+      view.card.hidden=!visible;view.card.dataset.active=String(mode===active);view.card.dataset.minimized=String(folded);view.body.hidden=folded;
+      view.minimize.textContent=folded?'+':'−';view.minimize.title=`${ANALYSIS_MODES.find(item=>item.id===mode).label} 분석 창 ${folded?'펼치기':'접기'}`;view.minimize.setAttribute('aria-label',view.minimize.title);view.minimize.setAttribute('aria-expanded',String(!folded));
+      if(visible){count++;if(folded)minimizedCount++;if(folded&&focusInBody)view.minimize.focus({preventScroll:true});}
+    }
+    windows.hidden=!count;windows.dataset.count=String(count);windows.dataset.minimizedAll=String(count>0&&minimizedCount===count);
     if(focusedCard&&windows.contains(focusedCard)&&focusedCard.hidden)queueMicrotask(()=>{
       // The indicator legend receives the same event after this controller.
       // Restore focus only after it has rendered the surviving controls.

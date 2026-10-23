@@ -5,8 +5,8 @@ import { normalizeIndicatorState, writeIndicatorState, readIndicatorState } from
 
 const memory = () => { const values=new Map();return {getItem:key=>values.get(key),setItem:(key,value)=>values.set(key,value)}; };
 
-test('sharing a panned indexed workspace retains hidden indicators and the mobile primary',()=>{
-  const indicators=normalizeIndicatorState({added:['volume','states','periods'],hidden:['states'],active:'periods',primary:'volume',collapsed:true});
+test('sharing a panned indexed workspace retains hidden indicators, a folded legend and minimized panes',()=>{
+  const indicators=normalizeIndicatorState({added:['volume','states','periods'],hidden:['states'],minimized:['periods'],active:'periods',primary:'volume',collapsed:true});
   const params=writeIndicatorState(new URLSearchParams('granularity=weekly&axis=linear&assumption=stress&page=data&utm_source=x'),indicators);
   const query=workspaceQuery(params,{frequency:'weekly',unit:'indexed',range:{start:'2024-03-04',end:'2025-04-05'}});
   const restored=new URLSearchParams(query);
@@ -14,6 +14,8 @@ test('sharing a panned indexed workspace retains hidden indicators and the mobil
   assert.deepEqual(readWorkspaceViewport(restored),{unit:'indexed',range:{start:'2024-03-04',end:'2025-04-05'}});
   assert.equal(restored.get('axis'),'linear');assert.equal(restored.get('assumption'),'stress');
   assert.equal(restored.has('page'),false);assert.equal(restored.has('utm_source'),false);
+  const storage=memory();assert.equal(saveWorkspace(storage,[],{name:'접힌 분석',query}).ok,true);
+  assert.deepEqual(readIndicatorState(readWorkspaces(storage)[0].query,{mobile:false}),indicators);
 });
 
 test('cycle period selection and a collapsed panel survive sharing and saved-workspace restoration',()=>{

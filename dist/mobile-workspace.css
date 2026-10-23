@@ -34,7 +34,7 @@
   .workbench-market-info #workbench-market-refresh{width:28px;height:24px;min-height:24px;padding:4px;flex:none}
   .chart-indicator-manager{top:var(--mobile-legend-top);left:10px;width:max-content;max-width:calc(100% - var(--plot-right-gap,65px) - 12px);box-sizing:border-box;box-shadow:none;background:transparent;border:0;border-radius:0}
   .chart-indicator-list{max-height:min(200px,28dvh,max(0px,calc(var(--plot-height,500px) - var(--mobile-legend-top) - var(--mobile-countdown-height) - 100px)));overflow:auto;overscroll-behavior:contain;padding:0 3px 0 0}
-  .chart-indicator-manager .indicator-legend-toggle{height:32px;min-height:32px;min-width:44px}
+  .chart-indicator-manager .indicator-legend-toggle{width:32px;min-width:32px;height:28px;min-height:28px}
   .chart-indicator-manager .indicator-row{min-height:32px}
   .chart-indicator-manager .indicator-row button{min-width:32px;min-height:32px}
   .chart-indicator-manager .indicator-row [data-indicator-action]{opacity:1;pointer-events:auto;background:#10151cd9}
@@ -105,7 +105,6 @@
   .indicator-library-views{padding:0 16px 10px;gap:3px}.indicator-library-views button{min-height:40px;font-size:11px}
   .indicator-library-favorite{width:32px;min-width:32px;min-height:44px;padding:7px}.indicator-library-eye{width:36px;min-width:36px;min-height:44px;padding:9px;margin-right:0}
   .indicator-library-row{gap:0}.indicator-library-item{gap:6px;padding-left:5px;padding-right:5px}
-  .indicator-primary-option{font-size:11px;gap:8px}.indicator-primary-option select{min-height:42px;height:42px;font-size:12px}
   .indicator-template-panel{padding:2px 16px 12px}.indicator-template-form input{font-size:16px;min-height:44px}.indicator-template-form button{min-height:44px}
   .indicator-preference-status{padding:7px 16px}
   .analysis-indicator-windows,.atlas-plot[data-countdown-visible=true]>.analysis-indicator-windows{left:8px;right:8px;width:auto;max-width:none;--analysis-stack-top:calc(var(--mobile-legend-top) + var(--indicator-manager-height,0px) + var(--mobile-countdown-height,0px) + var(--mobile-countdown-gap,0px) + 8px);--analysis-bottom-gap:30px}

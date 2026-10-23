@@ -1,10 +1,11 @@
 import { utcDay } from './cycle-engine.js?v=1.11.0';
 import { CHART_INTERVALS, isIntradayInterval } from './ohlc-data.js?v=1.11.0';
 import { INTRADAY_MAX_VISIBLE_BARS } from './intraday-history.js?v=1.11.0';
+import { normalizePriceDomain } from './price-axis.js?v=1.12.0-tv-parity.1';
 
 export const WORKSPACE_STORAGE_KEY = 'atlas.workspaces.v1';
 export const MAX_WORKSPACES = 8;
-const keys = new Set(['span','magnet','assumption','granularity','axis','align','interval','measure','scope','phase','audit','type','indicators','indicator-hide','indicator-list','indicator-primary','cycle-relation','cycle-panel','chart','unit','view-start','view-end']);
+const keys = new Set(['span','magnet','assumption','granularity','axis','align','interval','measure','scope','phase','audit','type','indicators','indicator-hide','indicator-minimize','indicator-list','indicator-primary','cycle-relation','cycle-panel','chart','unit','view-start','view-end','price-min','price-max']);
 const validDate = value => {
   if (typeof value !== 'string' || !/^20\d{2}-\d{2}-\d{2}$/.test(value)) return false;
   try { utcDay(value); return true; } catch { return false; }
@@ -29,10 +30,17 @@ export function readWorkspaceViewport(params) {
   return { unit:params.get('unit') === 'indexed' ? 'indexed' : 'usd', range:normalizeWorkspaceRange({start:read('view-start'),end:read('view-end')},frequency) };
 }
 
-export function writeWorkspaceViewport(params, { frequency = 'daily', unit = 'usd', range = null } = {}) {
+export function readWorkspacePriceDomain(params) {
+  const read = key => params.has(key) && params.get(key).trim() !== '' ? Number(params.get(key)) : NaN;
+  return normalizePriceDomain({min:read('price-min'),max:read('price-max')},{scale:params.get('axis') === 'linear' ? 'linear' : 'log'});
+}
+
+export function writeWorkspaceViewport(params, { frequency = 'daily', unit = 'usd', range = null, priceDomain = null } = {}) {
   unit === 'indexed' ? params.set('unit','indexed') : params.delete('unit');
   const valid = normalizeWorkspaceRange(range,frequency);
   for (const key of ['start','end']) valid ? params.set(`view-${key}`,String(valid[key])) : params.delete(`view-${key}`);
+  const price = normalizePriceDomain(priceDomain,{scale:params.get('axis') === 'linear' ? 'linear' : 'log'});
+  for (const key of ['min','max']) price ? params.set(`price-${key}`,String(price[key])) : params.delete(`price-${key}`);
   return params;
 }
 
@@ -41,7 +49,7 @@ export function cleanWorkspaceQuery(query) {
   const source = new URLSearchParams(query), result = new URLSearchParams();
   for (const [key,value] of source) if (keys.has(key) && value.length <= 500) result.set(key,value);
   const view = readWorkspaceViewport(result);
-  writeWorkspaceViewport(result,{frequency:result.get('granularity') || 'daily',...view});
+  writeWorkspaceViewport(result,{frequency:result.get('granularity') || 'daily',...view,priceDomain:readWorkspacePriceDomain(result)});
   result.sort();
   return result.toString();
 }

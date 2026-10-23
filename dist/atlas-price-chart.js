@@ -5,13 +5,14 @@ import { utcDay } from './cycle-engine.js?v=1.11.0';
 import { shiftCalendarMonths } from './cycle-timing.js?v=1.11.0';
 import { STATE_LABELS } from './market-structure.js?v=1.11.0';
 import { chartPaneLayout, historicalMarkersMarkup, volumePaneMarkup, cycleTimingMarkup, formatBtcVolume } from './chart-overlays.js?v=1.11.0';
-import { createPriceScale,nearestDailyIndex as nearest } from './chart-math.js?v=1.11.0';
+import { createPriceScale, barPriceChange, nearestDailyIndex as nearest } from './chart-math.js?v=1.12.0-tv-parity.1';
+import { priceAxisMarkup } from './price-axis.js?v=1.12.0-tv-parity.1';
 
 import { resolveMagnetPoint, advanceMeasurement, measurePriceAnchors, measurementOverlayMarkup, createMeasurementOverlay } from './chart-magnet.js?v=1.11.0';
 
 import { clearChartHover, coalescedChartHover, paintPriceCursor } from './chart-hover.js?v=1.11.0';
 
-import { dateWindow, intervalAtDate, upperBoundDate, pixelExtrema } from './chart-window.js?v=1.11.0';
+import { dateWindow, intervalAtDate, lowerBoundDate, upperBoundDate, pixelExtrema } from './chart-window.js?v=1.11.0';
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const numberFormats=new Map();
@@ -44,7 +45,7 @@ function dailyRuns(rows,omit=()=>false){
 }
 
 /** Rendering and inspection only. It never changes prices, paths or model dates. */
-export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency='daily',chartType='line',observedCandles=[],candleSource='Bitstamp',volumeBars=[],volumeProjection=null,volumeSource='Bitstamp',showVolume=false,historicalEvents=[],cycleCalibration=null,showCycleTiming=false,headerInset=null,showHistoricalEvents=true,activeHistoricalEventId=null,onHistoricalEvent=()=>{},stateStepDays=1,unit='usd',denominator=1,scale='log',tool='crosshair',magnet='off',measurement=null,onMeasurement=()=>{},onHover=()=>{},band=false,turns=[],showTurns=true,cycleMarkers=[],showCycleMarkers=true,activeCycleMarkerId=null,activeCycleMarkerIds=[],activeCycleInterval=null,onCycleMarker=()=>{},cycleIntervals=[],showCycleIntervals=false,cycleRelation='all',cycleOverlayObstacles=[],onCycleInterval=()=>{},events=[],states=[],fib=[],historical=false,nextTurn=null,showNextTurnLabel=true,onNextTurn=()=>{},showDrawdown=true,showStates=false,threshold=.12,onInspect=()=>{},selectedDate}){
+export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency='daily',chartType='line',observedCandles=[],candleSource='Bitstamp',volumeBars=[],volumeProjection=null,volumeSource='Bitstamp',showVolume=false,historicalEvents=[],cycleCalibration=null,showCycleTiming=false,headerInset=null,showHistoricalEvents=true,activeHistoricalEventId=null,onHistoricalEvent=()=>{},stateStepDays=1,unit='usd',denominator=1,scale='log',priceDomain=null,tool='crosshair',magnet='off',measurement=null,onMeasurement=()=>{},onHover=()=>{},band=false,turns=[],showTurns=true,cycleMarkers=[],showCycleMarkers=true,activeCycleMarkerId=null,activeCycleMarkerIds=[],activeCycleInterval=null,onCycleMarker=()=>{},cycleIntervals=[],showCycleIntervals=false,cycleRelation='all',cycleOverlayObstacles=[],onCycleInterval=()=>{},events=[],states=[],fib=[],historical=false,nextTurn=null,showNextTurnLabel=true,onNextTurn=()=>{},showDrawdown=true,showStates=false,threshold=.12,onInspect=()=>{},selectedDate}){
   clearChartHover(svg);
   // Match the allocated viewport instead of shrinking a fixed-height drawing.
   // An explicitly enabled secondary band stays present even in a short chart.
@@ -60,21 +61,31 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   }):[];
   const retainedDates=new Set(visibleCycleMarkers.map(marker=>marker.date));
   const candleDays=frequency==='weekly'?7:1;
-  const candleRows=chartType==='candles'?dateWindow(observedCandles,start,split&&split<end?split:end,c=>c.endDate||c.date||new Date((c.time+(candleDays-1)*86400)*1000).toISOString().slice(0,10)).map(c=>({...c,startDate:c.startDate||new Date(c.time*1000).toISOString().slice(0,10),endDate:c.endDate||new Date((c.time+(candleDays-1)*86400)*1000).toISOString().slice(0,10)})).filter(c=>c.endDate>=start&&c.endDate<=end&&(!split||c.endDate<=split)):[];
+  const candleDate=c=>c.endDate||c.date||new Date((c.time+(candleDays-1)*86400)*1000).toISOString().slice(0,10);
+  const candleRows=chartType==='candles'?dateWindow(observedCandles,start,split&&split<end?split:end,candleDate).map(c=>({...c,startDate:c.startDate||new Date(c.time*1000).toISOString().slice(0,10),endDate:candleDate(c)})).filter(c=>c.endDate>=start&&c.endDate<=end&&(!split||c.endDate<=split)):[];
   const candleByDate=new Map(candleRows.map(c=>[c.endDate,c]));
   const coveredDays=new Set();for(const c of candleRows)for(let day=dayOf(c.startDate);day<=dayOf(c.endDate);day++)coveredDays.add(day);
   const covered=date=>coveredDays.has(dayOf(date));
   const visible=candleRows.length?originalVisible.filter(p=>!covered(p.date)||candleByDate.has(p.date)).map(p=>candleByDate.has(p.date)?{...p,coinMetricsPrice:p.price,price:candleByDate.get(p.date).close,candle:candleByDate.get(p.date)}:p):originalVisible;
   if(!visible.length){svg.onclick=svg.onpointermove=svg.onpointerleave=svg.onkeydown=svg.onkeyup=null;delete svg.dataset.plotLeft;delete svg.dataset.plotRight;svg.innerHTML='<text x="24" y="60" fill="#c6d0dd">이 기간에는 아직 자료가 없습니다.</text>';return null;}
+  // The same pre-pixel-reduction vertices back the weekly path and cursor.
+  // Daily milestone anchors remain exact, even between completed Sunday closes.
+  const observed=visible.filter(p=>!split||p.date<=split);
+  const observedRuns=dailyRuns(observed,point=>Boolean(point.candle)).map(run=>sample(run,frequency,retainedDates));
+  const future=sample(originalVisible.filter(p=>split&&p.date>=split),frequency,retainedDates).map(p=>({...p,lower:p.lower??p.price,upper:p.upper??p.price}));
+  const displayedDates=frequency==='weekly'?new Set([...observedRuns.flat(),...future,...visible.filter(point=>point.candle)].map(point=>point.date)):null;
+  const selectionRows=displayedDates?visible.filter(point=>displayedDates.has(point.date)):visible;
   const factor=unit==='indexed'?100/denominator:1;
   let valueLow=Infinity,valueHigh=-Infinity;const includePrice=value=>{if(Number.isFinite(value)&&value>0){valueLow=Math.min(valueLow,value);valueHigh=Math.max(valueHigh,value);}};
-  for(const point of visible){includePrice(point.price);if(band&&point.lower>0&&point.upper>0){includePrice(point.lower);includePrice(point.upper);}}for(const candle of candleRows){includePrice(candle.low);includePrice(candle.high);}
+  for(const point of selectionRows){includePrice(point.price);if(band&&point.lower>0&&point.upper>0){includePrice(point.lower);includePrice(point.upper);}}for(const candle of candleRows){includePrice(candle.low);includePrice(candle.high);}
   // Landmarks remain Coin Metrics / model values when venue candles are shown.
   // Keep those prices on the axis without changing any exchange OHLC values.
   for(const marker of visibleCycleMarkers)includePrice(marker.price);
   const values=[valueLow,valueHigh];
   const tickCount=Math.max(2,Math.min(small?5:7,Math.floor((priceBottom-T)/38)+1));
-  const priceScale=createPriceScale(values,{scale,top:T,bottom:priceBottom,tickCount,factor}),{min,max,y}=priceScale;
+  const priceScale=createPriceScale(values,{scale,top:T,bottom:priceBottom,tickCount,factor,domain:priceDomain}),{min,max,y}=priceScale;
+  const tickDigits=Math.max(0,Math.min(6,1-Math.floor(Math.log10((max-min)*factor/(tickCount-1))))),axisDigits=Math.max(unit==='usd'?2:1,tickDigits);
+  const cursorPrice=value=>`${unit==='usd'?'$':''}${nf(value*factor,axisDigits)}`;
   const yd=v=>ddTop+Math.min(100,Math.max(0,-(v??0)))/100*(ddBottom-ddTop);
   const tracePoints=(ps,key)=>{
     const reduced=pixelExtrema(ps,x,[key]);
@@ -89,16 +100,15 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
     const runs=dailyRuns(source,omit).map(run=>sample(run,frequency,retainedDates));
     return {path:runs.map(run=>path(run,yy,key)).join(''),isolated:runs.filter(run=>run.length===1).map(run=>run[0])};
   };
-  const observed=visible.filter(p=>!split||p.date<=split),future=sample(originalVisible.filter(p=>split&&p.date>=split),frequency,retainedDates).map(p=>({...p,lower:p.lower??p.price,upper:p.upper??p.price}));
   const bottom=showVolume?volumeBottom:showStates?stateBottom:showCycleTiming?cycleBottom:showDrawdown?ddBottom:priceBottom;
   const visibleVolume=dateWindow(volumeBars,start,split&&split<end?split:end),volumeByDate=new Map(visibleVolume.map(bar=>[bar.date,bar]));
   const allProjectedVolume=volumeProjection?.points||[];
   const projectedVolume=dateWindow(allProjectedVolume,start,end).filter(point=>point.kind==='scenario'&&split&&point.date>split);
   const projectedVolumeAt=date=>{const point=intervalAtDate(allProjectedVolume,date);return point?.kind==='scenario'&&split&&date>split?point:null;};
   const timingSeries=cycleCalibration?.series||[],visibleTiming=showCycleTiming?dateWindow(timingSeries,start,end):[];
-  const clip=`${svg.id}-clip`,fullHistory=span>3000;
-  let s=`<title>${historical?'실제 비트코인 가격':'실제 비트코인 가격과 미래 가정'}</title><desc>가격 실선은 실제 관측, 금색 가격 점선은 미래 가정입니다. 색 원과 기간선의 실선은 사후 기준, 점선은 잠정 또는 가정 기준입니다. 그래프를 누르면 값을 고정해 읽을 수 있습니다. 미래 음영은 보정된 확률 구간이 아닙니다.</desc><defs><clipPath id="${clip}"><rect x="${L}" y="${T}" width="${W-L-R}" height="${bottom-T}"/></clipPath></defs>`;
-  for(const price of priceScale.ticks){const value=price*factor,yy=y(price);s+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#28323f"/><text x="${W-R+8}" y="${yy+4}" text-anchor="start" fill="#b0bbca" font-size="12">${unit==='usd'?'$':''}${compact(value)}</text>`;}
+  const clip=`${svg.id}-clip`,priceClip=`${svg.id}-price-clip`,axisClip=`${svg.id}-price-axis-clip`,fullHistory=span>3000;
+  let s=`<title>${historical?'실제 비트코인 가격':'실제 비트코인 가격과 미래 가정'}</title><desc>가격 실선은 실제 관측, 금색 가격 점선은 미래 가정입니다. 색 원과 기간선의 실선은 사후 기준, 점선은 잠정 또는 가정 기준입니다. 그래프를 누르면 값을 고정해 읽을 수 있습니다. 미래 음영은 보정된 확률 구간이 아닙니다.</desc><defs><clipPath id="${clip}"><rect x="${L}" y="${T}" width="${W-L-R}" height="${bottom-T}"/></clipPath><clipPath id="${priceClip}"><rect x="${L}" y="${T}" width="${W-L-R}" height="${priceBottom-T}"/></clipPath><clipPath id="${axisClip}"><rect x="${W-R}" y="${T}" width="${R}" height="${priceBottom-T}"/></clipPath></defs>`;
+  for(const price of priceScale.ticks){const value=price*factor,yy=y(price),label=`${unit==='usd'?'$':''}${max/min<2?nf(value,tickDigits):compact(value)}`,fontSize=Math.min(12,(R-12)/Math.max(1,label.length*.6));s+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#28323f"/><text x="${W-R+8}" y="${yy+4}" text-anchor="start" fill="#b0bbca" font-size="${fontSize}">${label}</text>`;}
   let months=span>5000?(small?60:24):span>3000?(small?36:24):span>1100?(small?12:6):span>550?(small?6:3):span>270?3:1;
   let tick=`${start.slice(0,4)}-01-01`;while(dayOf(tick)<minDay)tick=shiftCalendarMonths(tick,months);
   while(dayOf(tick)<=maxDay){const xx=xday(dayOf(tick));s+=`<line x1="${xx}" x2="${xx}" y1="${T}" y2="${bottom}" stroke="#222c37"/><text x="${xx}" y="${axisY}" text-anchor="${xx>W-35?'end':'middle'}" fill="#aebaca" font-size="12">${months>=12?tick.slice(0,4):tick.slice(2,7).replace('-','.')}</text>`;tick=shiftCalendarMonths(tick,months);}
@@ -109,7 +119,7 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   }
   if(showDrawdown){s+=`<text x="${L}" y="${layout.ddTitleY}" fill="#aebaca" font-size="${layout.ddTitleFontSize}">이전 최고가에서 떨어진 폭</text>`;for(const dd of(ddHeight<44?[0,-100]:[0,-50,-100]))s+=`<line x1="${L}" x2="${W-R}" y1="${yd(dd)}" y2="${yd(dd)}" stroke="#25303c"/><text x="${W-R+8}" y="${yd(dd)+4}" text-anchor="start" fill="#aab7c8" font-size="11">${dd}%</text>`;}
   if(showStates)s+=`<text class="state-pane-title" x="${L}" y="${layout.stateTitleY}" fill="#a8b9ca" font-size="${layout.stateTitleFontSize}">시장 국면 · 관측 / 가정<title>가격 경로에서 계산한 상승·횡보·하락 분류입니다. 관측 기준일 이후는 선택한 가정 경로의 분류이며 확정된 미래나 매매 신호가 아닙니다.</title></text>`;
-  s+=`<g clip-path="url(#${clip})">`;
+  s+=`<g clip-path="url(#${clip})"><g class="price-series-layer" clip-path="url(#${priceClip})">`;
   if(nextTurn){const left=xday(Math.max(minDay,dayOf(nextTurn.lowerDate||nextTurn.date))),right=xday(Math.min(maxDay,dayOf(nextTurn.upperDate||nextTurn.date)));if(right>left)s+=`<rect x="${left}" y="${T}" width="${right-left}" height="${priceBottom-T}" fill="#87bde7" opacity=".065"/>`;}
   if(band&&future.length){s+=`<path d="${path(future,y,'upper')}${tracePoints(future,'lower').reverse().map(p=>`L${x(p).toFixed(2)},${y(p.lower).toFixed(2)}`).join('')}Z" fill="#efb45f" opacity=".13"/>`;}
   for(const f of fib.filter(f=>f.price>min&&f.price<max&&(!f.startDate||f.startDate<=end))){const yy=y(f.price),from=xday(Math.max(minDay,f.startDate?dayOf(f.startDate):minDay));s+=`<line x1="${from}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#b4a7d6" opacity=".55" stroke-dasharray="3 5"/><text x="${W-R-4}" y="${yy-5}" text-anchor="end" fill="#c2b5e0" font-size="11">${nf(f.ratio*100,1)}% · ${unit==='usd'?money(f.price):nf(f.price*factor,1)}</text>`;}
@@ -129,6 +139,7 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   for(const c of candleRows){const xx=xday(dayOf(c.endDate)),color=c.close>=c.open?'#62bca5':'#dd7e8d',top=Math.min(y(c.open),y(c.close)),height=Math.max(1,Math.abs(y(c.open)-y(c.close)));s+=`<g class="observed-candle" data-date="${c.endDate}" data-open="${c.open}" data-high="${c.high}" data-low="${c.low}" data-close="${c.close}"><line x1="${xx}" x2="${xx}" y1="${y(c.high)}" y2="${y(c.low)}" stroke="${color}"/><rect x="${xx-candleWidth/2}" y="${top}" width="${candleWidth}" height="${height}" fill="${color}"/><title>${esc(candleSource)} BTC-USD · ${c.startDate}${candleDays>1?`–${c.endDate}`:''} UTC · O ${money(c.open)} H ${money(c.high)} L ${money(c.low)} C ${money(c.close)}</title></g>`;}
   }
   if(future.length)s+=`<path d="${path(future)}" fill="none" stroke="#f2b960" stroke-width="1.8" stroke-dasharray="5 3"/>`;
+  s+='</g>';
   if(showDrawdown){
     if(observed.length){
       const trace=observedTrace(originalVisible.filter(p=>!split||p.date<=split),yd,'drawdownPct');
@@ -141,7 +152,7 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   const confirmedTurns=turns.filter(point=>point.confirmationDate).sort((a,b)=>a.confirmationDate.localeCompare(b.confirmationDate));
   const turnAt=value=>{const point=confirmedTurns[upperBoundDate(confirmedTurns,value,turn=>turn.confirmationDate)-1];return point?{...point,kind:split&&point.date>split?'simulated':'observed'}:null;};
   const visibleTurns=turns.filter(p=>p.date>=start&&p.date<=end);
-  if(showTurns)for(const p of visibleTurns){const actual=!split||p.date<=split,color=p.type==='high'?'#e7bb73':'#85bfdc';s+=`<circle data-date="${p.date}" cx="${xday(dayOf(p.date))}" cy="${y(p.price)}" r="${fullHistory?2.5:4}" fill="${actual?color:'#10151c'}" stroke="${color}" stroke-width="1.4"><title>${esc(`${actual?'관측':'예시 경로'} ${p.type==='high'?'고점':'저점'} ${date(p.date)} · ${money(p.price)}`)}</title></circle>`;}
+  if(showTurns)for(const p of visibleTurns){const actual=!split||p.date<=split,color=p.type==='high'?'#e7bb73':'#85bfdc';s+=`<circle data-date="${p.date}" clip-path="url(#${priceClip})" cx="${xday(dayOf(p.date))}" cy="${y(p.price)}" r="${fullHistory?2.5:4}" fill="${actual?color:'#10151c'}" stroke="${color}" stroke-width="1.4"><title>${esc(`${actual?'관측':'예시 경로'} ${p.type==='high'?'고점':'저점'} ${date(p.date)} · ${money(p.price)}`)}</title></circle>`;}
   s+='</g>';
   if(showCycleTiming)s+=cycleTimingMarkup({points:visibleTiming,x,left:L,right:W-R,top:cycleTop,bottom:cycleBottom,titleY:layout.cycleTitleY,titleFontSize:layout.cycleTitleFontSize,dayWidth:(W-L-R)/span,split}).markup;
   if(showVolume)s+=volumePaneMarkup({bars:visibleVolume,x:bar=>xday(dayOf(bar.date)),left:L,right:W-R,top:volumeTop,bottom:volumeBottom,titleY:layout.volumeTitleY,titleFontSize:layout.volumeTitleFontSize,separatorY:layout.volumeSeparatorY,barWidth:Math.max(.6,Math.min(12,(W-L-R)*candleDays/span*.72)),source:volumeSource,projectionLabel:volumeProjection?.summary?.centralMethod==='persistence'?'중앙 · 최근 90일 활동 유지':'점선 · 조건부 평균 거래량',projection:projectedVolume,clipId:`${svg.id}-volume-clip`,futureX:split&&dayOf(split)>=minDay&&dayOf(split)<maxDay?xday(dayOf(split)):null}).markup;
@@ -160,8 +171,8 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
       obstacles.push({x:point.x-point.radius-3,y:point.y-point.radius-3,width:2*point.radius+6,height:2*point.radius+6});
       if(point.box)obstacles.push(point.box);
     }
-    const stride=Math.max(1,Math.ceil(visible.length/Math.max(24,W/4)));
-    const pricePoints=visible.filter((_,index)=>index%stride===0||index===visible.length-1).flatMap(point=>point.candle?[{x:x(point),y:y(point.candle.high)},{x:x(point),y:y(point.candle.low)}]:[{x:x(point),y:y(point.price)}]);
+    const stride=Math.max(1,Math.ceil(selectionRows.length/Math.max(24,W/4)));
+    const pricePoints=selectionRows.filter((_,index)=>index%stride===0||index===selectionRows.length-1).flatMap(point=>point.candle?[{x:x(point),y:y(point.candle.high)},{x:x(point),y:y(point.candle.low)}]:[{x:x(point),y:y(point.price)}]);
     const periodClip=`${svg.id}-cycle-periods`;
     s+=`<defs><clipPath id="${periodClip}"><rect x="${L}" y="${T}" width="${W-L-R}" height="${priceBottom-T}"/></clipPath></defs>`;
     const periods=cycleIntervalsOverlayMarkup({intervals:cycleIntervals,start,end,x,left:L,right:W-R,top:T,bottom:priceBottom,clipId:periodClip,relation:cycleRelation,activeIntervalId:activeCycleInterval?.id,activeMarkerId:activeCycleMarkerId,obstacles,pricePoints});
@@ -170,27 +181,36 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   if(milestoneLayer){s+=milestoneLayer.markup;svg.dataset.cycleMarkerCount=String(milestoneLayer.markers.length);svg.dataset.cycleMarkerLabelCount=String(milestoneLayer.labelCount);}
 
   const latest=originalVisible.find(p=>p.date===split);
-  if(latest){const yy=y(latest.price);s+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#7da89c" stroke-dasharray="2 5" opacity=".5"/><rect x="${W-R}" y="${yy-9}" width="${R-3}" height="18" rx="2" fill="#2b6558"/><text x="${W-R+5}" y="${yy+4}" fill="#edf8f3" font-size="${small?10:11}">${unit==='usd'?money(latest.price):nf(latest.price*factor,1)}</text>`;}
-  s+=`<g id="${svg.id}-cross" pointer-events="none"><line class="cross-time" y1="${T}" y2="${bottom}" stroke="#afc4dd" stroke-dasharray="3 3" opacity=".6"/><line class="cross-price" x1="${L}" x2="${W-R}" stroke="#afc4dd" stroke-dasharray="3 3" opacity=".6"/><circle r="4" fill="#10151c" stroke="#f4dcac" stroke-width="1.5"/><g class="cross-price-tag"><rect x="${W-R}" width="${R-3}" height="18" rx="2" fill="#465366"/><text x="${W-R+5}" fill="#edf2f9" font-size="${small?10:11}"></text></g><g class="cross-date-tag"><rect width="80" height="18" rx="2" fill="#39485b"/><text fill="#edf2f9" font-size="10" text-anchor="middle"></text></g></g>`;
-  s+=measurementOverlayMarkup(clip);
+  if(latest&&latest.price>=min&&latest.price<=max){const yy=y(latest.price),labelTop=Math.max(T,Math.min(priceBottom-18,yy-9));s+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#7da89c" stroke-dasharray="2 5" opacity=".5"/><rect x="${W-R}" y="${labelTop}" width="${R-3}" height="18" rx="2" fill="#2b6558"/><text x="${W-R+5}" y="${labelTop+13}" fill="#edf8f3" font-size="${small?10:11}">${unit==='usd'?money(latest.price):nf(latest.price*factor,1)}</text>`;}
+  s+=`<g id="${svg.id}-cross" pointer-events="none"><line class="cross-time" y1="${T}" y2="${bottom}" stroke="#afc4dd" stroke-dasharray="3 3" opacity=".6"/><line class="cross-price" clip-path="url(#${priceClip})" x1="${L}" x2="${W-R}" stroke="#afc4dd" stroke-dasharray="3 3" opacity=".6"/><circle clip-path="url(#${priceClip})" r="4" fill="#10151c" stroke="#f4dcac" stroke-width="1.5"/><g class="cross-price-tag" clip-path="url(#${axisClip})"><rect x="${W-R}" width="${R-3}" height="18" rx="2" fill="#465366"/><text x="${W-R+5}" fill="#edf2f9" font-size="${small?10:11}"></text></g><g class="cross-date-tag"><rect width="80" height="18" rx="2" fill="#39485b"/><text fill="#edf2f9" font-size="10" text-anchor="middle"></text></g></g>`;
+  s+=measurementOverlayMarkup(priceClip);
+  s+=priceAxisMarkup({left:W-R,right:W,top:T,bottom:priceBottom});
   svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.dataset.plotLeft=String(L);svg.dataset.plotRight=String(W-R);svg.dataset.plotTop=String(T);svg.dataset.plotBottom=String(bottom);svg.dataset.priceBottom=String(priceBottom);svg.parentElement?.style.setProperty('--plot-bottom-gap',`${H-bottom+6}px`);svg.parentElement?.style.setProperty('--plot-right-gap',`${R+7}px`);svg.dataset.scale=scale;svg.dataset.tool=tool;svg.dataset.chartType=chartType;svg.dataset.visiblePointCount=String(visible.length);svg.dataset.observedCandleCount=String(candleRows.length);svg.dataset.candleRendering=denseCandles?'batched':'individual';svg.innerHTML=s;
   const cross=svg.querySelector('[id$="-cross"]'),crossLine=cross.querySelector('.cross-time'),crossPrice=cross.querySelector('.cross-price'),crossDot=cross.querySelector('circle'),priceTag=cross.querySelector('.cross-price-tag'),dateTag=cross.querySelector('.cross-date-tag'),stateByDate=new Map(dateWindow(states,start,end).map(p=>[p.date,p]));
   let measurementState=measurement?{...measurement,endDate:measurement.endDate??null}:null;
-  const initialDate=tool==='measure'&&measurementState?(measurementState.endDate||measurementState.startDate):(selectedDate||split||visible.at(-1).date);
-  let active=nearest(visible,dayOf(initialDate)),pinned=false,cursor=active,lastHovered=-1,lastPointer=null;
-  const hoverInfo=(index,hovered)=>{const point=visible[index],previous=rows[nearest(rows,dayOf(point.date))-1],c=point.candle,v=volumeByDate.get(point.date),projected=projectedVolumeAt(point.date);return {date:point.date,price:point.price,displayedPrice:point.price*factor,changePrice:c?c.close-c.open:previous?point.price-previous.price:null,changePct:c?(c.close/c.open-1)*100:previous?(point.price/previous.price-1)*100:null,drawdownPct:c?null:point.drawdownPct??null,kind:split&&point.date>split?'simulated':'observed',...(v?{volume:v.volume,volumeSource,volumeUnit:'BTC',volumeStartDate:v.startDate||v.date,volumeEndDate:v.endDate||v.date}:{}),...(projected?{volume:projected.volume,volumeLower:projected.lower,volumeUpper:projected.upper,volumeKind:'scenario',volumeSource,volumeUnit:'BTC',volumeStartDate:projected.startDate,volumeEndDate:projected.endDate}:{}),...(c?{open:c.open,high:c.high,low:c.low,close:c.close,volume:c.volume,source:candleSource,product:'BTC-USD',interval:frequency==='weekly'?'1W':'1D',completed:true}:{}),lower:point.lower,upper:point.upper,marketState:stateByDate.get(point.date)?.state,marketStateLabel:plainState[stateByDate.get(point.date)?.state],cycleTiming:split&&point.date>split?cycleCalibration?.current:intervalAtDate(timingSeries,point.date),turn:turnAt(point.date),fib,hovered};};
+  const initialDate=tool==='measure'&&measurementState?(measurementState.endDate||measurementState.startDate):(selectedDate||split||selectionRows.at(-1).date);
+  let active=nearest(selectionRows,dayOf(initialDate)),pinned=false,cursor=active,lastHovered=-1,lastPointer=null;
+  const previousClosePoint=point=>{
+    if(point.candle){const previous=observedCandles[lowerBoundDate(observedCandles,point.candle.endDate,candleDate)-1];return previous?{date:candleDate(previous),price:previous.close}:null;}
+    let index=lowerBoundDate(rows,point.date)-1;
+    if(frequency==='weekly')while(index>=0&&new Date(`${rows[index].date}T00:00:00Z`).getUTCDay()!==0)index--;
+    const previous=rows[index];
+    // A model path never presents its first change as an observed market return.
+    return previous&&Boolean(split&&previous.date>split)===Boolean(split&&point.date>split)?previous:null;
+  };
+  const hoverInfo=(index,hovered)=>{const point=selectionRows[index],previous=previousClosePoint(point),c=point.candle,v=volumeByDate.get(point.date),projected=projectedVolumeAt(point.date);return {date:point.date,price:point.price,displayedPrice:point.price*factor,...barPriceChange(point.price,previous?.price,c?.open),previousCloseDate:previous?.date??null,changeInterval:frequency==='weekly'?'1W':'1D',drawdownPct:c?null:point.drawdownPct??null,kind:split&&point.date>split?'simulated':'observed',...(v?{volume:v.volume,volumeSource,volumeUnit:'BTC',volumeStartDate:v.startDate||v.date,volumeEndDate:v.endDate||v.date}:{}),...(projected?{volume:projected.volume,volumeLower:projected.lower,volumeUpper:projected.upper,volumeKind:'scenario',volumeSource,volumeUnit:'BTC',volumeStartDate:projected.startDate,volumeEndDate:projected.endDate}:{}),...(c?{open:c.open,high:c.high,low:c.low,close:c.close,volume:c.volume,source:candleSource,product:'BTC-USD',interval:frequency==='weekly'?'1W':'1D',completed:true}:{}),lower:point.lower,upper:point.upper,marketState:stateByDate.get(point.date)?.state,marketStateLabel:plainState[stateByDate.get(point.date)?.state],cycleTiming:split&&point.date>split?cycleCalibration?.current:intervalAtDate(timingSeries,point.date),turn:turnAt(point.date),fib,hovered};};
   const measurementMoney=value=>`$${nf(value,Math.abs(value)<1?6:2)}`;
   const measurementOverlay=createMeasurementOverlay(svg,{x:value=>xday(dayOf(value)),y,left:L,right:W-R,top:T,bottom:priceBottom,small,formatPrice:measurementMoney,formatDate:date,formatChange:percent,formatDuration:result=>`${result.deltaDays>0?'+':''}${result.deltaDays}일`});
   const lookupMeasurement=value=>{const point=rows[nearest(rows,value)],candle=candleByDate.get(point.date);return candle?{...point,price:candle.close}:point;};
   function renderMeasurement(preview=null){measurementOverlay.paint(measurePriceAnchors(measurementState,{lookup:lookupMeasurement,split,preview}),Boolean(measurementState&&!measurementState.endDate));}
   function anchorAt(index,event=null){
-    const row=visible[index],box=event?svg.getBoundingClientRect():null;
+    const row=selectionRows[index],box=event?svg.getBoundingClientRect():null;
     const pointerY=event?Math.max(T,Math.min(priceBottom,(event.clientY-box.top)/box.height*H)):undefined;
     const point=resolveMagnetPoint({row,pointerY,y,invertY:priceScale.invert,mode:magnet,ctrlKey:event?.ctrlKey,metaKey:event?.metaKey,thresholdPx:(event?.pointerType==='touch'?20:12)*(box?H/box.height:1)});
     return point?{...point,date:row.date,kind:split&&row.date>split?'simulated':'observed'}:null;
   }
 
-  const inspection=index=>{const p=visible[index],isFuture=Boolean(split&&p.date>split),isLong=isFuture&&(p.phase==='long-horizon'||p.kind==='conditional-long-horizon-path'),flow=stateByDate.get(p.date),event=visibleTurns.find(t=>t.date===p.date),fields=[{label:unit==='usd'?'가격 · 달러':'최근 관측 가격 = 100',value:unit==='usd'?money(p.price):nf(p.price*factor,1)},{label:'이전 최고가 대비',value:percent(p.drawdownPct)},{label:'가격 흐름',value:plainState[flow?.state]||'—'}];
+  const inspection=index=>{const p=selectionRows[index],isFuture=Boolean(split&&p.date>split),isLong=isFuture&&(p.phase==='long-horizon'||p.kind==='conditional-long-horizon-path'),flow=stateByDate.get(p.date),event=visibleTurns.find(t=>t.date===p.date),fields=[{label:unit==='usd'?'가격 · 달러':'최근 관측 가격 = 100',value:unit==='usd'?money(p.price):nf(p.price*factor,1)},{label:'이전 최고가 대비',value:percent(p.drawdownPct)},{label:'가격 흐름',value:plainState[flow?.state]||'—'}];
     if(p.candle){fields.splice(0,fields.length,{label:'시가 O',value:money(p.candle.open)},{label:'고가 H',value:money(p.candle.high)},{label:'저가 L',value:money(p.candle.low)},{label:'종가 C',value:money(p.candle.close)},{label:'거래량 · BTC',value:nf(p.candle.volume,4)},{label:'출처',value:`${candleSource} · BTC-USD`});}
     const volume=volumeByDate.get(p.date);if(!p.candle&&volume)fields.push({label:'거래량 · BTC',value:nf(volume.volume,4)},{label:'거래량 출처',value:`${volumeSource} · BTC/USD 현물`});
     const projected=projectedVolumeAt(p.date);
@@ -209,22 +229,23 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
     if(isLong&&Number.isFinite(p.baselinePrice))fields.push({label:'가치평가 기준 가격',value:money(p.baselinePrice)});
     if(isLong&&Number.isFinite(p.annualizedVolatilityPct))fields.push({label:'연환산 변동성 가정',value:`${nf(p.annualizedVolatilityPct,1)}%`});
     if(isLong&&Number.isFinite(p.realizedVolPct))fields.push({label:'가정 경로의 계산 변동성',value:`${nf(p.realizedVolPct,1)}%`});
-    return {label:`${date(p.date)}${event?` · ${event.type==='high'?'고점':'저점'}${isFuture?' 예시':''}`:''}`,date:p.date,kind:isFuture?'simulated':'observed',fields,note:(p.candle?`${candleSource} 실제 거래소의 완료 ${frequency==='weekly'?'주':'일'}봉입니다. 캔들 ${p.candle.startDate}–${p.candle.endDate} UTC. 과거 종가 선과 미래 가정의 연결 기준은 Coin Metrics이며 거래소 종가와 다를 수 있습니다.`:isLong?'가격선과 범위는 경제적 채택 가정에 따른 예시입니다. 가치평가 기준과 변동성 가정은 모델 입력이며, 가정 경로의 계산 변동성은 그 예시에서 따로 계산한 값입니다. 실제 미래의 실현 변동성이나 확률이 보정된 예측구간을 뜻하지 않습니다.':isFuture?'선택한 가정의 예시입니다. 가격 범위는 확률이 보정된 예측구간이 아닙니다.':event?`가격이 꺾인 날과, 반대 방향으로 ${nf(threshold*100)}% 이동해 확인한 날을 구분합니다.`:frequency==='weekly'?(retainedDates.size?'선은 주간 마지막 가격과 표시한 사이클 기준점의 일말 가격을 연결합니다. 선택한 값은 해당 날짜의 일말 가격입니다.':'선은 주간 마지막 가격, 선택한 값은 해당 날짜의 일말 가격입니다.'):`Coin Metrics의 하루 말 가격입니다. 장중 최고·최저가와 다를 수 있습니다.${volume?` 거래량은 ${volumeSource} BTC/USD 현물의 ${volume.startDate||volume.date}${volume.endDate?'–'+volume.endDate:''} UTC 합계이며 전 세계 거래량이 아닙니다.`:''}`)+(projected?` 거래량 점선은 ${volumeSource} BTC/USD 자료로 보정한 조건부 평균 거래량입니다. 음영은 가정 민감도이며 확률구간이 아닙니다. 달러 환산은 기준 가격 × 가정 BTC 수량으로, 실제 VWAP 거래대금이나 전 세계 합계가 아닙니다.`:''),...(projected?{sources:[{url:'https://github.com/twoimo/bitcoin-cycle-atlas/blob/main/docs/VOLUME_FORECAST_MODEL.md',title:'거래량 모형 · 과거 검증 · 장기 가정'}]}:{})};};
+    return {label:`${date(p.date)}${event?` · ${event.type==='high'?'고점':'저점'}${isFuture?' 예시':''}`:''}`,date:p.date,kind:isFuture?'simulated':'observed',fields,note:(p.candle?`${candleSource} 실제 거래소의 완료 ${frequency==='weekly'?'주':'일'}봉입니다. 캔들 ${p.candle.startDate}–${p.candle.endDate} UTC. 과거 종가 선과 미래 가정의 연결 기준은 Coin Metrics이며 거래소 종가와 다를 수 있습니다.`:isLong?'가격선과 범위는 경제적 채택 가정에 따른 예시입니다. 가치평가 기준과 변동성 가정은 모델 입력이며, 가정 경로의 계산 변동성은 그 예시에서 따로 계산한 값입니다. 실제 미래의 실현 변동성이나 확률이 보정된 예측구간을 뜻하지 않습니다.':isFuture?'선택한 가정의 예시입니다. 가격 범위는 확률이 보정된 예측구간이 아닙니다.':event?`가격이 꺾인 날과, 반대 방향으로 ${nf(threshold*100)}% 이동해 확인한 날을 구분합니다.`:frequency==='weekly'?(retainedDates.size?'선은 주간 마지막 가격과 표시한 사이클 기준점의 일말 가격을 연결합니다. 선택한 값은 선에 표시한 일말 가격이며, 변화율은 직전 완료 주 종가 대비입니다.':'선은 주간 마지막 가격, 선택한 값은 선에 표시한 일말 가격이며, 변화율은 직전 완료 주 종가 대비입니다.'):`Coin Metrics의 하루 말 가격입니다. 장중 최고·최저가와 다를 수 있습니다.${volume?` 거래량은 ${volumeSource} BTC/USD 현물의 ${volume.startDate||volume.date}${volume.endDate?'–'+volume.endDate:''} UTC 합계이며 전 세계 거래량이 아닙니다.`:''}`)+(projected?` 거래량 점선은 ${volumeSource} BTC/USD 자료로 보정한 조건부 평균 거래량입니다. 음영은 가정 민감도이며 확률구간이 아닙니다. 달러 환산은 기준 가격 × 가정 BTC 수량으로, 실제 VWAP 거래대금이나 전 세계 합계가 아닙니다.`:''),...(projected?{sources:[{url:'https://github.com/twoimo/bitcoin-cycle-atlas/blob/main/docs/VOLUME_FORECAST_MODEL.md',title:'거래량 모형 · 과거 검증 · 장기 가정'}]}:{})};};
   function mark(index,anchor=null,pointerY=null){
-    cursor=index;const p=visible[index],xx=x(p),tx=Math.max(L,Math.min(W-R-80,xx-40));
+    cursor=index;const p=selectionRows[index],xx=x(p),tx=Math.max(L,Math.min(W-R-80,xx-40));
     crossLine.setAttribute('x1',xx);crossLine.setAttribute('x2',xx);crossDot.setAttribute('cx',xx);
-    paintPriceCursor({horizontal:crossPrice,dot:crossDot,tag:priceTag,axis:priceScale,top:T,bottom:priceBottom,selectedPrice:anchor?.price??p.price,pointerY,formatPrice:value=>unit==='usd'?money(value):nf(value*factor,1)});
+    paintPriceCursor({horizontal:crossPrice,dot:crossDot,tag:priceTag,axis:priceScale,top:T,bottom:priceBottom,selectedPrice:anchor?.price??p.price,pointerY,formatPrice:cursorPrice});
+    if(!Number.isFinite(pointerY)&&((anchor?.price??p.price)<min||(anchor?.price??p.price)>max))for(const node of [crossPrice,crossDot,priceTag])node.setAttribute('visibility','hidden');
     dateTag.querySelector('rect').setAttribute('x',tx);dateTag.querySelector('rect').setAttribute('y',axisY-12);dateTag.querySelector('text').setAttribute('x',tx+40);dateTag.querySelector('text').setAttribute('y',axisY+1);dateTag.querySelector('text').textContent=p.date;
   }
 
-  function commit(index,pin=true,user=pin){lastHovered=-1;active=Math.max(0,Math.min(visible.length-1,index));pinned=pin;mark(active);if(tooltip)tooltip.hidden=true;onHover(hoverInfo(active,false));onInspect(inspection(active),{user,openPanel:pin});}
+  function commit(index,pin=true,user=pin){lastHovered=-1;active=Math.max(0,Math.min(selectionRows.length-1,index));pinned=pin;mark(active);if(tooltip)tooltip.hidden=true;onHover(hoverInfo(active,false));onInspect(inspection(active),{user,openPanel:pin});}
   function measure(index,anchor=null){
-    active=Math.max(0,Math.min(visible.length-1,index));const point=anchor||anchorAt(active);mark(active,point);onHover(hoverInfo(active,false));
+    active=Math.max(0,Math.min(selectionRows.length-1,index));const point=anchor||anchorAt(active);mark(active,point);onHover(hoverInfo(active,false));
     measurementState=advanceMeasurement(measurementState,point);
     renderMeasurement();measurementOverlay.showSnap(point);onMeasurement({...measurementState});
   }
 
-  function fromPointer(e){const target=e.target.closest?.('[data-date]');if(target)return nearest(visible,dayOf(target.dataset.date));const rect=svg.getBoundingClientRect(),px=(e.clientX-rect.left)/rect.width*W;return nearest(visible,minDay+(Math.max(L,Math.min(W-R,px))-L)/(W-L-R)*span);}
+  function fromPointer(e){const target=e.target.closest?.('[data-date]');if(target)return nearest(selectionRows,dayOf(target.dataset.date));const rect=svg.getBoundingClientRect(),px=(e.clientX-rect.left)/rect.width*W;return nearest(selectionRows,minDay+(Math.max(L,Math.min(W-R,px))-L)/(W-L-R)*span);}
   const inPlot=e=>{const box=svg.getBoundingClientRect(),px=(e.clientX-box.left)/box.width*W,py=(e.clientY-box.top)/box.height*H;return px>=L&&px<=W-R&&py>=T&&py<=bottom;};
   svg.onclick=e=>{hoverHandler.cancel();const interval=e.target.closest?.('[data-cycle-interval]');if(interval){onCycleInterval(interval.dataset.cycleInterval);return;}const cycle=e.target.closest?.('[data-cycle-marker]');if(cycle){onCycleMarker(cycle.dataset.cycleMarker);return;}const history=e.target.closest?.('[data-history-event]');if(history){onHistoricalEvent(history.dataset.historyEvent);return;}if(e.target.closest?.('[data-next-turn]')){onNextTurn();return;}if(tool==='pan'||!inPlot(e))return;if(tool==='measure'){const box=svg.getBoundingClientRect();if((e.clientY-box.top)/box.height*H>priceBottom)return;svg.focus({preventScroll:true});measure(fromPointer(e),anchorAt(fromPointer(e),e));return;}commit(fromPointer(e));};
   function pointerPreview(e){
@@ -248,16 +269,17 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
     const interval=e.target.closest?.('[data-cycle-interval]');if(interval&&['Enter',' '].includes(e.key)){e.preventDefault();e.stopPropagation();onCycleInterval(interval.dataset.cycleInterval);return;}
     const cycle=e.target.closest?.('[data-cycle-marker]');if(cycle&&['Enter',' '].includes(e.key)){e.preventDefault();e.stopPropagation();onCycleMarker(cycle.dataset.cycleMarker);return;}
     const history=e.target.closest?.('[data-history-event]');if(history&&['Enter',' '].includes(e.key)){e.preventDefault();e.stopPropagation();onHistoricalEvent(history.dataset.historyEvent);return;}
+    if(interval||cycle||history)return;
     if(e.shiftKey||e.altKey||e.ctrlKey||e.metaKey)return;
-    if(e.target.closest?.('[data-next-turn]')&&['Enter',' '].includes(e.key)){e.preventDefault();e.stopPropagation();onNextTurn();return;}
+    if(e.target.closest?.('[data-next-turn]')){if(['Enter',' '].includes(e.key)){e.preventDefault();e.stopPropagation();onNextTurn();}return;}
     if(tool==='measure'&&['Enter',' '].includes(e.key)){e.preventDefault();e.stopPropagation();if(!e.repeat)measure(cursor);return;}
     if(!['ArrowLeft','ArrowRight','Home','End','Escape'].includes(e.key))return;e.preventDefault();
     if(e.key==='Escape'){pinned=false;if(tooltip)tooltip.hidden=true;mark(active);if(measurementState){measurementState=null;renderMeasurement();onMeasurement(null);e.stopPropagation();}return;}
-    const index=e.key==='Home'?0:e.key==='End'?visible.length-1:active+(e.key==='ArrowRight'?1:-1)*(frequency==='weekly'&&chartType!=='candles'?7:1);
-    if(tool==='measure'){active=Math.max(0,Math.min(visible.length-1,index));mark(active);onHover(hoverInfo(active,false));if(measurementState&&!measurementState.endDate)renderMeasurement(anchorAt(active));}
+    const index=e.key==='Home'?0:e.key==='End'?selectionRows.length-1:active+(e.key==='ArrowRight'?1:-1);
+    if(tool==='measure'){active=Math.max(0,Math.min(selectionRows.length-1,index));mark(active);onHover(hoverInfo(active,false));if(measurementState&&!measurementState.endDate)renderMeasurement(anchorAt(active));}
     else commit(index,false,true);
   };
   renderMeasurement();
   if(tool==='measure'){mark(active);onHover(hoverInfo(active,false));}else commit(active,false);
-  return {getSelection({anchor}={}){const index=Number.isFinite(anchor)?nearest(visible,minDay+Math.max(0,Math.min(1,anchor))*span):cursor;const detail=inspection(index);return {label:detail.label,copyText:[detail.label,...detail.fields.map(field=>`${field.label}: ${field.value}`),detail.note].join('\n')};},selectDate(value){commit(nearest(visible,dayOf(value)));},previous(){const previous=visibleTurns.filter(p=>p.date<visible[active].date).at(-1);commit(previous?nearest(visible,dayOf(previous.date)):0);},next(){const next=visibleTurns.find(p=>p.date>visible[active].date);commit(next?nearest(visible,dayOf(next.date)):visible.length-1);},getDate(){return visible[active].date;},hasPrevious(){return visibleTurns.some(p=>p.date<visible[active].date);},hasNext(){return visibleTurns.some(p=>p.date>visible[active].date);}};
+  return {getPriceScale(){return {...priceScale,left:L,right:W-R};},getSelection({anchor}={}){const index=Number.isFinite(anchor)?nearest(selectionRows,minDay+Math.max(0,Math.min(1,anchor))*span):cursor;const detail=inspection(index);return {label:detail.label,copyText:[detail.label,...detail.fields.map(field=>`${field.label}: ${field.value}`),detail.note].join('\n')};},selectDate(value){commit(nearest(selectionRows,dayOf(value)));},previous(){const previous=visibleTurns.filter(p=>p.date<selectionRows[active].date).at(-1);commit(previous?nearest(selectionRows,dayOf(previous.date)):0);},next(){const next=visibleTurns.find(p=>p.date>selectionRows[active].date);commit(next?nearest(selectionRows,dayOf(next.date)):selectionRows.length-1);},getDate(){return selectionRows[active].date;},hasPrevious(){return visibleTurns.some(p=>p.date<selectionRows[active].date);},hasNext(){return visibleTurns.some(p=>p.date>selectionRows[active].date);}};
 }

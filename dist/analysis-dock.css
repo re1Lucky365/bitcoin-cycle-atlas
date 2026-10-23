@@ -3,11 +3,12 @@
 .chart-indicator-manager:has(:focus-visible){z-index:13;background:#101923f5;box-shadow:0 0 0 4px #101923f5}
 .chart-indicator-manager button,.analysis-window-heading button{display:grid;place-items:center;width:24px;height:24px;min-height:0;flex:none;margin:0;padding:4px;border:0;border-radius:3px;color:#91a8c4;background:transparent;cursor:pointer}
 .chart-indicator-manager button:hover,.analysis-window-heading button:hover{background:#29394f;color:#e1ebf8}
-.chart-indicator-manager svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.chart-indicator-manager svg,.analysis-window-heading button svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 /* Even the shortest plot keeps a usable row and access to the remaining values. */
 .chart-indicator-list{min-height:32px;max-height:min(220px,28dvh,max(0px,calc(var(--plot-height,700px) - var(--indicator-top,75px) - 150px)));overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#42536b99 transparent;padding:0 3px 0 0}
-.chart-indicator-manager .indicator-legend-toggle{display:block;width:auto;min-width:40px;height:26px;padding:3px 7px;margin-top:2px;color:#a3b9d1;background:#14202de8;font:inherit;font-size:10px;line-height:1.4;white-space:nowrap;text-shadow:none}
+.chart-indicator-manager .indicator-legend-toggle{display:grid;place-items:center;width:29px;min-width:29px;height:21px;min-height:21px;padding:2px 6px;margin-top:2px;color:#a3b9d1;background:#14202de8;border:1px solid #344255;border-radius:3px;text-shadow:none}
 .chart-indicator-manager .indicator-legend-toggle:hover{background:#25384e;color:#e1ebf8}
+.chart-indicator-manager[data-collapsed=true] .indicator-legend-toggle{margin-top:0}
 .indicator-row[hidden],.indicator-legend-toggle[hidden]{display:none!important}
 .indicator-readout-date{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;margin:0;padding:0;border:0}
 .indicator-readout-date[hidden]{display:none}
@@ -73,8 +74,6 @@
 .indicator-library-favorite:hover{background:#29394f;color:#e2c783}
 .indicator-library-favorite svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linejoin:round}
 .indicator-library-favorite[aria-pressed=true]{color:#e1bd6e}.indicator-library-favorite[aria-pressed=true] svg{fill:#e1bd6e35}
-.indicator-primary-option{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:40px;margin:3px 0 8px;color:#bdd0e8;font-size:11px}
-.indicator-primary-option select{width:220px;max-width:58%;min-width:0;height:36px;min-height:36px;padding:5px 24px 5px 8px;border:1px solid #344b66;border-radius:5px;background:#111d2b;color:#d5e6fa;font:inherit;font-size:11px}
 .indicator-template-panel{overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;min-height:80px;padding:2px 24px 14px;flex:1}
 .indicator-template-form{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px 8px;margin:0}
 .indicator-template-form label{grid-column:1/-1;margin:0;color:#bfd0e7;font-size:12px}
@@ -94,7 +93,11 @@
    no indicator membership, visibility or explicit fold state is changed. */
 .analysis-indicator-windows{--analysis-stack-top:78px;--analysis-bottom-gap:60px;--analysis-safe-bottom:min(var(--analysis-bottom-gap),max(8px,calc(var(--plot-height,700px) - 338px)));position:absolute;top:max(8px,min(var(--analysis-stack-top),calc(var(--plot-height,700px) - var(--analysis-safe-bottom) - 330px)));right:10px;bottom:var(--analysis-safe-bottom);width:min(640px,62%);max-width:calc(100% - 20px);z-index:12;display:flex;flex-direction:column;gap:10px;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scroll-padding-top:52px;pointer-events:auto;padding:0 3px 3px 0;box-sizing:border-box}
 .analysis-indicator-windows[hidden],.analysis-indicator-window[hidden],.chart-indicator-list[hidden],.chart-indicator-manager[hidden]{display:none!important}
+.analysis-indicator-windows[data-minimized-all=true]{bottom:auto;max-height:calc(var(--plot-height,700px) - 16px)}
 .analysis-indicator-window{pointer-events:auto;flex:0 0 auto;display:flex;flex-direction:column;height:auto;min-height:330px;max-height:none;overflow:visible;box-sizing:border-box;background:#101923f5;border:1px solid #34465d;border-radius:7px;box-shadow:0 8px 30px #0006;color:#c7d6e8;padding:0 9px 8px;gap:5px}
+.analysis-window-body{display:contents}.analysis-window-body[hidden]{display:none!important}
+.analysis-indicator-window[data-minimized=true]{min-height:0;padding-bottom:0;gap:0}
+.analysis-indicator-window[data-minimized=true]>.analysis-window-heading{border-bottom:0}
 .analysis-indicator-window[data-active=true]{border-color:#5d84b2}
 .analysis-window-heading{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:5px;min-height:32px;flex:none;border-bottom:1px solid #2a3b50;margin:0 -9px;padding:3px 7px 3px 11px;background:#172231}
 .analysis-window-heading h3{font-size:11px;line-height:1.5;margin:0;font-weight:600;color:#d6e5f6}
