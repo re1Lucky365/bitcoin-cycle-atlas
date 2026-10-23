@@ -1,5 +1,5 @@
 import { DATA_UPDATE } from './data-update.js?v=1.11.0';
-import { mountWorkbenchChrome } from './workbench-chrome.js?v=1.11.0';
+import { mountWorkbenchChrome } from './workbench-chrome.js?v=1.11.0-milestones.2';
 import { mountResearchWorkbench } from './research-workbench.js?v=1.11.0';
 import { mountAnalysisIndicators } from './analysis-dock.js?v=1.11.0-indicators.1';
 import { mountIndicatorWorkbench } from './indicator-workbench.js?v=1.11.0-milestones.1';
@@ -185,7 +185,7 @@ export function initViewportWorkspace(icon) {
     const changed=reader.hidden||reader.dataset.kind!==kind;
     if(reader.hidden||focus)rememberOpener(trigger);
     returnControls();
-    title.textContent=heading;title.title=heading;reader.dataset.kind=kind;actions.hidden=kind!=='selection'||selectedKind==='history'||selectedOwner==='countdown';
+    title.textContent=heading;title.title=heading;reader.dataset.kind=kind;actions.hidden=kind!=='selection'||selectedKind==='history'||selectedOwner==='countdown'||selectedOwner==='cycle';
     reader.hidden=false;workspace.dataset.detailsOpen='true';
     if(!overlay.matches)sizeReader(parseFloat(workspace.style.getPropertyValue('--detail-width'))||320);
     if(liveControls.has(kind)){readerPager.suspend();body.dataset.controls=kind;body.replaceChildren(liveControls.get(kind));}

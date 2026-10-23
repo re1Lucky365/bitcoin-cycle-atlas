@@ -1,6 +1,6 @@
 import { CHART_INTERVALS,isIntradayInterval } from './ohlc-data.js?v=1.11.0';
 import { MAGNET_MODES, MAGNET_LABELS, normalizeMagnetMode } from './chart-magnet.js?v=1.11.0';
-import { mountWorkspaceTools } from './workspace-tools.js?v=1.11.0';
+import { mountWorkspaceTools } from './workspace-tools.js?v=1.11.0-milestones.2';
 const $ = selector => document.querySelector(selector);
 
 const paths = {

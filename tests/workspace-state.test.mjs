@@ -16,6 +16,28 @@ test('sharing a panned indexed workspace retains hidden indicators and the mobil
   assert.equal(restored.has('page'),false);assert.equal(restored.has('utm_source'),false);
 });
 
+test('cycle period selection and a collapsed panel survive sharing and saved-workspace restoration',()=>{
+  const params=new URLSearchParams('granularity=weekly&cycle-relation=bottom-cycle-top&cycle-panel=closed');
+  const cleaned=new URLSearchParams(cleanWorkspaceQuery(params.toString()));
+  assert.equal(cleaned.get('cycle-relation'),'bottom-cycle-top');
+  assert.equal(cleaned.get('cycle-panel'),'closed');
+
+  const shared=workspaceQuery(params,{frequency:'weekly',unit:'indexed',range:{start:'2022-11-09',end:'2030-08-15'}});
+  const sharedParams=new URLSearchParams(shared);
+  assert.equal(sharedParams.get('cycle-relation'),'bottom-cycle-top');
+  assert.equal(sharedParams.get('cycle-panel'),'closed');
+  assert.deepEqual(readWorkspaceViewport(sharedParams),{unit:'indexed',range:{start:'2022-11-09',end:'2030-08-15'}});
+
+  const storage=memory();
+  assert.equal(saveWorkspace(storage,[],{name:'저점에서 고점까지',query:shared}).ok,true);
+  const restored=readWorkspaces(storage);
+  assert.equal(restored.length,1);
+  assert.equal(restored[0].query,shared);
+  const restoredParams=new URLSearchParams(restored[0].query);
+  assert.equal(restoredParams.get('cycle-relation'),'bottom-cycle-top');
+  assert.equal(restoredParams.get('cycle-panel'),'closed');
+});
+
 test('daily viewport rejects impossible dates and reversed bounds without blocking the page',()=>{
   for(const range of [{start:'2026-02-30',end:'2026-04-01'},{start:'2026-05-01',end:'2026-04-01'},{start:'2026-01-01',end:'2026-01-01'},{start:'<script>',end:'2027-01-01'}])assert.equal(normalizeWorkspaceRange(range),null);
   const params=new URLSearchParams('unit=anything&view-start=2026-02-30&view-end=2026-04-01');
