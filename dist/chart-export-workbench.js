@@ -1,4 +1,4 @@
-import {createObservedChartCsv,selectObservedChartRows,createConditionalChartCsv,createResearchSeriesCsv,createChartSvgExport,createChartPngFromSvg,chartExportRange} from './chart-export.js?v=1.13.0-research.1';
+import {createObservedChartCsv,selectObservedChartRows,createConditionalChartCsv,createResearchSeriesCsv,createChartSvgExport,createChartPngFromSvg,chartExportRange} from './chart-export.js?v=1.14.1-png.1';
 import {mountDialogViewport} from './dialog-viewport.js?v=1.14.0-mobile.1';
 
 const iso=value=>{const time=typeof value==='number'?value*1000:Date.parse(value);return Number.isFinite(time)?new Date(time).toISOString():null;};

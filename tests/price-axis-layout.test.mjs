@@ -106,7 +106,8 @@ test('font and fitted bounds survive the actual SVG export and PNG input seriali
   let imageSource;doc.fonts={ready:Promise.resolve()};doc.defaultView.URL={createObjectURL:blob=>{imageSource=blob;return 'blob:axis';},revokeObjectURL(){}};
   doc.defaultView.DOMParser=class{parseFromString(text){const root=text.match(/<svg\s[^>]+>/)[0];return {documentElement:{getAttribute:name=>root.match(new RegExp(` ${name}="([^"]+)"`))?.[1]}};}};
   doc.defaultView.Image=class{set src(_value){queueMicrotask(()=>this.onload());}};
-  doc.createElement=()=>({getContext:()=>({drawImage(){}}),toBlob:callback=>callback(new Blob(['png-boundary'],{type:'image/png'}))});
+  // Serialization seam only; received PNG pixels are verified separately.
+  doc.createElement=()=>({getContext:()=>({drawImage(){},getImageData(){return {data:new Uint8ClampedArray([16,21,28,255])};}}),toBlob:callback=>callback(new Blob(['png-boundary'],{type:'image/png'}))});
   await createChartPngExport(svg);const pngInput=await imageSource.text();for(const label of labels(pngInput))contained(label,320);
   const csv=createObservedChartCsv({candles:h.candles,range:{start:first,end:first+7200},frequency:'1h',source:'Coinbase'});assert.ok(csv.includes(String(h.candles.at(-1).close)));assert.equal(h.candles.at(-1).close,1234567890.123456);
 });

@@ -24,7 +24,7 @@ import { analyzeMarketStructure, computeRollingStates, detectDirectionalChanges,
 import { utcDay, dateFromDay } from './cycle-engine.js?v=1.11.0';
 import { shiftCalendarMonths } from './cycle-timing.js?v=1.11.0';
 import { chartPresetRange, DEFAULT_CHART_SPAN, CHART_SPANS } from './chart-presets.js?v=1.11.0';
-import { createChartSvgExport } from './chart-export.js?v=1.13.0-research.1';
+import { createChartSvgExport } from './chart-export.js?v=1.14.1-png.1';
 import { readWorkspaceViewport, readWorkspacePriceDomain, readWorkspaceAxisOptions, writeWorkspaceViewport, workspaceQuery } from './workspace-state.js?v=1.14.0-mobile.1';
 import { normalizePriceDomain } from './price-axis.js?v=1.14.0-mobile.1';
 import { clearChartHover } from './chart-hover.js?v=1.12.1-cursor-hud.1';
@@ -32,7 +32,7 @@ import { PRICE_UNITS, isStartPriceUnit, formatDisplayPrice } from './price-displ
 import { transitionViewport } from './chart-view-policy.js?v=1.14.0-mobile.1';
 import { createWorkspaceHistory, captureHistoryCommand, historyShortcut } from './workspace-history.js?v=1.13.0-research.1';
 import { mountChartTouchTracking } from './chart-touch-tracking.js?v=1.14.0-mobile.1';
-import { mountChartExportWorkbench } from './chart-export-workbench.js?v=1.14.0-mobile.1';
+import { mountChartExportWorkbench } from './chart-export-workbench.js?v=1.14.1-png.1';
 import { readResearchAnnotations, writeResearchAnnotations, changeResearchAnnotations } from './research-annotations.js?v=1.13.0-research.1';
 import { mountResearchAnnotationsWorkbench } from './research-annotations-workbench.js?v=1.13.0-research.1';
 

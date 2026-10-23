@@ -63,8 +63,8 @@ class VectorNode {
   querySelectorAll(selector){const selectors=selector.split(',').map(item=>item.trim()),matches=[];for(const child of this.children){if(selectors.some(item=>child.matches(item)))matches.push(child);matches.push(...child.querySelectorAll(selector));}return matches;}
 }
 
-function rasterFixture({imageError=false,blobError=false}={}){
-  const calls={revoked:[],draws:0},canvas={width:0,height:0,getContext:()=>({drawImage(){calls.draws++;}}),toBlob:callback=>callback(blobError?null:new Blob(['raster'],{type:'image/png'}))};
+function rasterFixture({imageError=false,blobError=false,readbackError=false,pixelProvider=null,pixels=new Uint8ClampedArray([16,21,28,255])}={}){
+  const calls={revoked:[],draws:0,reads:0,readRects:[],encodes:0},canvas={width:0,height:0,getContext:(type,options)=>{calls.contextType=type;calls.contextOptions=options;return {drawImage(){calls.draws++;},getImageData(x,y,width,height){calls.reads++;const rect={x,y,width,height};calls.readRects.push(rect);if(readbackError)throw new Error('readback unavailable');return {data:pixelProvider?pixelProvider(rect):pixels};}};},toBlob:callback=>{calls.encodes++;callback(blobError?null:new Blob(['raster'],{type:'image/png'}));}};
   const serialize=node=>`<${node.tagName}${node.attributes.map(({name,value})=>` ${name}="${String(value).replaceAll('"','&quot;')}"`).join('')}>${node.textContent}${node.children.map(serialize).join('')}</${node.tagName}>`;
   const doc={fonts:{ready:Promise.resolve()},createElement:()=>canvas,createElementNS:(_ns,tag)=>new VectorNode(tag,doc),defaultView:{
     XMLSerializer:class{serializeToString(node){return serialize(node);}},
@@ -78,8 +78,32 @@ function rasterFixture({imageError=false,blobError=false}={}){
 
 test('PNG exports the source-labelled vector, releases its blob URL and clears the large canvas',async()=>{
   const f=rasterFixture(),blob=await createChartPngExport(f.svg,{title:'BTCUSD · USD · 로그 · 기준 가정 · UTC',note:'조건부 시나리오'});
-  assert.equal(blob.type,'image/png');assert.equal(f.calls.draws,1);
+  assert.equal(blob.type,'image/png');assert.equal(f.calls.draws,1);assert.equal(f.calls.reads,1);assert.equal(f.calls.encodes,1);
+  assert.equal(f.calls.contextType,'2d');assert.deepEqual(f.calls.contextOptions,{willReadFrequently:true});
   assert.deepEqual(f.calls.revoked,['blob:test-chart']);assert.equal(f.canvas.width,0);assert.equal(f.canvas.height,0);
+});
+
+test('fully transparent PNG readbacks cannot be encoded or reported as a saved image',async()=>{
+  for(const pixels of [new Uint8ClampedArray(8),new Uint8ClampedArray([255,100,20,0])]){
+    const f=rasterFixture({pixels});await assert.rejects(createChartPngExport(f.svg),/빈 이미지.*SVG 저장/);
+    assert.equal(f.calls.draws,1);assert.ok(f.calls.reads>1);assert.equal(f.calls.encodes,0);assert.ok(f.calls.readRects.every(rect=>rect.height<=16&&rect.width<=4096));
+    assert.deepEqual(f.calls.revoked,['blob:test-chart']);assert.equal(f.canvas.width,0);assert.equal(f.canvas.height,0);
+  }
+});
+
+test('PNG readback scans later bounded strips when the first rows are transparent',async()=>{
+  const f=rasterFixture({pixelProvider:({y})=>new Uint8ClampedArray(y===0?[0,0,0,0]:[24,80,120,255])}),blob=await createChartPngExport(f.svg);
+  assert.equal(blob.type,'image/png');assert.equal(f.calls.reads,2);assert.equal(f.calls.encodes,1);assert.ok(f.calls.readRects.every(rect=>rect.height<=16));
+});
+
+test('an unreadable PNG canvas provides an SVG fallback without encoding and releases resources',async()=>{
+  const f=rasterFixture({readbackError:true});await assert.rejects(createChartPngExport(f.svg),/픽셀.*SVG 저장/);
+  assert.equal(f.calls.encodes,0);assert.deepEqual(f.calls.revoked,['blob:test-chart']);assert.equal(f.canvas.width,0);assert.equal(f.canvas.height,0);
+});
+
+test('a faint painted alpha is valid rather than being rejected for lacking full opacity',async()=>{
+  const f=rasterFixture({pixels:new Uint8ClampedArray([255,0,0,1])}),blob=await createChartPngExport(f.svg);
+  assert.equal(blob.type,'image/png');assert.equal(f.calls.encodes,1);assert.deepEqual(f.calls.revoked,['blob:test-chart']);
 });
 
 test('failed PNG decoding or encoding provides an SVG fallback and still releases its resources',async()=>{

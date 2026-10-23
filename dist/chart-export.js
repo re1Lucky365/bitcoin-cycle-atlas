@@ -142,10 +142,20 @@ export async function createChartPngFromSvg(vector,doc){
   canvas.width=size.width;canvas.height=size.height;
   let url=null;
   try{
-    const context=canvas.getContext('2d');if(!context)throw new Error('이미지를 만들 수 없습니다. SVG 저장을 사용해 주세요.');
+    // Export needs stable readback, not an accelerated display surface.
+    const context=canvas.getContext('2d',{willReadFrequently:true});if(!context)throw new Error('이미지를 만들 수 없습니다. SVG 저장을 사용해 주세요.');
     const image=new view.Image();url=view.URL.createObjectURL(new Blob([vector],{type:'image/svg+xml;charset=utf-8'}));
     await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=()=>reject(new Error('차트 이미지 변환에 실패했습니다. SVG 저장을 사용해 주세요.'));image.src=url;});
     context.drawImage(image,0,0,size.width,size.height);
+    // Inspect bounded strips, not another full-size RGBA allocation.
+    let painted=false;
+    try{
+      for(let row=0;row<size.height&&!painted;row+=16){
+        const pixels=context.getImageData(0,row,size.width,Math.min(16,size.height-row)).data;
+        for(let index=3;index<pixels.length;index+=4)if(pixels[index]>0){painted=true;break;}
+      }
+    }catch(cause){throw new Error('PNG 픽셀을 확인할 수 없습니다. SVG 저장을 사용해 주세요.',{cause});}
+    if(!painted)throw new Error('빈 이미지를 PNG로 저장하지 않았습니다. SVG 저장을 사용해 주세요.');
     return await new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('PNG 파일을 만들지 못했습니다. SVG 저장을 사용해 주세요.')),'image/png'));
   }finally{if(url)view.URL.revokeObjectURL(url);canvas.width=0;canvas.height=0;}
 }
