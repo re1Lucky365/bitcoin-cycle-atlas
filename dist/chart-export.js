@@ -54,7 +54,7 @@ export function createChartSvgExport(svg,{title='BTCUSD',readout='',source='',no
   function copyChart(sourceChart,y,chartHeight){
     const clone=sourceChart.cloneNode(true);clone.removeAttribute('id');clone.removeAttribute('class');clone.removeAttribute('hidden');clone.removeAttribute('tabindex');clone.setAttribute('x','0');clone.setAttribute('y',String(y));clone.setAttribute('width',String(width));clone.setAttribute('height',String(chartHeight));
     clone.removeAttribute('style');
-    for(const node of clone.querySelectorAll('[id$="-cross"],.history-event-preview,.cycle-marker-preview,.chart-magnet-preview,.chart-snap-feedback,.chart-measurement[data-pending="true"],script,foreignObject'))node.remove();
+    for(const node of clone.querySelectorAll('[id$="-cross"],.history-event-preview,.cycle-marker-preview,.cycle-interval-preview,.chart-magnet-preview,.chart-snap-feedback,.chart-measurement[data-pending="true"],script,foreignObject'))node.remove();
     for(const node of [clone,...clone.querySelectorAll('*')]){
       node.removeAttribute('tabindex');node.removeAttribute('role');
       for(const attr of [...node.attributes])if(attr.name.startsWith('on'))node.removeAttribute(attr.name);

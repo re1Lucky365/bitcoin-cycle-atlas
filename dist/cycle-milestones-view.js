@@ -1,6 +1,6 @@
 import { utcDay } from './cycle-engine.js?v=1.11.0';
 import { shiftCalendarMonths } from './cycle-timing.js?v=1.11.0';
-import { MILESTONE_TYPES, INTERVAL_RELATIONS } from './cycle-milestones.js?v=1.11.0-milestones.3';
+import { MILESTONE_TYPES, INTERVAL_RELATIONS } from './cycle-milestones.js?v=1.11.0-milestones.4';
 
 /** Pure presentation: all dates, prices and classifications come from the
  * milestone engine. Zoom changes geometry and label density, never endpoints. */
@@ -232,7 +232,11 @@ export function cycleIntervalsMarkup({ intervals = [], start, end, width = 1000,
 }
 
 export function cycleLegendMarkup() {
-  return `<div class="cycle-milestone-legend cycle-legend" role="group" aria-label="사이클 기준점 색상 범례">${MILESTONE_TYPES.map(type => `<span class="cycle-legend-item" data-milestone-type="${esc(type.id)}" title="${esc(type.description || type.label)}"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6" fill="${type.color}" fill-opacity=".17" stroke="${type.color}" stroke-width="1.2"/></svg><span>${esc(type.label)}</span></span>`).join('')}<span class="cycle-legend-status cycle-legend-note">실선 원 · 관측 사후 기준 / 점선 원 · 잠정·가정</span></div>`;
+  const samples = [
+    { dashed: false, name: '실선 원과 기간선', label: '실선 · 관측 사후 기준' },
+    { dashed: true, name: '점선 원과 기간선', label: '점선 · 잠정·가정' },
+  ].map(sample => `<span class="cycle-style-sample"><svg width="30" height="16" viewBox="0 0 30 16" role="img" aria-label="${sample.name}"><circle cx="6" cy="8" r="4.8" fill="none" stroke="currentColor" stroke-width="1.2"${sample.dashed ? ' stroke-dasharray="2 2"' : ''}/><path d="M15,8H29" fill="none" stroke="currentColor" stroke-width="1.2"${sample.dashed ? ' stroke-dasharray="3 2"' : ''}/></svg><span>${sample.label}</span></span>`).join('');
+  return `<div class="cycle-milestone-legend cycle-legend" role="group" aria-label="사이클 기준점 색상 범례">${MILESTONE_TYPES.map(type => `<span class="cycle-legend-item" data-milestone-type="${esc(type.id)}" title="${esc(type.description || type.label)}"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="${type.id === 'pit-stop' ? 4.68 : 6}" fill="${type.color}" fill-opacity=".17" stroke="${type.color}" stroke-width="1.2"/></svg><span>${esc(type.label)}</span></span>`).join('')}<span class="cycle-legend-status cycle-legend-note" role="group" aria-label="원과 기간선의 상태"><span class="cycle-legend-status-label">원·기간선</span>${samples}</span></div>`;
 }
 
 /** The image's printed numbers are source claims, never current measurements. */

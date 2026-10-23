@@ -60,18 +60,18 @@
     })();
   </script>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./styles.css?v=1.11.0">
+  <link rel="stylesheet" href="./styles.css?v=1.11.0-milestones.4">
   <link rel="stylesheet" href="./compact.css?v=1.11.0">
   <link rel="stylesheet" href="./outlook.css?v=1.11.0">
   <link rel="stylesheet" href="./lab.css?v=1.11.0">
   <link rel="stylesheet" href="./atlas.css?v=1.11.0">
   <link rel="stylesheet" href="./viewport.css?v=1.11.0">
   <link rel="stylesheet" href="./chart-details-panel.css?v=1.11.0">
-  <link rel="stylesheet" href="./analysis-dock.css?v=1.11.0-milestones.3">
+  <link rel="stylesheet" href="./analysis-dock.css?v=1.11.0-milestones.4">
   <link rel="stylesheet" href="./chart-magnet.css?v=1.11.0">
   <link rel="stylesheet" href="./mobile-workspace.css?v=1.11.0-indicators.1">
   <link rel="stylesheet" href="./workspace-tools.css?v=1.11.0">
-  <link rel="stylesheet" href="./cycle-milestones.css?v=1.11.0-milestones.3">
+  <link rel="stylesheet" href="./cycle-milestones.css?v=1.11.0-milestones.4">
 </head>
 <body>
   <div id="atlas-boot-shell">
@@ -175,10 +175,13 @@
           </div>
           <div class="lab-chart-meta"><span id="lab-chart-title">가격과 미래 흐름</span><span id="atlas-axis-note">달러 · 같은 상승률은 같은 높이</span></div>
           <div id="lab-chart-stage" class="lab-chart-stage atlas-chart-stage"><svg id="lab-chart" role="group" tabindex="0" aria-label="실제 비트코인 가격과 미래 가정의 그래프. 누르거나 좌우 방향키로 값을 확인하세요."></svg><svg id="atlas-analysis-chart" role="img" tabindex="0" aria-label="과거 사이클 비교 그래프. 누르거나 좌우 방향키로 값을 확인하세요." hidden></svg><div id="lab-tooltip" class="lab-tooltip" hidden></div></div>
-          <section id="atlas-cycle-panel" class="atlas-cycle-panel" aria-label="사이클 주요 지점 사이의 기간 비교">
-            <header class="cycle-panel-heading"><h2>사이클 기간 <small>같은 시간축 · 9가지 관계</small></h2><div class="cycle-panel-actions"><select id="atlas-cycle-relation" aria-label="표시할 사이클 기간 관계"><option value="all">모든 기간 관계</option></select><button id="atlas-cycle-overview" type="button" title="관측과 현재 가정의 모든 사이클 기준점을 한 화면에 보기">전체 사이클</button><button id="atlas-cycle-toggle" type="button" aria-expanded="true" aria-controls="atlas-cycle-body">접기</button></div></header>
-            <div id="atlas-cycle-selection" class="cycle-panel-selection" hidden><p id="atlas-cycle-selection-summary" aria-live="polite"></p><div class="cycle-selection-actions"><button id="atlas-cycle-focus" type="button">전체 구간 보기</button><button id="atlas-cycle-clear" type="button">선택 해제</button></div></div>
-            <div id="atlas-cycle-body" class="cycle-panel-body"><div id="atlas-cycle-timeline" class="cycle-timeline" aria-label="사이클 기간 차트"></div><p id="atlas-cycle-note" class="cycle-panel-note">관측 날짜로 기간을 계산하고 있습니다.</p><details class="cycle-reference"><summary>첨부 이미지와 계산 기준 비교</summary><div id="atlas-cycle-reference"></div></details></div>
+          <section id="atlas-cycle-panel" class="cycle-chart-controls" aria-label="가격 그래프 안의 사이클 기간 표시 설정">
+            <details id="atlas-cycle-options"><summary title="가격 그래프 안의 기간선 · 관계 선택·원본 비교">기간선</summary><div class="cycle-chart-menu">
+              <div class="cycle-panel-heading"><h2>차트 안 사이클 기간 <small>9가지 관계</small></h2><button id="atlas-cycle-toggle" type="button" aria-pressed="true" aria-controls="lab-chart">기간선 숨기기</button></div>
+              <div class="cycle-panel-actions"><select id="atlas-cycle-relation" aria-label="표시할 사이클 기간 관계"><option value="all">모든 기간 관계</option></select><button id="atlas-cycle-overview" type="button" title="관측과 현재 가정의 모든 사이클 기준점을 한 화면에 보기">전체 사이클</button></div>
+              <div id="atlas-cycle-selection" class="cycle-panel-selection" hidden><p id="atlas-cycle-selection-summary" aria-live="polite"></p><div class="cycle-selection-actions"><button id="atlas-cycle-focus" type="button">전체 구간 보기</button><button id="atlas-cycle-clear" type="button">선택 해제</button></div></div>
+              <p id="atlas-cycle-note" class="cycle-panel-note">기간선을 선택하면 양 끝점과 정확한 날짜·경과일을 확인할 수 있습니다.</p><details class="cycle-reference"><summary>첨부 이미지와 계산 기준 비교</summary><div id="atlas-cycle-reference"></div></details>
+            </div></details>
           </section>
           <div class="lab-chart-foot"><div id="atlas-chart-legend" class="lab-legend"></div><span id="atlas-chart-caveat" class="lab-caveat">미래는 가정에 따른 예시</span></div>
           <div class="atlas-inspector" aria-label="선택한 날짜와 구간의 값">
@@ -187,7 +190,7 @@
           </div>
           <div id="atlas-event-rail" class="atlas-event-rail" aria-label="주요 미래 시점"></div>
         </section>
-        <div class="atlas-under-chart"><p id="atlas-chart-note">흰 실선은 실제 가격, 금색 점선은 미래 가정의 예시입니다. 그래프를 눌러 자세히 보세요.</p><details class="atlas-guide"><summary>차트 읽는 법</summary><div><p><strong>실선 = 실제 가격.</strong> 점선은 선택한 가정으로 만든 예시이며, 그날 그 가격이 된다는 예측은 아닙니다.</p><p><strong>고점·저점은 나중에 확인됩니다.</strong> 반대 방향으로 12% 움직인 뒤 확인하므로, 가격이 꺾인 날과 확인한 날을 나눠 보여 줍니다.</p><p><strong>장기 전망은 자동으로 이어집니다.</strong> 검증한 출처의 가장 먼 목표 연도까지 표시합니다. 연말 가치평가 기준은 고점·저점 날짜 예측이 아닙니다.</p><p><strong>음영은 수요·채택 가정의 범위입니다.</strong> 확률 80%를 뜻하지 않으며 실제 가격은 범위를 벗어날 수 있습니다. 2050년까지의 새 모형은 아직 미래 적중률이 검증되지 않았습니다.</p><p><strong>세로축은 상승률을 비교하는 눈금입니다.</strong> $10에서 $20, $100에서 $200처럼 두 배 상승하면 같은 높이만큼 이동합니다.</p></div></details></div>
+        <div class="atlas-under-chart"><p id="atlas-chart-note">흰 실선은 실제 가격, 금색 점선은 미래 가정의 예시입니다. 그래프를 눌러 자세히 보세요.</p><details class="atlas-guide"><summary>차트 읽는 법</summary><div><p><strong>실선 = 실제 가격.</strong> 금색 가격 점선은 선택한 가정으로 만든 예시이며, 그날 그 가격이 된다는 예측은 아닙니다.</p><p><strong>고점·저점은 나중에 확인됩니다.</strong> 반대 방향으로 12% 움직인 뒤 확인하므로, 가격이 꺾인 날과 확인한 날을 나눠 보여 줍니다.</p><p><strong>장기 전망은 자동으로 이어집니다.</strong> 검증한 출처의 가장 먼 목표 연도까지 표시합니다. 연말 가치평가 기준은 고점·저점 날짜 예측이 아닙니다.</p><p><strong>음영은 수요·채택 가정의 범위입니다.</strong> 확률 80%를 뜻하지 않으며 실제 가격은 범위를 벗어날 수 있습니다. 2050년까지의 새 모형은 아직 미래 적중률이 검증되지 않았습니다.</p><p><strong>세로축은 상승률을 비교하는 눈금입니다.</strong> $10에서 $20, $100에서 $200처럼 두 배 상승하면 같은 높이만큼 이동합니다.</p></div></details></div>
         <div id="atlas-model-info" hidden></div>
         <details id="atlas-exact-details" class="lab-details"><summary>정확한 수치 · 계산식 · 과거 검증</summary><div class="lab-details-body"><div class="lab-section-head"><h2>미래 가정의 주요 날짜</h2><div class="lab-segmented"><button data-lab-events="macro" aria-pressed="true">가치평가 기준</button><button data-lab-events="local" aria-pressed="false">예시의 고저점</button></div></div><div class="lab-table-scroll"><table class="lab-table"><thead id="lab-events-head"></thead><tbody id="lab-events-body"></tbody></table></div><div id="lab-events-foot" class="lab-table-foot"></div><div id="lab-method"></div><p><a href="https://github.com/twoimo/bitcoin-cycle-atlas/blob/main/docs/MARKET_STRUCTURE_METHOD.md" target="_blank" rel="noopener noreferrer">과거 구간·월·분기·되돌림 계산 근거 ↗</a> · <a href="?page=compare&amp;legacy=1">이전 상세 분석 도구 ↗</a></p></div></details>
         <p id="lab-error" class="lab-error" role="alert" hidden></p>
@@ -275,6 +278,6 @@
   <dialog id="method-dialog" aria-labelledby="method-title"><div class="dialog-top"><span class="eyebrow">DATA & METHODOLOGY</span><button id="close-method" class="icon-button" aria-label="방법론 닫기"><span data-icon="close"></span></button></div><h2 id="method-title">방법론과 출처</h2><p class="dialog-lead">차트의 출발점부터 가격의 정의까지, 비교에 사용한 기준입니다.</p><div id="method-content"></div><button id="method-done" class="primary-button">확인했습니다</button></dialog>
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
   <dialog id="evidence-dialog" aria-labelledby="evidence-detail-title"><div class="dialog-top"><span class="eyebrow">EVIDENCE & LIMITS</span><button id="evidence-close" class="icon-button" aria-label="자료 상세 닫기"><span data-icon="close"></span></button></div><h2 id="evidence-detail-title"></h2><div id="evidence-detail-body"></div></dialog>
-  <script type="module" src="./app.js?v=1.11.0-milestones.3"></script>
+  <script type="module" src="./app.js?v=1.11.0-milestones.4"></script>
 </body>
 </html>

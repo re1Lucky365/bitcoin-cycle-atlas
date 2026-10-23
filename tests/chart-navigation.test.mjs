@@ -158,10 +158,15 @@ class TestElement extends EventSurface {
   getAttribute(key){return this.attributes.get(key)??null;}
   contains(target){return target===this||this.children.some(child=>child.contains?.(target));}
   matchesSelector(selector){
+    const exclusions=[...selector.matchAll(/:not\(([^)]+)\)/g)].map(match=>match[1]);
+    if(exclusions.length){
+      const positive=selector.replace(/:not\([^)]+\)/g,'');
+      return this.matchesSelector(positive)&&exclusions.every(excluded=>!this.matchesSelector(excluded));
+    }
     if(selector.startsWith('.'))return this.getAttribute('class')?.split(/\s+/).includes(selector.slice(1))||false;
     if(selector.startsWith('#'))return this.getAttribute('id')===selector.slice(1);
-    if(selector==='svg[data-plot-left]:not([hidden])')return this.tagName==='SVG'&&this.dataset.plotLeft!==undefined&&!this.hidden;
-    if(selector==='[role=button]:not(.history-event-marker)')return this.getAttribute('role')==='button'&&!this.getAttribute('class')?.split(/\s+/).includes('history-event-marker');
+    if(selector==='svg[data-plot-left]')return this.tagName==='SVG'&&this.dataset.plotLeft!==undefined;
+    if(selector==='[hidden]')return this.hidden;
     if(selector.startsWith('[role='))return this.getAttribute('role')===selector.slice(6,-1);
     if(selector==='[contenteditable=true]')return this.getAttribute('contenteditable')==='true';
     if(selector==='[data-next-turn]')return this.dataset.nextTurn!==undefined;
@@ -227,6 +232,33 @@ test('historical event label children allow wheel zoom and pan but retain activa
   assert.equal(h.fire('wheel',{target:label,clientY:20,deltaY:-100}).defaultPrevented,false);
   h.controller.menu.append(marker);
   assert.equal(h.fire('wheel',{target:label,deltaY:-100}).defaultPrevented,false);
+  h.flush();assert.equal(h.changes.length,changed);h.controller.destroy();
+});
+
+test('period arrows and labels share price-chart wheel navigation while activation and ordinary controls keep their own events',()=>{
+  const h=navigationHarness();
+  const period=h.document.createElement('g'),line=h.document.createElement('line'),label=h.document.createElement('text');
+  period.setAttribute('class','cycle-interval-span cycle-interval is-active');period.setAttribute('role','button');
+  period.dataset.cycleInterval='bottom-to-top';period.append(line,label);h.svg.append(period);
+  const event=h.fire('wheel',{target:line,clientX:321,deltaY:-180});
+  assert.equal(event.defaultPrevented,true);h.flush();
+  assert.deepEqual(h.range,zoomRange(range,Math.exp(-180*.0015),(321-60)/(930-60)));
+  const zoomed=h.range;
+  assert.equal(h.fire('wheel',{target:label,shiftKey:true,deltaY:87}).defaultPrevented,true);h.flush();
+  assert.deepEqual(h.range,panRange(zoomed,.1));
+  const changed=h.changes.length;
+  for(const type of ['click','pointerdown','dblclick','contextmenu'])assert.equal(h.fire(type,{target:line}).defaultPrevented,false);
+  for(const key of ['Enter',' ','+'])assert.equal(h.fire('keydown',{target:label,key}).defaultPrevented,false);
+  assert.equal(h.element.dataset.dragging,undefined);
+  const button=h.document.createElement('button'),otherRole=h.document.createElement('g');
+  button.setAttribute('class','cycle-interval');otherRole.setAttribute('role','button');
+  period.append(button);h.svg.append(otherRole);
+  for(const target of [button,otherRole,h.controller.toolbar.children[0],h.controller.menu]){
+    assert.equal(h.fire('wheel',{target,deltaY:-100}).defaultPrevented,false);
+  }
+  for(const props of [{ctrlKey:true},{metaKey:true},{clientX:960},{clientY:20}]){
+    assert.equal(h.fire('wheel',{target:label,deltaY:-100,...props}).defaultPrevented,false);
+  }
   h.flush();assert.equal(h.changes.length,changed);h.controller.destroy();
 });
 

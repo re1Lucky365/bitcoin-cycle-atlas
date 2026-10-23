@@ -1,6 +1,6 @@
 import { CHART_INTERVALS,isIntradayInterval } from './ohlc-data.js?v=1.11.0';
 import { MAGNET_MODES, MAGNET_LABELS, normalizeMagnetMode } from './chart-magnet.js?v=1.11.0';
-import { mountWorkspaceTools } from './workspace-tools.js?v=1.11.0-milestones.3';
+import { mountWorkspaceTools } from './workspace-tools.js?v=1.11.0-milestones.4';
 const $ = selector => document.querySelector(selector);
 
 const paths = {
@@ -84,7 +84,7 @@ export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlSto
   const chartType=button('candles','가격 표시 · 캔들로 변경',{'id':'workbench-chart-type','aria-pressed':'false'});chartType.onclick=()=>command('chart-type',chartType.getAttribute('aria-pressed')==='true'?'line':'candles');
   const chartMenu=button('more','차트 빠른 조작 · 우클릭 / Shift+F10',{'id':'workbench-chart-menu','aria-haspopup':'menu','aria-controls':'atlas-chart-context-menu'});chartMenu.onclick=()=>command('context-menu');
   const workspaceButton=button('search','작업 화면·명령 검색 · Ctrl/⌘ K',{'id':'workbench-workspace'});
-  heading.append(symbol,frequency,chartType,menu,scenario,spacer,workspaceButton,chartMenu,save,settingButton);stage.prepend(heading);
+  heading.append(symbol,frequency,chartType,menu,scenario,$('#atlas-cycle-panel'),spacer,workspaceButton,chartMenu,save,settingButton);stage.prepend(heading);
   const workspaceTools=mountWorkspaceTools({trigger:workspaceButton,plot,openReader,closeReader});
   const marketInfo=document.createElement('div');marketInfo.className='workbench-market-info';marketInfo.hidden=true;
   const marketStatus=document.createElement('span');marketStatus.id='workbench-market-status';marketStatus.setAttribute('role','status');marketStatus.setAttribute('aria-live','polite');

@@ -59,7 +59,7 @@ export function indicatorReadout(item,{selection=null,workbench={},cycle=null,an
     case 'cycle-intervals': {
       const meta=workbench.cycleMilestones;
       if(!meta)return missing('기간 계산 중');
-      return output(`${number(meta.visibleIntervals||0,0)}개 구간 · 9가지 관계`, '아래 기간 차트는 가격과 같은 시간축입니다. 실제 끝 날짜 − 시작 날짜로 경과 주·일을 계산합니다.');
+      return output(`${number(meta.visibleIntervals||0,0)}개 구간 · 9가지 관계`, '가격 그래프 안의 기간선은 가격과 같은 시간축입니다. 실제 끝 날짜 − 시작 날짜로 경과 주·일을 계산합니다.');
     }
     case 'range':
       return future&&finite(selected.lower)&&finite(selected.upper)?output(`${money(selected.lower)}–${money(selected.upper)}`,`${context} · 수요·채택 가정 범위 · 확률구간이 아닙니다.`,'scenario'):missing(selected.date?'미래 구간의 가정 범위':'범위 자료 대기');

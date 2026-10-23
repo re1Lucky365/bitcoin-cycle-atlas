@@ -3,12 +3,12 @@ import { detectDirectionalChanges, getMacroCycles } from './market-structure.js?
 
 /** Retrospective chart annotations. These never alter the observed or assumed price path. */
 export const MILESTONE_TYPES = Object.freeze([
-  Object.freeze({ id: 'cycle-top', label: 'CYCLE TOP', color: '#f27781', description: '사후 사이클 고점 · 최신 구간과 미래 경로는 후보' }),
-  Object.freeze({ id: 'pit-stop', label: 'PIT STOP', color: '#6d9dff', description: '최종 고점 60–150일 전의 중간 고점' }),
-  Object.freeze({ id: 'first-top', label: 'FIRST TOP', color: '#67c78f', description: '해당 고점 연도 전반기에 확인한 주요 고점' }),
-  Object.freeze({ id: 'ath', label: 'ATH', color: '#5bcbd8', description: '직전 사이클 고점의 일말 가격을 처음 초과한 날' }),
-  Object.freeze({ id: 'mid-top', label: 'MID-TOP', color: '#f3ae63', description: '저점과 반감기 사이의 최고 일말 가격' }),
-  Object.freeze({ id: 'bottom', label: 'BOTTOM', color: '#b293ee', description: '사후 구간 최저 일말 가격 · 최신 저점은 후보' }),
+  Object.freeze({ id: 'cycle-top', label: 'CYCLE TOP', color: '#f27781', description: '관측: 사후로 선택한 사이클 고점 / 미래: 모형 고점 시계까지의 경로 최고값 · 최신·미래 구간은 후보' }),
+  Object.freeze({ id: 'pit-stop', label: 'PIT STOP', color: '#6d9dff', description: 'FIRST TOP 이후, 최종 고점 60–150일 전의 마지막 12% 하락 확인 고점 · 관측·미래 경로에 같은 조건 적용' }),
+  Object.freeze({ id: 'first-top', label: 'FIRST TOP', color: '#67c78f', description: '최종 고점 연도 1–6월의 주요 12% 하락 확인 고점 · 최종 고점보다 90일 이상 앞서며 관측·가정의 자격 창을 따름' }),
+  Object.freeze({ id: 'ath', label: 'ATH', color: '#5bcbd8', description: '저점 이후 직전 선택 사이클 고점의 일말 가격을 처음 초과한 날 · 관측 또는 선택한 가정 경로의 회복 기준' }),
+  Object.freeze({ id: 'mid-top', label: 'MID-TOP', color: '#f3ae63', description: '관측: 저점부터 반감기까지 최고 일말 가격 / 미래: 저점부터 모형 고점 시계까지 첫 1/3 구간의 최고 예시 가격' }),
+  Object.freeze({ id: 'bottom', label: 'BOTTOM', color: '#b293ee', description: '관측: 선택 고점 사이의 최저 일말 가격 / 미래: 다음 저점 창에서 제공된 경로의 최저값 · 최신·부분 창은 후보' }),
 ]);
 const TYPES = new Map(MILESTONE_TYPES.map(type => [type.id, type]));
 export const INTERVAL_RELATIONS = Object.freeze([
