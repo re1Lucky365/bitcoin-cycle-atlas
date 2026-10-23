@@ -1,4 +1,4 @@
-import { milestoneMarkersMarkup } from './cycle-milestones-view.js?v=1.11.0-milestones.1';
+import { milestoneMarkersMarkup } from './cycle-milestones-view.js?v=1.11.0-milestones.2';
 import { utcDay } from './cycle-engine.js?v=1.11.0';
 import { shiftCalendarMonths } from './cycle-timing.js?v=1.11.0';
 import { STATE_LABELS } from './market-structure.js?v=1.11.0';

@@ -1,6 +1,6 @@
 import { buildCycleMilestones, INTERVAL_RELATIONS, MILESTONE_TYPES } from './cycle-milestones.js?v=1.11.0-milestones.1';
-import { cycleIntervalsMarkup, cycleLegendMarkup, cycleMilestoneInspection, cycleIntervalInspection } from './cycle-milestones-view.js?v=1.11.0-milestones.1';
-import { drawAtlasPriceChart as drawChart } from './atlas-price-chart.js?v=1.11.0-milestones.1';
+import { cycleIntervalsMarkup, cycleLegendMarkup, cycleMilestoneInspection, cycleIntervalInspection } from './cycle-milestones-view.js?v=1.11.0-milestones.2';
+import { drawAtlasPriceChart as drawChart } from './atlas-price-chart.js?v=1.11.0-milestones.2';
 import { renderCryptoConAudit } from './cryptocon-audit.js?v=1.11.0';
 import { bindChartNavigation, panRange } from './chart-navigation.js?v=1.11.0';
 import { renderAtlasAnalysis } from './atlas-analysis.js?v=1.11.0';
@@ -24,7 +24,7 @@ import { utcDay, dateFromDay } from './cycle-engine.js?v=1.11.0';
 import { shiftCalendarMonths } from './cycle-timing.js?v=1.11.0';
 import { chartPresetRange, DEFAULT_CHART_SPAN, CHART_SPANS } from './chart-presets.js?v=1.11.0';
 import { createChartSvgExport, createObservedChartCsv } from './chart-export.js?v=1.11.0-milestones.1';
-import { readWorkspaceViewport, writeWorkspaceViewport, workspaceQuery } from './workspace-state.js?v=1.11.0';
+import { readWorkspaceViewport, writeWorkspaceViewport, workspaceQuery } from './workspace-state.js?v=1.11.0-milestones.2';
 import { clearChartHover } from './chart-hover.js?v=1.11.0';
 
 const $ = (selector) => document.querySelector(selector);

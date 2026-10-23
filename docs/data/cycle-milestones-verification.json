@@ -2,7 +2,7 @@
   "schemaVersion": "cycle-milestones-verification-v1",
   "baselineCommit": "468589cf37f590f426f021fb40e4f205168285ef",
   "observedAsOf": "2026-10-22",
-  "startedAt": "2026-10-23T06:48:05.693924+00:00",
+  "startedAt": "2026-10-23T07:11:06.512566+00:00",
   "testMethod": {
     "runner": "One direct node process per tests/*.test.mjs file",
     "maxConcurrentProcesses": 4,
@@ -14,15 +14,16 @@
     "files": 48,
     "passedFiles": 48,
     "failedFiles": 0,
-    "reportedTestsOrChecks": 426,
-    "reportedPassesOrChecks": 426,
+    "reportedTestsOrChecks": 428,
+    "reportedPassesOrChecks": 428,
     "reportedFailures": 0,
     "filesWithoutReportedTestCounts": [],
-    "passedGates": 4,
-    "failedGates": 0,
-    "nodeTestCases": 382,
+    "nodeTestCases": 384,
     "manualChecksOrScenarios": 44,
-    "status": "pass"
+    "status": "pass",
+    "initialSnapshotPassedGates": 4,
+    "initialSnapshotFailedGates": 0,
+    "scope": "Direct automated regression tests; live mobile CSS verification remains pending."
   },
   "tests": [
     {
@@ -32,7 +33,7 @@
         "tests/analysis-dock.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 2627,
+      "durationMs": 2800,
       "tests": 8,
       "passed": 8,
       "failed": 0,
@@ -45,7 +46,7 @@
         "tests/analysis-focus.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 97,
+      "durationMs": 160,
       "tests": 4,
       "passed": 4,
       "failed": 0,
@@ -58,7 +59,7 @@
         "tests/app-workspace-url.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 1002,
+      "durationMs": 155,
       "tests": 4,
       "passed": 4,
       "failed": 0,
@@ -71,7 +72,7 @@
         "tests/bitcoin-events.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 191,
+      "durationMs": 368,
       "tests": 10,
       "passed": 10,
       "failed": 0,
@@ -84,7 +85,7 @@
         "tests/boot-shell.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 232,
+      "durationMs": 261,
       "tests": 5,
       "passed": 5,
       "failed": 0,
@@ -97,7 +98,7 @@
         "tests/calendar-cache.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 274,
+      "durationMs": 306,
       "tests": 3,
       "passed": 3,
       "failed": 0,
@@ -110,7 +111,7 @@
         "tests/chart-cursor.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 226,
+      "durationMs": 643,
       "tests": 7,
       "passed": 7,
       "failed": 0,
@@ -123,7 +124,7 @@
         "tests/chart-data-export.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 98,
+      "durationMs": 118,
       "tests": 4,
       "passed": 4,
       "failed": 0,
@@ -136,7 +137,7 @@
         "tests/chart-hover.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 94,
+      "durationMs": 392,
       "tests": 4,
       "passed": 4,
       "failed": 0,
@@ -149,7 +150,7 @@
         "tests/chart-magnet.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 203,
+      "durationMs": 198,
       "tests": 8,
       "passed": 8,
       "failed": 0,
@@ -162,7 +163,7 @@
         "tests/chart-math.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 124,
+      "durationMs": 105,
       "tests": 6,
       "passed": 6,
       "failed": 0,
@@ -175,7 +176,7 @@
         "tests/chart-navigation.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 125,
+      "durationMs": 154,
       "tests": 24,
       "passed": 24,
       "failed": 0,
@@ -188,7 +189,7 @@
         "tests/chart-overlays.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 852,
+      "durationMs": 377,
       "tests": 26,
       "passed": 26,
       "failed": 0,
@@ -201,7 +202,7 @@
         "tests/chart-performance.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 593,
+      "durationMs": 707,
       "tests": 13,
       "passed": 13,
       "failed": 0,
@@ -214,7 +215,7 @@
         "tests/chart-presets.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 114,
+      "durationMs": 108,
       "tests": 2,
       "passed": 2,
       "failed": 0,
@@ -227,7 +228,7 @@
         "tests/cryptocon-audit.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 319,
+      "durationMs": 241,
       "tests": 5,
       "passed": 5,
       "failed": 0,
@@ -240,7 +241,7 @@
         "tests/cycle-calibration-pipeline.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 8717,
+      "durationMs": 5977,
       "tests": 5,
       "passed": 5,
       "failed": 0,
@@ -253,7 +254,7 @@
         "tests/cycle-calibration.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 5528,
+      "durationMs": 5162,
       "tests": 11,
       "passed": 11,
       "failed": 0,
@@ -266,7 +267,7 @@
         "tests/cycle-engine.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 2680,
+      "durationMs": 365,
       "tests": 10,
       "passed": 10,
       "failed": 0,
@@ -279,9 +280,9 @@
         "tests/cycle-milestones-view.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 151,
-      "tests": 12,
-      "passed": 12,
+      "durationMs": 157,
+      "tests": 13,
+      "passed": 13,
       "failed": 0,
       "countingMethod": "direct node:test reported totals"
     },
@@ -292,7 +293,7 @@
         "tests/cycle-milestones.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 381,
+      "durationMs": 416,
       "tests": 11,
       "passed": 11,
       "failed": 0,
@@ -305,7 +306,7 @@
         "tests/cycle-timing.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 404,
+      "durationMs": 381,
       "tests": 12,
       "passed": 12,
       "failed": 0,
@@ -318,7 +319,7 @@
         "tests/data-source.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 411,
+      "durationMs": 201,
       "tests": 10,
       "passed": 10,
       "failed": 0,
@@ -331,7 +332,7 @@
         "tests/detailed-forecast.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 12803,
+      "durationMs": 6699,
       "tests": 20,
       "passed": 20,
       "failed": 0,
@@ -344,7 +345,7 @@
         "tests/forecast-engine.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 1949,
+      "durationMs": 630,
       "tests": 14,
       "passed": 14,
       "failed": 0,
@@ -357,7 +358,7 @@
         "tests/indicator-frame.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 784,
+      "durationMs": 322,
       "tests": 7,
       "passed": 7,
       "failed": 0,
@@ -370,7 +371,7 @@
         "tests/indicator-preferences.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 536,
+      "durationMs": 147,
       "tests": 5,
       "passed": 5,
       "failed": 0,
@@ -383,7 +384,7 @@
         "tests/indicator-readouts.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 110,
+      "durationMs": 341,
       "tests": 9,
       "passed": 9,
       "failed": 0,
@@ -396,7 +397,7 @@
         "tests/indicator-state.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 184,
+      "durationMs": 145,
       "tests": 13,
       "passed": 13,
       "failed": 0,
@@ -409,7 +410,7 @@
         "tests/inspection-policy.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 145,
+      "durationMs": 153,
       "tests": 4,
       "passed": 4,
       "failed": 0,
@@ -422,7 +423,7 @@
         "tests/intraday-history.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 705,
+      "durationMs": 327,
       "tests": 12,
       "passed": 12,
       "failed": 0,
@@ -435,7 +436,7 @@
         "tests/intraday-rendering.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 2950,
+      "durationMs": 494,
       "tests": 4,
       "passed": 4,
       "failed": 0,
@@ -448,7 +449,7 @@
         "tests/long-horizon-forecast.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 8639,
+      "durationMs": 5964,
       "tests": 12,
       "passed": 12,
       "failed": 0,
@@ -461,7 +462,7 @@
         "tests/market-data-controller.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 879,
+      "durationMs": 112,
       "tests": 10,
       "passed": 10,
       "failed": 0,
@@ -474,7 +475,7 @@
         "tests/market-request-ownership.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 108,
+      "durationMs": 95,
       "tests": 8,
       "passed": 8,
       "failed": 0,
@@ -487,7 +488,7 @@
         "tests/market-structure.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 3727,
+      "durationMs": 2112,
       "tests": 13,
       "passed": 13,
       "failed": 0,
@@ -500,7 +501,7 @@
         "tests/mobile-workspace.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 366,
+      "durationMs": 104,
       "tests": 3,
       "passed": 3,
       "failed": 0,
@@ -513,7 +514,7 @@
         "tests/ohlc-data.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 91,
+      "durationMs": 139,
       "tests": 10,
       "passed": 10,
       "failed": 0,
@@ -526,7 +527,7 @@
         "tests/outlook-engine.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 1964,
+      "durationMs": 962,
       "tests": 11,
       "passed": 11,
       "failed": 0,
@@ -539,7 +540,7 @@
         "tests/peak-zones.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 778,
+      "durationMs": 483,
       "tests": 10,
       "passed": 10,
       "failed": 0,
@@ -552,7 +553,7 @@
         "tests/published-data.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 233,
+      "durationMs": 219,
       "tests": 5,
       "passed": 5,
       "failed": 0,
@@ -565,7 +566,7 @@
         "tests/refresh-data.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 723,
+      "durationMs": 703,
       "tests": 8,
       "passed": 8,
       "failed": 0,
@@ -578,7 +579,7 @@
         "tests/research-workbench.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 121,
+      "durationMs": 310,
       "tests": 1,
       "passed": 1,
       "failed": 0,
@@ -591,7 +592,7 @@
         "tests/scenario-countdown.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 4708,
+      "durationMs": 3720,
       "tests": 9,
       "passed": 9,
       "failed": 0,
@@ -604,7 +605,7 @@
         "tests/timing-view.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 304,
+      "durationMs": 251,
       "tests": 2,
       "passed": 2,
       "failed": 0,
@@ -617,7 +618,7 @@
         "tests/volume-data.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 242,
+      "durationMs": 264,
       "tests": 13,
       "passed": 13,
       "failed": 0,
@@ -630,7 +631,7 @@
         "tests/volume-forecast.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 791,
+      "durationMs": 831,
       "tests": 12,
       "passed": 12,
       "failed": 0,
@@ -643,9 +644,9 @@
         "tests/workspace-state.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 122,
-      "tests": 7,
-      "passed": 7,
+      "durationMs": 137,
+      "tests": 8,
+      "passed": 8,
       "failed": 0,
       "countingMethod": "direct node:test reported totals"
     }
@@ -800,19 +801,88 @@
     }
   ],
   "browserVerification": {
-    "status": "not-performed",
-    "reason": "Local file-protocol preview was blocked in the available browser; no live-browser verification is claimed."
+    "status": "partial-pass",
+    "evidenceSource": "Primary agent live-browser observations supplied for this report; these checks are distinct from the direct Node tests.",
+    "desktop": {
+      "status": "pass",
+      "checks": [
+        {
+          "action": "Filter one period relation",
+          "result": {
+            "rows": 1,
+            "intervals": 2
+          },
+          "status": "pass"
+        },
+        {
+          "action": "Inspect interval",
+          "result": {
+            "elapsedDays": 1062
+          },
+          "status": "pass"
+        },
+        {
+          "action": "Inspect marker with keyboard",
+          "status": "pass"
+        },
+        {
+          "action": "Switch to intraday",
+          "result": {
+            "cyclePanelHidden": true,
+            "cycleLegendHidden": true
+          },
+          "status": "pass"
+        },
+        {
+          "action": "Download exported SVG through browser",
+          "result": {
+            "bytes": 148206,
+            "panels": 2,
+            "markers": 5,
+            "filteredIntervals": 2,
+            "legendEntries": 6,
+            "uniqueIds": true,
+            "tabStops": 0
+          },
+          "status": "pass"
+        }
+      ]
+    },
+    "mobile": {
+      "status": "issue-found-awaiting-fix-verification",
+      "observedIssue": "Legend and countdown collided during initial mobile inspection.",
+      "fixStatus": "CSS fix pending live verification; no mobile pass is claimed."
+    },
+    "initialLocalPreview": {
+      "status": "blocked",
+      "reason": "Earlier local file-protocol preview was blocked; later desktop live-browser checks are recorded above."
+    }
   },
   "publication": {
-    "status": "pre-publication-snapshot",
-    "remoteCodeVerified": false,
-    "note": "This report records verification before the code upload. Deployment status must be checked using the pull request, commit and Pages workflow."
+    "status": "initial-feature-published-followup-pending",
+    "remoteCodeVerified": true,
+    "initialFeature": {
+      "pullRequest": 4,
+      "pullRequestUrl": "https://github.com/twoimo/bitcoin-cycle-atlas/pull/4",
+      "merged": true,
+      "remoteCommitShort": "56ed9b5",
+      "localCommit": "4eea6a636c8fb35d1d5bc403f3d3bcf300716ff0",
+      "verifiedSameTree": "13fa6ae6b33e3193778a9edcc851fe9fe00dbef6",
+      "pagesWorkflowRunId": 39914821348,
+      "pagesWorkflowUrl": "https://github.com/twoimo/bitcoin-cycle-atlas/actions/runs/39914821348",
+      "pagesWorkflowConclusion": "success",
+      "evidenceSource": "Primary agent verified remote merge, identical tree, and successful Pages workflow."
+    },
+    "followup": {
+      "status": "pending-release",
+      "note": "This report does not claim the subsequent workspace, inspection, axis, or mobile CSS fixes are deployed."
+    }
   },
   "limitations": [
     "Finite executable regression checks, not a mathematical proof of Bitcoin cycles or future prices.",
     "Formal gate concerns bounded request ownership only and does not prove this annotation engine."
   ],
-  "completedAt": "2026-10-23T06:50:53.725077+00:00",
+  "completedAt": "2026-10-23T07:11:19.616561+00:00",
   "nodeVersion": "v24.19.0",
   "postReviewChecks": {
     "standalone": {
@@ -862,5 +932,758 @@
         "Interactive handlers, tab stops and hover previews removed"
       ]
     }
+  },
+  "initialSnapshot": {
+    "baselineCommit": "468589cf37f590f426f021fb40e4f205168285ef",
+    "startedAt": "2026-10-23T06:48:05.693924+00:00",
+    "completedAt": "2026-10-23T06:50:53.725077+00:00",
+    "summary": {
+      "files": 48,
+      "passedFiles": 48,
+      "failedFiles": 0,
+      "reportedTestsOrChecks": 426,
+      "reportedPassesOrChecks": 426,
+      "reportedFailures": 0,
+      "filesWithoutReportedTestCounts": [],
+      "passedGates": 4,
+      "failedGates": 0,
+      "nodeTestCases": 382,
+      "manualChecksOrScenarios": 44,
+      "status": "pass"
+    },
+    "tests": [
+      {
+        "file": "tests/analysis-dock.test.mjs",
+        "command": [
+          "node",
+          "tests/analysis-dock.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 2627,
+        "tests": 8,
+        "passed": 8,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/analysis-focus.test.mjs",
+        "command": [
+          "node",
+          "tests/analysis-focus.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 97,
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/app-workspace-url.test.mjs",
+        "command": [
+          "node",
+          "tests/app-workspace-url.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 1002,
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/bitcoin-events.test.mjs",
+        "command": [
+          "node",
+          "tests/bitcoin-events.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 191,
+        "tests": 10,
+        "passed": 10,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/boot-shell.test.mjs",
+        "command": [
+          "node",
+          "tests/boot-shell.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 232,
+        "tests": 5,
+        "passed": 5,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/calendar-cache.test.mjs",
+        "command": [
+          "node",
+          "tests/calendar-cache.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 274,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/chart-cursor.test.mjs",
+        "command": [
+          "node",
+          "tests/chart-cursor.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 226,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/chart-data-export.test.mjs",
+        "command": [
+          "node",
+          "tests/chart-data-export.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 98,
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/chart-hover.test.mjs",
+        "command": [
+          "node",
+          "tests/chart-hover.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 94,
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/chart-magnet.test.mjs",
+        "command": [
+          "node",
+          "tests/chart-magnet.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 203,
+        "tests": 8,
+        "passed": 8,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/chart-math.test.mjs",
+        "command": [
+          "node",
+          "tests/chart-math.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 124,
+        "tests": 6,
+        "passed": 6,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/chart-navigation.test.mjs",
+        "command": [
+          "node",
+          "tests/chart-navigation.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 125,
+        "tests": 24,
+        "passed": 24,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/chart-overlays.test.mjs",
+        "command": [
+          "node",
+          "tests/chart-overlays.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 852,
+        "tests": 26,
+        "passed": 26,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/chart-performance.test.mjs",
+        "command": [
+          "node",
+          "tests/chart-performance.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 593,
+        "tests": 13,
+        "passed": 13,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/chart-presets.test.mjs",
+        "command": [
+          "node",
+          "tests/chart-presets.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 114,
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/cryptocon-audit.test.mjs",
+        "command": [
+          "node",
+          "tests/cryptocon-audit.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 319,
+        "tests": 5,
+        "passed": 5,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/cycle-calibration-pipeline.test.mjs",
+        "command": [
+          "node",
+          "tests/cycle-calibration-pipeline.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 8717,
+        "tests": 5,
+        "passed": 5,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/cycle-calibration.test.mjs",
+        "command": [
+          "node",
+          "tests/cycle-calibration.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 5528,
+        "tests": 11,
+        "passed": 11,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/cycle-engine.test.mjs",
+        "command": [
+          "node",
+          "tests/cycle-engine.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 2680,
+        "tests": 10,
+        "passed": 10,
+        "failed": 0,
+        "countingMethod": "direct script reported check/scenario count"
+      },
+      {
+        "file": "tests/cycle-milestones-view.test.mjs",
+        "command": [
+          "node",
+          "tests/cycle-milestones-view.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 151,
+        "tests": 12,
+        "passed": 12,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/cycle-milestones.test.mjs",
+        "command": [
+          "node",
+          "tests/cycle-milestones.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 381,
+        "tests": 11,
+        "passed": 11,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/cycle-timing.test.mjs",
+        "command": [
+          "node",
+          "tests/cycle-timing.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 404,
+        "tests": 12,
+        "passed": 12,
+        "failed": 0,
+        "countingMethod": "direct script reported check/scenario count"
+      },
+      {
+        "file": "tests/data-source.test.mjs",
+        "command": [
+          "node",
+          "tests/data-source.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 411,
+        "tests": 10,
+        "passed": 10,
+        "failed": 0,
+        "countingMethod": "direct script reported check/scenario count"
+      },
+      {
+        "file": "tests/detailed-forecast.test.mjs",
+        "command": [
+          "node",
+          "tests/detailed-forecast.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 12803,
+        "tests": 20,
+        "passed": 20,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/forecast-engine.test.mjs",
+        "command": [
+          "node",
+          "tests/forecast-engine.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 1949,
+        "tests": 14,
+        "passed": 14,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/indicator-frame.test.mjs",
+        "command": [
+          "node",
+          "tests/indicator-frame.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 784,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/indicator-preferences.test.mjs",
+        "command": [
+          "node",
+          "tests/indicator-preferences.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 536,
+        "tests": 5,
+        "passed": 5,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/indicator-readouts.test.mjs",
+        "command": [
+          "node",
+          "tests/indicator-readouts.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 110,
+        "tests": 9,
+        "passed": 9,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/indicator-state.test.mjs",
+        "command": [
+          "node",
+          "tests/indicator-state.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 184,
+        "tests": 13,
+        "passed": 13,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/inspection-policy.test.mjs",
+        "command": [
+          "node",
+          "tests/inspection-policy.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 145,
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/intraday-history.test.mjs",
+        "command": [
+          "node",
+          "tests/intraday-history.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 705,
+        "tests": 12,
+        "passed": 12,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/intraday-rendering.test.mjs",
+        "command": [
+          "node",
+          "tests/intraday-rendering.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 2950,
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/long-horizon-forecast.test.mjs",
+        "command": [
+          "node",
+          "tests/long-horizon-forecast.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 8639,
+        "tests": 12,
+        "passed": 12,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/market-data-controller.test.mjs",
+        "command": [
+          "node",
+          "tests/market-data-controller.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 879,
+        "tests": 10,
+        "passed": 10,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/market-request-ownership.test.mjs",
+        "command": [
+          "node",
+          "tests/market-request-ownership.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 108,
+        "tests": 8,
+        "passed": 8,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/market-structure.test.mjs",
+        "command": [
+          "node",
+          "tests/market-structure.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 3727,
+        "tests": 13,
+        "passed": 13,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/mobile-workspace.test.mjs",
+        "command": [
+          "node",
+          "tests/mobile-workspace.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 366,
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/ohlc-data.test.mjs",
+        "command": [
+          "node",
+          "tests/ohlc-data.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 91,
+        "tests": 10,
+        "passed": 10,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/outlook-engine.test.mjs",
+        "command": [
+          "node",
+          "tests/outlook-engine.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 1964,
+        "tests": 11,
+        "passed": 11,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/peak-zones.test.mjs",
+        "command": [
+          "node",
+          "tests/peak-zones.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 778,
+        "tests": 10,
+        "passed": 10,
+        "failed": 0,
+        "countingMethod": "direct script reported check/scenario count"
+      },
+      {
+        "file": "tests/published-data.test.mjs",
+        "command": [
+          "node",
+          "tests/published-data.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 233,
+        "tests": 5,
+        "passed": 5,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/refresh-data.test.mjs",
+        "command": [
+          "node",
+          "tests/refresh-data.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 723,
+        "tests": 8,
+        "passed": 8,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/research-workbench.test.mjs",
+        "command": [
+          "node",
+          "tests/research-workbench.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 121,
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/scenario-countdown.test.mjs",
+        "command": [
+          "node",
+          "tests/scenario-countdown.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 4708,
+        "tests": 9,
+        "passed": 9,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/timing-view.test.mjs",
+        "command": [
+          "node",
+          "tests/timing-view.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 304,
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "countingMethod": "direct script reported check/scenario count"
+      },
+      {
+        "file": "tests/volume-data.test.mjs",
+        "command": [
+          "node",
+          "tests/volume-data.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 242,
+        "tests": 13,
+        "passed": 13,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/volume-forecast.test.mjs",
+        "command": [
+          "node",
+          "tests/volume-forecast.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 791,
+        "tests": 12,
+        "passed": 12,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      },
+      {
+        "file": "tests/workspace-state.test.mjs",
+        "command": [
+          "node",
+          "tests/workspace-state.test.mjs"
+        ],
+        "exitCode": 0,
+        "durationMs": 122,
+        "tests": 7,
+        "passed": 7,
+        "failed": 0,
+        "countingMethod": "direct node:test reported totals"
+      }
+    ],
+    "testMethod": {
+      "runner": "One direct node process per tests/*.test.mjs file",
+      "maxConcurrentProcesses": 4,
+      "perFileTimeoutSeconds": 300,
+      "nodeTestWrapperUsed": false,
+      "countingNote": "node:test test totals plus explicit direct-script check/scenario totals; test-file wrapper counts are never substituted."
+    },
+    "postReviewChecks": {
+      "standalone": {
+        "status": "pass",
+        "command": "node scripts/verify-static.mjs --standalone build/Bitcoin_Cycles_Comparison.html",
+        "modules": 58,
+        "observations": 5941,
+        "bytes": 11676841
+      },
+      "cacheGraph": {
+        "version": "1.11.0-milestones.1",
+        "changedClosureModules": 11,
+        "checkedChangedEdges": 14,
+        "allImportedPaths": 58,
+        "conflictingUrlVersions": 0
+      },
+      "svgExports": {
+        "status": "pass",
+        "method": "Real production renderer and exporter with a temporary DOM adapter; XML parsed and rasterized for review, not browser screenshots.",
+        "cases": [
+          {
+            "width": 1440,
+            "scope": "overview",
+            "markers": 30,
+            "intervals": 44,
+            "relationRows": 9
+          },
+          {
+            "width": 1440,
+            "scope": "2024–2030",
+            "markers": 10,
+            "intervals": 16,
+            "relationRows": 9
+          },
+          {
+            "width": 390,
+            "scope": "2024–2030",
+            "markers": 10,
+            "intervals": 16,
+            "relationRows": 9
+          }
+        ],
+        "checks": [
+          "All six legend categories present",
+          "No duplicate IDs and all clip references resolve",
+          "Period rows and footer fit the export viewBox",
+          "Interactive handlers, tab stops and hover previews removed"
+        ]
+      }
+    },
+    "label": "Initial milestone feature verification snapshot; before the follow-up fixes listed below."
+  },
+  "baselineCommitScope": "Initial feature development baseline. Current follow-up base is separately recorded in followupVerification.",
+  "gateRecordScope": {
+    "phase": "initial-snapshot",
+    "baselineCommit": "468589cf37f590f426f021fb40e4f205168285ef",
+    "rerunDuringFollowup": false,
+    "note": "Existing gate records are preserved. No formal rerun was requested because the model and request-ownership implementation are unchanged. Follow-up release CI is a separate check."
+  },
+  "followupVerification": {
+    "startedAt": "2026-10-23T07:11:06.512566+00:00",
+    "completedAt": "2026-10-23T07:11:19.616561+00:00",
+    "baseLocalCommit": "4eea6a636c8fb35d1d5bc403f3d3bcf300716ff0",
+    "basePublishedCommitShort": "56ed9b5",
+    "baseTree": "13fa6ae6b33e3193778a9edcc851fe9fe00dbef6",
+    "observedAsOf": "2026-10-22",
+    "method": "All48 test files executed directly with node; bounded at4 concurrent subprocesses; per-file300second timeout.",
+    "changesCovered": [
+      "Preserve cycle-relation and cycle-panel through workspace cleaning, sharing, save, and restore.",
+      "Calendar-aligned interval axis regression.",
+      "Adaptive USD formatting for cycle inspections.",
+      "Hide price-date actions for cycle inspections."
+    ],
+    "testSummary": {
+      "files": 48,
+      "passedFiles": 48,
+      "failedFiles": 0,
+      "reportedTestsOrChecks": 428,
+      "reportedPassesOrChecks": 428,
+      "reportedFailures": 0,
+      "filesWithoutReportedTestCounts": [],
+      "nodeTestCases": 384,
+      "manualChecksOrScenarios": 44,
+      "status": "pass",
+      "initialSnapshotPassedGates": 4,
+      "initialSnapshotFailedGates": 0,
+      "scope": "Direct automated regression tests; live mobile CSS verification remains pending."
+    },
+    "formalRerun": false,
+    "cacheUrlUpdates": "Release cache URLs are handled separately by the coordinator."
+  },
+  "verificationStatus": "automated-tests-pass-mobile-followup-pending",
+  "followupStaticBuild": {
+    "status": "pass",
+    "release": "1.11.0-milestones.2",
+    "files": 83,
+    "checkedReferences": 151,
+    "standaloneBytes": 11981460,
+    "embeddedModules": 58,
+    "embeddedObservations": 5941,
+    "changedDependencyClosureModules": 8,
+    "note": "Final cache URL update and responsive CSS included; browser geometry after follow-up deployment remains a separate check."
   }
 }

@@ -148,3 +148,17 @@ test('coincident types retain different colored rings at the true shared date an
   assert.notEqual(result.markers[0].color, result.markers[1].color);
   assert.equal((result.markup.match(/pointer-events="stroke"/g) || []).length, 2);
 });
+
+test('four-year duration ticks align with the price chart calendar grid on desktop and mobile', () => {
+  const start = '2024-10-22', end = '2028-10-22';
+  const ticks = result => [...result.markup.matchAll(/<text class="cycle-interval-date"([^>]*)>([^<]+)<\/text>/g)].map(([, attributes, label]) => ({ ...attr(attributes), label }));
+  const expectedX = (date, width, left, right) => left + (day(date) - day(start)) / (day(end) - day(start)) * (width - left - right);
+  const desktop = ticks(cycleIntervalsMarkup({ intervals: [], start, end, width: 1000, left: 12, right: 82 }));
+  assert.deepEqual(desktop.map(tick => tick.label), ['25.01', '25.07', '26.01', '26.07', '27.01', '27.07', '28.01', '28.07']);
+  assert.ok(Math.abs(Number(desktop[0].x) - expectedX('2025-01-01', 1000, 12, 82)) < .001, 'January tick uses its actual UTC date, not a fraction of the viewport');
+  assert.ok(Math.abs(Number(desktop[1].x) - expectedX('2025-07-01', 1000, 12, 82)) < .001, 'July tick follows the same six-month calendar grid as price');
+  assert.equal(new Set(desktop.map(tick => tick.label)).size, desktop.length, 'month ticks do not repeat coarse year-only labels');
+  const mobile = ticks(cycleIntervalsMarkup({ intervals: [], start, end, width: 390, left: 8, right: 66 }));
+  assert.deepEqual(mobile.map(tick => tick.label), ['2025', '2026', '2027', '2028']);
+  for (const tick of mobile) assert.ok(Math.abs(Number(tick.x) - expectedX(`${tick.label}-01-01`, 390, 8, 66)) < .001, 'mobile annual ticks align on January 1');
+});

@@ -1,4 +1,5 @@
-import { utcDay, dateFromDay } from './cycle-engine.js?v=1.11.0';
+import { utcDay } from './cycle-engine.js?v=1.11.0';
+import { shiftCalendarMonths } from './cycle-timing.js?v=1.11.0';
 import { MILESTONE_TYPES, INTERVAL_RELATIONS } from './cycle-milestones.js?v=1.11.0-milestones.1';
 
 /** Pure presentation: all dates, prices and classifications come from the
@@ -9,7 +10,8 @@ const finite = value => typeof value === 'number' && Number.isFinite(value);
 const types = new Map(MILESTONE_TYPES.map(type => [type.id, type]));
 const relations = new Map(INTERVAL_RELATIONS.map(relation => [relation.id, relation]));
 const numberFormat = new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 });
-const priceFormat = new Intl.NumberFormat('en-US', { maximumFractionDigits: 8 });
+const smallPriceFormat = new Intl.NumberFormat('en-US', { maximumFractionDigits: 8 });
+const formatPrice = value => (Math.abs(value) < 1 ? smallPriceFormat : numberFormat).format(value);
 const textWidth = text => [...text].reduce((width, char) => width + (char.charCodeAt(0) > 255 ? 10 : 5.6), 0);
 const intersects = (a, b, gap = 4) => a.x < b.x + b.width + gap && a.x + a.width + gap > b.x && a.y < b.y + b.height + gap && a.y + a.height + gap > b.y;
 const dayOf = date => { try { return utcDay(date); } catch { return null; } };
@@ -28,7 +30,7 @@ export function cycleDurationLabel(days) {
 
 function markerTitle(marker) {
   const type = types.get(marker.type);
-  return `${type?.label || marker.label || marker.type} · ${marker.date} UTC · $${priceFormat.format(marker.price)}\n${status(marker)}${marker.definition ? `\n${marker.definition}` : ''}`;
+  return `${type?.label || marker.label || marker.type} · ${marker.date} UTC · $${formatPrice(marker.price)}\n${status(marker)}${marker.definition ? `\n${marker.definition}` : ''}`;
 }
 
 function labelBox(point, bounds, placed, points, active = false) {
@@ -177,10 +179,16 @@ export function cycleIntervalsMarkup({ intervals = [], start, end, width = 1000,
   if (validDomain) {
     const splitDay = dayOf(split);
     if (splitDay !== null && splitDay >= first && splitDay <= last) markup += `<line class="cycle-interval-observed-split" x1="${fmt(xx(splitDay))}" x2="${fmt(xx(splitDay))}" y1="0" y2="${cursor}" stroke="#b5c2d3" stroke-dasharray="2 5" opacity=".55" pointer-events="none"><title>관측 기준일 ${esc(split)} UTC</title></line>`;
-    const tickCount = Math.max(2, Math.min(6, Math.floor(plotWidth / 105) + 1));
-    for (let i = 0; i < tickCount; i++) {
-      const day = Math.round(first + (last - first) * i / (tickCount - 1)), date = dateFromDay(day), dateLabel = spanDays > 1100 ? date.slice(0, 4) : spanDays > 180 ? date.slice(0, 7) : date.slice(5);
-      markup += `<text class="cycle-interval-date" x="${fmt(xx(day))}" y="${cursor + 18}" text-anchor="${i === 0 ? 'start' : i === tickCount - 1 ? 'end' : 'middle'}" fill="#9badc2" font-size="10">${dateLabel}</text>`;
+    // Keep the exact calendar grid used by drawAtlasPriceChart. Equal pixel
+    // fractions can land in arbitrary months and repeat coarse year labels.
+    const small = width < 600;
+    const months = spanDays > 5000 ? (small ? 60 : 24) : spanDays > 3000 ? (small ? 36 : 24) : spanDays > 1100 ? (small ? 12 : 6) : spanDays > 550 ? (small ? 6 : 3) : spanDays > 270 ? 3 : 1;
+    let tick = `${start.slice(0, 4)}-01-01`;
+    while (dayOf(tick) < first) tick = shiftCalendarMonths(tick, months);
+    while (dayOf(tick) <= last) {
+      const tickX = xx(dayOf(tick)), dateLabel = months >= 12 ? tick.slice(0, 4) : tick.slice(2, 7).replace('-', '.');
+      markup += `<text class="cycle-interval-date" x="${fmt(tickX)}" y="${cursor + 18}" text-anchor="${tickX > width - 35 ? 'end' : 'middle'}" fill="#9badc2" font-size="10">${dateLabel}</text>`;
+      tick = shiftCalendarMonths(tick, months);
     }
   }
   markup += '</svg>';
@@ -204,7 +212,7 @@ export function cycleMilestoneInspection(marker, { asOf } = {}) {
   if (!type || dayOf(marker.date) === null || !finite(marker.price) || marker.price <= 0) return null;
   const fields = [
     { label: '날짜 · UTC', value: marker.date },
-    { label: '가격 · USD', value: `$${priceFormat.format(marker.price)}` },
+    { label: '가격 · USD', value: `$${formatPrice(marker.price)}` },
     { label: '기준점 상태', value: status(marker) },
     { label: '선택 기준', value: marker.definition || type.description || '명시된 사이클 기준점' },
   ];

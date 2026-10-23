@@ -4,7 +4,7 @@ import { INTRADAY_MAX_VISIBLE_BARS } from './intraday-history.js?v=1.11.0';
 
 export const WORKSPACE_STORAGE_KEY = 'atlas.workspaces.v1';
 export const MAX_WORKSPACES = 8;
-const keys = new Set(['span','magnet','assumption','granularity','axis','align','interval','measure','scope','phase','audit','type','indicators','indicator-hide','indicator-list','indicator-primary','chart','unit','view-start','view-end']);
+const keys = new Set(['span','magnet','assumption','granularity','axis','align','interval','measure','scope','phase','audit','type','indicators','indicator-hide','indicator-list','indicator-primary','cycle-relation','cycle-panel','chart','unit','view-start','view-end']);
 const validDate = value => {
   if (typeof value !== 'string' || !/^20\d{2}-\d{2}-\d{2}$/.test(value)) return false;
   try { utcDay(value); return true; } catch { return false; }
