@@ -1,4 +1,5 @@
-import { milestoneMarkersMarkup } from './cycle-milestones-view.js?v=1.11.0-milestones.2';
+import { milestoneMarkersMarkup } from './cycle-milestones-view.js?v=1.11.0-milestones.3';
+import { MILESTONE_TYPES } from './cycle-milestones.js?v=1.11.0-milestones.3';
 import { utcDay } from './cycle-engine.js?v=1.11.0';
 import { shiftCalendarMonths } from './cycle-timing.js?v=1.11.0';
 import { STATE_LABELS } from './market-structure.js?v=1.11.0';
@@ -25,7 +26,8 @@ const dayOf=date=>{if(calendarDays.has(date))return calendarDays.get(date);const
 const COLORS={warmup:'#536173','price-discovery':'#dfb567','bottom-formation':'#91a1ce',range:'#93a1b1',rebound:'#7ec5b7',pullback:'#bc9bb7',advance:'#81b79b',correction:'#d28f94',transition:'#697c91'};
 const plainState={warmup:'초기 자료', 'price-discovery':'최고가를 새로 쓰는 중','bottom-formation':'낮은 가격대에서 회복 중',range:'좁은 범위에서 횡보',rebound:'하락 뒤 반등',pullback:'상승 중 되돌림',advance:'상승 흐름',correction:'하락 흐름',transition:'방향이 섞인 구간'};
 const timingReasons={'causal-daily-clock-applied':'관측 보정을 근거리 시계에 반영','near-phase-unavailable':'적용할 근거리 기준 시계 없음','adjustment-would-expire-required-anchor':'보정하면 필수 기준일이 이미 지남','insufficient-causal-timing-evidence':'완료된 관측 근거 부족','calibration-reference-high-differs':'보정과 근거리 모형의 기준 고점이 다름','disabled-for-comparison':'비교 조건에서 보정 끔','legacy-calendar-prior':'기존 달력 기준 사용'};
-function sample(rows,frequency){return frequency==='daily'?rows:rows.filter((p,i)=>new Date(`${p.date}T00:00:00Z`).getUTCDay()===0||i===0||i===rows.length-1);}
+const milestoneTypeIds=new Set(MILESTONE_TYPES.map(type=>type.id));
+function sample(rows,frequency,retainedDates){return frequency==='daily'?rows:rows.filter((p,i)=>new Date(`${p.date}T00:00:00Z`).getUTCDay()===0||i===0||i===rows.length-1||retainedDates?.has(p.date));}
 
 // Split the daily source before weekly/pixel sampling. Otherwise a missing
 // weekday disappears between two Sundays and looks like continuous evidence.
@@ -41,7 +43,7 @@ function dailyRuns(rows,omit=()=>false){
 }
 
 /** Rendering and inspection only. It never changes prices, paths or model dates. */
-export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency='daily',chartType='line',observedCandles=[],candleSource='Bitstamp',volumeBars=[],volumeProjection=null,volumeSource='Bitstamp',showVolume=false,historicalEvents=[],cycleCalibration=null,showCycleTiming=false,headerInset=null,showHistoricalEvents=true,activeHistoricalEventId=null,onHistoricalEvent=()=>{},stateStepDays=1,unit='usd',denominator=1,scale='log',tool='crosshair',magnet='off',measurement=null,onMeasurement=()=>{},onHover=()=>{},band=false,turns=[],showTurns=true,cycleMarkers=[],showCycleMarkers=true,onCycleMarker=()=>{},events=[],states=[],fib=[],historical=false,nextTurn=null,showNextTurnLabel=true,onNextTurn=()=>{},showDrawdown=true,showStates=false,threshold=.12,onInspect=()=>{},selectedDate}){
+export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency='daily',chartType='line',observedCandles=[],candleSource='Bitstamp',volumeBars=[],volumeProjection=null,volumeSource='Bitstamp',showVolume=false,historicalEvents=[],cycleCalibration=null,showCycleTiming=false,headerInset=null,showHistoricalEvents=true,activeHistoricalEventId=null,onHistoricalEvent=()=>{},stateStepDays=1,unit='usd',denominator=1,scale='log',tool='crosshair',magnet='off',measurement=null,onMeasurement=()=>{},onHover=()=>{},band=false,turns=[],showTurns=true,cycleMarkers=[],showCycleMarkers=true,activeCycleMarkerId=null,activeCycleMarkerIds=[],activeCycleInterval=null,onCycleMarker=()=>{},events=[],states=[],fib=[],historical=false,nextTurn=null,showNextTurnLabel=true,onNextTurn=()=>{},showDrawdown=true,showStates=false,threshold=.12,onInspect=()=>{},selectedDate}){
   clearChartHover(svg);
   // Match the allocated viewport instead of shrinking a fixed-height drawing.
   // An explicitly enabled secondary band stays present even in a short chart.
@@ -51,6 +53,11 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   const minDay=dayOf(start),maxDay=dayOf(end),span=Math.max(1,maxDay-minDay),xday=d=>L+(d-minDay)/span*(W-L-R),x=p=>xday(dayOf(p.date));
   svg.dataset.cycleMarkerCount='0';svg.dataset.cycleMarkerLabelCount='0';svg.dataset.historyLabelCount='0';svg.dataset.historyEventCount='0';svg.dataset.historyLabelMode='off';svg.dataset.historyHiddenLabelCount='0';
   const originalVisible=dateWindow(rows,start,end).filter(p=>p.price>0);
+  const visibleCycleMarkers=showCycleMarkers?cycleMarkers.filter(marker=>{
+    if(!marker?.id||!milestoneTypeIds.has(marker.type)||typeof marker.date!=='string'||marker.date<start||marker.date>end||!Number.isFinite(marker.price)||marker.price<=0)return false;
+    try{return dayOf(marker.date)>=minDay&&dayOf(marker.date)<=maxDay;}catch{return false;}
+  }):[];
+  const retainedDates=new Set(visibleCycleMarkers.map(marker=>marker.date));
   const candleDays=frequency==='weekly'?7:1;
   const candleRows=chartType==='candles'?dateWindow(observedCandles,start,split&&split<end?split:end,c=>c.endDate||c.date||new Date((c.time+(candleDays-1)*86400)*1000).toISOString().slice(0,10)).map(c=>({...c,startDate:c.startDate||new Date(c.time*1000).toISOString().slice(0,10),endDate:c.endDate||new Date((c.time+(candleDays-1)*86400)*1000).toISOString().slice(0,10)})).filter(c=>c.endDate>=start&&c.endDate<=end&&(!split||c.endDate<=split)):[];
   const candleByDate=new Map(candleRows.map(c=>[c.endDate,c]));
@@ -60,16 +67,28 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   if(!visible.length){svg.onclick=svg.onpointermove=svg.onpointerleave=svg.onkeydown=svg.onkeyup=null;delete svg.dataset.plotLeft;delete svg.dataset.plotRight;svg.innerHTML='<text x="24" y="60" fill="#c6d0dd">이 기간에는 아직 자료가 없습니다.</text>';return null;}
   const factor=unit==='indexed'?100/denominator:1;
   let valueLow=Infinity,valueHigh=-Infinity;const includePrice=value=>{if(Number.isFinite(value)&&value>0){valueLow=Math.min(valueLow,value);valueHigh=Math.max(valueHigh,value);}};
-  for(const point of visible){includePrice(point.price);if(band&&point.lower>0&&point.upper>0){includePrice(point.lower);includePrice(point.upper);}}for(const candle of candleRows){includePrice(candle.low);includePrice(candle.high);}const values=[valueLow,valueHigh];
+  for(const point of visible){includePrice(point.price);if(band&&point.lower>0&&point.upper>0){includePrice(point.lower);includePrice(point.upper);}}for(const candle of candleRows){includePrice(candle.low);includePrice(candle.high);}
+  // Landmarks remain Coin Metrics / model values when venue candles are shown.
+  // Keep those prices on the axis without changing any exchange OHLC values.
+  for(const marker of visibleCycleMarkers)includePrice(marker.price);
+  const values=[valueLow,valueHigh];
   const tickCount=Math.max(2,Math.min(small?5:7,Math.floor((priceBottom-T)/38)+1));
   const priceScale=createPriceScale(values,{scale,top:T,bottom:priceBottom,tickCount,factor}),{min,max,y}=priceScale;
   const yd=v=>ddTop+Math.min(100,Math.max(0,-(v??0)))/100*(ddBottom-ddTop);
-  const path=(ps,yy=y,key='price')=>pixelExtrema(ps,x,[key]).map((p,i)=>`${i?'L':'M'}${x(p).toFixed(2)},${yy(p[key]).toFixed(2)}`).join('');
+  const tracePoints=(ps,key)=>{
+    const reduced=pixelExtrema(ps,x,[key]);
+    if(!retainedDates.size)return reduced;
+    const selected=new Set(reduced);
+    return ps.filter(point=>selected.has(point)||retainedDates.has(point.date));
+  };
+  const path=(ps,yy=y,key='price')=>tracePoints(ps,key).map((p,i)=>`${i?'L':'M'}${x(p).toFixed(2)},${yy(p[key]).toFixed(2)}`).join('');
   const observedTrace=(source,yy=y,key='price',omit)=>{
-    const runs=dailyRuns(source,omit).map(run=>sample(run,frequency));
+    // Weekly context retains the exact daily landmark anchors. A Wednesday
+    // peak must not float away from a Sunday-only polyline or pixel reduction.
+    const runs=dailyRuns(source,omit).map(run=>sample(run,frequency,retainedDates));
     return {path:runs.map(run=>path(run,yy,key)).join(''),isolated:runs.filter(run=>run.length===1).map(run=>run[0])};
   };
-  const observed=visible.filter(p=>!split||p.date<=split),future=sample(originalVisible.filter(p=>split&&p.date>=split),frequency).map(p=>({...p,lower:p.lower??p.price,upper:p.upper??p.price}));
+  const observed=visible.filter(p=>!split||p.date<=split),future=sample(originalVisible.filter(p=>split&&p.date>=split),frequency,retainedDates).map(p=>({...p,lower:p.lower??p.price,upper:p.upper??p.price}));
   const bottom=showVolume?volumeBottom:showStates?stateBottom:showCycleTiming?cycleBottom:showDrawdown?ddBottom:priceBottom;
   const visibleVolume=dateWindow(volumeBars,start,split&&split<end?split:end),volumeByDate=new Map(visibleVolume.map(bar=>[bar.date,bar]));
   const allProjectedVolume=volumeProjection?.points||[];
@@ -91,7 +110,7 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   if(showStates)s+=`<text class="state-pane-title" x="${L}" y="${layout.stateTitleY}" fill="#a8b9ca" font-size="${layout.stateTitleFontSize}">시장 국면 · 관측 / 가정<title>가격 경로에서 계산한 상승·횡보·하락 분류입니다. 관측 기준일 이후는 선택한 가정 경로의 분류이며 확정된 미래나 매매 신호가 아닙니다.</title></text>`;
   s+=`<g clip-path="url(#${clip})">`;
   if(nextTurn){const left=xday(Math.max(minDay,dayOf(nextTurn.lowerDate||nextTurn.date))),right=xday(Math.min(maxDay,dayOf(nextTurn.upperDate||nextTurn.date)));if(right>left)s+=`<rect x="${left}" y="${T}" width="${right-left}" height="${priceBottom-T}" fill="#87bde7" opacity=".065"/>`;}
-  if(band&&future.length){s+=`<path d="${path(future,y,'upper')}${pixelExtrema(future,x,['lower']).reverse().map(p=>`L${x(p).toFixed(2)},${y(p.lower).toFixed(2)}`).join('')}Z" fill="#efb45f" opacity=".13"/>`;}
+  if(band&&future.length){s+=`<path d="${path(future,y,'upper')}${tracePoints(future,'lower').reverse().map(p=>`L${x(p).toFixed(2)},${y(p.lower).toFixed(2)}`).join('')}Z" fill="#efb45f" opacity=".13"/>`;}
   for(const f of fib.filter(f=>f.price>min&&f.price<max&&(!f.startDate||f.startDate<=end))){const yy=y(f.price),from=xday(Math.max(minDay,f.startDate?dayOf(f.startDate):minDay));s+=`<line x1="${from}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#b4a7d6" opacity=".55" stroke-dasharray="3 5"/><text x="${W-R-4}" y="${yy-5}" text-anchor="end" fill="#c2b5e0" font-size="11">${nf(f.ratio*100,1)}% · ${unit==='usd'?money(f.price):nf(f.price*factor,1)}</text>`;}
   if(observed.length){
     const trace=observedTrace(observed,y,'price',point=>Boolean(point.candle));
@@ -136,7 +155,7 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   if(showCycleMarkers){
     const markerClip=`${svg.id}-milestone-clip`;
     s+=`<defs><clipPath id="${markerClip}"><rect x="${L}" y="${T}" width="${W-L-R}" height="${priceBottom-T}"/></clipPath></defs>`;
-    const layer=milestoneMarkersMarkup({markers:cycleMarkers,start,end,x,y,left:L,right:W-R,top:T,bottom:priceBottom,clipId:markerClip});
+    const layer=milestoneMarkersMarkup({markers:cycleMarkers,start,end,x,y,left:L,right:W-R,top:T,bottom:priceBottom,clipId:markerClip,activeMarkerId:activeCycleMarkerId,activeMarkerIds:activeCycleMarkerIds,activeInterval:activeCycleInterval});
     s+=layer.markup;svg.dataset.cycleMarkerCount=String(layer.markers.length);svg.dataset.cycleMarkerLabelCount=String(layer.labelCount);
   }
   const latest=originalVisible.find(p=>p.date===split);
@@ -179,7 +198,7 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
     if(isLong&&Number.isFinite(p.baselinePrice))fields.push({label:'가치평가 기준 가격',value:money(p.baselinePrice)});
     if(isLong&&Number.isFinite(p.annualizedVolatilityPct))fields.push({label:'연환산 변동성 가정',value:`${nf(p.annualizedVolatilityPct,1)}%`});
     if(isLong&&Number.isFinite(p.realizedVolPct))fields.push({label:'가정 경로의 계산 변동성',value:`${nf(p.realizedVolPct,1)}%`});
-    return {label:`${date(p.date)}${event?` · ${event.type==='high'?'고점':'저점'}${isFuture?' 예시':''}`:''}`,date:p.date,kind:isFuture?'simulated':'observed',fields,note:(p.candle?`${candleSource} 실제 거래소의 완료 ${frequency==='weekly'?'주':'일'}봉입니다. 캔들 ${p.candle.startDate}–${p.candle.endDate} UTC. 과거 종가 선과 미래 가정의 연결 기준은 Coin Metrics이며 거래소 종가와 다를 수 있습니다.`:isLong?'가격선과 범위는 경제적 채택 가정에 따른 예시입니다. 가치평가 기준과 변동성 가정은 모델 입력이며, 가정 경로의 계산 변동성은 그 예시에서 따로 계산한 값입니다. 실제 미래의 실현 변동성이나 확률이 보정된 예측구간을 뜻하지 않습니다.':isFuture?'선택한 가정의 예시입니다. 가격 범위는 확률이 보정된 예측구간이 아닙니다.':event?`가격이 꺾인 날과, 반대 방향으로 ${nf(threshold*100)}% 이동해 확인한 날을 구분합니다.`:frequency==='weekly'?'선은 주간 마지막 가격, 선택한 값은 해당 날짜의 일말 가격입니다.':`Coin Metrics의 하루 말 가격입니다. 장중 최고·최저가와 다를 수 있습니다.${volume?` 거래량은 ${volumeSource} BTC/USD 현물의 ${volume.startDate||volume.date}${volume.endDate?'–'+volume.endDate:''} UTC 합계이며 전 세계 거래량이 아닙니다.`:''}`)+(projected?` 거래량 점선은 ${volumeSource} BTC/USD 자료로 보정한 조건부 평균 거래량입니다. 음영은 가정 민감도이며 확률구간이 아닙니다. 달러 환산은 기준 가격 × 가정 BTC 수량으로, 실제 VWAP 거래대금이나 전 세계 합계가 아닙니다.`:''),...(projected?{sources:[{url:'https://github.com/twoimo/bitcoin-cycle-atlas/blob/main/docs/VOLUME_FORECAST_MODEL.md',title:'거래량 모형 · 과거 검증 · 장기 가정'}]}:{})};};
+    return {label:`${date(p.date)}${event?` · ${event.type==='high'?'고점':'저점'}${isFuture?' 예시':''}`:''}`,date:p.date,kind:isFuture?'simulated':'observed',fields,note:(p.candle?`${candleSource} 실제 거래소의 완료 ${frequency==='weekly'?'주':'일'}봉입니다. 캔들 ${p.candle.startDate}–${p.candle.endDate} UTC. 과거 종가 선과 미래 가정의 연결 기준은 Coin Metrics이며 거래소 종가와 다를 수 있습니다.`:isLong?'가격선과 범위는 경제적 채택 가정에 따른 예시입니다. 가치평가 기준과 변동성 가정은 모델 입력이며, 가정 경로의 계산 변동성은 그 예시에서 따로 계산한 값입니다. 실제 미래의 실현 변동성이나 확률이 보정된 예측구간을 뜻하지 않습니다.':isFuture?'선택한 가정의 예시입니다. 가격 범위는 확률이 보정된 예측구간이 아닙니다.':event?`가격이 꺾인 날과, 반대 방향으로 ${nf(threshold*100)}% 이동해 확인한 날을 구분합니다.`:frequency==='weekly'?(retainedDates.size?'선은 주간 마지막 가격과 표시한 사이클 기준점의 일말 가격을 연결합니다. 선택한 값은 해당 날짜의 일말 가격입니다.':'선은 주간 마지막 가격, 선택한 값은 해당 날짜의 일말 가격입니다.'):`Coin Metrics의 하루 말 가격입니다. 장중 최고·최저가와 다를 수 있습니다.${volume?` 거래량은 ${volumeSource} BTC/USD 현물의 ${volume.startDate||volume.date}${volume.endDate?'–'+volume.endDate:''} UTC 합계이며 전 세계 거래량이 아닙니다.`:''}`)+(projected?` 거래량 점선은 ${volumeSource} BTC/USD 자료로 보정한 조건부 평균 거래량입니다. 음영은 가정 민감도이며 확률구간이 아닙니다. 달러 환산은 기준 가격 × 가정 BTC 수량으로, 실제 VWAP 거래대금이나 전 세계 합계가 아닙니다.`:''),...(projected?{sources:[{url:'https://github.com/twoimo/bitcoin-cycle-atlas/blob/main/docs/VOLUME_FORECAST_MODEL.md',title:'거래량 모형 · 과거 검증 · 장기 가정'}]}:{})};};
   function mark(index,anchor=null,pointerY=null){
     cursor=index;const p=visible[index],xx=x(p),tx=Math.max(L,Math.min(W-R-80,xx-40));
     crossLine.setAttribute('x1',xx);crossLine.setAttribute('x2',xx);crossDot.setAttribute('cx',xx);
