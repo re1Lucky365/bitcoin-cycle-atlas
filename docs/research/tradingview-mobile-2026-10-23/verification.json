@@ -1,0 +1,46 @@
+{
+  "status": "passed",
+  "verifiedAt": "2026-10-23T10:45:20.029Z",
+  "baseline": "a71cdc3765fc7913dc0d9c57c94365619a4bcb0b",
+  "markdownFiles": 6,
+  "relativeReferences": 164,
+  "relativeFragments": 2,
+  "scenarios": 25,
+  "gapCandidates": 8,
+  "officialSources": 8,
+  "captures": 56,
+  "tradingViewCaptures": 19,
+  "atlasCaptures": 37,
+  "capturePngHashAndDimensionsVerified": true,
+  "visualCoverage": {
+    "captures": 56,
+    "contactSheets": 7,
+    "exportPngOriginal": true
+  },
+  "exports": {
+    "png": {
+      "width": 914,
+      "height": 1684,
+      "sha256": "02eefd5581a0f231af26dec23283bae23b35882519859da55cbab9b619e17f29"
+    },
+    "csv": {
+      "rows": 180,
+      "columns": 11,
+      "sha256": "e55bab773ae8fc54ab11d9485bebb76af132ce76f991a1fd2ea02cdba7eed2bc"
+    }
+  },
+  "baselineTests": {
+    "tests": 490,
+    "pass": 490,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "static": {
+    "status": "ok",
+    "files": 86,
+    "checkedReferences": 163
+  },
+  "applicationFilesChanged": 0,
+  "failures": []
+}

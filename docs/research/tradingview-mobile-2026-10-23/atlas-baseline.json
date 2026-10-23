@@ -1,0 +1,32 @@
+{
+  "observedAt": "2026-10-23T10:24:01.113Z",
+  "baseline": "a71cdc3765fc7913dc0d9c57c94365619a4bcb0b",
+  "packageVersion": "1.12.1",
+  "assetVersion": "1.12.1-cursor-hud.1",
+  "assets": [
+    {
+      "name": "app.js",
+      "url": "https://twoimo.github.io/bitcoin-cycle-atlas/app.js",
+      "publicSha256": "782c0d1b1a709456daa57b7d53d0b7e071b61062a4eb892b5311748a202b01ff",
+      "baselineSha256": "782c0d1b1a709456daa57b7d53d0b7e071b61062a4eb892b5311748a202b01ff"
+    },
+    {
+      "name": "mobile-workspace.css",
+      "url": "https://twoimo.github.io/bitcoin-cycle-atlas/mobile-workspace.css",
+      "publicSha256": "03c9d0e4466db10c5b42cecd09bff09bab77c4833e1e20ed753ee00ca97ec96f",
+      "baselineSha256": "03c9d0e4466db10c5b42cecd09bff09bab77c4833e1e20ed753ee00ca97ec96f"
+    },
+    {
+      "name": "chart-navigation.js",
+      "url": "https://twoimo.github.io/bitcoin-cycle-atlas/chart-navigation.js",
+      "publicSha256": "559d61d071b344416f10e38098ac7ea3520994d5701acbfbc691b4418fe801ad",
+      "baselineSha256": "559d61d071b344416f10e38098ac7ea3520994d5701acbfbc691b4418fe801ad"
+    },
+    {
+      "name": "indicator-state.js",
+      "url": "https://twoimo.github.io/bitcoin-cycle-atlas/indicator-state.js",
+      "publicSha256": "48d5d8345e701a16720371750d322cf315c46e623c4513465471b37e373112c1",
+      "baselineSha256": "48d5d8345e701a16720371750d322cf315c46e623c4513465471b37e373112c1"
+    }
+  ]
+}

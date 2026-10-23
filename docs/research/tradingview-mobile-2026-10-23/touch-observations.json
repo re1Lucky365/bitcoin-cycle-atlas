@@ -1,0 +1,607 @@
+{
+  "note": "Selected native UI observations only. Bounds are Android physical pixels, not DOM computed CSS. Offscreen/clipped children may exist in native accessibility; screenshots establish visual acceptance.",
+  "observations": [
+    {
+      "id": "MA04",
+      "observedAt": "2026-10-23T10:20:19.626Z",
+      "atlasUrl": "twoimo.github.io/bitcoin-cycle-atlas/?indicator-list=closed&type=candles",
+      "nativeUi": [
+        {
+          "label": "Bitstamp BTC-USD · 2026.02.11 UTC · O $68,801.00 H $69,235.00 L $65,719.00 C $67,053.00 · 직전 봉 종가 대비 −2.5% · 시가 대비 −2.5% · 6,069.911149 BTC",
+          "bounds": "[28,501][962,615]"
+        },
+        {
+          "label": "지표 이름·값 펼치기 · 8개",
+          "bounds": "[28,1066][135,1161]"
+        },
+        {
+          "label": "가격축 자동 맞춤 켜짐 · 눌러 현재 가격 범위 고정",
+          "bounds": "[1202,2837][1316,2969]"
+        }
+      ]
+    },
+    {
+      "id": "MA05",
+      "observedAt": "2026-10-23T10:20:28.951Z",
+      "atlasUrl": "twoimo.github.io/bitcoin-cycle-atlas/?indicator-list=closed&type=candles",
+      "nativeUi": [
+        {
+          "label": "Bitstamp BTC-USD · 2026.02.11 UTC · O $68,801.00 H $69,235.00 L $65,719.00 C $67,053.00 · 직전 봉 종가 대비 −2.5% · 시가 대비 −2.5% · 6,069.911149 BTC",
+          "bounds": "[28,501][962,615]"
+        },
+        {
+          "label": "지표 이름·값 펼치기 · 8개",
+          "bounds": "[28,1066][135,1161]"
+        },
+        {
+          "label": "가격축 자동 맞춤 켜짐 · 눌러 현재 가격 범위 고정",
+          "bounds": "[1202,2837][1316,2969]"
+        }
+      ]
+    },
+    {
+      "id": "MA06",
+      "observedAt": "2026-10-23T10:20:43.307Z",
+      "atlasUrl": "twoimo.github.io/bitcoin-cycle-atlas/?indicator-list=closed&type=candles&view-start=2025-04-02&view-end=2028-06-14",
+      "nativeUi": [
+        {
+          "label": "Bitstamp BTC-USD · 2026.02.11 UTC · O $68,801.00 H $69,235.00 L $65,719.00 C $67,053.00 · 직전 봉 종가 대비 −2.5% · 시가 대비 −2.5% · 6,069.911149 BTC",
+          "bounds": "[28,501][962,615]"
+        },
+        {
+          "label": "지표 이름·값 펼치기 · 8개",
+          "bounds": "[28,1066][135,1161]"
+        },
+        {
+          "label": "가격축 자동 맞춤 켜짐 · 눌러 현재 가격 범위 고정",
+          "bounds": "[1202,2837][1316,2969]"
+        }
+      ]
+    },
+    {
+      "id": "MA07",
+      "observedAt": "2026-10-23T10:20:51.994Z",
+      "atlasUrl": "twoimo.github.io/bitcoin-cycle-atlas/?indicator-list=closed&type=candles&view-start=2025-03-10&view-end=2028-05-22",
+      "nativeUi": [
+        {
+          "label": "Bitstamp BTC-USD · 2026.02.11 UTC · O $68,801.00 H $69,235.00 L $65,719.00 C $67,053.00 · 직전 봉 종가 대비 −2.5% · 시가 대비 −2.5% · 6,069.911149 BTC",
+          "bounds": "[28,501][962,615]"
+        },
+        {
+          "label": "지표 이름·값 펼치기 · 8개",
+          "bounds": "[28,1066][135,1161]"
+        },
+        {
+          "label": "가격축 자동 맞춤 켜짐 · 눌러 현재 가격 범위 고정",
+          "bounds": "[1202,2837][1316,2969]"
+        }
+      ]
+    },
+    {
+      "id": "MA08",
+      "observedAt": "2026-10-23T10:21:11.831Z",
+      "atlasUrl": "twoimo.github.io/bitcoin-cycle-atlas/?indicator-list=closed&type=candles&view-start=2025-03-10&view-end=2028-05-22&price-min=50209.6800874168&price-max=265080.7858955325",
+      "nativeUi": [
+        {
+          "label": "Bitstamp BTC-USD · 2026.02.11 UTC · O $68,801.00 H $69,235.00 L $65,719.00 C $67,053.00 · 직전 봉 종가 대비 −2.5% · 시가 대비 −2.5% · 6,069.911149 BTC",
+          "bounds": "[28,501][962,615]"
+        },
+        {
+          "label": "지표 이름·값 펼치기 · 8개",
+          "bounds": "[28,1066][135,1161]"
+        },
+        {
+          "label": "가격축 수동 범위 · 눌러 자동 맞춤",
+          "bounds": "[1202,2837][1316,2969]"
+        }
+      ]
+    },
+    {
+      "id": "MA09",
+      "observedAt": "2026-10-23T10:21:19.197Z",
+      "atlasUrl": "twoimo.github.io/bitcoin-cycle-atlas/?indicator-list=closed&type=candles&view-start=2025-03-10&view-end=2028-05-22",
+      "nativeUi": [
+        {
+          "label": "Bitstamp BTC-USD · 2026.02.11 UTC · O $68,801.00 H $69,235.00 L $65,719.00 C $67,053.00 · 직전 봉 종가 대비 −2.5% · 시가 대비 −2.5% · 6,069.911149 BTC",
+          "bounds": "[28,501][962,615]"
+        },
+        {
+          "label": "지표 이름·값 펼치기 · 8개",
+          "bounds": "[28,1066][135,1161]"
+        },
+        {
+          "label": "가격축 자동 맞춤 켜짐 · 눌러 현재 가격 범위 고정",
+          "bounds": "[1202,2837][1316,2969]"
+        }
+      ]
+    },
+    {
+      "id": "MA10",
+      "observedAt": "2026-10-23T10:21:28.437Z",
+      "atlasUrl": "twoimo.github.io/bitcoin-cycle-atlas/?indicator-list=open&type=candles&view-start=2025-03-10&view-end=2028-05-22",
+      "nativeUi": [
+        {
+          "label": "Bitstamp BTC-USD · 2026.02.11 UTC · O $68,801.00 H $69,235.00 L $65,719.00 C $67,053.00 · 직전 봉 종가 대비 −2.5% · 시가 대비 −2.5% · 6,069.911149 BTC",
+          "bounds": "[28,501][962,615]"
+        },
+        {
+          "label": "거래량 숨기기",
+          "bounds": "[700,1066][808,1173]"
+        },
+        {
+          "label": "거래량 삭제",
+          "bounds": "[808,1066][912,1173]"
+        },
+        {
+          "label": "지표 이름·값 접기 · 8개",
+          "bounds": "[28,1641][135,1735]"
+        },
+        {
+          "label": "가격축 자동 맞춤 켜짐 · 눌러 현재 가격 범위 고정",
+          "bounds": "[1202,2837][1316,2969]"
+        }
+      ]
+    },
+    {
+      "id": "MA11",
+      "observedAt": "2026-10-23T10:21:39.806Z",
+      "atlasUrl": "twoimo.github.io/bitcoin-cycle-atlas/?indicator-list=open&type=candles&view-start=2025-03-10&view-end=2028-05-22&indicator-hide=volume",
+      "nativeUi": [
+        {
+          "label": "Bitstamp BTC-USD · 2026.02.11 UTC · O $68,801.00 H $69,235.00 L $65,719.00 C $67,053.00 · 직전 봉 종가 대비 −2.5% · 시가 대비 −2.5% · 6,069.911149 BTC",
+          "bounds": "[28,501][962,615]"
+        },
+        {
+          "label": "거래량 표시",
+          "bounds": "[700,1066][808,1173]"
+        },
+        {
+          "label": "거래량 삭제",
+          "bounds": "[808,1066][912,1173]"
+        },
+        {
+          "label": "지표 이름·값 접기 · 8개",
+          "bounds": "[28,1641][135,1735]"
+        },
+        {
+          "label": "가격축 자동 맞춤 켜짐 · 눌러 현재 가격 범위 고정",
+          "bounds": "[1202,2837][1316,2969]"
+        }
+      ]
+    },
+    {
+      "id": "MA12",
+      "observedAt": "2026-10-23T10:21:59.561Z",
+      "atlasUrl": "twoimo.github.io/bitcoin-cycle-atlas/?indicator-list=open&type=candles&view-start=2025-03-10&view-end=2028-05-22",
+      "nativeUi": [
+        {
+          "label": "Bitstamp BTC-USD · 2026.02.11 UTC · O $68,801.00 H $69,235.00 L $65,719.00 C $67,053.00 · 직전 봉 종가 대비 −2.5% · 시가 대비 −2.5% · 6,069.911149 BTC",
+          "bounds": "[28,501][962,615]"
+        },
+        {
+          "label": "거래량 숨기기",
+          "bounds": "[700,1066][808,1173]"
+        },
+        {
+          "label": "거래량 삭제",
+          "bounds": "[808,1066][912,1173]"
+        },
+        {
+          "label": "지표 이름·값 접기 · 8개",
+          "bounds": "[28,1641][135,1735]"
+        },
+        {
+          "label": "가격축 자동 맞춤 켜짐 · 눌러 현재 가격 범위 고정",
+          "bounds": "[1202,2837][1316,2969]"
+        }
+      ]
+    },
+    {
+      "id": "MA15",
+      "observedAt": "2026-10-23T10:22:41.570Z",
+      "atlasUrl": "twoimo.github.io/bitcoin-cycle-atlas/?indicator-list=open&type=candles&view-start=2025-03-10&view-end=2028-05-22&indicators=readout%2Csource%2Clegend%2Ccountdown%2Cvolume%2Chistory%2Crange%2Cturns%2Ccycle-landmarks%2Ccycle-intervals%2Ccycle-timing%2Ccycles&chart=cycles",
+      "nativeUi": [
+        {
+          "label": "인디케이터 창 닫기",
+          "bounds": "[1224,943][1366,1085]"
+        },
+        {
+          "label": "1개 · 차트에 12개 추가됨",
+          "bounds": "[25,1757][1417,1865]"
+        }
+      ]
+    },
+    {
+      "id": "MA16",
+      "observedAt": "2026-10-23T10:22:51.297Z",
+      "atlasUrl": "twoimo.github.io/bitcoin-cycle-atlas/?indicator-list=open&type=candles&view-start=2025-03-10&view-end=2028-05-22&indicators=readout%2Csource%2Clegend%2Ccountdown%2Cvolume%2Chistory%2Crange%2Cturns%2Ccycle-landmarks%2Ccycle-intervals%2Ccycle-timing%2Ccycles&chart=cycles",
+      "nativeUi": [
+        {
+          "label": "Bitstamp BTC-USD · 2026.02.11 UTC · O $68,801.00 H $69,235.00 L $65,719.00 C $67,053.00 · 직전 봉 종가 대비 −2.5% · 시가 대비 −2.5% · 6,069.911149 BTC",
+          "bounds": "[28,501][962,615]"
+        },
+        {
+          "label": "4년 비교 분석 창 접기",
+          "bounds": "[968,1596][1101,1729]"
+        },
+        {
+          "label": "4년 비교 삭제",
+          "bounds": "[1253,1596][1385,1729]"
+        },
+        {
+          "label": "거래량 숨기기",
+          "bounds": "[763,1066][871,1173]"
+        },
+        {
+          "label": "거래량 삭제",
+          "bounds": "[871,1066][978,1173]"
+        },
+        {
+          "label": "4년 비교 삭제",
+          "bounds": "[871,1874][978,1981]"
+        },
+        {
+          "label": "지표 이름·값 접기 · 9개",
+          "bounds": "[28,1641][135,1735]"
+        },
+        {
+          "label": "가격축 자동 맞춤 켜짐 · 눌러 현재 가격 범위 고정",
+          "bounds": "[1202,2837][1316,2969]"
+        }
+      ]
+    },
+    {
+      "id": "MA17",
+      "observedAt": "2026-10-23T10:23:20.709Z",
+      "atlasUrl": "twoimo.github.io/bitcoin-cycle-atlas/?indicator-list=open&type=candles&view-start=2025-03-10&view-end=2028-05-22&indicators=readout%2Csource%2Clegend%2Ccountdown%2Cvolume%2Chistory%2Crange%2Cturns%2Ccycle-landmarks%2Ccycle-intervals%2Ccycle-timing%2Ccycles&chart=cycles&indicator-minimize=cycles",
+      "nativeUi": [
+        {
+          "label": "Bitstamp BTC-USD · 2026.02.11 UTC · O $68,801.00 H $69,235.00 L $65,719.00 C $67,053.00 · 직전 봉 종가 대비 −2.5% · 시가 대비 −2.5% · 6,069.911149 BTC",
+          "bounds": "[28,501][962,615]"
+        },
+        {
+          "label": "4년 비교 분석 창 펼치기",
+          "bounds": "[968,1596][1101,1729]"
+        },
+        {
+          "label": "4년 비교 삭제",
+          "bounds": "[1253,1596][1385,1729]"
+        },
+        {
+          "label": "거래량 숨기기",
+          "bounds": "[763,1066][871,1173]"
+        },
+        {
+          "label": "거래량 삭제",
+          "bounds": "[871,1066][978,1173]"
+        },
+        {
+          "label": "4년 비교 삭제",
+          "bounds": "[871,1874][978,1981]"
+        },
+        {
+          "label": "지표 이름·값 접기 · 9개",
+          "bounds": "[28,1641][135,1735]"
+        },
+        {
+          "label": "가격축 자동 맞춤 켜짐 · 눌러 현재 가격 범위 고정",
+          "bounds": "[1202,2837][1316,2969]"
+        }
+      ]
+    },
+    {
+      "id": "MA19",
+      "observedAt": "2026-10-23T10:23:40.877Z",
+      "atlasUrl": "twoimo.github.io/bitcoin-cycle-atlas/?indicator-list=open&type=candles&view-start=2025-03-10&view-end=2028-05-22",
+      "nativeUi": [
+        {
+          "label": "Bitstamp BTC-USD · 2026.02.11 UTC · O $68,801.00 H $69,235.00 L $65,719.00 C $67,053.00 · 직전 봉 종가 대비 −2.5% · 시가 대비 −2.5% · 6,069.911149 BTC",
+          "bounds": "[28,501][962,615]"
+        },
+        {
+          "label": "거래량 숨기기",
+          "bounds": "[700,1066][808,1173]"
+        },
+        {
+          "label": "거래량 삭제",
+          "bounds": "[808,1066][912,1173]"
+        },
+        {
+          "label": "지표 이름·값 접기 · 8개",
+          "bounds": "[28,1641][135,1735]"
+        },
+        {
+          "label": "가격축 자동 맞춤 켜짐 · 눌러 현재 가격 범위 고정",
+          "bounds": "[1202,2837][1316,2969]"
+        }
+      ]
+    },
+    {
+      "id": "MA21",
+      "observedAt": "2026-10-23T10:24:22.594Z",
+      "atlasUrl": "twoimo.github.io/bitcoin-cycle-atlas/?indicator-list=closed&type=candles&granularity=1h",
+      "nativeUi": [
+        {
+          "label": "Coinbase Exchange BTC-USD · 2026-10-23 03:00 UTC · O $81,849.38 H $81,919.62 L $81,586.26 C $81,769.15 · 직전 봉 종가 대비 −0.1% · 시가 대비 −0.1% · 91.730065 BTC",
+          "bounds": "[28,501][1003,615]"
+        },
+        {
+          "label": "Coinbase BTC-USD · 저장 자료 2026-10-23 04:50 UTC",
+          "bounds": "[41,631][766,687]"
+        },
+        {
+          "label": "지표 이름·값 펼치기 · 8개",
+          "bounds": "[28,810][135,905]"
+        },
+        {
+          "label": "가격축 자동 맞춤 켜짐 · 눌러 현재 가격 범위 고정",
+          "bounds": "[1202,2837][1316,2969]"
+        }
+      ]
+    },
+    {
+      "id": "MA22",
+      "observedAt": "2026-10-23T10:25:04.118Z",
+      "atlasUrl": "twoimo.github.io/bitcoin-cycle-atlas/?indicator-list=closed&type=candles&granularity=1h",
+      "nativeUi": [
+        {
+          "label": "Coinbase Exchange BTC-USD · 2026-10-23 03:00 UTC · O $81,849.38 H $81,919.62 L $81,586.26 C $81,769.15 · 직전 봉 종가 대비 −0.1% · 시가 대비 −0.1% · 91.730065 BTC",
+          "bounds": "[28,501][1003,615]"
+        },
+        {
+          "label": "Coinbase BTC-USD · 조회 완료 2026-10-23 10:24 UTC",
+          "bounds": "[41,631][760,687]"
+        },
+        {
+          "label": "지표 이름·값 펼치기 · 8개",
+          "bounds": "[28,810][135,905]"
+        },
+        {
+          "label": "가격축 자동 맞춤 켜짐 · 눌러 현재 가격 범위 고정",
+          "bounds": "[1202,2837][1316,2969]"
+        }
+      ]
+    },
+    {
+      "id": "MA23",
+      "observedAt": "2026-10-23T10:25:16.654Z",
+      "atlasUrl": "twoimo.github.io/bitcoin-cycle-atlas/?indicator-list=closed&type=candles&granularity=1h",
+      "nativeUi": [
+        {
+          "label": "Coinbase Exchange BTC-USD · 2026-10-23 05:00 UTC · O $81,470.69 H $81,773.27 L $81,470.69 C $81,714.96 · 직전 봉 종가 대비 +0.3% · 시가 대비 +0.3% · 81.066300 BTC",
+          "bounds": "[28,501][1003,615]"
+        },
+        {
+          "label": "Coinbase BTC-USD · 조회 완료 2026-10-23 10:24 UTC",
+          "bounds": "[41,631][760,687]"
+        },
+        {
+          "label": "지표 이름·값 펼치기 · 8개",
+          "bounds": "[28,810][135,905]"
+        },
+        {
+          "label": "가격축 자동 맞춤 켜짐 · 눌러 현재 가격 범위 고정",
+          "bounds": "[1202,2837][1316,2969]"
+        }
+      ]
+    },
+    {
+      "id": "MA26",
+      "observedAt": "2026-10-23T10:26:04.814Z",
+      "atlasUrl": "twoimo.github.io/bitcoin-cycle-atlas/?indicator-list=closed&type=candles&granularity=1h",
+      "nativeUi": [
+        {
+          "label": "Coinbase Exchange BTC-USD · 2026-10-21 08:00 UTC · O $83,058.85 H $83,608.74 L $83,000.00 C $83,143.28 · 직전 봉 종가 대비 +0.1% · 시가 대비 +0.1% · 353.737185 BTC",
+          "bounds": "[28,501][1003,615]"
+        },
+        {
+          "label": "Coinbase BTC-USD · 조회 완료 2026-10-23 10:24 UTC",
+          "bounds": "[41,631][760,687]"
+        },
+        {
+          "label": "지표 이름·값 펼치기 · 8개",
+          "bounds": "[28,810][135,905]"
+        },
+        {
+          "label": "가격축 자동 맞춤 켜짐 · 눌러 현재 가격 범위 고정",
+          "bounds": "[1202,2837][1316,2969]"
+        }
+      ]
+    },
+    {
+      "id": "MA28",
+      "observedAt": "2026-10-23T10:26:52.213Z",
+      "atlasUrl": "twoimo.github.io/bitcoin-cycle-atlas/?indicator-list=closed&type=candles&granularity=1h",
+      "nativeUi": [
+        {
+          "label": "Coinbase Exchange BTC-USD · 2026-10-21 08:00 UTC · O $83,058.85 H $83,608.74 L $83,000.00 C $83,143.28 · 직전 봉 종가 대비 +0.1% · 시가 대비 +0.1% · 353.737185 BTC",
+          "bounds": "[28,501][1003,615]"
+        },
+        {
+          "label": "Coinbase BTC-USD · 조회 완료 2026-10-23 10:24 UTC",
+          "bounds": "[41,631][760,687]"
+        },
+        {
+          "label": "지표 이름·값 펼치기 · 8개",
+          "bounds": "[28,810][135,905]"
+        },
+        {
+          "label": "가격축 자동 맞춤 켜짐 · 눌러 현재 가격 범위 고정",
+          "bounds": "[1202,2837][1316,2969]"
+        },
+        {
+          "label": "차트 설정",
+          "bounds": "[50,530][492,1057]"
+        },
+        {
+          "label": "SVG 저장",
+          "bounds": "[501,530][940,1057]"
+        },
+        {
+          "label": "작업 화면·공유",
+          "bounds": "[50,1066][492,1590]"
+        }
+      ]
+    },
+    {
+      "id": "MA29",
+      "observedAt": "2026-10-23T10:27:17.868Z",
+      "atlasUrl": "twoimo.github.io/bitcoin-cycle-atlas/?indicator-list=closed&type=candles&granularity=1h",
+      "nativeUi": [
+        {
+          "label": "차트 설정",
+          "bounds": "[15,495][1426,3029]"
+        },
+        {
+          "label": "차트 설정",
+          "bounds": "[56,567][1221,637]"
+        }
+      ]
+    },
+    {
+      "id": "MA30",
+      "observedAt": "2026-10-23T10:28:20.867Z",
+      "atlasUrl": "twoimo.github.io/bitcoin-cycle-atlas/?indicator-list=closed&type=candles&granularity=1h",
+      "nativeUi": [
+        {
+          "label": "Coinbase Exchange BTC-USD · 2026-10-21 08:00 UTC · O $83,058.85 H $83,608.74 L $83,000.00 C $83,143.28 · 직전 봉 종가 대비 +0.1% · 시가 대비 +0.1% · 353.737185 BTC",
+          "bounds": "[28,501][1003,615]"
+        },
+        {
+          "label": "Coinbase BTC-USD · 조회 완료 2026-10-23 10:24 UTC",
+          "bounds": "[41,631][760,687]"
+        },
+        {
+          "label": "지표 이름·값 펼치기 · 8개",
+          "bounds": "[28,810][135,905]"
+        },
+        {
+          "label": "가격축 자동 맞춤 켜짐 · 눌러 현재 가격 범위 고정",
+          "bounds": "[1202,2837][1316,2969]"
+        },
+        {
+          "label": "주 가격 차트와 가정·출처를 PNG로 저장했습니다.",
+          "bounds": "[359,2477][1085,2695]"
+        }
+      ]
+    },
+    {
+      "id": "MA32",
+      "observedAt": "2026-10-23T10:29:33.417Z",
+      "atlasUrl": "twoimo.github.io/bitcoin-cycle-atlas/?indicator-list=closed&type=candles&granularity=1h",
+      "nativeUi": [
+        {
+          "label": "작업 화면 닫기",
+          "bounds": "[1237,880][1354,997]"
+        }
+      ]
+    },
+    {
+      "id": "MA33",
+      "observedAt": "2026-10-23T10:29:43.266Z",
+      "atlasUrl": "twoimo.github.io/bitcoin-cycle-atlas/?indicator-list=closed&type=candles&granularity=1h",
+      "nativeUi": [
+        {
+          "label": "작업 화면 닫기",
+          "bounds": "[1237,880][1354,997]"
+        },
+        {
+          "label": "현재 화면 링크",
+          "bounds": "[88,1972][1354,2038]"
+        }
+      ]
+    },
+    {
+      "id": "MA34",
+      "observedAt": "2026-10-23T10:30:12.445Z",
+      "atlasUrl": "twoimo.github.io/bitcoin-cycle-atlas/?indicator-list=closed&type=candles&granularity=1h",
+      "nativeUi": [
+        {
+          "label": "작업 화면 닫기",
+          "bounds": "[1237,1237][1354,1353]"
+        },
+        {
+          "label": "현재 범위 완료 OHLC CSV 조회된 실제 완료 봉 · Coinbase · USD",
+          "bounds": "[88,1710][1354,1890]"
+        }
+      ]
+    },
+    {
+      "id": "MA35",
+      "observedAt": "2026-10-23T10:30:26.474Z",
+      "atlasUrl": "twoimo.github.io/bitcoin-cycle-atlas/?indicator-list=closed&type=candles&granularity=1h",
+      "nativeUi": [
+        {
+          "label": "Coinbase Exchange BTC-USD · 2026-10-21 08:00 UTC · O $83,058.85 H $83,608.74 L $83,000.00 C $83,143.28 · 직전 봉 종가 대비 +0.1% · 시가 대비 +0.1% · 353.737185 BTC",
+          "bounds": "[28,501][1003,615]"
+        },
+        {
+          "label": "Coinbase BTC-USD · 조회 완료 2026-10-23 10:24 UTC",
+          "bounds": "[41,631][760,687]"
+        },
+        {
+          "label": "지표 이름·값 펼치기 · 8개",
+          "bounds": "[28,810][135,905]"
+        },
+        {
+          "label": "가격축 자동 맞춤 켜짐 · 눌러 현재 가격 범위 고정",
+          "bounds": "[1202,2837][1316,2969]"
+        },
+        {
+          "label": "현재 범위의 실제 관측값을 USD 단위 CSV로 저장했습니다.",
+          "bounds": "[359,2477][1085,2695]"
+        }
+      ]
+    },
+    {
+      "id": "MA36",
+      "observedAt": "2026-10-23T10:31:34.399Z",
+      "atlasUrl": "twoimo.github.io/bitcoin-cycle-atlas/?indicator-list=closed&type=candles&granularity=1h",
+      "nativeUi": [
+        {
+          "label": "차트 설정",
+          "bounds": "[2733,274][2837,378]"
+        },
+        {
+          "label": "Coinbase Exchange BTC-USD · 2026-10-21 08:00 UTC · O $83,058.85 H $83,608.74 L $83,000.00 C $83,143.28 · 직전 봉 종가 대비 +0.1% · 시가 대비 +0.1% · 353.737185 BTC",
+          "bounds": "[167,413][1164,542]"
+        },
+        {
+          "label": "Coinbase BTC-USD · 조회 완료 2026-10-23 10:24 UTC",
+          "bounds": "[179,555][978,602]"
+        },
+        {
+          "label": "지표 이름·값 펼치기 · 8개",
+          "bounds": "[167,624][265,697]"
+        },
+        {
+          "label": "가격축 자동 맞춤 켜짐 · 눌러 현재 가격 범위 고정",
+          "bounds": "[2212,1275][2316,1363]"
+        }
+      ]
+    },
+    {
+      "id": "MA37",
+      "observedAt": "2026-10-23T10:31:58.850Z",
+      "atlasUrl": "twoimo.github.io/bitcoin-cycle-atlas/?indicator-list=closed&type=candles&granularity=1h",
+      "nativeUi": [
+        {
+          "label": "Coinbase Exchange BTC-USD · 2026-10-21 08:00 UTC · O $83,058.85 H $83,608.74 L $83,000.00 C $83,143.28 · 직전 봉 종가 대비 +0.1% · 시가 대비 +0.1% · 353.737185 BTC",
+          "bounds": "[28,501][1003,615]"
+        },
+        {
+          "label": "Coinbase BTC-USD · 조회 완료 2026-10-23 10:24 UTC",
+          "bounds": "[41,631][760,687]"
+        },
+        {
+          "label": "지표 이름·값 펼치기 · 8개",
+          "bounds": "[28,810][135,905]"
+        },
+        {
+          "label": "가격축 자동 맞춤 켜짐 · 눌러 현재 가격 범위 고정",
+          "bounds": "[1202,2837][1316,2969]"
+        }
+      ]
+    }
+  ]
+}

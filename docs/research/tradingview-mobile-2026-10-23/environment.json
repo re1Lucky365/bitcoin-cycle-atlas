@@ -1,0 +1,60 @@
+{
+  "observedDateKst": "2026-10-23",
+  "target": "emulator-5554",
+  "deviceClass": "Android ARM64 virtual device, not a physical Samsung Galaxy",
+  "model": "sdk_gphone64_arm64",
+  "android": "14",
+  "resolutionPortrait": [
+    1440,
+    3120
+  ],
+  "resolutionLandscape": [
+    3120,
+    1440
+  ],
+  "densityDpi": 505,
+  "androidAppBoundsDp": {
+    "portrait": [
+      456,
+      917
+    ],
+    "landscape": [
+      941,
+      404
+    ]
+  },
+  "chrome": "113.0.5672.136",
+  "timezone": "Asia/Seoul",
+  "input": "ADB single-finger taps, long presses via stationary swipe, horizontal and vertical swipes; emulator rotate",
+  "tradingView": {
+    "surface": "mobile website, anonymous/new blank /chart/ tab",
+    "nativeAppInstalled": false,
+    "signupOverlay": true,
+    "savedMainOpened": false
+  },
+  "physicalDevices": {
+    "connected": false,
+    "availableOnline": false
+  },
+  "notTested": [
+    "physical One UI hardware",
+    "TradingView native Android app",
+    "iOS Safari and native app",
+    "simultaneous two-finger pinch",
+    "TalkBack/VoiceOver",
+    "FPS/touch latency/battery",
+    "broker/order/alert execution"
+  ],
+  "preservation": {
+    "taskTabsClosed": 2,
+    "existingTabsNotClosed": true,
+    "originalAppRestored": "com.instagram.android/com.instagram.mainactivity.InstagramMainActivity",
+    "rotationRestored": 0,
+    "accelerometerRotationUnchanged": 1,
+    "userRotationUnchanged": 0,
+    "noAppInstallOrUpgrade": true,
+    "noDevicePermissionChanges": true,
+    "noLayoutSaveOrWorkspaceSave": true,
+    "noAppSourceChanges": true
+  }
+}

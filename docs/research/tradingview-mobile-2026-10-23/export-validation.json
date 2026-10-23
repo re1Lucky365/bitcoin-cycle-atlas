@@ -1,0 +1,39 @@
+{
+  "rowCount": 180,
+  "columns": 11,
+  "consistentColumns": true,
+  "sources": [
+    "Coinbase Exchange"
+  ],
+  "kinds": [
+    "observed"
+  ],
+  "currency": [
+    "USD"
+  ],
+  "interval": [
+    "1h"
+  ],
+  "first": "2026-10-15T22:00:00.000Z",
+  "last": "2026-10-23T09:00:00.000Z",
+  "allCompletedBeforeDownload": true,
+  "strictlyIncreasing": true,
+  "ohlcSane": true,
+  "csvSha256": "e55bab773ae8fc54ab11d9485bebb76af132ce76f991a1fd2ea02cdba7eed2bc",
+  "downloadObservedAt": "2026-10-23T10:30:26.474Z",
+  "png": {
+    "file": "exports/Atlas_Android_1h.png",
+    "downloadName": "Bitcoin_Price_and_Future.png",
+    "format": "PNG",
+    "width": 914,
+    "height": 1684,
+    "bytes": 190802,
+    "sha256": "02eefd5581a0f231af26dec23283bae23b35882519859da55cbab9b619e17f29",
+    "inspected": "original file visually reviewed; source, measurement and some clipped right-axis labels observed"
+  },
+  "csv": {
+    "file": "exports/Atlas_Android_1h.csv",
+    "downloadName": "Bitcoin_Observed_1h.csv",
+    "bytes": 23967
+  }
+}
