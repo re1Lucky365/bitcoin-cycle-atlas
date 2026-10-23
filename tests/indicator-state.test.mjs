@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {INDICATORS,normalizeIndicatorState,readIndicatorState,writeIndicatorState,changeIndicatorState,isIndicatorVisible,visibleAnalysisIds,searchIndicators} from '../dist/indicator-state.js';
+import {INDICATORS,normalizeIndicatorState,readIndicatorState,writeIndicatorState,changeIndicatorState,applyIndicatorLayout,isIndicatorVisible,visibleAnalysisIds,searchIndicators} from '../dist/indicator-state.js';
 import {preparePriceViewData} from '../dist/price-view-data.js';
 import {chartIndicatorItems} from '../dist/indicator-workbench.js';
 import {INDICATOR_PREFERENCES_KEY,readIndicatorPreferences,writeIndicatorPreferences,saveIndicatorTemplate} from '../dist/indicator-preferences.js';
@@ -19,7 +19,7 @@ test('fresh and reset charts keep volume added but hidden, and an explicit visib
     const params=writeIndicatorState(new URLSearchParams('granularity=1h&type=candles'),visible);
     assert.equal(params.has('indicator-hide'),true);assert.equal(params.get('indicator-hide'),'','an explicit visible default must not disappear from the shared link');
     assert.equal(params.get('granularity'),'1h');assert.equal(params.get('type'),'candles');
-    assert.deepEqual(readIndicatorState(params,{mobile:!mobile}),visible);
+    assert.deepEqual(readIndicatorState(params,{mobile:!mobile}),applyIndicatorLayout(visible,{mobile:!mobile}));
     const reset=changeIndicatorState(visible,{action:'reset'});assert.ok(reset.added.includes('volume'));assert.equal(isIndicatorVisible(reset,'volume'),false);assert.deepEqual(reset.added,fresh.added);
     assert.deepEqual(readIndicatorState(writeIndicatorState(new URLSearchParams(),reset),{mobile:false}),reset);
   }
@@ -76,14 +76,23 @@ test('explicit closed legend survives sharing while existing open links remain e
   assert.deepEqual(readIndicatorState(params),expanded);
 });
 
-test('only a fresh mobile chart starts folded and either explicit choice survives device changes',()=>{
+test('mobile always folds names and values even for an explicit desktop-open URL',()=>{
   assert.equal(readIndicatorState('',{mobile:true}).collapsed,true);
   assert.equal(readIndicatorState('',{mobile:false}).collapsed,false);
   for(const mobile of [true,false])for(const collapsed of [true,false]){
     const state=readIndicatorState(`indicator-list=${collapsed?'closed':'open'}`,{mobile});
-    assert.equal(state.collapsed,collapsed);
+    assert.equal(state.collapsed,mobile||collapsed);
     const params=writeIndicatorState(new URLSearchParams(),state);
-    assert.equal(readIndicatorState(params,{mobile:!mobile}).collapsed,collapsed);
+    assert.equal(readIndicatorState(params,{mobile:true}).collapsed,true);
+  }
+});
+
+test('mobile layout also constrains reset, template replacement and expansion without hiding studies',()=>{
+  const desktop=normalizeIndicatorState({added:['volume','cycles'],hidden:['cycles']});
+  for(const state of [desktop,changeIndicatorState(desktop,{action:'reset'}),changeIndicatorState(desktop,{action:'replace',state:desktop}),changeIndicatorState({...desktop,collapsed:true},{action:'collapse'})]){
+    const mobile=applyIndicatorLayout(state,{mobile:true});
+    assert.equal(mobile.collapsed,true);assert.deepEqual({...mobile,collapsed:state.collapsed},state);
+    assert.equal(applyIndicatorLayout(state,{mobile:false}),state);
   }
 });
 

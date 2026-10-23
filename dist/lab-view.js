@@ -1,13 +1,13 @@
 import {priceLegendMarkup,priceReadoutKind,observedPriceSourceLabel} from './price-legend.js?v=1.14.0-mobile.1';
-import { buildCycleMilestones, INTERVAL_RELATIONS, MILESTONE_TYPES } from './cycle-milestones.js?v=1.11.0-milestones.4';
-import { cycleLegendMarkup, cycleMilestoneInspection, cycleIntervalInspection, cycleDurationLabel } from './cycle-milestones-view.js?v=1.11.0-milestones.4';
+import { buildCycleMilestones, INTERVAL_RELATIONS, MILESTONE_TYPES } from './cycle-milestones.js?v=1.14.1-touch.1';
+import { cycleLegendMarkup, cycleMilestoneInspection, cycleIntervalInspection, cycleDurationLabel } from './cycle-milestones-view.js?v=1.14.1-touch.1';
 import { resolveCycleSelection, cycleSelectionViewport, cycleOverviewViewport } from './cycle-selection.js?v=1.11.0-milestones.4';
-import { drawAtlasPriceChart as drawChart } from './atlas-price-chart.js?v=1.14.0-mobile.1';
+import { drawAtlasPriceChart as drawChart } from './atlas-price-chart.js?v=1.14.1-touch.1';
 import { renderCryptoConAudit } from './cryptocon-audit.js?v=1.13.0-research.1';
-import { bindChartNavigation, panRange } from './chart-navigation.js?v=1.14.0-mobile.1';
+import { bindChartNavigation, panRange } from './chart-navigation.js?v=1.14.1-touch.1';
 import { renderAtlasAnalysis } from './atlas-analysis.js?v=1.13.0-research.1';
-import { ANALYSIS_MODES, analysisCalendarDate, shouldPublishInspection, analysisSelectionSummary } from './analysis-dock.js?v=1.14.0-mobile.1';
-import { INDICATORS, readIndicatorState, writeIndicatorState, changeIndicatorState, isIndicatorVisible, visibleAnalysisIds, indicatorSettings, applyIndicatorPresentation } from './indicator-state.js?v=1.14.0-mobile.1';
+import { ANALYSIS_MODES, analysisCalendarDate, shouldPublishInspection, analysisSelectionSummary } from './analysis-dock.js?v=1.14.1-touch.1';
+import { INDICATORS, readIndicatorState, writeIndicatorState, changeIndicatorState, applyIndicatorLayout, isIndicatorVisible, visibleAnalysisIds, indicatorSettings, applyIndicatorPresentation } from './indicator-state.js?v=1.14.1-touch.1';
 import { preparePriceViewData } from './price-view-data.js?v=1.11.0';
 import { chartSelectionHandler } from './inspection-policy.js?v=1.11.0';
 import { buildLongHorizonForecast, LONG_HORIZON_SCENARIOS } from './long-horizon-forecast.js?v=1.11.0';
@@ -302,7 +302,10 @@ export function initLabView() {
   const inspectPriceSelection=chartSelectionHandler(inspect);
   function analysisDate(detail=state.lastAnalysisDetail){return analysisCalendarDate(detail,{firstDate:state.dataset?.prices[0]?.[0],lastDate:state.dataset?.prices.at(-1)?.[0]});}
   function publishAnalysisState(extra={}){document.dispatchEvent(new CustomEvent('atlas:analysis-state',{detail:{mode:state.analysisMode,metric:state.atlasMetric,open:state.analysisOpen,...extra}}));}
+  const indicatorLayout=window.matchMedia('(max-width:620px)');
+  indicatorLayout.addEventListener('change',()=>{publishIndicators();syncAtlasUrl();});
   function publishIndicators(){
+    state.indicators=applyIndicatorLayout(state.indicators,{mobile:indicatorLayout.matches});
     state.analysisOpen=visibleAnalysisIds(state.indicators,state.frequency).length>0;
     for(const item of INDICATORS)if(item.control){const input=$(`#${item.control}`);if(input)input.checked=shown(item.id);}
     document.dispatchEvent(new CustomEvent('atlas:indicator-state',{detail:{indicators:state.indicators,frequency:state.frequency,cycleCalibration:state.models.get(state.scenario)?.cycleCalibration?.current}}));

@@ -467,3 +467,37 @@ test('scope, scale, tool changes and cancellation discard pending price-axis fra
     assert.equal(prices.length,0,change);assert.equal(h.element.hasPointerCapture(1),false,change);
   }
 });
+
+
+test('touch capture handoff from an SVG child does not cancel continuous panning',()=>{
+  const h=navigationHarness();
+  h.fire('pointerdown',{pointerType:'touch',clientX:750});
+  h.pointer('pointermove',{pointerType:'touch',clientX:700});h.flush();
+  // Chrome sends a bubbling lostpointercapture for the old implicit SVG target
+  // when explicit capture is transferred to the stable plot container.
+  h.element.emit('lostpointercapture',{target:h.svg,pointerId:1});
+  assert.equal(h.element.dataset.dragging,'true');
+  h.pointer('pointermove',{pointerType:'touch',clientX:400});h.flush();
+  h.controller.update();
+  h.pointer('pointermove',{pointerType:'touch',clientX:150});h.flush();
+  assert.deepEqual(h.range,panRange(range,600/870));
+  assert.equal(h.changes.length,3);
+  h.pointer('pointerup',{pointerType:'touch',clientX:150});
+  assert.equal(h.element.dataset.dragging,undefined);h.controller.destroy();
+});
+
+test('annotation gestures can pan without consuming ordinary annotation taps',()=>{
+  for(const className of ['history-event-marker','cycle-interval','cycle-marker']){
+    const h=navigationHarness(),label=h.document.createElement('g');label.setAttribute('class',className);label.setAttribute('role','button');h.svg.append(label);
+    h.fire('pointerdown',{target:label,pointerType:'touch',clientX:750});
+    h.pointer('pointermove',{target:label,pointerType:'touch',clientX:746});
+    h.pointer('pointerup',{target:label,pointerType:'touch',clientX:746});
+    assert.equal(h.fire('click',{target:label}).defaultPrevented,false,'tap still selects '+className);
+    h.fire('pointerdown',{target:label,pointerType:'touch',clientX:750});
+    h.pointer('pointermove',{target:label,pointerType:'touch',clientX:150});h.flush();
+    assert.deepEqual(h.range,panRange(range,600/870),className);
+    h.pointer('pointerup',{target:label,pointerType:'touch',clientX:150});
+    assert.equal(h.fire('click',{target:label}).defaultPrevented,true,'drag cannot select '+className);
+    h.controller.destroy();
+  }
+});

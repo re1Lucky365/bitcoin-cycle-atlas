@@ -1,4 +1,4 @@
-import {normalizeIndicatorState,isIndicatorVisible,ANALYSIS_PANE_MIN_HEIGHT,ANALYSIS_PANE_MAX_HEIGHT,ANALYSIS_PANE_DEFAULT_HEIGHT} from './indicator-state.js?v=1.14.0-mobile.1';
+import {normalizeIndicatorState,isIndicatorVisible,ANALYSIS_PANE_MIN_HEIGHT,ANALYSIS_PANE_MAX_HEIGHT,ANALYSIS_PANE_DEFAULT_HEIGHT} from './indicator-state.js?v=1.14.1-touch.1';
 
 export const ANALYSIS_MODES = Object.freeze([
   {id:'cycles',label:'4년 비교'},

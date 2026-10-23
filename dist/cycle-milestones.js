@@ -26,8 +26,10 @@ export const INTERVAL_RELATIONS = Object.freeze([
 /** Image annotations are attributed source claims, never model inputs or measured durations. */
 export const MILESTONE_SOURCE_REFERENCE = Object.freeze({
   title: 'Insights from Bitcoin Halvings (v.3)', author: 'ilay_ / @ilay_vp',
-  publishedAt: '2024-08-06T22:33:00+03:00', instrument: 'Bitcoin Liquid Index · 1W · BNC',
-  source: '사용자가 제공한 TradingView 차트 이미지',
+  publishedAt: '2024-08-06T19:34:44Z', chartCapturedAt: '2024-08-06T22:33:00+03:00', instrument: 'Bitcoin Liquid Index · 1W · BNC',
+  source: 'X 원문과 원문에 첨부된 TradingView 차트 이미지',
+  url: 'https://x.com/ilay_vp/status/1820906371669168600',
+  imageUrl: 'https://pbs.twimg.com/media/GUUooPxW4AAR1l9.jpg',
   cycles: Object.freeze(['2011–2013', '2015–2017', '2019–2021', '2022–2025']),
   periodClaims: Object.freeze({
     'bottom-bottom': Object.freeze(['214', '204', '204', '204']),
@@ -41,7 +43,7 @@ export const MILESTONE_SOURCE_REFERENCE = Object.freeze({
     'pit-stop-cycle-top': Object.freeze(['13', '13 + 2', '13 − 2', '13 + 2']),
   }),
   unit: 'weeks', datesAreWeeklyLabels: true, usedForCalculation: false,
-  note: '2024년 8월 원본의 2025·2026 표시는 당시 가정입니다. 원본 BLX 주봉과 이 앱의 Coin Metrics 일말 가격·기준점 정의는 달라 주 수가 일치하지 않을 수 있습니다.',
+  note: '2024년 8월 원본의 2025·2026 표시는 당시 가정입니다. 원본 BLX 주봉과 이 앱의 Coin Metrics 일말 가격·기준점 정의는 달라 주 수가 일치하지 않을 수 있습니다. 원문의 ATH 기간은 Sustained ATH(돌파 후 유지)이며 앱의 첫 일말 돌파 ATH와 같지 않습니다. 원문 §3의 104 + 7~8 = 113은 산술오류입니다. 실제 합은 111~112주이며 113주에는 9주가 필요합니다. COVID의 7~8주 효과와 반복 주수는 인과관계·예측 법칙으로 입증되지 않은 가설입니다.',
 });
 
 const METHODS = Object.freeze({

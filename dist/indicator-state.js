@@ -49,6 +49,10 @@ export function normalizeIndicatorState(value={}) {
   return {added,hidden,minimized,active,primary,collapsed:value.collapsed===true,settings,paneOrder,paneHeights,maximized};
 }
 
+export function applyIndicatorLayout(state,{mobile=globalThis.matchMedia?.('(max-width:620px)')?.matches??false}={}) {
+  return mobile && !state.collapsed ? {...state,collapsed:true} : state;
+}
+
 export function readIndicatorState(search='',{mobile=globalThis.matchMedia?.('(max-width:620px)')?.matches??false}={}) {
   const params=search instanceof URLSearchParams?search:new URLSearchParams(search);
   const added=params.has('indicators')?params.get('indicators').split(','):defaults.slice();
@@ -65,7 +69,7 @@ export function readIndicatorState(search='',{mobile=globalThis.matchMedia?.('(m
   if(!params.has('indicator-settings')&&settings&&typeof settings==='object'&&!Array.isArray(settings))for(const [id,key,param] of [['cycles','alignment','align'],['duration','phase','phase'],['periods','period','interval'],['periods','metric','measure'],['periods','scope','scope'],['cryptocon','view','audit']]){
     if(params.has(param)&&!Object.hasOwn(settings[id]?.inputs||{},key))settings[id]={...settings[id],inputs:{...settings[id]?.inputs,[key]:params.get(param)}};
   }
-  return normalizeIndicatorState({added,hidden,minimized:params.get('indicator-minimize')?.split(',')||[],active:legacy,primary:params.get('indicator-primary'),collapsed:legend==='closed'||legend!=='open'&&mobile,settings,paneOrder:params.get('pane-order')?.split(',')||[],paneHeights:parseJson(params.get('pane-heights')),maximized:params.get('pane-maximized')});
+  return applyIndicatorLayout(normalizeIndicatorState({added,hidden,minimized:params.get('indicator-minimize')?.split(',')||[],active:legacy,primary:params.get('indicator-primary'),collapsed:legend==='closed',settings,paneOrder:params.get('pane-order')?.split(',')||[],paneHeights:parseJson(params.get('pane-heights')),maximized:params.get('pane-maximized')}),{mobile});
 }
 
 export function writeIndicatorState(params,state) {
@@ -73,7 +77,7 @@ export function writeIndicatorState(params,state) {
   if(addedKey===defaultKey)params.delete('indicators');else params.set('indicators',addedKey);
   if(next.hidden.length||next.added.includes('volume'))params.set('indicator-hide',next.hidden.join(','));else params.delete('indicator-hide');
   if(next.minimized.length)params.set('indicator-minimize',next.minimized.join(','));else params.delete('indicator-minimize');
-  // Both choices are explicit in shared/saved charts, even across device sizes.
+  // Desktop choices remain explicit; mobile layout always folds the value rows.
   params.set('indicator-list',next.collapsed?'closed':'open');
   if(next.primary)params.set('indicator-primary',next.primary);else params.delete('indicator-primary');
   // An explicit empty map separates new default inputs from unrelated legacy

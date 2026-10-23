@@ -1,6 +1,6 @@
 import { utcDay } from './cycle-engine.js?v=1.11.0';
 import { shiftCalendarMonths } from './cycle-timing.js?v=1.11.0';
-import { MILESTONE_TYPES, INTERVAL_RELATIONS } from './cycle-milestones.js?v=1.11.0-milestones.4';
+import { MILESTONE_TYPES, INTERVAL_RELATIONS } from './cycle-milestones.js?v=1.14.1-touch.1';
 
 /** Pure presentation: all dates, prices and classifications come from the
  * milestone engine. Zoom changes geometry and label density, never endpoints. */
@@ -243,7 +243,7 @@ export function cycleLegendMarkup() {
 export function cycleSourceReferenceMarkup(sourceReference) {
   if (!sourceReference || !Array.isArray(sourceReference.cycles) || !sourceReference.periodClaims) return '';
   const reference = sourceReference;
-  return `<details class="cycle-source-reference"><summary>첨부 원본의 기간 표 · 2024년 당시 가정 포함</summary><p>${esc(reference.title)} · ${esc(reference.author)} · ${esc(reference.publishedAt)}<br>${esc(reference.instrument)}</p><p>${esc(reference.note || '원본에 적힌 비교값입니다. 현재 앱의 실제 경과 기간과 구분합니다.')}</p><div class="cycle-source-table-wrap" tabindex="0" role="region" aria-label="원본 이미지 기간 비교표"><table><caption>원본에 표기된 주 수 · 계산 입력으로 사용하지 않음</caption><thead><tr><th scope="col">관계</th>${reference.cycles.map(cycle => `<th scope="col">${esc(cycle)}</th>`).join('')}</tr></thead><tbody>${INTERVAL_RELATIONS.map(relation => `<tr><th scope="row">${esc(relation.label)}</th>${reference.cycles.map((_, index) => `<td>${esc(reference.periodClaims[relation.id]?.[index] ?? '—')}</td>`).join('')}</tr>`).join('')}</tbody></table></div><p>단위: 주. 원본의 주봉 날짜·지수·선택 기준과 현재 일말 자료는 다릅니다. 그림에 맞추기 위해 실제 기간이나 가격을 변경하지 않습니다.</p></details>`;
+  return `<details class="cycle-source-reference"><summary>첨부 원본의 기간 표 · 2024년 당시 가정 포함</summary><p>${esc(reference.title)} · ${esc(reference.author)} · ${esc(reference.publishedAt)}<br>${esc(reference.instrument)}${reference.chartCapturedAt?`<br>차트 작성 ${esc(reference.chartCapturedAt)} · 게시 시각과 구분`:''}${reference.url?`<br><a href="${esc(reference.url)}" target="_blank" rel="noopener noreferrer">X 원문</a>`:''}</p><p>${esc(reference.note || '원본에 적힌 비교값입니다. 현재 앱의 실제 경과 기간과 구분합니다.')}</p><div class="cycle-source-table-wrap" tabindex="0" role="region" aria-label="원본 이미지 기간 비교표"><table><caption>원본에 표기된 주 수 · 계산 입력으로 사용하지 않음</caption><thead><tr><th scope="col">관계</th>${reference.cycles.map(cycle => `<th scope="col">${esc(cycle)}</th>`).join('')}</tr></thead><tbody>${INTERVAL_RELATIONS.map(relation => `<tr><th scope="row">${esc(relation.id==='bottom-ath'?'BOTTOM → Sustained ATH':relation.id==='ath-cycle-top'?'Sustained ATH → CYCLE TOP':relation.label)}</th>${reference.cycles.map((_, index) => `<td>${esc(reference.periodClaims[relation.id]?.[index] ?? '—')}</td>`).join('')}</tr>`).join('')}</tbody></table></div><p>단위: 주. 원본의 주봉 날짜·지수·선택 기준과 현재 일말 자료는 다릅니다. 그림에 맞추기 위해 실제 기간이나 가격을 변경하지 않습니다.</p></details>`;
 }
 
 function selectionWindowFields(item, prefix = '') {

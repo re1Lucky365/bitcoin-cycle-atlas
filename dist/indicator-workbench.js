@@ -1,8 +1,8 @@
-import { INDICATORS, readIndicatorState, normalizeIndicatorState, isIndicatorVisible } from './indicator-state.js?v=1.14.0-mobile.1';
+import { INDICATORS, readIndicatorState, normalizeIndicatorState, isIndicatorVisible } from './indicator-state.js?v=1.14.1-touch.1';
 import {indicatorReadout,indicatorReadoutDate} from './indicator-readouts.js?v=1.13.0-research.1';
 import {INDICATOR_SETTINGS,indicatorSettings,indicatorSupportsInterval} from './indicator-settings.js?v=1.13.0-research.1';
-import {mountIndicatorSettingsDialog} from './indicator-settings-dialog.js?v=1.14.0-mobile.1';
-import {INDICATOR_PREFERENCES_KEY,MAX_TEMPLATE_NAME,readIndicatorPreferences,writeIndicatorPreferences,toggleIndicatorFavorite,saveIndicatorTemplate,deleteIndicatorTemplate,indicatorLibraryItems,hasIndicatorTemplate} from './indicator-preferences.js?v=1.14.0-mobile.1';
+import {mountIndicatorSettingsDialog} from './indicator-settings-dialog.js?v=1.14.1-touch.1';
+import {INDICATOR_PREFERENCES_KEY,MAX_TEMPLATE_NAME,readIndicatorPreferences,writeIndicatorPreferences,toggleIndicatorFavorite,saveIndicatorTemplate,deleteIndicatorTemplate,indicatorLibraryItems,hasIndicatorTemplate} from './indicator-preferences.js?v=1.14.1-touch.1';
 
 const ICONS={eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',hidden:'<path d="m3 3 18 18M10 5a12 12 0 0 1 2 0c6.5 0 10 7 10 7a20 20 0 0 1-3 4M6 6a20 20 0 0 0-4 6s3.5 7 10 7a12 12 0 0 0 5-1"/>',close:'<path d="m6 6 12 12M6 18 18 6"/>',expand:'<path d="m7 10 5 5 5-5"/>',collapse:'<path d="m7 14 5-5 5 5"/>'};
 const glyph=name=>`<svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[name]}</svg>`;
@@ -31,7 +31,8 @@ export function mountIndicatorWorkbench({plot,stage}) {
   list.setAttribute('role','list');
   const readoutDate=doc.createElement('p');readoutDate.id='indicator-readout-date';readoutDate.className='indicator-readout-date';
   const fold=doc.createElement('button');fold.type='button';fold.id='indicator-legend-toggle';fold.className='indicator-legend-toggle';fold.setAttribute('aria-controls',list.id);
-  fold.onclick=()=>command('collapse');
+  const mobileLayout=()=>doc.defaultView.matchMedia?.('(max-width:620px)')?.matches??false;
+  fold.onclick=()=>{if(!mobileLayout())command('collapse');};
   manager.append(readoutDate,list,fold);plot.append(manager);
   // Observe layout boxes, never the price path. Wrapped readouts determine the
   // legend position; the actual plot height bounds its scrollable overflow.
@@ -183,6 +184,9 @@ export function mountIndicatorWorkbench({plot,stage}) {
     const items=chartIndicatorItems(state);
     applyDisplay();manager.dataset.collapsed=String(state.collapsed);manager.hidden=!items.length;list.hidden=state.collapsed;readoutDate.hidden=state.collapsed;
     fold.hidden=!items.length;fold.setAttribute('aria-expanded',String(!state.collapsed));fold.innerHTML=glyph(state.collapsed?'expand':'collapse');fold.title=`지표 이름·값 ${state.collapsed?'펼치기':'접기'} · ${items.length}개`;fold.setAttribute('aria-label',fold.title);
+    const mobile=mobileLayout();
+    fold.disabled=mobile;listVisible.disabled=mobile;
+    if(mobile){fold.title='모바일에서는 지표 이름·값 항상 접힘 · 인디케이터 메뉴에서 관리';fold.setAttribute('aria-label',fold.title);}
     listVisible.checked=!state.collapsed;
     const hasVisible=items.some(item=>isIndicatorVisible(state,item.id));all.textContent=hasVisible?'지표 일괄 숨김':'지표 일괄 표시';all.disabled=!items.length;all.title=`가격·OHLC, 출처, 범례를 유지하고 지표를 ${hasVisible?'모두 숨기기':'모두 표시'}`;all.setAttribute('aria-label',all.title);
     const key=JSON.stringify([state.added,state.hidden,state.collapsed,state.settings,intraday,readoutContext.workbench.frequency]);if(key===listKey){scheduleReadouts();return;}listKey=key;

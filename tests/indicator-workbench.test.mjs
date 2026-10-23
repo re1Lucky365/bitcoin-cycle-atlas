@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { mountIndicatorWorkbench } from '../dist/indicator-workbench.js';
-import { readIndicatorState, changeIndicatorState, writeIndicatorState, isIndicatorVisible } from '../dist/indicator-state.js';
+import { readIndicatorState, changeIndicatorState, writeIndicatorState, applyIndicatorLayout, isIndicatorVisible } from '../dist/indicator-state.js';
 
 // Exercise the shipped controller, reducer and shared-link boundary together.
 // This fixture does not claim browser layout, SVG painting or native tab order.
@@ -66,7 +66,7 @@ function fixture(t,{mobile=false,search=''}={}){
   const original=new Map(['location','matchMedia','ResizeObserver','requestAnimationFrame','cancelAnimationFrame'].map(key=>[key,Object.getOwnPropertyDescriptor(globalThis,key)]));
   const frames=new Map(),observers=[];let frame=0;
   Object.assign(globalThis,{location:{search},matchMedia:()=>({matches:mobile}),ResizeObserver:class{constructor(callback){this.callback=callback;this.targets=new Set();observers.push(this);}observe(node){this.targets.add(node);}disconnect(){this.targets.clear();}},requestAnimationFrame:callback=>{frames.set(++frame,callback);return frame;},cancelAnimationFrame:id=>frames.delete(id)});
-  const doc=new Surface(),win=new Surface(),stored=new Map();doc.defaultView=win;win.localStorage={getItem:key=>stored.get(key)||null,setItem:(key,value)=>stored.set(key,value)};
+  const doc=new Surface(),win=new Surface(),stored=new Map();doc.defaultView=win;win.matchMedia=globalThis.matchMedia;win.localStorage={getItem:key=>stored.get(key)||null,setItem:(key,value)=>stored.set(key,value)};
   doc.createElement=tag=>new Element(tag,doc);doc.createTextNode=text=>{const node=doc.createElement('#text');node.textContent=text;return node;};
   doc.body=doc.createElement('body');doc.activeElement=doc.body;doc.querySelector=selector=>doc.body.querySelector(selector);doc.querySelectorAll=selector=>doc.body.querySelectorAll(selector);doc.getElementById=id=>doc.querySelector(`#${id}`);
   const add=(parent,tag,id,className='')=>{const node=doc.createElement(tag);node.id=id;node.className=className;parent.append(node);return node;};
@@ -76,7 +76,7 @@ function fixture(t,{mobile=false,search=''}={}){
   let state=readIndicatorState(search),query=search;
   const publish=()=>doc.dispatchEvent({type:'atlas:indicator-state',detail:{indicators:state}});
   const command=detail=>doc.dispatchEvent(new CustomEvent('atlas:indicator-command',{detail}));
-  doc.addEventListener('atlas:indicator-command',event=>{state=changeIndicatorState(state,event.detail);query=writeIndicatorState(new URLSearchParams(query),state).toString();publish();});
+  doc.addEventListener('atlas:indicator-command',event=>{state=applyIndicatorLayout(changeIndicatorState(state,event.detail));query=writeIndicatorState(new URLSearchParams(query),state).toString();publish();});
   const controller=mountIndicatorWorkbench({plot,stage});
   if(!cleanups.has(t)){const items=[];cleanups.set(t,items);t.after(()=>{for(const cleanup of items.reverse())cleanup();});}
   cleanups.get(t).push(()=>{controller.destroy();for(const [key,descriptor]of original)descriptor?Object.defineProperty(globalThis,key,descriptor):delete globalThis[key];});
@@ -96,14 +96,17 @@ test('the real legend button folds every study row, including a single volume ro
   fold.click();assert.equal(list.hidden,false);assert.equal(fold.getAttribute('aria-expanded'),'true');assert.equal(f.doc.activeElement,fold);
 });
 
-test('fresh mobile legend is folded while an explicit open URL keeps all study rows available',t=>{
-  const fresh=fixture(t,{mobile:true});
+test('mobile names and values remain folded for fresh, shared-open, reset and template states',t=>{
+  const fresh=fixture(t,{mobile:true,search:'indicator-list=open'});
   assert.equal(fresh.node('chart-indicator-list').hidden,true);assert.equal(fresh.node('chart-indicator-manager').hidden,false);
+  assert.equal(fresh.node('indicator-legend-toggle').disabled,true);
+  assert.equal(fresh.node('indicator-list-visibility').disabled,true);
   fresh.node('indicator-legend-toggle').click();
-  assert.equal(new URLSearchParams(fresh.query).get('indicator-list'),'open');
-  const restored=fixture(t,{mobile:true,search:fresh.query});
-  assert.equal(restored.node('chart-indicator-list').hidden,false);assert.equal(restored.node('indicator-legend-toggle').getAttribute('aria-expanded'),'true');
-  assert.equal(restored.node('indicator-primary'),null,'the obsolete representative-row setting is absent');
+  assert.equal(fresh.state.collapsed,true);
+  for(const detail of [{action:'reset'},{action:'replace',state:{...fresh.state,collapsed:false}},{action:'collapse'}]){
+    fresh.command(detail);assert.equal(fresh.state.collapsed,true);assert.equal(fresh.node('chart-indicator-list').hidden,true);
+  }
+  fresh.controller.open(fresh.opener);assert.equal(fresh.node('indicator-library').open,true,'library remains accessible');
 });
 
 test('desktop fold survives a shared link and does not retain a legacy primary row on mobile',t=>{
@@ -140,7 +143,7 @@ test('folding with focus in a study row returns focus to the visible arrow and d
 });
 
 test('folded rows keep the current selected value and reveal it immediately on expansion',t=>{
-  const f=fixture(t,{mobile:true,search:'indicators=volume'});
+  const f=fixture(t,{search:'indicators=volume&indicator-list=closed'});
   f.doc.dispatchEvent({type:'atlas:readout',detail:{date:'2026-10-21',price:84000,volume:1234,volumeSource:'Bitstamp',frequency:'daily',kind:'observed'}});f.flush();
   f.node('indicator-legend-toggle').click();
   assert.equal(f.node('chart-indicator-list').hidden,false);
@@ -187,7 +190,7 @@ test('settings remain reachable through the library when mobile legend is fully 
 });
 
 test('study folding leaves the legend anchored directly below readout/source without reviving a countdown HUD',t=>{
-  const f=fixture(t,{mobile:true,search:'indicators=readout,source,legend,countdown,volume'}),plot=f.node('plot'),readout=f.node('lab-metrics'),source=f.node('source'),manager=f.node('chart-indicator-manager'),list=f.node('chart-indicator-list'),legend=f.node('foot');
+  const f=fixture(t,{search:'indicators=readout,source,legend,countdown,volume&indicator-list=closed'}),plot=f.node('plot'),readout=f.node('lab-metrics'),source=f.node('source'),manager=f.node('chart-indicator-manager'),list=f.node('chart-indicator-list'),legend=f.node('foot');
   f.doc.dispatchEvent({type:'atlas:workbench-state',detail:{intraday:false,countdown:{status:'upcoming',dday:'D-20',date:'2026-11-12',nextLabel:'하락',minimumRunDays:7}}});
   assert.equal(f.node('scenario-countdown'),null,'old saved links and state payloads cannot mount the removed card');
   assert.equal(isIndicatorVisible(f.state,'countdown'),false);

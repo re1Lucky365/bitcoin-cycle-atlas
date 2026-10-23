@@ -6,6 +6,22 @@
   <meta name="theme-color" content="#0c0f14">
   <meta name="description" content="비트코인 반감기, 저점, 고점, 이전 최고가 돌파 사이클과 방향 전환 시점을 실제 일별 데이터로 비교하세요. 관측일과 확인일, 사이클 속도, 계산 근거를 함께 제공합니다.">
   <title>Bitcoin Cycles — 비트코인 통합 차트</title>
+  <link rel="canonical" href="https://twoimo.github.io/bitcoin-cycle-atlas/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Bitcoin Cycle Atlas">
+  <meta property="og:title" content="비트코인 사이클 아틀라스">
+  <meta property="og:description" content="반감기·고점·저점과 사이클 기간을 실제 데이터로 비교하는 비트코인 차트. 관측과 미래 가정을 구분합니다.">
+  <meta property="og:url" content="https://twoimo.github.io/bitcoin-cycle-atlas/">
+  <meta property="og:image" content="https://twoimo.github.io/bitcoin-cycle-atlas/social-preview.png?v=20261024">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Bitcoin Cycle Atlas · 비트코인을 중심으로 과거 사이클을 표현한 금색·청색·보라색 궤도 일러스트">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="비트코인 사이클 아틀라스">
+  <meta name="twitter:description" content="반감기·고점·저점·사이클 기간을 실제 데이터로 비교합니다.">
+  <meta name="twitter:image" content="https://twoimo.github.io/bitcoin-cycle-atlas/social-preview.png?v=20261024">
+  <meta name="twitter:image:alt" content="Bitcoin Cycle Atlas · 비트코인과 사이클 궤도 일러스트">
   <!-- Keep the first paint stable while the module graph builds the workbench. -->
   <style id="atlas-boot-style">
     html[data-boot="loading"],html[data-boot="error"]{background:#10151c;overflow:hidden}
@@ -74,7 +90,7 @@
   <link rel="stylesheet" href="./chart-workspace-controls.css?v=1.13.0-research.1">
   <link rel="stylesheet" href="./research-annotations.css?v=1.13.0-research.1">
   <link rel="stylesheet" href="./chart-export-workbench.css?v=1.14.0-mobile.1">
-  <link rel="stylesheet" href="./cycle-milestones.css?v=1.14.0-mobile.1">
+  <link rel="stylesheet" href="./cycle-milestones.css?v=1.14.1-touch.1">
   <link rel="stylesheet" href="./compact-chart-layout.css?v=1.14.0-mobile.1">
   <link rel="stylesheet" href="./chart-bottom-bar.css?v=1.14.0-mobile.1">
 </head>
@@ -188,7 +204,7 @@
               <p id="atlas-cycle-note" class="cycle-panel-note">기간선을 선택하면 양 끝점과 정확한 날짜·경과일을 확인할 수 있습니다.</p><details class="cycle-reference"><summary>첨부 이미지와 계산 기준 비교</summary><div id="atlas-cycle-reference"></div></details>
             </div></details>
           </section>
-          <div class="lab-chart-foot"><div id="atlas-chart-legend" class="lab-legend"></div><span id="atlas-chart-caveat" class="lab-caveat">미래는 가정에 따른 예시</span></div>
+          <div class="lab-chart-foot" tabindex="0" role="region" aria-label="차트 범례 · 좁은 화면에서는 좌우로 이동"><div id="atlas-chart-legend" class="lab-legend"></div><span id="atlas-chart-caveat" class="lab-caveat">미래는 가정에 따른 예시</span></div>
           <div class="atlas-inspector" aria-label="선택한 날짜와 구간의 값">
             <div class="atlas-inspector-top"><div><span id="atlas-inspector-kind" class="atlas-kind">실제 관측</span><strong id="atlas-inspector-title">그래프를 눌러 확인하세요</strong></div><div class="atlas-inspector-actions"><label id="atlas-date-label" class="atlas-date-input"><span class="lab-visually-hidden">확인할 날짜</span><input id="atlas-date" type="date" aria-label="확인할 날짜"></label><button id="atlas-inspect-prev" aria-label="이전 고점·저점">← 이전</button><button id="atlas-inspect-next" aria-label="다음 고점·저점">다음 →</button><button id="atlas-latest">최근 관측</button></div></div>
             <div id="atlas-inspector-values" class="atlas-inspector-values"></div><p id="atlas-inspector-note" class="atlas-inspector-note"></p>
@@ -283,6 +299,6 @@
   <dialog id="method-dialog" aria-labelledby="method-title"><div class="dialog-top"><span class="eyebrow">DATA & METHODOLOGY</span><button id="close-method" class="icon-button" aria-label="방법론 닫기"><span data-icon="close"></span></button></div><h2 id="method-title">방법론과 출처</h2><p class="dialog-lead">차트의 출발점부터 가격의 정의까지, 비교에 사용한 기준입니다.</p><div id="method-content"></div><button id="method-done" class="primary-button">확인했습니다</button></dialog>
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
   <dialog id="evidence-dialog" aria-labelledby="evidence-detail-title"><div class="dialog-top"><span class="eyebrow">EVIDENCE & LIMITS</span><button id="evidence-close" class="icon-button" aria-label="자료 상세 닫기"><span data-icon="close"></span></button></div><h2 id="evidence-detail-title"></h2><div id="evidence-detail-body"></div></dialog>
-  <script type="module" src="./app.js?v=1.14.0-mobile.1"></script>
+  <script type="module" src="./app.js?v=1.14.1-touch.1"></script>
 </body>
 </html>

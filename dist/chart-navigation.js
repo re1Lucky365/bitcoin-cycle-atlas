@@ -147,7 +147,7 @@ export function bindChartNavigation({
   const listen = (target, type, handler, options) => { target.addEventListener(type, handler, options);listeners.push([target, type, handler, options]); };
   // Event labels are chart surfaces for wheel navigation, while their click,
   // pointer and keyboard activation keeps the usual interactive boundary.
-  const interactive = (target, allowHistoryWheel = false) => Boolean(target?.closest?.(`button,input,select,textarea,summary,a,[contenteditable=true],.analysis-indicator-windows,#chart-indicator-manager,[role=button]${allowHistoryWheel ? ':not(.history-event-marker):not(.cycle-interval):not(.cycle-milestone-marker):not(.research-annotation)' : ''},[role=menu],[data-next-turn]`));
+  const interactive = (target, allowAnnotations = false) => Boolean(target?.closest?.(`button,input,select,textarea,summary,a,[contenteditable=true],.analysis-indicator-windows,#chart-indicator-manager,[role=button]${allowAnnotations ? ':not(.history-event-marker):not(.cycle-interval):not(.cycle-marker):not(.cycle-milestone-marker):not(.research-annotation)' : ''},[role=menu]${allowAnnotations ? '' : ',[data-next-turn]'}`));
   const chartSvg = () => element.querySelector('svg[data-plot-left]:not([hidden])');
   const focusChart = () => chartSvg()?.focus?.({ preventScroll: true });
 
@@ -293,7 +293,7 @@ export function bindChartNavigation({
       const bounds=timeAxisBounds();drag={kind:'time-scale',id:event.pointerId,x:event.clientX,y:event.clientY,lastX:event.clientX,lastY:event.clientY,pointerType:event.pointerType,width:bounds.width,range,tool:getTool(),anchor:(event.clientX-bounds.left)/bounds.width,active:false};
       event.preventDefault();event.stopImmediatePropagation();return;
     }
-    if (!range || getTool() === 'measure' || event.button !== 0 || (event.isPrimary === false&&event.pointerType!=='touch') || interactive(event.target) || !inside(event, rect)) return;
+    if (!range || getTool() === 'measure' || event.button !== 0 || (event.isPrimary === false&&event.pointerType!=='touch') || interactive(event.target, true) || !inside(event, rect)) return;
     if(touch){
       if((joinsTouch&&(completedPinchTouches.size||!touches.size))||touches.size>=2){
         completedPinchTouches.add(event.pointerId);event.preventDefault();event.stopImmediatePropagation();return;
@@ -409,7 +409,7 @@ export function bindChartNavigation({
     return true;
   }
   function click(event) {
-    if (event.detail !== 0 && suppressClickUntil > Date.now() && !interactive(event.target)) {
+    if (event.detail !== 0 && suppressClickUntil > Date.now() && !interactive(event.target, true)) {
       suppressClickUntil = 0;event.preventDefault();event.stopImmediatePropagation();
     }
   }
@@ -518,7 +518,9 @@ export function bindChartNavigation({
   listen(window, 'pointermove', pointerMove, { passive: false, capture: true });
   listen(window, 'pointerup', pointerUp, true);
   listen(window, 'pointercancel', pointerCancel, true);
-  listen(element, 'lostpointercapture', pointerCancel, true);
+  // A child's implicit touch capture is released when capture transfers to
+  // the stable plot. Only loss of the plot's own capture cancels its gesture.
+  listen(element, 'lostpointercapture', event => { if (event.target === element) pointerCancel(event); }, true);
   listen(element, 'click', click, true);
   listen(element, 'dblclick', doubleClick, true);
   listen(element, 'contextmenu', contextMenu, true);
