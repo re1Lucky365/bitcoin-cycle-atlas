@@ -1,0 +1,1163 @@
+{
+  "schemaVersion": 1,
+  "researchDate": "2026-10-23",
+  "timezone": "Asia/Seoul",
+  "atlasInitialRevision": "0827b66c3be5028cc6945416d49cfe3764eaea16",
+  "atlasFinalRevision": "d54d09ff653486a53435428b78f36d9ba68e5cae",
+  "officialDocumentCount": 24,
+  "workflowCount": 32,
+  "candidateCount": 12,
+  "captureCount": 70,
+  "notes": [
+    "Actual product UI captures, not mockups.",
+    "No private saved-layout URL, local source path, virtual ref or raw snapshot is included.",
+    "T40 is an unsuccessful selection-stage attempt; T41/T42 show actual creation/undo.",
+    "T05/T62/T63 were visually reviewed and retaken; fileModifiedAt reflects final file."
+  ],
+  "captures": [
+    {
+      "id": "A01-atlas-baseline",
+      "label": "Atlas 조사 시작 화면",
+      "steps": [
+        "사용자가 지정한 기존 Atlas 탭을 읽고 캡처"
+      ],
+      "notes": "조사 시작 당시 화면. 최신 d54d09f 공개 배포의 재검증 증거가 아님.",
+      "file": "captures/A01-atlas-baseline.png",
+      "width": 1208,
+      "height": 1008,
+      "bytes": 247160,
+      "sha256": "61dbfe18c8907bcc6f5689ad4ce3f150e270f18b2e62a2eac27c8259ada7b2a3",
+      "fileModifiedAt": "2026-10-23T09:27:51.835Z",
+      "observedAt": null,
+      "observedAtNote": "capture instant not separately logged; fileModifiedAt is file metadata, not an invented observation timestamp"
+    },
+    {
+      "id": "T01-existing-layout-entry",
+      "label": "TradingView 기존 레이아웃 첫 진입",
+      "steps": [
+        "Supercharts 열기",
+        "기존 MAIN과 1W Candles 확인"
+      ],
+      "notes": "기존 차트의 개인 그림/지표를 연구용 신규 작업공간으로 오인하지 않음.",
+      "file": "captures/T01-existing-layout-entry.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 281056,
+      "sha256": "37af0e7be1dabfd31a90d7e90272be7977b1e45cbff28a57c200079135aa51a9",
+      "fileModifiedAt": "2026-10-23T09:28:09.535Z",
+      "observedAt": null,
+      "observedAtNote": "capture instant not separately logged; fileModifiedAt is file metadata, not an invented observation timestamp"
+    },
+    {
+      "id": "T02-layout-plan-limit",
+      "label": "새 레이아웃 플랜 제한",
+      "steps": [
+        "Manage layouts → Create new layout"
+      ],
+      "notes": "현재 계정 1 saved layout 제한 안내. 업그레이드/결제 없음.",
+      "file": "captures/T02-layout-plan-limit.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 306937,
+      "sha256": "7cc354aae77612509e412472e10edf5c709767e8d6d0c919d024f21e82599639",
+      "fileModifiedAt": "2026-10-23T09:28:54.548Z",
+      "observedAt": null,
+      "observedAtNote": "capture instant not separately logged; fileModifiedAt is file metadata, not an invented observation timestamp"
+    },
+    {
+      "id": "T03-main-baseline",
+      "label": "비저장 조사 기준 화면",
+      "steps": [
+        "Supercharts 열기",
+        "Manage layouts에서 Autosave aria-checked=false 확인"
+      ],
+      "notes": "MAIN을 수동 저장하지 않음. 새 레이아웃과 복사는 현재 플랜 제한.",
+      "file": "captures/T03-main-baseline.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 278488,
+      "sha256": "562983424b57620806eb46efb41542fa7fa5633afd144f81417036ce80540e70",
+      "fileModifiedAt": "2026-10-23T09:29:19.560Z",
+      "observedAt": "2026-10-23T09:29:19.560Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T04-symbol-search",
+      "label": "심볼 검색: 거래소·상품 구분",
+      "steps": [
+        "상단 BTCUSDT 클릭",
+        "동일 티커의 거래소별 결과 비교"
+      ],
+      "notes": "BINANCE:BTCUSDT는 USDT 호가. Atlas BTCUSD 합성/거래소 자료와 동일 원자료가 아님.",
+      "file": "captures/T04-symbol-search.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 226879,
+      "sha256": "f0262361bc7aab892cc8c06ba4a01b17410b4cc24bf27eac7c794236b1779b03",
+      "fileModifiedAt": "2026-10-23T09:29:32.836Z",
+      "observedAt": "2026-10-23T09:29:32.837Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T05-symbol-exact-exchange",
+      "label": "거래소 지정 검색",
+      "steps": [
+        "검색창에 BITSTAMP:BTCUSD 입력"
+      ],
+      "notes": "검색 지연 중이던 최초 캡처를 폐기하고 실제 Bitstamp 결과가 나온 상태로 재촬영. 심볼 선택 안 함.",
+      "file": "captures/T05-symbol-exact-exchange.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 230771,
+      "sha256": "a7d7bf574f973337bf86c36252d9e5ffae04a678eaa8fe55377f9eb11c2c301d",
+      "fileModifiedAt": "2026-10-23T09:45:27.360Z",
+      "observedAt": "2026-10-23T09:45:27.360Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T06-interval-menu",
+      "label": "봉 간격 메뉴",
+      "steps": [
+        "Chart interval 열기",
+        "Minutes / Hours / Days 및 즐겨찾기 확인"
+      ],
+      "notes": "상단 D/W는 봉 간격, 하단 1D/1Y는 보이는 기간. 서로 다른 제어.",
+      "file": "captures/T06-interval-menu.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 283151,
+      "sha256": "a96b18116a0bee9d418ab96e45de1b429ade22fb85422cfecaf931e9e8bcfe8a",
+      "fileModifiedAt": "2026-10-23T09:29:42.098Z",
+      "observedAt": "2026-10-23T09:29:42.098Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T07-daily-selected",
+      "label": "일봉 전환 결과",
+      "steps": [
+        "간격 메뉴에서 1 day 선택",
+        "상태줄 1D 및 일봉 canvas 확인"
+      ],
+      "notes": "자동 저장 false. 기존 MAIN 수동 저장 안 함.",
+      "file": "captures/T07-daily-selected.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 229564,
+      "sha256": "accf826b88a2af99afad552483c0d5effb6d8f29bdbe9cfe4354d141e0fd212d",
+      "fileModifiedAt": "2026-10-23T09:29:42.931Z",
+      "observedAt": "2026-10-23T09:29:42.931Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T08-chart-types",
+      "label": "차트 유형 목록",
+      "steps": [
+        "Candles 메뉴 열기",
+        "표준 가격 차트와 변환 차트 구분"
+      ],
+      "notes": "Heikin Ashi/Renko를 실제 거래 OHLC로 취급하면 안 됨.",
+      "file": "captures/T08-chart-types.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 241239,
+      "sha256": "2c34b25f2b005f2127107dfd52a52fb5491abe80d73a0fa7aa98a4d0b85dae39",
+      "fileModifiedAt": "2026-10-23T09:29:56.623Z",
+      "observedAt": "2026-10-23T09:29:56.623Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T09-line-result",
+      "label": "선 차트 전환 결과",
+      "steps": [
+        "유형 메뉴에서 Line 선택",
+        "상단 버튼 Line으로 바뀜 확인"
+      ],
+      "notes": "지표·그림은 유지, 가격 시각화만 전환",
+      "file": "captures/T09-line-result.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 237048,
+      "sha256": "0632b3546c94e5cbb880b48104af734597e3a4de795627cbf38eeb55c2547e89",
+      "fileModifiedAt": "2026-10-23T09:29:57.834Z",
+      "observedAt": "2026-10-23T09:29:57.837Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T10-settings-symbol",
+      "label": "설정: Symbol",
+      "steps": [
+        "Settings 열기",
+        "Symbol 탭 확인"
+      ],
+      "notes": "선의 가격 source, 선 모양, 정밀도, 시간대.",
+      "file": "captures/T10-settings-symbol.png",
+      "width": 1208,
+      "height": 1008,
+      "bytes": 175249,
+      "sha256": "d7209728ea3ee2876f878560f3d45e5a0de92952c29875cd426374e43493777b",
+      "fileModifiedAt": "2026-10-23T09:30:16.636Z",
+      "observedAt": "2026-10-23T09:30:16.636Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T11-settings-status",
+      "label": "상태줄 설정",
+      "steps": [
+        "Settings → Status line"
+      ],
+      "notes": "종목명·OHLC·지표 값·매수매도 표시의 분리",
+      "file": "captures/T11-settings-status.png",
+      "width": 1208,
+      "height": 1008,
+      "bytes": 135494,
+      "sha256": "21e6536387be4f458e8f7640b20d63e12aeffc843ca259ec5165e09311c40266",
+      "fileModifiedAt": "2026-10-23T09:30:29.796Z",
+      "observedAt": "2026-10-23T09:30:29.797Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T12-settings-scales",
+      "label": "축과 가격선 설정",
+      "steps": [
+        "Settings → Scales and lines"
+      ],
+      "notes": "축 위치·레이블·가격선과 눈금 제어.",
+      "file": "captures/T12-settings-scales.png",
+      "width": 1208,
+      "height": 1008,
+      "bytes": 142938,
+      "sha256": "61149077a4b3c2be8d324e1e875d24fdf3219fbd256b22d91b9c68e76c90e1d5",
+      "fileModifiedAt": "2026-10-23T09:30:36.314Z",
+      "observedAt": "2026-10-23T09:30:36.314Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T13-settings-canvas",
+      "label": "캔버스 설정",
+      "steps": [
+        "Settings → Canvas"
+      ],
+      "notes": "배경·그리드·십자선·탐색 버튼·여백을 분리",
+      "file": "captures/T13-settings-canvas.png",
+      "width": 1208,
+      "height": 1008,
+      "bytes": 131579,
+      "sha256": "afa37d2c2eab0b103ff44856bd1684cba09e299b3cc8972a76564fdf4819edc0",
+      "fileModifiedAt": "2026-10-23T09:30:36.860Z",
+      "observedAt": "2026-10-23T09:30:36.860Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T14-settings-trading",
+      "label": "거래 표시 설정",
+      "steps": [
+        "Settings → Trading"
+      ],
+      "notes": "주문·포지션 표시 설정 열람. 거래 연결/주문 없음.",
+      "file": "captures/T14-settings-trading.png",
+      "width": 1208,
+      "height": 1008,
+      "bytes": 150120,
+      "sha256": "b2d87ba43cc7ac37ce3da612cac36248e843ce50e3f4ebc85ae05f12f52580aa",
+      "fileModifiedAt": "2026-10-23T09:30:49.330Z",
+      "observedAt": "2026-10-23T09:30:49.330Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T15-settings-alerts",
+      "label": "알림 표시 설정",
+      "steps": [
+        "Settings → Alerts"
+      ],
+      "notes": "알림 표시만 조사, 알림 생성 안 함.",
+      "file": "captures/T15-settings-alerts.png",
+      "width": 1208,
+      "height": 1008,
+      "bytes": 176870,
+      "sha256": "a16f3f696b3ca10f1a069dfcfe966b13a82054237d077608a583ad5b4f5ed77a",
+      "fileModifiedAt": "2026-10-23T09:30:49.896Z",
+      "observedAt": "2026-10-23T09:30:49.896Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T16-settings-events",
+      "label": "이벤트 표시 설정",
+      "steps": [
+        "Settings → Events"
+      ],
+      "notes": "Atlas 사건과 달리 실적/배당/경제 이벤트 체계.",
+      "file": "captures/T16-settings-events.png",
+      "width": 1208,
+      "height": 1008,
+      "bytes": 176318,
+      "sha256": "5fcd85e8d8a2e5361469993d8038ca31cfbd684b84204c7ad7b94ece2075a121",
+      "fileModifiedAt": "2026-10-23T09:30:50.461Z",
+      "observedAt": "2026-10-23T09:30:50.461Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T17-quick-search-log",
+      "label": "명령 검색: 로그 축",
+      "steps": [
+        "Quick search 열기",
+        "log 입력"
+      ],
+      "notes": "명령과 단축키가 같은 검색 결과에 표시됨.",
+      "file": "captures/T17-quick-search-log.png",
+      "width": 1208,
+      "height": 1008,
+      "bytes": 189965,
+      "sha256": "4c62d5be78941be5cde094ccdde61b4941fa724bec8ec7e9aae52e5873c1575a",
+      "fileModifiedAt": "2026-10-23T09:30:57.883Z",
+      "observedAt": "2026-10-23T09:30:57.883Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T18-log-axis-result",
+      "label": "로그 축 전환",
+      "steps": [
+        "Quick search에서 Logarithmic 단축키 확인",
+        "Escape/닫기 후 Alt+L 실행"
+      ],
+      "notes": "픽셀 변화는 로그 표시. 원자료 가격을 바꾸는 변환이 아님.",
+      "file": "captures/T18-log-axis-result.png",
+      "width": 1208,
+      "height": 1008,
+      "bytes": 215444,
+      "sha256": "f54602f1865c12df678dbeaa3f3470aa06753b3317a0404221d798208baa78f2",
+      "fileModifiedAt": "2026-10-23T09:31:05.808Z",
+      "observedAt": "2026-10-23T09:31:05.808Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T19-go-to-range",
+      "label": "Go to: 정확한 기간 입력",
+      "steps": [
+        "하단 Go to 열기",
+        "Custom range 선택"
+      ],
+      "notes": "하단 기간 제어와 상단 봉 간격이 별개",
+      "file": "captures/T19-go-to-range.png",
+      "width": 1208,
+      "height": 1008,
+      "bytes": 232537,
+      "sha256": "9fbe05057e0d5f99cf29741adf198372734604703b6c4d92f4755cac1ecff3b3",
+      "fileModifiedAt": "2026-10-23T09:31:14.743Z",
+      "observedAt": "2026-10-23T09:31:14.743Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T20-custom-range-result",
+      "label": "2024년 구간 이동 결과",
+      "steps": [
+        "시작 2024-01-01 / 종료 2024-12-31",
+        "Go to 실행"
+      ],
+      "notes": "표시 기간 적용 후 차트 축 시각 검토 필요.",
+      "file": "captures/T20-custom-range-result.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 236701,
+      "sha256": "ffb02a326a32531908b781da883f0acefeb94dde65ba6fef566e6b70501b3774",
+      "fileModifiedAt": "2026-10-23T09:31:22.854Z",
+      "observedAt": "2026-10-23T09:31:22.854Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T21-timezone-menu",
+      "label": "시간대 선택",
+      "steps": [
+        "하단 Timezone 클릭"
+      ],
+      "notes": "현재 UTC+9 Seoul. 시간대는 날짜 경계·봉 원자료 정의와 구분.",
+      "file": "captures/T21-timezone-menu.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 212065,
+      "sha256": "4f91bb58d31d4be80fe513503a78b667cd9b393dec9f6d5b7e9fc3db21388e1b",
+      "fileModifiedAt": "2026-10-23T09:31:23.655Z",
+      "observedAt": "2026-10-23T09:31:23.655Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T22-indicators-browser",
+      "label": "지표 탐색: 분류와 즐겨찾기",
+      "steps": [
+        "Indicators 열기",
+        "Personal / Built-In / Community 분류 확인"
+      ],
+      "notes": "개인 즐겨찾기는 수정 안 함.",
+      "file": "captures/T22-indicators-browser.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 229833,
+      "sha256": "d4aa27a01120bdd868949aed357ba69b64e5aa0777130f07feb1cd78123a2fb9",
+      "fileModifiedAt": "2026-10-23T09:31:41.433Z",
+      "observedAt": "2026-10-23T09:31:41.433Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T23-indicator-rsi-search",
+      "label": "RSI 검색 결과",
+      "steps": [
+        "Relative Strength Index 검색",
+        "Technicals와 Community 저자 구분"
+      ],
+      "notes": "이름이 같은 커뮤니티 지표와 내장 지표를 구분",
+      "file": "captures/T23-indicator-rsi-search.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 231351,
+      "sha256": "0f31a65736865c19ac7df6bde025f93ef665de0fc81c189a9ffd02dbf5a031f6",
+      "fileModifiedAt": "2026-10-23T09:31:57.737Z",
+      "observedAt": "2026-10-23T09:31:57.737Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T24-rsi-added",
+      "label": "RSI 별도 패널 적용 결과",
+      "steps": [
+        "내장 Relative strength index 클릭",
+        "검색 창 닫기",
+        "하단 RSI 패널 확인"
+      ],
+      "notes": "실제로 Indicator added to chart 및 Undo insert 확인.",
+      "file": "captures/T24-rsi-added.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 236747,
+      "sha256": "96611d3735d33c0862fecc044a27221a74c63e596541a9332787afa0b0edc694",
+      "fileModifiedAt": "2026-10-23T09:32:03.794Z",
+      "observedAt": "2026-10-23T09:32:03.794Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T25-object-tree",
+      "label": "오브젝트 트리",
+      "steps": [
+        "우측 Object tree and data window 클릭"
+      ],
+      "notes": "그림·지표 객체의 선택과 관리, 단순 값 목록과 다름.",
+      "file": "captures/T25-object-tree.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 188225,
+      "sha256": "1784d4d045eaa5e53cc9ccb5c354ba2ef206283b8ad43a99b54088f8681ee68b",
+      "fileModifiedAt": "2026-10-23T09:32:10.562Z",
+      "observedAt": "2026-10-23T09:32:10.562Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T26-pane-maximized",
+      "label": "패널 더블클릭 확대 동작",
+      "steps": [
+        "보조 패널 배경 더블클릭"
+      ],
+      "notes": "Undo toggle maximized pane state 확인. RSI 설정 창 열기와는 다른 동작.",
+      "file": "captures/T26-pane-maximized.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 127158,
+      "sha256": "d3d93c297eed199c9bcf0ca8f1fbeaa583c1ded19340e8b5a43cf6004296b0f0",
+      "fileModifiedAt": "2026-10-23T09:32:58.703Z",
+      "observedAt": "2026-10-23T09:32:58.703Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T27-data-window",
+      "label": "데이터 창",
+      "steps": [
+        "우측 Object tree → Data window"
+      ],
+      "notes": "선택 시점의 OHLC/지표 값을 표 형식으로 읽음.",
+      "file": "captures/T27-data-window.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 201515,
+      "sha256": "5c3a28f49ae65510f90a4cf800625e2945acf906e36df9091003561a217f57f4",
+      "fileModifiedAt": "2026-10-23T09:32:59.851Z",
+      "observedAt": "2026-10-23T09:32:59.851Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T28-rsi-inputs",
+      "label": "지표 설정: Inputs",
+      "steps": [
+        "범례 펼침 → RSI에 hover → Settings"
+      ],
+      "notes": "입력값은 계산 정의, Style/Visibility와 별도.",
+      "file": "captures/T28-rsi-inputs.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 216549,
+      "sha256": "df71cac9726a48d629124d7f0f0ccaa490f2b715d72ee0d03f2c758617c98316",
+      "fileModifiedAt": "2026-10-23T09:33:36.897Z",
+      "observedAt": "2026-10-23T09:33:36.897Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T29-rsi-style",
+      "label": "지표 설정: Style",
+      "steps": [
+        "RSI Settings → Style"
+      ],
+      "notes": "표시 선·기준선·채움·정밀도·상태줄 값을 개별 제어.",
+      "file": "captures/T29-rsi-style.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 224772,
+      "sha256": "19d45992f8040698ce1a7d10f075186e3be0729a48df2abb550efa71edc90f66",
+      "fileModifiedAt": "2026-10-23T09:33:47.899Z",
+      "observedAt": "2026-10-23T09:33:47.899Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T30-rsi-visibility",
+      "label": "지표 설정: Visibility",
+      "steps": [
+        "RSI Settings → Visibility"
+      ],
+      "notes": "삭제와 달리 지원 시간 간격에서만 표시하는 상태.",
+      "file": "captures/T30-rsi-visibility.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 214916,
+      "sha256": "5103c097f07641a8a866b8481b268924d1858d1f00b7bf839479e5d31b5b0142",
+      "fileModifiedAt": "2026-10-23T09:33:48.279Z",
+      "observedAt": "2026-10-23T09:33:48.279Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T31-indicator-templates",
+      "label": "지표 템플릿 메뉴",
+      "steps": [
+        "상단 Indicator templates 클릭"
+      ],
+      "notes": "기존 템플릿 적용·덮어쓰기·새 저장은 실행하지 않음.",
+      "file": "captures/T31-indicator-templates.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 225977,
+      "sha256": "613d85f3f028d503d91d1288b4a2d53dc8bb06a798a739575e1fd5d99605b09f",
+      "fileModifiedAt": "2026-10-23T09:33:49.098Z",
+      "observedAt": "2026-10-23T09:33:49.098Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T32-trend-tools",
+      "label": "추세·수평선·채널 도구",
+      "steps": [
+        "Trendline 행 우측 화살표 → Trend tools"
+      ],
+      "notes": "좌측 아이콘은 마지막 도구, 화살표는 전체 그룹.",
+      "file": "captures/T32-trend-tools.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 202928,
+      "sha256": "b3c0e384e99ecb0744e2456504f5fd90c67bcf838f6e9a9fa0889e5479f59d1d",
+      "fileModifiedAt": "2026-10-23T09:34:17.220Z",
+      "observedAt": "2026-10-23T09:34:17.220Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T33-fibonacci-tools",
+      "label": "Gann·피보나치 도구",
+      "steps": [
+        "Fib retracement hover → Gann and Fibonacci tools"
+      ],
+      "notes": "목록 조사. 모든 계산 도구의 정확도 검증은 아님.",
+      "file": "captures/T33-fibonacci-tools.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 206862,
+      "sha256": "e6894266348b69d8d9ec46bb7bed81798802c6c7808fa16ce8b53f6ad483f8bb",
+      "fileModifiedAt": "2026-10-23T09:34:31.414Z",
+      "observedAt": "2026-10-23T09:34:31.414Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T34-pattern-tools",
+      "label": "패턴·엘리엇·사이클 도구",
+      "steps": [
+        "XABCD pattern hover → Patterns"
+      ],
+      "notes": "패턴 표시를 예측 정확도 보장과 혼동하지 않음.",
+      "file": "captures/T34-pattern-tools.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 211476,
+      "sha256": "c13a85660d981b2779f504c559e5f3c646e0dc5fa2221d80fae7f55af79a537f",
+      "fileModifiedAt": "2026-10-23T09:34:37.349Z",
+      "observedAt": "2026-10-23T09:34:37.349Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T35-forecast-measure-tools",
+      "label": "예측·포지션·가격/날짜 범위 측정",
+      "steps": [
+        "Forecasting and measurement tools 열기"
+      ],
+      "notes": "Long/Short position은 리스크 시각 도구. 실제 주문과 구분.",
+      "file": "captures/T35-forecast-measure-tools.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 214218,
+      "sha256": "fd456806d3bf2cdf9a4f3b5ebd458e31bca59e41d79d278000fffbcc5ff82cae",
+      "fileModifiedAt": "2026-10-23T09:34:44.847Z",
+      "observedAt": "2026-10-23T09:34:44.847Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T36-geometric-tools",
+      "label": "도형·브러시 도구",
+      "steps": [
+        "Geometric shapes 열기"
+      ],
+      "notes": "그리기와 분석 데이터 레이어를 구분할 필요.",
+      "file": "captures/T36-geometric-tools.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 209972,
+      "sha256": "416c617cebc9937e12966a331345025a91430208dea217023ee49df89f35b993",
+      "fileModifiedAt": "2026-10-23T09:34:53.567Z",
+      "observedAt": "2026-10-23T09:34:53.567Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T37-annotation-tools",
+      "label": "텍스트·가격 라벨·노트 도구",
+      "steps": [
+        "Annotation tools 열기"
+      ],
+      "notes": "분석 주석과 실제 가격 표식을 구분",
+      "file": "captures/T37-annotation-tools.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 216124,
+      "sha256": "40ef779f5e13885450a0899a9fd5ca678fa7cd546199fa8eb9dc69b9f82c49ee",
+      "fileModifiedAt": "2026-10-23T09:35:10.237Z",
+      "observedAt": "2026-10-23T09:35:10.237Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T38-cursor-modes",
+      "label": "커서 모드",
+      "steps": [
+        "Cross hover → Cursors 열기"
+      ],
+      "notes": "십자선·점·화살표·지우개 등의 역할 구분",
+      "file": "captures/T38-cursor-modes.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 199842,
+      "sha256": "bff0b45b2697032897e9facd7f616c1d908d76ae9a6445d3a32001035df4b5e5",
+      "fileModifiedAt": "2026-10-23T09:35:34.412Z",
+      "observedAt": "2026-10-23T09:35:34.412Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T39-magnet-control",
+      "label": "OHLC 자석 제어",
+      "steps": [
+        "좌측 Magnet mode 버튼 확인·전환"
+      ],
+      "notes": "자석 제어 존재 확인. 강도별 세부 메뉴는 이번 UI 경로에서 미확인.",
+      "file": "captures/T39-magnet-control.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 223452,
+      "sha256": "e3dd49c5b2ad1508ce3d51177fabe8164f6eeb3f1585971561e70f7462736cbf",
+      "fileModifiedAt": "2026-10-23T09:36:09.016Z",
+      "observedAt": "2026-10-23T09:36:09.016Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T40-trendline-created",
+      "label": "추세선 메뉴 선택 전 시도",
+      "steps": [
+        "도구 메뉴 선택 전 캔버스 클릭 시도",
+        "실제 생성은 확인되지 않음"
+      ],
+      "notes": "이 캡처에서는 도형 생성 미확인. 후속 T41에서 실제 수락 확인.",
+      "file": "captures/T40-trendline-created.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 202888,
+      "sha256": "0a7533de324ba0e024e09beaf0e443c5b1054476b34167193aacf38471878b5c",
+      "fileModifiedAt": "2026-10-23T09:36:11.116Z",
+      "observedAt": "2026-10-23T09:36:11.116Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T41-trendline-accepted",
+      "label": "실제 2점 추세선 생성",
+      "steps": [
+        "Trendline 메뉴 항목 명시 선택",
+        "(400,350)과 (700,220) 클릭"
+      ],
+      "notes": "Undo create trendline 및 두 핸들 시각 확인.",
+      "file": "captures/T41-trendline-accepted.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 233370,
+      "sha256": "e8ea49c7f7da136c835afe8a9f20b9188de46b8ec0a4f2a79c084ada82694d9f",
+      "fileModifiedAt": "2026-10-23T09:36:38.867Z",
+      "observedAt": "2026-10-23T09:36:38.867Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T42-undo-drawing",
+      "label": "추세선 실행 취소",
+      "steps": [
+        "Undo create trendline 클릭"
+      ],
+      "notes": "Redo create trendline이 생김. 기존 그림 삭제 없음.",
+      "file": "captures/T42-undo-drawing.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 220851,
+      "sha256": "89704ed6bf3e7db29d82df90a44229650ebf7f1dc7a3661c83fd51cd6bbf658b",
+      "fileModifiedAt": "2026-10-23T09:36:50.868Z",
+      "observedAt": "2026-10-23T09:36:50.868Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T43-measure-range",
+      "label": "두 점 임시 측정",
+      "steps": [
+        "Measure 선택",
+        "차트 안에서 드래그"
+      ],
+      "notes": "일시 측정과 저장 도형은 별개. 시각 결과로 확인.",
+      "file": "captures/T43-measure-range.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 157047,
+      "sha256": "53fd078b538b13b380d22a651341694232982a5cec61e1af99658966db8345ca",
+      "fileModifiedAt": "2026-10-23T09:36:51.408Z",
+      "observedAt": "2026-10-23T09:36:51.408Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T44-price-scale-menu",
+      "label": "가격축 우클릭 메뉴",
+      "steps": [
+        "가격축 위에서 우클릭"
+      ],
+      "notes": "축 자동/고정·모드·반전·라벨과 메인 차트 메뉴는 별개.",
+      "file": "captures/T44-price-scale-menu.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 221032,
+      "sha256": "2c8d84705c394ecb181455e89551ed3800b6b0d1c5d8fd0804388e4f227c2856",
+      "fileModifiedAt": "2026-10-23T09:37:01.428Z",
+      "observedAt": "2026-10-23T09:37:01.428Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T45-percent-axis",
+      "label": "백분율 축 적용",
+      "steps": [
+        "가격축 우클릭 → Percent"
+      ],
+      "notes": "원가격 대신 기준점 대비 수익률 축. 로그 축과 다름.",
+      "file": "captures/T45-percent-axis.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 224947,
+      "sha256": "e5a6eaacec4775dd133254d02685744c2e73e44295c46f3ea54a32edb19ebce1",
+      "fileModifiedAt": "2026-10-23T09:37:12.547Z",
+      "observedAt": "2026-10-23T09:37:12.546Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T46-indexed-axis",
+      "label": "Indexed to 100 적용",
+      "steps": [
+        "가격축 우클릭 → Indexed to 100"
+      ],
+      "notes": "Atlas 최근 관측값=100과 기준점 의미가 다름.",
+      "file": "captures/T46-indexed-axis.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 220184,
+      "sha256": "8747c9be9fe87c2eadfba1278faff1e9d64bdb56737aa4ac0758d20d8c0878f7",
+      "fileModifiedAt": "2026-10-23T09:37:13.096Z",
+      "observedAt": "2026-10-23T09:37:13.096Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T47-layout-sync",
+      "label": "다중 차트 배치와 동기화",
+      "steps": [
+        "Layout setup 열기"
+      ],
+      "notes": "여러 차트·동기화 체크 항목은 메뉴 확인. 유료 기능을 실행/구독하지 않음.",
+      "file": "captures/T47-layout-sync.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 216282,
+      "sha256": "c229bc6f301014fdcf5198d6aedaf2f65e8ee8d789edac87bead4099a9328f38",
+      "fileModifiedAt": "2026-10-23T09:37:13.528Z",
+      "observedAt": "2026-10-23T09:37:13.527Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T48-alert-dialog",
+      "label": "알림 생성 대화상자",
+      "steps": [
+        "상단 Create alert 클릭"
+      ],
+      "notes": "실제 알림 생성 버튼 누르지 않음. 조건·유효기간·메시지·전달 방식은 별도 서버 객체.",
+      "file": "captures/T48-alert-dialog.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 221920,
+      "sha256": "1d8dc2828ccd4dce1e5933ff933af15b974dadb95b428b9be16efa41d2756796",
+      "fileModifiedAt": "2026-10-23T09:37:21.484Z",
+      "observedAt": "2026-10-23T09:37:21.484Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T49-alert-conditions",
+      "label": "알림 조건 연산자",
+      "steps": [
+        "알림 창 → Crossing 선택기 열기"
+      ],
+      "notes": "실제 목록은 Crossing / Crossing Up / Crossing Down 및 Show more. 추가 연산자 전체는 열람하지 않음. 알림 생성 없음.",
+      "file": "captures/T49-alert-conditions.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 220364,
+      "sha256": "28843512cbe3bfe2c182e41c85671d979eb7c4089473b2085ad8162f8574b0b2",
+      "fileModifiedAt": "2026-10-23T09:37:29.698Z",
+      "observedAt": "2026-10-23T09:37:29.698Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T50-replay-entry",
+      "label": "Bar Replay 진입",
+      "steps": [
+        "상단 Bar replay 클릭"
+      ],
+      "notes": "기존 Replay 진행을 Continue/Start new로 이어갈지 묻는 안내. 진행 보존을 위해 재생·전진·새 시작 안 함.",
+      "file": "captures/T50-replay-entry.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 224330,
+      "sha256": "bb563901f6d3780c130ecc0386933ec1a5dfabbb621a26008d800a5ac89a31aa",
+      "fileModifiedAt": "2026-10-23T09:37:36.336Z",
+      "observedAt": "2026-10-23T09:37:36.335Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T51-snapshot-export-menu",
+      "label": "차트 스냅샷 메뉴",
+      "steps": [
+        "Take a snapshot 클릭"
+      ],
+      "notes": "이미지 다운로드·복사·링크와 공개 게시를 분리. 공개 공유/게시 안 함.",
+      "file": "captures/T51-snapshot-export-menu.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 221395,
+      "sha256": "e73c16717cd8ff24feedd0d1fcec4082b50dea3df76432f284d8bbe5f0fb7d3c",
+      "fileModifiedAt": "2026-10-23T09:37:50.853Z",
+      "observedAt": "2026-10-23T09:37:50.853Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T52-layout-save-menu",
+      "label": "저장·복사·공유·자료 내보내기",
+      "steps": [
+        "Manage layouts 열기"
+      ],
+      "notes": "Autosave=false 유지, Save 클릭 안 함.",
+      "file": "captures/T52-layout-save-menu.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 238449,
+      "sha256": "1be262d8bded413eec9c617539bafe26cb333383d55c86e371f0afbcf1b3ba2b",
+      "fileModifiedAt": "2026-10-23T09:37:59.768Z",
+      "observedAt": "2026-10-23T09:37:59.768Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T53-csv-export-dialog",
+      "label": "CSV 자료 내보내기 진입",
+      "steps": [
+        "Manage layouts → Download chart data"
+      ],
+      "notes": "실제 파일 내용·시간대·범위 검증과 메뉴 도달을 구분.",
+      "file": "captures/T53-csv-export-dialog.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 222911,
+      "sha256": "ee65cf830f808a510c15b61183db5f137e55d1f2e82cd502a50dd71ce4112a9f",
+      "fileModifiedAt": "2026-10-23T09:38:00.230Z",
+      "observedAt": "2026-10-23T09:38:00.230Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T54-csv-time-format",
+      "label": "CSV 시간 형식",
+      "steps": [
+        "내보내기 창 → ISO time 선택기"
+      ],
+      "notes": "화면에 UTC+9라고 표시. Atlas UTC CSV와 직접 섞지 않음.",
+      "file": "captures/T54-csv-time-format.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 220754,
+      "sha256": "cb4a53ecfc025c78fea1f719f77f09fbc8e8b2b095b85dba6831a92463965fa0",
+      "fileModifiedAt": "2026-10-23T09:38:11.649Z",
+      "observedAt": "2026-10-23T09:38:11.649Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T55-csv-download-state",
+      "label": "CSV 다운로드 클릭 뒤 상태",
+      "steps": [
+        "Download 버튼 클릭",
+        "download 이벤트 20초 대기"
+      ],
+      "notes": "실제 Download 클릭 후 Basic→Plus 업그레이드 안내. CSV 수신/스키마 검증은 미완료. 같은 경로 재시도 없음.",
+      "file": "captures/T55-csv-download-state.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 236827,
+      "sha256": "f298f08449c854d30ea8ecedc332ca869f657c891f3defa3b6120525dc87bebc",
+      "fileModifiedAt": "2026-10-23T09:39:06.431Z",
+      "observedAt": "2026-10-23T09:39:06.431Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T56-compare-symbols",
+      "label": "여러 심볼 비교 진입",
+      "steps": [
+        "상단 Compare symbols 클릭"
+      ],
+      "notes": "비교 심볼 검색. 실제 추가/변경은 뒤 절차에 명시.",
+      "file": "captures/T56-compare-symbols.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 211901,
+      "sha256": "599c14a499a1ea2fd7e6f17570dbde155971460e07cb73b9b78b06a6f3b34c9b",
+      "fileModifiedAt": "2026-10-23T09:39:15.780Z",
+      "observedAt": "2026-10-23T09:39:15.779Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T57-compare-exchange-result",
+      "label": "거래소 지정 비교 결과",
+      "steps": [
+        "Compare symbols → BITSTAMP:BTCUSD 검색"
+      ],
+      "notes": "같은 BTC라도 USDT/Binance와 USD/Bitstamp는 별도 시리즈.",
+      "file": "captures/T57-compare-exchange-result.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 219106,
+      "sha256": "23e109ca83771a3a2c0dbabe6b32ad4b7561dc80a6786fef21afd54a35019d84",
+      "fileModifiedAt": "2026-10-23T09:39:25.566Z",
+      "observedAt": "2026-10-23T09:39:25.566Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T58-compare-scale-options",
+      "label": "비교 시리즈 배치 옵션",
+      "steps": [
+        "검색 결과에 hover",
+        "Same % scale / New price scale / New pane 확인"
+      ],
+      "notes": "다중 시리즈의 단위·축 소유권을 명시적으로 선택.",
+      "file": "captures/T58-compare-scale-options.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 219828,
+      "sha256": "9e8090ba33347a7bc5d77e4503f2781d841e9084e9ed78c3b3e243a63f5b2d77",
+      "fileModifiedAt": "2026-10-23T09:39:36.966Z",
+      "observedAt": "2026-10-23T09:39:36.966Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T59-compare-applied",
+      "label": "비교 시리즈 적용 결과",
+      "steps": [
+        "BITSTAMP:BTCUSD → Same % scale",
+        "창 닫기"
+      ],
+      "notes": "Undo insert Overlay 및 Bitstamp 비교 범례·백분율 축으로 수락 확인.",
+      "file": "captures/T59-compare-applied.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 243085,
+      "sha256": "2dc67b883b29f309f8f19dd515d87d6c01281f20c2877e9f6741293c6a4080bd",
+      "fileModifiedAt": "2026-10-23T09:39:38.250Z",
+      "observedAt": "2026-10-23T09:39:38.250Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T60-command-shortcut",
+      "label": "Cmd+K 실제 동작",
+      "steps": [
+        "차트 화면에서 Cmd+K"
+      ],
+      "notes": "이번 데스크톱 계정/문맥에서는 Search tool or function 명령 검색이 열림.",
+      "file": "captures/T60-command-shortcut.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 204320,
+      "sha256": "361d3ffe7a0c2f36165052a2134bd0cd26a1c2196b75f4c47159d5033a27acd3",
+      "fileModifiedAt": "2026-10-23T09:39:49.996Z",
+      "observedAt": "2026-10-23T09:39:49.996Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T61-keyboard-shortcuts",
+      "label": "공식 단축키 목록",
+      "steps": [
+        "프로필 메뉴 → Keyboard shortcuts"
+      ],
+      "notes": "플랫폼 실제 표기 기준. 도움말 목록 전체 확인과 각 단축키 실행은 다름.",
+      "file": "captures/T61-keyboard-shortcuts.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 199925,
+      "sha256": "0966bab802dee631334d7bea148fa4b6acfa98d44e3ee8f5f73e3baceaa16fd4",
+      "fileModifiedAt": "2026-10-23T09:40:00.912Z",
+      "observedAt": "2026-10-23T09:40:00.912Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T62-shortcuts-chart",
+      "label": "차트 단축키 목록 펼침",
+      "steps": [
+        "Keyboard shortcuts → Chart 영역 캡처"
+      ],
+      "notes": "잘못 잘린 최초 캡처를 검수에서 폐기하고 실제 펼친 도움말 패널 첫 화면으로 교체. 전체 목록은 텍스트 근거에 별도 보존.",
+      "file": "captures/T62-shortcuts-chart.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 185665,
+      "sha256": "858bbf1f151222ac6a8b111dcf14e2bacd8a7820df140de23a625f3e6d2ee788",
+      "fileModifiedAt": "2026-10-23T09:45:42.125Z",
+      "observedAt": null,
+      "observedAtNote": "capture instant not separately logged; fileModifiedAt is file metadata, not an invented observation timestamp"
+    },
+    {
+      "id": "T63-shortcuts-drawings",
+      "label": "자석 임시 전환 단축키 검색",
+      "steps": [
+        "Keyboard shortcuts → Indicators and drawings"
+      ],
+      "notes": "magnet 검색 결과 Command+Move a point. 원래 잘못 잘린 이미지 교체. 다른 그림 단축키 전체는 텍스트 근거.",
+      "file": "captures/T63-shortcuts-drawings.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 162926,
+      "sha256": "5fa9ccb5e36702e3b25f6c5eeff7f42c2a0991143e5a4aae05f0321b6752afb8",
+      "fileModifiedAt": "2026-10-23T09:45:42.338Z",
+      "observedAt": null,
+      "observedAtNote": "capture instant not separately logged; fileModifiedAt is file metadata, not an invented observation timestamp"
+    },
+    {
+      "id": "T64-products-menu",
+      "label": "우측 제품 탐색 메뉴",
+      "steps": [
+        "우측 Products 열기"
+      ],
+      "notes": "Screener·뉴스·경제달력·포트폴리오 등 범위 확인. 개별 제품 전체 기능 시험 아님.",
+      "file": "captures/T64-products-menu.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 243273,
+      "sha256": "91694c6bfdcd1a260c9521cc8bf734365b36b47b5174ce377be0238bdcdf1a01",
+      "fileModifiedAt": "2026-10-23T09:40:52.285Z",
+      "observedAt": "2026-10-23T09:40:52.285Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T65-trading-panel",
+      "label": "거래 연결 선택 화면",
+      "steps": [
+        "Trade 클릭"
+      ],
+      "notes": "연결·약관 동의·모의주문·실주문 모두 실행하지 않음.",
+      "file": "captures/T65-trading-panel.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 115656,
+      "sha256": "ddcc23fba5d0bd7b82ed2cb379adb11ba431b7113746fa568fbbec6d37590a10",
+      "fileModifiedAt": "2026-10-23T09:41:09.421Z",
+      "observedAt": "2026-10-23T09:41:09.421Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T66-magnet-modes",
+      "label": "Weak/Strong Magnet 메뉴",
+      "steps": [
+        "Magnet 버튼 hover → Magnets 화살표 클릭"
+      ],
+      "notes": "두 강도의 선택지 확인. 강도별 모든 OHLC 스냅 반례 검증은 아님.",
+      "file": "captures/T66-magnet-modes.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 241132,
+      "sha256": "0c9d82894e29bf988dafab7ad1b21d7363d6b1ce4292e818b1780eaa8709c884",
+      "fileModifiedAt": "2026-10-23T09:41:21.431Z",
+      "observedAt": "2026-10-23T09:41:21.431Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T67-candle-style",
+      "label": "캔들 표현 설정",
+      "steps": [
+        "Settings → Symbol (Candles 상태)"
+      ],
+      "notes": "body·border·wick·전일 종가 기준 색상 및 정밀도. Line 설정과 다름.",
+      "file": "captures/T67-candle-style.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 213441,
+      "sha256": "086fb0482fe907efbe95d151ab5d6b50ef1fa75fd502d9822f12df09687dcb95",
+      "fileModifiedAt": "2026-10-23T09:41:49.814Z",
+      "observedAt": "2026-10-23T09:41:49.813Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T68-before-restore",
+      "label": "조사 종료 직전 비저장 상태",
+      "steps": [
+        "MAIN Save 표시 확인"
+      ],
+      "notes": "이후 reload로 저장된 기존 MAIN 재로딩. 새 RSI/비교 시리즈·축 변경 수동 저장 안 함.",
+      "file": "captures/T68-before-restore.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 245000,
+      "sha256": "84d1e68551ee1c4f015413db2ffa8264cbaadf6eb28d686f580989c9903e8c6a",
+      "fileModifiedAt": "2026-10-23T09:41:50.258Z",
+      "observedAt": "2026-10-23T09:41:50.258Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    },
+    {
+      "id": "T69-restored-main",
+      "label": "저장된 MAIN 복원 확인",
+      "steps": [
+        "조사 변경 저장 없이 reload",
+        "원래 1W Candles 및 지표 접힘 10/7 확인",
+        "Watchlist 다시 열기"
+      ],
+      "notes": "새 RSI·Bitstamp overlay 없음. All changes saved disabled. 기존 차트 재로드 결과와 시각 확인.",
+      "file": "captures/T69-restored-main.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 282875,
+      "sha256": "9b75958e923c8c934589d1516d835351e478521e2d6714ec93117f60763a4adb",
+      "fileModifiedAt": "2026-10-23T09:42:24.065Z",
+      "observedAt": "2026-10-23T09:42:24.064Z",
+      "observedAtNote": "capture log; replacements additionally use fileModifiedAt"
+    }
+  ]
+}

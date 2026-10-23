@@ -4,6 +4,10 @@
 
 **[통합 차트 열기](https://twoimo.github.io/bitcoin-cycle-atlas/)** · **[사용 안내](docs/GRAPH_WORKSPACE_GUIDE.md)** · **[장기 전망 리서치](docs/LONG_HORIZON_RESEARCH.md)** · **[모델의 반영 범위](docs/MODEL_SCOPE.md)** · **[리서치 표](https://twoimo.github.io/bitcoin-cycle-atlas/?page=evidence)** · **[릴리스](https://github.com/twoimo/bitcoin-cycle-atlas/releases)** · **[Actions](https://github.com/twoimo/bitcoin-cycle-atlas/actions)**
 
+## TradingView 심층 사용법 조사
+
+[공식 문서 24개·단계별 사용 흐름 32개·실제 UI 캡처 70장](docs/research/tradingview-2026-10-23/README.md)을 정리했습니다. 최신 v1.12.0 기준으로 이미 해결된 기능과 남은 개선 후보 12개를 구분하며, 메뉴 확인·실제 실행·플랜 제한·모바일 미검증 범위를 명시합니다. 이번 자료는 사용법·개선 검토용이며 새로운 앱 기능의 구현 완료를 뜻하지 않습니다.
+
 ## v1.11 변경
 
 v1.11.0은 실제 TradingView의 메뉴와 공식 사용법을 비교해 작업 흐름을 개선했습니다. 상단 돋보기 또는 `Ctrl/⌘ K`로 기능을 검색하고, **저장·공유**에서 확대·이동한 범위와 가격 단위·가정·지표를 이름으로 저장하거나 링크로 공유할 수 있습니다. 지표 창에는 **추가됨·즐겨찾기·템플릿**과 **접었을 때 대표 지표** 선택이 생겼습니다. 포인터 가격과 실제 OHLC를 분리한 십자선, 최근 완료 봉 가격 표식, 현재 범위 관측 CSV도 제공합니다. [기능별 비교와 검증](docs/TRADINGVIEW_UX_AUDIT.md)
