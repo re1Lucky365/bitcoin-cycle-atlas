@@ -1,11 +1,16 @@
 import { bindChartNavigation } from '../../dist/chart-navigation.js';
-// Shared event boundary fixture; real browser gesture arbitration is tested in QA.
+// Shared event boundary fixture; native browser gesture arbitration needs separate QA.
 export class EventSurface {
   constructor(){this.listeners=new Map();}
   addEventListener(type,handler,options){const list=this.listeners.get(type)||[];list.push({handler,options});this.listeners.set(type,list);}
   removeEventListener(type,handler){this.listeners.set(type,(this.listeners.get(type)||[]).filter(item=>item.handler!==handler));}
   emit(type,values={}){
-    const event={type,target:this,button:0,buttons:1,pointerId:1,pointerType:'mouse',isPrimary:true,clientX:500,clientY:200,deltaX:0,deltaY:0,deltaMode:0,detail:1,key:'',defaultPrevented:false,stopped:false,preventDefault(){this.defaultPrevented=true;},stopPropagation(){this.stopped=true;},stopImmediatePropagation(){this.stopped=true;this.immediate=true;},...values};
+    const owner=this.ownerDocument?.defaultView||this,points=owner.pointerPositions??=new Map(),id=values.pointerId??1,ending=type==='pointerup'||type==='pointercancel';
+    // An unspecified release keeps the last emitted coordinate, as intended by
+    // these tests; explicit release coordinates still exercise the final delta.
+    const event={type,target:this,button:0,buttons:ending?0:1,pointerId:1,pointerType:'mouse',isPrimary:true,clientX:500,clientY:200,deltaX:0,deltaY:0,deltaMode:0,detail:1,key:'',defaultPrevented:false,stopped:false,preventDefault(){this.defaultPrevented=true;},stopPropagation(){this.stopped=true;},stopImmediatePropagation(){this.stopped=true;this.immediate=true;},...(ending?points.get(id):null),...values};
+    if(type==='pointerdown'||type==='pointermove')points.set(id,{clientX:event.clientX,clientY:event.clientY,pointerType:event.pointerType,isPrimary:event.isPrimary});
+    if(ending)points.delete(id);
     for(const {handler}of [...(this.listeners.get(type)||[])]){handler(event);if(event.immediate)break;}
     return event;
   }

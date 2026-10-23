@@ -1,6 +1,6 @@
 import { utcDay, dateFromDay } from './cycle-engine.js?v=1.11.0';
 import { chartInterval, isIntradayInterval } from './ohlc-data.js?v=1.11.0';
-import { normalizePriceDomain } from './price-axis.js?v=1.13.0-research.1';
+import { normalizePriceDomain } from './price-axis.js?v=1.14.0-mobile.1';
 
 const DAY = 86400;
 const FIRST = Date.parse('1800-01-01T00:00:00Z') / 1000;

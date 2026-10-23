@@ -5,10 +5,10 @@ import { utcDay } from './cycle-engine.js?v=1.11.0';
 import { shiftCalendarMonths } from './cycle-timing.js?v=1.11.0';
 import { STATE_LABELS } from './market-structure.js?v=1.11.0';
 import { chartPaneLayout, historicalMarkersMarkup, volumePaneMarkup, cycleTimingMarkup, formatBtcVolume } from './chart-overlays.js?v=1.13.0-research.1';
-import { createPriceScale, barPriceChange, nearestDailyIndex as nearest } from './chart-math.js?v=1.13.0-research.1';
-import { priceAxisMarkup, timeAxisMarkup } from './price-axis.js?v=1.13.0-research.1';
+import { createPriceScale, barPriceChange, nearestDailyIndex as nearest } from './chart-math.js?v=1.14.0-mobile.1';
+import { priceAxisMarkup, timeAxisMarkup, createPriceAxisLayout, createPriceAxisFormatter } from './price-axis.js?v=1.14.0-mobile.1';
 import { createPriceDisplay, formatDisplayPrice } from './price-display.js?v=1.13.0-research.1';
-import { retainPriceViewport, renderEmptyPriceViewport } from './empty-price-chart.js?v=1.13.0-research.1';
+import { retainPriceViewport, renderEmptyPriceViewport } from './empty-price-chart.js?v=1.14.0-mobile.1';
 import { researchAnnotationsMarkup } from './research-annotations.js?v=1.13.0-research.1';
 
 import { resolveMagnetPoint, advanceMeasurement, measurePriceAnchors, measurementOverlayMarkup, createMeasurementOverlay } from './chart-magnet.js?v=1.11.0';
@@ -23,7 +23,6 @@ const nf=(v,n=0)=>{if(!numberFormats.has(n))numberFormats.set(n,new Intl.NumberF
 const money=v=>`$${nf(v,v<10?2:0)}`;
 const percent=v=>`${v>0?'+':v<0?'−':''}${nf(Math.abs(v),1)}%`;
 const date=v=>v?.replaceAll('-','.')??'—';
-const compact=v=>v>=1e6?`${nf(v/1e6,1)}m`:v>=1e3?`${nf(v/1e3,v<1e4?1:0)}k`:nf(v,v<1?2:0);
 // UTC date interpretation is immutable across data revisions. Bound the pure
 // calendar cache; prices, model outputs and mutable source metadata are not cached.
 const calendarDays=new Map();
@@ -55,10 +54,12 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   // An explicitly enabled secondary band stays present even in a short chart.
   const W=Math.max(1,Math.round(svg.clientWidth||svg.parentElement?.clientWidth||1100)),H=Math.max(1,Math.round(svg.clientHeight||svg.parentElement?.clientHeight||500)),small=W<600,compactHeight=H<320;
   const layout=chartPaneLayout({width:W,height:H,volume:showVolume,drawdown:showDrawdown,states:showStates,cycleTiming:showCycleTiming,top:Number.isFinite(headerInset)?Math.max(8,headerInset):compactHeight?62:70});
+  const axisText=createPriceAxisLayout({svg,width:W,left:layout.left,minRight:layout.right});layout.right=axisText.right;
   const {left:L,right:R,top:T,axisY,priceBottom,ddTop,ddBottom,stateTop,stateBottom,volumeTop,volumeBottom,cycleTop,cycleBottom}=layout,stateHeight=stateBottom-stateTop,ddHeight=ddBottom-ddTop;
   const minDay=dayOf(start),maxDay=dayOf(end),span=Math.max(1,maxDay-minDay),xday=d=>L+(d-minDay)/span*(W-L-R),x=p=>xday(dayOf(p.date));
   svg.dataset.cycleIntervalCount='0';svg.dataset.cycleIntervalLabelCount='0';svg.dataset.cycleMarkerCount='0';svg.dataset.cycleMarkerLabelCount='0';svg.dataset.historyLabelCount='0';svg.dataset.historyEventCount='0';svg.dataset.historyLabelMode='off';svg.dataset.historyHiddenLabelCount='0';
   delete svg.dataset.cycleIntervalBandTop;delete svg.dataset.cycleIntervalBandBottom;
+  svg.dataset.observedLineCount='0';svg.dataset.observedCandleCount='0';
   const originalVisible=dateWindow(rows,start,end).filter(p=>p.price>0);
   const visibleCycleMarkers=showCycleMarkers?cycleMarkers.filter(marker=>{
     if(!marker?.id||!milestoneTypeIds.has(marker.type)||typeof marker.date!=='string'||marker.date<start||marker.date>end||!Number.isFinite(marker.price)||marker.price<=0)return false;
@@ -72,10 +73,11 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   const coveredDays=new Set();for(const c of candleRows)for(let day=dayOf(c.startDate);day<=dayOf(c.endDate);day++)coveredDays.add(day);
   const covered=date=>coveredDays.has(dayOf(date));
   const visible=candleRows.length?originalVisible.filter(p=>!covered(p.date)||candleByDate.has(p.date)).map(p=>candleByDate.has(p.date)?{...p,coinMetricsPrice:p.price,price:candleByDate.get(p.date).close,candle:candleByDate.get(p.date)}:p):originalVisible;
-  if(!visible.length)return renderEmptyPriceViewport({svg,layout,width:W,height:H,start,end,scale,priceDomain,unit,denominator,denominatorDate:split,fallbackPrice:denominator,invertScale,tool,onHover,frequency,researchAnnotations,activeResearchAnnotationId:selectedAnnotation,onResearchAnnotation:activateAnnotation,scenarioId});
+  if(!visible.length)return renderEmptyPriceViewport({svg,layout,axisText,width:W,height:H,start,end,scale,priceDomain,unit,denominator,denominatorDate:split,fallbackPrice:denominator,invertScale,tool,onHover,frequency,researchAnnotations,activeResearchAnnotationId:selectedAnnotation,onResearchAnnotation:activateAnnotation,scenarioId});
   // The same pre-pixel-reduction vertices back the weekly path and cursor.
   // Daily milestone anchors remain exact, even between completed Sunday closes.
   const observed=visible.filter(p=>!split||p.date<=split);
+  svg.dataset.observedLineCount=String(observed.filter(point=>!point.candle).length);
   const observedRuns=dailyRuns(observed,point=>Boolean(point.candle)).map(run=>sample(run,frequency,retainedDates));
   const future=sample(originalVisible.filter(p=>split&&p.date>=split),frequency,retainedDates).map(p=>({...p,lower:p.lower??p.price,upper:p.upper??p.price}));
   const displayedDates=frequency==='weekly'?new Set([...observedRuns.flat(),...future,...visible.filter(point=>point.candle)].map(point=>point.date)):null;
@@ -89,8 +91,7 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   const values=[valueLow,valueHigh];
   const tickCount=Math.max(2,Math.min(small?5:7,Math.floor((priceBottom-T)/38)+1));
   const priceScale=createPriceScale(values,{scale:effectiveScale,top:T,bottom:priceBottom,tickCount,factor,offset,inverted:invertScale,domain:priceDomain}),{min,max,y}=priceScale;
-  const tickDigits=Math.max(0,Math.min(6,1-Math.floor(Math.log10((max-min)*factor/(tickCount-1))))),axisDigits=Math.max(unit==='usd'?2:1,tickDigits);
-  const cursorPrice=value=>formatDisplayPrice(value,display,axisDigits);
+  const axisLabels=createPriceAxisFormatter({axis:priceScale,display,layout:axisText});
   retainPriceViewport(svg,priceScale);
   const yd=v=>ddTop+Math.min(100,Math.max(0,-(v??0)))/100*(ddBottom-ddTop);
   const tracePoints=(ps,key)=>{
@@ -114,7 +115,7 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   const timingSeries=cycleCalibration?.series||[],visibleTiming=showCycleTiming?dateWindow(timingSeries,start,end):[];
   const clip=`${svg.id}-clip`,priceClip=`${svg.id}-price-clip`,axisClip=`${svg.id}-price-axis-clip`,fullHistory=span>3000;
   let s=`<title>${historical?'실제 비트코인 가격':'실제 비트코인 가격과 미래 가정'}</title><desc>가격 실선은 실제 관측, 금색 가격 점선은 미래 가정입니다. 색 원과 기간선의 실선은 사후 기준, 점선은 잠정 또는 가정 기준입니다. 그래프를 누르면 값을 고정해 읽을 수 있습니다. 미래 음영은 보정된 확률 구간이 아닙니다.</desc><defs><clipPath id="${clip}"><rect x="${L}" y="${T}" width="${W-L-R}" height="${bottom-T}"/></clipPath><clipPath id="${priceClip}"><rect x="${L}" y="${T}" width="${W-L-R}" height="${priceBottom-T}"/></clipPath><clipPath id="${axisClip}"><rect x="${W-R}" y="${T}" width="${R}" height="${priceBottom-T}"/></clipPath></defs>`;
-  for(const price of priceScale.ticks){const value=display.toDisplay(price),yy=y(price),label=unit==='usd'?`$${max/min<2?nf(value,tickDigits):compact(value)}`:formatDisplayPrice(price,display,tickDigits),fontSize=Math.min(12,(R-12)/Math.max(1,label.length*.6));s+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#28323f"/><text x="${W-R+8}" y="${yy+4}" text-anchor="start" fill="#b0bbca" font-size="${fontSize}">${label}</text>`;}
+  for(const price of priceScale.ticks){const yy=y(price),label=axisLabels.tick(price);s+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#28323f"/><text x="${W-R+axisText.inset}" y="${yy+4}" text-anchor="start" ${axisText.attributes(label)} fill="#b0bbca" font-size="${axisText.fontSize}">${esc(label)}</text>`;}
   let months=span>5000?(small?60:24):span>3000?(small?36:24):span>1100?(small?12:6):span>550?(small?6:3):span>270?3:1;
   let tick=`${start.slice(0,4)}-01-01`;while(dayOf(tick)<minDay)tick=shiftCalendarMonths(tick,months);
   while(dayOf(tick)<=maxDay){const xx=xday(dayOf(tick));s+=`<line x1="${xx}" x2="${xx}" y1="${T}" y2="${bottom}" stroke="#222c37"/><text x="${xx}" y="${axisY}" text-anchor="${xx>W-35?'end':'middle'}" fill="#aebaca" font-size="12">${months>=12?tick.slice(0,4):tick.slice(2,7).replace('-','.')}</text>`;tick=shiftCalendarMonths(tick,months);}
@@ -208,10 +209,10 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   if(milestoneLayer){if(milestoneLayer.markers.length||activeCycleInterval)s+=`<g data-indicator-layer="cycle-landmarks">${milestoneLayer.markup}</g>`;svg.dataset.cycleMarkerCount=String(milestoneLayer.markers.length);svg.dataset.cycleMarkerLabelCount=String(milestoneLayer.labelCount);}
 
   const latest=originalVisible.find(p=>p.date===split);
-  if(latest&&latest.price>=min&&latest.price<=max){const yy=y(latest.price),labelTop=Math.max(T,Math.min(priceBottom-18,yy-9));s+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#7da89c" stroke-dasharray="2 5" opacity=".5"/><rect x="${W-R}" y="${labelTop}" width="${R-3}" height="18" rx="2" fill="#2b6558"/><text x="${W-R+5}" y="${labelTop+13}" fill="#edf8f3" font-size="${small?10:11}">${formatDisplayPrice(latest.price,display,1)}</text>`;}
+  if(latest&&latest.price>=min&&latest.price<=max){const yy=y(latest.price),labelTop=Math.max(T,Math.min(priceBottom-18,yy-9)),label=axisLabels.price(latest.price);s+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#7da89c" stroke-dasharray="2 5" opacity=".5"/><rect x="${W-R}" y="${labelTop}" width="${R-3}" height="18" rx="2" fill="#2b6558"/><text x="${W-R+axisText.inset}" y="${labelTop+13}" ${axisText.attributes(label,{badge:true,kind:'latest'})} fill="#edf8f3" font-size="${axisText.badgeFontSize}">${esc(label)}</text>`;}
   const annotations=researchAnnotationsMarkup({annotations:researchAnnotations,start,end,x:({date:value})=>xday(typeof value==='number'?value/86400:value.length>10?Date.parse(value)/86400000:dayOf(value)),y,left:L,right:W-R,top:T,bottom:priceBottom,clipId:priceClip,activeId:selectedAnnotation,scenarioId});
   s+=annotations.markup;svg.dataset.researchAnnotationCount=String(annotations.visibleCount);
-  s+=`<g id="${svg.id}-cross" pointer-events="none"><line class="cross-time" y1="${T}" y2="${bottom}" stroke="#afc4dd" stroke-dasharray="3 3" opacity=".6"/><line class="cross-price" clip-path="url(#${priceClip})" x1="${L}" x2="${W-R}" stroke="#afc4dd" stroke-dasharray="3 3" opacity=".6"/><circle clip-path="url(#${priceClip})" r="4" fill="#10151c" stroke="#f4dcac" stroke-width="1.5"/><g class="cross-price-tag" clip-path="url(#${axisClip})"><rect x="${W-R}" width="${R-3}" height="18" rx="2" fill="#465366"/><text x="${W-R+5}" fill="#edf2f9" font-size="${small?10:11}"></text></g><g class="cross-date-tag"><rect width="80" height="18" rx="2" fill="#39485b"/><text fill="#edf2f9" font-size="10" text-anchor="middle"></text></g></g>`;
+  s+=`<g id="${svg.id}-cross" pointer-events="none"><line class="cross-time" y1="${T}" y2="${bottom}" stroke="#afc4dd" stroke-dasharray="3 3" opacity=".6"/><line class="cross-price" clip-path="url(#${priceClip})" x1="${L}" x2="${W-R}" stroke="#afc4dd" stroke-dasharray="3 3" opacity=".6"/><circle clip-path="url(#${priceClip})" r="4" fill="#10151c" stroke="#f4dcac" stroke-width="1.5"/><g class="cross-price-tag" clip-path="url(#${axisClip})"><rect x="${W-R}" width="${R-3}" height="18" rx="2" fill="#465366"/><text x="${W-R+axisText.inset}" fill="#edf2f9" font-size="${axisText.badgeFontSize}"></text></g><g class="cross-date-tag"><rect width="80" height="18" rx="2" fill="#39485b"/><text fill="#edf2f9" font-size="10" text-anchor="middle"></text></g></g>`;
   s+=measurementOverlayMarkup(priceClip);
   s+=priceAxisMarkup({left:W-R,right:W,top:T,bottom:priceBottom})+timeAxisMarkup({left:L,right:W-R,top:bottom+8,bottom:H});
   svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.dataset.plotLeft=String(L);svg.dataset.plotRight=String(W-R);svg.dataset.plotTop=String(T);svg.dataset.plotBottom=String(bottom);svg.dataset.priceBottom=String(priceBottom);svg.parentElement?.style.setProperty('--plot-bottom-gap',`${H-bottom+6}px`);svg.parentElement?.style.setProperty('--plot-right-gap',`${R+7}px`);svg.dataset.scale=effectiveScale;svg.dataset.unit=unit;svg.dataset.invertScale=String(Boolean(invertScale));svg.dataset.timeAxisTop=String(bottom+8);svg.dataset.tool=tool;svg.dataset.chartType=chartType;svg.dataset.visiblePointCount=String(visible.length);svg.dataset.observedCandleCount=String(candleRows.length);svg.dataset.candleRendering=denseCandles?'batched':'individual';svg.innerHTML=s;
@@ -266,7 +267,8 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   function mark(index,anchor=null,pointerY=null){
     cursor=index;const p=selectionRows[index],xx=x(p),tx=Math.max(L,Math.min(W-R-80,xx-40));
     crossLine.setAttribute('x1',xx);crossLine.setAttribute('x2',xx);crossDot.setAttribute('cx',xx);
-    paintPriceCursor({horizontal:crossPrice,dot:crossDot,tag:priceTag,axis:priceScale,top:T,bottom:priceBottom,selectedPrice:anchor?.price??p.price,pointerY,formatPrice:cursorPrice});
+    paintPriceCursor({horizontal:crossPrice,dot:crossDot,tag:priceTag,axis:priceScale,top:T,bottom:priceBottom,selectedPrice:anchor?.price??p.price,pointerY,formatPrice:axisLabels.price});
+    axisText.fitNode(priceTag.querySelector('text'),{badge:true,kind:'cursor'});
     if(!Number.isFinite(pointerY)&&((anchor?.price??p.price)<min||(anchor?.price??p.price)>max))for(const node of [crossPrice,crossDot,priceTag])node.setAttribute('visibility','hidden');
     dateTag.querySelector('rect').setAttribute('x',tx);dateTag.querySelector('rect').setAttribute('y',axisY-12);dateTag.querySelector('text').setAttribute('x',tx+40);dateTag.querySelector('text').setAttribute('y',axisY+1);dateTag.querySelector('text').textContent=p.date;
   }

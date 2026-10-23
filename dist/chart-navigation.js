@@ -1,5 +1,5 @@
 import { utcDay, dateFromDay } from './cycle-engine.js?v=1.11.0';
-import { normalizePriceDomain, scalePriceDomain, panPriceDomain } from './price-axis.js?v=1.13.0-research.1';
+import { normalizePriceDomain, scalePriceDomain, panPriceDomain } from './price-axis.js?v=1.14.0-mobile.1';
 
 const MIN_DAYS = 30;
 const MIN_BARS = 12;
@@ -86,7 +86,7 @@ const icons = {
 export function bindChartNavigation({
   element, getRange, getTool = () => 'crosshair', onRangeChange, onReset,
   getPriceAxis = () => null, onPriceRangeChange = null, onPriceReset = null,
-  getContext = () => null, onAnnounce, onGestureStart = null, onGestureEnd = null, signal,
+  getContext = () => null, onAnnounce, onGestureStart = null, onGestureEnd = null, onMenuOpen = null, signal,
 }) {
   const document = element.ownerDocument, window = document.defaultView;
   const toolbar = document.createElement('div');
@@ -139,8 +139,10 @@ export function bindChartNavigation({
   function wheelTransaction(){beginTransaction('차트 확대·이동');if(onGestureStart||onGestureEnd){if(wheelTimer!==null)cancelDelay(wheelTimer);wheelTimer=delay(()=>{wheelTimer=null;flush();finishTransaction();},220);}}
   function discrete(next,label='차트 범위 변경'){flush();finishTransaction();if(sameWindow(next,getRange()))return;beginTransaction(label);finishOnFlush=true;enqueue(next);}
   const touches = new Map();
+  // Retire the entire touch cohort after a pinch or cancellation. A finger
+  // still down (or added before all fingers lift) cannot become a new pan.
   const completedPinchTouches = new Set();
-  let menuState = null, lastPointer = null, destroyed = false;
+  let menuState = null, lastPointer = null, destroyed = false, touchContextUntil = 0;
   const listeners = [];
   const listen = (target, type, handler, options) => { target.addEventListener(type, handler, options);listeners.push([target, type, handler, options]); };
   // Event labels are chart surfaces for wheel navigation, while their click,
@@ -201,7 +203,10 @@ export function bindChartNavigation({
     try { if (element.hasPointerCapture?.(id)) element.releasePointerCapture(id); } catch { /* A cancelled pointer can already be gone. */ }
   }
   function cancelGesture() {
-    const previous = drag,wasPinching=Boolean(pinch),captured=[...touches.keys()];drag = null;pinch=null;touches.clear();completedPinchTouches.clear();delete element.dataset.dragging;delete element.dataset.pinching;delete element.dataset.priceScaling;delete element.dataset.timeScaling;clearPending();clearPricePending();
+    const previous = drag,wasPinching=Boolean(pinch),captured=[...touches.keys()];
+    for(const id of captured)completedPinchTouches.add(id);
+    if(previous?.pointerType==='touch')completedPinchTouches.add(previous.id);
+    drag = null;pinch=null;touches.clear();delete element.dataset.dragging;delete element.dataset.pinching;delete element.dataset.priceScaling;delete element.dataset.timeScaling;clearPending();clearPricePending();
     if (previous?.active||wasPinching) suppressClickUntil = Date.now() + 500;
     if (previous) releaseCapture(previous.id);
     for(const id of captured)releaseCapture(id);
@@ -263,26 +268,36 @@ export function bindChartNavigation({
     }
   }
   function pointerDown(event) {
-    flush();finishTransaction();
+    const touch=event.pointerType==='touch',joinsTouch=touch&&event.isPrimary===false;
+    touchContextUntil=touch?Date.now()+800:0;
+    // Pan -> pinch belongs to one gesture/history transaction. Extra fingers
+    // must not commit that transaction simply by touching the same surface.
+    if(!joinsTouch){flush();finishTransaction();suppressClickUntil=0;}
+    if(!touch&&(touches.size||pinch||drag?.pointerType==='touch'))cancelGesture();
+    if(!touch)completedPinchTouches.delete(event.pointerId);
+    if(touch&&!joinsTouch){if(drag||pinch||touches.size)cancelGesture();completedPinchTouches.clear();}
     const range = current(), rect = plotBounds();
-    if (drag?.kind === 'price' && drag.id !== event.pointerId) { cancelGesture();return; }
+    if ((drag?.kind === 'price'||drag?.kind==='time-scale') && drag.id !== event.pointerId) {
+      cancelGesture();if(touch)completedPinchTouches.add(event.pointerId);return;
+    }
     if (range && event.button === 0 && event.isPrimary !== false && !interactive(event.target) && typeof onPriceRangeChange === 'function') {
       const bounds = priceAxisBounds();
       if (inside(event,bounds)) {
         cancelGesture();closeMenu();suppressClickUntil = 0;
-        drag = { kind:'price', id:event.pointerId, y:event.clientY, height:bounds.height, range:{...range}, axis:{...getPriceAxis()}, tool:getTool(), active:false };
+        drag = { kind:'price', id:event.pointerId, y:event.clientY, lastX:event.clientX,lastY:event.clientY,pointerType:event.pointerType,height:bounds.height, range:{...range}, axis:{...getPriceAxis()}, tool:getTool(), active:false };
         event.preventDefault();event.stopImmediatePropagation();return;
       }
     }
     if(range&&event.button===0&&event.isPrimary!==false&&!interactive(event.target)&&inside(event,timeAxisBounds())){
       cancelGesture();closeMenu();suppressClickUntil=0;
-      const bounds=timeAxisBounds();drag={kind:'time-scale',id:event.pointerId,x:event.clientX,y:event.clientY,width:bounds.width,range,tool:getTool(),anchor:(event.clientX-bounds.left)/bounds.width,active:false};
+      const bounds=timeAxisBounds();drag={kind:'time-scale',id:event.pointerId,x:event.clientX,y:event.clientY,lastX:event.clientX,lastY:event.clientY,pointerType:event.pointerType,width:bounds.width,range,tool:getTool(),anchor:(event.clientX-bounds.left)/bounds.width,active:false};
       event.preventDefault();event.stopImmediatePropagation();return;
     }
     if (!range || getTool() === 'measure' || event.button !== 0 || (event.isPrimary === false&&event.pointerType!=='touch') || interactive(event.target) || !inside(event, rect)) return;
-    if(event.pointerType==='touch'){
-      if(event.isPrimary!==false)completedPinchTouches.clear();
-      if(touches.size>=2)return;
+    if(touch){
+      if((joinsTouch&&(completedPinchTouches.size||!touches.size))||touches.size>=2){
+        completedPinchTouches.add(event.pointerId);event.preventDefault();event.stopImmediatePropagation();return;
+      }
       touches.set(event.pointerId,{x:event.clientX,y:event.clientY});
       if(touches.size===2){
         flush();drag=null;delete element.dataset.dragging;
@@ -295,11 +310,16 @@ export function bindChartNavigation({
     }
     closeMenu();suppressClickUntil = 0;
     const axis=getPriceAxis(),axisBounds=priceAxisBounds(),canPanY=range.allowEmpty===true&&typeof onPriceRangeChange==='function'&&normalizePriceDomain(axis,{scale:axis?.scale})&&axisBounds&&event.clientY>=axisBounds.top&&event.clientY<=axisBounds.top+axisBounds.height;
-    drag = { kind:'time',id: event.pointerId, x: event.clientX, y: event.clientY, width: rect.width, range, tool:getTool(), pointerType:event.pointerType, axis:canPanY?{...axis}:null,priceHeight:axisBounds?.height,active: false };
+    drag = { kind:'time',id: event.pointerId, x: event.clientX, y: event.clientY,lastX:event.clientX,lastY:event.clientY, width: rect.width, range, tool:getTool(), pointerType:event.pointerType, axis:canPanY?{...axis}:null,priceHeight:axisBounds?.height,active: false };
   }
-  function pointerMove(event) {
+  function pointerMove(event,ending=false) {
+    if(event.pointerType==='touch'&&(touches.has(event.pointerId)||drag?.id===event.pointerId))touchContextUntil=Date.now()+800;
+    if(event.pointerType==='touch'&&completedPinchTouches.has(event.pointerId)&&!touches.has(event.pointerId)){
+      event.preventDefault();event.stopImmediatePropagation();return;
+    }
+    if(drag?.id===event.pointerId){drag.lastX=event.clientX;drag.lastY=event.clientY;}
     if(drag?.kind==='price'&&event.pointerId===drag.id){
-      if(!validPriceScope(drag)||(event.buttons===0&&event.pointerType!=='touch')){cancelGesture();return;}
+      if(!validPriceScope(drag)||(!ending&&event.buttons===0&&event.pointerType!=='touch')){cancelGesture();return;}
       const delta=event.clientY-drag.y;
       if(!drag.active){
         if(Math.abs(delta)<3)return;
@@ -310,7 +330,7 @@ export function bindChartNavigation({
       enqueuePrice(scalePriceDomain(drag.axis,Math.exp(clamp(delta/drag.height,-1.5,1.5)*2)),drag);return;
     }
     if(drag?.kind==='time-scale'&&event.pointerId===drag.id){
-      if(!sameScope(drag.range,getRange())||getTool()!==drag.tool||(event.buttons===0&&event.pointerType!=='touch')){cancelGesture();return;}
+      if(!sameScope(drag.range,getRange())||getTool()!==drag.tool||(!ending&&event.buttons===0&&event.pointerType!=='touch')){cancelGesture();return;}
       const delta=event.clientX-drag.x;
       if(!drag.active){if(Math.abs(delta)<3)return;beginTransaction('시간축 확대·축소');drag.active=true;element.dataset.timeScaling='true';focusChart();try{element.setPointerCapture?.(event.pointerId);}catch{}}
       event.preventDefault();event.stopImmediatePropagation();enqueue(zoomRange(drag.range,Math.exp(clamp(delta/drag.width,-2,2)*2),drag.anchor));return;
@@ -326,7 +346,7 @@ export function bindChartNavigation({
     if(touches.has(event.pointerId))touches.set(event.pointerId,{x:event.clientX,y:event.clientY});
     if (element.contains(event.target) && inside(event, plotBounds())) lastPointer = { clientX: event.clientX, clientY: event.clientY };
     if (!drag || event.pointerId !== drag.id) return;
-    if (!sameScope(drag.range, getRange()) || getTool() !== drag.tool || (event.buttons === 0 && event.pointerType !== 'touch')) { cancelGesture();return; }
+    if (!sameScope(drag.range, getRange()) || getTool() !== drag.tool || (!ending && event.buttons === 0 && event.pointerType !== 'touch')) { cancelGesture();return; }
     const dx = event.clientX - drag.x, dy = event.clientY - drag.y;
     if(drag.axis&&(drag.axis.scale!==getPriceAxis()?.scale||drag.axis.inverted!==getPriceAxis()?.inverted)){cancelGesture();return;}
     if (!drag.active) {
@@ -336,7 +356,7 @@ export function bindChartNavigation({
       try { element.setPointerCapture?.(event.pointerId); } catch { /* Window listeners still complete the gesture. */ }
     }
     event.preventDefault();event.stopImmediatePropagation();
-    if(drag.axis&&!drag.pricePanning&&Math.abs(dy)>=3){
+    if(drag.axis&&(drag.pointerType!=='touch'||drag.tool==='pan')&&!drag.pricePanning&&Math.abs(dy)>=3){
       // Horizontal drags retain Auto. If Y begins later in the same gesture,
       // use the currently visible USD range, then retain it through a return
       // to the original pointer Y instead of dropping the final zero offset.
@@ -345,6 +365,14 @@ export function bindChartNavigation({
     enqueue(panRange(drag.range, -dx / drag.width),drag.pricePanning?panPriceDomain(drag.axis,dy/drag.priceHeight):null,drag);
   }
   function pointerUp(event) {
+    if(event.pointerType==='touch'&&(touches.has(event.pointerId)||completedPinchTouches.has(event.pointerId)||drag?.id===event.pointerId))touchContextUntil=Date.now()+800;
+    const last=pinch&&touches.get(event.pointerId),ownsDrag=drag?.id===event.pointerId;
+    if(!completedPinchTouches.has(event.pointerId)&&(last||ownsDrag)&&[event.clientX,event.clientY].every(Number.isFinite)&&
+      (event.clientX!==(last?.x??drag?.lastX)||event.clientY!==(last?.y??drag?.lastY))){
+      // The final pointer position is authoritative. Browsers may coalesce or
+      // omit a last move, and pointerup normally has buttons === 0.
+      pointerMove(event,true);
+    }
     if(completedPinchTouches.delete(event.pointerId)){
       event.preventDefault();event.stopImmediatePropagation();suppressClickUntil=Date.now()+500;return;
     }
@@ -362,10 +390,18 @@ export function bindChartNavigation({
     releaseCapture(previous.id);
     finishTransaction();
   }
-  function pointerCancel(event) { if (drag?.id === event.pointerId||touches.has(event.pointerId)) cancelGesture(); }
+  function pointerCancel(event) {
+    if(drag?.id===event.pointerId||touches.has(event.pointerId))cancelGesture();
+    // Releasing capture is not a physical lift; retain the other touch IDs
+    // until their actual up/cancel, or until a fresh primary contact arrives.
+    if(event.type==='pointercancel'&&completedPinchTouches.delete(event.pointerId)){
+      event.preventDefault();event.stopImmediatePropagation();suppressClickUntil=Date.now()+500;
+    }
+  }
   function resumeTouchGesture(points){
     if(destroyed||!Array.isArray(points)||points.length!==2||getTool()==='measure'||new Set(points.map(point=>point.pointerId)).size!==2||points.some(point=>![point.pointerId,point.clientX,point.clientY].every(Number.isFinite)))return false;
     flush();cancelGesture();const range=getRange(),rect=plotBounds();if(!range||!rect.width)return false;
+    completedPinchTouches.clear();
     for(const point of points)touches.set(point.pointerId,{x:point.clientX,y:point.clientY});
     const [a,b]=[...touches.values()];pinch={range,tool:getTool(),distance:Math.max(16,Math.hypot(a.x-b.x,a.y-b.y)),center:(a.x+b.x)/2,left:rect.left,width:rect.width};
     beginTransaction('차트 두 손가락 확대·이동');element.dataset.pinching='true';closeMenu();focusChart();
@@ -396,7 +432,7 @@ export function bindChartNavigation({
   function openMenu(position = null) {
     const range = getRange();
     if (destroyed || !range) return false;
-    cancelGesture();closeMenu();
+    cancelGesture();closeMenu();onMenuOpen?.();
     const rect = plotBounds();
     const point = position || (lastPointer && inside(lastPointer, rect) ? lastPointer : { clientX: rect.left + rect.width / 2, clientY: rect.top + rect.height / 2 });
     const anchor = clamp((point.clientX - rect.left) / (rect.width || 1), 0, 1);
@@ -418,6 +454,9 @@ export function bindChartNavigation({
   }
   function contextMenu(event) {
     if (!getRange() || interactive(event.target) || !inside(event, plotBounds())) return;
+    const nativeTouch=event.pointerType==='touch'||event.sourceCapabilities?.firesTouchEvents===true||
+      (!event.pointerType&&event.sourceCapabilities?.firesTouchEvents!==false&&(touches.size>0||Date.now()<touchContextUntil));
+    if(nativeTouch){event.preventDefault();event.stopImmediatePropagation();return;}
     event.preventDefault();event.stopImmediatePropagation();openMenu(event);
   }
   function menuKeydown(event) {
@@ -494,8 +533,8 @@ export function bindChartNavigation({
 
   function update() {
     if (destroyed) return;
-    // An explicit pan tool owns vertical touches. Crosshair mode still leaves
-    // an ordinary vertical swipe available to the page until tracking starts.
+    // H owns vertical as well as horizontal movement. Crosshair navigation
+    // waits for horizontal intent; native scrolling also depends on SVG CSS.
     element.style.touchAction=getTool()==='pan'?'none':'pan-y pinch-zoom';
     const range = getRange();toolbar.hidden = !range;
     if (!range || (drag && (drag.kind==='price'?!validPriceScope(drag):!sameScope(drag.range,range)||getTool()!==drag.tool||(drag.axis&&!validPanScope(drag)))) || (pinch&&(!sameScope(pinch.range,range)||getTool()!==pinch.tool))) cancelGesture();

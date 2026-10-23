@@ -5,9 +5,8 @@ export {indicatorSettings,indicatorSupportsInterval,applyIndicatorPresentation} 
 export const INDICATORS = Object.freeze([
   {id:'readout',label:'가격 · OHLC 읽기',category:'표시',description:'왼쪽 위의 가격, 날짜, 시가·고가·저가·종가',default:true},
   {id:'source',label:'자료 출처',category:'표시',description:'가격·거래량 제공자와 수집 시각',default:true},
-  {id:'legend',label:'차트 범례',category:'표시',description:'오른쪽 위의 실제 가격·미래 가정·사이클 색상 범례',default:true},
-  {id:'countdown',label:'다음 국면 · D-day',category:'가격 지표',description:'미래 경로에서 7일 유지되는 다음 국면까지 · 조건부 가정',default:true,dailyOnly:true},
-  {id:'volume',label:'거래량',category:'가격 지표',description:'실제 BTC 수량과 장기 조건부 거래량',control:'atlas-volume',default:true},
+  {id:'legend',label:'차트 범례',category:'표시',description:'오른쪽 위의 관측 가격·미래 가정·사이클 색상 범례',default:true},
+  {id:'volume',label:'거래량',category:'가격 지표',description:'실제 BTC 수량과 장기 조건부 거래량 · 기본 숨김',control:'atlas-volume',default:true,defaultHidden:true},
   {id:'history',label:'역사 사건',category:'가격 지표',description:'확대 수준에 맞춘 사건 이름과 원문',control:'atlas-history-events',default:true,dailyOnly:true},
   {id:'range',label:'수요·채택 가정 범위',category:'가격 지표',description:'장기 가격 시나리오의 범위 · 확률구간 아님',control:'lab-band',default:true,dailyOnly:true},
   {id:'turns',label:'고점·저점',category:'가격 지표',description:'관측 전환점과 미래 조건부 방향 후보',control:'lab-turns',default:true,dailyOnly:true},
@@ -28,6 +27,7 @@ const ids=new Set(INDICATORS.map(item=>item.id));
 const analyses=new Set(INDICATORS.filter(item=>item.analysis).map(item=>item.id));
 const studies=new Set(INDICATORS.filter(item=>item.category!=='표시').map(item=>item.id));
 const defaults=INDICATORS.filter(item=>item.default).map(item=>item.id);
+const defaultHidden=INDICATORS.filter(item=>item.defaultHidden).map(item=>item.id);
 const ordered=values=>{const wanted=new Set(values);return INDICATORS.filter(item=>wanted.has(item.id)).map(item=>item.id);};
 export const ANALYSIS_PANE_MIN_HEIGHT=240;
 export const ANALYSIS_PANE_MAX_HEIGHT=900;
@@ -37,7 +37,7 @@ const parseJson=value=>{try{return value&&value.length<=8000?JSON.parse(value):{
 
 export function normalizeIndicatorState(value={}) {
   const added=ordered(Array.isArray(value.added)?value.added:defaults);
-  const hidden=ordered((Array.isArray(value.hidden)?value.hidden:[]).filter(id=>added.includes(id)));
+  const hidden=ordered((Array.isArray(value.hidden)?value.hidden:Array.isArray(value.added)?[]:defaultHidden).filter(id=>added.includes(id)));
   const minimized=ordered((Array.isArray(value.minimized)?value.minimized:[]).filter(id=>analyses.has(id)&&added.includes(id)));
   const active=analyses.has(value.active)&&added.includes(value.active)&&!hidden.includes(value.active)?value.active:added.find(id=>analyses.has(id)&&!hidden.includes(id))||added.find(id=>analyses.has(id))||'cycles';
   const primary=ids.has(value.primary)&&added.includes(value.primary)?value.primary:null;
@@ -52,7 +52,9 @@ export function normalizeIndicatorState(value={}) {
 export function readIndicatorState(search='',{mobile=globalThis.matchMedia?.('(max-width:620px)')?.matches??false}={}) {
   const params=search instanceof URLSearchParams?search:new URLSearchParams(search);
   const added=params.has('indicators')?params.get('indicators').split(','):defaults.slice();
-  const hidden=params.get('indicator-hide')?.split(',')||[];
+  // Old explicit layouts keep their eye states. New charts hide volume until
+  // requested; an explicitly empty hide parameter preserves a saved visible choice.
+  const hidden=params.has('indicator-hide')?params.get('indicator-hide').split(','):params.has('indicators')?[]:defaultHidden.slice();
   const legacy=params.get('chart'),legacyCompare=params.get('page')==='compare'&&!params.has('legacy')&&legacy!=='price';
   if(!params.has('indicators')&&(analyses.has(legacy)||legacyCompare)){
     const mode=analyses.has(legacy)?legacy:'cycles';added.push(mode);if(params.get('dock')==='closed')hidden.push(mode);
@@ -69,7 +71,7 @@ export function readIndicatorState(search='',{mobile=globalThis.matchMedia?.('(m
 export function writeIndicatorState(params,state) {
   const next=normalizeIndicatorState(state),defaultKey=defaults.join(','),addedKey=next.added.join(',');
   if(addedKey===defaultKey)params.delete('indicators');else params.set('indicators',addedKey);
-  if(next.hidden.length)params.set('indicator-hide',next.hidden.join(','));else params.delete('indicator-hide');
+  if(next.hidden.length||next.added.includes('volume'))params.set('indicator-hide',next.hidden.join(','));else params.delete('indicator-hide');
   if(next.minimized.length)params.set('indicator-minimize',next.minimized.join(','));else params.delete('indicator-minimize');
   // Both choices are explicit in shared/saved charts, even across device sizes.
   params.set('indicator-list',next.collapsed?'closed':'open');

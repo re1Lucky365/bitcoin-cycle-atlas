@@ -1,5 +1,6 @@
 import { CHART_INTERVALS } from './ohlc-data.js?v=1.11.0';
-import { readWorkspaces, saveWorkspace, writeWorkspaces, cleanWorkspaceQuery, workspaceQuery, readWorkspaceViewport, readWorkspacePriceDomain, searchWorkspaceCommands } from './workspace-state.js?v=1.13.0-research.1';
+import { mountDialogViewport } from './dialog-viewport.js?v=1.14.0-mobile.1';
+import { readWorkspaces, saveWorkspace, writeWorkspaces, cleanWorkspaceQuery, workspaceQuery, readWorkspaceViewport, readWorkspacePriceDomain, searchWorkspaceCommands } from './workspace-state.js?v=1.14.0-mobile.1';
 
 /** All actions delegate to the live chart, so the palette is another entrance to the same state. */
 export function mountWorkspaceTools({trigger, plot, openReader, closeReader}) {
@@ -31,6 +32,7 @@ export function mountWorkspaceTools({trigger, plot, openReader, closeReader}) {
   const localNote=make('p','workspace-hint','저장 목록은 이 브라우저에만 남습니다. 다른 기기에서는 공유 링크를 사용하세요.');savedPane.append(summary,scope,form,list,shareTitle,shareRow,localNote);
   const status=make('p','workspace-feedback');status.setAttribute('role','status');status.setAttribute('aria-live','polite');
   dialog.append(header,tabs,commandsPane,savedPane,status);doc.body.append(dialog);
+  const dialogViewport=mountDialogViewport(dialog);
   const toast=make('div','workspace-toast');toast.hidden=true;toast.setAttribute('role','status');toast.setAttribute('aria-live','polite');doc.body.append(toast);let toastTimer;
   const onFeedback=event=>{toast.textContent=String(event.detail?.message || '');toast.hidden=!toast.textContent;win.clearTimeout(toastTimer);toastTimer=win.setTimeout(()=>{toast.hidden=true;},7000);};
   trigger.setAttribute('aria-haspopup','dialog');trigger.setAttribute('aria-controls',dialog.id);trigger.setAttribute('aria-expanded','false');
@@ -65,14 +67,16 @@ export function mountWorkspaceTools({trigger, plot, openReader, closeReader}) {
   }
   form.onsubmit=event=>{event.preventDefault();persist(name.value);};
   function close(restore=true){restoreAfterClose=restore;if(dialog.open)dialog.close();}
-  function selectTab(value){
+  function selectTab(value,{focusInput=true}={}){
     tab=value;commandsPane.hidden=value!=='commands';savedPane.hidden=value!=='saved';commandsTab.setAttribute('aria-pressed',String(value==='commands'));savedTab.setAttribute('aria-pressed',String(value==='saved'));
-    status.textContent='';if(value==='commands'){paintCommands();search.focus();}else{renderSaved();name.focus();}
+    status.textContent='';if(value==='commands'){paintCommands();if(focusInput)search.focus();}else{renderSaved();if(focusInput)name.focus();}
   }
   function open(value='commands',source=trigger){
     opener=source;closeReader({restoreFocus:false});
     doc.dispatchEvent(new win.CustomEvent('atlas:modal-open',{detail:{id:dialog.id}}));
-    if(!dialog.open)dialog.showModal();trigger.setAttribute('aria-expanded','true');search.value='';selectTab(value);
+    if(!dialog.open)dialog.showModal();trigger.setAttribute('aria-expanded','true');search.value='';
+    const compact=Boolean(win.matchMedia?.('(max-width:620px), (max-height:500px)').matches);
+    selectTab(value,{focusInput:!compact});if(compact)closeButton.focus({preventScroll:true});
   }
   function run(item){close(false);plot.querySelector('svg:not([hidden])')?.focus({preventScroll:true});item.run();}
   function commands(){
@@ -135,7 +139,9 @@ export function mountWorkspaceTools({trigger, plot, openReader, closeReader}) {
   const onKey=event=>{if(event.defaultPrevented||doc.body.dataset.page!=='outlook'||event.altKey||event.shiftKey||!(event.ctrlKey||event.metaKey)||event.key.toLowerCase()!=='k'||event.target.closest?.('input,textarea,select,[contenteditable=true],dialog[open]'))return;event.preventDefault();open('commands',doc.activeElement);};
   const onState=event=>{latest=event.detail;if(dialog.open&&tab==='saved')renderSaved();};
   const onHistory=event=>{if(latest)latest={...latest,history:event.detail};if(dialog.open&&tab==='commands')paintCommands();};
+  const onOpen=event=>open(event.detail?.tab==='saved'?'saved':'commands',event.detail?.opener||doc.activeElement);
+  doc.addEventListener('atlas:workspace-open',onOpen);
   doc.addEventListener('atlas:history-state',onHistory);
   doc.addEventListener('keydown',onKey);doc.addEventListener('atlas:workbench-state',onState);doc.addEventListener('atlas:action-feedback',onFeedback);
-  return {destroy(){doc.removeEventListener('atlas:history-state',onHistory);doc.removeEventListener('keydown',onKey);doc.removeEventListener('atlas:workbench-state',onState);doc.removeEventListener('atlas:action-feedback',onFeedback);win.clearTimeout(toastTimer);dialog.remove();toast.remove();}};
+  return {destroy(){dialogViewport.destroy();doc.removeEventListener('atlas:workspace-open',onOpen);doc.removeEventListener('atlas:history-state',onHistory);doc.removeEventListener('keydown',onKey);doc.removeEventListener('atlas:workbench-state',onState);doc.removeEventListener('atlas:action-feedback',onFeedback);win.clearTimeout(toastTimer);dialog.remove();toast.remove();}};
 }

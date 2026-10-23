@@ -1,8 +1,9 @@
 import { CHART_INTERVALS,isIntradayInterval } from './ohlc-data.js?v=1.11.0';
 import { MAGNET_MODES, MAGNET_LABELS, normalizeMagnetMode } from './chart-magnet.js?v=1.11.0';
-import { mountChartGoTo } from './chart-go-to.js?v=1.13.0-research.1';
+import { mountChartGoTo } from './chart-go-to.js?v=1.14.0-mobile.1';
 import { isStartPriceUnit } from './price-display.js?v=1.13.0-research.1';
-import { mountWorkspaceTools } from './workspace-tools.js?v=1.13.0-research.1';
+import { mountWorkspaceTools } from './workspace-tools.js?v=1.14.0-mobile.1';
+import { mountChartBottomBar } from './chart-bottom-bar.js?v=1.14.0-mobile.1';
 const $ = selector => document.querySelector(selector);
 
 const paths = {
@@ -145,7 +146,6 @@ export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlSto
   const next=button('target','다음 방향 후보로 이동',{'id':'workbench-next-turn'});next.onclick=()=>command('next-turn');
   detailTools.append(selection,layerButton,math,next);right.append(detailTools,$('.atlas-nav'));
   const help=tools.querySelector('[data-reader=guide]');help.className='workbench-icon workbench-help';help.innerHTML=icon('info');help.title='차트 사용법';help.setAttribute('aria-label',help.title);panelButton(help,'guide');right.append(help);workspace.append(right);
-  const bottom=document.createElement('footer');bottom.className='workbench-bottom';bottom.setAttribute('aria-label','표시 기간과 가격 눈금');
   const ranges=document.createElement('div');ranges.className='workbench-ranges';ranges.setAttribute('role','group');ranges.setAttribute('aria-label','차트 표시 기간');
   for(const [value,label,title] of [['focus','4년','최근 2년 + 앞으로 2년 · 기본 보기'],['near','6개월','가까운 6개월 · 최근 45일 포함'],['all','장기 전망','검증한 자료의 마지막 목표 연도까지'],['history','전체','2010년부터 장기 전망까지']]){
     const node=document.createElement('button');node.type='button';node.textContent=label;node.title=title;node.setAttribute('aria-label',title);node.dataset.chartSpan=value;node.setAttribute('aria-pressed','false');node.onclick=()=>command('span',value);ranges.append(node);
@@ -159,7 +159,8 @@ export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlSto
   const fit=button('fit','기본 범위로 · 0 / Alt+R / 차트 더블클릭',{'id':'workbench-fit','aria-keyshortcuts':'0 Alt+R'});fit.onclick=()=>command('fit');axis.append(scale,auto,fit);
   const update=$('#atlas-update-status');update.className='workbench-update';panelButton(update,'update');
   const zone=document.createElement('span');zone.className='workbench-zone';zone.textContent='UTC';zone.title='차트 날짜와 봉 시각의 기준 시간대';
-  const status=document.createElement('div');status.className='workbench-status';status.append(zone,update);bottom.append(ranges,rangeLabel,axis,status);stage.append(bottom);
+  const status=document.createElement('div');status.className='workbench-status';status.append(zone,update);
+  const bottomBar=mountChartBottomBar({stage,ranges,dateButton:goDate,rangeLabel,axis,status,fitButton:fit,updateButton:update,onCommand:command,onUpdate:opener=>openReader('update',{focus:true,opener})});
   $('#chart-detail-actions').append($('#atlas-date-label'),$('#atlas-inspect-prev'),$('#atlas-inspect-next'),$('#atlas-latest'));
   $('#atlas-latest').innerHTML=icon('clock');$('#atlas-latest').title='최근 관측으로';$('#atlas-latest').setAttribute('aria-label','최근 관측으로');
   $('.atlas-controls').remove();tools.remove();
@@ -193,6 +194,7 @@ export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlSto
     const rangeText=intraday&&validSeconds(s.start)&&validSeconds(s.end)?`${timeText(s.start)} — ${timeText(s.end)}`:!intraday&&typeof s.start==='string'&&typeof s.end==='string'?`${s.start.replaceAll('-','.')} — ${s.end.replaceAll('-','.')}`:'';
     rangeLabel.hidden=!price||!rangeText;rangeLabel.textContent=price?rangeText:'';
     rangeLabel.title=price&&rangeText?`표시 기간 · ${rangeText} UTC`:'';
+    bottomBar.update(s);
     if(s.next){next.disabled=false;next.title=`${s.next.type==='high'?'조정':'반등'} 후보 · D-${s.next.days} · ${s.next.date} · 가정`;next.setAttribute('aria-label',next.title);}else next.disabled=true;
   };
   const handleIntervalKey=event=>{
@@ -203,7 +205,7 @@ export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlSto
     nodes[next].focus({preventScroll:true});nodes[next].click();
   };
   const handleKey=event=>{
-    if(event.defaultPrevented||document.body.dataset.page!=='outlook'||event.ctrlKey||event.metaKey||event.target.closest?.('input,textarea,select,[contenteditable=true],#chart-reader,#indicator-library,#workspace-dialog,#chart-indicator-manager,.analysis-indicator-window,.chart-context-menu,.chart-go-to-dialog'))return;
+    if(event.defaultPrevented||document.body.dataset.page!=='outlook'||event.ctrlKey||event.metaKey||event.target.closest?.('input,textarea,select,[contenteditable=true],#chart-reader,#indicator-library,#workspace-dialog,#chart-indicator-manager,.analysis-indicator-window,.chart-context-menu,.chart-go-to-dialog,.chart-bottom-popover'))return;
     if(workspace.dataset.chartMode!=='price')return;
     const key=event.key.toLowerCase(),intraday=plot.dataset.intraday==='true';
     if(event.altKey){
@@ -221,5 +223,5 @@ export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlSto
   scale.setAttribute('aria-keyshortcuts','Alt+L');goDate.setAttribute('aria-keyshortcuts','Alt+G');
   document.addEventListener('atlas:workbench-state',handleState);
   document.addEventListener('keydown',handleKey);intervalButtons.addEventListener('keydown',handleIntervalKey);
-  return {destroy(){goTo.destroy();workspaceTools.destroy();document.removeEventListener('atlas:workbench-state',handleState);document.removeEventListener('keydown',handleKey);intervalButtons.removeEventListener('keydown',handleIntervalKey);document.removeEventListener('pointerdown',dismissMagnet,true);document.removeEventListener('focusin',dismissMagnet);document.removeEventListener('scroll',scrollMagnet,true);document.removeEventListener('visibilitychange',visibilityMagnet);window.removeEventListener('resize',resizeMagnet);window.removeEventListener('blur',resizeMagnet);magnetMenu.remove();}};
+  return {destroy(){goTo.destroy();workspaceTools.destroy();bottomBar.destroy();document.removeEventListener('atlas:workbench-state',handleState);document.removeEventListener('keydown',handleKey);intervalButtons.removeEventListener('keydown',handleIntervalKey);document.removeEventListener('pointerdown',dismissMagnet,true);document.removeEventListener('focusin',dismissMagnet);document.removeEventListener('scroll',scrollMagnet,true);document.removeEventListener('visibilitychange',visibilityMagnet);window.removeEventListener('resize',resizeMagnet);window.removeEventListener('blur',resizeMagnet);magnetMenu.remove();}};
 }

@@ -1,4 +1,4 @@
-import {normalizeIndicatorState,isIndicatorVisible,ANALYSIS_PANE_MIN_HEIGHT,ANALYSIS_PANE_MAX_HEIGHT,ANALYSIS_PANE_DEFAULT_HEIGHT} from './indicator-state.js?v=1.13.0-research.1';
+import {normalizeIndicatorState,isIndicatorVisible,ANALYSIS_PANE_MIN_HEIGHT,ANALYSIS_PANE_MAX_HEIGHT,ANALYSIS_PANE_DEFAULT_HEIGHT} from './indicator-state.js?v=1.14.0-mobile.1';
 
 export const ANALYSIS_MODES = Object.freeze([
   {id:'cycles',label:'4년 비교'},
@@ -59,6 +59,13 @@ export function mountAnalysisIndicators({stage,svg,modeTabs,controls}) {
   const indicator=(action,id,extra={})=>doc.dispatchEvent(new CustomEvent('atlas:indicator-command',{detail:{action,id,...extra}}));
   let indicatorState=normalizeIndicatorState({added:[]}),frequency=null,previousMaximized=null,normalScrollTop=0;
   const windows=doc.createElement('section');windows.id='analysis-indicator-windows';windows.className='analysis-indicator-windows';windows.setAttribute('aria-label','차트에 추가한 분석 창');windows.hidden=true;
+  // A compact scrollport can be shorter than one research pane. Keep every
+  // surviving pane reachable without scrolling through another pane's body.
+  const access=doc.createElement('nav');access.className='analysis-pane-access';access.setAttribute('aria-label','연구 창 이동');access.hidden=true;
+  const accessLabel=doc.createElement('label'),accessText=doc.createElement('span'),paneSelect=doc.createElement('select'),paneGo=doc.createElement('button');
+  paneSelect.setAttribute('aria-label','연구 창으로 이동');paneSelect.setAttribute('aria-controls',windows.id);accessText.textContent='연구 창';accessLabel.append(accessText,paneSelect);
+  paneGo.type='button';paneGo.textContent='이동';paneGo.setAttribute('aria-label','선택한 연구 창 조작으로 이동');access.append(accessLabel,paneGo);windows.append(access);
+  let accessKey='';
   const views=new Map(),controlGroups={cycles:'atlas-cycle-controls',duration:'atlas-duration-controls',periods:'atlas-period-controls',cryptocon:'atlas-cryptocon-controls'};
   for(const {id:mode,label} of ANALYSIS_MODES){
     const card=doc.createElement('article');card.id=`analysis-window-${mode}`;card.className='analysis-indicator-window';card.dataset.analysisMode=mode;card.hidden=true;card.setAttribute('aria-labelledby',`analysis-window-title-${mode}`);
@@ -110,6 +117,14 @@ export function mountAnalysisIndicators({stage,svg,modeTabs,controls}) {
     card.addEventListener('pointerdown',()=>command('activate',mode),true);card.addEventListener('focusin',()=>command('activate',mode));
     views.set(mode,{card,body,minimize,maximize,up,down,resize,showHeight,chart,title,caption,legend,note,summary,locate,prev,next});
   }
+  function goToPane({focus=false}={}){
+    const view=views.get(paneSelect.value);if(!view||view.card.hidden)return;
+    const paneTop=view.card.getBoundingClientRect().top,windowTop=windows.getBoundingClientRect().top,headerHeight=access.getBoundingClientRect().height;
+    windows.scrollTop=Math.max(0,(windows.scrollTop||0)+paneTop-windowTop-headerHeight);
+    command('activate',paneSelect.value);
+    if(focus)view.minimize.focus({preventScroll:true});
+  }
+  paneSelect.addEventListener('change',()=>goToPane());paneGo.onclick=()=>goToPane({focus:true});
   modeTabs.remove();stage.querySelector('.atlas-plot').append(windows);
   function setState(event){
     const state=event.detail||{},view=views.get(state.mode);if(!view)return;
@@ -131,7 +146,7 @@ export function mountAnalysisIndicators({stage,svg,modeTabs,controls}) {
     const maximized=isIndicatorVisible(indicatorState,indicatorState.maximized,frequency)?indicatorState.maximized:null;
     if(maximized&&!previousMaximized)normalScrollTop=windows.scrollTop||0;
     const order=[...paneOrder,...ANALYSIS_MODES.map(item=>item.id).filter(id=>!paneOrder.includes(id))];
-    if([...windows.children].map(node=>node.dataset.analysisMode).join(',')!==order.join(',')){
+    if([...windows.children].filter(node=>node.dataset.analysisMode).map(node=>node.dataset.analysisMode).join(',')!==order.join(',')){
       for(const mode of order)windows.append(views.get(mode).card);
       if(focused?.isConnected&&!focused.closest?.('[hidden]'))focused.focus({preventScroll:true});
     }
@@ -146,6 +161,13 @@ export function mountAnalysisIndicators({stage,svg,modeTabs,controls}) {
       if(visible){count++;if(folded)minimizedCount++;if(folded&&focusInBody)view.minimize.focus({preventScroll:true});}
     }
     windows.hidden=!count;windows.dataset.count=String(count);windows.dataset.minimizedAll=String(count>0&&minimizedCount===count);windows.dataset.maximized=String(Boolean(maximized));
+    const available=order.filter(mode=>!views.get(mode).card.hidden),nextAccessKey=available.map(mode=>`${mode}:${minimized.includes(mode)}`).join(',');
+    if(nextAccessKey!==accessKey){
+      const selected=paneSelect.value;
+      paneSelect.replaceChildren(...available.map(mode=>{const option=doc.createElement('option');option.value=mode;option.textContent=`${ANALYSIS_MODES.find(item=>item.id===mode).label}${minimized.includes(mode)?' · 접힘':''}`;return option;}));
+      paneSelect.value=available.includes(selected)?selected:available.includes(active)?active:available[0]||'';accessKey=nextAccessKey;
+    }
+    accessText.textContent=`연구 창 · ${count}`;access.hidden=count<2||Boolean(maximized);
     if(maximized!==previousMaximized)windows.scrollTop=maximized?0:normalScrollTop;
     previousMaximized=maximized;
     if(focusedCard&&windows.contains(focusedCard)&&focusedCard.hidden)queueMicrotask(()=>{
@@ -166,5 +188,5 @@ export function mountAnalysisIndicators({stage,svg,modeTabs,controls}) {
   // Scroll inside floating analysis windows never pans the underlying price axis.
   windows.addEventListener('wheel',event=>event.stopPropagation(),{passive:true});windows.addEventListener('pointerdown',event=>event.stopPropagation());windows.addEventListener('dblclick',event=>event.stopPropagation());windows.addEventListener('contextmenu',event=>event.stopPropagation());windows.addEventListener('keydown',event=>event.stopPropagation());
   doc.addEventListener('atlas:analysis-state',setState);doc.addEventListener('atlas:indicator-state',indicators);
-  return {element:windows,views,destroy(){doc.removeEventListener('atlas:analysis-state',setState);doc.removeEventListener('atlas:indicator-state',indicators);windows.remove();}};
+  return {element:windows,views,paneSelect,paneGo,destroy(){doc.removeEventListener('atlas:analysis-state',setState);doc.removeEventListener('atlas:indicator-state',indicators);windows.remove();}};
 }

@@ -2,12 +2,37 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {INDICATORS,normalizeIndicatorState,readIndicatorState,writeIndicatorState,changeIndicatorState,isIndicatorVisible,visibleAnalysisIds,searchIndicators} from '../dist/indicator-state.js';
 import {preparePriceViewData} from '../dist/price-view-data.js';
-import {countdownPresentation,chartIndicatorItems} from '../dist/indicator-workbench.js';
+import {chartIndicatorItems} from '../dist/indicator-workbench.js';
+import {INDICATOR_PREFERENCES_KEY,readIndicatorPreferences,writeIndicatorPreferences,saveIndicatorTemplate} from '../dist/indicator-preferences.js';
 
 test('fresh chart shows the indicator legend without unsolicited research analysis windows',()=>{
   const state=readIndicatorState('');
   assert.equal(state.collapsed,false);assert.deepEqual(visibleAnalysisIds(state),[]);
-  for(const id of ['readout','source','legend','volume','history','cycle-timing'])assert.ok(isIndicatorVisible(state,id));
+  for(const id of ['readout','source','legend','history','cycle-timing'])assert.ok(isIndicatorVisible(state,id));
+  assert.ok(state.added.includes('volume'));assert.ok(state.hidden.includes('volume'));assert.equal(isIndicatorVisible(state,'volume'),false);
+});
+
+test('fresh and reset charts keep volume added but hidden, and an explicit visible choice survives sharing on either device',()=>{
+  for(const mobile of [false,true]){
+    const fresh=readIndicatorState('',{mobile});assert.ok(fresh.added.includes('volume'));assert.equal(isIndicatorVisible(fresh,'volume'),false);
+    const visible=changeIndicatorState(fresh,{action:'visibility',id:'volume'});assert.equal(isIndicatorVisible(visible,'volume'),true);assert.deepEqual(visible.added,fresh.added);
+    const params=writeIndicatorState(new URLSearchParams('granularity=1h&type=candles'),visible);
+    assert.equal(params.has('indicator-hide'),true);assert.equal(params.get('indicator-hide'),'','an explicit visible default must not disappear from the shared link');
+    assert.equal(params.get('granularity'),'1h');assert.equal(params.get('type'),'candles');
+    assert.deepEqual(readIndicatorState(params,{mobile:!mobile}),visible);
+    const reset=changeIndicatorState(visible,{action:'reset'});assert.ok(reset.added.includes('volume'));assert.equal(isIndicatorVisible(reset,'volume'),false);assert.deepEqual(reset.added,fresh.added);
+    assert.deepEqual(readIndicatorState(writeIndicatorState(new URLSearchParams(),reset),{mobile:false}),reset);
+  }
+});
+
+test('existing explicit indicator URLs preserve volume visibility while absent choices receive the new hidden default',()=>{
+  for(const search of ['indicators=volume','indicators=readout,source,legend,volume','indicator-hide=','indicators=volume&indicator-hide=']){
+    const restored=readIndicatorState(search);assert.equal(isIndicatorVisible(restored,'volume'),true,search);assert.ok(!restored.hidden.includes('volume'));
+    assert.deepEqual(readIndicatorState(writeIndicatorState(new URLSearchParams(),restored)),restored);
+  }
+  assert.equal(isIndicatorVisible(readIndicatorState('granularity=1h&type=candles'),'volume'),false);
+  assert.equal(isIndicatorVisible(readIndicatorState('indicators=volume&indicator-hide=volume'),'volume'),false);
+  const empty=readIndicatorState('indicators=');assert.deepEqual(empty.added,[]);assert.deepEqual(empty.hidden,[]);
 });
 
 test('click to add and click again to remove is separate from temporary eye visibility',()=>{
@@ -181,12 +206,23 @@ test('price-view preparation preserves exact points and drawdowns while reusing 
   assert.notStrictEqual(preparePriceViewData(revisedModel,revisedRows,pivots),revision);
 });
 
-test('countdown HUD distinguishes upcoming candidates, no candidate and unavailable paths',()=>{
-  const current={currentLabel:'횡보',currentUntil:'2026-10-26',holdDays:5,minimumRunDays:7};
-  const upcoming=countdownPresentation({...current,status:'upcoming',dday:'D-33',nextLabel:'상승'});
-  assert.equal(upcoming.dday,'D-33');assert.equal(upcoming.next,'상승');assert.equal(upcoming.current,'현재 가정 횡보 · 2026.10.26까지');
-  const maintained=countdownPresentation({...current,status:'maintained',currentRightCensored:true});
-  assert.equal(maintained.dday,'—');assert.equal(maintained.next,'다음 후보 없음');assert.match(maintained.current,/까지 표시$/);
-  const unavailable=countdownPresentation({...current,status:'unavailable',reason:'incomplete-future-path'});
-  assert.equal(unavailable.dday,'—');assert.equal(unavailable.next,'다음 후보 계산 불가');assert.notEqual(unavailable.next,maintained.next);
+test('old countdown URL fields are sanitized and commands cannot restore the removed indicator',()=>{
+  const params=new URLSearchParams({indicators:'readout,source,legend,countdown,volume,cycles','indicator-hide':'countdown,volume','indicator-minimize':'countdown,cycles','indicator-primary':'countdown','indicator-list':'closed','indicator-settings':JSON.stringify({countdown:{values:true},volume:{values:false}}),'pane-order':'countdown,cycles','pane-heights':JSON.stringify({countdown:700,cycles:420}),'pane-maximized':'countdown',chart:'cycles',granularity:'1h'});
+  const state=readIndicatorState(params);
+  assert.deepEqual(state.added,['readout','source','legend','volume','cycles']);assert.deepEqual(state.hidden,['volume']);assert.deepEqual(state.minimized,['cycles']);
+  assert.equal(state.primary,null);assert.equal(state.maximized,null);assert.equal(state.collapsed,true);assert.equal(state.settings.countdown,undefined);assert.equal(state.settings.volume.values,false);
+  assert.deepEqual(state.paneOrder,['cycles']);assert.deepEqual(state.paneHeights,{cycles:420});
+  assert.equal(isIndicatorVisible(state,'countdown'),false);assert.ok(!INDICATORS.some(item=>item.id==='countdown'));assert.deepEqual(searchIndicators('countdown'),[]);
+  for(const action of ['add','toggle','visibility','activate','primary','settings'])assert.deepEqual(changeIndicatorState(state,{action,id:'countdown',patch:{values:true}}),state);
+  writeIndicatorState(params,state);assert.ok(!params.toString().includes('countdown'));assert.equal(params.get('granularity'),'1h');assert.deepEqual(readIndicatorState(params),state);
+});
+
+test('old saved templates and favorites discard countdown while preserving remaining studies and fold choices',()=>{
+  const old={version:1,favorites:['countdown','volume'],templates:[{name:'Existing layout',state:{added:['legend','countdown','volume','periods'],hidden:['countdown','volume'],minimized:['periods'],primary:'countdown',collapsed:true,settings:{countdown:{values:true},volume:{values:false}},paneOrder:['periods'],paneHeights:{periods:420}}}]};
+  const stored=new Map([[INDICATOR_PREFERENCES_KEY,JSON.stringify(old)]]),storage={getItem:key=>stored.get(key),setItem:(key,value)=>stored.set(key,value)};
+  const preferences=readIndicatorPreferences(()=>storage),template=preferences.templates[0];
+  assert.deepEqual(preferences.favorites,['volume']);assert.equal(template.name,'Existing layout');assert.deepEqual(template.state.added,['legend','volume','periods']);assert.deepEqual(template.state.hidden,['volume']);assert.deepEqual(template.state.minimized,['periods']);assert.equal(template.state.collapsed,true);assert.equal(template.state.settings.volume.values,false);
+  const applied=changeIndicatorState(readIndicatorState(''),{action:'replace',state:old.templates[0].state});assert.deepEqual(applied,template.state);assert.equal(isIndicatorVisible(applied,'countdown'),false);
+  const saved=saveIndicatorTemplate(preferences,'Existing layout',old.templates[0].state);assert.equal(saved.error,null);assert.equal(saved.replaced,true);assert.deepEqual(saved.template.state,template.state);
+  assert.equal(writeIndicatorPreferences(saved.preferences,()=>storage),true);assert.ok(!stored.get(INDICATOR_PREFERENCES_KEY).includes('countdown'));assert.deepEqual(readIndicatorPreferences(()=>storage),saved.preferences);
 });

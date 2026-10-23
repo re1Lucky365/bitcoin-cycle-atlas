@@ -17,6 +17,7 @@ class Element extends Surface {
   get hidden(){return this._hidden;}
   set hidden(value){this._hidden=Boolean(value);if(value&&this.contains(this.ownerDocument.activeElement))this.ownerDocument.activeElement=this.ownerDocument.body;}
   append(...nodes){for(const node of nodes){node.remove();node.parentElement=this;this.children.push(node);}}
+  replaceChildren(...nodes){for(const node of [...this.children])node.remove();this.append(...nodes);}
   remove(){if(this.parentElement)this.parentElement.children=this.parentElement.children.filter(node=>node!==this);this.parentElement=null;}
   setAttribute(key,value){this.attributes.set(key,value);}
   getAttribute(key){return this.attributes.get(key)??null;}
@@ -136,7 +137,7 @@ test('zero, one and five panes maximize and restore without removing another stu
 test('reorder changes DOM and keyboard order together while keeping the focused control and chart instances',()=>{
   const f=fixture();f.update({added:['cycles','duration','periods']});
   const cycles=f.controller.views.get('cycles'),chart=cycles.chart;cycles.down.focus();cycles.down.click();
-  assert.deepEqual(f.state.paneOrder,['duration','cycles','periods']);assert.deepEqual(f.controller.element.children.slice(0,3).map(card=>card.dataset.analysisMode),f.state.paneOrder);assert.equal(f.doc.activeElement,cycles.down);assert.strictEqual(cycles.chart,chart);
+  assert.deepEqual(f.state.paneOrder,['duration','cycles','periods']);assert.deepEqual(f.controller.element.children.filter(card=>card.dataset.analysisMode).slice(0,3).map(card=>card.dataset.analysisMode),f.state.paneOrder);assert.equal(f.doc.activeElement,cycles.down);assert.strictEqual(cycles.chart,chart);
   cycles.up.click();assert.deepEqual(f.state.paneOrder,['cycles','duration','periods']);assert.equal(cycles.up.disabled,true);assert.equal(f.controller.views.get('periods').down.disabled,true);f.controller.destroy();
 });
 
@@ -150,4 +151,21 @@ test('boundary drag previews height through publishes and commits once, while ca
   const key=(key,shiftKey=false)=>cycles.resize.dispatchEvent({type:'keydown',key,shiftKey,preventDefault(){}});
   cycles.resize.focus();key('ArrowUp');assert.equal(f.state.paneHeights.cycles,470);key('ArrowDown',true);assert.equal(f.state.paneHeights.cycles,530);key('Home');assert.equal(f.state.paneHeights.cycles,240);key('End');assert.equal(f.state.paneHeights.cycles,900);assert.equal(f.doc.activeElement,cycles.resize);
   assert.deepEqual(f.state.hidden,[]);assert.deepEqual(f.state.minimized,[]);assert.equal(f.state.paneHeights.periods,300);f.controller.destroy();
+});
+
+test('compact pane access follows actual order, retains folded studies and excludes hidden or maximized-away studies',()=>{
+  const f=fixture(),select=f.controller.paneSelect,access=select.closest('.analysis-pane-access');
+  f.update({added:['cycles','duration','peaks','periods','cryptocon'],paneOrder:['duration','cycles','peaks','periods','cryptocon'],minimized:['periods'],hidden:['peaks']});
+  assert.equal(access.hidden,false);assert.deepEqual(select.children.map(option=>option.value),['duration','cycles','periods','cryptocon']);
+  assert.match(select.children.find(option=>option.value==='periods').textContent,/접힘/);
+  const before=JSON.stringify(f.state),pane=f.controller.views.get('periods');
+  f.controller.element.scrollTop=20;f.controller.element.getBoundingClientRect=()=>({top:200,height:160});
+  access.getBoundingClientRect=()=>({top:200,height:32});pane.card.getBoundingClientRect=()=>({top:850,height:60});
+  select.focus();select.value='periods';select.dispatchEvent({type:'change'});
+  assert.equal(f.controller.element.scrollTop,638);assert.equal(f.doc.activeElement,select);
+  assert.equal(JSON.stringify(f.state),before,'navigation must not expand, unhide, remove or resize a study');
+  f.controller.paneGo.click();assert.equal(f.doc.activeElement,pane.minimize,'keyboard users can enter the chosen pane without tabbing through earlier panes');assert.equal(pane.body.hidden,true);
+  f.controller.views.get('cycles').maximize.click();assert.equal(access.hidden,true);assert.deepEqual(select.children.map(option=>option.value),['cycles']);
+  f.controller.views.get('cycles').maximize.click();assert.equal(access.hidden,false);assert.deepEqual(select.children.map(option=>option.value),['duration','cycles','periods','cryptocon']);
+  f.update({added:['cycles']});assert.equal(access.hidden,true);f.controller.destroy();
 });

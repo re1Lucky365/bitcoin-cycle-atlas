@@ -1,4 +1,4 @@
-import {INDICATORS} from './indicator-state.js?v=1.13.0-research.1';
+import {INDICATORS} from './indicator-state.js?v=1.14.0-mobile.1';
 import {INDICATOR_SETTINGS,INDICATOR_SETTING_INTERVALS,indicatorSettings} from './indicator-settings.js?v=1.13.0-research.1';
 
 /** An editor of only settings that the shipped graph actually consumes. */

@@ -98,7 +98,7 @@ test('long-press tracking hands two existing fingers to a live pinch without req
   h.pointer('pointerup',{pointerId:12,pointerType:'touch'});assert.equal(h.element.capture.size,0);assert.equal(h.history.length,2);assert.equal(h.fire('click').defaultPrevented,true);h.controller.destroy();
 });
 
-test('explicit pan owns mobile vertical gestures, while crosshair preserves page scrolling',()=>{
+test('explicit pan consumes mobile vertical movement, while crosshair navigation waits for horizontal intent',()=>{
   const h=priceHarness();h.controller.update();assert.equal(h.element.style.touchAction,'pan-y pinch-zoom');
   h.fire('pointerdown',{pointerType:'touch',clientX:500,clientY:200});assert.equal(h.pointer('pointermove',{pointerType:'touch',clientX:501,clientY:280}).defaultPrevented,false);h.controller.cancelGesture();
   h.tool='pan';h.controller.update();assert.equal(h.element.style.touchAction,'none');

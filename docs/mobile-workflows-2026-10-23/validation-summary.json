@@ -1,0 +1,293 @@
+{
+  "release": {
+    "package": "1.14.0",
+    "assetVersion": "1.14.0-mobile.1",
+    "status": "local verification before commit; PR/CI/Pages results are recorded separately"
+  },
+  "generatedAt": "2026-10-23T13:17:47.351412+00:00",
+  "result": "passed",
+  "scope": "Final effective automated gates and separately scoped Chromium responsive-layout evidence; not physical-device acceptance.",
+  "tests": {
+    "fileCount": 73,
+    "npmFileBoundaries": {
+      "tests": 73,
+      "suites": 0,
+      "pass": 73,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "nodeTestFiles": 68,
+    "nodeCases": 640,
+    "nodePass": 640,
+    "customFiles": 5,
+    "customNamedChecks": 44,
+    "aggregateCasesAndNamedChecks": 684,
+    "failed": 0,
+    "skipped": 0,
+    "countMeaning": "node:test cases plus named custom checks/scenarios; not the number of assert() invocations, matrix iterations, or npm runner file boundaries",
+    "revisionValidation": "One complete direct run of all 73 files, followed by a direct rerun of the sole authorized changed test and a fresh npm test of all files. Unchanged test/source hashes preserve the other 72 direct results.",
+    "includedSubsets": {
+      "mobileGestureCases": 20,
+      "realSnapshotPriceAndCsvContractCases": 14
+    },
+    "customBreakdown": [
+      {
+        "file": "tests/cycle-engine.test.mjs",
+        "customCases": 10,
+        "customPassLines": 10,
+        "customCountVerified": true
+      },
+      {
+        "file": "tests/cycle-timing.test.mjs",
+        "customCases": 12,
+        "customPassLines": 12,
+        "customCountVerified": true
+      },
+      {
+        "file": "tests/data-source.test.mjs",
+        "customCases": 10,
+        "customPassLines": 10,
+        "customCountVerified": true
+      },
+      {
+        "file": "tests/peak-zones.test.mjs",
+        "customCases": 10,
+        "customPassLines": 10,
+        "customCountVerified": true
+      },
+      {
+        "file": "tests/timing-view.test.mjs",
+        "customCases": 2,
+        "customPassLines": 0,
+        "customCountVerified": true
+      }
+    ]
+  },
+  "effectiveGates": [
+    {
+      "name": "verify-cycle",
+      "exitCode": 0
+    },
+    {
+      "name": "build-standalone",
+      "exitCode": 0
+    },
+    {
+      "name": "verify-static",
+      "exitCode": 0
+    },
+    {
+      "name": "verify-standalone-static",
+      "exitCode": 0
+    },
+    {
+      "name": "verify-performance",
+      "exitCode": 0
+    },
+    {
+      "name": "verify-formal",
+      "exitCode": 0
+    },
+    {
+      "name": "npm-test-final",
+      "exitCode": 0
+    }
+  ],
+  "static": {
+    "status": "ok",
+    "files": 107,
+    "checkedReferences": 211,
+    "basePath": "/bitcoin-cycle-atlas/",
+    "standalone": null
+  },
+  "standalone": {
+    "file": "Bitcoin_Cycles_Comparison.html",
+    "bytes": 17236355,
+    "modules": 76,
+    "embeddedObservations": 5941,
+    "static": "passed",
+    "sha256": "2b2deec4c187892b1e218385ba73e11fce12eba843dbeab18507ac191ff5b533"
+  },
+  "cycle": {
+    "status": "verified",
+    "asOf": "2026-10-22",
+    "observationCount": 5941,
+    "sourcePricesSha256": "fbbe7ca83daac9656f76e513f87f74262359b612955cc8614284b6b6f5e905db"
+  },
+  "performance": {
+    "status": "PASS",
+    "scope": "Deterministic renderer/search/selection checks; Node SVG boundary, not browser paint or input-latency measurement.",
+    "svgElements": 103,
+    "svgElementBudget": 120
+  },
+  "formal": {
+    "tool": {
+      "name": "TLC",
+      "version": "1.7.4",
+      "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+    },
+    "bounds": {
+      "requestGenerations": 3,
+      "intervals": [
+        "1m",
+        "5m"
+      ],
+      "property": "NoStaleDisplay"
+    },
+    "model": {
+      "MarketRequests": {
+        "outcome": "pass",
+        "generatedStates": 5955,
+        "distinctStates": 2081,
+        "remainingStates": 0
+      },
+      "MarketRequestsBroken": {
+        "outcome": "expected invariant violation",
+        "generatedStates": 151,
+        "distinctStates": 109,
+        "remainingStates": 79
+      }
+    },
+    "implementation": {
+      "regression": "pass",
+      "mutation": "expected assertion failure",
+      "sourceSha256": "dce96066268bb4e5ff0f5b81fe182904d6cb7d711172886872de3d387b6b7bee",
+      "mutatedSourceSha256": "18d1ac6de0cb495dc161cf0001af81978bd922051fea4aacdaf8d0ad865dc19a"
+    },
+    "limitations": [
+      "Bounded abstract model, not a whole-program proof",
+      "No pricing, numerical, history-pagination, wall-clock or liveness proof"
+    ]
+  },
+  "sourceIntegrity": {
+    "beforeTreeSha256": "9965a4571eb4b4f064b8e1550267cba3df22e858b3f9ea38b719b799b2127e03",
+    "afterTreeSha256": "9965a4571eb4b4f064b8e1550267cba3df22e858b3f9ea38b719b799b2127e03",
+    "fileCountBefore": 208,
+    "fileCountAfter": 208,
+    "unchanged": true,
+    "changedFiles": []
+  },
+  "preliminaryAttempts": {
+    "formalSandbox": "spawnSync java EPERM; the identical local command with pinned TLC completed with approved execution",
+    "test": "One obsolete countdown expectation was replaced with absence and stale-metadata regression checks; the sole changed test was rerun and the full npm suite passed.",
+    "finalEffectiveGates": "all passed; preliminary attempts are not concealed or counted as final failures"
+  },
+  "supplementalIntegrationAudit": {
+    "basis": "Release integrator audit supplied alongside final browser results; separate from automated test case counts.",
+    "comparisonBaseline": "8c1974a",
+    "dataJsonFiles": 5,
+    "modelModules": 17,
+    "dataAndModelUnchanged": true,
+    "cacheDependencyClosureFiles": 35,
+    "currentVersionUrls": 55,
+    "cacheVersion": "1.14.0-mobile.1",
+    "result": "passed"
+  },
+  "browser": {
+    "environment": "Chromium responsive iframe; not a physical touch device",
+    "records": "browser-layout-qa.json",
+    "settledAxisAcceptance": [
+      "desktop-final",
+      "320-expanded-menu-settled",
+      "390-expanded-settled",
+      "inspected PNG"
+    ],
+    "footerHeightPx": 44,
+    "footerWidthsChecked": [
+      320,
+      390,
+      456,
+      620,
+      844
+    ],
+    "eventPopover": {
+      "viewportWidth": 390,
+      "priceSvgHeightBeforePx": 752,
+      "priceSvgHeightAfterPx": 752
+    },
+    "list": {
+      "widths": [
+        320,
+        390
+      ],
+      "heightPx": 112,
+      "rowHeightPx": 28,
+      "scrollHeightPx": 196
+    },
+    "focus": {
+      "viewportWidth": 390,
+      "managerHeightWhileFocusedPx": 0,
+      "collapsedAfterRestore": false,
+      "volumeHiddenAfterRestore": true
+    },
+    "shortExportDialog": {
+      "viewport": [
+        390,
+        430
+      ],
+      "topPx": 8,
+      "bottomPx": 422,
+      "headerHeightPx": 57,
+      "footerHeightPx": 57,
+      "bodyHeightPx": 298
+    },
+    "savedInitialFocus": {
+      "tag": "BUTTON",
+      "label": "작업 화면 닫기"
+    },
+    "paneCoverage": "0 panes in this browser run; 1/5-pane and long-text matrices are controller/unit coverage only",
+    "transitionalWidths": [
+      456,
+      620,
+      844
+    ],
+    "transitionalNote": "Initial resize records establish footer/HUD layout only, not settled price-axis clipping acceptance at those widths.",
+    "downloads": {
+      "png": "received and inspected: chart-export.png",
+      "svg": "UI reported success; browser download event timed out; no independent file verification",
+      "csv": "real stored-data contracts passed 14 new automated cases; no new native-device file receipt claim"
+    },
+    "artifacts": [
+      {
+        "file": "browser-layout-qa.json",
+        "bytes": 15253,
+        "sha256": "30aadd5bde42a21c1e2c50bd3a8731223267fbc928bdefe48865c79f51a00309"
+      },
+      {
+        "file": "desktop-one-row.jpg",
+        "bytes": 125847,
+        "sha256": "e9428fa735fe162c68af887b2b7bdd3a7bcc0ceef6a45ea1f20203e4fa3a8f03"
+      },
+      {
+        "file": "mobile-390-compact.jpg",
+        "bytes": 68971,
+        "sha256": "7d37296ad780cd64bbec24a1bb9fb8c972037ecf5671365881203d6ef11ac9e8"
+      },
+      {
+        "file": "mobile-320-more.jpg",
+        "bytes": 55110,
+        "sha256": "45f14bfb78ffca0f1df7dc774827c0e4b1fa15b8ea7f127d16002d2c74588b80"
+      },
+      {
+        "file": "mobile-short-export.jpg",
+        "bytes": 40613,
+        "sha256": "fa48d9ce221f5b6272a31d3d80d1324d66039b3655d4501c95f0e0900601e4e7"
+      },
+      {
+        "file": "chart-export.png",
+        "bytes": 627364,
+        "sha256": "d5ae2f2a9ef3c805762a118ab526be4d88e75e84aa18e320d691b82a75d306dd",
+        "width": 2562,
+        "height": 2008
+      }
+    ],
+    "limitations": [
+      "Physical Android/iOS touch hardware not tested",
+      "Native IME not tested",
+      "Simultaneous physical pinch not tested",
+      "TradingView native app, TalkBack, FPS, input latency and battery not tested"
+    ]
+  }
+}

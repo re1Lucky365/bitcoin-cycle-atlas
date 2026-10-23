@@ -1,4 +1,8 @@
-.chart-export-dialog {width:min(920px,calc(100vw - 24px));max-height:calc(100dvh - 28px);padding:20px;border:1px solid #41546b;border-radius:12px;background:#101923;color:#dce8f7;box-shadow:0 20px 80px #0009;font:13px/1.6 system-ui,sans-serif}
+.chart-export-dialog {width:min(920px,calc(100vw - 24px));max-height:calc(var(--dialog-viewport-height,100dvh) - 28px);padding:0;border:1px solid #41546b;border-radius:12px;background:#101923;color:#dce8f7;box-shadow:0 20px 80px #0009;font:13px/1.6 system-ui,sans-serif;box-sizing:border-box;overflow:hidden}
+.chart-export-dialog[open]{display:flex;flex-direction:column}
+.chart-export-body{padding:0 20px;overflow:auto;min-height:0;overscroll-behavior:contain}
+.chart-export-dialog>header,.chart-export-dialog>footer{flex:none;padding:12px 20px;background:#101923}
+.chart-export-dialog>header{border-bottom:1px solid #304254}.chart-export-dialog>footer{border-top:1px solid #304254}
 .chart-export-dialog::backdrop {background:#0009}
 .chart-export-dialog header,.chart-export-dialog footer {display:flex;align-items:center;justify-content:space-between;gap:12px}
 .chart-export-dialog h2 {font-size:18px;margin:0}
@@ -17,4 +21,5 @@
 .chart-export-preview img {display:block;width:100%;height:auto}.chart-export-preview pre {font-size:11px;line-height:1.6;margin:12px;white-space:pre;tab-size:2}
 .chart-export-status {min-height:20px;color:#b8d7ff;font-size:12px}
 .chart-export-dialog footer {justify-content:flex-end}.chart-export-download {background:#244e78!important}
-@media(max-width:560px){.chart-export-dialog{padding:14px}.chart-export-facts{grid-template-columns:1fr;gap:2px}.chart-export-facts dd{margin-bottom:6px}.chart-export-controls{gap:8px}.chart-export-preview{max-height:40vh}}
+@media(max-width:620px),(max-height:500px){.chart-export-dialog{position:fixed;inset:var(--dialog-viewport-top,0px) 0 auto;margin:8px auto;width:calc(100vw - 16px);max-height:calc(var(--dialog-viewport-height,100dvh) - 16px)}.chart-export-dialog>header,.chart-export-dialog>footer{padding:6px 12px}.chart-export-body{padding:0 12px}.chart-export-dialog button,.chart-export-dialog select{min-height:44px}.chart-export-controls{gap:8px}.chart-export-controls label{min-width:120px}.chart-export-preview{max-height:40dvh}.chart-export-dialog select{font-size:16px}}
+@media(max-width:420px){.chart-export-facts{grid-template-columns:1fr;gap:2px}.chart-export-facts dd{margin-bottom:6px}}

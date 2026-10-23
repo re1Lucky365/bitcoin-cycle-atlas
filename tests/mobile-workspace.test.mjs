@@ -32,7 +32,8 @@ class Element extends Surface {
 }
 function fixture() {
   const doc = new Surface(), media = new Surface(); media.matches = true;
-  doc.defaultView = { matchMedia: () => media }; doc.createElement = tag => new Element(tag, doc); doc.createTextNode = value => ({ textContent: value });
+  const stored=new Map();
+  doc.defaultView = { matchMedia: () => media,CustomEvent:class{constructor(type,{detail}){this.type=type;this.detail=detail;}},localStorage:{getItem:key=>stored.get(key),setItem:(key,value)=>stored.set(key,value)} }; doc.createElement = tag => new Element(tag, doc); doc.createTextNode = value => ({ textContent: value });
   doc.body = doc.createElement('body'); doc.querySelector = selector => doc.body.querySelector(selector); doc.getElementById = id => doc.querySelector(`#${id}`);
   const add = (parent, tag, className) => { const node = doc.createElement(tag); node.className = className; parent.append(node); return node; };
   const sidebar = add(doc.body, 'aside', 'atlas-sidebar'); add(sidebar, 'button', 'atlas-brand'); add(sidebar, 'button', 'tool');
@@ -41,7 +42,7 @@ function fixture() {
   const reader = add(doc.body, 'aside', 'reader'); reader.hidden = true;
   const controller = mountMobileWorkspace({ workspace, stage, plot, reader, closeReader() { reader.hidden = true; } });
   const modal = add(doc.body, 'dialog', 'modal'); modal.open = true; const input = add(modal, 'input', 'modal-input');
-  return { doc, sidebar, rail, controller, input, toggle: kind => doc.getElementById(`mobile-${kind}-toggle`), tray: kind => kind === 'tools' ? sidebar : rail };
+  return { doc, sidebar, rail, plot,media,stored,controller, input, toggle: kind => doc.getElementById(`mobile-${kind}-toggle`), tray: kind => kind === 'tools' ? sidebar : rail,action:target=>rail.querySelectorAll('button').find(node=>node.dataset.mobileTarget===target) };
 }
 function key(doc, target, value) {
   const event = { type: 'keydown', key: value, target, defaultPrevented: false, immediateStopped: false, preventDefault() { this.defaultPrevented = true; }, stopImmediatePropagation() { this.immediateStopped = true; } };
@@ -82,4 +83,38 @@ test('ordinary tray Escape keeps its existing dismissal and opener focus', () =>
     assert.equal(event.defaultPrevented, true); assert.equal(event.immediateStopped, true);
     f.controller.destroy();
   }
+});
+
+test('focus view temporarily hides information without issuing indicator commands and restores from the plot',()=>{
+  const f=fixture(),events=[],commands=[];
+  f.doc.addEventListener('atlas:chart-focus',event=>events.push(event.detail.focused));
+  f.doc.addEventListener('atlas:indicator-command',event=>commands.push(event.detail));
+  f.toggle('details').click();f.action('focus').click();
+  assert.equal(f.plot.dataset.chartFocus,'true');assert.equal(f.tray('details').dataset.mobileOpen,undefined);
+  const restore=f.plot.querySelector('.mobile-focus-return');assert.equal(restore.hidden,false);assert.equal(f.doc.activeElement,restore);
+  restore.click();assert.equal(f.plot.dataset.chartFocus,undefined);assert.equal(restore.hidden,true);assert.equal(f.doc.activeElement,f.toggle('details'));
+  assert.deepEqual(commands,[]);assert.deepEqual(events,[true,false]);
+  f.controller.destroy();
+});
+
+test('leaving phone layout clears temporary focus view without changing saved indicators',()=>{
+  const f=fixture();f.action('focus').click();f.media.matches=false;f.media.dispatchEvent({type:'change'});
+  assert.equal(f.plot.dataset.chartFocus,undefined);assert.equal(f.action('focus').getAttribute('aria-pressed'),'false');
+  assert.equal(f.plot.querySelector('.mobile-focus-return').hidden,true);f.controller.destroy();
+});
+
+test('mobile save/share opens the saved tab with a visible focus-return target',()=>{
+  const f=fixture(),opened=[];f.doc.addEventListener('atlas:workspace-open',event=>opened.push(event.detail));
+  f.toggle('details').click();f.action('#workbench-workspace').click();
+  assert.equal(opened.length,1);assert.equal(opened[0].tab,'saved');assert.equal(opened[0].opener,f.toggle('details'));
+  assert.equal(f.doc.activeElement,f.toggle('details'));assert.equal(f.tray('details').dataset.mobileOpen,undefined);f.controller.destroy();
+});
+
+test('gesture help can be dismissed and reopened and the current tool/magnet stays accurate',()=>{
+  const f=fixture(),hint=f.sidebar.querySelector('.mobile-gesture-hint');
+  hint.querySelectorAll('button').find(node=>node.textContent==='안내 접기').click();assert.equal(hint.hidden,true);assert.equal(f.stored.get('atlas-mobile-gesture-hint'),'dismissed');
+  f.sidebar.querySelector('.mobile-gesture-help').click();assert.equal(hint.hidden,false);
+  f.doc.dispatchEvent({type:'atlas:workbench-state',detail:{tool:'pan',magnet:'strong',intraday:true}});
+  assert.equal(f.sidebar.querySelector('.mobile-tool-status').textContent,'이동 · 자석 강하게');assert.equal(f.action('#workbench-scenario').hidden,true);
+  f.controller.destroy();assert.equal(f.sidebar.querySelector('.mobile-gesture-hint'),null);assert.equal(f.plot.querySelector('.mobile-focus-return'),null);
 });

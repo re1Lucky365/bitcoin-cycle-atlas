@@ -1,0 +1,657 @@
+{
+  "environment": "Chromium responsive iframe; not physical touch device",
+  "version": "1.14.0-mobile.1",
+  "records": [
+    {
+      "case": "desktop-final",
+      "footer": {
+        "bottom": 936,
+        "height": 44,
+        "right": 1325,
+        "text": "4년6개월장기 전망전체기간4년6개월장기 전망전체⌃사건432024.10.22 — 2028.10.22로그자동UTC10.23 20:39 KST",
+        "width": 1281,
+        "x": 44,
+        "y": 892
+      },
+      "hasCountdown": false,
+      "hud": {
+        "bottom": 105,
+        "height": 57,
+        "right": 1223,
+        "text": "관측 가격선미래 가정가정 범위고점·저점CYCLE TOPPIT STOPFIRST TOPATHMID-TOPBOTTOM원·기간선실선 · 관측 사후 기준점선 · 잠정·가정조건부 가정",
+        "width": 430,
+        "x": 793,
+        "y": 48
+      },
+      "indicator": null,
+      "more": {
+        "bottom": 932.5,
+        "height": 36,
+        "right": 1319,
+        "text": "",
+        "width": 32,
+        "x": 1287,
+        "y": 896.5
+      },
+      "plot": null,
+      "prices": [
+        {
+          "kind": "tick",
+          "right": 1284.9530029296875,
+          "value": "$50,000"
+        },
+        {
+          "kind": "tick",
+          "right": 1290.281005859375,
+          "value": "$100,000"
+        },
+        {
+          "kind": "tick",
+          "right": 1292.718994140625,
+          "value": "$200,000"
+        },
+        {
+          "kind": "latest",
+          "right": 1293.1409912109375,
+          "value": "$81,257.02"
+        },
+        {
+          "kind": "cursor",
+          "right": 1296.7430419921875,
+          "value": "$118,541.78"
+        }
+      ],
+      "ready": "ready",
+      "svg": {
+        "bottom": 892,
+        "height": 852,
+        "right": 1325,
+        "text": "실제 비트코인 가격과 미래 가정가격 실선은 실제 관측, 금색 가격 점선은 미래 가정입니다. 색 원과 기간선의 실선은 사후 기준, 점선은 잠정 또는 가정 기준입니다. 그래프를 누르면 값을 고정해 읽을 수 있습니다. 미래 음영은 보정된 확률 구간이 아닙니다.$50,000$",
+        "width": 1281,
+        "x": 44,
+        "y": 40
+      },
+      "viewport": {
+        "height": 936,
+        "width": 1363
+      }
+    },
+    {
+      "case": "390x844-final",
+      "footer": {
+        "bottom": 844,
+        "height": 44,
+        "right": 390,
+        "text": "4년6개월장기 전망전체기간4년6개월장기 전망전체⌃사건432024.10.22 — 2028.10.22로그자동UTC10.23 20:39 KST",
+        "width": 390,
+        "x": 0,
+        "y": 800
+      },
+      "hasCountdown": false,
+      "hud": {
+        "bottom": 0,
+        "height": 0,
+        "right": 0,
+        "text": "관측 가격선미래 가정가정 범위고점·저점CYCLE TOPPIT STOPFIRST TOPATHMID-TOPBOTTOM원·기간선실선 · 관측 사후 기준점선 · 잠정·가정조건부 가정",
+        "width": 0,
+        "x": 0,
+        "y": 0
+      },
+      "indicator": null,
+      "more": {
+        "bottom": 842.5,
+        "height": 40,
+        "right": 386,
+        "text": "",
+        "width": 32,
+        "x": 354,
+        "y": 802.5
+      },
+      "ready": "ready",
+      "svg": {
+        "bottom": 800,
+        "height": 752,
+        "right": 390,
+        "text": "실제 비트코인 가격과 미래 가정가격 실선은 실제 관측, 금색 가격 점선은 미래 가정입니다. 색 원과 기간선의 실선은 사후 기준, 점선은 잠정 또는 가정 기준입니다. 그래프를 누르면 값을 고정해 읽을 수 있습니다. 미래 음영은 보정된 확률 구간이 아닙니다.$50,000$",
+        "width": 390,
+        "x": 0,
+        "y": 48
+      },
+      "volume": 0
+    },
+    {
+      "case": "390-events-open",
+      "footerHeight": 44,
+      "footerTop": 800,
+      "popupBottom": 794,
+      "popupVisible": true,
+      "svgHeight": 752
+    },
+    {
+      "case": "320x740",
+      "footer": {
+        "bottom": 740,
+        "height": 44,
+        "right": 320,
+        "width": 320,
+        "x": 0,
+        "y": 696
+      },
+      "hud": {
+        "bottom": 0,
+        "height": 0,
+        "right": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      },
+      "list": {
+        "bottom": 0,
+        "height": 0,
+        "right": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      },
+      "manager": {
+        "bottom": 136,
+        "height": 28,
+        "right": 36,
+        "width": 28,
+        "x": 8,
+        "y": 108
+      },
+      "more": {
+        "bottom": 738.5,
+        "height": 40,
+        "right": 316,
+        "width": 32,
+        "x": 284,
+        "y": 698.5
+      },
+      "prices": [
+        {
+          "kind": "tick",
+          "right": 282.342529296875,
+          "text": "$50,000"
+        },
+        {
+          "kind": "tick",
+          "right": 287.2225341796875,
+          "text": "$100,000"
+        },
+        {
+          "kind": "tick",
+          "right": 289.4544982910156,
+          "text": "$200,000"
+        },
+        {
+          "kind": "latest",
+          "right": 288.9219970703125,
+          "text": "$81,257.02"
+        },
+        {
+          "kind": "cursor",
+          "right": 288.9219970703125,
+          "text": "$81,257.02"
+        }
+      ],
+      "rowHeights": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "svg": {
+        "bottom": 696,
+        "height": 648,
+        "right": 320,
+        "width": 320,
+        "x": 0,
+        "y": 48
+      },
+      "measurementPhase": "immediately after responsive resize; interim SVG text positions, not settled clipping acceptance"
+    },
+    {
+      "case": "456x880",
+      "footer": {
+        "bottom": 880,
+        "height": 44,
+        "right": 456,
+        "width": 456,
+        "x": 0,
+        "y": 836
+      },
+      "hud": {
+        "bottom": 0,
+        "height": 0,
+        "right": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      },
+      "list": {
+        "bottom": 0,
+        "height": 0,
+        "right": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      },
+      "manager": {
+        "bottom": 136,
+        "height": 28,
+        "right": 36,
+        "width": 28,
+        "x": 8,
+        "y": 108
+      },
+      "more": {
+        "bottom": 878.5,
+        "height": 40,
+        "right": 452,
+        "width": 32,
+        "x": 420,
+        "y": 838.5
+      },
+      "prices": [
+        {
+          "kind": "tick",
+          "right": 417.9640197753906,
+          "text": "$50,000"
+        },
+        {
+          "kind": "tick",
+          "right": 422.8440856933594,
+          "text": "$100,000"
+        },
+        {
+          "kind": "tick",
+          "right": 425.0660705566406,
+          "text": "$200,000"
+        },
+        {
+          "kind": "latest",
+          "right": 425.010009765625,
+          "text": "$81,257.02"
+        },
+        {
+          "kind": "cursor",
+          "right": 425.010009765625,
+          "text": "$81,257.02"
+        }
+      ],
+      "rowHeights": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "svg": {
+        "bottom": 836,
+        "height": 788,
+        "right": 456,
+        "width": 456,
+        "x": 0,
+        "y": 48
+      },
+      "measurementPhase": "immediately after responsive resize; interim SVG text positions, not settled clipping acceptance"
+    },
+    {
+      "case": "620x900",
+      "footer": {
+        "bottom": 900,
+        "height": 44,
+        "right": 620,
+        "width": 620,
+        "x": 0,
+        "y": 856
+      },
+      "hud": {
+        "bottom": 0,
+        "height": 0,
+        "right": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      },
+      "list": {
+        "bottom": 0,
+        "height": 0,
+        "right": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      },
+      "manager": {
+        "bottom": 136,
+        "height": 28,
+        "right": 36,
+        "width": 28,
+        "x": 8,
+        "y": 108
+      },
+      "more": {
+        "bottom": 898.5,
+        "height": 40,
+        "right": 616,
+        "width": 32,
+        "x": 584,
+        "y": 858.5
+      },
+      "prices": [
+        {
+          "kind": "tick",
+          "right": 580.1539916992188,
+          "text": "$50,000"
+        },
+        {
+          "kind": "tick",
+          "right": 585.4819946289062,
+          "text": "$100,000"
+        },
+        {
+          "kind": "tick",
+          "right": 587.9180297851562,
+          "text": "$200,000"
+        },
+        {
+          "kind": "latest",
+          "right": 588.1859741210938,
+          "text": "$81,257.02"
+        },
+        {
+          "kind": "cursor",
+          "right": 588.1859741210938,
+          "text": "$81,257.02"
+        }
+      ],
+      "rowHeights": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "svg": {
+        "bottom": 856,
+        "height": 808,
+        "right": 620,
+        "width": 620,
+        "x": 0,
+        "y": 48
+      },
+      "measurementPhase": "immediately after responsive resize; interim SVG text positions, not settled clipping acceptance"
+    },
+    {
+      "case": "844x390",
+      "footer": {
+        "bottom": 390,
+        "height": 44,
+        "right": 806,
+        "width": 762,
+        "x": 44,
+        "y": 346
+      },
+      "hud": {
+        "bottom": 0,
+        "height": 0,
+        "right": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      },
+      "list": {
+        "bottom": 0,
+        "height": 0,
+        "right": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      },
+      "manager": {
+        "bottom": 123,
+        "height": 28,
+        "right": 80,
+        "width": 28,
+        "x": 52,
+        "y": 95
+      },
+      "more": {
+        "bottom": 386.5,
+        "height": 36,
+        "right": 800,
+        "width": 32,
+        "x": 768,
+        "y": 350.5
+      },
+      "prices": [
+        {
+          "kind": "tick",
+          "right": 527.448486328125,
+          "text": "$50,000"
+        },
+        {
+          "kind": "tick",
+          "right": 529.4638671875,
+          "text": "$100,000"
+        },
+        {
+          "kind": "tick",
+          "right": 530.3848876953125,
+          "text": "$200,000"
+        },
+        {
+          "kind": "latest",
+          "right": 530.8072509765625,
+          "text": "$81,257.02"
+        },
+        {
+          "kind": "cursor",
+          "right": 530.8072509765625,
+          "text": "$81,257.02"
+        }
+      ],
+      "rowHeights": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "svg": {
+        "bottom": 346,
+        "height": 306,
+        "right": 806,
+        "width": 762,
+        "x": 44,
+        "y": 40
+      },
+      "measurementPhase": "immediately after responsive resize; interim SVG text positions, not settled clipping acceptance"
+    },
+    {
+      "case": "390-expanded-settled",
+      "list": {
+        "bottom": 248,
+        "height": 112,
+        "right": 316.859375,
+        "width": 308.859375,
+        "x": 8,
+        "y": 136
+      },
+      "manager": {
+        "bottom": 248,
+        "height": 140,
+        "right": 316.859375,
+        "width": 308.859375,
+        "x": 8,
+        "y": 108
+      },
+      "mode": "stack",
+      "plot": {
+        "bottom": 800,
+        "height": 752,
+        "right": 390,
+        "width": 390,
+        "x": 0,
+        "y": 48
+      },
+      "rows": [
+        {
+          "height": 28,
+          "label": "Vol"
+        },
+        {
+          "height": 28,
+          "label": "역사 사건"
+        },
+        {
+          "height": 28,
+          "label": "수요·채택 범위"
+        },
+        {
+          "height": 28,
+          "label": "고점·저점"
+        },
+        {
+          "height": 28,
+          "label": "사이클 주요 지점"
+        },
+        {
+          "height": 28,
+          "label": "사이클 기간 비교"
+        },
+        {
+          "height": 28,
+          "label": "사이클 시계"
+        }
+      ],
+      "style": "--source-top: 30px; --indicator-top: 60px; --compact-content-top: 60px; --compact-list-width: 374px; --compact-list-max-height: 112px; --compact-analysis-top: 200px; --compact-analysis-left: 8px; --compact-analysis-bottom: 32px; touch-action: pan-y pinch-zoom; --plot-height: 752px; --indicator-manager-height: 140px; --readout-height: 19px; --source-height: 24px; --chart-legend-height: 0px; --plot-bottom-gap: 59px; --plot-right-gap: 97px;",
+      "svgViewBox": "0 0 390 752"
+    },
+    {
+      "case": "downloads",
+      "pngActualFile": true,
+      "svgUiSuccess": true,
+      "svgDownloadEvent": "timeout; file not independently verified",
+      "pngArtifact": "chart-export.png"
+    },
+    {
+      "case": "320-expanded-menu-settled",
+      "active": "사건 검색·전체 목록",
+      "footer": {
+        "bottom": 740,
+        "height": 44,
+        "right": 320,
+        "width": 320,
+        "x": 0,
+        "y": 696
+      },
+      "list": {
+        "bottom": 248,
+        "height": 112,
+        "right": 312,
+        "width": 304,
+        "x": 8,
+        "y": 136
+      },
+      "manager": {
+        "bottom": 248,
+        "height": 140,
+        "right": 312,
+        "width": 304,
+        "x": 8,
+        "y": 108
+      },
+      "menu": {
+        "bottom": 690,
+        "height": 243,
+        "right": 312,
+        "width": 292,
+        "x": 20,
+        "y": 447
+      },
+      "more": {
+        "bottom": 738.5,
+        "height": 40,
+        "right": 316,
+        "width": 32,
+        "x": 284,
+        "y": 698.5
+      },
+      "prices": [
+        {
+          "right": 282.342529296875,
+          "text": "$50,000"
+        },
+        {
+          "right": 287.2225341796875,
+          "text": "$100,000"
+        },
+        {
+          "right": 289.4544982910156,
+          "text": "$200,000"
+        },
+        {
+          "right": 288.9219970703125,
+          "text": "$81,257.02"
+        },
+        {
+          "right": 288.9219970703125,
+          "text": "$81,257.02"
+        }
+      ],
+      "svg": {
+        "bottom": 696,
+        "height": 648,
+        "right": 320,
+        "width": 320,
+        "x": 0,
+        "y": 48
+      },
+      "viewBox": "0 0 320 648"
+    },
+    {
+      "case": "focus-active",
+      "collapsed": "false",
+      "focus": "true",
+      "managerHeight": 0,
+      "restore": "정보 다시 표시",
+      "volumeVisible": "false"
+    },
+    {
+      "case": "390x430-export",
+      "bottom": 422,
+      "closeBottom": 66,
+      "format": "png",
+      "height": 414,
+      "saveBottom": 421,
+      "scrollBody": 298,
+      "top": 8
+    },
+    {
+      "case": "390x430-saved-initial-focus",
+      "activeLabel": "작업 화면 닫기",
+      "activeTag": "BUTTON",
+      "selectedTab": [
+        "반감기Halving",
+        "미래 고점 · 저점"
+      ]
+    }
+  ],
+  "acceptanceNotes": [
+    "Settled axis bounds verified in desktop-final, 320-expanded-menu-settled and 390-expanded-settled plus inspected PNG.",
+    "Physical multi-touch, native IME, iOS and TradingView native app are outside this run.",
+    "The saved-workspace selectedTab field comes from global page tabs; initial close-button focus is the verified property."
+  ]
+}
