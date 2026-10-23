@@ -12,7 +12,7 @@ class Surface {
   dispatchEvent(event){for(const handler of this.listeners.get(event.type)||[])handler(event);return true;}
 }
 class Element extends Surface {
-  constructor(tag,doc){super();this.tagName=tag;this.ownerDocument=doc;this.children=[];this.dataset={};this.attributes=new Map();this._hidden=false;this._text='';this._html='';this.tabIndex=tag==='button'||tag==='input'||tag==='select'?0:-1;const styles=new Map();this.style={setProperty:(key,value)=>styles.set(key,value),getPropertyValue:key=>styles.get(key)||''};}
+  constructor(tag,doc){super();this.tagName=tag;this.ownerDocument=doc;this.children=[];this.dataset={};this.attributes=new Map();this._hidden=false;this._text='';this._html='';this.tabIndex=tag==='button'||tag==='input'||tag==='select'?0:-1;const styles=new Map();this.style={setProperty:(key,value)=>styles.set(key,value),getPropertyValue:key=>styles.get(key)||'',removeProperty:key=>styles.delete(key)};}
   get isConnected(){return this===this.ownerDocument.body||Boolean(this.parentElement?.isConnected);}
   get hidden(){return this._hidden;}
   set hidden(value){this._hidden=Boolean(value);if(value&&this.contains(this.ownerDocument.activeElement))this.ownerDocument.activeElement=this.ownerDocument.body;}
@@ -62,11 +62,11 @@ class Element extends Surface {
   scrollIntoView(){}
 }
 const cleanups=new WeakMap();
-function fixture(t,{mobile=false,search=''}={}){
+function fixture(t,{mobile=false,search='',viewport=null}={}){
   const original=new Map(['location','matchMedia','ResizeObserver','requestAnimationFrame','cancelAnimationFrame'].map(key=>[key,Object.getOwnPropertyDescriptor(globalThis,key)]));
   const frames=new Map(),observers=[];let frame=0;
   Object.assign(globalThis,{location:{search},matchMedia:()=>({matches:mobile}),ResizeObserver:class{constructor(callback){this.callback=callback;this.targets=new Set();observers.push(this);}observe(node){this.targets.add(node);}disconnect(){this.targets.clear();}},requestAnimationFrame:callback=>{frames.set(++frame,callback);return frame;},cancelAnimationFrame:id=>frames.delete(id)});
-  const doc=new Surface(),win=new Surface(),stored=new Map();doc.defaultView=win;win.matchMedia=globalThis.matchMedia;win.localStorage={getItem:key=>stored.get(key)||null,setItem:(key,value)=>stored.set(key,value)};
+  const doc=new Surface(),win=new Surface(),stored=new Map();doc.defaultView=win;win.visualViewport=viewport;win.matchMedia=globalThis.matchMedia;win.localStorage={getItem:key=>stored.get(key)||null,setItem:(key,value)=>stored.set(key,value)};
   doc.createElement=tag=>new Element(tag,doc);doc.createTextNode=text=>{const node=doc.createElement('#text');node.textContent=text;return node;};
   doc.body=doc.createElement('body');doc.activeElement=doc.body;doc.querySelector=selector=>doc.body.querySelector(selector);doc.querySelectorAll=selector=>doc.body.querySelectorAll(selector);doc.getElementById=id=>doc.querySelector(`#${id}`);
   const add=(parent,tag,id,className='')=>{const node=doc.createElement(tag);node.id=id;node.className=className;parent.append(node);return node;};
@@ -268,6 +268,17 @@ test('HUD notifications ignore same-size hover values and render feedback but in
   width=160;reportSize();width=140;reportSize();f.flush();
   assert.equal(notices,2,'a transient resize that returns to the published geometry is suppressed');
   assert.equal(f.pendingFrames,0,'a renderer publishing the same HUD state cannot create a layout loop');
+});
+
+test('mobile library follows the keyboard viewport without unfolding indicators and releases observers',t=>{
+  const viewport=new Surface();Object.assign(viewport,{height:884,offsetTop:0});
+  const f=fixture(t,{mobile:true,viewport}),dialog=f.node('indicator-library');f.controller.open(f.opener);
+  assert.equal(dialog.style.getPropertyValue('--dialog-viewport-height'),'884px');assert.equal(dialog.getAttribute('data-short-viewport'),null);
+  viewport.height=475;viewport.offsetTop=12;viewport.dispatchEvent({type:'resize'});
+  assert.equal(dialog.style.getPropertyValue('--dialog-viewport-height'),'475px');assert.equal(dialog.style.getPropertyValue('--dialog-viewport-top'),'12px');assert.equal(dialog.getAttribute('data-short-viewport'),'');
+  assert.equal(f.state.collapsed,true);assert.equal(f.node('chart-indicator-list').hidden,true);
+  viewport.height=884;viewport.offsetTop=0;viewport.dispatchEvent({type:'scroll'});assert.equal(dialog.getAttribute('data-short-viewport'),null);
+  f.controller.destroy();assert.equal(viewport.listeners.get('resize').size,0);assert.equal(viewport.listeners.get('scroll').size,0);assert.equal(dialog.style.getPropertyValue('--dialog-viewport-height'),'');assert.equal(dialog.getAttribute('data-short-viewport'),null);
 });
 
 test('destroy cancels a pending HUD layout notification',t=>{

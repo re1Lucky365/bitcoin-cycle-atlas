@@ -29,7 +29,7 @@
 }
 @media(hover:none),(pointer:coarse){.indicator-row-action{opacity:1;pointer-events:auto}}
 .indicator-empty{font-size:11px;color:#8ca0b9;padding:10px;margin:0;line-height:1.5}
-.indicator-library{width:min(720px,calc(100vw - 32px));max-width:720px;max-height:min(760px,calc(100dvh - 48px));padding:0;margin:auto;border:1px solid #36465c;border-radius:12px;background:#151e2b;color:#d9e4f3;box-shadow:0 24px 100px #0009;font-family:var(--font);overflow:hidden}
+.indicator-library{width:min(720px,calc(100vw - 32px));max-width:720px;max-height:min(760px,calc(var(--dialog-viewport-height,100dvh) - 48px));padding:0;margin:auto;border:1px solid #36465c;border-radius:12px;background:#151e2b;color:#d9e4f3;box-shadow:0 24px 100px #0009;font-family:var(--font);overflow:hidden}
 .indicator-library[open]{display:flex;flex-direction:column}
 .indicator-library::backdrop{background:#03070d99;backdrop-filter:blur(3px)}
 .indicator-library-heading{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:20px 24px 10px;flex:none}
@@ -88,6 +88,10 @@
 .indicator-template-panel[hidden],.indicator-library-results[hidden],.indicator-categories[hidden],#indicator-search[hidden],.indicator-preference-status[hidden]{display:none}
 /* Short landscape screens scroll the whole dialog instead of clipping controls. */
 @media(max-height:600px){.indicator-library[open]{display:block;overflow:auto;overscroll-behavior:contain}.indicator-library-heading{position:sticky;top:0;z-index:2;background:#151e2b}.indicator-library-results,.indicator-template-panel{overflow:visible;min-height:0}}
+/* The visual viewport can be short even while the layout viewport stays tall. */
+.indicator-library[data-short-viewport][open]{display:block;overflow:auto;overscroll-behavior:contain}
+.indicator-library[data-short-viewport] .indicator-library-heading{position:sticky;top:0;z-index:2;background:#151e2b}
+.indicator-library[data-short-viewport] .indicator-library-results,.indicator-library[data-short-viewport] .indicator-template-panel{overflow:visible;min-height:0}
 /* Scroll within the available region; a short canvas must never pull a pane
    upward across the indicator list. Compact layouts share a measured budget. */
 .analysis-indicator-windows{--analysis-stack-top:78px;--analysis-bottom-gap:60px;--analysis-safe-bottom:var(--analysis-bottom-gap);position:absolute;top:max(8px,var(--analysis-stack-top));right:10px;bottom:var(--analysis-safe-bottom);width:min(640px,62%);max-width:calc(100% - 20px);z-index:12;display:flex;flex-direction:column;gap:10px;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scroll-padding-top:52px;pointer-events:auto;padding:0 3px 3px 0;box-sizing:border-box}

@@ -46,9 +46,12 @@
 .analysis-pane-access select{flex:1;width:auto;min-width:0;height:28px;min-height:28px;margin:0;padding:3px 24px 3px 6px;border:0;border-radius:3px;background:#1e334b;color:#d0e1f4;font:inherit;font-size:11px}
 .analysis-pane-access>button{flex:none;width:40px;min-height:28px;padding:3px 5px;border:1px solid #405b79;border-radius:3px;background:#203c58;color:#d0e1f4;font:inherit;font-size:10px;cursor:pointer}
 .atlas-plot[data-compact-layout] .analysis-indicator-windows[data-maximized=true]>.analysis-pane-access{display:none}
+/* Bodies already have their own scrollports. A sticky top offset inside an
+   overflow-hidden card moves the painted header over the first body rows. */
+.atlas-plot[data-compact-layout] .analysis-indicator-window{background:#101923}
 .atlas-plot[data-compact-layout] .analysis-indicator-window>.analysis-window-heading{
  display:flex;flex-wrap:wrap;align-items:center;gap:2px 5px;min-height:0;padding:4px 5px 4px 8px;
- top:var(--analysis-access-height,0px);scroll-margin-top:var(--analysis-access-height,0px)
+ position:relative;top:0;scroll-margin-top:var(--analysis-access-height,0px)
 }
 .atlas-plot[data-compact-layout] .analysis-window-heading h3{font-size:11px;line-height:16px;min-width:0}
 .atlas-plot[data-compact-layout] .analysis-window-axis{margin-left:auto;margin-right:0;font-size:9px}

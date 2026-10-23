@@ -83,7 +83,7 @@
   .chart-details-panel .reader-pagination button,.chart-detail-actions button{width:44px;height:40px;min-height:40px}
   .chart-detail-actions{height:46px;max-height:46px;gap:4px}
   .chart-detail-actions input{height:40px;max-width:140px;width:140px;font-size:12px}
-  .indicator-library{width:calc(100vw - 16px);max-width:none;max-height:calc(100dvh - 24px - var(--mobile-top) - var(--mobile-bottom));border-radius:10px}
+  .indicator-library{position:fixed;inset:var(--dialog-viewport-top,0px) 0 auto;margin:8px auto;width:calc(100vw - 16px);max-width:none;max-height:calc(var(--dialog-viewport-height,100dvh) - 16px - var(--mobile-top) - var(--mobile-bottom));border-radius:10px}
   .indicator-library::backdrop{backdrop-filter:none}
   .indicator-library-heading{padding:14px 16px 8px}
   .indicator-library-heading h2{font-size:20px}

@@ -1,4 +1,5 @@
 import { INDICATORS, readIndicatorState, normalizeIndicatorState, isIndicatorVisible } from './indicator-state.js?v=1.14.1-touch.1';
+import {mountDialogViewport} from './dialog-viewport.js?v=1.14.1-ime.1';
 import {indicatorReadout,indicatorReadoutDate} from './indicator-readouts.js?v=1.13.0-research.1';
 import {INDICATOR_SETTINGS,indicatorSettings,indicatorSupportsInterval} from './indicator-settings.js?v=1.13.0-research.1';
 import {mountIndicatorSettingsDialog} from './indicator-settings-dialog.js?v=1.14.1-touch.1';
@@ -106,6 +107,7 @@ export function mountIndicatorWorkbench({plot,stage}) {
   const help=doc.createElement('p');help.className='indicator-library-help';help.textContent='작은 화살표는 지표 이름과 값만 접습니다. 차트에 그린 지표는 유지되며, 눈 아이콘으로 지표를 숨길 수 있습니다. 일괄 숨김은 가격·OHLC, 출처, 차트 범례를 유지합니다.';
   footer.append(options,help);
   dialog.append(dialogHeader,description,views,search,categories,resultCount,results,templatePanel,preferenceStatus,footer);doc.body.append(dialog);
+  const dialogViewport=mountDialogViewport(dialog);
   templateName.addEventListener('input',()=>{templateSave.textContent=hasIndicatorTemplate(preferences,templateName.value)?'덮어쓰기':'저장';});
   templateForm.addEventListener('submit',event=>{
     event.preventDefault();const saved=saveIndicatorTemplate(preferences,templateName.value,state);
@@ -272,5 +274,5 @@ export function mountIndicatorWorkbench({plot,stage}) {
   doc.defaultView?.addEventListener('storage',onPreferences);
   doc.addEventListener('atlas:indicator-library',onOpen);doc.addEventListener('atlas:indicator-state',onState);doc.addEventListener('atlas:workbench-state',onWorkbench);doc.addEventListener('atlas:readout',onReadout);doc.addEventListener('atlas:analysis-state',onAnalysis);paintList();
   for(const name of ['wheel','pointerdown','dblclick','contextmenu'])manager.addEventListener(name,event=>event.stopPropagation(),name==='wheel'?{passive:true}:undefined);
-  return {open,destroy(){doc.removeEventListener('atlas:indicator-library',onOpen);doc.removeEventListener('atlas:indicator-state',onState);doc.removeEventListener('atlas:workbench-state',onWorkbench);doc.removeEventListener('atlas:readout',onReadout);doc.removeEventListener('atlas:analysis-state',onAnalysis);doc.defaultView?.removeEventListener('storage',onPreferences);if(readoutFrame)cancelAnimationFrame(readoutFrame);if(hudLayoutFrame)cancelAnimationFrame(hudLayoutFrame);overlayResize.disconnect();settingsDialog.destroy();dialog.remove();manager.remove();}};
+  return {open,destroy(){doc.removeEventListener('atlas:indicator-library',onOpen);doc.removeEventListener('atlas:indicator-state',onState);doc.removeEventListener('atlas:workbench-state',onWorkbench);doc.removeEventListener('atlas:readout',onReadout);doc.removeEventListener('atlas:analysis-state',onAnalysis);doc.defaultView?.removeEventListener('storage',onPreferences);if(readoutFrame)cancelAnimationFrame(readoutFrame);if(hudLayoutFrame)cancelAnimationFrame(hudLayoutFrame);overlayResize.disconnect();settingsDialog.destroy();dialogViewport.destroy();dialog.remove();manager.remove();}};
 }
