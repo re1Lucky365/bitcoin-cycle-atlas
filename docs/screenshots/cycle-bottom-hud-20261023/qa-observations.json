@@ -1,0 +1,389 @@
+{
+  "baselineCommit": "d54d09ff653486a53435428b78f36d9ba68e5cae",
+  "revision": "1.12.1-cursor-hud.1",
+  "viewport": "1363x936",
+  "method": "Documented CUA scroll with zero pages moves real pointer without changing range; no synthetic DOM events",
+  "cursorComparison": [
+    {
+      "version": "before",
+      "pointerX": 180,
+      "cursorX": 137.4977973568282,
+      "cursorY": 260,
+      "height": 39,
+      "range": "2026.09.08 — 2027.04.23",
+      "readout": "1D관측$84,501전봉 −0.4%2026.10.02 UTCO $84,851.22H $87,219.40L $83,841.27C $84,500.84"
+    },
+    {
+      "version": "before",
+      "pointerX": 520,
+      "cursorX": 242.07929515418505,
+      "cursorY": 441.8587026340608,
+      "height": 39,
+      "range": "2026.09.08 — 2027.04.23",
+      "readout": "1D관측$81,315전봉 −3.2%2026.10.22 UTCO $84,023.25H $84,294.15L $80,835.75C $81,315.35"
+    },
+    {
+      "version": "before",
+      "pointerX": 190,
+      "cursorX": 242.07929515418505,
+      "cursorY": 441.8587026340608,
+      "height": 39,
+      "range": "2026.09.08 — 2027.04.23",
+      "readout": "1D관측$81,315전봉 −3.2%2026.10.22 UTCO $84,023.25H $84,294.15L $80,835.75C $81,315.35"
+    },
+    {
+      "version": "before",
+      "pointerX": 550,
+      "cursorX": 242.07929515418505,
+      "cursorY": 441.8587026340608,
+      "height": 39,
+      "range": "2026.09.08 — 2027.04.23",
+      "readout": "1D관측$81,315전봉 −3.2%2026.10.22 UTCO $84,023.25H $84,294.15L $80,835.75C $81,315.35"
+    },
+    {
+      "version": "before",
+      "pointerX": 210,
+      "cursorX": 242.07929515418505,
+      "cursorY": 441.8587026340608,
+      "height": 39,
+      "range": "2026.09.08 — 2027.04.23",
+      "readout": "1D관측$81,315전봉 −3.2%2026.10.22 UTCO $84,023.25H $84,294.15L $80,835.75C $81,315.35"
+    },
+    {
+      "version": "before",
+      "pointerX": 600,
+      "cursorX": 242.07929515418505,
+      "cursorY": 441.8587026340608,
+      "height": 39,
+      "range": "2026.09.08 — 2027.04.23",
+      "readout": "1D관측$81,315전봉 −3.2%2026.10.22 UTCO $84,023.25H $84,294.15L $80,835.75C $81,315.35"
+    },
+    {
+      "version": "after",
+      "pointerX": 180,
+      "cursorX": 137.4977973568282,
+      "cursorY": 260,
+      "height": 39,
+      "range": "2026.09.08 — 2027.04.23",
+      "readout": "1D관측$84,501전봉 −0.4%2026.10.02 UTCO $84,851.22H $87,219.40L $83,841.27C $84,500.84"
+    },
+    {
+      "version": "after",
+      "pointerX": 520,
+      "cursorX": 477.3876651982378,
+      "cursorY": 260,
+      "height": 39,
+      "range": "2026.09.08 — 2027.04.23",
+      "readout": "1D가정$95,335전봉 −0.8%2026.12.06 UTC"
+    },
+    {
+      "version": "after",
+      "pointerX": 190,
+      "cursorX": 147.95594713656388,
+      "cursorY": 260,
+      "height": 39,
+      "range": "2026.09.08 — 2027.04.23",
+      "readout": "1D관측$86,510전봉 +2.1%2026.10.04 UTCO $84,746.88H $86,770.50L $84,712.95C $86,510.16"
+    },
+    {
+      "version": "after",
+      "pointerX": 550,
+      "cursorX": 503.5330396475771,
+      "cursorY": 260,
+      "height": 39,
+      "range": "2026.09.08 — 2027.04.23",
+      "readout": "1D가정$94,805전봉 −0.1%2026.12.11 UTC"
+    },
+    {
+      "version": "after",
+      "pointerX": 210,
+      "cursorX": 163.6431718061674,
+      "cursorY": 260,
+      "height": 39,
+      "range": "2026.09.08 — 2027.04.23",
+      "readout": "1D관측$83,275전봉 −2.7%2026.10.07 UTCO $85,544.34H $85,591.44L $82,733.94C $83,274.86"
+    },
+    {
+      "version": "after",
+      "pointerX": 600,
+      "cursorX": 555.8237885462555,
+      "cursorY": 260,
+      "height": 39,
+      "range": "2026.09.08 — 2027.04.23",
+      "readout": "1D가정$91,557전봉 −2.1%2026.12.21 UTC"
+    }
+  ],
+  "layoutChecks": [
+    {
+      "case": "320-study-open",
+      "dday": {
+        "h": 32,
+        "w": 227,
+        "x": 20,
+        "y": 108
+      },
+      "expanded": "true",
+      "legend": {
+        "h": 72,
+        "w": 227,
+        "x": 20,
+        "y": 140
+      },
+      "list": {
+        "h": 180,
+        "w": 3,
+        "x": 10,
+        "y": 220
+      },
+      "manager": {
+        "h": 210,
+        "w": 0,
+        "x": 10,
+        "y": 220
+      },
+      "plot": {
+        "h": 589,
+        "w": 320,
+        "x": 0,
+        "y": 48
+      },
+      "scrollWidth": 320
+    },
+    {
+      "case": "zoom-in",
+      "h": 833,
+      "periods": [
+        {
+          "id": "scenario-base-2029-08-15:bottom-bottom",
+          "y": "608"
+        },
+        {
+          "id": "scenario-base-2029-08-15:bottom-cycle-top",
+          "y": "586"
+        },
+        {
+          "id": "scenario-base-2029-08-15:bottom-first-top",
+          "y": "564"
+        },
+        {
+          "id": "scenario-base-2029-08-15:bottom-ath",
+          "y": "520"
+        }
+      ],
+      "range": "2026.10.01 — 2027.03.31"
+    },
+    {
+      "case": "pan",
+      "h": 833,
+      "periods": [
+        {
+          "id": "scenario-base-2029-08-15:bottom-bottom",
+          "y": "608"
+        },
+        {
+          "id": "scenario-base-2029-08-15:bottom-cycle-top",
+          "y": "586"
+        },
+        {
+          "id": "scenario-base-2029-08-15:bottom-first-top",
+          "y": "564"
+        },
+        {
+          "id": "scenario-base-2029-08-15:bottom-ath",
+          "y": "520"
+        }
+      ],
+      "range": "2026.09.17 — 2027.03.17"
+    },
+    {
+      "case": "linear",
+      "h": 833,
+      "periods": [
+        {
+          "id": "scenario-base-2029-08-15:bottom-bottom",
+          "y": "608"
+        },
+        {
+          "id": "scenario-base-2029-08-15:bottom-cycle-top",
+          "y": "586"
+        },
+        {
+          "id": "scenario-base-2029-08-15:bottom-first-top",
+          "y": "564"
+        },
+        {
+          "id": "scenario-base-2029-08-15:bottom-ath",
+          "y": "520"
+        }
+      ],
+      "scale": "linear"
+    },
+    {
+      "case": "320-study-open-fixed",
+      "dday": {
+        "h": 32,
+        "w": 227,
+        "x": 20,
+        "y": 108
+      },
+      "legend": {
+        "h": 72,
+        "w": 227,
+        "x": 20,
+        "y": 140
+      },
+      "list": {
+        "h": 180,
+        "w": 227,
+        "x": 10,
+        "y": 220
+      },
+      "manager": {
+        "h": 210,
+        "w": 227,
+        "x": 10,
+        "y": 220
+      },
+      "plot": {
+        "h": 589,
+        "w": 320,
+        "x": 0,
+        "y": 48
+      },
+      "scrollWidth": 320
+    }
+  ],
+  "hudVisibility": [
+    {
+      "hud": [
+        {
+          "borderRadius": "0px 0px 6px 6px",
+          "h": 0,
+          "hidden": true,
+          "id": "lab-chart-foot",
+          "w": 0,
+          "y": 0
+        },
+        {
+          "borderRadius": "6px",
+          "h": 32,
+          "hidden": false,
+          "id": "scenario-countdown",
+          "w": 430,
+          "y": 48
+        }
+      ],
+      "plotH": 833
+    },
+    {
+      "hud": [
+        {
+          "borderRadius": "0px 0px 6px 6px",
+          "h": 66,
+          "hidden": false,
+          "id": "lab-chart-foot",
+          "w": 430,
+          "y": 80
+        },
+        {
+          "borderRadius": "6px 6px 0px 0px",
+          "h": 32,
+          "hidden": false,
+          "id": "scenario-countdown",
+          "w": 430,
+          "y": 48
+        }
+      ],
+      "plotH": 833
+    },
+    {
+      "hud": [
+        {
+          "borderRadius": "6px",
+          "h": 66,
+          "hidden": false,
+          "id": "lab-chart-foot",
+          "w": 430,
+          "y": 48
+        },
+        {
+          "borderRadius": "6px 6px 0px 0px",
+          "h": 0,
+          "hidden": true,
+          "id": "scenario-countdown",
+          "w": 0,
+          "y": 0
+        }
+      ],
+      "plotH": 833
+    },
+    {
+      "hud": [
+        {
+          "borderRadius": "0px 0px 6px 6px",
+          "h": 66,
+          "hidden": false,
+          "id": "lab-chart-foot",
+          "w": 430,
+          "y": 80
+        },
+        {
+          "borderRadius": "6px 6px 0px 0px",
+          "h": 32,
+          "hidden": false,
+          "id": "scenario-countdown",
+          "w": 430,
+          "y": 48
+        }
+      ],
+      "plotH": 833
+    }
+  ],
+  "finalDaily": [
+    {
+      "readout": "1D관측$86,510전봉 +2.1%2026.10.04 UTCO $84,746.88H $86,770.50L $84,712.95C $86,510.16",
+      "x": 147.95594713656388,
+      "y": 260
+    },
+    {
+      "readout": "1D가정$94,805전봉 −0.1%2026.12.11 UTC",
+      "x": 503.5330396475771,
+      "y": 260
+    },
+    {
+      "readout": "1D관측$83,275전봉 −2.7%2026.10.07 UTCO $85,544.34H $85,591.44L $82,733.94C $83,274.86",
+      "x": 163.6431718061674,
+      "y": 260
+    }
+  ],
+  "finalIntraday": [
+    {
+      "pointer": [
+        350,
+        300
+      ],
+      "readout": "1h관측$81,408.28전봉 −0.1%2026-10-17 12:00 UTCO $81,458.12H $81,506.57L $81,359.01C $81,408.28",
+      "x": 307.11049723756906,
+      "y": 260
+    },
+    {
+      "pointer": [
+        750,
+        450
+      ],
+      "readout": "1h관측$81,694.80전봉 +0.1%2026-10-20 01:00 UTCO $81,633.41H $81,755.55L $81,080.64C $81,694.80",
+      "x": 707.1491712707182,
+      "y": 410
+    },
+    {
+      "pointer": [
+        500,
+        300
+      ],
+      "readout": "1h관측$81,960.17전봉 −0.0%2026-10-18 11:00 UTCO $81,982.06H $82,035.60L $81,881.48C $81,960.17",
+      "x": 457.94475138121544,
+      "y": 260
+    }
+  ],
+  "console": "No errors or warnings from terminal.local in captured final check"
+}

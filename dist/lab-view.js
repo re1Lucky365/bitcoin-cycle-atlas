@@ -1,19 +1,19 @@
 import { buildCycleMilestones, INTERVAL_RELATIONS, MILESTONE_TYPES } from './cycle-milestones.js?v=1.11.0-milestones.4';
 import { cycleLegendMarkup, cycleMilestoneInspection, cycleIntervalInspection, cycleDurationLabel } from './cycle-milestones-view.js?v=1.11.0-milestones.4';
 import { resolveCycleSelection, cycleSelectionViewport, cycleOverviewViewport } from './cycle-selection.js?v=1.11.0-milestones.4';
-import { drawAtlasPriceChart as drawChart } from './atlas-price-chart.js?v=1.12.0-tv-parity.1';
+import { drawAtlasPriceChart as drawChart } from './atlas-price-chart.js?v=1.12.1-cursor-hud.1';
 import { renderCryptoConAudit } from './cryptocon-audit.js?v=1.11.0';
 import { bindChartNavigation, panRange } from './chart-navigation.js?v=1.12.0-tv-parity.1';
 import { renderAtlasAnalysis } from './atlas-analysis.js?v=1.11.0';
 import { ANALYSIS_MODES, analysisCalendarDate, shouldPublishInspection, analysisSelectionSummary } from './analysis-dock.js?v=1.12.0-tv-parity.1';
-import { INDICATORS, readIndicatorState, writeIndicatorState, changeIndicatorState, isIndicatorVisible, visibleAnalysisIds } from './indicator-state.js?v=1.12.0-tv-parity.1';
+import { INDICATORS, readIndicatorState, writeIndicatorState, changeIndicatorState, isIndicatorVisible, visibleAnalysisIds } from './indicator-state.js?v=1.12.1-cursor-hud.1';
 import { preparePriceViewData } from './price-view-data.js?v=1.11.0';
 import { chartSelectionHandler } from './inspection-policy.js?v=1.11.0';
 import { buildScenarioCountdown, koreanCalendarDate } from './scenario-countdown.js?v=1.11.0';
 import { buildLongHorizonForecast, LONG_HORIZON_SCENARIOS } from './long-horizon-forecast.js?v=1.11.0';
 import { longHorizonMethodMarkup } from './long-horizon-view.js?v=1.11.0';
 import { CHART_INTERVALS, chartInterval, isIntradayInterval } from './ohlc-data.js?v=1.11.0';
-import { drawIntradayChart } from './intraday-chart.js?v=1.12.0-tv-parity.1';
+import { drawIntradayChart } from './intraday-chart.js?v=1.12.1-cursor-hud.1';
 import { createMarketDataController, marketStatusText } from './market-data-controller.js?v=1.11.0';
 import { parseVolumeSnapshot, aggregateWeeklyVolume } from './volume-data.js?v=1.11.0';
 import { fitVolumeForecastModel, projectVolumeForecast } from './volume-forecast.js?v=1.11.0';
@@ -27,7 +27,7 @@ import { chartPresetRange, DEFAULT_CHART_SPAN, CHART_SPANS } from './chart-prese
 import { createChartSvgExport, createChartPngExport, createObservedChartCsv } from './chart-export.js?v=1.12.0-tv-parity.1';
 import { readWorkspaceViewport, readWorkspacePriceDomain, writeWorkspaceViewport, workspaceQuery } from './workspace-state.js?v=1.12.0-tv-parity.1';
 import { normalizePriceDomain } from './price-axis.js?v=1.12.0-tv-parity.1';
-import { clearChartHover } from './chart-hover.js?v=1.11.0';
+import { clearChartHover } from './chart-hover.js?v=1.12.1-cursor-hud.1';
 
 const $ = (selector) => document.querySelector(selector);
 const esc = (value) => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -183,7 +183,7 @@ export function initLabView() {
       $('#atlas-cycle-focus').hidden=!selection.interval;
     }
     state.cycleVisibleIntervals=Number($('#lab-chart').dataset.cycleIntervalCount||0);
-    const note=`기간선은 가격 그래프와 같은 날짜축에 표시됩니다. 날짜·가격은 바꾸지 않고 빈 가로 공간에 배치합니다. 기간은 종료 UTC 날짜 − 시작 UTC 날짜이며, 화면 밖으로 이어지는 구간도 전체 기간을 표시합니다. 색 원·기간선의 실선은 사후 기준, 점선은 잠정 또는 가정입니다. ${data.futureStatus?.reason||''}`;
+    const note=`기간선은 가격 그래프 하단의 고정된 관계별 행에 표시됩니다. 확대·이동해도 위로 올라가지 않으며, 날짜축에 맞춰 가로 길이만 바뀝니다. 좁은 구간의 전체 이름·날짜는 선택해서 확인할 수 있습니다. 기간은 종료 UTC 날짜 − 시작 UTC 날짜이며, 화면 밖으로 이어지는 구간도 전체 기간을 표시합니다. 색 원·기간선의 실선은 사후 기준, 점선은 잠정 또는 가정입니다. ${data.futureStatus?.reason||''}`;
     $('#atlas-cycle-note').textContent=note;
     const ref=data.sourceReference;
     $('#atlas-cycle-reference').innerHTML=`<p><strong>${esc(ref.title)}</strong> · ${esc(ref.author)} · 2024.08.06 · ${esc(ref.instrument)}</p><p>${esc(ref.note)} 아래는 원본에 적힌 주 수이며, 위 차트의 계산값과 구분합니다.</p><div class="cycle-reference-table"><table><thead><tr><th scope="col">원본 관계 · 주</th>${ref.cycles.map(label=>`<th scope="col">${esc(label)}</th>`).join('')}</tr></thead><tbody>${INTERVAL_RELATIONS.map(item=>`<tr><th scope="row">${esc(item.label)}</th>${ref.periodClaims[item.id].map(value=>`<td>${esc(value)}</td>`).join('')}</tr>`).join('')}</tbody></table></div><p><strong>선정 기준</strong><br>${Object.entries(data.methodology).filter(([key])=>!['general','duration','future'].includes(key)).map(([key,value])=>`${esc(key.toUpperCase())}: ${esc(value)}`).join('<br>')}</p><p>모형에 기준점이 없는 장기 구간에는 날짜나 고점을 만들어 넣지 않습니다. 구간 막대나 원을 선택하면 정확한 날짜와 기준을 확인할 수 있습니다.</p>`;
@@ -196,6 +196,11 @@ export function initLabView() {
       const rect=node.getBoundingClientRect();
       return {x:rect.left-box.left-5,y:rect.top-box.top-5,width:rect.width+10,height:rect.height+10};
     }).filter(rect=>rect.width>10&&rect.height>10);
+  }
+  // Readout text may resize while the pointer moves. Repack only the period
+  // annotations; rebuilding the price chart here would reset its live cursor.
+  function refreshCycleHudPlacement(){
+    if(!isIntradayInterval(state.frequency)&&isIndicatorVisible(state.indicators,'cycle-intervals')&&!state.cycleCollapsed)state.priceController?.updateCycleOverlayObstacles?.(cycleHudObstacles());
   }
   function currentFib(){
     const pivots=base().pivots.pivots;if(pivots.length<2)return[];
@@ -407,7 +412,7 @@ export function initLabView() {
         renderCycleControls(milestones);
         // One follow-up layout after a HUD wraps keeps the period labels clear
         // without reserving vertical chart space or altering the price scale.
-        if(!state.cycleCollapsed&&isIndicatorVisible(state.indicators,'cycle-intervals')&&JSON.stringify(cycleHudObstacles())!==JSON.stringify(cycleObstacles))schedule();
+        if(JSON.stringify(cycleHudObstacles())!==JSON.stringify(cycleObstacles))refreshCycleHudPlacement();
         $('#atlas-chart-caveat').textContent='조건부 가정';
         const candleNote=state.chartType==='candles'?` ${observedCandles.length?`Bitstamp BTC/USD 캔들 ${observedCandles[0].date}–${observedCandles.at(-1).date} · 실제 OHLC. 이전 가격선과 미래 연결 기준은 Coin Metrics입니다.`:'실제 캔들을 기다리는 동안 Coin Metrics 일말 가격선을 표시합니다.'}`:'';
         $('#atlas-chart-note').textContent=`${m.scenario.label} · ${end.slice(0,4)}년까지. 금색 가격 점선과 음영은 출처·가정에 따른 시나리오이며 확률 예측구간이 아닙니다. 색 원·기간선의 점선은 잠정 기준 또는 가정을 뜻합니다.${candleNote}`;
@@ -553,7 +558,7 @@ export function initLabView() {
   $('#atlas-cycle-clear').onclick=()=>{showPriceInspection();$('#atlas-cycle-relation').focus({preventScroll:true});};
   $('#lab-scenario').onchange=e=>{state.scenario=e.target.value;state.measurement=null;state.eventPage=0;schedule();};
   document.addEventListener('atlas:hud-layout-change',()=>{
-    if(!isIntradayInterval(state.frequency)&&isIndicatorVisible(state.indicators,'cycle-intervals')&&!state.cycleCollapsed)schedule();
+    refreshCycleHudPlacement();
   });
   document.addEventListener('atlas:indicator-command',event=>{
     const before=state.indicators,command=event.detail||{};
@@ -563,7 +568,7 @@ export function initLabView() {
     publishIndicators();syncAtlasUrl();
     const htmlOnly=['readout','source','legend'].includes(command.id)||['collapse','primary'].includes(command.action);
     if(!htmlOnly){if(ANALYSIS_MODES.some(item=>item.id===command.id))scheduleAnalysis();else schedule();}
-    else if(!isIntradayInterval(state.frequency)&&isIndicatorVisible(state.indicators,'cycle-intervals')&&!state.cycleCollapsed)schedule();
+    else refreshCycleHudPlacement();
   });
   document.addEventListener('atlas:countdown-detail',()=>{
     if(state.dataset)publishCountdownInspection(model(),{user:true,openPanel:true});

@@ -1,6 +1,6 @@
-import { INDICATORS, readIndicatorState, normalizeIndicatorState, isIndicatorVisible } from './indicator-state.js?v=1.12.0-tv-parity.1';
+import { INDICATORS, readIndicatorState, normalizeIndicatorState, isIndicatorVisible } from './indicator-state.js?v=1.12.1-cursor-hud.1';
 import {indicatorReadout,indicatorReadoutDate} from './indicator-readouts.js?v=1.12.0-tv-parity.1';
-import {INDICATOR_PREFERENCES_KEY,MAX_TEMPLATE_NAME,readIndicatorPreferences,writeIndicatorPreferences,toggleIndicatorFavorite,saveIndicatorTemplate,deleteIndicatorTemplate,indicatorLibraryItems,hasIndicatorTemplate} from './indicator-preferences.js?v=1.12.0-tv-parity.1';
+import {INDICATOR_PREFERENCES_KEY,MAX_TEMPLATE_NAME,readIndicatorPreferences,writeIndicatorPreferences,toggleIndicatorFavorite,saveIndicatorTemplate,deleteIndicatorTemplate,indicatorLibraryItems,hasIndicatorTemplate} from './indicator-preferences.js?v=1.12.1-cursor-hud.1';
 
 const ICONS={eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',hidden:'<path d="m3 3 18 18M10 5a12 12 0 0 1 2 0c6.5 0 10 7 10 7a20 20 0 0 1-3 4M6 6a20 20 0 0 0-4 6s3.5 7 10 7a12 12 0 0 0 5-1"/>',close:'<path d="m6 6 12 12M6 18 18 6"/>',expand:'<path d="m7 10 5 5 5-5"/>',collapse:'<path d="m7 14 5-5 5 5"/>'};
 const glyph=name=>`<svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[name]}</svg>`;
@@ -39,15 +39,15 @@ export function mountIndicatorWorkbench({plot,stage}) {
   countdownBox.onclick=()=>doc.dispatchEvent(new CustomEvent('atlas:countdown-detail'));plot.append(countdownBox);
   // Observe layout boxes, never the price path. Wrapped readouts determine the
   // legend position; the actual plot height bounds its scrollable overflow.
-  const readoutNode=plot.querySelector('#lab-metrics'),sourceNode=plot.querySelector('.workbench-market-info');
+  const readoutNode=plot.querySelector('#lab-metrics'),sourceNode=plot.querySelector('.workbench-market-info'),legendNode=plot.querySelector('.lab-chart-foot');
   let observedCountdownWidth=-1,hudLayoutFrame=0,lastHudLayoutKey='';
-  const hudNodes=[manager,countdownBox,readoutNode,sourceNode].filter(Boolean),overlayGeometry=new WeakMap();
+  const hudNodes=[manager,countdownBox,readoutNode,sourceNode,legendNode].filter(Boolean),overlayGeometry=new WeakMap();
   function scheduleHudLayoutChange(){
     if(hudLayoutFrame)return;
     hudLayoutFrame=requestAnimationFrame(()=>{
       hudLayoutFrame=0;
-      // Read after the observer has applied CSS anchors: the countdown can move
-      // without resizing when the indicator legend above it folds or expands.
+      // Read after observed heights settle: wrapped OHLC/provenance can move
+      // the context card, whose height can reposition the study controls.
       const origin=plot.getBoundingClientRect(),key=JSON.stringify(hudNodes.map(node=>{
         if(node.hidden)return null;
         const box=node.getBoundingClientRect();
@@ -70,14 +70,14 @@ export function mountIndicatorWorkbench({plot,stage}) {
       }
       const pixels=Math.ceil(height);
       if(overlaySizes.get(entry.target)===pixels)continue;overlaySizes.set(entry.target,pixels);
-      const property=entry.target===plot?'--plot-height':entry.target===manager?'--indicator-manager-height':entry.target===countdownBox?'--countdown-height':entry.target===readoutNode?'--readout-height':'--source-height';
+      const property=entry.target===plot?'--plot-height':entry.target===manager?'--indicator-manager-height':entry.target===countdownBox?'--countdown-height':entry.target===readoutNode?'--readout-height':entry.target===legendNode?'--chart-legend-height':'--source-height';
       plot.style.setProperty(property,`${pixels}px`);
       if(entry.target===readoutNode||entry.target===sourceNode)offsetChanged=true;
     }
     if(offsetChanged)updateOverlayOffsets();
     if(geometryChanged)scheduleHudLayoutChange();
   });
-  for(const node of [plot,manager,countdownBox,readoutNode,sourceNode])if(node)overlayResize.observe(node);
+  for(const node of [plot,manager,countdownBox,readoutNode,sourceNode,legendNode])if(node)overlayResize.observe(node);
 
   const dialog=doc.createElement('dialog');dialog.id='indicator-library';dialog.className='indicator-library';dialog.setAttribute('aria-labelledby','indicator-library-title');dialog.setAttribute('aria-describedby','indicator-library-description indicator-readout-date');
   const dialogHeader=doc.createElement('header');dialogHeader.className='indicator-library-heading';
