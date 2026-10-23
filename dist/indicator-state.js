@@ -8,6 +8,8 @@ export const INDICATORS = Object.freeze([
   {id:'history',label:'역사 사건',category:'가격 지표',description:'확대 수준에 맞춘 사건 이름과 원문',control:'atlas-history-events',default:true,dailyOnly:true},
   {id:'range',label:'수요·채택 가정 범위',category:'가격 지표',description:'장기 가격 시나리오의 범위 · 확률구간 아님',control:'lab-band',default:true,dailyOnly:true},
   {id:'turns',label:'고점·저점',category:'가격 지표',description:'관측 전환점과 미래 조건부 방향 후보',control:'lab-turns',default:true,dailyOnly:true},
+  {id:'cycle-landmarks',label:'사이클 주요 지점',category:'가격 지표',description:'CYCLE TOP · PIT STOP · FIRST TOP · ATH · MID-TOP · BOTTOM, 여섯 색 원형 표시',control:'lab-milestones',default:true,dailyOnly:true},
+  {id:'cycle-intervals',label:'사이클 기간 비교',category:'가격 지표',description:'BOTTOM → CYCLE TOP 등 아홉 관계의 실제 경과 주·일, 미래 가정 포함',control:'lab-cycle-intervals',default:true,dailyOnly:true},
   {id:'cycle-timing',label:'사이클 시계 · 레인보우',category:'가격 지표',description:'조건부 시계 대비 단축·기준·연장 · 매매 신호 아님',default:true,dailyOnly:true},
   {id:'drawdown',label:'전고점 대비 낙폭',category:'가격 지표',description:'날짜별 이전 최고 가격에서 떨어진 비율',control:'atlas-drawdown',dailyOnly:true},
   {id:'states',label:'상승·횡보·하락',category:'가격 지표',description:'당시까지의 가격으로 분류한 시장 국면',control:'atlas-states',dailyOnly:true},

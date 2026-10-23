@@ -51,6 +51,16 @@ export function indicatorReadout(item,{selection=null,workbench={},cycle=null,an
       if(!meta)return missing('사건 자료 대기');
       return output(`${number(meta.total||0,0)}개 사건 · 이름 ${number(meta.labels||0,0)}개`,`현재 보이는 기간의 사건 ${number(meta.total||0,0)}개 중 ${number(meta.labels||0,0)}개 이름을 표시합니다. 확대 수준에 따라 이름 수가 바뀝니다.`);
     }
+    case 'cycle-landmarks': {
+      const meta=workbench.cycleMilestones;
+      if(!meta)return missing('주요 지점 계산 중');
+      return output(`${number(meta.visibleMarkers||0,0)}개 지점 · 6색`, 'CYCLE TOP · PIT STOP · FIRST TOP · ATH · MID-TOP · BOTTOM. 관측값은 사후 선정이며 점선 원은 후보 또는 미래 가정입니다.');
+    }
+    case 'cycle-intervals': {
+      const meta=workbench.cycleMilestones;
+      if(!meta)return missing('기간 계산 중');
+      return output(`${number(meta.visibleIntervals||0,0)}개 구간 · 9가지 관계`, '아래 기간 차트는 가격과 같은 시간축입니다. 실제 끝 날짜 − 시작 날짜로 경과 주·일을 계산합니다.');
+    }
     case 'range':
       return future&&finite(selected.lower)&&finite(selected.upper)?output(`${money(selected.lower)}–${money(selected.upper)}`,`${context} · 수요·채택 가정 범위 · 확률구간이 아닙니다.`,'scenario'):missing(selected.date?'미래 구간의 가정 범위':'범위 자료 대기');
     case 'turns': {

@@ -67,10 +67,11 @@
   <link rel="stylesheet" href="./atlas.css?v=1.11.0">
   <link rel="stylesheet" href="./viewport.css?v=1.11.0">
   <link rel="stylesheet" href="./chart-details-panel.css?v=1.11.0">
-  <link rel="stylesheet" href="./analysis-dock.css?v=1.11.0-indicators.1">
+  <link rel="stylesheet" href="./analysis-dock.css?v=1.11.0-milestones.1">
   <link rel="stylesheet" href="./chart-magnet.css?v=1.11.0">
   <link rel="stylesheet" href="./mobile-workspace.css?v=1.11.0-indicators.1">
   <link rel="stylesheet" href="./workspace-tools.css?v=1.11.0">
+  <link rel="stylesheet" href="./cycle-milestones.css?v=1.11.0-milestones.1">
 </head>
 <body>
   <div id="atlas-boot-shell">
@@ -170,10 +171,14 @@
             <div id="atlas-period-controls" class="atlas-control-set" hidden><label>간격<select id="atlas-period"><option value="monthly">월별</option><option value="quarterly">분기별</option></select></label><label>비교할 값<select id="atlas-measure"><option value="returnPct">얼마나 올랐나 · 수익률</option><option value="maxDrawdownPct">가장 크게 떨어진 폭</option><option value="realizedVolPct">가격이 흔들린 정도</option><option value="discoveryDays">최고가를 새로 쓴 일수</option></select></label><label>기간<select id="atlas-period-scope"><option value="recent">최근 구간</option><option value="all">2010년부터 전체</option></select></label></div>
             <div id="atlas-cryptocon-controls" class="atlas-control-set" hidden><label>검증 항목<select id="atlas-cryptocon-view"><option value="timing">고점 전망과 수정</option><option value="thresholds">고점권 조기 진입</option><option value="targets">가격 목표와 결과</option></select></label></div>
             <div id="atlas-observed-note" class="atlas-control-hint" hidden>실제 관측 자료로 비교합니다. 진행 중인 구간은 별도로 표시합니다.</div>
-            <div class="atlas-control-actions"><button id="atlas-reset" class="atlas-quiet-button">처음 화면</button><details id="atlas-display-options" class="atlas-settings"><summary>표시 설정</summary><div class="atlas-settings-body"><fieldset><legend>가격 표시 간격</legend><div class="lab-segmented"><button data-lab-frequency="daily" aria-pressed="true">일별</button><button data-lab-frequency="weekly" aria-pressed="false">주별</button></div></fieldset><label>가격 단위<select id="lab-unit"><option value="usd">달러 가격</option><option value="indexed">최근 가격 = 100</option></select></label><label><input id="lab-band" type="checkbox" checked>수요·채택 가정의 범위</label><label><input id="lab-turns" type="checkbox" checked>고점·저점 표시</label><label><input id="atlas-drawdown" type="checkbox">최고가에서 떨어진 폭</label><label><input id="atlas-states" type="checkbox">상승·횡보·하락 흐름</label><label><input id="lab-fib" type="checkbox">최근 구간의 되돌림 비율</label><p>표시 설정은 ‘가격과 미래’ 그래프에 적용됩니다.</p><div class="atlas-setting-downloads"><button id="lab-svg" class="atlas-quiet-button">그래프 저장</button><button id="lab-json" class="atlas-quiet-button">계산 자료 저장</button></div></div></details></div>
+            <div class="atlas-control-actions"><button id="atlas-reset" class="atlas-quiet-button">처음 화면</button><details id="atlas-display-options" class="atlas-settings"><summary>표시 설정</summary><div class="atlas-settings-body"><fieldset><legend>가격 표시 간격</legend><div class="lab-segmented"><button data-lab-frequency="daily" aria-pressed="true">일별</button><button data-lab-frequency="weekly" aria-pressed="false">주별</button></div></fieldset><label>가격 단위<select id="lab-unit"><option value="usd">달러 가격</option><option value="indexed">최근 가격 = 100</option></select></label><label><input id="lab-band" type="checkbox" checked>수요·채택 가정의 범위</label><label><input id="lab-turns" type="checkbox" checked>고점·저점 표시</label><label><input id="lab-milestones" type="checkbox" checked>사이클 주요 지점 · 여섯 색 원</label><label><input id="lab-cycle-intervals" type="checkbox" checked>사이클 기간 비교 · 아홉 관계</label><label><input id="atlas-drawdown" type="checkbox">최고가에서 떨어진 폭</label><label><input id="atlas-states" type="checkbox">상승·횡보·하락 흐름</label><label><input id="lab-fib" type="checkbox">최근 구간의 되돌림 비율</label><p>표시 설정은 ‘가격과 미래’ 그래프에 적용됩니다.</p><div class="atlas-setting-downloads"><button id="lab-svg" class="atlas-quiet-button">그래프 저장</button><button id="lab-json" class="atlas-quiet-button">계산 자료 저장</button></div></div></details></div>
           </div>
           <div class="lab-chart-meta"><span id="lab-chart-title">가격과 미래 흐름</span><span id="atlas-axis-note">달러 · 같은 상승률은 같은 높이</span></div>
           <div id="lab-chart-stage" class="lab-chart-stage atlas-chart-stage"><svg id="lab-chart" role="group" tabindex="0" aria-label="실제 비트코인 가격과 미래 가정의 그래프. 누르거나 좌우 방향키로 값을 확인하세요."></svg><svg id="atlas-analysis-chart" role="img" tabindex="0" aria-label="과거 사이클 비교 그래프. 누르거나 좌우 방향키로 값을 확인하세요." hidden></svg><div id="lab-tooltip" class="lab-tooltip" hidden></div></div>
+          <section id="atlas-cycle-panel" class="atlas-cycle-panel" aria-label="사이클 주요 지점 사이의 기간 비교">
+            <header class="cycle-panel-heading"><h2>사이클 기간 <small>같은 시간축 · 9가지 관계</small></h2><div class="cycle-panel-actions"><select id="atlas-cycle-relation" aria-label="표시할 사이클 기간 관계"><option value="all">모든 기간 관계</option></select><button id="atlas-cycle-toggle" type="button" aria-expanded="true" aria-controls="atlas-cycle-body">접기</button></div></header>
+            <div id="atlas-cycle-body" class="cycle-panel-body"><div id="atlas-cycle-timeline" class="cycle-timeline" aria-label="사이클 기간 차트"></div><p id="atlas-cycle-note" class="cycle-panel-note">관측 날짜로 기간을 계산하고 있습니다.</p><details class="cycle-reference"><summary>첨부 이미지와 계산 기준 비교</summary><div id="atlas-cycle-reference"></div></details></div>
+          </section>
           <div class="lab-chart-foot"><div id="atlas-chart-legend" class="lab-legend"></div><span id="atlas-chart-caveat" class="lab-caveat">미래는 가정에 따른 예시</span></div>
           <div class="atlas-inspector" aria-label="선택한 날짜와 구간의 값">
             <div class="atlas-inspector-top"><div><span id="atlas-inspector-kind" class="atlas-kind">실제 관측</span><strong id="atlas-inspector-title">그래프를 눌러 확인하세요</strong></div><div class="atlas-inspector-actions"><label id="atlas-date-label" class="atlas-date-input"><span class="lab-visually-hidden">확인할 날짜</span><input id="atlas-date" type="date" aria-label="확인할 날짜"></label><button id="atlas-inspect-prev" aria-label="이전 고점·저점">← 이전</button><button id="atlas-inspect-next" aria-label="다음 고점·저점">다음 →</button><button id="atlas-latest">최근 관측</button></div></div>
@@ -269,6 +274,6 @@
   <dialog id="method-dialog" aria-labelledby="method-title"><div class="dialog-top"><span class="eyebrow">DATA & METHODOLOGY</span><button id="close-method" class="icon-button" aria-label="방법론 닫기"><span data-icon="close"></span></button></div><h2 id="method-title">방법론과 출처</h2><p class="dialog-lead">차트의 출발점부터 가격의 정의까지, 비교에 사용한 기준입니다.</p><div id="method-content"></div><button id="method-done" class="primary-button">확인했습니다</button></dialog>
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
   <dialog id="evidence-dialog" aria-labelledby="evidence-detail-title"><div class="dialog-top"><span class="eyebrow">EVIDENCE & LIMITS</span><button id="evidence-close" class="icon-button" aria-label="자료 상세 닫기"><span data-icon="close"></span></button></div><h2 id="evidence-detail-title"></h2><div id="evidence-detail-body"></div></dialog>
-  <script type="module" src="./app.js?v=1.11.0-indicators.1"></script>
+  <script type="module" src="./app.js?v=1.11.0-milestones.1"></script>
 </body>
 </html>

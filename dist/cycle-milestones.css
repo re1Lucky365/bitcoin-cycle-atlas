@@ -1,0 +1,57 @@
+/* Landmark colors encode a category; dashed outlines identify a candidate or scenario. */
+.cycle-marker{cursor:pointer;outline:none}
+.cycle-marker:hover .cycle-marker-ring,.cycle-marker:focus-visible .cycle-marker-ring{stroke-width:3;fill-opacity:.22}
+.cycle-marker:focus-visible{filter:drop-shadow(0 0 3px #d8e8ff)}
+.cycle-marker:is(:hover,:focus) .cycle-marker-preview{visibility:visible}
+.cycle-marker text{paint-order:stroke;stroke:#10151c;stroke-width:3px;stroke-linejoin:round}
+.atlas-plot>.lab-chart-foot:has(.cycle-legend){max-width:min(460px,calc(100% - var(--plot-right-gap,80px) - 16px));pointer-events:auto}
+.atlas-plot>.lab-chart-foot .lab-legend:has(.cycle-legend){display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.price-legend{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px 10px}
+.cycle-legend{display:grid;grid-template-columns:repeat(3,max-content);gap:5px 13px;padding-top:5px;border-top:1px solid #354355}
+.atlas-plot>.lab-chart-foot .cycle-legend span{display:flex;align-items:center;gap:5px;font-size:9px;line-height:14px;white-space:nowrap}
+.atlas-plot>.lab-chart-foot .cycle-legend i{display:inline-block;width:11px;height:11px;box-sizing:border-box;border:1.7px solid var(--milestone-color,currentColor);border-radius:50%;background:transparent;flex:none}
+.cycle-legend-note{font-size:8px;color:#8da0b6;line-height:1.5;text-align:right}
+.cycle-legend-note{grid-column:1/-1;justify-content:flex-end}
+.atlas-chart-stage .cycle-legend-item>svg{width:13px;height:13px;min-width:13px;flex:none}
+.atlas-cycle-panel{flex:none;min-width:0;border-top:1px solid #344154;background:#101822;contain:layout}
+.atlas-cycle-panel[hidden]{display:none!important}
+.cycle-panel-heading{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:5px 12px;min-height:33px;box-sizing:border-box;border-bottom:1px solid #243345}
+.cycle-panel-heading h2{margin:0;font-size:11px;font-weight:550;white-space:nowrap;color:#c4d5e9;line-height:1.5}
+.cycle-panel-heading h2 small{font-size:9px;font-weight:400;color:#829ab5;margin-left:7px}
+.cycle-panel-actions{display:flex;align-items:center;gap:6px;min-width:0}
+.cycle-panel-actions select{font:inherit!important;font-size:10px!important;width:190px!important;max-width:30vw!important;min-height:26px!important;height:26px;padding:3px 22px 3px 7px!important;background:#172333;color:#bcd0e7;border:1px solid #34475f;border-radius:4px}
+.cycle-panel-actions button{font-size:10px;line-height:1.5;min-height:26px;min-width:36px;padding:4px 7px;color:#adbed4;border:1px solid #34475f;border-radius:4px;background:#182535;cursor:pointer;white-space:nowrap}
+.cycle-panel-actions button:hover{background:#263c53;color:#e6eff9}
+.cycle-panel-actions :focus-visible,.cycle-panel-body :focus-visible{outline:2px solid #83b9ef;outline-offset:-2px}
+.cycle-panel-body{max-height:min(300px,33dvh);overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#415873 #101822}
+.cycle-timeline{min-width:0;line-height:0}
+.cycle-timeline:empty{height:300px;background:repeating-linear-gradient(to bottom,transparent 0,transparent 38px,#243345 39px,transparent 40px)}
+.atlas-chart-stage .cycle-timeline>svg{display:block;width:100%;height:auto;min-width:0;overflow:visible}
+.cycle-interval{cursor:pointer;outline:none}
+.cycle-interval:hover,.cycle-interval:focus-visible{filter:brightness(1.4)}
+.cycle-panel-note{margin:0;padding:7px 12px;border-top:1px solid #243345;font-size:10px;line-height:1.65;color:#879db6;word-break:keep-all}
+.cycle-panel-note strong{font-weight:500;color:#b6c9df}
+.cycle-reference{padding:3px 12px 9px;color:#a6bad3;font-size:10px;line-height:1.6}
+.cycle-reference>summary{cursor:pointer;padding:5px 0;color:#b9ccdf}
+.cycle-reference p{margin:5px 0;font-size:10px;line-height:1.7}
+.cycle-reference-table{overflow-x:auto;overscroll-behavior:contain}
+.cycle-reference table{width:100%;border-collapse:collapse;font-size:10px;white-space:nowrap}
+.cycle-reference th,.cycle-reference td{border-bottom:1px solid #29394b;padding:5px 9px;text-align:left;color:#aebfd3}
+.cycle-reference th{font-weight:500;color:#d0dce9;background:#152131}
+@media(max-width:620px){
+ .atlas-plot>.lab-chart-foot:has(.cycle-legend){max-width:calc(100% - var(--plot-right-gap,68px) - 12px);padding:4px 6px}
+ .atlas-plot>.lab-chart-foot .cycle-legend{gap:3px 8px}
+ .atlas-plot>.lab-chart-foot .cycle-legend span{font-size:8px;line-height:11px;gap:4px}
+ .atlas-plot>.lab-chart-foot .cycle-legend i{width:9px;height:9px}
+ .cycle-legend-note{font-size:7px}
+ .cycle-panel-heading{padding:4px 7px;min-height:35px}
+ .cycle-panel-heading h2{font-size:10px}
+ .cycle-panel-heading h2 small{display:none}
+ .cycle-panel-actions{gap:4px}
+ .cycle-panel-actions select{width:150px!important;max-width:38vw!important;font-size:9px!important}
+ .cycle-panel-actions button{font-size:9px;min-height:28px;padding:4px 6px}
+ .cycle-panel-body{max-height:min(230px,31dvh)}
+ .cycle-panel-note{padding:6px 8px;font-size:9px}
+}
+@media(max-height:560px){.cycle-panel-body{max-height:28dvh}.cycle-panel-heading{min-height:30px;padding-top:2px;padding-bottom:2px}}
+@media(prefers-reduced-motion:reduce){.cycle-marker,.cycle-interval{transition:none}}

@@ -9,8 +9,8 @@ import { renderPeakView } from './peak-view.js?v=1.11.0';
 import { renderForecastView, exportForecastSvg } from './forecast-view.js?v=1.11.0';
 // Changed release modules use a versioned URL so a cached v1.5 module cannot
 // leave a new long-horizon page running the old three-year workbench.
-import { initViewportWorkspace } from './viewport-workspace.js?v=1.11.0-indicators.1';
-import { initLabView } from './lab-view.js?v=1.11.0-indicators.1';
+import { initViewportWorkspace } from './viewport-workspace.js?v=1.11.0-milestones.1';
+import { initLabView } from './lab-view.js?v=1.11.0-milestones.1';
 import { initEvidenceView, showEvidenceView } from './evidence-view.js?v=1.11.0';
 
 const $ = (selector) => document.querySelector(selector);
