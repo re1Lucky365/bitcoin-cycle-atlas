@@ -16,7 +16,7 @@
     .atlas-boot-side{display:flex;flex-direction:column;align-items:center;gap:17px;padding:9px 7px;background:#11161f;border-right:1px solid #2a3240}
     .atlas-boot-side:last-child{border-right:0;border-left:1px solid #2a3240;padding-top:14px}
     .atlas-boot-brand{font-size:23px;line-height:25px;color:#c4a16d;margin-bottom:9px}
-    .atlas-boot-main{display:grid;grid-template-rows:40px minmax(0,1fr) 62px;min-width:0;min-height:0}
+    .atlas-boot-main{display:grid;grid-template-rows:40px minmax(0,1fr) 44px;min-width:0;min-height:0}
     .atlas-boot-top{display:flex;align-items:center;gap:14px;padding:0 10px;background:#11161f;border-bottom:1px solid #2a3240;overflow:hidden}
     .atlas-boot-symbol{font-size:13px;font-weight:650;letter-spacing:.1px;white-space:nowrap}
     .atlas-boot-bar{display:block;flex:none;width:64px;height:9px;border-radius:3px;background:#263140;animation:atlas-boot-pulse 1.8s ease-in-out infinite}
@@ -25,7 +25,7 @@
     .atlas-boot-canvas{position:relative;min-height:0;overflow:hidden;background-image:linear-gradient(#1b243080 1px,transparent 1px),linear-gradient(90deg,#1b243080 1px,transparent 1px);background-size:100% 20%,20% 100%}
     .atlas-boot-readout{display:flex;align-items:center;gap:14px;margin:17px 16px}.atlas-boot-readout .atlas-boot-wide{height:15px}
     .atlas-boot-indicators{display:grid;gap:14px;margin:22px 16px}
-    .atlas-boot-bottom{display:grid;gap:0;background:#11161f;border-top:1px solid #2a3240}
+    .atlas-boot-bottom{display:flex;gap:0;background:#11161f;border-top:1px solid #2a3240}
     .atlas-boot-bottom>div{display:flex;align-items:center;gap:13px;padding:0 12px;overflow:hidden}
     .atlas-boot-bottom>div+div{border-top:1px solid #2a3240}
     .atlas-boot-message{position:absolute;inset:0;display:grid;align-content:center;justify-items:center;padding:24px;text-align:center}
@@ -38,8 +38,8 @@
     .atlas-boot-noscript{padding:20px;max-width:360px;color:#dce5f0;background:#141d29;border:1px solid #35465e;border-radius:6px}
     html[data-boot="error"] .atlas-boot-bar{animation:none}
     @keyframes atlas-boot-pulse{0%,100%{opacity:.45}50%{opacity:.85}}
-    @media(max-width:620px){#atlas-boot-shell{grid-template-columns:minmax(0,1fr)}.atlas-boot-side{display:none}.atlas-boot-main{grid-template-rows:calc(48px + env(safe-area-inset-top,0px)) minmax(0,1fr) calc(102px + env(safe-area-inset-bottom,0px))}.atlas-boot-top{padding-top:env(safe-area-inset-top,0px);gap:14px}.atlas-boot-symbol{font-size:11px}.atlas-boot-top .atlas-boot-wide{display:none}.atlas-boot-bottom{grid-template-rows:36px 1fr;padding-bottom:env(safe-area-inset-bottom,0px)}.atlas-boot-readout{gap:10px}.atlas-boot-readout .atlas-boot-short{display:none}.atlas-boot-message{padding:16px}}
-    @media(max-width:620px) and (max-height:500px){.atlas-boot-main{grid-template-rows:44px minmax(0,1fr) 42px}.atlas-boot-bottom{grid-template-rows:1fr}.atlas-boot-bottom>div:first-child{display:none}}
+    @media(max-width:620px){#atlas-boot-shell{grid-template-columns:minmax(0,1fr)}.atlas-boot-side{display:none}.atlas-boot-main{grid-template-rows:calc(48px + env(safe-area-inset-top,0px)) minmax(0,1fr) calc(44px + env(safe-area-inset-bottom,0px))}.atlas-boot-top{padding-top:env(safe-area-inset-top,0px);gap:14px}.atlas-boot-symbol{font-size:11px}.atlas-boot-top .atlas-boot-wide{display:none}.atlas-boot-bottom{padding-bottom:env(safe-area-inset-bottom,0px)}.atlas-boot-readout{gap:10px}.atlas-boot-readout .atlas-boot-short{display:none}.atlas-boot-message{padding:16px}}
+    @media(max-width:620px) and (max-height:500px){.atlas-boot-main{grid-template-rows:44px minmax(0,1fr) 44px}.atlas-boot-bottom>div{gap:10px}}
     @media(prefers-reduced-motion:reduce){.atlas-boot-bar{animation:none;opacity:.65}}
   </style>
   <noscript><style id="atlas-boot-noscript-style">#atlas-boot-status{display:none}.atlas-boot-bar{animation:none}</style></noscript>
@@ -67,14 +67,16 @@
   <link rel="stylesheet" href="./atlas.css?v=1.11.0">
   <link rel="stylesheet" href="./viewport.css?v=1.11.0">
   <link rel="stylesheet" href="./chart-details-panel.css?v=1.12.1-cursor-hud.1">
-  <link rel="stylesheet" href="./analysis-dock.css?v=1.13.0-research.1">
+  <link rel="stylesheet" href="./analysis-dock.css?v=1.14.0-mobile.1">
   <link rel="stylesheet" href="./chart-magnet.css?v=1.11.0">
-  <link rel="stylesheet" href="./mobile-workspace.css?v=1.12.1-cursor-hud.1">
-  <link rel="stylesheet" href="./workspace-tools.css?v=1.11.0">
+  <link rel="stylesheet" href="./mobile-workspace.css?v=1.14.0-mobile.1">
+  <link rel="stylesheet" href="./workspace-tools.css?v=1.14.0-mobile.1">
   <link rel="stylesheet" href="./chart-workspace-controls.css?v=1.13.0-research.1">
   <link rel="stylesheet" href="./research-annotations.css?v=1.13.0-research.1">
-  <link rel="stylesheet" href="./chart-export-workbench.css?v=1.13.0-research.1">
-  <link rel="stylesheet" href="./cycle-milestones.css?v=1.12.1-cursor-hud.1">
+  <link rel="stylesheet" href="./chart-export-workbench.css?v=1.14.0-mobile.1">
+  <link rel="stylesheet" href="./cycle-milestones.css?v=1.14.0-mobile.1">
+  <link rel="stylesheet" href="./compact-chart-layout.css?v=1.14.0-mobile.1">
+  <link rel="stylesheet" href="./chart-bottom-bar.css?v=1.14.0-mobile.1">
 </head>
 <body>
   <div id="atlas-boot-shell">
@@ -90,7 +92,7 @@
           <noscript><p class="atlas-boot-noscript">이 차트는 JavaScript가 필요합니다. 브라우저에서 JavaScript를 허용한 뒤 다시 불러와 주세요.</p></noscript>
         </div>
       </div>
-      <div class="atlas-boot-bottom" aria-hidden="true"><div><i class="atlas-boot-bar atlas-boot-wide"></i><i class="atlas-boot-bar"></i></div><div><i class="atlas-boot-bar atlas-boot-short"></i><i class="atlas-boot-bar atlas-boot-short"></i><i class="atlas-boot-bar atlas-boot-short"></i><i class="atlas-boot-bar atlas-boot-short"></i></div></div>
+      <div class="atlas-boot-bottom" aria-hidden="true"><div><i class="atlas-boot-bar atlas-boot-short"></i><i class="atlas-boot-bar atlas-boot-short"></i><i class="atlas-boot-bar atlas-boot-short"></i><i class="atlas-boot-bar atlas-boot-short"></i></div></div>
     </div>
     <div class="atlas-boot-side" aria-hidden="true"><i class="atlas-boot-bar atlas-boot-square"></i><i class="atlas-boot-bar atlas-boot-square"></i><i class="atlas-boot-bar atlas-boot-square"></i><i class="atlas-boot-bar atlas-boot-square"></i></div>
   </div>
@@ -281,6 +283,6 @@
   <dialog id="method-dialog" aria-labelledby="method-title"><div class="dialog-top"><span class="eyebrow">DATA & METHODOLOGY</span><button id="close-method" class="icon-button" aria-label="방법론 닫기"><span data-icon="close"></span></button></div><h2 id="method-title">방법론과 출처</h2><p class="dialog-lead">차트의 출발점부터 가격의 정의까지, 비교에 사용한 기준입니다.</p><div id="method-content"></div><button id="method-done" class="primary-button">확인했습니다</button></dialog>
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
   <dialog id="evidence-dialog" aria-labelledby="evidence-detail-title"><div class="dialog-top"><span class="eyebrow">EVIDENCE & LIMITS</span><button id="evidence-close" class="icon-button" aria-label="자료 상세 닫기"><span data-icon="close"></span></button></div><h2 id="evidence-detail-title"></h2><div id="evidence-detail-body"></div></dialog>
-  <script type="module" src="./app.js?v=1.13.0-research.1"></script>
+  <script type="module" src="./app.js?v=1.14.0-mobile.1"></script>
 </body>
 </html>

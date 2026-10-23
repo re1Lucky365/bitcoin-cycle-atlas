@@ -1,7 +1,7 @@
-import {createPriceScale,barPriceChange} from './chart-math.js?v=1.13.0-research.1';
-import { priceAxisMarkup, timeAxisMarkup } from './price-axis.js?v=1.13.0-research.1';
+import {createPriceScale,barPriceChange} from './chart-math.js?v=1.14.0-mobile.1';
+import { priceAxisMarkup, timeAxisMarkup, createPriceAxisLayout, createPriceAxisFormatter } from './price-axis.js?v=1.14.0-mobile.1';
 import { createPriceDisplay, formatDisplayPrice } from './price-display.js?v=1.13.0-research.1';
-import { retainPriceViewport, renderEmptyPriceViewport } from './empty-price-chart.js?v=1.13.0-research.1';
+import { retainPriceViewport, renderEmptyPriceViewport } from './empty-price-chart.js?v=1.14.0-mobile.1';
 import { researchAnnotationsMarkup } from './research-annotations.js?v=1.13.0-research.1';
 import {chartInterval} from './ohlc-data.js?v=1.11.0';
 import {chartPaneLayout,volumePaneMarkup} from './chart-overlays.js?v=1.13.0-research.1';
@@ -22,6 +22,7 @@ export function drawIntradayChart({svg,series,chartType='candles',scale='log',pr
   if(!allRows.length&&(!Number.isFinite(range?.start)||!Number.isFinite(range?.end)))throw new RangeError('An empty market chart needs an explicit UTC range');
   const W=Math.max(1,Math.round(svg.clientWidth||1100)),H=Math.max(1,Math.round(svg.clientHeight||500)),small=W<600;
   const layout=chartPaneLayout({width:W,height:H,volume:showVolume,top:Number.isFinite(headerInset)?Math.max(12,headerInset):70});
+  const axisText=createPriceAxisLayout({svg,width:W,left:layout.left,minRight:layout.right});layout.right=axisText.right;
   const {left:L,right:R,top:T,axisY,bottom,priceBottom:B,volumeTop,volumeBottom}=layout;
   const minTime=range?.start??allRows[0].time-interval.seconds,maxTime=range?.end??allRows.at(-1).time+interval.seconds;
   const rows=dateWindow(allRows,minTime,maxTime,row=>row.time);
@@ -30,14 +31,15 @@ export function drawIntradayChart({svg,series,chartType='candles',scale='log',pr
   Object.assign(svg.dataset,{plotLeft:String(L),plotRight:String(W-R),plotTop:String(T),plotBottom:String(bottom),priceBottom:String(B),scale,chartType,interval:series.interval,historyLabelCount:'0',historyEventCount:'0'});
   svg.parentElement?.style.setProperty('--plot-bottom-gap',`${H-bottom+6}px`);svg.parentElement?.style.setProperty('--plot-right-gap',`${R+7}px`);
   Object.assign(svg.dataset,{visiblePointCount:String(rows.length),observedCandleCount:String(rows.length),candleRendering:'none'});
-  if(!rows.length)return renderEmptyPriceViewport({svg,layout,width:W,height:H,start:minTime,end:maxTime,seconds:true,scale,priceDomain,unit,denominator:allRows.at(-1)?.close,denominatorDate:allRows.at(-1)?.date,fallbackPrice:allRows.at(-1)?.close,invertScale,tool,message:historyStatus==='loading'?'이 구간의 과거 봉을 불러오고 있습니다.':historyStatus==='error'?'과거 자료 조회에 실패했습니다.':'이 구간에는 완료된 거래 봉이 없습니다.',onHover,source:series.source,frequency:series.interval,researchAnnotations,activeResearchAnnotationId:selectedAnnotation,onResearchAnnotation:activateAnnotation,scenarioId});
+  if(!rows.length)return renderEmptyPriceViewport({svg,layout,axisText,width:W,height:H,start:minTime,end:maxTime,seconds:true,scale,priceDomain,unit,denominator:allRows.at(-1)?.close,denominatorDate:allRows.at(-1)?.date,fallbackPrice:allRows.at(-1)?.close,invertScale,tool,message:historyStatus==='loading'?'이 구간의 과거 봉을 불러오고 있습니다.':historyStatus==='error'?'과거 자료 조회에 실패했습니다.':'이 구간에는 완료된 거래 봉이 없습니다.',onHover,source:series.source,frequency:series.interval,researchAnnotations,activeResearchAnnotationId:selectedAnnotation,onResearchAnnotation:activateAnnotation,scenarioId});
   const display=createPriceDisplay({unit,rows,denominator:allRows.at(-1).close,denominatorDate:allRows.at(-1).date,scale}),{factor,offset,effectiveScale}=display;
   const axis=createPriceScale(rows.flatMap(row=>chartType==='candles'?[row.low,row.high]:[row.close]),{scale:effectiveScale,top:T,bottom:B,tickCount:Math.max(2,Math.min(7,Math.floor((B-T)/45))),factor,offset,inverted:invertScale,paddingRatio:.12,domain:priceDomain});
   const y=axis.y,price=value=>formatDisplayPrice(value,display,unit==='usd'&&Math.abs(value)<1?6:2);
+  const axisLabels=createPriceAxisFormatter({axis,display,layout:axisText});
   retainPriceViewport(svg,axis);Object.assign(svg.dataset,{scale:effectiveScale,unit,invertScale:String(Boolean(invertScale)),timeAxisTop:String(bottom+8)});
   const clip=`${svg.id}-market-clip`,axisClip=`${svg.id}-price-axis-clip`,width=Math.max(.7,Math.min(14,(W-L-R)*interval.seconds/(maxTime-minTime)*.68));
   let s=`<title>${esc(series.source)} BTC-USD · ${interval.label} · ${chartType==='candles'?'캔들':'종가 선'}</title><desc>거래소가 제공한 완료 봉의 시가·고가·저가·종가와 BTC 거래량입니다. 빈 구간은 채우지 않습니다. 시간은 UTC입니다.</desc><defs><clipPath id="${clip}"><rect x="${L}" y="${T}" width="${W-L-R}" height="${B-T}"/></clipPath><clipPath id="${axisClip}"><rect x="${W-R}" y="${T}" width="${R}" height="${B-T}"/></clipPath></defs>`;
-  for(const tick of axis.ticks){const yy=y(tick);s+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#26323e"/><text x="${W-R+7}" y="${yy+4}" fill="#acbacb" font-size="11">${esc(price(tick))}</text>`;}
+  for(const tick of axis.ticks){const yy=y(tick),label=axisLabels.tick(tick);s+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#26323e"/><text x="${W-R+axisText.inset}" y="${yy+4}" ${axisText.attributes(label)} fill="#acbacb" font-size="${axisText.fontSize}">${esc(label)}</text>`;}
   const tickStep=Math.max(1,Math.ceil(rows.length/(small?3:7)));
   for(let i=0;i<rows.length;i+=tickStep){const row=rows[i],xx=x(row.time),label=timestamp(row.time).slice(5);s+=`<line x1="${xx}" x2="${xx}" y1="${T}" y2="${bottom}" stroke="#212c37"/><text x="${xx}" y="${axisY}" text-anchor="${i===0?'start':'middle'}" fill="#aebaca" font-size="10">${label}</text>`;}
   s+=`<g clip-path="url(#${clip})">`;
@@ -65,11 +67,12 @@ export function drawIntradayChart({svg,series,chartType='candles',scale='log',pr
   const last=allRows.at(-1);
   if(last.time<=maxTime&&last.time>=minTime&&last.close>=axis.min&&last.close<=axis.max){
     const yy=y(last.close),labelTop=Math.max(T,Math.min(B-18,yy-9)),up=last.close>=last.open,color=up?'#2b6558':'#823c4c';
-    s+=`<g class="market-last-price" pointer-events="none"><title>${esc(series.source)} · 마지막 완료 봉 · ${timestamp(last.time)} UTC · ${esc(money(last.close))}</title><line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="${up?'#74ab9e':'#dd7e8d'}" stroke-dasharray="3 5" opacity=".6"/><rect x="${W-R}" y="${labelTop}" width="${R-2}" height="18" rx="2" fill="${color}"/><text x="${W-R+4}" y="${labelTop+13}" fill="#f0f5fa" font-size="10">${esc(price(last.close))}</text></g>`;
+    const label=axisLabels.price(last.close);
+    s+=`<g class="market-last-price" pointer-events="none"><title>${esc(series.source)} · 마지막 완료 봉 · ${timestamp(last.time)} UTC · ${esc(money(last.close))}</title><line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="${up?'#74ab9e':'#dd7e8d'}" stroke-dasharray="3 5" opacity=".6"/><rect x="${W-R}" y="${labelTop}" width="${R-2}" height="18" rx="2" fill="${color}"/><text x="${W-R+axisText.inset}" y="${labelTop+13}" ${axisText.attributes(label,{badge:true,kind:'latest'})} fill="#f0f5fa" font-size="${axisText.badgeFontSize}">${esc(label)}</text></g>`;
   }
   const annotations=researchAnnotationsMarkup({annotations:researchAnnotations,start:minTime,end:maxTime,x:({date:value})=>x(typeof value==='number'?value:Date.parse(value)/1000),y,left:L,right:W-R,top:T,bottom:B,clipId:clip,activeId:selectedAnnotation,scenarioId});
   s+=annotations.markup;svg.dataset.researchAnnotationCount=String(annotations.visibleCount);
-  s+=`<g id="${svg.id}-cross" pointer-events="none"><line class="cross-time" y1="${T}" y2="${bottom}" stroke="#adbed1" stroke-dasharray="3 3"/><line class="cross-price" clip-path="url(#${clip})" x1="${L}" x2="${W-R}" stroke="#adbed1" stroke-dasharray="3 3"/><circle clip-path="url(#${clip})" r="3" fill="#10151c" stroke="#d5e6f7"/><g class="market-price-tag" clip-path="url(#${axisClip})"><rect x="${W-R}" width="${R-2}" height="18" rx="2" fill="#385466"/><text x="${W-R+4}" fill="#f0f5fa" font-size="10"/></g><g class="market-date-tag"><rect width="124" height="18" rx="2" fill="#39485b"/><text fill="#edf2f9" font-size="9" text-anchor="middle"/></g></g>`;
+  s+=`<g id="${svg.id}-cross" pointer-events="none"><line class="cross-time" y1="${T}" y2="${bottom}" stroke="#adbed1" stroke-dasharray="3 3"/><line class="cross-price" clip-path="url(#${clip})" x1="${L}" x2="${W-R}" stroke="#adbed1" stroke-dasharray="3 3"/><circle clip-path="url(#${clip})" r="3" fill="#10151c" stroke="#d5e6f7"/><g class="market-price-tag" clip-path="url(#${axisClip})"><rect x="${W-R}" width="${R-2}" height="18" rx="2" fill="#385466"/><text x="${W-R+axisText.inset}" fill="#f0f5fa" font-size="${axisText.badgeFontSize}"/></g><g class="market-date-tag"><rect width="124" height="18" rx="2" fill="#39485b"/><text fill="#edf2f9" font-size="9" text-anchor="middle"/></g></g>`;
   s+=measurementOverlayMarkup(clip);
   s+=priceAxisMarkup({left:W-R,right:W,top:T,bottom:B})+timeAxisMarkup({left:L,right:W-R,top:bottom+8,bottom:H});
   svg.innerHTML=s;
@@ -87,7 +90,8 @@ export function drawIntradayChart({svg,series,chartType='candles',scale='log',pr
   function mark(index,hovered=false,anchor=null,notify=true,pointerY=null){
     cursor=index;const row=rows[index],xx=x(row.time),tx=Math.max(L,Math.min(W-R-124,xx-62));
     vertical.setAttribute('x1',xx);vertical.setAttribute('x2',xx);dot.setAttribute('cx',xx);
-    paintPriceCursor({horizontal,dot,tag:priceTag,axis,top:T,bottom:B,selectedPrice:anchor?.price??row.close,pointerY,formatPrice:price});
+    paintPriceCursor({horizontal,dot,tag:priceTag,axis,top:T,bottom:B,selectedPrice:anchor?.price??row.close,pointerY,formatPrice:axisLabels.price});
+    axisText.fitNode(priceTag.querySelector('text'),{badge:true,kind:'cursor'});
     if(!Number.isFinite(pointerY)&&((anchor?.price??row.close)<axis.min||(anchor?.price??row.close)>axis.max))for(const node of [horizontal,dot,priceTag])node.setAttribute('visibility','hidden');
     dateTag.querySelector('rect').setAttribute('x',tx);dateTag.querySelector('rect').setAttribute('y',axisY-12);dateTag.querySelector('text').setAttribute('x',tx+62);dateTag.querySelector('text').setAttribute('y',axisY+1);dateTag.querySelector('text').textContent=timestamp(row.time);if(notify)onHover({...hover(index),hovered});
   }

@@ -1,4 +1,5 @@
 import {createObservedChartCsv,selectObservedChartRows,createConditionalChartCsv,createResearchSeriesCsv,createChartSvgExport,createChartPngFromSvg,chartExportRange} from './chart-export.js?v=1.13.0-research.1';
+import {mountDialogViewport} from './dialog-viewport.js?v=1.14.0-mobile.1';
 
 const iso=value=>{const time=typeof value==='number'?value*1000:Date.parse(value);return Number.isFinite(time)?new Date(time).toISOString():null;};
 const deepFreeze=value=>{if(value&&typeof value==='object'){for(const child of Object.values(value))deepFreeze(child);Object.freeze(value);}return value;};
@@ -62,7 +63,8 @@ export function mountChartExportWorkbench({document:doc=globalThis.document,getC
   const help=make('p',{class:'chart-export-help'},'이 창을 연 순간의 화면과 자료를 고정했습니다. 출처·범위·단위를 확인한 뒤 저장하세요. 새 화면은 창을 닫고 다시 열어 가져옵니다.'),controls=make('div',{class:'chart-export-controls'});
   function select(name,label,choices){const wrapper=make('label',{},label),node=make('select',{id:`chart-export-${name}`});for(const [value,text]of choices)node.append(make('option',{value},text));wrapper.append(node);controls.append(wrapper);return node;}
   const format=select('format','파일 형식',[['png','PNG 이미지'],['svg','SVG 벡터'],['csv','CSV 원자료 / 분석']]),scope=select('scope','이미지 범위',[['main','현재 가격 화면'],['workspace','현재 가격 + 보이는 연구 창']]),dataset=select('dataset','CSV 자료',[]),facts=make('dl',{class:'chart-export-facts'}),preview=make('div',{class:'chart-export-preview'}),status=make('p',{class:'chart-export-status',role:'status','aria-live':'polite'}),actions=make('footer'),download=make('button',{type:'button',class:'chart-export-download'},'저장'),copy=make('button',{type:'button'},'이미지 복사');actions.append(copy,download);
-  dialog.append(header,help,controls,facts,preview,status,actions);doc.body.append(dialog);
+  const body=make('div',{class:'chart-export-body'});body.append(help,controls,facts,preview,status);dialog.append(header,body,actions);doc.body.append(dialog);
+  const dialogViewport=mountDialogViewport(dialog);
   let snapshot=null,opener=null,busy=false,previewURL=null;
   const announce=message=>{status.textContent=message;};
   function releasePreview(){if(previewURL){doc.defaultView?.URL?.revokeObjectURL(previewURL);previewURL=null;}}
@@ -97,5 +99,5 @@ export function mountChartExportWorkbench({document:doc=globalThis.document,getC
     const preferred=options.dataset||(snapshot.metadata.chartType==='candles'&&['daily','weekly'].includes(snapshot.metadata.frequency)?'bitstamp-ohlc':null);
     dataset.value=snapshot.datasets.find(item=>item.id===preferred&&item.csv)?.id||snapshot.datasets.find(item=>item.csv)?.id||snapshot.datasets[0]?.id||'';const Event=doc.defaultView?.CustomEvent||globalThis.CustomEvent;if(Event)doc.dispatchEvent(new Event('atlas:modal-open',{detail:{id:dialog.id}}));if(!dialog.open)dialog.showModal();paint();format.focus();
   }
-  return {open,destroy(){releasePreview();dialog.remove();}};
+  return {open,destroy(){dialogViewport.destroy();releasePreview();dialog.remove();}};
 }

@@ -186,35 +186,36 @@ test('settings remain reachable through the library when mobile legend is fully 
   assert.deepEqual(readIndicatorState(f.query,{mobile:false}).settings,f.state.settings);
 });
 
-test('study folding leaves the upper context card anchored while wrapped readout changes move the whole HUD stack',t=>{
-  const f=fixture(t,{mobile:true}),plot=f.node('plot'),readout=f.node('lab-metrics'),source=f.node('source'),manager=f.node('chart-indicator-manager'),list=f.node('chart-indicator-list'),countdown=f.node('scenario-countdown'),legend=f.node('foot');
+test('study folding leaves the legend anchored directly below readout/source without reviving a countdown HUD',t=>{
+  const f=fixture(t,{mobile:true,search:'indicators=readout,source,legend,countdown,volume'}),plot=f.node('plot'),readout=f.node('lab-metrics'),source=f.node('source'),manager=f.node('chart-indicator-manager'),list=f.node('chart-indicator-list'),legend=f.node('foot');
   f.doc.dispatchEvent({type:'atlas:workbench-state',detail:{intraday:false,countdown:{status:'upcoming',dday:'D-20',date:'2026-11-12',nextLabel:'하락',minimumRunDays:7}}});
+  assert.equal(f.node('scenario-countdown'),null,'old saved links and state payloads cannot mount the removed card');
+  assert.equal(isIndicatorVisible(f.state,'countdown'),false);
   const pixels=key=>Number.parseFloat(plot.style.getPropertyValue(key));let readoutHeight=36;
   plot.rect={left:20,top:30,width:390,height:600};
   readout.rect=()=>({left:30,top:38,width:300,height:readoutHeight});
   source.rect=()=>({left:30,top:30+pixels('--source-top'),width:300,height:20});
-  // Model the narrow-layout contract, not CSS painting: the card is above
-  // studies and depends on wrapped readout/provenance, never study list height.
-  countdown.rect=()=>({left:90,top:30+pixels('--indicator-top'),width:250,height:32});
-  legend.rect=()=>({left:90,top:countdown.getBoundingClientRect().top+pixels('--countdown-height'),width:250,height:66});
+  // Model the narrow-layout contract, not CSS painting: the legend depends on
+  // wrapped readout/provenance, with no removed-card gap or study-height input.
+  legend.rect=()=>({left:90,top:30+pixels('--indicator-top'),width:250,height:66});
   manager.rect=()=>({left:30,top:legend.getBoundingClientRect().top+pixels('--chart-legend-height')+8,width:300,height:list.hidden?28:228});
-  const notices=[];f.doc.addEventListener('atlas:hud-layout-change',()=>notices.push({manager:manager.getBoundingClientRect(),countdown:countdown.getBoundingClientRect(),legend:legend.getBoundingClientRect()}));
-  f.resize([{target:readout,width:300,height:36},{target:source,width:300,height:20},{target:manager,width:300,height:28},{target:countdown,width:250,height:32},{target:legend,width:250,height:66}]);
+  const notices=[];f.doc.addEventListener('atlas:hud-layout-change',()=>notices.push({manager:manager.getBoundingClientRect(),legend:legend.getBoundingClientRect()}));
+  f.resize([{target:readout,width:300,height:36},{target:source,width:300,height:20},{target:manager,width:300,height:28},{target:legend,width:250,height:66}]);
   assert.equal(notices.length,0,'observer deliveries wait for the final layout frame');f.flush();
-  assert.equal(notices.length,1);assert.equal(notices[0].countdown.top,103);assert.equal(notices[0].legend.top,135);assert.equal(notices[0].manager.top,209);
+  assert.equal(notices.length,1);assert.equal(notices[0].legend.top,103);assert.equal(notices[0].manager.top,177);
   const path=f.price.innerHTML;
   f.node('indicator-legend-toggle').click();
   f.resize([{target:manager,width:300,height:228}]);f.flush();
   assert.equal(notices.length,2);assert.equal(notices[1].manager.height,228);
-  assert.equal(notices[1].countdown.top,103,'expanding studies cannot push the anchored countdown down');
-  assert.equal(notices[1].legend.top,135);assert.equal(notices[1].manager.top,209);
+  assert.equal(notices[1].legend.top,103,'expanding studies cannot push the legend down');assert.equal(notices[1].manager.top,177);
   f.node('indicator-legend-toggle').click();f.resize([{target:manager,width:300,height:28}]);f.flush();
-  assert.equal(notices.length,3);assert.equal(notices[2].countdown.top,103,'folding studies cannot move the card either');
+  assert.equal(notices.length,3);assert.equal(notices[2].legend.top,103,'folding studies cannot move the legend either');
   readoutHeight=48;f.resize([{target:readout,width:300,height:48}]);
   readoutHeight=52;f.resize([{target:readout,width:300,height:52}]);
   assert.equal(notices.length,3);f.flush();
   assert.equal(notices.length,4,'several wrapped readout deliveries publish one settled layout');
-  assert.equal(notices[3].countdown.top,119);assert.equal(notices[3].legend.top,151);assert.equal(notices[3].manager.top,225);
+  assert.equal(notices[3].legend.top,119);assert.equal(notices[3].manager.top,193);
+  assert.equal(f.node('scenario-countdown'),null);assert.equal(plot.style.getPropertyValue('--countdown-height'),'');
   assert.equal(f.price.innerHTML,path,'the HUD controller does not mutate the price geometry');
 });
 

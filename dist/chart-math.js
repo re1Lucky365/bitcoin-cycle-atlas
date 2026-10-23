@@ -1,5 +1,5 @@
 import { utcDay } from './cycle-engine.js?v=1.11.0';
-import { normalizePriceDomain } from './price-axis.js?v=1.13.0-research.1';
+import { normalizePriceDomain } from './price-axis.js?v=1.14.0-mobile.1';
 
 /** All coordinates use original prices; factor affects only the choice of ticks. */
 export function createPriceScale(values,{scale='log',top=0,bottom=1,tickCount=6,factor=1,offset=0,inverted=false,paddingRatio=.12,domain=null}={}) {
@@ -37,7 +37,12 @@ export function createPriceScale(values,{scale='log',top=0,bottom=1,tickCount=6,
   const step=([1,2,2.5,5,10].find(value=>value>=rough/magnitude)||10)*magnitude;
   if(!Number.isFinite(step)||step<=0)throw new RangeError('Price ticks cannot be represented');
   const firstTick=Math.ceil(a/step);
-  for(let index=0;index<count*4+16&&(firstTick+index)*step<=b+step*1e-9;index++)displayTicks.push(Number(((firstTick+index)*step).toPrecision(12)));
+  // Rounding to a fixed number of significant digits can collapse separate
+  // ticks in a narrow manual viewport at a large price. Formatting belongs to
+  // the axis label layer; keep each representable grid coordinate here.
+  for(let index=0;index<count*4+16&&(firstTick+index)*step<=b+step*1e-9;index++){
+    const value=(firstTick+index)*step;if(value!==displayTicks.at(-1))displayTicks.push(value);
+  }
   return {scale,min,max,top,bottom,inverted:Boolean(inverted),mode:manual?'manual':'auto',y,invert,ticks:displayTicks.map(value=>(value-offset)/factor)};
 }
 

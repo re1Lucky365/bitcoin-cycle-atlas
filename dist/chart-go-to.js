@@ -1,5 +1,5 @@
 import { chartInterval, isIntradayInterval } from './ohlc-data.js?v=1.11.0';
-import { parseGoToRequest } from './chart-view-policy.js?v=1.13.0-research.1';
+import { parseGoToRequest } from './chart-view-policy.js?v=1.14.0-mobile.1';
 
 const inputValue=(value,intraday)=>{
   if(value===null||value===undefined)return '';

@@ -1,4 +1,4 @@
-.mobile-workbench-button,.mobile-extra-actions,.mobile-workbench-backdrop,.mobile-chart-home{display:none}
+.mobile-workbench-button,.mobile-extra-actions,.mobile-workbench-backdrop,.mobile-chart-home,.mobile-tray-heading,.mobile-gesture-hint,.mobile-focus-return{display:none}
 /* The plotted surface owns its gestures, while text and controls keep native zoom. */
 .atlas-plot>svg#lab-chart{touch-action:none}
 @media (max-width:620px){
@@ -40,10 +40,6 @@
   .chart-indicator-manager .indicator-name{font-size:10px}
   .chart-indicator-manager .indicator-value{font-size:11px}
   .chart-indicator-manager .indicator-label,.chart-indicator-manager .indicator-value{background:#10151cd9;box-shadow:0 0 0 2px #10151cd9;border-radius:1px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
-  .atlas-plot .scenario-countdown{top:var(--indicator-top,90px);left:auto;right:var(--plot-right-gap,65px);width:var(--chart-hud-width,430px);max-width:calc(100% - var(--plot-right-gap,65px) - 20px);min-width:0;min-height:32px;padding:5px 7px;box-shadow:none;border-radius:6px;background:#152132ed}
-  .scenario-countdown .countdown-main{font-size:11px;gap:8px;line-height:1.4}
-  .scenario-countdown .countdown-main b{font-size:18px;letter-spacing:-.5px}
-  .scenario-countdown .countdown-caption,.scenario-countdown .countdown-current{font-size:8px;line-height:1.4}
   .atlas-plot>.lab-chart-foot{max-width:calc(100% - var(--plot-right-gap,65px) - 12px);padding:4px 6px;background:#101925f5;backdrop-filter:none}
   .atlas-plot>.lab-chart-foot .lab-legend{gap:3px 8px}
   .atlas-plot>.lab-chart-foot .lab-legend span{font-size:9px;line-height:13px}
@@ -121,3 +117,20 @@
 @media (max-width:360px){.atlas-canvas-heading{padding-left:3px;padding-right:3px}.workbench-symbol{font-size:10px;padding-right:2px}#workbench-interval-select{width:54px}.atlas-canvas-heading .workbench-spacer{display:none}}
 @media (max-width:620px) and (max-height:500px){.atlas-canvas-heading{min-height:44px;height:44px}.workbench-bottom{height:42px;min-height:42px;grid-template-rows:40px}.workbench-status,.history-journal{display:none}.chart-details-panel{inset:6px}.scenario-countdown .countdown-current{display:none}}
 @media (prefers-reduced-motion:reduce){.journal-chevron{transition:none}.chart-indicator-manager,.scenario-countdown,.indicator-library{scroll-behavior:auto}}
+
+/* Keep icon geometry bounded without reducing the touch target. */
+.mobile-extra-action>svg{display:block;position:static;width:21px;height:21px;min-width:21px;max-width:21px;max-height:21px;flex:0 0 21px}
+@media(max-width:620px){
+ .atlas-sidebar[data-mobile-open=true]>.mobile-tray-heading,.workbench-rail[data-mobile-open=true]>.mobile-tray-heading{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;position:sticky;top:-8px;z-index:2;flex:none;margin:-2px 0 4px;padding:0 0 4px;background:#141f2d;border-bottom:1px solid #314158}
+ .mobile-tray-heading strong{font-size:12px;color:#d7e4f6;margin-right:auto}
+ .atlas-sidebar .mobile-tray-heading button,.workbench-rail[data-mobile-open=true] .mobile-tray-heading button{display:inline-flex;flex-direction:row;min-width:44px;min-height:44px;width:auto;height:44px;padding:6px 10px;border:0;background:transparent;color:#c1d5eb;font-size:12px}
+ .workbench-rail[data-mobile-open=true] .mobile-tray-heading button::after{content:none}
+ .mobile-tool-status{flex-basis:calc(100% - 88px);margin:0;font-size:11px;color:#9db9d7}
+ .atlas-sidebar[data-mobile-open=true]>.mobile-gesture-hint:not([hidden]){display:block;flex:none;margin-top:8px;padding:8px 10px;border:1px solid #314158;border-radius:6px;background:#182636}
+ .mobile-gesture-hint p{margin:0;font-size:11px;line-height:1.7;color:#b0c5df;word-break:keep-all}
+ .mobile-gesture-hint>div{display:flex;justify-content:space-between;gap:4px;margin-top:4px}
+ .mobile-gesture-hint button{min-height:44px;padding:6px 8px;border:0;background:transparent;color:#bedaff;font-size:11px}
+ .atlas-plot[data-chart-focus=true]>:is(#lab-metrics,.workbench-market-info,.lab-chart-foot,.chart-indicator-manager,.analysis-indicator-windows){display:none!important}
+ .atlas-plot>.mobile-focus-return:not([hidden]){display:block;position:absolute;top:8px;right:var(--plot-right-gap,80px);z-index:12;min-height:44px;padding:7px 11px;border:1px solid #415875;border-radius:6px;background:#142235ed;color:#cadff6;font-size:11px}
+ .mobile-extra-action[aria-pressed=true]{background:#284566!important;border-color:#83b7eb!important}
+}

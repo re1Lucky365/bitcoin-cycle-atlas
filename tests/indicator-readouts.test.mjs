@@ -9,15 +9,16 @@ const observed={date:'2026-10-21',price:84023.24,open:82946.02,high:84842.65,low
 const workbench={chartType:'candles',historicalLabelMeta:{total:43,labels:9,hidden:34},countdown:{status:'upcoming',today:'2026-10-22',date:'2027-01-18',dday:'D-88',nextLabel:'하락',minimumRunDays:7},marketStatus:'Bitstamp BTC/USD · 2026-10-22 11:53 UTC 수집'};
 
 test('every library row has an explicit value or honest availability status',()=>{
+  assert.equal(INDICATORS.some(item=>item.id==='countdown'),false,'the removed D-day UI cannot be restored by legacy workbench metadata');
   for(const item of INDICATORS){
     for(const context of [{},{selection:observed,workbench}]){
       const result=indicatorReadout(item,context);
       assert.ok(result.value.length>0,item.id);assert.ok(result.title.length>0,item.id);
       assert.doesNotMatch(result.value,/undefined|NaN|Infinity/);
+      assert.doesNotMatch(`${result.value} ${result.title}`,/D-88/,'old countdown metadata cannot appear in another library row');
     }
   }
   assert.match(read('history',{selection:observed,workbench}).value,/43개 사건 · 이름 9개/);
-  assert.equal(read('countdown',{selection:observed,workbench}).value,'D-88 · 하락 가정');
 });
 
 test('actual BTC volume and conditional volume keep distinct scopes and units',()=>{

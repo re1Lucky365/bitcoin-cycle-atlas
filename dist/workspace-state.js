@@ -1,7 +1,7 @@
 import { utcDay } from './cycle-engine.js?v=1.11.0';
 import { CHART_INTERVALS, isIntradayInterval } from './ohlc-data.js?v=1.11.0';
 import { INTRADAY_MAX_VISIBLE_BARS } from './intraday-history.js?v=1.11.0';
-import { normalizePriceDomain } from './price-axis.js?v=1.13.0-research.1';
+import { normalizePriceDomain } from './price-axis.js?v=1.14.0-mobile.1';
 import { PRICE_UNITS, isStartPriceUnit } from './price-display.js?v=1.13.0-research.1';
 
 export const WORKSPACE_STORAGE_KEY = 'atlas.workspaces.v1';

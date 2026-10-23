@@ -1,5 +1,6 @@
 import {BITCOIN_EVENTS,BITCOIN_EVENT_CATEGORIES,BITCOIN_EVENTS_REVIEW_DATE} from './bitcoin-events.js?v=1.11.0';
 import {EVENT_COLORS,formatBtcVolume} from './chart-overlays.js?v=1.13.0-research.1';
+import {mountHistoryJournal} from './history-journal.js?v=1.14.0-mobile.1';
 
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const stamp=value=>value?value.slice(0,16).replace('T',' '):'—';
@@ -61,22 +62,8 @@ export function mountResearchWorkbench({stage,controlStore,liveControls,openRead
   panelButton('events','비트코인 주요 사건 · 검색과 원문','<path d="M5 4h14v17H5zM8 1v6m8-6v6M5 9h14M8 13h2m4 0h2m-8 4h2m4 0h2"/>');
   panelButton('volume','거래량 · 출처와 미래 모형','<path d="M4 21V11h4v10m2 0V4h4v17m2 0V8h4v13M2 21h20"/>');
 
-  const journal=document.createElement('section');journal.className='history-journal';journal.setAttribute('aria-label','비트코인 주요 사건 타임라인');
-  journal.innerHTML=`<div class="journal-heading"><button id="history-journal-toggle" type="button" aria-expanded="false" aria-controls="history-journal-items"><span class="journal-chevron">⌃</span> 주요 사건 <span class="journal-count">${BITCOIN_EVENTS.length}</span></button><span id="journal-context">과거 사건 · 원문 기반</span><button id="history-journal-all" type="button">검색·전체 목록</button><button id="history-volume-source" type="button">거래량 출처</button></div><div id="history-journal-items" class="journal-items" hidden></div>`;
-  stage.querySelector('.workbench-bottom').before(journal);
-  const journalItems=journal.querySelector('.journal-items'),toggle=journal.querySelector('#history-journal-toggle');
-  toggle.onclick=()=>{const open=toggle.getAttribute('aria-expanded')!=='true';toggle.setAttribute('aria-expanded',String(open));journalItems.hidden=!open;journal.dataset.open=String(open);if(open)paintJournal(lastState);};
-  journal.querySelector('#history-journal-all').onclick=event=>openReader('events',{focus:true,opener:event.currentTarget});
-  journal.querySelector('#history-volume-source').onclick=event=>openReader('volume',{focus:true,opener:event.currentTarget});
-  journalItems.addEventListener('click',event=>{const button=event.target.closest('[data-history-jump]');if(button)eventCommand(button.dataset.historyJump);});
-  function paintJournal(state){
-    const range=state&&!state.intraday&&typeof state.start==='string'?{start:state.start,end:state.end}:null;
-    const all=BITCOIN_EVENTS.filter(event=>event.date<=latestAsOf),visible=range?all.filter(event=>event.date>=range.start&&event.date<=range.end):all;
-    const context=journal.querySelector('#journal-context'),meta=state?.historicalLabelMeta;
-    context.textContent=state?.intraday?'사건은 하루 단위 · 일봉에서 탐색':state?.historicalEventsVisible===false?'차트 사건 표시 꺼짐 · 목록에서 탐색':meta&&Number.isFinite(meta.total)?`차트 사건 ${meta.total}개 · 이름 ${meta.labels}개${meta.hidden>0?' · 확대하면 더 표시':''}`:`${visible.length}개 사건이 표시 기간에 포함`;
-    context.title='축소하면 이름을 줄이고, 확대하면 더 자세히 표시합니다. 점에 마우스를 올리거나 키보드로 선택하면 숨긴 이름도 볼 수 있습니다.';
-    journalItems.innerHTML=visible.length?visible.map(event=>`<button type="button" class="journal-event" data-history-jump="${event.id}" style="--event-color:${EVENT_COLORS[event.category]}"><time>${event.date}</time><strong>${esc(event.label)}</strong><span>${esc(BITCOIN_EVENT_CATEGORIES[event.category])}</span></button>`).join(''):'<p>이 기간에는 기록된 사건이 없습니다. 검색·전체 목록에서 다른 날짜를 선택하세요.</p>';
-  }
+  const journalController=mountHistoryJournal({stage,events:BITCOIN_EVENTS,categories:BITCOIN_EVENT_CATEGORIES,colors:EVENT_COLORS,onEvent:id=>eventCommand(id),openReader});
+  const journal=journalController.element;
   function paintVolume(state){
     const target=volume.querySelector('#volume-source-status'),meta=state?.volumeMeta;
     volume.querySelector('#volume-forecast-status').innerHTML=state?.intraday?'<p class="volume-intraday-note">분·시간 차트는 실제 완료 봉을 표시합니다. 장기 거래량 시나리오는 1D·1W에서 가격 전망과 함께 볼 수 있습니다.</p>':volumeForecastSummaryMarkup(state?.volumeForecast);
@@ -89,10 +76,11 @@ export function mountResearchWorkbench({stage,controlStore,liveControls,openRead
       target.innerHTML=`<span class="source-badge">동일 거래소 교차 검증 · BTC</span><h3>${esc(meta.source)} · BTC/USD 현물</h3><dl class="source-stats"><dt>자료 범위</dt><dd>${meta.firstDate} — ${meta.lastDate} UTC</dd><dt>수집 시각</dt><dd>${stamp(meta.retrievedAt)} UTC</dd><dt>완료 일봉</dt><dd>${number(meta.count)}개</dd><dt>날짜 누락</dt><dd>${number(meta.gapCount)}일</dd><dt>실제 0 거래량</dt><dd>${number(meta.zeroCount)}일</dd></dl><p>${meta.validation?.firstDate||'—'}–${meta.validation?.lastDate||'—'} 표본의 ${meta.validation?.hourlyDays||0}개 일봉을 1시간·15분 봉 합계와 대조했고, ${meta.validation?.tradeMinutes||0}개 완료 1분 봉은 공개 체결 수량의 합계와 비교했습니다. 이 표본의 검증 결과는 ${meta.validation?.status==='PASS'?'모두 일치':'출처 보고서에서 확인'}입니다. 전체 역사 구간의 모든 체결을 감사한 것은 아닙니다.</p><p>실제 주봉 막대는 월요일–일요일 UTC의 완료 일봉 7개를 더합니다. 미래 주간 점선은 미래의 7일 가정 수량만 합하며, 관측과 미래가 섞인 주는 채우지 않습니다.</p><p>다른 거래소 Coinbase와 겹치는 ${meta.validation?.overlapDays||0}일의 거래량도 비교했습니다. 거래소별 물량이 다르므로 두 수치를 합치거나 서로 대체하지 않습니다.</p><p><a href="https://www.bitstamp.net/api/" target="_blank" rel="noopener noreferrer">Bitstamp 공식 API 정의 ↗</a></p>`;
     }else target.textContent=state?.volumeError?'거래량 자료를 불러오지 못했습니다. 가격 차트는 이용할 수 있습니다.':'검증된 거래량 자료를 불러오는 중입니다.';
   }
-  document.addEventListener('atlas:workbench-state',event=>{
-    lastState=event.detail;journal.hidden=lastState.mode!=='price';
+  const onState=event=>{
+    lastState=event.detail;
     if(lastState.asOf&&latestAsOf!==lastState.asOf){latestAsOf=lastState.asOf;paintEvents();}
-    paintJournal(lastState);paintVolume(lastState);
-  });
-  return {events,volume,journal};
+    journalController.update(lastState);paintVolume(lastState);
+  };
+  document.addEventListener('atlas:workbench-state',onState);
+  return {events,volume,journal,destroy(){document.removeEventListener('atlas:workbench-state',onState);journalController.destroy();}};
 }

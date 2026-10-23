@@ -1,0 +1,62 @@
+/* One measured budget for mobile/narrow overlays. This never changes the price
+   SVG height or any persisted indicator fold, visibility or pane size. */
+.compact-indicator-controls,.analysis-pane-access{display:none}
+.atlas-plot[data-compact-layout]>#chart-indicator-manager.chart-indicator-manager{
+ top:var(--compact-content-top);left:8px;right:auto;width:max-content;
+ max-width:var(--compact-list-width);padding:0;box-sizing:border-box;z-index:11
+}
+.atlas-plot[data-compact-layout]>#chart-indicator-manager.chart-indicator-manager[data-collapsed=true]{width:max-content;max-width:calc(100% - 16px)}
+.atlas-plot[data-compact-layout] .compact-indicator-controls{
+ display:flex;align-items:center;justify-content:flex-start;gap:8px;height:28px;min-height:28px;
+ box-sizing:border-box;background:transparent;border:0;border-radius:3px;padding:0
+}
+.atlas-plot[data-compact-layout] .chart-indicator-manager[data-collapsed=true] .compact-indicator-controls{background:transparent;border:0;border-radius:4px;padding:0}
+.atlas-plot[data-compact-layout] .compact-indicator-controls>.indicator-legend-toggle{
+ width:28px;min-width:28px;height:26px;min-height:26px;margin:0;flex:none;border:1px solid #344255;background:#14202de8
+}
+.atlas-plot[data-compact-layout] .chart-indicator-manager[data-collapsed=true] .indicator-legend-toggle{border:1px solid #344255;background:#14202de8}
+.compact-list-size{display:flex;flex-direction:row;align-items:center;gap:4px;margin:0;min-width:0;font-size:9px;line-height:1.4;color:#92aac6}
+.compact-list-size select{width:auto;min-width:54px;max-width:72px;height:24px;min-height:24px;margin:0;padding:2px 17px 2px 5px;border:1px solid #34485f;border-radius:3px;background:#142131e8;color:#c9daed;font:inherit;font-size:10px}
+.compact-list-size[hidden],.compact-indicator-controls[hidden],.analysis-pane-access[hidden]{display:none!important}
+.atlas-plot[data-compact-layout] .chart-indicator-list{
+ min-height:0;max-height:var(--compact-list-max-height);margin:0;padding:0 3px 0 0;overflow:auto;
+ overscroll-behavior:contain;scrollbar-gutter:stable;background:transparent;border-radius:0
+}
+.atlas-plot[data-compact-layout] .indicator-row{min-height:28px;align-items:center;gap:1px}
+.atlas-plot[data-compact-layout] .indicator-row .indicator-name{display:flex;flex-wrap:nowrap;align-items:baseline;min-width:0;padding:2px 3px;gap:5px;white-space:nowrap;overflow:hidden;background:transparent;box-shadow:none}
+.atlas-plot[data-compact-layout] .indicator-row :is(.indicator-label,.indicator-value){flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:20px;overflow-wrap:normal;background:#10151cd9;box-shadow:none}
+.atlas-plot[data-compact-layout] .indicator-row .indicator-row-action{width:28px;min-width:28px;height:28px;min-height:28px;padding:6px;opacity:1;pointer-events:auto}
+@media(hover:hover) and (pointer:fine) and (min-width:621px){
+ .atlas-plot[data-compact-layout] .indicator-row{min-height:24px}
+ .atlas-plot[data-compact-layout] .indicator-row .indicator-row-action{width:24px;min-width:24px;height:24px;min-height:24px;padding:5px;opacity:0;pointer-events:none}
+ .atlas-plot[data-compact-layout] .indicator-row:hover .indicator-row-action,.atlas-plot[data-compact-layout] .indicator-row:focus-within .indicator-row-action{opacity:1;pointer-events:auto}
+}
+.atlas-plot[data-compact-layout]>.analysis-indicator-windows:not([data-maximized=true]){
+ top:var(--compact-analysis-top);left:var(--compact-analysis-left);right:8px;bottom:var(--compact-analysis-bottom);
+ width:auto;max-width:none;max-height:none;min-height:0;gap:6px;padding:0 2px 3px 0;z-index:12;
+ overflow:auto;overscroll-behavior:contain;scroll-padding-top:36px
+}
+.atlas-plot[data-compact-layout]>.analysis-indicator-windows[data-minimized-all=true]:not([data-maximized=true]){bottom:auto;max-height:calc(var(--plot-height,700px) - var(--compact-analysis-top) - var(--compact-analysis-bottom))}
+.atlas-plot[data-compact-layout] .analysis-pane-access{
+ position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:7px;flex:0 0 32px;min-height:32px;
+ box-sizing:border-box;margin-bottom:-6px;padding:2px 6px;border:1px solid #34465d;border-radius:5px 5px 0 0;background:#172535;color:#9ab2cc;font-size:10px
+}
+.analysis-pane-access label{display:flex;flex:1;align-items:center;gap:8px;min-width:0;margin:0;font:inherit}
+.analysis-pane-access label>span{flex:none;white-space:nowrap}
+.analysis-pane-access select{flex:1;width:auto;min-width:0;height:28px;min-height:28px;margin:0;padding:3px 24px 3px 6px;border:0;border-radius:3px;background:#1e334b;color:#d0e1f4;font:inherit;font-size:11px}
+.analysis-pane-access>button{flex:none;width:40px;min-height:28px;padding:3px 5px;border:1px solid #405b79;border-radius:3px;background:#203c58;color:#d0e1f4;font:inherit;font-size:10px;cursor:pointer}
+.atlas-plot[data-compact-layout] .analysis-indicator-windows[data-maximized=true]>.analysis-pane-access{display:none}
+.atlas-plot[data-compact-layout] .analysis-indicator-window>.analysis-window-heading{
+ display:flex;flex-wrap:wrap;align-items:center;gap:2px 5px;min-height:0;padding:4px 5px 4px 8px;
+ top:var(--analysis-access-height,0px);scroll-margin-top:var(--analysis-access-height,0px)
+}
+.atlas-plot[data-compact-layout] .analysis-window-heading h3{font-size:11px;line-height:16px;min-width:0}
+.atlas-plot[data-compact-layout] .analysis-window-axis{margin-left:auto;margin-right:0;font-size:9px}
+.atlas-plot[data-compact-layout] .analysis-window-actions{flex-basis:100%;justify-content:flex-end;gap:2px;margin:0}
+.atlas-plot[data-compact-layout] .analysis-window-actions>button{width:32px;min-width:32px;height:32px;min-height:32px;padding:6px}
+.atlas-plot[data-compact-layout] .analysis-indicator-window[data-minimized=true]{min-height:0;height:auto}
+.atlas-plot[data-compact-layout] .analysis-indicator-window .analysis-window-body{overscroll-behavior-y:auto}
+.atlas-plot[data-compact-layout] .analysis-indicator-window[data-maximized=true]>.analysis-window-heading{top:0}
+.atlas-plot[data-compact-layout] .analysis-indicator-windows:has(>.analysis-pane-access:not([hidden])){--analysis-access-height:32px}
+.atlas-plot[data-compact-layout] .analysis-indicator-windows[data-maximized=true]{--analysis-access-height:0px}
+.compact-list-size :focus-visible,.analysis-pane-access :focus-visible{outline:2px solid #82b5f7;outline-offset:-2px}
