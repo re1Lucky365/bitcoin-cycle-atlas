@@ -162,3 +162,125 @@ test('four-year duration ticks align with the price chart calendar grid on deskt
   assert.deepEqual(mobile.map(tick => tick.label), ['2025', '2026', '2027', '2028']);
   for (const tick of mobile) assert.ok(Math.abs(Number(tick.x) - expectedX(`${tick.label}-01-01`, 390, 8, 66)) < .001, 'mobile annual ticks align on January 1');
 });
+
+test('selecting an interval highlights its real endpoints and projects the span without changing price coordinates', () => {
+  const entries = [marker('low', 'bottom', '2024-01-02', 40), marker('high', 'cycle-top', '2024-01-20', 100), marker('other', 'ath', '2024-01-12', 70)];
+  const selected = interval('rise', 'bottom-cycle-top', '2024-01-02', '2024-01-20', { fromId: 'low', toId: 'high' });
+  const options = { markers: entries, start: '2024-01-01', end: '2024-02-01', x: point => ({ low: 122.25, high: 358.875, other: 250 }[point.id]), y: price => 200.125 - price, left: 12, right: 480, top: 20, bottom: 210 };
+  const before = milestoneMarkersMarkup(options), after = milestoneMarkersMarkup({ ...options, activeInterval: selected });
+  assert.deepEqual(after.markers.map(point => [point.marker.id, point.x, point.y]), before.markers.map(point => [point.marker.id, point.x, point.y]));
+  assert.deepEqual(after.markers.filter(point => point.active).map(point => point.marker.id), ['low', 'high']);
+  for (const point of after.markers.filter(point => point.active)) assert.ok(point.box, 'both endpoints keep readable selected labels');
+  const groups = [...after.markup.matchAll(/<g class="cycle-milestone-marker[^"]*"[^>]*>/g)].map(match => attr(match[0]));
+  assert.equal(groups.find(group => group['data-cycle-marker'] === 'low')['aria-pressed'], 'true');
+  assert.equal(groups.find(group => group['data-cycle-marker'] === 'high')['aria-pressed'], 'true');
+  assert.equal(groups.find(group => group['data-cycle-marker'] === 'other')['aria-pressed'], 'false');
+  const band = attr(after.markup.match(/<rect class="cycle-selected-interval-band"[^>]*>/)[0]);
+  assert.equal(Number(band.x), 122.25);
+  assert.equal(Number(band.width), 236.625);
+  assert.equal(Number(band.y), 20);
+  assert.equal(Number(band.height), 190);
+  assert.equal(band['pointer-events'], 'none');
+  assert.equal(band['aria-hidden'], 'true');
+  const guides = [...after.markup.matchAll(/<line class="cycle-selected-endpoint-guide"[^>]*>/g)].map(match => attr(match[0]));
+  assert.deepEqual(guides.map(guide => [guide['data-guide-marker'], Number(guide.x1), Number(guide.x2)]), [['low', 122.25, 122.25], ['high', 358.875, 358.875]]);
+  assert.ok(guides.every(guide => guide['stroke-dasharray'] && Number(guide.y1) === 20 && Number(guide.y2) === 210));
+});
+
+test('dense overview reserves room for two selected endpoint labels without overlapping them', () => {
+  const entries = [marker('low', 'bottom', '2024-01-01', 55), marker('high', 'cycle-top', '2024-01-28', 110), ...Array.from({ length: 34 }, (_, index) => marker(`crowd-${index}`, index % 2 ? 'mid-top' : 'ath', `2024-01-${String(index % 28 + 1).padStart(2, '0')}`, 60 + index % 20))];
+  const result = milestoneMarkersMarkup({ markers: entries, start: '2020-01-01', end: '2030-01-01', x: point => 8 + (day(point.date) - day('2024-01-01')) / 31 * 246, y: price => 180 - price, left: 8, right: 254, top: 20, bottom: 170, activeMarkerIds: ['low', 'high'] });
+  assert.equal(result.count, entries.length);
+  assert.equal(result.labelMode, 'overview');
+  assert.equal(result.labelBudget, 2);
+  const boxes = result.markers.filter(point => point.active).map(point => point.box);
+  assert.equal(boxes.length, 2);
+  assert.ok(boxes.every(Boolean), 'both selected endpoints survive the overview label budget');
+  const [a, b] = boxes;
+  assert.ok(a.x + a.width <= b.x || b.x + b.width <= a.x || a.y + a.height <= b.y || b.y + b.height <= a.y);
+  for (const box of boxes) assert.ok(box.x >= 8 && box.x + box.width <= 254 && box.y >= 20 && box.y + box.height <= 170);
+});
+
+test('selection geometry clips the span but never creates circles or endpoint guides at viewport edges', () => {
+  const entries = [marker('off-left', 'bottom', '2019-12-15', 50), marker('off-right', 'cycle-top', '2020-02-15', 100)];
+  const selected = interval('across', 'bottom-cycle-top', '2019-12-15', '2020-02-15', { fromId: 'off-left', toId: 'off-right' });
+  const options = { markers: entries, activeInterval: selected, start: '2020-01-01', end: '2020-01-31', x: point => point.id === 'off-left' ? -60 : 400, y: price => 180 - price, left: 8, right: 254, top: 20, bottom: 180 };
+  const result = milestoneMarkersMarkup(options);
+  assert.equal(result.count, 0);
+  const band = attr(result.markup.match(/<rect class="cycle-selected-interval-band"[^>]*>/)[0]);
+  assert.equal(Number(band.x), 8);
+  assert.equal(Number(band.width), 246);
+  assert.doesNotMatch(result.markup, /class="cycle-selected-endpoint-guide"|class="cycle-marker-circle/);
+  for (const invalid of [
+    { ...options, markers: [entries[0]] },
+    { ...options, activeInterval: { ...selected, startDate: '2019-12-16' } },
+  ]) assert.doesNotMatch(milestoneMarkersMarkup(invalid).markup, /class="cycle-selected-interval-band"|class="cycle-selected-endpoint-guide"|class="cycle-marker-circle/);
+});
+
+test('a selected endpoint outside the price scale remains absent while its date guide stays at the real date', () => {
+  const entries = [marker('low', 'bottom', '2024-01-02', 40), marker('above', 'cycle-top', '2024-01-20', 500)];
+  const selected = interval('rise', 'bottom-cycle-top', '2024-01-02', '2024-01-20', { fromId: 'low', toId: 'above' });
+  const result = milestoneMarkersMarkup({ markers: entries, activeInterval: selected, start: '2024-01-01', end: '2024-02-01', x: point => point.id === 'low' ? 40 : 220, y: price => 180 - price, left: 8, right: 254, top: 20, bottom: 170 });
+  assert.deepEqual(result.markers.map(point => point.marker.id), ['low']);
+  assert.doesNotMatch(result.markup, /data-cycle-marker="above"/);
+  const guide = attr(result.markup.match(/<line class="cycle-selected-endpoint-guide" data-guide-marker="above"[^>]*>/)[0]);
+  assert.equal(Number(guide.x1), 220);
+  assert.equal(Number(guide.x2), 220);
+  assert.equal(guide['data-date'], '2024-01-20');
+});
+
+test('multiple selected coincident rings retain their true shared coordinate and independent keyboard states', () => {
+  const entries = [marker('ath', 'ath', '2027-06-04', 100), marker('mid', 'mid-top', '2027-06-04', 100), marker('pit', 'pit-stop', '2027-07-04', 110)];
+  const result = milestoneMarkersMarkup({ markers: entries, activeMarkerIds: ['ath', 'mid'], start: '2026-01-01', end: '2030-01-01', x: point => point.id === 'pit' ? 200 : 120.125, y: price => 200.25 - price, left: 8, right: 254, top: 20, bottom: 180 });
+  const selected = result.markers.filter(point => point.active);
+  assert.deepEqual(selected.map(point => [point.x, point.y]), [[120.125, 100.25], [120.125, 100.25]]);
+  assert.notEqual(selected[0].radius, selected[1].radius);
+  assert.notEqual(selected[0].color, selected[1].color);
+  assert.equal((result.markup.match(/aria-pressed="true"/g) || []).length, 2);
+  assert.equal((result.markup.match(/pointer-events="stroke"/g) || []).length, 2);
+  assert.ok(result.markers.find(point => point.marker.id === 'pit').radius < selected[0].radius, 'PIT STOP remains a smaller visual category');
+  assert.doesNotMatch(result.markup, /class="cycle-selected-interval-band"/);
+});
+
+test('duration selection distinguishes the active span from other spans related to a selected marker', () => {
+  const entries = [
+    interval('rise', 'bottom-cycle-top', '2024-01-01', '2024-10-01', { fromId: 'low', toId: 'high' }),
+    interval('reclaim', 'bottom-ath', '2024-01-01', '2024-05-01', { fromId: 'low', toId: 'ath' }),
+    interval('unrelated', 'pit-stop-cycle-top', '2024-08-01', '2024-10-01', { fromId: 'pit', toId: 'high' }),
+  ];
+  const result = cycleIntervalsMarkup({ intervals: entries, start: '2024-01-01', end: '2025-01-01', width: 800, activeIntervalId: 'rise', activeMarkerId: 'low' });
+  const spans = result.rows.flatMap(row => row.spans);
+  assert.deepEqual(spans.filter(item => item.active).map(item => item.interval.id), ['rise']);
+  assert.deepEqual(spans.filter(item => item.related).map(item => item.interval.id), ['rise', 'reclaim']);
+  assert.equal(result.rows.find(row => row.id === 'bottom-cycle-top').active, true);
+  assert.equal(result.rows.find(row => row.id === 'bottom-ath').related, true);
+  const groups = [...result.markup.matchAll(/<g class="cycle-interval-span[^"]*"[^>]*>/g)].map(match => attr(match[0]));
+  assert.equal(groups.find(group => group['data-cycle-interval'] === 'rise')['aria-pressed'], 'true');
+  assert.equal(groups.find(group => group['data-cycle-interval'] === 'reclaim')['aria-pressed'], 'false', 'related is not an independently pressed interval');
+  assert.match(groups.find(group => group['data-cycle-interval'] === 'reclaim').class, /is-related/);
+  assert.doesNotMatch(groups.find(group => group['data-cycle-interval'] === 'unrelated').class, /is-active|is-related/);
+  assert.match(result.markup, /class="cycle-interval-row is-active has-related"/);
+  const panned = cycleIntervalsMarkup({ intervals: entries, start: '2025-01-01', end: '2026-01-01', width: 800, activeIntervalId: 'rise' });
+  assert.equal(panned.visibleCount, 0);
+  assert.equal(panned.rows.find(row => row.id === 'bottom-cycle-top').active, true, 'the selected relation remains identified while its span is outside the viewport');
+});
+
+test('observed prices chosen by a scenario and partial candidate windows retain explicit provenance', () => {
+  const partial = marker('candidate', 'bottom', '2026-10-01', 100, { kind: 'observed', provisional: false, selectionKind: 'scenario', selectionWindowComplete: false, windowStart: '2026-09-01', windowEnd: '2026-10-23', requestedWindowEnd: '2027-03-01' });
+  const rendered = milestoneMarkersMarkup({ markers: [partial], start: '2026-01-01', end: '2027-01-01', x: () => 100, y: () => 100, left: 8, right: 254, top: 20, bottom: 180 });
+  assert.match(rendered.markup, /관측 가격 · 가정 기준 · 부분 구간 후보/);
+  assert.match(rendered.markup, /stroke-dasharray="4 3"/);
+  assert.match(rendered.markup, /data-kind="observed"/);
+  const detail = cycleMilestoneInspection(partial);
+  assert.equal(detail.kind, 'assumption');
+  assert.ok(detail.fields.some(field => field.value === '2026-09-01 → 2026-10-23'));
+  assert.ok(detail.fields.some(field => field.value === '2027-03-01'));
+  assert.match(detail.note, /실제 관측값/);
+  assert.match(detail.note, /부분 경로/);
+  const span = interval('partial', 'cycle-top-bottom', '2026-09-01', '2026-10-01', { kind: 'observed', selectionKind: 'scenario', selectionWindowComplete: false, to: partial });
+  const spanDetail = cycleIntervalInspection(span);
+  assert.equal(spanDetail.kind, 'assumption');
+  assert.ok(spanDetail.fields.some(field => field.label.includes('종료점') && field.value === '2027-03-01'));
+  assert.match(spanDetail.note, /부분 구간 후보/);
+  assert.match(cycleIntervalsMarkup({ intervals: [span], start: '2026-01-01', end: '2027-01-01' }).markup, /stroke-dasharray="5 3"/);
+});

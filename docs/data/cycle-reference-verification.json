@@ -1,0 +1,291 @@
+{
+  "scope": "Cycle reference integration follow-up: exact price anchors, linked selection, responsive aligned timeline and scenario provenance",
+  "assetVersion": "1.11.0-milestones.3",
+  "baseCommit": "201fca2d75ac6cc40b0c4d4a974aa2f04d65c6ae",
+  "data": {
+    "asOf": "2026-10-22",
+    "observations": 5941,
+    "source": "dist/data/btc-daily.json"
+  },
+  "automated": {
+    "completedAt": "2026-10-23T07:31:22.826543+00:00",
+    "nodeVersion": "v24.19.0",
+    "tests": {
+      "finishedAt": "2026-10-23T07:29:36.623578+00:00",
+      "fileCount": 50,
+      "filesPassed": 50,
+      "filesFailed": 0,
+      "nodeTests": {
+        "tests": 405,
+        "suites": 0,
+        "pass": 405,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "customChecksPassed": 44,
+      "failures": [],
+      "totalCasesAndCustomChecksPassed": 449
+    },
+    "gates": [
+      {
+        "name": "npm-test",
+        "command": [
+          "npm",
+          "test"
+        ],
+        "exitCode": 0,
+        "seconds": 15.919
+      },
+      {
+        "name": "formal",
+        "command": [
+          "node",
+          "scripts/verify-market-state.mjs"
+        ],
+        "exitCode": 0,
+        "seconds": 3.263,
+        "initialFailure": {
+          "exitCode": 1,
+          "reason": "Pinned TLC download failed in default network environment (EAI_AGAIN)."
+        },
+        "execution": "authorized subprocess capture",
+        "receipt": {
+          "tool": {
+            "name": "TLC",
+            "version": "1.7.4",
+            "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+          },
+          "bounds": {
+            "requestGenerations": 3,
+            "intervals": [
+              "1m",
+              "5m"
+            ],
+            "property": "NoStaleDisplay"
+          },
+          "model": {
+            "MarketRequests": {
+              "outcome": "pass",
+              "generatedStates": 5955,
+              "distinctStates": 2081,
+              "remainingStates": 0
+            },
+            "MarketRequestsBroken": {
+              "outcome": "expected invariant violation",
+              "generatedStates": 151,
+              "distinctStates": 109,
+              "remainingStates": 79
+            }
+          },
+          "implementation": {
+            "regression": "pass",
+            "mutation": "expected assertion failure",
+            "sourceSha256": "dce96066268bb4e5ff0f5b81fe182904d6cb7d711172886872de3d387b6b7bee",
+            "mutatedSourceSha256": "18d1ac6de0cb495dc161cf0001af81978bd922051fea4aacdaf8d0ad865dc19a"
+          },
+          "limitations": [
+            "Bounded abstract model, not a whole-program proof",
+            "No pricing, numerical, history-pagination, wall-clock or liveness proof"
+          ]
+        }
+      },
+      {
+        "name": "cycle",
+        "command": [
+          "npm",
+          "run",
+          "verify:cycle"
+        ],
+        "exitCode": 0,
+        "seconds": 1.194
+      },
+      {
+        "name": "performance",
+        "command": [
+          "npm",
+          "run",
+          "verify:performance"
+        ],
+        "exitCode": 0,
+        "seconds": 0.753
+      },
+      {
+        "name": "static",
+        "command": [
+          "npm",
+          "run",
+          "verify:static"
+        ],
+        "exitCode": 0,
+        "seconds": 4.709
+      },
+      {
+        "name": "standalone-build",
+        "command": [
+          "npm",
+          "run",
+          "build:standalone"
+        ],
+        "exitCode": 0,
+        "seconds": 0.934
+      },
+      {
+        "name": "standalone-static",
+        "command": [
+          "node",
+          "scripts/verify-static.mjs",
+          "--standalone",
+          "build/Bitcoin_Cycles_Comparison.html"
+        ],
+        "exitCode": 0,
+        "seconds": 4.663
+      }
+    ],
+    "note": "Tests and deterministic gates do not substitute for browser visual/interaction verification. npm test reports 50 file-level cases; direct execution counts 405 actual node:test cases plus 44 custom checks. Formal implementation cases are a repeated subset, not additional distinct tests."
+  },
+  "sourceSha256": {
+    "dist/app.js": "ac160e2cfdf5e3f44589b40fe2158f9e4441c0d029fc0ba67cf4ccbe3e440ade",
+    "dist/atlas-price-chart.js": "d17a46bda8de5c1f4d990509be1338e4a1980104a890c1656e3a7af489a0ee2c",
+    "dist/cycle-milestones-view.js": "e5fee887a24b4c1d3c4fc85d10180fa1bf3aab9abcd84e4e32bbeafc925bf31e",
+    "dist/cycle-milestones.css": "61a6dbf8603bfed7c4992d5bdc5575fcb0f6a3c3492b39da184602ad605b4749",
+    "dist/cycle-milestones.js": "d24f626166490e05f639bd83462e0d66c98cac6b8136087a609bfb337df385d8",
+    "dist/cycle-selection.js": "7fd67c069224576f8b2cc1bdcc825ddb8fc253fde7a282d6f77fa99e1a9eb17a",
+    "dist/index.html": "1d32d68f3d16ce62878da4ab83ec780b8c61285f4c69f49b3efda945be379dfc",
+    "dist/indicator-preferences.js": "4d8bb6dc93906b9d18f633a5b0525a1cce91dabd6c264dec9ce0c30116bfb716",
+    "dist/indicator-workbench.js": "fb0a6fd68fc7f4bd8eef1d98c58b14827cb67161949b132b88cd0926354618a3",
+    "dist/lab-view.js": "94d1c3133151211bdf57e35429a8c70868c5abb303939e59176bdcd3e9fc19fc",
+    "dist/mobile-preview.html": "a2a68bd152a678535b72409ce2da9ea65d883dde4f6313a4d1d05fbd13585f2c",
+    "dist/viewport-workspace.js": "6c72eed5150e5398df25b170040aab4cbaefeac351d46d7a94b0ec2917295c0c",
+    "dist/workbench-chrome.js": "268f90e11cd064bd3bfb7134fc20f2e663125cceb6dec4b8be8692a575f55d5a",
+    "dist/workspace-tools.js": "2e0ea6912e05af2139ad1bb4fa97bbbfee10ad7a32d61b2f82157e3a4856e14e",
+    "tests/cycle-milestones-view.test.mjs": "65051627e1161857df50e365a11946d738bb603d859fd09e05eadca821b6d7cb",
+    "tests/cycle-milestones.test.mjs": "f4952799705130339d7f273bbd80b405acdd0dc931e47578ca858d0069a1618e",
+    "tests/cycle-price-alignment.test.mjs": "740cb2abd44b130ccab20bccaf12c2ba585b0d18a3f9749205337b47a6150b61",
+    "tests/cycle-selection.test.mjs": "0350cf463390afc4d2ba297101e7166bad1b113dd5cbd255004cb242df068a9e"
+  },
+  "browser": {
+    "testedAt": "2026-10-23",
+    "environment": "Chrome cloud browser, local preview; responsive iframe is not a physical device performance test",
+    "visualStatus": "passed",
+    "desktop": {
+      "viewport": [
+        1363,
+        936
+      ],
+      "overviewRange": [
+        "2010-12-10",
+        "2030-04-10"
+      ],
+      "markers": 30,
+      "intervals": 44,
+      "markerTypes": 6,
+      "relationRows": 9,
+      "priceAndPeriodWidthPx": 1281
+    },
+    "futureSelection": {
+      "start": "2026-06-30",
+      "end": "2029-08-12",
+      "days": 1139,
+      "weeks": 162,
+      "remainderDays": 5,
+      "focusedRange": [
+        "2026-03-30",
+        "2029-11-12"
+      ],
+      "priceAndPeriodWidthPx": 961,
+      "priceAndPeriodEndpointXPx": [
+        72.29,
+        818.71
+      ]
+    },
+    "clippedSelection": {
+      "start": "2022-11-09",
+      "end": "2025-10-06",
+      "days": 1062,
+      "visibleEndpointDates": [
+        "2025-10-06"
+      ],
+      "bandWidthPx": 207.107
+    },
+    "scenarioReplacement": {
+      "from": "base",
+      "to": "stress",
+      "selectionHidden": true,
+      "activeRings": 0,
+      "selectedBands": 0
+    },
+    "weeklyCandles": {
+      "markers": 5,
+      "relationRows": 9,
+      "legendItems": 6
+    },
+    "mobile": [
+      {
+        "viewport": [
+          390,
+          844
+        ],
+        "bodyWidthPx": 390,
+        "scrollWidthPx": 390,
+        "priceAndPeriodWidthPx": 390,
+        "legendItems": 6,
+        "countdownToLegendGapPx": 13
+      },
+      {
+        "viewport": [
+          320,
+          740
+        ],
+        "bodyWidthPx": 320,
+        "scrollWidthPx": 320,
+        "priceAndPeriodWidthPx": 320,
+        "legendItems": 6,
+        "countdownToLegendGapPx": 13,
+        "headerControlsRightPx": [
+          211.0625,
+          273,
+          313
+        ]
+      }
+    ],
+    "mobileSelection": {
+      "viewport": [
+        320,
+        740
+      ],
+      "activation": "Enter key",
+      "start": "2022-11-09",
+      "end": "2025-10-06",
+      "days": 1062,
+      "activeDates": [
+        "2022-11-09",
+        "2025-10-06"
+      ],
+      "priceAndPeriodEndpointXPx": [
+        24.972,
+        237.028
+      ],
+      "scrollWidthPx": 320
+    },
+    "appConsoleErrors": 0,
+    "consoleNote": "Mobile browser extension metadata errors excluded from app errors.",
+    "svgDownload": {
+      "status": "blocked",
+      "reason": "Local browser download-event wait timed out; no newly synchronized SVG artifact was observed. Source composition and automated export checks reviewed; no live download success claimed."
+    },
+    "screenshots": [
+      "docs/screenshots/cycle-future-selection-20261023.jpg",
+      "docs/screenshots/cycle-mobile-320-20261023.jpg",
+      "docs/screenshots/cycle-mobile-390-20261023.jpg",
+      "docs/screenshots/cycle-overview-20261023.jpg"
+    ]
+  },
+  "limitations": [
+    "Counts describe the specified dataset and selected scenario, not prediction accuracy.",
+    "TLC is a bounded ownership model, not a whole-program or market forecast proof.",
+    "Nine categories do not imply every cycle has every valid endpoint.",
+    "Near-cycle annotation does not repeat speculative four-year cycles through 2050."
+  ]
+}

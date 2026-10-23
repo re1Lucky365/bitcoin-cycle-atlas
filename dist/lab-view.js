@@ -1,11 +1,12 @@
-import { buildCycleMilestones, INTERVAL_RELATIONS, MILESTONE_TYPES } from './cycle-milestones.js?v=1.11.0-milestones.1';
-import { cycleIntervalsMarkup, cycleLegendMarkup, cycleMilestoneInspection, cycleIntervalInspection } from './cycle-milestones-view.js?v=1.11.0-milestones.2';
-import { drawAtlasPriceChart as drawChart } from './atlas-price-chart.js?v=1.11.0-milestones.2';
+import { buildCycleMilestones, INTERVAL_RELATIONS, MILESTONE_TYPES } from './cycle-milestones.js?v=1.11.0-milestones.3';
+import { cycleIntervalsMarkup, cycleLegendMarkup, cycleMilestoneInspection, cycleIntervalInspection, cycleDurationLabel } from './cycle-milestones-view.js?v=1.11.0-milestones.3';
+import { resolveCycleSelection, cycleSelectionViewport, cycleOverviewViewport } from './cycle-selection.js?v=1.11.0-milestones.3';
+import { drawAtlasPriceChart as drawChart } from './atlas-price-chart.js?v=1.11.0-milestones.3';
 import { renderCryptoConAudit } from './cryptocon-audit.js?v=1.11.0';
 import { bindChartNavigation, panRange } from './chart-navigation.js?v=1.11.0';
 import { renderAtlasAnalysis } from './atlas-analysis.js?v=1.11.0';
 import { ANALYSIS_MODES, analysisCalendarDate, shouldPublishInspection, analysisSelectionSummary } from './analysis-dock.js?v=1.11.0-indicators.1';
-import { INDICATORS, readIndicatorState, writeIndicatorState, changeIndicatorState, isIndicatorVisible, visibleAnalysisIds } from './indicator-state.js?v=1.11.0-milestones.1';
+import { INDICATORS, readIndicatorState, writeIndicatorState, changeIndicatorState, isIndicatorVisible, visibleAnalysisIds } from './indicator-state.js?v=1.11.0-milestones.3';
 import { preparePriceViewData } from './price-view-data.js?v=1.11.0';
 import { chartSelectionHandler } from './inspection-policy.js?v=1.11.0';
 import { buildScenarioCountdown, koreanCalendarDate } from './scenario-countdown.js?v=1.11.0';
@@ -23,8 +24,8 @@ import { analyzeMarketStructure, computeRollingStates, detectDirectionalChanges,
 import { utcDay, dateFromDay } from './cycle-engine.js?v=1.11.0';
 import { shiftCalendarMonths } from './cycle-timing.js?v=1.11.0';
 import { chartPresetRange, DEFAULT_CHART_SPAN, CHART_SPANS } from './chart-presets.js?v=1.11.0';
-import { createChartSvgExport, createObservedChartCsv } from './chart-export.js?v=1.11.0-milestones.1';
-import { readWorkspaceViewport, writeWorkspaceViewport, workspaceQuery } from './workspace-state.js?v=1.11.0-milestones.2';
+import { createChartSvgExport, createObservedChartCsv } from './chart-export.js?v=1.11.0-milestones.3';
+import { readWorkspaceViewport, writeWorkspaceViewport, workspaceQuery } from './workspace-state.js?v=1.11.0-milestones.3';
 import { clearChartHover } from './chart-hover.js?v=1.11.0';
 
 const $ = (selector) => document.querySelector(selector);
@@ -147,12 +148,20 @@ export function initLabView() {
     const data=state.cycleAnnotations;
     if(!data)return null;
     const item=(kind==='marker'?data.markers:data.intervals).find(item=>item.id===id);
-    return item?(kind==='marker'?cycleMilestoneInspection(item):cycleIntervalInspection(item)):null;
+    if(!item)return null;
+    const detail=kind==='marker'?cycleMilestoneInspection(item,{asOf:data.asOf}):cycleIntervalInspection(item,{asOf:data.asOf});
+    if(detail&&kind==='marker'){
+      const related=data.intervals.filter(interval=>interval.fromId===id||interval.toId===id);
+      detail.fields.push(...related.map(interval=>({label:interval.label,value:`${cycleDurationLabel(interval.days)} · ${interval.days}일 · ${interval.startDate} → ${interval.endDate}${interval.selectionKind==='scenario'||interval.kind!=='observed'?' · 가정 포함':''}`})));
+    }
+    return detail;
   }
+  function activeCycleSelection(){return state.inspectionOwner==='cycle'?resolveCycleSelection(state.cycleAnnotations,state.selectedCycleItem):null;}
   function inspectCycle(kind,id,{user=true,openPanel=true}={}){
     const detail=cycleDetail(kind,id);if(!detail)return;
     if(user){state.selectedCycleItem={kind,id};state.selectedEvent=null;state.selectedHistoryEvent=null;}
     inspect(detail,{owner:'cycle',user,openPanel});
+    if(user)schedule();
   }
   function renderCyclePanel(data,start,end){
     const panel=$('#atlas-cycle-panel');
@@ -161,9 +170,17 @@ export function initLabView() {
     body.hidden=state.cycleCollapsed;toggle.setAttribute('aria-expanded',String(!state.cycleCollapsed));toggle.textContent=state.cycleCollapsed?'펼치기':'접기';
     $('#atlas-cycle-relation').value=state.cycleRelation;
     if(panel.hidden){state.cycleVisibleIntervals=0;return;}
+    const selection=activeCycleSelection(),summary=$('#atlas-cycle-selection');
+    summary.hidden=!selection;
+    if(selection){
+      const item=selection.interval||selection.marker;
+      $('#atlas-cycle-selection-summary').textContent=selection.interval?`${item.label} · ${cycleDurationLabel(item.days)} (${item.days}일) · ${item.startDate} → ${item.endDate}`:`${item.label} · ${item.date} UTC · 연결 기간 ${selection.intervals.length}개`;
+      $('#atlas-cycle-focus').hidden=!selection.interval;
+    }
     const width=Math.max(1,$('#lab-chart').clientWidth||plot.clientWidth||1000),geometry=$('#lab-chart').dataset;
     const intervals=state.cycleRelation==='all'?data.intervals:data.intervals.filter(item=>item.relation===state.cycleRelation);
-    const timeline=cycleIntervalsMarkup({intervals,start,end,width,left:Number(geometry.plotLeft)||12,right:width-(Number(geometry.plotRight)||width-82),relation:state.cycleRelation,compact:width<600,split:data.asOf});
+    const timeline=cycleIntervalsMarkup({intervals,start,end,width,left:Number(geometry.plotLeft)||12,right:width-(Number(geometry.plotRight)||width-82),relation:state.cycleRelation,compact:width<600,split:data.asOf,activeIntervalId:selection?.interval?.id,activeMarkerId:selection?.marker?.id});
+    $('#atlas-cycle-timeline').style.setProperty('--cycle-axis-width',`${width}px`);
     $('#atlas-cycle-timeline').innerHTML=timeline.markup;state.cycleVisibleIntervals=timeline.visibleCount;
     const note=`기간은 시작·종료 UTC 날짜의 차이입니다. 원은 사후에 선정한 기준점이며, 점선 원과 구간은 후보 또는 미래 가정입니다. ${data.futureStatus?.reason||''}`;
     $('#atlas-cycle-note').textContent=note;
@@ -191,7 +208,10 @@ export function initLabView() {
     const owner=options.owner||'price',user=options.user===true;
     if(owner==='price')state.lastPriceDetail=detail;
     if(!shouldPublishInspection({owner,currentOwner:state.inspectionOwner,user}))return;
-    if(user)state.inspectionOwner=owner;
+    if(user){
+      state.inspectionOwner=owner;
+      if(owner!=='cycle'&&state.selectedCycleItem){state.selectedCycleItem=null;schedule();}
+    }
     if(user&&owner==='price'&&detail.kind!=='history'){state.selectedEvent=null;state.selectedHistoryEvent=null;}
     queueMicrotask(updateNavigation);
     const labels={observed:'관측',simulated:'가정',assumption:'가정',distribution:'모의 요약',history:'역사 사건'};
@@ -250,7 +270,7 @@ export function initLabView() {
     state.analysisController=visible.includes(state.analysisMode)?state.analysisControllers.get(state.analysisMode)||null:null;
     state.lastAnalysisDetail=state.analysisDetails.get(state.analysisMode)||null;
   }
-  function showPriceInspection(){state.inspectionOwner='price';if(state.lastPriceDetail)inspect(state.lastPriceDetail,{openPanel:false});updateNavigation();}
+  function showPriceInspection(){const hadCycle=Boolean(state.selectedCycleItem);state.selectedCycleItem=null;state.inspectionOwner='price';if(state.lastPriceDetail)inspect(state.lastPriceDetail,{openPanel:false});updateNavigation();if(hadCycle)schedule();}
   function useAnalysisNavigation(direction){
     if(!state.analysisOpen||!state.analysisController)return;
     state.analysisController[direction]?.();
@@ -350,7 +370,12 @@ export function initLabView() {
         const activeMarker=['low','high'].includes(state.selectedEvent)?turnInfo(m,state.selectedEvent):next;
         const observedCandles=history?.bars||[];
         const milestones=cycleAnnotations(m);state.cycleAnnotations=milestones;
-        state.priceController=drawChart({svg:$('#lab-chart'),tooltip:$('#lab-tooltip'),rows:allRows,start,end:chartEnd,split:m.asOf,frequency:state.frequency,chartType:state.chartType,observedCandles,candleSource:history?.source||'Bitstamp',volumeBars:history?.bars||[],volumeProjection:state.volumeProjection,volumeSource:history?.source||'Bitstamp',showVolume:$('#atlas-volume').checked,historicalEvents:BITCOIN_EVENTS.filter(event=>state.historyCategory==='all'||event.category===state.historyCategory),showHistoricalEvents:$('#atlas-history-events').checked,activeHistoricalEventId:state.selectedHistoryEvent,onHistoricalEvent:id=>focusHistoricalEvent(id,false),scale:state.scale,tool:state.tool,magnet:state.magnet,measurement:state.measurement,onMeasurement:value=>{state.measurement=value;if(value)state.selectedDate=value.endDate||value.startDate;schedule();},onHover:renderHover,unit:state.unit,denominator:last.price,headerInset:18,cycleCalibration:m.cycleCalibration,showCycleTiming:isIndicatorVisible(state.indicators,'cycle-timing'),band:$('#lab-band').checked,turns:prepared.turns,showTurns:$('#lab-turns').checked,cycleMarkers:milestones.markers,showCycleMarkers:isIndicatorVisible(state.indicators,'cycle-landmarks'),onCycleMarker:id=>inspectCycle('marker',id),events:prepared.events,states:state.futureStates.get(state.scenario),fib:$('#lab-fib').checked?currentFib():[],nextTurn:$('#lab-turns').checked?activeMarker:null,showNextTurnLabel:!isIndicatorVisible(state.indicators,'countdown'),onNextTurn:()=>focusEvent(activeMarker.type),showDrawdown:$('#atlas-drawdown').checked,showStates:$('#atlas-states').checked,onInspect:inspectPriceSelection,selectedDate:state.selectedDate||m.asOf});
+        const cycleSelection=activeCycleSelection();
+        if(state.inspectionOwner==='cycle'&&state.selectedCycleItem&&!cycleSelection){
+          state.selectedCycleItem=null;
+          inspect({label:'이 가정에는 선택한 사이클 지점이 없습니다',kind:'assumption',fields:[],note:'가정을 바꾸면 예시 경로와 주요 지점이 다시 계산됩니다. 현재 차트에서 지점이나 기간을 선택하세요.'},{owner:'cycle'});
+        }
+        state.priceController=drawChart({svg:$('#lab-chart'),tooltip:$('#lab-tooltip'),rows:allRows,start,end:chartEnd,split:m.asOf,frequency:state.frequency,chartType:state.chartType,observedCandles,candleSource:history?.source||'Bitstamp',volumeBars:history?.bars||[],volumeProjection:state.volumeProjection,volumeSource:history?.source||'Bitstamp',showVolume:$('#atlas-volume').checked,historicalEvents:BITCOIN_EVENTS.filter(event=>state.historyCategory==='all'||event.category===state.historyCategory),showHistoricalEvents:$('#atlas-history-events').checked,activeHistoricalEventId:state.selectedHistoryEvent,onHistoricalEvent:id=>focusHistoricalEvent(id,false),scale:state.scale,tool:state.tool,magnet:state.magnet,measurement:state.measurement,onMeasurement:value=>{state.measurement=value;if(value)state.selectedDate=value.endDate||value.startDate;schedule();},onHover:renderHover,unit:state.unit,denominator:last.price,headerInset:18,cycleCalibration:m.cycleCalibration,showCycleTiming:isIndicatorVisible(state.indicators,'cycle-timing'),band:$('#lab-band').checked,turns:prepared.turns,showTurns:$('#lab-turns').checked,cycleMarkers:milestones.markers,showCycleMarkers:isIndicatorVisible(state.indicators,'cycle-landmarks'),activeCycleMarkerId:cycleSelection?.marker?.id,activeCycleMarkerIds:cycleSelection?.markerIds||[],activeCycleInterval:cycleSelection?.interval,onCycleMarker:id=>inspectCycle('marker',id),events:prepared.events,states:state.futureStates.get(state.scenario),fib:$('#lab-fib').checked?currentFib():[],nextTurn:$('#lab-turns').checked?activeMarker:null,showNextTurnLabel:!isIndicatorVisible(state.indicators,'countdown'),onNextTurn:()=>focusEvent(activeMarker.type),showDrawdown:$('#atlas-drawdown').checked,showStates:$('#atlas-states').checked,onInspect:inspectPriceSelection,selectedDate:state.selectedDate||m.asOf});
         $('#atlas-date').min=b.rows[0].date;$('#atlas-date').max=end;
         $('#lab-chart-title').textContent=`${dateLabel(start)} — ${dateLabel(chartEnd)} · ${state.frequency==='daily'?'일별':'주별'} 가격`;
         $('#atlas-axis-note').textContent=`${state.unit==='usd'?'USD':'최근 = 100'} · ${state.scale==='linear'?'선형':'로그'}`;
@@ -488,6 +513,17 @@ export function initLabView() {
   $('#atlas-cycle-relation').innerHTML='<option value="all">모든 기간 관계</option>'+INTERVAL_RELATIONS.map(item=>`<option value="${item.id}">${esc(item.label)}</option>`).join('');
   $('#atlas-cycle-relation').onchange=event=>{state.cycleRelation=event.target.value;schedule();};
   $('#atlas-cycle-toggle').onclick=()=>{state.cycleCollapsed=!state.cycleCollapsed;$('#atlas-cycle-body').hidden=state.cycleCollapsed;schedule();};
+  $('#atlas-cycle-overview').onclick=()=>{
+    const range=cycleOverviewViewport(state.cycleAnnotations,{min:base().rows[0].date,max:model().displayEnd});
+    if(!range)return;
+    state.priceRange=range;state.cycleRelation='all';state.selectedEvent=null;state.selectedHistoryEvent=null;schedule();
+  };
+  $('#atlas-cycle-focus').onclick=()=>{
+    const selection=activeCycleSelection(),range=cycleSelectionViewport(selection,{min:base().rows[0].date,max:model().displayEnd});
+    if(!range)return;
+    state.priceRange=range;state.selectedEvent=null;state.selectedHistoryEvent=null;schedule();
+  };
+  $('#atlas-cycle-clear').onclick=()=>{showPriceInspection();$('#atlas-cycle-relation').focus({preventScroll:true});};
   const cycleActivate=event=>{const target=event.target.closest?.('[data-cycle-interval]');if(!target)return;if(event.type==='keydown'&&!['Enter',' '].includes(event.key))return;event.preventDefault();event.stopPropagation();inspectCycle('interval',target.dataset.cycleInterval);};
   $('#atlas-cycle-timeline').addEventListener('click',cycleActivate);$('#atlas-cycle-timeline').addEventListener('keydown',cycleActivate);
   $('#lab-scenario').onchange=e=>{state.scenario=e.target.value;state.measurement=null;state.eventPage=0;schedule();};

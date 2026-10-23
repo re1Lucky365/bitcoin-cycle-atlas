@@ -141,3 +141,60 @@ test('a forecast built against another final observed price is rejected even whe
   forecast.path[0].price *= 1.01;
   assert.throws(() => buildCycleMilestones(data, { forecast }), /anchor|price|관측/i);
 });
+
+test('a truncated future low window stays an explicitly partial candidate without claiming the clock endpoint', () => {
+  const forecast = forecastFor();
+  forecast.path = forecast.path.slice(0, 850);
+  const result = buildCycleMilestones(data, { forecast });
+  const cycle = result.cycles.at(-1), bottom = cycle.markers['next-bottom'];
+  assert.ok(bottom, 'the available path contains a low after the selected future peak');
+  assert.equal(bottom.selectionWindowComplete, false);
+  assert.equal(bottom.windowStart, cycle.markers['cycle-top'].date);
+  assert.equal(bottom.windowEnd, forecast.path.at(-1).date);
+  assert.equal(bottom.requestedWindowEnd, forecast.nominalClock.nextLowDate);
+  assert.equal(bottom.provisional, true);
+  assert.match(bottom.definition, /부분|경로 종료/);
+  assert.match(result.futureStatus.reason, /부분|미완료/);
+  const periods = result.intervals.filter(interval => interval.toId === bottom.id);
+  assert.ok(periods.length >= 2);
+  assert.ok(periods.every(interval => interval.selectionWindowComplete === false));
+  assert.ok(periods.every(interval => interval.endDate <= forecast.path.at(-1).date));
+  const full = buildCycleMilestones(data, { forecast: forecastFor() }).cycles.at(-1).markers['next-bottom'];
+  assert.equal(full.selectionWindowComplete, true);
+  assert.equal(full.windowEnd, forecast.nominalClock.nextLowDate);
+});
+
+test('future-dependent selection of an observed price preserves both kinds of provenance', () => {
+  const asOf = '2024-08-06', prefix = data.prices.filter(([date]) => date <= asOf);
+  const day = utcDay(asOf), price = prefix.at(-1)[1];
+  const path = Array.from({ length: 1001 }, (_, index) => ({
+    date: dateFromDay(day + index), price: price * Math.exp(index / 650 + .3 * Math.sin(index / 37)),
+  }));
+  const forecast = { asOf, path, nominalClock: { effectivePeakDate: dateFromDay(day + 720), nextLowDate: dateFromDay(day + 1000) } };
+  const baseline = buildCycleMilestones({ prices: prefix });
+  const result = buildCycleMilestones({ prices: prefix }, { forecast });
+  const baselineIds = new Set(baseline.markers.map(marker => marker.id));
+  const conditionalObserved = result.markers.filter(marker => marker.kind === 'observed' && !baselineIds.has(marker.id));
+  assert.ok(conditionalObserved.length > 0, 'future cycle selects an already-observed ATH or MID-TOP');
+  for (const marker of conditionalObserved) {
+    assert.equal(marker.selectionKind, 'scenario');
+    assert.equal(marker.price, new Map(prefix).get(marker.date));
+    assert.equal(marker.provisional, true);
+  }
+  assert.deepEqual(result.markers.filter(marker => baselineIds.has(marker.id)), baseline.markers);
+  const conditionalPeriods = result.intervals.filter(interval => interval.cycleId.startsWith('scenario-'));
+  assert.ok(conditionalPeriods.some(interval => interval.kind === 'observed'));
+  assert.ok(conditionalPeriods.every(interval => interval.selectionKind === 'scenario' && interval.provisional));
+});
+
+test('FIRST TOP and PIT STOP selected relative to a provisional peak remain provisional too', () => {
+  const partial = buildCycleMilestones(data, { asOf: '2021-06-30' });
+  const current = partial.cycles.at(-1);
+  assert.equal(current.markers['cycle-top'].provisional, true);
+  assert.ok(current.markers['first-top'] && current.markers['pit-stop']);
+  assert.equal(current.markers['first-top'].provisional, true);
+  assert.equal(current.markers['pit-stop'].provisional, true);
+  const completed = observed.cycles.find(cycle => cycle.id === 'peak-2021');
+  assert.equal(completed.markers['first-top'].provisional, false);
+  assert.equal(completed.markers['pit-stop'].provisional, false);
+});

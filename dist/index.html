@@ -67,11 +67,11 @@
   <link rel="stylesheet" href="./atlas.css?v=1.11.0">
   <link rel="stylesheet" href="./viewport.css?v=1.11.0">
   <link rel="stylesheet" href="./chart-details-panel.css?v=1.11.0">
-  <link rel="stylesheet" href="./analysis-dock.css?v=1.11.0-milestones.1">
+  <link rel="stylesheet" href="./analysis-dock.css?v=1.11.0-milestones.3">
   <link rel="stylesheet" href="./chart-magnet.css?v=1.11.0">
   <link rel="stylesheet" href="./mobile-workspace.css?v=1.11.0-indicators.1">
   <link rel="stylesheet" href="./workspace-tools.css?v=1.11.0">
-  <link rel="stylesheet" href="./cycle-milestones.css?v=1.11.0-milestones.2">
+  <link rel="stylesheet" href="./cycle-milestones.css?v=1.11.0-milestones.3">
 </head>
 <body>
   <div id="atlas-boot-shell">
@@ -176,7 +176,8 @@
           <div class="lab-chart-meta"><span id="lab-chart-title">가격과 미래 흐름</span><span id="atlas-axis-note">달러 · 같은 상승률은 같은 높이</span></div>
           <div id="lab-chart-stage" class="lab-chart-stage atlas-chart-stage"><svg id="lab-chart" role="group" tabindex="0" aria-label="실제 비트코인 가격과 미래 가정의 그래프. 누르거나 좌우 방향키로 값을 확인하세요."></svg><svg id="atlas-analysis-chart" role="img" tabindex="0" aria-label="과거 사이클 비교 그래프. 누르거나 좌우 방향키로 값을 확인하세요." hidden></svg><div id="lab-tooltip" class="lab-tooltip" hidden></div></div>
           <section id="atlas-cycle-panel" class="atlas-cycle-panel" aria-label="사이클 주요 지점 사이의 기간 비교">
-            <header class="cycle-panel-heading"><h2>사이클 기간 <small>같은 시간축 · 9가지 관계</small></h2><div class="cycle-panel-actions"><select id="atlas-cycle-relation" aria-label="표시할 사이클 기간 관계"><option value="all">모든 기간 관계</option></select><button id="atlas-cycle-toggle" type="button" aria-expanded="true" aria-controls="atlas-cycle-body">접기</button></div></header>
+            <header class="cycle-panel-heading"><h2>사이클 기간 <small>같은 시간축 · 9가지 관계</small></h2><div class="cycle-panel-actions"><select id="atlas-cycle-relation" aria-label="표시할 사이클 기간 관계"><option value="all">모든 기간 관계</option></select><button id="atlas-cycle-overview" type="button" title="관측과 현재 가정의 모든 사이클 기준점을 한 화면에 보기">전체 사이클</button><button id="atlas-cycle-toggle" type="button" aria-expanded="true" aria-controls="atlas-cycle-body">접기</button></div></header>
+            <div id="atlas-cycle-selection" class="cycle-panel-selection" hidden><p id="atlas-cycle-selection-summary" aria-live="polite"></p><div class="cycle-selection-actions"><button id="atlas-cycle-focus" type="button">전체 구간 보기</button><button id="atlas-cycle-clear" type="button">선택 해제</button></div></div>
             <div id="atlas-cycle-body" class="cycle-panel-body"><div id="atlas-cycle-timeline" class="cycle-timeline" aria-label="사이클 기간 차트"></div><p id="atlas-cycle-note" class="cycle-panel-note">관측 날짜로 기간을 계산하고 있습니다.</p><details class="cycle-reference"><summary>첨부 이미지와 계산 기준 비교</summary><div id="atlas-cycle-reference"></div></details></div>
           </section>
           <div class="lab-chart-foot"><div id="atlas-chart-legend" class="lab-legend"></div><span id="atlas-chart-caveat" class="lab-caveat">미래는 가정에 따른 예시</span></div>
@@ -274,6 +275,6 @@
   <dialog id="method-dialog" aria-labelledby="method-title"><div class="dialog-top"><span class="eyebrow">DATA & METHODOLOGY</span><button id="close-method" class="icon-button" aria-label="방법론 닫기"><span data-icon="close"></span></button></div><h2 id="method-title">방법론과 출처</h2><p class="dialog-lead">차트의 출발점부터 가격의 정의까지, 비교에 사용한 기준입니다.</p><div id="method-content"></div><button id="method-done" class="primary-button">확인했습니다</button></dialog>
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
   <dialog id="evidence-dialog" aria-labelledby="evidence-detail-title"><div class="dialog-top"><span class="eyebrow">EVIDENCE & LIMITS</span><button id="evidence-close" class="icon-button" aria-label="자료 상세 닫기"><span data-icon="close"></span></button></div><h2 id="evidence-detail-title"></h2><div id="evidence-detail-body"></div></dialog>
-  <script type="module" src="./app.js?v=1.11.0-milestones.2"></script>
+  <script type="module" src="./app.js?v=1.11.0-milestones.3"></script>
 </body>
 </html>

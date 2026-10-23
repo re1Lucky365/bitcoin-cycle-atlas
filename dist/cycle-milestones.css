@@ -2,6 +2,9 @@
 .cycle-marker{cursor:pointer;outline:none}
 .cycle-marker:hover .cycle-marker-ring,.cycle-marker:focus-visible .cycle-marker-ring{stroke-width:3;fill-opacity:.22}
 .cycle-marker:focus-visible{filter:drop-shadow(0 0 3px #d8e8ff)}
+.cycle-marker.is-active .cycle-marker-label-bg{stroke-opacity:.85}
+.cycle-marker.is-active .cycle-marker-label{font-weight:700}
+.cycle-selected-interval-band,.cycle-selected-endpoint-guide{pointer-events:none}
 .cycle-marker:is(:hover,:focus) .cycle-marker-preview{visibility:visible}
 .cycle-marker text{paint-order:stroke;stroke:#10151c;stroke-width:3px;stroke-linejoin:round}
 .atlas-plot>.lab-chart-foot:has(.cycle-legend){max-width:min(460px,calc(100% - var(--plot-right-gap,80px) - 16px));pointer-events:auto}
@@ -24,12 +27,22 @@
 .cycle-panel-actions button{font-size:10px;line-height:1.5;min-height:26px;min-width:36px;padding:4px 7px;color:#adbed4;border:1px solid #34475f;border-radius:4px;background:#182535;cursor:pointer;white-space:nowrap}
 .cycle-panel-actions button:hover{background:#263c53;color:#e6eff9}
 .cycle-panel-actions :focus-visible,.cycle-panel-body :focus-visible{outline:2px solid #83b9ef;outline-offset:-2px}
-.cycle-panel-body{max-height:min(300px,33dvh);overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#415873 #101822}
+.cycle-panel-selection{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 12px;border-bottom:1px solid #304254;background:#152232}
+.cycle-panel-selection[hidden]{display:none!important}
+.cycle-panel-selection p{margin:0;min-width:0;font-size:10px;line-height:1.6;color:#c4d5e9;overflow-wrap:anywhere}
+.cycle-selection-actions{display:flex;flex:none;align-items:center;gap:5px}
+.cycle-selection-actions button{font:inherit;font-size:10px;line-height:1.5;min-height:27px;padding:4px 7px;border:1px solid #48617c;border-radius:4px;background:#20334a;color:#d5e6fa;cursor:pointer;white-space:nowrap}
+.cycle-selection-actions button:hover{background:#2b4763}
+.cycle-selection-actions button:focus-visible{outline:2px solid #83b9ef;outline-offset:2px}
+.cycle-panel-body{max-height:min(300px,33dvh);overflow:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#415873 #101822}
 .cycle-timeline{min-width:0;line-height:0}
 .cycle-timeline:empty{height:300px;background:repeating-linear-gradient(to bottom,transparent 0,transparent 38px,#243345 39px,transparent 40px)}
-.atlas-chart-stage .cycle-timeline>svg{display:block;width:100%;height:auto;min-width:0;overflow:visible}
+/* Match the price SVG's physical width even when a scrollbar consumes gutter. */
+.atlas-chart-stage .cycle-timeline>svg{display:block;width:var(--cycle-axis-width,100%);max-width:none;height:auto;min-width:0;overflow:visible}
 .cycle-interval{cursor:pointer;outline:none}
 .cycle-interval:hover,.cycle-interval:focus-visible{filter:brightness(1.4)}
+.cycle-interval.is-active .cycle-interval-duration,.cycle-interval-row.is-active>.cycle-interval-row-label{font-weight:700}
+.cycle-interval.is-related .cycle-interval-duration{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
 .cycle-panel-note{margin:0;padding:7px 12px;border-top:1px solid #243345;font-size:10px;line-height:1.65;color:#879db6;word-break:keep-all}
 .cycle-panel-note strong{font-weight:500;color:#b6c9df}
 .cycle-reference{padding:3px 12px 9px;color:#a6bad3;font-size:10px;line-height:1.6}
@@ -58,6 +71,10 @@
  .cycle-panel-actions{gap:4px}
  .cycle-panel-actions select{width:150px!important;max-width:38vw!important;font-size:9px!important}
  .cycle-panel-actions button{font-size:9px;min-height:28px;padding:4px 6px}
+ .cycle-panel-selection{align-items:flex-start;flex-direction:column;gap:4px;padding:5px 8px}
+ .cycle-panel-selection p{font-size:9px;line-height:1.5}
+ .cycle-selection-actions{align-self:flex-end;gap:4px}
+ .cycle-selection-actions button{font-size:9px;min-height:28px;padding:4px 6px}
  .cycle-panel-body{max-height:min(176px,22dvh)}
  .cycle-panel-note{padding:6px 8px;font-size:9px}
 }

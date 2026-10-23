@@ -77,13 +77,14 @@ export function buildCycleMilestones(input, { forecast = null, asOf } = {}) {
     if (!row) return null;
     const kind = row.date > cutoff ? 'scenario' : 'observed', id = `${type}:${kind}:${row.date}`;
     if (markersById.has(id)) return markersById.get(id);
-    const { label, color } = TYPES.get(type);
-    const marker = { id, type, label, color, date: row.date, price: row.price, kind,
-      provisional: kind === 'scenario' || Boolean(options.provisional), cycleId,
+    const { label, color } = TYPES.get(type), selectionKind = options.selectionKind || kind;
+    const marker = { id, type, label, color, date: row.date, price: row.price, kind, selectionKind,
+      provisional: selectionKind === 'scenario' || kind === 'scenario' || Boolean(options.provisional), cycleId,
       definition: options.definition || METHODS[type], source: kind === 'scenario' ? '선택한 미래 가정' : 'Coin Metrics',
       selectionIsRetrospective: true, futureObservation: false,
       ...(options.confirmationDate ? { confirmationDate: options.confirmationDate } : {}),
       ...(options.windowStart ? { windowStart: options.windowStart, windowEnd: options.windowEnd } : {}),
+      ...(options.selectionWindowComplete !== undefined ? { selectionWindowComplete: options.selectionWindowComplete, requestedWindowEnd: options.requestedWindowEnd } : {}),
     };
     markersById.set(id, marker);return marker;
   }
@@ -95,28 +96,38 @@ export function buildCycleMilestones(input, { forecast = null, asOf } = {}) {
       if (!from || !to || from.date >= to.date) continue;
       const days = utcDay(to.date) - utcDay(from.date);
       const kind = from.kind === to.kind ? from.kind : 'mixed';
+      // Price provenance and selection provenance are independent: a future
+      // cycle can select an already observed ATH or intermediate high.
+      const selectionKind = cycle.kind === 'scenario' || from.selectionKind === 'scenario' || to.selectionKind === 'scenario' ? 'scenario' : 'observed';
+      const partialWindow = from.selectionWindowComplete === false || to.selectionWindowComplete === false;
       intervals.push({ id: `${cycle.id}:${relation.id}`, relation: relation.id, fromId: from.id, toId: to.id,
         startDate: from.date, endDate: to.date, days, weeks: days / 7, label: relation.label, color: relation.color,
-        kind, provisional: from.provisional || to.provisional || cycle.provisional,
+        kind, selectionKind, provisional: from.provisional || to.provisional || cycle.provisional,
+        ...(partialWindow ? { selectionWindowComplete: false } : {}),
         cycleId: cycle.id, cycleLabel: cycle.label, from, to });
     }
     cycles.push({ ...cycle, markerIds: Object.values(cycle.markers).filter(Boolean).map(point => point.id) });
   }
 
-  function fillLandmarks({ id, label, start, peak, end, previousPeak, selectedRows, selectedPivots, midpointEnd, firstEligibleDate, provisional = false, initial = false, isFuture = false }) {
+  function fillLandmarks({ id, label, start, peak, end, previousPeak, selectedRows, selectedPivots, midpointEnd, firstEligibleDate, provisional = false, initial = false, isFuture = false, lowWindow = null }) {
     const markers = {};
-    if (!initial) markers.bottom = addMarker('bottom', start, id, { provisional: isFuture ? Boolean(start.provisional) : false });
-    markers['cycle-top'] = addMarker('cycle-top', peak, id, { provisional, definition: isFuture
+    const mark = (type, row, options = {}) => addMarker(type, row, id, { ...options, selectionKind: isFuture ? 'scenario' : 'observed' });
+    if (!initial) markers.bottom = mark('bottom', start, { provisional: isFuture ? Boolean(start.provisional) : false });
+    markers['cycle-top'] = mark('cycle-top', peak, { provisional, definition: isFuture
       ? '모형 고점 시계까지의 선택한 미래 경로에서 가장 높은 예시 가격. 실제 미래 고점이나 모형 시계 날짜 적중을 뜻하지 않습니다.' : METHODS['cycle-top'] });
-    markers['next-bottom'] = end && end.date > peak.date ? addMarker('bottom', end, id, { provisional,
-      definition: isFuture ? '선택한 예시 고점 이후 모형의 다음 저점 시계까지 가장 낮은 예시 가격. 확정된 미래 저점이 아닙니다.' : METHODS.bottom }) : null;
+    markers['next-bottom'] = end && end.date > peak.date ? mark('bottom', end, { provisional,
+      definition: isFuture ? lowWindow?.complete === false
+        ? '선택한 예시 고점 이후 현재 경로 종료일까지의 부분 구간 최저 예시 가격입니다. 다음 저점 시계까지 경로가 없어 전체 구간의 BOTTOM으로 확정하지 않습니다.'
+        : '선택한 예시 고점 이후 모형의 다음 저점 시계까지 가장 낮은 예시 가격. 확정된 미래 저점이 아닙니다.' : METHODS.bottom,
+      ...(lowWindow ? { windowStart: peak.date, windowEnd: lowWindow.end, requestedWindowEnd: lowWindow.requestedEnd, selectionWindowComplete: lowWindow.complete } : {}),
+    }) : null;
     const rising = within(selectedRows, start.date, peak.date);
     const reclaim = previousPeak ? rising.find(row => row.date > start.date && row.price > previousPeak.price) : null;
-    if (reclaim) markers.ath = addMarker('ath', reclaim, id, { provisional: isFuture,
+    if (reclaim) markers.ath = mark('ath', reclaim, { provisional: isFuture,
       definition: `${METHODS.ath} 비교 고점: ${previousPeak.date}, $${previousPeak.price}.` });
     if (!initial && midpointEnd && midpointEnd > start.date && midpointEnd < peak.date) {
       const mid = extreme(within(rising, start.date, midpointEnd));
-      if (mid && mid.date > start.date && mid.date < peak.date) markers['mid-top'] = addMarker('mid-top', mid, id, {
+      if (mid && mid.date > start.date && mid.date < peak.date) markers['mid-top'] = mark('mid-top', mid, {
         provisional: isFuture, definition: isFuture ? '저점 후보부터 모형 고점 시계까지 첫 1/3 구간에서 가장 높은 예시 가격. 이 구간 경계는 모형 가정이며 미래 반감기 날짜가 아닙니다.' : METHODS['mid-top'],
         windowStart: start.date, windowEnd: midpointEnd,
       });
@@ -125,11 +136,11 @@ export function buildCycleMilestones(input, { forecast = null, asOf } = {}) {
     const highs = selectedPivots.filter(point => point.type === 'high' && point.eventDate > start.date && point.eventDate < peak.date && point.confirmationDate <= peak.date);
     const firstHalfStart = `${peak.date.slice(0, 4)}-01-01`, firstHalfEnd = `${peak.date.slice(0, 4)}-06-30`;
     const first = eligibleDate ? highs.filter(point => point.eventDate >= eligibleDate && point.eventDate >= firstHalfStart && point.eventDate <= firstHalfEnd && utcDay(peak.date) - utcDay(point.eventDate) >= 90 && point.eventDate !== markers['mid-top']?.date).reduce((best, point) => !best || point.eventPrice > best.eventPrice ? point : best, null) : null;
-    if (first) markers['first-top'] = addMarker('first-top', { date: first.eventDate, price: first.eventPrice }, id,
-      { provisional: isFuture, confirmationDate: first.confirmationDate });
+    if (first) markers['first-top'] = mark('first-top', { date: first.eventDate, price: first.eventPrice },
+      { provisional: provisional || isFuture, confirmationDate: first.confirmationDate });
     const pit = first ? highs.findLast(point => point.eventDate > first.eventDate && utcDay(peak.date) - utcDay(point.eventDate) >= 60 && utcDay(peak.date) - utcDay(point.eventDate) <= 150 && point.eventDate !== markers['mid-top']?.date) : null;
-    if (pit) markers['pit-stop'] = addMarker('pit-stop', { date: pit.eventDate, price: pit.eventPrice }, id,
-      { provisional: isFuture, confirmationDate: pit.confirmationDate });
+    if (pit) markers['pit-stop'] = mark('pit-stop', { date: pit.eventDate, price: pit.eventPrice },
+      { provisional: provisional || isFuture, confirmationDate: pit.confirmationDate });
     addIntervals({ id, label, provisional, kind: isFuture ? 'scenario' : 'observed', markers,
       startDate: start.date, endDate: end?.date ?? peak.date,
       missingTypes: MILESTONE_TYPES.filter(type => !markers[type.id]).map(type => type.id) });
@@ -175,13 +186,17 @@ export function buildCycleMilestones(input, { forecast = null, asOf } = {}) {
           } else {
             const midpoint = utcDay(start.date) + Math.floor((peakDay - utcDay(start.date)) / 3);
             const midpointEnd = new Date(midpoint * 86400000).toISOString().slice(0, 10);
+            const completeWindow = future.at(-1).date >= clock.nextLowDate;
             fillLandmarks({ id: `scenario-${forecast.scenario?.id || 'selected'}-${clock.effectivePeakDate}`, label: `${clock.effectivePeakDate.slice(0, 4)}년 조건부 사이클`,
               start, peak, end, previousPeak: lastCycle.peak, selectedRows: futureRows,
               selectedPivots: detectDirectionalChanges(futureRows, { threshold: .12 }).pivots,
-              midpointEnd, firstEligibleDate: midpointEnd, provisional: true, isFuture: true });
+              midpointEnd, firstEligibleDate: midpointEnd, provisional: true, isFuture: true,
+              lowWindow: { end: future.at(-1).date, requestedEnd: clock.nextLowDate, complete: completeWindow } });
             futureStatus = { available: true, through: future.at(-1).date, clockPeakDate: clock.effectivePeakDate,
-              clockNextLowDate: clock.nextLowDate, completeWindow: future.at(-1).date >= clock.nextLowDate,
-              reason: '근거리 시계 안의 예시 가격 경로만 분류합니다. 이후 장기 구간에는 반복 사이클 고점·저점을 가정하지 않습니다.' };
+              clockNextLowDate: clock.nextLowDate, completeWindow,
+              reason: completeWindow
+                ? '근거리 시계 안의 예시 가격 경로만 분류합니다. 이후 장기 구간에는 반복 사이클 고점·저점을 가정하지 않습니다.'
+                : `미래 경로가 ${future.at(-1).date}에서 끝나 다음 저점 시계 ${clock.nextLowDate}까지의 구간은 미완료입니다. BOTTOM과 연결 기간은 현재 경로 안의 부분 구간 후보입니다. 이후 반복 사이클은 만들지 않습니다.` };
           }
         }
       }
