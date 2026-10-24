@@ -120,9 +120,8 @@ export function drawAtlasPriceChart({svg,tooltip,rows,start,end,split,frequency=
   let tick=`${start.slice(0,4)}-01-01`;while(dayOf(tick)<minDay)tick=shiftCalendarMonths(tick,months);
   while(dayOf(tick)<=maxDay){const xx=xday(dayOf(tick));s+=`<line x1="${xx}" x2="${xx}" y1="${T}" y2="${bottom}" stroke="#222c37"/><text x="${xx}" y="${axisY}" text-anchor="${xx>W-35?'end':'middle'}" fill="#aebaca" font-size="12">${months>=12?tick.slice(0,4):tick.slice(2,7).replace('-','.')}</text>`;tick=shiftCalendarMonths(tick,months);}
   if(split&&dayOf(split)>=minDay&&dayOf(split)<=maxDay){
-    const xx=xday(dayOf(split)),badgeWidth=Math.min(78,Math.max(0,W-R-L-8)),preferredX=xx-L>=badgeWidth+10?xx-badgeWidth-6:xx+6;
-    const badgeX=Math.max(L+4,Math.min(W-R-badgeWidth-4,preferredX)),fontSize=Math.min(small?10:11,Math.max(0,badgeWidth-12)/6);
-    s+=`<rect x="${xx}" y="${T}" width="${W-R-xx}" height="${bottom-T}" fill="#e9b366" opacity=".025"/><line x1="${xx}" x2="${xx}" y1="${T}" y2="${bottom}" stroke="#a5b1bf" stroke-dasharray="3 5"/><g class="observed-split-badge" pointer-events="none"><title>관측 기준일 ${split} UTC</title><rect x="${badgeX}" y="${T+3}" width="${badgeWidth}" height="19" rx="3" fill="#152333" fill-opacity=".95"/><text x="${badgeX+badgeWidth/2}" y="${T+16}" text-anchor="middle" fill="#b9c5d2" font-size="${fontSize}">관측 ${split.slice(5).replace('-','.')}</text></g>`;
+    const xx=xday(dayOf(split));
+    s+=`<rect x="${xx}" y="${T}" width="${W-R-xx}" height="${bottom-T}" fill="#e9b366" opacity=".025"/><line class="observed-split-boundary" x1="${xx}" x2="${xx}" y1="${T}" y2="${bottom}" stroke="#a5b1bf" stroke-dasharray="3 5"/>`;
   }
   if(showDrawdown){s+=`<text x="${L}" y="${layout.ddTitleY}" fill="#aebaca" font-size="${layout.ddTitleFontSize}">이전 최고가에서 떨어진 폭</text>`;for(const dd of(ddHeight<44?[0,-100]:[0,-50,-100]))s+=`<line x1="${L}" x2="${W-R}" y1="${yd(dd)}" y2="${yd(dd)}" stroke="#25303c"/><g data-indicator-layer="drawdown"><text data-indicator-axis-label x="${W-R+8}" y="${yd(dd)+4}" text-anchor="start" fill="#aab7c8" font-size="11">${dd}%</text></g>`;}
   if(showStates)s+=`<text class="state-pane-title" x="${L}" y="${layout.stateTitleY}" fill="#a8b9ca" font-size="${layout.stateTitleFontSize}">시장 국면 · 관측 / 가정<title>가격 경로에서 계산한 상승·횡보·하락 분류입니다. 관측 기준일 이후는 선택한 가정 경로의 분류이며 확정된 미래나 매매 신호가 아닙니다.</title></text>`;

@@ -78,6 +78,14 @@ test('published Coin Metrics daily selection and CSV keep exact USD values and s
   assert.equal(observedOnly.length, rows.length);
 });
 
+test('the observed cutoff keeps its boundary and future shading without a floating date badge', () => {
+  const h = atlas();
+  assert.doesNotMatch(h.svg.innerHTML, /observed-split-badge|>관측 \d{2}\.\d{2}</u);
+  assert.match(h.svg.innerHTML, /<line class="observed-split-boundary"[^>]+stroke-dasharray="3 5"/u);
+  assert.match(h.svg.innerHTML, /fill="#e9b366" opacity="\.025"/u);
+  assert.match(h.svg.innerHTML, /stroke="#f2b960"[^>]+stroke-dasharray="5 3"/u);
+});
+
 test('daily exchange candle selection and CSV agree on the original Bitstamp OHLCV, independently of Coin Metrics', () => {
   const eligible = observed.bars.filter(bar => bar.date <= asOf), latest = eligible.at(-1);
   const h = atlas({ chartType: 'candles', observedCandles: eligible, candleSource: observed.source, selectedDate: latest.date });

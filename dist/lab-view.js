@@ -2,7 +2,7 @@ import {priceLegendMarkup,priceReadoutKind,observedPriceSourceLabel} from './pri
 import { buildCycleMilestones, INTERVAL_RELATIONS, MILESTONE_TYPES } from './cycle-milestones.js?v=1.14.1-touch.1';
 import { cycleLegendMarkup, cycleMilestoneInspection, cycleIntervalInspection, cycleDurationLabel } from './cycle-milestones-view.js?v=1.14.1-touch.1';
 import { resolveCycleSelection, cycleSelectionViewport, cycleOverviewViewport } from './cycle-selection.js?v=1.11.0-milestones.4';
-import { drawAtlasPriceChart as drawChart } from './atlas-price-chart.js?v=1.14.1-touch.1';
+import { drawAtlasPriceChart as drawChart } from './atlas-price-chart.js?v=1.14.1-no-date-badge.1';
 import { renderCryptoConAudit } from './cryptocon-audit.js?v=1.13.0-research.1';
 import { bindChartNavigation, panRange } from './chart-navigation.js?v=1.14.1-touch.1';
 import { renderAtlasAnalysis } from './atlas-analysis.js?v=1.13.0-research.1';
@@ -256,6 +256,11 @@ export function initLabView() {
   // Readout text may resize while the pointer moves. Repack only the period
   // annotations; rebuilding the price chart here would reset its live cursor.
   function refreshCycleHudPlacement(){
+    // Float beside the left HUD only when the measured boxes leave room.
+    const origin=plot.getBoundingClientRect(),legend=plot.querySelector('.lab-chart-foot')?.getBoundingClientRect();
+    const infoRight=Math.max(origin.left,...[...plot.querySelectorAll('.atlas-readout,.workbench-market-info')].map(node=>node.getBoundingClientRect()).filter(box=>box.width>0&&box.height>0).map(box=>box.right));
+    const dock=origin.width>850&&legend?.width>0&&legend.left>=infoRight+12?'top':'stack';
+    if(plot.dataset.legendDock!==dock)plot.dataset.legendDock=dock;
     if(!isIntradayInterval(state.frequency)&&shown('cycle-intervals')&&!state.cycleCollapsed){state.priceController?.updateCycleOverlayObstacles?.(cycleHudObstacles());applyIndicatorPresentation($('#lab-chart'),state.indicators,state.frequency);}
   }
   function currentFib(){
@@ -737,7 +742,7 @@ export function initLabView() {
   $('#atlas-reset').onclick=()=>{state.indicators=changeIndicatorState(state.indicators,{action:'reset'});publishIndicators();state.analysisMode='cycles';state.analysisOpen=false;state.inspectionOwner='price';state.lastAnalysisDetail=null;state.marketRange=null;state.selectedHistoryEvent=null;state.priceRange=null;state.atlasMode='price';state.scenario='base';state.frequency='daily';state.chartType='line';state.marketSelectedTime=null;marketData.cancel();state.scale='log';state.priceDomain=null;state.invertScale=false;state.priceOnlyAuto=false;state.tool='crosshair';state.magnet='off';state.measurement=null;state.unit='usd';state.window=DEFAULT_CHART_SPAN;state.selectedDate=null;state.selectedEvent=null;state.selectedCycleItem=null;state.cycleCollapsed=false;state.cycleRelation='all';state.atlasAlignment='trough';state.atlasPhase='macro';state.atlasPeriod='monthly';state.atlasMetric='returnPct';state.atlasScope='recent';for(const id of ['lab-band','lab-turns','lab-milestones','lab-cycle-intervals','atlas-volume','atlas-history-events'])$(`#${id}`).checked=true;for(const id of ['lab-fib','atlas-states','atlas-drawdown'])$(`#${id}`).checked=false;$('#atlas-display-options').open=false;schedule();};
   document.addEventListener('click',e=>{if(!$('#atlas-display-options').contains(e.target))$('#atlas-display-options').open=false;if(!$('#atlas-cycle-options').contains(e.target))$('#atlas-cycle-options').open=false;});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){touchTracking.cancel();$('#atlas-display-options').open=false;document.querySelector('.atlas-guide').open=false;$('#atlas-cycle-options').open=false;}});
-  const chartSizes=new WeakMap(),chartResize=new ResizeObserver(entries=>{let priceChanged=false,analysisChanged=false;for(const entry of entries){const r=entry.contentRect,key=`${Math.round(r.width)}x${Math.round(r.height)}`;if(key!==chartSizes.get(entry.target)){chartSizes.set(entry.target,key);if(entry.target===plot)priceChanged=true;else analysisChanged=true;}}if(priceChanged)schedule();else if(analysisChanged)scheduleAnalysis();});chartResize.observe(plot);for(const svg of analysisCharts.values())chartResize.observe(svg.parentElement);
+  const chartSizes=new WeakMap(),chartResize=new ResizeObserver(entries=>{let priceChanged=false,analysisChanged=false;for(const entry of entries){const r=entry.contentRect,key=`${Math.round(r.width)}x${Math.round(r.height)}`;if(key!==chartSizes.get(entry.target)){chartSizes.set(entry.target,key);if(entry.target===plot)priceChanged=true;else analysisChanged=true;}}if(priceChanged){schedule();requestAnimationFrame(refreshCycleHudPlacement);}else if(analysisChanged)scheduleAnalysis();});chartResize.observe(plot);for(const svg of analysisCharts.values())chartResize.observe(svg.parentElement);
   // Plot ResizeObserver is the single size-change scheduler; window resize would draw the same geometry twice.
   $('#structure-scope').onchange=e=>{state.scope=e.target.value;state.periodPage=0;schedule();};$('#structure-alignment').onchange=e=>{state.alignment=e.target.value;schedule();};$('#structure-threshold').onchange=e=>{state.threshold=Number(e.target.value);state.analysis=null;schedule();};
   for(const button of document.querySelectorAll('[data-structure-frequency]'))button.onclick=()=>{state.structureFrequency=button.dataset.structureFrequency;document.querySelectorAll('[data-structure-frequency]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));schedule();};

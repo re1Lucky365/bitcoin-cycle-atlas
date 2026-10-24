@@ -20,6 +20,9 @@
 .atlas-plot:has(>.lab-chart-foot:not([hidden])){--chart-hud-legend-height:var(--chart-legend-height,52px);--chart-hud-gap:7px}
 /* The legend follows the canvas edge, not the variable price-axis gutter. */
 .atlas-plot>.lab-chart-foot{inset:max(var(--indicator-top,75px),var(--chart-hud-top)) 8px auto auto;width:max-content;max-width:calc(100% - 16px);max-height:none;margin:0;padding:4px 8px;box-sizing:border-box;pointer-events:auto;background:#111c2aee;border:1px solid #304155;border-radius:5px;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scrollbar-width:thin;z-index:7}
+/* Already-open chart modules may still emit the removed date badge. */
+.atlas-plot .observed-split-badge{display:none}
+.atlas-plot[data-legend-dock=top]>.lab-chart-foot{top:8px}
 .atlas-plot[data-mode=price]>.lab-chart-foot .lab-legend{display:flex;flex-wrap:nowrap;flex:none;width:max-content;min-width:0;justify-content:flex-start;align-items:center;gap:8px;text-align:left}
 .price-legend{display:flex;flex-wrap:nowrap;flex:none;justify-content:flex-start;gap:8px;align-items:center;min-height:14px}
 .atlas-plot>.lab-chart-foot .price-legend-item{display:inline-flex;align-items:center;flex:none;gap:4px;font-size:9px;line-height:14px;white-space:nowrap}
