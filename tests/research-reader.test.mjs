@@ -38,6 +38,14 @@ test('aliases resolve to the canonical article and canonical downloadable bytes'
   for(const article of RESEARCH_ARTICLES)for(const claim of article.claims)for(const id of claim.crossCheckIds||[])assert.ok(getResearchArticle(id),`broken cross-check ${article.id} -> ${id}`);
 });
 
+test('MSTR and BMNR model methods preserve their separate research bodies after URL de-duplication',()=>{
+  const mstr=getResearchArticle('mstr-model-method'),bmnr=getResearchArticle('bmnr-model-method');
+  assert.equal(mstr.id,'mstr-model-method');assert.equal(bmnr.id,'bmnr-model-method');
+  assert.notEqual(mstr.url,bmnr.url);
+  assert.ok(mstr.symbols.includes('MSTR'));assert.ok(bmnr.symbols.includes('BMNR'));
+  assert.notEqual(researchArticleMarkdown(mstr),researchArticleMarkdown(bmnr));
+});
+
 test('an unknown article cannot silently produce a different or empty export',()=>{
   assert.equal(getResearchArticle('not-a-research-article'),null);
   assert.throws(()=>researchArticleMarkdown('not-a-research-article'),/Unknown research article/);

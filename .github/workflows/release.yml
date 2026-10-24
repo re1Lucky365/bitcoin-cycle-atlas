@@ -44,6 +44,8 @@ jobs:
         run: npm test
       - name: Verify research catalog and preserved Markdown
         run: npm run verify:research
+      - name: Independently reconcile daily treasury paths
+        run: npm run verify:treasury-paths
       - name: Verify bounded request ownership and negative controls
         run: npm run verify:formal
       - name: Verify and package release assets

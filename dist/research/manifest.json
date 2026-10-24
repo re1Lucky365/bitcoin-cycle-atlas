@@ -34,16 +34,16 @@
     {
       "id": "mstr-model-method",
       "path": "dist/research/mstr-model-method.md",
-      "sourceUrl": "https://github.com/twoimo/bitcoin-cycle-atlas/blob/main/docs/TREASURY_MODEL.md",
-      "sha256": "6e5993ca7489a375c363a2d4f0cf2e2b3c95fc6b1c342483c0e72d7c243c91b4",
-      "bytes": 2839
+      "sourceUrl": "https://github.com/twoimo/bitcoin-cycle-atlas/blob/main/docs/TREASURY_ASSET_PATHS.md#mstr",
+      "sha256": "f05d9331ce86a93679195a441cb052805b03f48a5129d46ab791efb59c0c88bc",
+      "bytes": 4002
     },
     {
       "id": "bmnr-model-method",
       "path": "dist/research/bmnr-model-method.md",
-      "sourceUrl": "https://github.com/twoimo/bitcoin-cycle-atlas/blob/main/docs/TREASURY_MODEL.md#bmnr",
-      "sha256": "f4397008f85aa59fb35bac257df0057d2535ca38e9f320d7c41547b16c0b0ad1",
-      "bytes": 2999
+      "sourceUrl": "https://github.com/twoimo/bitcoin-cycle-atlas/blob/main/docs/TREASURY_ASSET_PATHS.md#bmnr",
+      "sha256": "7df462579271a006a715ad07940e2619472c438da7fe1ba16df1872360dab9dd",
+      "bytes": 4440
     },
     {
       "id": "model-eth-valuation",

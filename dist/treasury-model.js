@@ -1,4 +1,5 @@
 import { TREASURY_SNAPSHOTS, TREASURY_MARKET_ANCHORS, TREASURY_FUTURE_EVENTS, TREASURY_TARGETS } from './treasury-research.js?v=1.19.0';
+import { detectDirectionalChanges } from './market-structure.js?v=1.19.0';
 
 const DAY = 86400000, YEAR = 365.25;
 const day = value => {
@@ -136,23 +137,53 @@ function applyKnownAdjustments(snapshot,asOf) {
   return {state,applied};
 }
 
-function simulate(symbol,snapshot,coinAnchor,latest,scenario,endYear) {
-  const adjusted=applyKnownAdjustments(snapshot,latest.date),settings=assumptionsFor(symbol,scenario,adjusted.state,coinAnchor,endYear);
+function validateAssetPaths(bundle,{coin,asOf,endDate,anchorPrice}) {
+  if(!bundle||bundle.asset!==coin||bundle.asOf!==asOf||bundle.endDate!==endDate)throw new RangeError('Asset paths must match the treasury asset, as-of date and horizon');
+  const firstDay=day(asOf),lastDay=day(endDate),count=lastDay-firstDay+1;
+  if(!bundle.scenarios||Object.keys(bundle.scenarios).some(id=>!TREASURY_SCENARIOS.some(item=>item.id===id)))throw new TypeError('Asset paths require the three declared treasury scenarios');
+  const scenarios={};
+  for(const {id} of TREASURY_SCENARIOS){
+    const scenario=bundle.scenarios[id];
+    if(!scenario||scenario.id!==id||typeof scenario.method!=='string'||!scenario.method.trim())throw new TypeError('Asset path scenario identity and method are required');
+    if(scenario.asset!==undefined&&scenario.asset!==coin||scenario.asOf!==undefined&&scenario.asOf!==asOf||scenario.endDate!==undefined&&scenario.endDate!==endDate)throw new RangeError('Asset path scenario boundaries disagree with its bundle');
+    if(!Array.isArray(scenario.sourceIds)||!scenario.sourceIds.length||scenario.sourceIds.some(value=>typeof value!=='string'||!value))throw new TypeError('Asset path sources are required');
+    if(!scenario.training||typeof scenario.training.maxSourceDate!=='string'||day(scenario.training.maxSourceDate)>firstDay)throw new RangeError('Asset path training cannot use observations after its as-of date');
+    if(!Array.isArray(scenario.path)||scenario.path.length!==count)throw new RangeError('Asset path must contain every calendar day through its declared horizon');
+    const path=Array.from(scenario.path,(row,index)=>{
+      if(!row||day(row.date)!==firstDay+index)throw new RangeError('Asset path dates must be consecutive, ordered calendar days');
+      positive(row.price,'asset path price');
+      if(row.baselinePrice!==undefined)positive(row.baselinePrice,'asset baseline price');
+      if(row.sourceIds!==undefined&&(!Array.isArray(row.sourceIds)||row.sourceIds.some(value=>typeof value!=='string'||!value)))throw new TypeError('Asset point source IDs must be strings');
+      return {...row};
+    });
+    if(Math.abs(path[0].price-anchorPrice)>1e-10*Math.max(1,anchorPrice))throw new RangeError('Asset path anchor must match the observed coin price used for share normalization');
+    if(!Array.isArray(scenario.anchors))throw new TypeError('Asset valuation anchors must be explicit, including an empty list');
+    const anchors=scenario.anchors.map(anchor=>{day(anchor?.date);positive(anchor.price,'asset valuation anchor');return {...anchor};});
+    scenarios[id]={...scenario,path,anchors,sourceIds:[...scenario.sourceIds],training:{...scenario.training}};
+  }
+  return {...bundle,scenarios};
+}
+
+function simulate(symbol,snapshot,coinAnchor,latest,scenario,endYear,assetPath=null) {
+  const adjusted=applyKnownAdjustments(snapshot,latest.date),originalSettings=assumptionsFor(symbol,scenario,adjusted.state,coinAnchor,endYear);
+  const settings=assetPath?{...originalSettings,anchors:assetPath.anchors,sourceIds:[...new Set([...assetPath.sourceIds,...HOLDING_POLICIES[symbol].sourceIds])],assetPathMethod:assetPath.method,accountingFrequency:'calendar-day',labels:[...originalSettings.labels,'기초 코인의 일별 모의 경로를 그대로 재무 계산에 전달하며 주말에도 비용·보상·상환을 평가합니다.']}:originalSettings;
   let state={...adjusted.state};
   const initial=treasuryResidual(state,coinAnchor.price);
   if(state.coinUnits>settings.holdingPolicy.maxCoinUnits)throw new RangeError('Initial holdings exceed the declared capacity');
   if(initial.insolvent)throw new RangeError('Cannot normalize a nonpositive initial treasury residual');
   const initialPremium=latest.price/initial.navPerShare;
   const startDay=day(latest.date),endDay=day(`${endYear}-12-31`),dates=new Set([latest.date,date(endDay)]);
-  for(let t=startDay+30;t<endDay;t+=30)dates.add(date(t));
-  // Every scenario shares all annual knots, including other scenarios' targets.
-  for(let year=Number(latest.date.slice(0,4));year<=endYear;year++)if(`${year}-12-31`>latest.date)dates.add(`${year}-12-31`);
-  for(const item of snapshot.debtSchedule||[])if(item.date>latest.date&&day(item.date)<=endDay)dates.add(item.date);
-  for(const item of settings.anchors)if(item.date>latest.date&&day(item.date)<=endDay)dates.add(item.date);
-  const sorted=[...dates].sort(),path=[];let prior=latest.date,totalSold=0,capitalRaised=0,insolventAt=null,shockApplied=false,capacityReachedAt=null,rewardsSold=0,rewardSaleProceeds=0;
+  if(!assetPath){
+    for(let t=startDay+30;t<endDay;t+=30)dates.add(date(t));
+    for(let year=Number(latest.date.slice(0,4));year<=endYear;year++)if(`${year}-12-31`>latest.date)dates.add(`${year}-12-31`);
+    for(const item of snapshot.debtSchedule||[])if(item.date>latest.date&&day(item.date)<=endDay)dates.add(item.date);
+    for(const item of settings.anchors)if(item.date>latest.date&&day(item.date)<=endDay)dates.add(item.date);
+  }
+  const sorted=assetPath?assetPath.path.map(point=>point.date):[...dates].sort(),path=[];let prior=latest.date,totalSold=0,capitalRaised=0,insolventAt=null,shockApplied=false,capacityReachedAt=null,rewardsSold=0,rewardSaleProceeds=0;
   const sourceIds=[...new Set([...(snapshot.sourceIds||[]),...adjusted.applied.flatMap(item=>item.sourceIds||[]),...settings.sourceIds,`${symbol.toLowerCase()}-model-method`])];
-  for(const at of sorted){
-    const years=(day(at)-startDay)/YEAR,dt=(day(at)-day(prior))/YEAR,coinPrice=interpolatePrice({date:latest.date,price:coinAnchor.price},settings.anchors,at);
+  for(let index=0;index<sorted.length;index++){
+    const at=sorted[index],assetPoint=assetPath?.path[index];
+    const years=(day(at)-startDay)/YEAR,dt=(day(at)-day(prior))/YEAR,coinPrice=assetPoint?assetPoint.price:interpolatePrice({date:latest.date,price:coinAnchor.price},settings.anchors,at);
     const premium=settings.premiumTarget+(initialPremium-settings.premiumTarget)*Math.pow(0.5,years/settings.premiumHalfLifeYears);
     if(dt>0&&!insolventAt){
       const haircutStep=Math.min(years,1)-Math.min((day(prior)-startDay)/YEAR,1);
@@ -185,7 +216,8 @@ function simulate(symbol,snapshot,coinAnchor,latest,scenario,endYear) {
     const components=treasuryResidual(state,coinPrice);
     if(components.insolvent&&!insolventAt)insolventAt=at;
     const price=nonnegative(insolventAt?0:components.navPerShare*premium,'scenario price');
-    path.push({date:at,price,kind:at===latest.date?'anchor':'forecast',sourceIds,components:{...components,coinPrice,coinUnits:state.coinUnits,cashUsd:state.cashUsd,debtUsd:state.debtUsd,preferredUsd:state.preferredUsd,shares:state.shares,premium,coinsSold:totalSold,capitalRaised,rewardsSold,rewardSaleProceeds,holdingCap:settings.holdingPolicy.maxCoinUnits},financialAsOf:snapshot.asOf,probability:null});
+    const pointSources=assetPoint?.sourceIds?.length?[...new Set([...sourceIds,...assetPoint.sourceIds])]:sourceIds;
+    path.push({date:at,price,kind:at===latest.date?'anchor':'forecast',sourceIds:pointSources,components:{...components,coinPrice,...(assetPoint?.baselinePrice!==undefined?{coinBaselinePrice:assetPoint.baselinePrice}:{}),coinUnits:state.coinUnits,cashUsd:state.cashUsd,otherAssetsUsd:state.otherAssetsUsd,debtUsd:state.debtUsd,preferredUsd:state.preferredUsd,otherLiabilitiesUsd:state.otherLiabilitiesUsd,nonControllingInterestUsd:state.nonControllingInterestUsd,shares:state.shares,premium,coinsSold:totalSold,capitalRaised,rewardsSold,rewardSaleProceeds,holdingCap:settings.holdingPolicy.maxCoinUnits},financialAsOf:snapshot.asOf,probability:null});
     prior=at;
   }
   return {path,settings,initialPremium,insolventAt,capacityReachedAt,adjustments:adjusted.applied};
@@ -195,8 +227,8 @@ function simulate(symbol,snapshot,coinAnchor,latest,scenario,endYear) {
  * capital structure. It is explicitly NOT current NAV: newer holdings are not
  * divided by a stale denominator. The stale-vintage warning travels with every
  * output and is shown on the chart. No out-of-sample predictive claim is made. */
-export function buildTreasuryForecast({symbol,history,scenario='base',asOf,endYear=2035,snapshot=TREASURY_SNAPSHOTS[symbol],coinAnchor=TREASURY_MARKET_ANCHORS[symbol]}={}) {
-  if(!['MSTR','BMNR'].includes(symbol)||!TREASURY_SCENARIOS.some(s=>s.id===scenario))throw new RangeError('Invalid instrument or scenario');
+export function buildTreasuryForecasts({symbol,history,asOf,endYear=2035,snapshot=TREASURY_SNAPSHOTS[symbol],coinAnchor=TREASURY_MARKET_ANCHORS[symbol],assetPaths}={}) {
+  if(!['MSTR','BMNR'].includes(symbol))throw new RangeError('Invalid instrument or scenario');
   if(!snapshot||!coinAnchor)throw new TypeError('Missing verified treasury snapshot or crypto anchor');
   if(!Number.isSafeInteger(endYear)||endYear<2027||endYear>2050)throw new RangeError('Horizon must be 2027–2050');
   const rawCandles=Array.isArray(history)?history:history?.candles;
@@ -228,26 +260,44 @@ export function buildTreasuryForecast({symbol,history,scenario='base',asOf,endYe
   if(latest.date<'2026-10-23'||coinAnchor.date<'2026-10-23')throw new RangeError('Effective market anchors precede the research knowledge date');
   if(day(latest.date)>=day(`${endYear}-12-31`))throw new RangeError('Expired horizon');
   if(snapshot.asOf>latest.date||snapshot.publishedAt>latest.date||coinAnchor.date>latest.date)throw new RangeError('Future information is not permitted at the price cutoff');
-  const simulations=Object.fromEntries(TREASURY_SCENARIOS.map(item=>[item.id,simulate(symbol,snapshot,coinAnchor,latest,item.id,endYear)]));
-  const selected=simulations[scenario],maps=Object.values(simulations).map(item=>new Map(item.path.map(p=>[p.date,p])));
-  const path=selected.path.map(point=>{
-    const values=maps.map(map=>map.get(point.date)?.price).filter(Number.isFinite);
-    return {...point,low:Math.min(point.price,...values),high:Math.max(point.price,...values)};
-  });
+  if(assetPaths!==undefined&&coinAnchor.date!==latest.date)throw new RangeError('Asset-linked paths require the coin anchor date to match the observed equity anchor date');
+  const assets=assetPaths===undefined?null:validateAssetPaths(assetPaths,{coin:snapshot.coin,asOf:latest.date,endDate:`${endYear}-12-31`,anchorPrice:coinAnchor.price});
+  const simulations=Object.fromEntries(TREASURY_SCENARIOS.map(item=>[item.id,simulate(symbol,snapshot,coinAnchor,latest,item.id,endYear,assets?.scenarios[item.id])]));
+  const maps=Object.values(simulations).map(item=>new Map(item.path.map(p=>[p.date,p])));
   const age=day(latest.date)-day(snapshot.asOf);
-  const milestones=[
-    {id:`${symbol.toLowerCase()}-capital-model`,date:date(day(latest.date)+90),title:'주당 가치 · 자금 조달',description:'보유자산에서 선순위 청구권을 차감하고, 발행·희석·현금 비용을 적용합니다.',sourceIds:[`${symbol.toLowerCase()}-model-method`,...snapshot.sourceIds]},
-    ...TREASURY_FUTURE_EVENTS.filter(item=>item.symbol===symbol&&item.date>latest.date&&Number(item.date.slice(0,4))<=endYear),
-    ...selected.settings.anchors.filter(item=>item.date>latest.date&&Number(item.date.slice(0,4))<=endYear).map((item,index)=>({id:`${symbol.toLowerCase()}-valuation-${index}`,date:item.date,title:`${snapshot.coin} 가격 조건`,description:`${item.date}의 $${Math.round(item.price).toLocaleString('en-US')}는 지정한 조건입니다. 실제 사건 또는 확률 예측이 아닙니다.`,sourceIds:selected.settings.sourceIds})),
-  ].sort((a,b)=>a.date.localeCompare(b.date));
-  return {symbol,asOf:latest.date,issuedAt:'2026-10-24',financialAsOf:snapshot.asOf,displayEnd:`${endYear}-12-31`,path,milestones,snapshot,coinAnchor,scenario:TREASURY_SCENARIOS.find(item=>item.id===scenario),assumptions:selected.settings,
+  return Object.fromEntries(TREASURY_SCENARIOS.map(scenario=>{
+    const selected=simulations[scenario.id],asset=assets?.scenarios[scenario.id];
+    const path=selected.path.map(point=>{
+      const values=maps.map(map=>map.get(point.date)?.price).filter(Number.isFinite);
+      if(values.length!==TREASURY_SCENARIOS.length)throw new RangeError('Treasury scenario dates must agree before constructing the condition range');
+      return {...point,low:Math.min(...values),high:Math.max(...values)};
+    });
+    const pivots=assets?detectDirectionalChanges(path.filter(point=>point.price>0),{threshold:0.12}).pivots.filter(point=>point.eventDate>latest.date):[];
+    const milestones=[
+      {id:`${symbol.toLowerCase()}-capital-model`,date:date(day(latest.date)+90),title:'주당 가치 · 자금 조달',description:'보유자산에서 선순위 청구권을 차감하고, 발행·희석·현금 비용을 적용합니다.',sourceIds:[`${symbol.toLowerCase()}-model-method`,...snapshot.sourceIds]},
+      ...TREASURY_FUTURE_EVENTS.filter(item=>item.symbol===symbol&&item.date>latest.date&&Number(item.date.slice(0,4))<=endYear),
+      ...selected.settings.anchors.filter(item=>item.date>latest.date&&Number(item.date.slice(0,4))<=endYear).map((item,index)=>({id:`${symbol.toLowerCase()}-valuation-${index}`,date:item.date,title:`${snapshot.coin} 가격 조건`,description:`${item.date}의 $${Math.round(item.price).toLocaleString('en-US')}는 지정한 ${assets?'기초자산 기준선':'가격'} 조건입니다. 실제 사건 또는 확률 예측이 아닙니다.`,sourceIds:selected.settings.sourceIds})),
+      ...pivots.map((point,index)=>({id:`${symbol.toLowerCase()}-simulated-${point.type}-${index}`,date:point.eventDate,price:point.eventPrice,title:`모의 ${point.type==='high'?'고점':'저점'} 후보`,description:`앱이 선택한 12% 반전 규칙으로 모의 경로를 사후 요약한 ${point.type==='high'?'고점':'저점'}입니다. 모형 내 확인일은 ${point.confirmationDate}이며 별도 최소 간격 필터는 없습니다. 실제 미래 사건, 4년 주기 또는 적중 확률을 뜻하지 않습니다.`,kind:'simulated-turn',turnType:point.type,confirmationDate:point.confirmationDate,threshold:0.12,probability:null,sourceIds:selected.path.find(row=>row.date===point.eventDate).sourceIds})),
+      ...(assets&&selected.insolventAt?[{id:`${symbol.toLowerCase()}-simulated-zero`,date:selected.insolventAt,price:0,title:'모의 잔여가치 소진',description:'이 조건의 일말 보통주 잔여가치가 0 이하가 되어 이후 가격을 0으로 유지하는 모델 규칙입니다. 실제 파산일 예측이 아닙니다.',kind:'simulated-insolvency',probability:null,sourceIds:selected.settings.sourceIds}]:[]),
+    ].filter(item=>item.date<=`${endYear}-12-31`).sort((a,b)=>a.date.localeCompare(b.date));
+    return [scenario.id,{symbol,asOf:latest.date,issuedAt:'2026-10-24',financialAsOf:snapshot.asOf,displayEnd:`${endYear}-12-31`,path,milestones,snapshot,coinAnchor,scenario,assumptions:selected.settings,
+    pathMode:assets?'asset-linked-daily':'target-interpolation',
+    assetPath:asset?{asset:assets.asset,asOf:assets.asOf,endDate:assets.endDate,scenario:asset.id,method:asset.method,sourceIds:asset.sourceIds,anchors:asset.anchors,training:asset.training,metadata:{...assets.metadata,...asset.metadata},warnings:[...(assets.warnings||[]),...(asset.warnings||[])]}:null,
     formula:'주가 가정 = 프리미엄 × max(코인 가치 + 현금 + 포함 자산 − 채무 원금 − 우선주 청구권 − 기타 부채 − 비지배지분, 0) ÷ 보통주 수',
     warnings:[`재무 기준 ${snapshot.asOf} · 가격 기준 ${latest.date} · ${age}일 시차. 최신 NAV가 아닌 과거 구조의 가격 정규화 민감도입니다.`,
       '최근 보유량과 과거 주식 수를 합치지 않습니다. 공시 이후 모든 발행·매각·전환·세금을 복원한 현재 재무제표가 아닙니다.',
       '범위는 세 조건의 최소·최대입니다. 신뢰구간·발생 확률·상하한 보장이 아닙니다.',
       '잔여가치가 0 이하이면 이 모델은 청산 스트레스로 가격 0을 유지합니다. 법적 파산 판정이나 실제 주가 0의 예언은 아닙니다.',
       '주식과 코인 관측은 서로 다른 마감 시각입니다. 분 단위 동시 시세 또는 정확한 현물 프리미엄이 아닙니다.',
+      ...(assets?['일별 경로는 기초 코인 모형을 재무 구조에 전달한 모의 평가입니다. 주말에도 계산하며 실제 거래소의 체결·장중 OHLC를 예측한 값이 아닙니다.','일별 발행은 연간 발행률을 달력 날짜에 배분한 모델 가정이며 실제 주말 주식 발행 기록이 아닙니다.','일별 현금·발행 계산은 기존 목표 연결 모형의 약 30일 계산과 구간 길이가 다릅니다. 같은 종착 코인 가격이라도 중간 경로와 계산 주기에 따라 보유량·희석·주가가 달라집니다.',...(assets.warnings||[]),...(asset.warnings||[])]:[]),
       `${selected.settings.holdingPolicy.label} 상한 전에도 조달 접근성·호가·거래량·가격 충격은 검증하지 않았습니다.`,
       ...(snapshot.notes||[])],
-    diagnostics:{method:'historical-capital-structure-sensitivity',financialAgeDays:age,currentNavClaim:false,initialImpliedVintagePremium:selected.initialPremium,adjustments:selected.adjustments,predictiveValidation:'not-established',probabilities:null,insolventAt:selected.insolventAt,capacityReachedAt:selected.capacityReachedAt,scenarioCapacityReachedAt:Object.fromEntries(Object.entries(simulations).map(([id,value])=>[id,value.capacityReachedAt])),scenarioInsolvency:Object.fromEntries(Object.entries(simulations).map(([id,value])=>[id,value.insolventAt]))}};
+    diagnostics:{method:assets?'asset-path-linked-capital-structure-sensitivity':'historical-capital-structure-sensitivity',accountingFrequency:assets?'calendar-day':'target-and-30-day-knots',dayCountBasis:YEAR,assetPathMethod:asset?.method??null,simulatedTurnCount:pivots.length,financialAgeDays:age,currentNavClaim:false,initialImpliedVintagePremium:selected.initialPremium,adjustments:selected.adjustments,predictiveValidation:'not-established',probabilities:null,insolventAt:selected.insolventAt,capacityReachedAt:selected.capacityReachedAt,scenarioCapacityReachedAt:Object.fromEntries(Object.entries(simulations).map(([id,value])=>[id,value.capacityReachedAt])),scenarioInsolvency:Object.fromEntries(Object.entries(simulations).map(([id,value])=>[id,value.insolventAt]))}}];
+  }));
+}
+
+export function buildTreasuryForecast(options={}) {
+  const scenario=options.scenario??'base';
+  if(!TREASURY_SCENARIOS.some(item=>item.id===scenario))throw new RangeError('Invalid instrument or scenario');
+  return buildTreasuryForecasts(options)[scenario];
 }

@@ -1,4 +1,4 @@
-import {RESEARCH_ARTICLES,ARTICLE_ALIASES} from './research-library-data.js?v=1.19.0';
+import {RESEARCH_ARTICLES,ARTICLE_ALIASES} from './research-library-data.js?v=1.20.0';
 import {RESEARCH_SOURCES} from './research-source-data.js?v=1.19.0';
 import {mountDialogViewport} from './dialog-viewport.js?v=1.14.0-mobile.1';
 import {serializeResearchArticleMarkdown,safeResearchUrl as safe} from './research-format.js?v=1.19.0';

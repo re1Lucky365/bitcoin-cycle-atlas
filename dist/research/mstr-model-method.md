@@ -10,12 +10,12 @@
 - 종목: MSTR
 - 분류: method
 - 접근 상태: original-research
-- 원문: https://github.com/twoimo/bitcoin-cycle-atlas/blob/main/docs/TREASURY_MODEL.md
+- 원문: https://github.com/twoimo/bitcoin-cycle-atlas/blob/main/docs/TREASURY_ASSET_PATHS.md#mstr
 - 원문 위치: 페이지 본문 또는 아래 제한 참조
 
 ## 본문 · 연구 요약
 
-회사가 공시한 같은 날짜의 BTC·현금·채무 원금·우선주 청산우선권·기말 보통주로 잔여가치를 구성한다. 이를 최근 관측 주가에 정규화한 뒤, 자산 가격·발행·희석·금융비용·시장 프리미엄을 각각 바꾼다. 미래 경로는 해당 조건이 지속될 때의 민감도이며 현재 NAV나 적정 주가를 계산했다는 주장이 아니다.
+기본 자산 연동 모드는 BTC 화면과 같은 관측·seed의 실제 BTC 엔진 경로를 사용한다. 스트레스·기준·확대 조건의 일별 경로를 각각 공시 기반 재무 상태에 통과시켜 발행·희석·금융비용·상환·프리미엄을 계산하고 최근 관측 주가에 정규화한다. 기존 목표 연결 모드는 별도 민감도 비교로 남는다. 세일러의 목표에 기본 경로를 강제로 맞추지 않으며 현재 NAV나 적정 주가를 계산했다는 주장이 아니다.
 
 ## 주장과 교차 확인
 
@@ -35,9 +35,17 @@
 
 대조 자료: [mstr-capital-framework-2026](./mstr-capital-framework-2026.md)
 
+### 기본 경로는 BTC의 세 경제 조건을 일별 재무 계산에 그대로 연결한다.
+
+판정: conditional
+
+MSTR stress/base/bull은 BTC 엔진 stress/base/accelerated와 대응한다. 조건별 대표 경로를 각각 계산하며 조건 범위는 확률 분위수나 전체 손실 경계가 아니다.
+
+대조 자료: [btc-model-method](./btc-model-method.md), [long-wisdomtree-2030](./long-wisdomtree-2030.md), [long-wisdomtree-2050](./long-wisdomtree-2050.md)
+
 ## 한계와 반대 조건
 
-- 모델은 추정한 확률분포나 검증된 주가 예측기가 아니다.
+- 모델은 추정한 확률분포나 검증된 주가 예측기가 아니다. 같은 날짜의 UTC 코인 종가와 뉴욕 주식 종가는 동시 시각이 아니다.
 - 6월 공시 이후 모든 재무 변화를 복원하지 않았다. 최신 NAV는 표시하지 않는다.
 - 원금 상환 청구일에는 전액 현금상환하는 조건을 사용한다. 실제 청구·차환·전환은 미정이다.
 - 소프트웨어 영업가치, 미래 세금·환율·조건변경을 완전하게 가격화하지 않는다.
@@ -45,6 +53,12 @@
 ## 이미지·동영상 기록
 
 별도 미디어 URL을 확보하지 않았습니다. 미디어가 없다는 의미는 아닙니다.
+
+## 관련 링크
+
+- [기초자산 경로 · BTC 재사용과 ETH 블록 재표본](<https://github.com/twoimo/bitcoin-cycle-atlas/blob/main/docs/TREASURY_ASSET_PATHS.md>)
+- [자산 연동 재무 모형 · 조건별 일별 계산](<https://github.com/twoimo/bitcoin-cycle-atlas/blob/main/docs/TREASURY_PATH_MODEL.md>)
+- [공시 기반 재무 항등식과 기존 목표 연결 방법](<https://github.com/twoimo/bitcoin-cycle-atlas/blob/main/docs/TREASURY_MODEL.md>)
 
 ## 푸터 · 보존 범위
 

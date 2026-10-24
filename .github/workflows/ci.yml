@@ -32,6 +32,8 @@ jobs:
         run: npm run verify:research
       - name: Verify reviewed Ethereum history matches the published catalog
         run: npm run verify:eth-events
+      - name: Independently reconcile daily treasury paths
+        run: npm run verify:treasury-paths
       - name: Verify bounded request ownership and negative controls
         run: npm run verify:formal
       - name: Verify the observed daily clock and bounded chart work

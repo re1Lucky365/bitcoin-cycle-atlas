@@ -1,5 +1,5 @@
 import {bitcoinForecastEvidence} from './forecast-evidence.js?v=1.18.0';
-import {openResearchArticle} from './research-reader.js?v=1.19.0';
+import {openResearchArticle} from './research-reader.js?v=1.20.0';
 import {priceLegendMarkup,priceReadoutKind,observedPriceSourceLabel} from './price-legend.js?v=1.14.0-mobile.1';
 import { buildCycleMilestones, INTERVAL_RELATIONS, MILESTONE_TYPES } from './cycle-milestones.js?v=1.19.0';
 import { cycleLegendMarkup, cycleMilestoneInspection, cycleIntervalInspection, cycleDurationLabel } from './cycle-milestones-view.js?v=1.19.0';
@@ -15,7 +15,7 @@ import { chartSelectionHandler } from './inspection-policy.js?v=1.11.0';
 import { buildLongHorizonForecast, LONG_HORIZON_SCENARIOS } from './long-horizon-forecast.js?v=1.19.0';
 import { longHorizonMethodMarkup } from './long-horizon-view.js?v=1.11.0';
 import { CHART_INTERVALS, chartInterval, isIntradayInterval } from './ohlc-data.js?v=1.11.0';
-import { drawIntradayChart } from './intraday-chart.js?v=1.19.0';
+import { drawIntradayChart } from './intraday-chart.js?v=1.20.0';
 import { createMarketDataController, marketStatusText } from './market-data-controller.js?v=1.15.0-eth.1';
 import { parseVolumeSnapshot, aggregateWeeklyVolume } from './volume-data.js?v=1.19.0';
 import { fitVolumeForecastModel, projectVolumeForecast } from './volume-forecast.js?v=1.19.0';

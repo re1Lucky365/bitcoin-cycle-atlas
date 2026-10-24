@@ -1,0 +1,6 @@
+stage	decision	basis	verification
+ground	MSTR uses actual BTC path; BMNR has ETH path without forced four-year cycle	Existing BTC public daily path and ETH post-Merge continuous observations	PASS: exact BTC dates/prices and ETH source-return reconstruction at 2026-10-23 cutoff
+architecture	Separate asset-path value; reuse treasury accounting transition	Independent architecture review; avoid duplicated financial rules	PASS: 53010 daily transitions; independent synthetic path-order oracle
+range	Three coherent financial scenarios define min/max, not quantiles	BTC long horizon supplies representative paths, not calibrated probability samples	PASS: six full paths and all-date pointwise min/max equality
+display	Simulated path bars keep their range separate from scenario bounds	Daily price path does not identify future intraday OHLC	PASS: 19 renderer + 5 path-bar + 4 existing intraday individual checks; live deployment checked separately
+ownership	One writer per source slice; root owns generated files and publication	Shared workspace and already published v1.19.0	Remote base 0dcc7760d14c93f9038ea5ae26743a4dd9e06f03 verified

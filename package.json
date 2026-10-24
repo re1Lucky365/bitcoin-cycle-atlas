@@ -1,11 +1,12 @@
 {
   "name": "bitcoin-cycle-atlas",
-  "version": "1.19.0",
+  "version": "1.20.0",
   "private": true,
   "type": "module",
   "engines": { "node": ">=24" },
   "scripts": {
     "test": "node --test tests/*.test.mjs",
+    "verify:treasury-paths": "node scripts/verify-treasury-paths.mjs",
     "verify:static": "node scripts/verify-static.mjs",
     "refresh:cycle": "node scripts/refresh-cycle-calibration.mjs",
     "refresh:eth": "node scripts/refresh-eth.mjs",
