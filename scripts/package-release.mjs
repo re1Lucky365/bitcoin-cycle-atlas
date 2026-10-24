@@ -84,6 +84,6 @@ for (const name of [...names].sort()) {
 await asset('SHA256SUMS.txt', `${checksums.join('\n')}\n`);
 await writeFile(path.join(output, 'ASSETS.txt'), `${names.map(name => `release/assets/${name}`).join('\n')}\n`);
 const releaseNotesFile = `docs/RELEASE_V${packageVersion.split('.').slice(0,2).join('_')}.md`;
-const releaseNotes = await readFile(path.join(root, releaseNotesFile), 'utf8');
+const [releaseNotes] = await collectDocuments([releaseNotesFile]);
 await writeFile(path.join(output, 'RELEASE_NOTES.md'), `${releaseNotes.trim()}\n\n소스 커밋: ${commit}\n`);
 console.log(JSON.stringify({ tag, commit, output, assets: names }));
