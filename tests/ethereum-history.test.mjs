@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFile } from 'node:fs/promises';
-import { readEthereumEventSettings, ethereumEventQuery, ethereumEventRange, ethereumEventDetailMarkup } from '../dist/ethereum-history.js';
+import { readEthereumEventSettings, ethereumEventQuery, ethereumEventRange, ethereumEventDetailMarkup, ethereumHistoryList } from '../dist/ethereum-history.js';
 import { ETHEREUM_EVENTS } from '../dist/ethereum-events.js';
 import { parseEthArchive } from '../dist/eth-market-data.js';
 import { readEthView, ethViewQuery } from '../dist/eth-view-state.js';
@@ -26,7 +26,7 @@ const jumpTag=markup=>markup.match(/<button\b[^>]*data-event-jump="[^"]*"[^>]*>/
 
 test('history settings use explicit ETH keys, validate categories and default to observed event context',()=>{
   assert.deepEqual(readEthereumEventSettings(new URLSearchParams()),{visible:true,category:'all'});
-  for(const category of ['protocol','security','market','ecosystem']){
+  for(const category of ['protocol','security','market','ecosystem','macro','regulation','geopolitics']){
     assert.deepEqual(readEthereumEventSettings(new URLSearchParams(`eth-events=off&eth-event-category=${category}`)),{visible:false,category});
   }
   const btc=new URLSearchParams('history=off&events=off&history-category=protocol&eth-event-category=__proto__');
@@ -106,7 +106,7 @@ test('source detail escapes all dynamic text and permits only HTTPS links with a
     {url:'https://example.org/source?x=" onmouseover="bad',title:`공식 ${hostile}`,publisher:hostile,claim:hostile,type:'primary',publishedAt:hostile},
     ...['javascript:alert(1)','data:text/html,<script>alert(1)</script>','http://example.org','//example.org','/relative-source','not a URL'].map(url=>({url,title:`차단 ${hostile}`,publisher:hostile,type:'secondary',claim:hostile})),
   ];
-  const value=sample({id:`event" ${hostile}`,title:hostile,label:hostile,description:hostile,detail:`details ${hostile}`,dateBasis:hostile,crossCheck:hostile,limitations:[hostile],sources});
+  const value=sample({id:`event" ${hostile}`,title:hostile,label:hostile,description:hostile,detail:`details ${hostile}`,dateBasis:hostile,crossCheck:hostile,limitations:[hostile],policyAction:hostile,marketContext:hostile,followUp:hostile,facts:{announcementUtc:hostile},sources});
   const markup=ethereumEventDetailMarkup(value,{firstDate:'2016-05-24',lastDate:'2026-10-23'});
   assert.doesNotMatch(markup,/<img|<script|href="(?:javascript:|data:|http:|\/)/);
   assert.match(markup,/&lt;img src=x onerror=alert\(1\)&gt;/);
@@ -114,6 +114,20 @@ test('source detail escapes all dynamic text and permits only HTTPS links with a
   assert.ok(links[0][1].startsWith('https://example.org/source?x=&quot;'));assert.match(links[0][0],/target="_blank"/);assert.match(links[0][0],/rel="noopener noreferrer"/);
   assert.match(markup,/보조 검증 자료/);assert.match(markup,/1차 자료/);
   assert.match(ethereumEventDetailMarkup(null),/사건을 선택하면/);
+});
+
+test('the expanded catalog supports combined year/category/search filters and reversible date order',()=>{
+  const recent=ethereumHistoryList(),oldest=ethereumHistoryList({order:'asc'});
+  assert.equal(recent.length,ETHEREUM_EVENTS.length);assert.equal(oldest[0].id,'eth-ether-presale-launch');
+  assert.ok(recent.every((event,index)=>!index||event.date<=recent[index-1].date));
+  assert.deepEqual(oldest,ETHEREUM_EVENTS);
+  const filtered=ethereumHistoryList({year:'2021',category:'ecosystem',query:'Uniswap'});
+  // Arbitrum's launch evidence also names its Uniswap deployment; search includes source context.
+  assert.deepEqual(filtered.map(event=>event.id),['eth-context-arbitrum-one-public','eth-uniswap-v3-mainnet']);
+  assert.deepEqual(ethereumHistoryList({year:'2014'}).map(event=>event.id),['eth-ether-presale-launch']);
+  for(const year of ['2025-01','2013','2027','202x','',null,2025])assert.throws(()=>ethereumHistoryList({year}),RangeError);
+  for(const order of ['newest',null,1])assert.throws(()=>ethereumHistoryList({order}),RangeError);
+  recent.pop();assert.equal(ethereumHistoryList().length,ETHEREUM_EVENTS.length);
 });
 
 test('every published catalog entry has consistent detail/jump behavior against the actual validated ETH price archive',async()=>{

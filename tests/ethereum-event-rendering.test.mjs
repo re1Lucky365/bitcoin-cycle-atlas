@@ -1,7 +1,10 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { drawIntradayChart } from '../dist/intraday-chart.js';
 import { EVENT_COLORS } from '../dist/chart-overlays.js';
+import { ETHEREUM_EVENTS, ETHEREUM_EVENT_COLORS } from '../dist/ethereum-events.js';
+import { parseEthArchive } from '../dist/eth-market-data.js';
 
 class SvgNode {
   constructor(){this.attrs=new Map();this.nodes=new Map();this.dataset={};this.textContent='';}
@@ -103,4 +106,21 @@ test('adaptive labels keep mobile dots and active selection with explicit catego
   assert.match(marker(svg,'event-15').body,/stroke="#79c6b6"/);
   drawIntradayChart({svg,series:series(rows),showVolume:false,showHistoricalEvents:true,historicalEvents:[events[0]],historicalEventColors:{ecosystem:'#fff" onload="alert(1)'}});
   assert.doesNotMatch(svg.innerHTML,/onload|alert\(1\)/);assert.match(marker(svg,'event-0').body,new RegExp(`stroke="${EVENT_COLORS.market}"`));
+});
+
+test('the complete researched catalog retains every in-range marker on actual ETH history at desktop and narrow widths',()=>{
+  const daily=parseEthArchive(JSON.parse(readFileSync(new URL('../dist/data/eth-ohlc.json',import.meta.url),'utf8')));
+  const first=daily.candles[0].time,last=daily.candles.at(-1).time;
+  const expected=ETHEREUM_EVENTS.filter(value=>time(value.date)>=first&&time(value.date)<=last).map(value=>value.id);
+  const active='eth-policy-china-additional-tariff-threat-2025';
+  for(const width of [320,1100]){
+    const svg=svgFixture(width,520);
+    drawIntradayChart({svg,series:daily,range:{start:first-DAY,end:last+DAY},chartType:'line',showVolume:false,showHistoricalEvents:true,historicalEvents:ETHEREUM_EVENTS,activeHistoricalEventId:active,historicalEventColors:ETHEREUM_EVENT_COLORS});
+    assert.deepEqual(new Set(ids(svg)),new Set(expected));
+    assert.equal(ids(svg).length,expected.length,'labels can be reduced without dropping or duplicating event markers');
+    assert.equal(Number(svg.dataset.historyLabelCount)+Number(svg.dataset.historyHiddenLabelCount),expected.length);
+    assert.ok(Number(svg.dataset.historyHiddenLabelCount)>0,'the full catalog needs adaptive labels');
+    assert.match(marker(svg,active).body,/stroke="#e3b189"/);
+    assert.doesNotMatch(svg.innerHTML,/NaN|Infinity|data-history-event="eth-ether-presale-launch"/);
+  }
 });

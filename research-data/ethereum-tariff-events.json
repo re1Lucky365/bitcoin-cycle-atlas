@@ -1,0 +1,2332 @@
+[
+  {
+    "id": "eth-policy-steel-aluminum-announcement-2018",
+    "date": "2018-03-01",
+    "label": "철강·알루미늄 관세 예고",
+    "title": "트럼프, 철강·알루미늄 수입 관세 예고",
+    "category": "macro",
+    "importance": 2,
+    "summary": "철강·알루미늄 관세 계획이 공개되며 미국 무역정책의 보호무역 전환이 금융시장의 쟁점으로 부상했다.",
+    "description": "철강·알루미늄 관세 계획이 공개되며 미국 무역정책의 보호무역 전환이 금융시장의 쟁점으로 부상했다.",
+    "detail": "대통령이 업계 간담회에서 관세율을 제시한 날을 기록한다. 정식 포고문 서명과 세관 적용은 뒤에 이뤄졌으며, ETH에 직접 부과하는 세금이 아니다.",
+    "policyAction": "트럼프는 철강 수입에 25%, 알루미늄 수입에 10% 관세를 부과하겠다고 말하고 다음 주 서명을 예고했다.",
+    "marketContext": "Reuters는 3월 1일 주식시장 약세와 무역갈등 우려를 보도했으며, 발표 이전부터 연준 발언·금리 우려도 시장에 작용했다고 설명했다.",
+    "followUp": "CBP는 3월 8일 포고문 발행, 3월 23일 적용 시작 및 뒤이은 국가별 예외 변경을 확인한다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "백악관 간담회 기록의 3월 1일을 사용한다. Reuters 재배포 페이지의 3월 2일 표시는 3월 1일 미국 거래일과 구분한다.",
+    "crossCheck": "백악관 발언 원문, CBP 후속 집행 기록, Reuters 시장 보도를 대조했다. 백악관과 CBP는 같은 행정부 자료다.",
+    "limitations": [
+      "이 사건은 광범위한 무역정책 배경이며 ETH 고유 반응을 직접 확인한 보도가 아니다.",
+      "관세 예고일과 실제 부과일은 다르며 국가별 예외가 후속 변경됐다.",
+      "간담회 기록의 시각 표기에 불일치 소지가 있어 정확한 UTC 발표 시각을 생성하지 않았다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "철강",
+      "알루미늄",
+      "Section 232",
+      "보호무역"
+    ],
+    "sources": [
+      {
+        "title": "Remarks by President Trump in Listening Session with Representatives from the Steel and Aluminum Industry",
+        "url": "https://trumpwhitehouse.archives.gov/briefings-statements/remarks-president-trump-listening-session-representatives-steel-aluminum-industry/",
+        "publisher": "The White House — archived",
+        "type": "primary",
+        "publishedAt": "2018-03-01",
+        "accessedAt": "2026-10-24",
+        "role": "policy-announcement",
+        "claim": "철강 25%·알루미늄 10% 관세 예고 발언을 확인한다."
+      },
+      {
+        "title": "GLOBAL MARKETS-Stocks tumble, dollar gains on Trump tariff comments",
+        "url": "https://in.investing.com/news/stock-market-news/global-marketsstocks-tumble-dollar-gains-on-trump-tariff-comments-1046160",
+        "publisher": "Reuters, republished by Investing.com",
+        "type": "secondary",
+        "publishedAt": "2018-03-02",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-market-report",
+        "claim": "무역갈등 우려 및 금리 우려가 겹친 당시 시장을 보도한다."
+      },
+      {
+        "title": "CSMS# 18-000317 — UPDATE: Additional Duty on Imports of Steel and Aluminum Articles under Section 232",
+        "url": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/1ed564e",
+        "publisher": "U.S. Customs and Border Protection",
+        "type": "primary",
+        "publishedAt": "2018-05-01",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-implementation-record",
+        "claim": "3월 8일 포고문과 3월 23일 적용 시작을 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-section301-memorandum-2018",
+    "date": "2018-03-22",
+    "label": "대중 관세 절차 지시",
+    "title": "미국, 중국 대상 Section 301 관세 절차 지시",
+    "category": "macro",
+    "importance": 3,
+    "summary": "대통령 각서가 중국 대상 관세안 작성과 의견수렴 절차를 지시하며 미중 무역갈등이 확대됐다.",
+    "description": "대통령 각서가 중국 대상 관세안 작성과 의견수렴 절차를 지시하며 미중 무역갈등이 확대됐다.",
+    "detail": "3월 22일 각서는 당일 모든 관세를 즉시 징수한 명령이 아니다. 무역정책의 전환점으로 표시하며 당시 ETH 약세 전체의 원인이라고 단정하지 않는다.",
+    "policyAction": "USTR에 15일 이내 관세 대상·인상안 공표, 의견수렴 후 최종 결정·시행을 지시하고 WTO 분쟁 절차와 투자제한 검토도 주문했다.",
+    "marketContext": "Reuters는 관세 계획과 세계경제 우려 속 미국 주식시장 하락을 보도했다. 기사에는 기술기업 관련 악재 등 다른 요인도 포함됐다.",
+    "followUp": "6월 15일 USTR가 첫 340억 달러 품목의 25% 관세를 확정하고 7월 6일 징수 시작을 예고했다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "대통령 각서 발행일 3월 22일을 사용한다. 4월 제안 목록, 6월 확정, 7월 시행과 구분한다.",
+    "crossCheck": "대통령 각서의 절차 문구를 Reuters 동시기 보도 및 USTR 6월 확정 발표와 대조했다.",
+    "limitations": [
+      "정책 추진 근거에 관한 미국 정부의 대중 비난을 독립적으로 확정한 사실로 채택하지 않는다.",
+      "주식시장 보도는 ETH의 인과효과나 수익률을 입증하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "Section 301",
+      "미중 무역전쟁",
+      "지식재산"
+    ],
+    "sources": [
+      {
+        "title": "Presidential Memorandum on the Actions by the United States Related to the Section 301 Investigation",
+        "url": "https://trumpwhitehouse.archives.gov/presidential-actions/presidential-memorandum-actions-united-states-related-section-301-investigation/",
+        "publisher": "The White House — archived",
+        "type": "primary",
+        "publishedAt": "2018-03-22",
+        "accessedAt": "2026-10-24",
+        "role": "legal-policy-directive",
+        "claim": "관세안 공표와 의견수렴·후속 시행 절차를 지시한다."
+      },
+      {
+        "title": "Stocks tumble to worst day in six weeks after Trump tariff action",
+        "url": "https://www.investing.com/news/stock-market-news/futures-back-off-on-trade-war-fears-tech-woes-persist-1354165?ampMode=1",
+        "publisher": "Reuters, republished by Investing.com",
+        "type": "secondary",
+        "publishedAt": "2018-03-22",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-market-report",
+        "claim": "미국 주식 하락과 무역갈등 우려를 보도한다."
+      },
+      {
+        "title": "USTR Issues Tariffs on Chinese Products in Response to Unfair Trade Practices",
+        "url": "https://ustr.gov/about-us/policy-offices/press-office/press-releases/2018/june/ustr-issues-tariffs-chinese-products",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2018-06-15",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-final-action",
+        "claim": "첫 관세 목록과 7월 6일 징수 일정을 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-first-china-tariffs-effective-2018",
+    "date": "2018-07-06",
+    "label": "첫 대중 관세 시행",
+    "title": "미중 첫 대규모 상호 관세 시행",
+    "category": "macro",
+    "importance": 3,
+    "summary": "미국의 340억 달러 중국산 품목 추가 관세가 실제 적용되며 발표 단계였던 무역갈등이 상호 관세 징수로 이어졌다.",
+    "description": "미국의 340억 달러 중국산 품목 추가 관세가 실제 적용되며 발표 단계였던 무역갈등이 상호 관세 징수로 이어졌다.",
+    "detail": "정책 시행일을 기록한다. Reuters의 당일 보도에서는 세계 주식이 오르는 구간도 관측됐으므로 이 사건을 일률적인 가격 급락 표식으로 쓰지 않는다.",
+    "policyAction": "미국은 첫 목록의 약 340억 달러 중국산 수입품에 25% 추가 관세를 적용했다. Reuters는 중국의 대응 관세 시행도 보도했다.",
+    "marketContext": "Reuters는 무역갈등 확대 우려가 남아 있었지만 당일 주식시장이 초기 관세를 비교적 차분히 소화했다고 설명했다.",
+    "followUp": "USTR는 8월 7일 두 번째 약 160억 달러 목록을 확정하고 8월 23일 징수 시작을 발표했다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "6월 15일 USTR 발표가 지정한 7월 6일 시행일을 쓰고, 8월 USTR 회고에서 실제 시행을 재확인했다.",
+    "crossCheck": "USTR의 사전 일정과 후속 실제 시행 확인을 Reuters의 당일 상호 관세·시장 보도와 대조했다.",
+    "limitations": [
+      "관세 시행은 이미 예고된 뉴스였으며 당일 가격 방향을 사전에 결정하지 않는다.",
+      "세계 주식시장 관측을 ETH 반응으로 대체하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "Section 301",
+      "미중 무역전쟁",
+      "List 1",
+      "시행"
+    ],
+    "sources": [
+      {
+        "title": "USTR Issues Tariffs on Chinese Products in Response to Unfair Trade Practices",
+        "url": "https://ustr.gov/about-us/policy-offices/press-office/press-releases/2018/june/ustr-issues-tariffs-chinese-products",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2018-06-15",
+        "accessedAt": "2026-10-24",
+        "role": "announced-implementation-schedule",
+        "claim": "첫 340억 달러 목록과 7월 6일 징수 시작을 지정한다."
+      },
+      {
+        "title": "USTR Finalizes Second Tranche of Tariffs on Chinese Products in Response to China’s Unfair Trade Practices",
+        "url": "https://ustr.gov/about-us/policy-offices/press-office/press-releases/2018/august/ustr-finalizes-second-tranche",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2018-08-07",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-official-confirmation",
+        "claim": "첫 목록의 실제 7월 6일 시행과 두 번째 목록의 일정을 확인한다."
+      },
+      {
+        "title": "GLOBAL MARKETS-Stocks, euro survive first battle of U.S.-China trade war",
+        "url": "https://ca.investing.com/news/stock-market-news/global-marketsstocks-euro-survive-first-battle-of-uschina-trade-war-1197532",
+        "publisher": "Reuters, republished by Investing.com",
+        "type": "secondary",
+        "publishedAt": "2018-07-06",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-market-report",
+        "claim": "상호 관세 시행과 시장의 비교적 차분한 반응을 보도한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-china-list3-announcement-2018",
+    "date": "2018-09-17",
+    "label": "대중 관세 대상 확대",
+    "title": "미국, 2천억 달러 중국산 상품 관세 확대 발표",
+    "category": "macro",
+    "importance": 2,
+    "summary": "미국이 약 2천억 달러 중국산 수입품으로 관세 범위를 확대하는 일정을 발표했다.",
+    "description": "미국이 약 2천억 달러 중국산 수입품으로 관세 범위를 확대하는 일정을 발표했다.",
+    "detail": "대상 범위의 큰 확대를 기록한다. 다음 날 미국 주식에는 예상보다 완만한 초기 관세율이라는 해석도 나타나, 악재 제목과 가격 방향을 일치시키지 않는다.",
+    "policyAction": "9월 24일부터 10% 추가 관세를 적용하고 2019년 1월 1일 25%로 올리는 계획을 발표했다.",
+    "marketContext": "Reuters는 9월 18일 투자자들이 초기 10% 관세와 중국 대응을 우려보다 약한 조치로 해석하는 가운데 미국 주식이 올랐다고 보도했다.",
+    "followUp": "12월 1일 정상회담에서 1월 인상 계획이 유예됐다. 10%에서 25%로의 실제 인상은 2019년 5월에 이뤄졌다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "백악관 성명 날짜 9월 17일을 사용하며, 9월 24일 적용과 9월 18일 시장 관측을 구분한다.",
+    "crossCheck": "백악관 확대 성명과 후속 유예 성명, Reuters의 다음 날 시장 보도, CBP의 실제 인상 기록을 대조했다.",
+    "limitations": [
+      "당초 1월 1일 인상 계획은 그대로 시행되지 않았다.",
+      "보도된 주식 상승은 ETH 상승이나 관세의 긍정적 경제 효과를 증명하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "Section 301",
+      "List 3",
+      "미중 무역전쟁"
+    ],
+    "sources": [
+      {
+        "title": "Statement from the President — tariffs on approximately $200 billion of imports from China",
+        "url": "https://trumpwhitehouse.archives.gov/briefings-statements/statement-from-the-president-4/",
+        "publisher": "The White House — archived",
+        "type": "primary",
+        "publishedAt": "2018-09-17",
+        "accessedAt": "2026-10-24",
+        "role": "policy-announcement",
+        "claim": "약 2천억 달러 대상의 초기 10% 관세와 후속 인상 계획을 발표한다."
+      },
+      {
+        "title": "Wall Street rallies as blow from fresh tariffs less than feared",
+        "url": "https://www.business-standard.com/article/reuters/wall-street-rallies-as-blow-from-fresh-tariffs-less-than-feared-118091801480_1.html",
+        "publisher": "Reuters, republished by Business Standard",
+        "type": "secondary",
+        "publishedAt": "2018-09-18",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-market-report",
+        "claim": "다음 날 주식시장의 안도성 해석을 보도한다."
+      },
+      {
+        "title": "Statement from the Press Secretary Regarding the President’s Working Dinner with China",
+        "url": "https://trumpwhitehouse.archives.gov/briefings-statements/statement-press-secretary-regarding-presidents-working-dinner-china/",
+        "publisher": "The White House — archived",
+        "type": "primary",
+        "publishedAt": "2018-12-01",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-policy-pause",
+        "claim": "1월 관세 인상 계획 유예를 확인한다."
+      },
+      {
+        "title": "CSMS# 19-000238 — UPDATE: Section 301 (Tranche 3) Duties as of May 10, 2019",
+        "url": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/24419b4",
+        "publisher": "U.S. Customs and Border Protection",
+        "type": "primary",
+        "publishedAt": "2019-05-10",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-implementation-record",
+        "claim": "2019년 5월 실제 요율 인상을 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-buenos-aires-truce-2018",
+    "date": "2018-12-01",
+    "label": "미중 90일 협상 유예",
+    "title": "미중 G20 회담, 관세 인상 유예와 90일 협상 합의",
+    "category": "macro",
+    "importance": 2,
+    "summary": "미중 정상이 추가 관세 인상을 잠시 멈추고 90일 동안 협상을 추진하기로 했다.",
+    "description": "미중 정상이 추가 관세 인상을 잠시 멈추고 90일 동안 협상을 추진하기로 했다.",
+    "detail": "완전한 무역합의나 기존 관세 철폐가 아닌 인상 유예다. 주말 회담일과 뒤이은 주식시장 반응일을 나누어 기록한다.",
+    "policyAction": "미국은 약 2천억 달러 중국산 상품의 10% 관세를 2019년 1월에 25%로 올리지 않기로 했고 양측은 90일 협상을 추진했다.",
+    "marketContext": "Reuters는 12월 3일 미국 주식시장이 무역갈등 완화에 안도하며 올랐지만 해결할 쟁점이 남았다고 보도했다.",
+    "followUp": "관세 인상은 이후 추가로 미뤄졌으나 2019년 5월 10일 관련 요율이 25%로 높아졌다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "백악관의 12월 1일 회담 결과 성명을 사용한다. 시장 보도일 12월 3일과 구분한다.",
+    "crossCheck": "백악관 회담 결과, Reuters 다음 거래일 보도, USTR의 후속 관보 절차를 대조했다.",
+    "limitations": [
+      "90일 협상은 영구적인 분쟁 종결을 뜻하지 않는다.",
+      "주식시장 안도 반응을 ETH 반등으로 단정하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "G20",
+      "부에노스아이레스",
+      "유예",
+      "무역협상"
+    ],
+    "sources": [
+      {
+        "title": "Statement from the Press Secretary Regarding the President’s Working Dinner with China",
+        "url": "https://trumpwhitehouse.archives.gov/briefings-statements/statement-press-secretary-regarding-presidents-working-dinner-china/",
+        "publisher": "The White House — archived",
+        "type": "primary",
+        "publishedAt": "2018-12-01",
+        "accessedAt": "2026-10-24",
+        "role": "policy-pause-announcement",
+        "claim": "1월 요율 인상 유예와 90일 협상 계획을 확인한다."
+      },
+      {
+        "title": "U.S.-China trade truce boosts Wall Street",
+        "url": "https://www.investing.com/news/stock-market-news/uschina-trade-truce-boosts-wall-street-1708279",
+        "publisher": "Reuters, republished by Investing.com",
+        "type": "secondary",
+        "publishedAt": "2018-12-03",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-market-report",
+        "claim": "12월 3일 주식시장 안도 반응과 잔존 불확실성을 보도한다."
+      },
+      {
+        "title": "Notice of Modification of Section 301 Action — 84 FR 20459",
+        "url": "https://www.govinfo.gov/content/pkg/FR-2019-05-09/pdf/2019-09681.pdf",
+        "publisher": "Office of the United States Trade Representative / Federal Register",
+        "type": "primary",
+        "publishedAt": "2019-05-09",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-legal-record",
+        "claim": "추가 유예 경과와 5월 10일 25% 인상 일정을 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-china-tariff-escalation-threat-2019",
+    "date": "2019-05-05",
+    "label": "대중 관세 재인상 예고",
+    "title": "트럼프, 중국산 상품 관세 25% 재인상 예고",
+    "category": "macro",
+    "importance": 3,
+    "summary": "미중 협상 중 트럼프가 약 2천억 달러 중국산 상품의 추가 관세를 다시 올리겠다고 발표했다.",
+    "description": "미중 협상 중 트럼프가 약 2천억 달러 중국산 상품의 추가 관세를 다시 올리겠다고 발표했다.",
+    "detail": "일요일 게시물의 새 정책 정보를 마커로 삼는다. 다음 날 아시아 시장 보도와 5월 10일 실제 적용은 별도 단계이며, ETH 가격 변화의 단독 원인으로 취급하지 않는다.",
+    "policyAction": "트럼프는 기존 10% 추가 관세를 다음 금요일 25%로 높이고 추가 품목에도 관세를 부과하겠다고 예고했다.",
+    "marketContext": "Reuters는 5월 6일 중국 주식과 위안화가 약세를 보였으며 협상 지속 소식 뒤 일부 낙폭을 줄였다고 보도했다.",
+    "followUp": "5월 9일 관보와 5월 10일 CBP 지침이 실제 25% 인상을 확인했다. 이미 선적된 상품에는 당시 별도 경과 규정이 있었다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "보존된 5월 5일 대통령 게시물의 날짜를 사용한다. 아카이브의 시각 시간대를 별도 확인하지 않아 UTC 시각을 생성하지 않았다.",
+    "crossCheck": "대통령 게시물 원문을 Reuters의 5월 6일 보도, USTR 관보, CBP 집행 지침과 대조했다.",
+    "limitations": [
+      "게시물의 관세 부담 주체·경제 효과에 대한 주장을 검증된 사실로 채택하지 않는다.",
+      "기사 시점의 중국 주가·환율 변화는 ETH 일봉 수익률과 다르다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "Section 301",
+      "무역협상",
+      "인상 예고"
+    ],
+    "sources": [
+      {
+        "title": "Tweets of May 5, 2019",
+        "url": "https://www.presidency.ucsb.edu/documents/tweets-may-5-2019",
+        "publisher": "The American Presidency Project — Donald J. Trump post archive",
+        "type": "primary",
+        "publishedAt": "2019-05-05",
+        "accessedAt": "2026-10-24",
+        "role": "policy-announcement",
+        "claim": "10%에서 25%로 인상하겠다는 대통령 발언을 보존한다."
+      },
+      {
+        "title": "China stocks fall most in over 3 years on tariff threats, yuan tumbles",
+        "url": "https://www.reuters.com/article/world/china-stocks-fall-most-in-over-3-years-on-tariff-threats-yuan-tumbles-idUSKCN1SC0MK/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2019-05-06",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-market-report",
+        "claim": "5월 6일 중국 주식·위안화 및 협상 지속 소식에 대한 반응을 보도한다."
+      },
+      {
+        "title": "Notice of Modification of Section 301 Action — 84 FR 20459",
+        "url": "https://www.govinfo.gov/content/pkg/FR-2019-05-09/pdf/2019-09681.pdf",
+        "publisher": "Office of the United States Trade Representative / Federal Register",
+        "type": "primary",
+        "publishedAt": "2019-05-09",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-legal-action",
+        "claim": "5월 10일 인상 적용을 정한 관보 원문이다."
+      },
+      {
+        "title": "CSMS# 19-000238 — UPDATE: Section 301 (Tranche 3) Duties as of May 10, 2019",
+        "url": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/24419b4",
+        "publisher": "U.S. Customs and Border Protection",
+        "type": "primary",
+        "publishedAt": "2019-05-10",
+        "accessedAt": "2026-10-24",
+        "role": "implementation-guidance",
+        "claim": "실제 적용과 선적 시점별 경과 규정을 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-osaka-trade-truce-2019",
+    "date": "2019-06-29",
+    "label": "오사카 무역협상 재개",
+    "title": "미중 오사카 회담, 추가 관세 보류·협상 재개",
+    "category": "macro",
+    "importance": 2,
+    "summary": "오사카 G20 회담 뒤 미국은 새 대중 관세를 당분간 추가하지 않고 협상을 재개하겠다고 발표했다.",
+    "description": "오사카 G20 회담 뒤 미국은 새 대중 관세를 당분간 추가하지 않고 협상을 재개하겠다고 발표했다.",
+    "detail": "기존 관세는 유지된 가운데 추가 확대를 보류한 전환점이다. 주말 회담과 월요일 주식시장 관측을 같은 시각의 움직임으로 합치지 않는다.",
+    "policyAction": "트럼프는 기자회견에서 기존 관세를 없애지 않되 아직 관세가 붙지 않은 중국산 품목에 추가 관세를 당분간 부과하지 않겠다고 밝혔다.",
+    "marketContext": "Reuters는 7월 1일 협상 재개와 화웨이 관련 완화 기대 속 미국 기술주가 올랐다고 보도했다.",
+    "followUp": "8월 1일 트럼프는 추가 중국산 품목의 9월 관세 계획을 발표하며 긴장을 다시 높였다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "백악관의 6월 29일 일본 현지 기자회견 날짜를 사용한다. 7월 1일 시장 기사일과 구분한다.",
+    "crossCheck": "백악관 기자회견의 기존·추가 관세 구분을 Reuters 시장 보도 및 8월 대통령 게시물과 대조했다.",
+    "limitations": [
+      "협상 재개는 포괄 합의나 기존 관세 철폐가 아니다.",
+      "기술주 보도에는 화웨이와 금리 기대도 포함돼 있으며 ETH에 대한 독립 인과 검증은 없다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "G20",
+      "오사카",
+      "협상 재개",
+      "유예"
+    ],
+    "sources": [
+      {
+        "title": "Remarks by President Trump in Press Conference | Osaka, Japan",
+        "url": "https://trumpwhitehouse.archives.gov/briefings-statements/remarks-president-trump-press-conference-osaka-japan/",
+        "publisher": "The White House — archived",
+        "type": "primary",
+        "publishedAt": "2019-06-29",
+        "accessedAt": "2026-10-24",
+        "role": "policy-announcement",
+        "claim": "기존 관세 유지와 추가 관세 보류·협상 재개를 확인한다."
+      },
+      {
+        "title": "Wall Street rallies as trade optimism lifts tech stocks",
+        "url": "https://www.brecorder.com/news/506696/wall-street-rallies-as-trade-optimism-lifts-tech-stocks",
+        "publisher": "Reuters, republished by Business Recorder",
+        "type": "secondary",
+        "publishedAt": "2019-07-01",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-market-report",
+        "claim": "7월 1일 기술주와 위험선호의 반응을 보도한다."
+      },
+      {
+        "title": "Tweets of August 1, 2019",
+        "url": "https://www.presidency.ucsb.edu/documents/tweets-august-1-2019",
+        "publisher": "The American Presidency Project — Donald J. Trump post archive",
+        "type": "primary",
+        "publishedAt": "2019-08-01",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-policy-reversal",
+        "claim": "8월 1일 새 추가 관세 계획 발표를 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-china-list4-tariff-threat-2019",
+    "date": "2019-08-01",
+    "label": "중국 잔여품목 관세 예고",
+    "title": "트럼프, 중국산 추가 3천억 달러 품목 관세 예고",
+    "category": "macro",
+    "importance": 3,
+    "summary": "오사카 협상 재개 이후 트럼프가 아직 추가 관세가 없던 중국산 품목으로 대상 확대를 예고했다.",
+    "description": "오사카 협상 재개 이후 트럼프가 아직 추가 관세가 없던 중국산 품목으로 대상 확대를 예고했다.",
+    "detail": "새 예고의 날짜를 표시하며 전체 품목이 그날 또는 9월 1일에 일괄 과세됐다고 쓰지 않는다. 후속 유예와 요율 수정이 이어졌다.",
+    "policyAction": "트럼프는 약 3천억 달러 중국산 수입품에 9월 1일부터 10% 추가 관세를 적용하겠다고 발표했다.",
+    "marketContext": "Reuters는 8월 1일 미국 주식이 장중 상승에서 하락으로 전환했고, 전날 연준 결정과 금리 기대 변화도 배경에 있었다고 보도했다.",
+    "followUp": "8월 13일 일부 품목은 12월 15일로 연기됐고 일부는 제외됐다. 8월 23일 미국은 예고한 10%를 15%로 올리는 계획을 발표했다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "8월 1일 대통령 게시물 날짜를 사용한다. Reuters 재배포의 8월 2일 게시일과 본문 8월 1일 거래일을 구분한다.",
+    "crossCheck": "대통령 게시물, USTR 후속 품목별 일정·요율 발표, Reuters의 해당 거래일 보도를 대조했다.",
+    "limitations": [
+      "추가 관세 계획의 약 3천억 달러는 당시 제시한 수입품 범위이며 ETH 시가총액·손실액이 아니다.",
+      "기사의 주식시장 반응은 ETH의 동일 방향 반응을 입증하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "Section 301",
+      "List 4",
+      "소비재",
+      "관세 위협"
+    ],
+    "sources": [
+      {
+        "title": "Tweets of August 1, 2019",
+        "url": "https://www.presidency.ucsb.edu/documents/tweets-august-1-2019",
+        "publisher": "The American Presidency Project — Donald J. Trump post archive",
+        "type": "primary",
+        "publishedAt": "2019-08-01",
+        "accessedAt": "2026-10-24",
+        "role": "policy-announcement",
+        "claim": "추가 중국산 품목의 9월 1일 10% 관세 계획을 보존한다."
+      },
+      {
+        "title": "Wall St dragged down by Trump trade tweet",
+        "url": "https://www.moneyweb.co.za/news-fast-news/wall-st-dragged-down-by-trump-trade-tweet/",
+        "publisher": "Reuters, republished by Moneyweb",
+        "type": "secondary",
+        "publishedAt": "2019-08-02",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-market-report",
+        "claim": "8월 1일 장중 주가 전환과 다른 거시 배경을 보도한다."
+      },
+      {
+        "title": "USTR Announces Next Steps on Proposed 10 Percent Tariff on Imports from China",
+        "url": "https://www.ustr.gov/about-us/policy-offices/press-office/press-releases/2019/august/ustr-announces-next-steps-proposed",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2019-08-13",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-partial-delay",
+        "claim": "일부 품목의 12월 유예와 제외를 확인한다."
+      },
+      {
+        "title": "USTR Statement on Section 301 Tariff Action Regarding China",
+        "url": "https://www.ustr.gov/about-us/policy-offices/press-office/press-releases/2019/august/ustr-statement-section-301-tariff",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2019-08-23",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-rate-change",
+        "claim": "예고한 10% 요율의 15% 상향 계획을 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-china-currency-designation-2019",
+    "date": "2019-08-05",
+    "label": "중국 환율조작국 지정",
+    "title": "미국 재무부, 중국 환율조작국 지정",
+    "category": "macro",
+    "importance": 3,
+    "summary": "관세 갈등이 환율정책 충돌로 번지며 미국 재무부가 중국을 환율조작국으로 지정했다.",
+    "description": "관세 갈등이 환율정책 충돌로 번지며 미국 재무부가 중국을 환율조작국으로 지정했다.",
+    "detail": "지정은 미국 정부의 법적·정책적 판단이라는 사실로 기록한다. 위안화 약세와 정규장 하락이 먼저 발생한 뒤 늦게 지정이 발표됐으므로 하루 전체 움직임의 선행 원인으로 쓰지 않는다.",
+    "policyAction": "재무부는 1988년 법에 따라 중국을 환율조작국으로 판단하고 IMF와 협의하겠다고 발표했다.",
+    "marketContext": "Reuters는 지정 발표 뒤 미국 주가지수 선물 약세를 보도했다. 별도 종합 기사에서는 중국 인민은행이 경쟁적 평가절하를 부인했다고 전했다.",
+    "followUp": "2020년 1월 13일 재무부 보고서는 어느 주요 교역국도 환율조작 기준을 충족하지 않는다고 밝혔고 중국은 관찰대상 명단에 남았다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "재무부 발표일 8월 5일을 사용한다. 종합 Reuters 기사 헤더의 8월 6일 UTC와 발표 이후 선물 기사일을 구분한다.",
+    "crossCheck": "재무부 공식 지정과 해제 시점의 보고서, Reuters 발표 이후 선물 보도 및 양측 입장 보도를 대조했다. Reuters 두 기사는 같은 통신사다.",
+    "limitations": [
+      "미국 정부의 지정 사실과 중국이 실제 환율을 부당 조작했다는 독립적인 경제학적 결론은 다르다.",
+      "정규장 주가, 야간 선물, 위안화, ETH의 관측 창을 동일시하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "위안화",
+      "환율",
+      "환율조작국",
+      "무역전쟁",
+      "Treasury"
+    ],
+    "sources": [
+      {
+        "title": "Treasury Designates China as a Currency Manipulator",
+        "url": "https://home.treasury.gov/news/press-releases/sm751",
+        "publisher": "U.S. Department of the Treasury",
+        "type": "primary",
+        "publishedAt": "2019-08-05",
+        "accessedAt": "2026-10-24",
+        "role": "official-designation",
+        "claim": "미국 재무부의 법적 지정과 IMF 협의 계획을 확인한다."
+      },
+      {
+        "title": "S&P 500 futures fall after U.S. Treasury calls China currency manipulator",
+        "url": "https://www.reuters.com/article/business/sp-500-futures-fall-after-us-treasury-calls-china-currency-manipulator-idUSKCN1UV2D7/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2019-08-05",
+        "accessedAt": "2026-10-24",
+        "role": "post-announcement-market-report",
+        "claim": "지정 뒤 미국 주가지수 선물 약세를 보도한다."
+      },
+      {
+        "title": "U.S. designates China a currency manipulator, escalating trade war",
+        "url": "https://www.reuters.com/article/us-china-markets/u-s-designates-china-a-currency-manipulator-escalating-trade-war-idUSKCN1UV061/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2019-08-06",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-policy-report",
+        "claim": "발표 순서와 중국 측 경쟁적 평가절하 부인을 보도한다."
+      },
+      {
+        "title": "Treasury Releases Report on Macroeconomic and Foreign Exchange Policies of Major Trading Partners of the United States",
+        "url": "https://home.treasury.gov/news/press-releases/sm873",
+        "publisher": "U.S. Department of the Treasury",
+        "type": "primary",
+        "publishedAt": "2020-01-13",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-designation-change",
+        "claim": "2020년 1월 조작국 판단 변경과 관찰대상 유지 사실을 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-china-consumer-tariff-delay-2019",
+    "date": "2019-08-13",
+    "label": "소비재 관세 일부 유예",
+    "title": "미국, 중국산 일부 소비재 관세를 12월로 유예",
+    "category": "macro",
+    "importance": 2,
+    "summary": "미국이 새 관세 대상 중 스마트폰·노트북 등 일부 품목의 적용을 늦추고 일부 상품을 목록에서 제외했다.",
+    "description": "미국이 새 관세 대상 중 스마트폰·노트북 등 일부 품목의 적용을 늦추고 일부 상품을 목록에서 제외했다.",
+    "detail": "8월 1일의 전면 확대 예고가 품목별로 달라진 사건이다. 기존 관세나 모든 9월 관세의 철폐로 해석하지 않는다.",
+    "policyAction": "USTR는 일부 품목을 건강·안전 등 이유로 제외하고, 휴대전화·노트북 등 특정 품목의 추가 관세를 12월 15일로 미뤘다.",
+    "marketContext": "Reuters는 이날 선택적 관세 유예 발표 후 미국 주식시장이 상승했다고 보도했다.",
+    "followUp": "8월 23일 미국이 해당 관세 요율 인상 계획을 발표했다. 12월 시행 예정 목록은 12월 합의 뒤 추가 공지가 있을 때까지 정지됐다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "USTR 발표일 8월 13일을 사용한다. 9월 1일·12월 15일의 서로 다른 적용 예정일과 구분한다.",
+    "crossCheck": "USTR 원문을 Reuters 당일 시장 보도와 후속 요율 발표·12월 법적 정지 문서로 대조했다.",
+    "limitations": [
+      "유예는 특정 품목에 한정됐으며 이미 시행된 관세를 모두 없앤 조치가 아니다.",
+      "보도된 주식 상승을 ETH의 인과효과로 바꾸지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "List 4",
+      "스마트폰",
+      "노트북",
+      "관세 유예"
+    ],
+    "sources": [
+      {
+        "title": "USTR Announces Next Steps on Proposed 10 Percent Tariff on Imports from China",
+        "url": "https://www.ustr.gov/about-us/policy-offices/press-office/press-releases/2019/august/ustr-announces-next-steps-proposed",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2019-08-13",
+        "accessedAt": "2026-10-24",
+        "role": "partial-policy-delay",
+        "claim": "12월 15일로 미룬 품목과 일부 제외를 확인한다."
+      },
+      {
+        "title": "Wall Street rebounds as tariff delay prompts rally",
+        "url": "https://www.investing.com/news/stock-market-news/futures-slide-amid-geopolitical-tensions-trade-worries-1953540",
+        "publisher": "Reuters, republished by Investing.com",
+        "type": "secondary",
+        "publishedAt": "2019-08-13",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-market-report",
+        "claim": "선택적 유예 이후 미국 주식 상승을 보도한다."
+      },
+      {
+        "title": "USTR Statement on Section 301 Tariff Action Regarding China",
+        "url": "https://www.ustr.gov/about-us/policy-offices/press-office/press-releases/2019/august/ustr-statement-section-301-tariff",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2019-08-23",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-rate-change",
+        "claim": "추가 요율 변경 발표를 확인한다."
+      },
+      {
+        "title": "Notice of Modification of Section 301 Action — FR Doc. 2019-27306, public inspection copy",
+        "url": "https://s3.amazonaws.com/public-inspection.federalregister.gov/2019-27306.pdf",
+        "publisher": "Office of the United States Trade Representative / Federal Register",
+        "type": "primary",
+        "publishedAt": "2019-12-13",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-legal-suspension",
+        "claim": "12월 예정 목록의 무기한 정지를 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-china-retaliatory-escalation-2019",
+    "date": "2019-08-23",
+    "label": "미중 보복관세 재확대",
+    "title": "미중 보복관세 발표와 미국 추가 요율 인상 예고",
+    "category": "macro",
+    "importance": 3,
+    "summary": "중국의 보복관세 발표에 이어 미국이 기존·예정 대중 관세율을 추가로 높이겠다고 발표했다.",
+    "description": "중국의 보복관세 발표에 이어 미국이 기존·예정 대중 관세율을 추가로 높이겠다고 발표했다.",
+    "detail": "Reuters는 중국 발표와 트럼프의 대중 발언 뒤 정규장 주식 하락을 보도했으며, 미국의 구체적 추가 요율 발표는 정규장 종료 뒤였다고 명시했다. 순서를 뒤집어 인과관계를 만들지 않는다.",
+    "policyAction": "USTR는 약 2,500억 달러 대상 25%를 30%로 높이는 절차와 약 3천억 달러 대상 예정 요율 10%를 15%로 높이는 방침을 발표했다.",
+    "marketContext": "Reuters는 무역갈등 심화 우려 속 주식·원유 약세와 안전자산 선호를 보도했으며 미국 요율 대응의 발표 순서를 구분했다.",
+    "followUp": "25%에서 30%로의 인상은 당초 10월 1일 계획 뒤 10월 15일로 조정됐고, 10월 11일 미국이 그 인상을 보류했다. 12월 예정 추가 목록도 이후 정지됐다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "USTR 공식 발표일 8월 23일을 사용한다. Reuters 현재 헤더의 8월 24일 UTC와 미국 금요일 사건일을 구분한다.",
+    "crossCheck": "USTR 요율 계획을 Reuters 발표 순서 보도, 10월 백악관 인상 보류 기록, 12월 정지 문서와 대조했다.",
+    "limitations": [
+      "미국이 예고한 30% 관세를 8월 23일 실제 징수했거나 이후 그대로 시행했다고 기록하지 않는다.",
+      "하루에 여러 발표가 겹쳤고, 전체 일봉을 특정 후행 발언의 효과로 설명하지 않는다.",
+      "ETH 동반 반응에 대한 직접 인과 검증은 없다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "보복관세",
+      "Section 301",
+      "무역전쟁",
+      "인상 예고"
+    ],
+    "sources": [
+      {
+        "title": "USTR Statement on Section 301 Tariff Action Regarding China",
+        "url": "https://www.ustr.gov/about-us/policy-offices/press-office/press-releases/2019/august/ustr-statement-section-301-tariff",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2019-08-23",
+        "accessedAt": "2026-10-24",
+        "role": "policy-rate-announcement",
+        "claim": "기존 25%의 30% 상향 절차와 예정 10%의 15% 변경을 발표한다."
+      },
+      {
+        "title": "Trump heaps another 5% tariff on Chinese goods in latest tit-for-tat escalation",
+        "url": "https://www.reuters.com/article/world/trump-heaps-another-5-tariff-on-chinese-goods-in-latest-tit-for-tat-escalation-idUSKCN1VD21E/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2019-08-24",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-policy-and-market-report",
+        "claim": "미중 발표와 정규장·장후의 시간 순서를 보도한다."
+      },
+      {
+        "title": "Remarks by President Trump and Vice Premier Liu He of the People’s Republic of China in a Meeting",
+        "url": "https://trumpwhitehouse.archives.gov/briefings-statements/remarks-president-trump-vice-premier-liu-peoples-republic-china-meeting/",
+        "publisher": "The White House — archived",
+        "type": "primary",
+        "publishedAt": "2019-10-11",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-rate-pause",
+        "claim": "10월 예정 25%에서 30% 인상의 보류를 확인한다."
+      },
+      {
+        "title": "Notice of Modification of Section 301 Action — FR Doc. 2019-27306, public inspection copy",
+        "url": "https://s3.amazonaws.com/public-inspection.federalregister.gov/2019-27306.pdf",
+        "publisher": "Office of the United States Trade Representative / Federal Register",
+        "type": "primary",
+        "publishedAt": "2019-12-13",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-list-suspension",
+        "claim": "12월 예정 추가 목록의 정지를 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-phase-one-outline-2019",
+    "date": "2019-10-11",
+    "label": "1단계 합의 윤곽",
+    "title": "미중 1단계 합의 윤곽 발표·10월 관세 인상 보류",
+    "category": "macro",
+    "importance": 2,
+    "summary": "미중 협상 뒤 1단계 합의의 윤곽이 공개되고 다음 주로 예정된 관세율 인상이 보류됐다.",
+    "description": "미중 협상 뒤 1단계 합의의 윤곽이 공개되고 다음 주로 예정된 관세율 인상이 보류됐다.",
+    "detail": "이날의 정치적 발표는 서명 완료나 협정 발효와 다르다. 백악관 발언에서도 문서화를 위해 추가 시간이 필요하다고 설명했다.",
+    "policyAction": "미국은 10월 15일 예정된 약 2,500억 달러 대상 25%에서 30%로의 관세 인상을 진행하지 않겠다고 밝혔다.",
+    "marketContext": "Reuters는 합의 기대 속 미국 주가가 상승했으나 발표 뒤 장중 고점보다 낮아졌고, 합의 문서와 세부사항이 아직 남아 있다고 보도했다.",
+    "followUp": "12월 13일 양측은 1단계 합의 도달을 발표했고, 실제 서명은 2020년 1월 15일, 발효는 2월 14일이었다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "백악관 회동 기록 날짜 10월 11일을 사용한다. 재배포 기사의 이른 게시 시각은 갱신된 본문 사건의 정확한 시각으로 쓰지 않는다.",
+    "crossCheck": "백악관 회동 발언을 Reuters 협상·시장 보도, USTR 12월 발표 및 후속 발효 확인과 대조했다.",
+    "limitations": [
+      "합의 윤곽 공개 당시 12월 관세 계획까지 모두 취소된 것은 아니다.",
+      "합의 기대가 발표 전 가격에 반영됐을 수 있으며 주가 움직임을 ETH 반응으로 복사하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "1단계 합의",
+      "Phase One",
+      "관세 인상 보류"
+    ],
+    "sources": [
+      {
+        "title": "Remarks by President Trump and Vice Premier Liu He of the People’s Republic of China in a Meeting",
+        "url": "https://trumpwhitehouse.archives.gov/briefings-statements/remarks-president-trump-vice-premier-liu-peoples-republic-china-meeting/",
+        "publisher": "The White House — archived",
+        "type": "primary",
+        "publishedAt": "2019-10-11",
+        "accessedAt": "2026-10-24",
+        "role": "policy-outline-and-pause",
+        "claim": "문서화가 남은 합의 윤곽과 10월 관세 인상 보류를 확인한다."
+      },
+      {
+        "title": "U.S. outlines 'Phase 1' trade deal with China, suspends October tariff hike",
+        "url": "https://www.streetinsider.com/ETFs/U.S.%2Boutlines%2BPhase%2B1%2Btrade%2Bdeal%2Bwith%2BChina,%2Bsuspends%2BOctober%2Btariff%2Bhike/16002465.html",
+        "publisher": "Reuters, republished by StreetInsider",
+        "type": "secondary",
+        "publishedAt": "2019-10-11",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-policy-and-market-report",
+        "claim": "미완성 합의의 성격과 주식시장 관측을 보도한다."
+      },
+      {
+        "title": "United States and China Reach Phase One Trade Agreement",
+        "url": "https://ustr.gov/about-us/policy-offices/press-office/press-releases/2019/december/united-states-and-china-reach",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2019-12-13",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-agreement-announcement",
+        "claim": "12월 합의 발표를 확인한다."
+      },
+      {
+        "title": "USTR Announces Formation of Bilateral Evaluation and Dispute Resolution Office Pursuant to U.S.-China Phase One Agreement",
+        "url": "https://www.ustr.gov/about-us/policy-offices/press-office/press-releases/2020/february/ustr-announces-formation-bilateral-evaluation-and-dispute-resolution-office-pursuant-us-china-phase",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2020-02-14",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-effective-date",
+        "claim": "서명일과 실제 2월 14일 발효를 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-phase-one-agreement-announcement-2019",
+    "date": "2019-12-13",
+    "label": "미중 1단계 합의 발표",
+    "title": "미중 1단계 합의 도달·12월 추가 관세 중단 발표",
+    "category": "macro",
+    "importance": 3,
+    "summary": "미중이 1단계 무역합의 도달을 발표했고 곧 시행될 예정이던 추가 관세 목록은 정지됐다.",
+    "description": "미중이 1단계 무역합의 도달을 발표했고 곧 시행될 예정이던 추가 관세 목록은 정지됐다.",
+    "detail": "합의 발표, 정지 문서의 공개·관보 게시, 실제 협정 서명·발효 날짜를 구분한다. 기존 대중 관세의 상당 부분은 남아 있었다.",
+    "policyAction": "USTR는 1단계 합의와 관세 일부 조정을 발표했다. 같은 날 공개된 정지 문서는 12월 15일 예정 15% 추가 관세 목록의 적용을 무기한 멈췄다.",
+    "marketContext": "AP는 전날 합의 기대에 주가가 오른 뒤 12월 13일 실제 확인 때는 미국 주식의 반응이 제한적이었다고 보도했다.",
+    "followUp": "기존 약 2,500억 달러 대상 25% 관세는 유지됐다. 다른 대상의 15%에서 7.5% 인하는 2020년 2월 14일 적용으로 확정됐다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "USTR 합의 발표 및 정지 문서의 12월 13일 공개일을 사용한다. 정지 문서는 12월 18일 관보 게시, 12월 15일 예정 관세 중단을 명시한다.",
+    "crossCheck": "USTR 합의 발표, 공개열람용 법적 정지 문서, AP 시장 보도, 후속 인하 관보를 대조했다.",
+    "limitations": [
+      "합의 발표일에 협정이 이미 서명·발효됐거나 모든 관세가 철폐됐다고 쓰지 않는다.",
+      "전날 보도·기대와 당일 확정 발표가 겹쳐 하루 가격을 단일 뉴스의 효과로 해석할 수 없다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "Phase One",
+      "1단계 합의",
+      "관세 중단",
+      "List 4B"
+    ],
+    "sources": [
+      {
+        "title": "United States and China Reach Phase One Trade Agreement",
+        "url": "https://ustr.gov/about-us/policy-offices/press-office/press-releases/2019/december/united-states-and-china-reach",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2019-12-13",
+        "accessedAt": "2026-10-24",
+        "role": "agreement-announcement",
+        "claim": "1단계 합의 및 잔존 관세·일부 인하 방침을 발표한다."
+      },
+      {
+        "title": "Notice of Modification of Section 301 Action — FR Doc. 2019-27306, public inspection copy",
+        "url": "https://s3.amazonaws.com/public-inspection.federalregister.gov/2019-27306.pdf",
+        "publisher": "Office of the United States Trade Representative / Federal Register",
+        "type": "primary",
+        "publishedAt": "2019-12-13",
+        "accessedAt": "2026-10-24",
+        "role": "legal-suspension-public-inspection",
+        "claim": "12월 13일 공개와 12월 15일 예정 관세 정지를 확인한다."
+      },
+      {
+        "title": "Markets have muted reaction to long-awaited China trade deal",
+        "url": "https://www.clickorlando.com/business/2019/12/13/us-stocks-open-lower-as-traders-await-clarity-on-trade-deal/",
+        "publisher": "Associated Press, republished by ClickOrlando",
+        "type": "secondary",
+        "publishedAt": "2019-12-13",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-market-report",
+        "claim": "기대가 선반영된 뒤 제한적인 주가 반응을 보도한다."
+      },
+      {
+        "title": "Notice of Modification of Section 301 Action — 85 FR 3741",
+        "url": "https://ustr.gov/sites/default/files/enforcement/301Investigations/Notice_of_Modification-January_2020.pdf",
+        "publisher": "Office of the United States Trade Representative / Federal Register",
+        "type": "primary",
+        "publishedAt": "2020-01-22",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-legal-rate-reduction",
+        "claim": "7.5% 인하의 실제 적용일을 2월 14일로 정한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-phase-one-agreement-signing-2020",
+    "date": "2020-01-15",
+    "label": "미중 1단계 합의 서명",
+    "title": "미중 1단계 무역합의 서명",
+    "category": "macro",
+    "importance": 2,
+    "summary": "미국과 중국이 1단계 무역합의에 서명하며 2018년 이후 관세 갈등의 일부를 제도적 합의로 전환했다.",
+    "description": "미국과 중국이 1단계 무역합의에 서명하며 2018년 이후 관세 갈등의 일부를 제도적 합의로 전환했다.",
+    "detail": "12월의 합의 발표와 1월의 서명, 2월의 발효를 별도 단계로 보존한다. 모든 갈등 해결이나 관세 전면 철폐를 의미하지 않는다.",
+    "policyAction": "양측은 지식재산·기술이전·농업·금융서비스·환율·구매 약정 등을 포함하는 1단계 합의에 서명했다.",
+    "marketContext": "Reuters는 합의에 대한 시장의 안도와 함께 남은 쟁점·관세·이행 가능성에 대한 회의도 보도했다.",
+    "followUp": "USTR는 협정이 2월 14일 발효됐다고 확인했다. 일부 추가 관세는 그날 15%에서 7.5%로 낮아졌으나 기존 25% 대상은 남았다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "백악관 서명 기록의 1월 15일을 사용한다. 관보 게시 1월 22일, 협정·일부 관세 인하의 2월 14일 적용과 구분한다.",
+    "crossCheck": "백악관 서명 사실, Reuters 보도, USTR 발효 확인 및 관세 인하 관보 원문을 대조했다.",
+    "limitations": [
+      "공식 문서의 향후 경제성과·구매 목표를 실현된 성과로 간주하지 않는다.",
+      "광범위한 시장 맥락을 제공하는 사건이며 ETH 가격의 독립적인 인과효과를 추정하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "Phase One",
+      "1단계 합의",
+      "무역협정",
+      "서명"
+    ],
+    "sources": [
+      {
+        "title": "President Donald J. Trump is Signing a Landmark Phase One Trade Agreement with China",
+        "url": "https://trumpwhitehouse.archives.gov/briefings-statements/president-donald-j-trump-signing-landmark-phase-one-trade-agreement-china/",
+        "publisher": "The White House — archived",
+        "type": "primary",
+        "publishedAt": "2020-01-15",
+        "accessedAt": "2026-10-24",
+        "role": "agreement-signing-record",
+        "claim": "1월 15일 서명과 합의의 주요 분야를 확인한다."
+      },
+      {
+        "title": "China Signs 'Phase 1' Trade Deal with United States",
+        "url": "https://gcaptain.com/china-signs-phase-1-trade-deal-with-united-states/",
+        "publisher": "Reuters, republished by gCaptain",
+        "type": "secondary",
+        "publishedAt": "2020-01-15",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-policy-and-market-report",
+        "claim": "합의에 대한 안도와 미해결 쟁점을 보도한다."
+      },
+      {
+        "title": "USTR Announces Formation of Bilateral Evaluation and Dispute Resolution Office Pursuant to U.S.-China Phase One Agreement",
+        "url": "https://www.ustr.gov/about-us/policy-offices/press-office/press-releases/2020/february/ustr-announces-formation-bilateral-evaluation-and-dispute-resolution-office-pursuant-us-china-phase",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2020-02-14",
+        "accessedAt": "2026-10-24",
+        "role": "official-effective-date",
+        "claim": "실제 2월 14일 발효를 확인한다."
+      },
+      {
+        "title": "Notice of Modification of Section 301 Action — 85 FR 3741",
+        "url": "https://ustr.gov/sites/default/files/enforcement/301Investigations/Notice_of_Modification-January_2020.pdf",
+        "publisher": "Office of the United States Trade Representative / Federal Register",
+        "type": "primary",
+        "publishedAt": "2020-01-22",
+        "accessedAt": "2026-10-24",
+        "role": "legal-tariff-reduction",
+        "claim": "2월 14일 일부 관세 인하 및 관련 목록의 경과를 확인한다."
+      },
+      {
+        "title": "United States and China Reach Phase One Trade Agreement",
+        "url": "https://ustr.gov/about-us/policy-offices/press-office/press-releases/2019/december/united-states-and-china-reach",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2019-12-13",
+        "accessedAt": "2026-10-24",
+        "role": "prior-agreement-and-retained-tariffs",
+        "claim": "앞선 합의 발표와 잔존 25% 대상 관세를 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-three-country-tariffs-2025",
+    "date": "2025-02-01",
+    "label": "3개국 관세",
+    "title": "미국, 캐나다·멕시코·중국 추가 관세 발표",
+    "category": "macro",
+    "importance": 3,
+    "summary": "미국이 주요 교역국에 추가 관세를 발표했고, 뒤이은 거래일에 ETH를 포함한 위험자산의 매도 압력이 보도됐다.",
+    "description": "미국이 주요 교역국에 추가 관세를 발표했고, 뒤이은 거래일에 ETH를 포함한 위험자산의 매도 압력이 보도됐다.",
+    "detail": "정책 발표일은 2월 1일이다. Reuters의 2월 3일 기사는 무역전쟁 우려 속 ETH 하락을 관측했지만, 그 기사에 나온 금요일 이후 변화율을 발표 당일의 일봉 수익률로 사용하지 않는다.",
+    "policyAction": "미국은 캐나다·멕시코산 상품에 25%, 중국산에 10% 추가 관세를 발표했다. 캐나다 에너지에는 10%가 제시됐다.",
+    "marketContext": "Reuters는 2월 3일 가상자산 약세를 광범위한 위험회피 및 무역갈등 우려와 함께 설명했다.",
+    "followUp": "캐나다·멕시코 조치는 2월 3일 별도 명령으로 3월 4일까지 유예됐다. 중국은 이 유예 대상이 아니었다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "백악관 2월 1일 발표의 달력 날짜를 사용한다. 2월 3일 시장 기사일과 이후 시행일을 분리한다.",
+    "crossCheck": "백악관 정책 발표와 Reuters의 독립 시장 보도를 대조하고, 두 국경 유예 명령으로 후속 변경을 확인했다.",
+    "limitations": [
+      "관세는 수입 상품에 대한 정책이며 ETH에 직접 부과된 세금이 아니다.",
+      "관세 발표와 동반 하락의 관측만으로 ETH 하락의 단독 원인이나 기여도를 확정하지 않는다.",
+      "Reuters URL은 02-02이나 본문 날짜는 02-03이다. 기사 수익률의 관측 창은 UTC 일봉과 다르다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "캐나다",
+      "멕시코",
+      "중국",
+      "IEEPA",
+      "risk-off"
+    ],
+    "sources": [
+      {
+        "title": "Fact Sheet: President Donald J. Trump Imposes Tariffs on Imports from Canada, Mexico and China",
+        "url": "https://www.whitehouse.gov/fact-sheets/2025/02/fact-sheet-president-donald-j-trump-imposes-tariffs-on-imports-from-canada-mexico-and-china/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-02-01",
+        "accessedAt": "2026-10-24",
+        "role": "policy-announcement",
+        "claim": "세 나라 추가 관세와 캐나다 에너지 예외를 발표한다."
+      },
+      {
+        "title": "Bitcoin drops to 3-week low as Trump tariffs rattle markets",
+        "url": "https://www.reuters.com/markets/currencies/bitcoin-slides-below-100000-tariffs-rattle-markets-2025-02-02/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2025-02-03",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-market-report",
+        "claim": "2월 3일 ETH 동반 하락과 무역전쟁 우려를 보도한다."
+      },
+      {
+        "title": "Progress on the Situation at Our Northern Border",
+        "url": "https://www.whitehouse.gov/presidential-actions/2025/02/progress-on-the-situation-at-our-northern-border/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-02-03",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-policy-pause",
+        "claim": "캐나다 조치의 적용 시점을 3월 4일로 미룬다."
+      },
+      {
+        "title": "Progress on the Situation at Our Southern Border",
+        "url": "https://www.whitehouse.gov/presidential-actions/2025/02/progress-on-the-situation-at-our-southern-border/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-02-03",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-policy-pause",
+        "claim": "멕시코 조치의 적용 시점을 3월 4일로 미룬다."
+      }
+    ],
+    "commonEventId": "trump-three-country-tariffs-2025"
+  },
+  {
+    "id": "eth-policy-canada-mexico-pause-2025",
+    "date": "2025-02-03",
+    "label": "북미 관세 유예",
+    "title": "캐나다·멕시코 추가 관세 시행 유예",
+    "category": "macro",
+    "importance": 2,
+    "summary": "2월 4일로 예정됐던 캐나다·멕시코 추가 관세가 3월 4일까지 유예됐다.",
+    "description": "2월 4일로 예정됐던 캐나다·멕시코 추가 관세가 3월 4일까지 유예됐다.",
+    "detail": "관세 강화 직후 나온 완화 조치를 별도 사건으로 표시한다. 같은 날짜 안에서도 급락과 정책 유예가 순차적으로 발생할 수 있으므로 2월 3일의 전체 움직임을 하나의 방향으로 설명하지 않는다.",
+    "policyAction": "캐나다와 멕시코에 대한 두 행정명령이 최초 적용 시점을 3월 4일 00:01 미국 동부시간으로 변경했다.",
+    "marketContext": "Reuters는 멕시코 유예 발표 뒤 미국 주식시장이 초기 낙폭 일부를 되돌렸다고 보도했다. 이는 ETH의 특정 수익률을 뜻하지 않는다.",
+    "followUp": "중국은 북미 유예에서 제외됐다. 캐나다·멕시코 조치는 3월 4일 시행됐고, 3월 6일에는 USMCA 적격 상품 예외가 발표됐다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "두 행정명령의 서명일 2월 3일을 사용한다. Reuters 후속 기사에 표시된 2월 4일 UTC 게시일과 구분한다.",
+    "crossCheck": "캐나다·멕시코 각각의 법적 변경 문서와 Reuters 시장 보도를 대조했다. 두 백악관 문서는 같은 행정부의 자료이므로 독립 두 기관의 검증으로 세지 않는다.",
+    "limitations": [
+      "유예는 관세 정책의 영구 폐지를 뜻하지 않는다.",
+      "주식시장 반응을 ETH 반등으로 바꾸어 기록하지 않는다.",
+      "발표의 세부 순서를 UTC 일봉만으로 재구성할 수 없다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "캐나다",
+      "멕시코",
+      "유예",
+      "USMCA"
+    ],
+    "sources": [
+      {
+        "title": "Progress on the Situation at Our Northern Border",
+        "url": "https://www.whitehouse.gov/presidential-actions/2025/02/progress-on-the-situation-at-our-northern-border/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-02-03",
+        "accessedAt": "2026-10-24",
+        "role": "legal-pause-order",
+        "claim": "캐나다 추가 관세의 적용 시점을 변경한다."
+      },
+      {
+        "title": "Progress on the Situation at Our Southern Border",
+        "url": "https://www.whitehouse.gov/presidential-actions/2025/02/progress-on-the-situation-at-our-southern-border/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-02-03",
+        "accessedAt": "2026-10-24",
+        "role": "legal-pause-order",
+        "claim": "멕시코 추가 관세의 적용 시점을 변경한다."
+      },
+      {
+        "title": "Wall Street closes down, pares losses after Trump delays Mexico tariffs",
+        "url": "https://www.reuters.com/markets/us/futures-tumble-trumps-tariffs-stoke-trade-war-risks-2025-02-03/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2025-02-04",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-market-report",
+        "claim": "멕시코 유예 뒤 주식시장의 초기 낙폭 축소를 보도한다."
+      },
+      {
+        "title": "Fact Sheet: President Donald J. Trump Adjusts Tariffs on Canada and Mexico to Minimize Disruption to the Automotive Industry",
+        "url": "https://www.whitehouse.gov/fact-sheets/2025/03/fact-sheet-president-donald-j-trump-adjusts-tariffs-on-canada-and-mexico-to-minimize-disruption-to-the-automotive-industry/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-03-06",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-policy-record",
+        "claim": "3월 4일 시행 및 3월 6일 예외 조치를 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-north-america-tariffs-effective-2025",
+    "date": "2025-03-04",
+    "label": "관세 실제 시행",
+    "title": "북미 관세 시행과 대중 관세 확대",
+    "category": "macro",
+    "importance": 3,
+    "summary": "유예됐던 캐나다·멕시코 관세가 시행됐고 중국 대상 추가 관세도 확대됐다.",
+    "description": "유예됐던 캐나다·멕시코 관세가 시행됐고 중국 대상 추가 관세도 확대됐다.",
+    "detail": "The Block은 당일 ETH 약세를 관세 불확실성, 미국 경제지표, 직전 가상자산 준비자산 발표 뒤 되돌림과 함께 설명했다. 여러 뉴스가 겹친 구간으로 보존한다.",
+    "policyAction": "캐나다·멕시코 추가 관세가 3월 4일 시행됐다. 중국산 상품에 대한 펜타닐 명목 추가 관세는 10%에서 20%로 확대됐다.",
+    "marketContext": "The Block은 ETH 하락을 보도하면서 관세와 약한 미국 경제지표를 함께 거론했다.",
+    "followUp": "3월 6일 미국은 USMCA 요건을 충족하는 캐나다·멕시코 상품에 예외를 발표했다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "2월 3일 유예 명령의 예정일을 3월 6일 백악관의 실제 시행 회고 및 당일 보도와 대조했다. 3월 3일 재확인 발표와 구분한다.",
+    "crossCheck": "법적 예정일, 백악관 후속 설명, The Block의 당일 ETH 보도, Reuters의 중국 관세 확대 설명을 대조했다.",
+    "limitations": [
+      "The Block 본문은 최초 2025-03-04 게시 외에 2026-10-19 수정 표시가 있다. 당시 원본의 고정 스냅샷으로 취급하지 않는다.",
+      "기사의 최근 24시간 변화율을 Coinbase UTC 일봉 변화율로 사용하지 않는다.",
+      "경제지표와 준비자산 관련 뉴스의 영향을 관세와 분리 계량하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "캐나다",
+      "멕시코",
+      "중국",
+      "시행",
+      "미국 경제지표"
+    ],
+    "sources": [
+      {
+        "title": "Progress on the Situation at Our Northern Border",
+        "url": "https://www.whitehouse.gov/presidential-actions/2025/02/progress-on-the-situation-at-our-northern-border/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-02-03",
+        "accessedAt": "2026-10-24",
+        "role": "legal-effective-date",
+        "claim": "유예 종료 및 최초 적용 예정일을 3월 4일로 정한다."
+      },
+      {
+        "title": "Fact Sheet: President Donald J. Trump Adjusts Tariffs on Canada and Mexico to Minimize Disruption to the Automotive Industry",
+        "url": "https://www.whitehouse.gov/fact-sheets/2025/03/fact-sheet-president-donald-j-trump-adjusts-tariffs-on-canada-and-mexico-to-minimize-disruption-to-the-automotive-industry/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-03-06",
+        "accessedAt": "2026-10-24",
+        "role": "official-retrospective-confirmation",
+        "claim": "3월 4일 북미 관세가 시행됐다고 명시한다."
+      },
+      {
+        "title": "Bitcoin, ether lose over 10% as Trump's tariffs take effect",
+        "url": "https://www.theblock.co/news/markets/2025-03-04-bitcoin-ether-lose-over-10-as-trumps-tariffs-take-effect-344377",
+        "publisher": "The Block",
+        "type": "secondary",
+        "publishedAt": "2025-03-04",
+        "accessedAt": "2026-10-24",
+        "role": "market-report-with-later-update",
+        "claim": "ETH 약세와 관세·경제지표 등 복합 배경을 설명한다."
+      },
+      {
+        "title": "Trump delays tariffs for goods under Mexico, Canada trade deal",
+        "url": "https://www.reuters.com/business/tariff-reprieve-likely-be-extended-all-usmca-compliant-goods-lutnick-says-2025-03-06/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2025-03-07",
+        "accessedAt": "2026-10-24",
+        "role": "independent-policy-report",
+        "claim": "북미 시행과 중국 추가 관세의 20% 확대를 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-usmca-exemptions-2025",
+    "date": "2025-03-06",
+    "label": "USMCA 예외",
+    "title": "USMCA 적격 캐나다·멕시코 상품 관세 예외",
+    "category": "macro",
+    "importance": 2,
+    "summary": "미국이 USMCA 요건을 충족하는 북미 상품의 추가 관세 예외를 발표했다.",
+    "description": "미국이 USMCA 요건을 충족하는 북미 상품의 추가 관세 예외를 발표했다.",
+    "detail": "전면 관세 철회로 표시하지 않는다. 백악관은 적격·비적격 상품을 구별했고, 당시 보도는 잦은 정책 변경에 따른 불확실성이 남았다고 설명했다.",
+    "policyAction": "USMCA 적격 캐나다·멕시코 상품은 해당 추가 관세에서 제외하고, 비적격 상품의 관세와 캐나다 에너지·양국 칼륨비료의 별도 요율을 유지·조정했다.",
+    "marketContext": "Reuters는 완화 발표에도 미국 주식시장이 하락했고 정책의 잦은 변경이 우려 요인으로 지목됐다고 보도했다.",
+    "followUp": "4월 2일 상호관세 발표에서도 캐나다·멕시코는 별도 IEEPA 체계로 취급됐다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "백악관 설명 및 Reuters 본문이 가리키는 발표일 3월 6일을 쓴다. Reuters의 3월 7일 갱신 날짜와 구분한다.",
+    "crossCheck": "백악관의 적용 대상 설명을 Reuters 독립 보도와 대조했다. 후속 4월 2일 공식 발표로 별도 체계가 유지됐음을 확인했다.",
+    "limitations": [
+      "USMCA 적격 여부는 상품별로 다르며 모든 캐나다·멕시코 수입의 무관세를 의미하지 않는다.",
+      "당일 주가 반응을 ETH의 방향 또는 관세 단독 효과로 대체하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "USMCA",
+      "캐나다",
+      "멕시코",
+      "예외",
+      "potash"
+    ],
+    "sources": [
+      {
+        "title": "Fact Sheet: President Donald J. Trump Adjusts Tariffs on Canada and Mexico to Minimize Disruption to the Automotive Industry",
+        "url": "https://www.whitehouse.gov/fact-sheets/2025/03/fact-sheet-president-donald-j-trump-adjusts-tariffs-on-canada-and-mexico-to-minimize-disruption-to-the-automotive-industry/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-03-06",
+        "accessedAt": "2026-10-24",
+        "role": "policy-exemption-announcement",
+        "claim": "USMCA 적격 상품 예외와 비적격 상품의 잔존 관세를 설명한다."
+      },
+      {
+        "title": "Trump delays tariffs for goods under Mexico, Canada trade deal",
+        "url": "https://www.reuters.com/business/tariff-reprieve-likely-be-extended-all-usmca-compliant-goods-lutnick-says-2025-03-06/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2025-03-07",
+        "accessedAt": "2026-10-24",
+        "role": "independent-policy-and-market-report",
+        "claim": "3월 6일 예외 발표와 시장의 지속된 불확실성을 보도한다."
+      },
+      {
+        "title": "Fact Sheet: President Donald J. Trump Declares National Emergency to Increase our Competitive Edge, Protect our Sovereignty, and Strengthen our National and Economic Security",
+        "url": "https://www.whitehouse.gov/fact-sheets/2025/04/fact-sheet-president-donald-j-trump-declares-national-emergency-to-increase-our-competitive-edge-protect-our-sovereignty-and-strengthen-our-national-and-economic-security/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-04-02",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-policy-scope",
+        "claim": "캐나다·멕시코가 별도 IEEPA 체계로 남는다고 설명한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-reciprocal-tariffs-2025",
+    "date": "2025-04-02",
+    "label": "상호관세 발표",
+    "title": "미국 기본·국가별 상호관세 발표",
+    "category": "macro",
+    "importance": 3,
+    "summary": "미국이 기본 10% 및 국가별 상호관세를 발표했고, 다음 날 ETH를 포함한 위험자산 약세가 보도됐다.",
+    "description": "미국이 기본 10% 및 국가별 상호관세를 발표했고, 다음 날 ETH를 포함한 위험자산 약세가 보도됐다.",
+    "detail": "4월 2일은 정책 발표일이다. 기본 관세 적용 예정일인 4월 5일과 국가별 고율 적용 예정일인 4월 9일을 별도로 설명하며, 4월 3일 시장 기사의 스냅샷을 발표일 수익률로 붙이지 않는다.",
+    "policyAction": "기본 10%는 4월 5일, 국가별 추가 요율은 4월 9일 적용하는 일정이 제시됐으며 상품별 예외와 캐나다·멕시코 별도 체계가 있었다.",
+    "marketContext": "Reuters는 4월 3일 가상자산 관련 주식 및 ETH 약세를 광범위한 위험자산 매도와 연결해 보도했다.",
+    "followUp": "중국의 4월 4일 대응 발표와 4월 9일 미국의 중국 제외 유예로 정책이 다시 바뀌었다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "백악관 발표의 4월 2일 달력 날짜를 사용한다. 발효일·기사일을 사건 발표일과 분리한다.",
+    "crossCheck": "정책 요율·적용 일정은 백악관 원문, 시장 동반 반응은 Reuters의 다음 날 보도로 교차 확인했다.",
+    "limitations": [
+      "다음 날 기사에 표시된 등락률은 기사 갱신 시각에 따라 달라지므로 고정된 일봉 수치로 사용하지 않는다.",
+      "관세 외 당시 뉴스·포지션·유동성 요인을 통제한 인과효과 추정은 하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "상호관세",
+      "Liberation Day",
+      "기본관세",
+      "위험회피"
+    ],
+    "sources": [
+      {
+        "title": "Fact Sheet: President Donald J. Trump Declares National Emergency to Increase our Competitive Edge, Protect our Sovereignty, and Strengthen our National and Economic Security",
+        "url": "https://www.whitehouse.gov/fact-sheets/2025/04/fact-sheet-president-donald-j-trump-declares-national-emergency-to-increase-our-competitive-edge-protect-our-sovereignty-and-strengthen-our-national-and-economic-security/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-04-02",
+        "accessedAt": "2026-10-24",
+        "role": "policy-announcement",
+        "claim": "기본·국가별 관세와 각각의 적용 일정 및 예외를 발표한다."
+      },
+      {
+        "title": "U.S. crypto stocks slide as Trump's sweeping tariffs jolt markets",
+        "url": "https://www.reuters.com/markets/us-crypto-stocks-slide-trumps-sweeping-tariffs-jolt-markets-2025-04-03/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2025-04-03",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-market-report",
+        "claim": "4월 3일 ETH와 가상자산 관련 주식 약세를 보도한다."
+      },
+      {
+        "title": "国务院关税税则委员会关于对原产于美国的进口商品加征关税的公告 — 税委会公告2025年第4号",
+        "url": "https://gss.mof.gov.cn/gzdt/zhengcefabu/202504/t20250404_3961451.htm",
+        "publisher": "Customs Tariff Commission of the State Council / Ministry of Finance of China",
+        "type": "primary",
+        "publishedAt": "2025-04-04",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-retaliation",
+        "claim": "중국의 4월 4일 대응 발표를 확인한다."
+      },
+      {
+        "title": "Modifying Reciprocal Tariff Rates to Reflect Trading Partner Retaliation and Alignment",
+        "url": "https://www.whitehouse.gov/presidential-actions/2025/04/modifying-reciprocal-tariff-rates-to-reflect-trading-partner-retaliation-and-alignment/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-04-09",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-policy-pause",
+        "claim": "중국을 제외한 국가별 고율 관세 유예를 확인한다."
+      }
+    ],
+    "commonEventId": "trump-reciprocal-tariffs-2025"
+  },
+  {
+    "id": "eth-policy-china-retaliation-2025",
+    "date": "2025-04-04",
+    "label": "중국 보복관세",
+    "title": "중국, 미국산 상품 추가 관세 발표",
+    "category": "macro",
+    "importance": 3,
+    "summary": "중국이 미국산 수입 상품에 34% 추가 관세를 발표하며 무역갈등이 확대됐다.",
+    "description": "중국이 미국산 수입 상품에 34% 추가 관세를 발표하며 무역갈등이 확대됐다.",
+    "detail": "중국 재정부 원문에서 발표일과 적용 예정일을 확인했다. 이후 관세가 다시 인상됐으므로 최초 발표의 34%를 4월 내내 유지된 최종 요율로 해석하지 않는다.",
+    "policyAction": "중국 국무원 관세세칙위원회 제4호 공고는 4월 10일 12:01부터 미국산 상품에 기존 적용 관세 외 34%를 추가한다고 발표했다.",
+    "marketContext": "AP는 중국의 대응 발표와 미국 주식시장 급락을 함께 보도했다. ETH에는 공통 위험환경을 보여 주는 사건으로 표시한다.",
+    "followUp": "4월 9일 미국의 유예는 중국을 제외했다. 5월 12일 미중 공동성명은 고율 관세를 조정하는 합의를 발표했다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "중국 재정부 공고의 서명·게시 날짜 4월 4일을 사용한다. 공고가 정한 4월 10일 적용 예정일과 분리한다.",
+    "crossCheck": "중국 재정부의 중국어 원문과 AP 당일 보도를 대조했다. 영사관의 Global Times 재게시물은 독립 1차 자료로 세지 않았다.",
+    "limitations": [
+      "이 기록은 최초 대응 발표이며, 후속 인상·협상까지 같은 관세율이 지속됐다는 뜻이 아니다.",
+      "주식시장 동반 반응만으로 ETH의 직접 반응을 확정하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "미중 무역갈등",
+      "보복관세",
+      "34%"
+    ],
+    "sources": [
+      {
+        "title": "国务院关税税则委员会关于对原产于美国的进口商品加征关税的公告 — 税委会公告2025年第4号",
+        "url": "https://gss.mof.gov.cn/gzdt/zhengcefabu/202504/t20250404_3961451.htm",
+        "publisher": "Customs Tariff Commission of the State Council / Ministry of Finance of China",
+        "type": "primary",
+        "publishedAt": "2025-04-04",
+        "accessedAt": "2026-10-24",
+        "role": "original-policy-announcement",
+        "claim": "추가 관세율과 4월 10일 적용 예정일을 명시한다."
+      },
+      {
+        "title": "China slaps a 34% tax on all US imports in retaliation for Trump's tariffs",
+        "url": "https://apnews.com/article/02cd23e913649f32985f075058e787c4",
+        "publisher": "Associated Press",
+        "type": "secondary",
+        "publishedAt": "2025-04-04",
+        "accessedAt": "2026-10-24",
+        "role": "independent-contemporaneous-report",
+        "claim": "중국의 대응 발표와 미국 금융시장 긴장을 보도한다."
+      },
+      {
+        "title": "Joint Statement on U.S.-China Economic and Trade Meeting in Geneva",
+        "url": "https://www.whitehouse.gov/briefings-statements/2025/05/joint-statement-on-u-s-china-economic-and-trade-meeting-in-geneva/",
+        "publisher": "The White House — U.S.-China joint statement",
+        "type": "primary",
+        "publishedAt": "2025-05-12",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-bilateral-agreement",
+        "claim": "양측이 관세를 다시 조정하는 공동 합의를 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-reciprocal-pause-2025",
+    "date": "2025-04-09",
+    "label": "90일 관세 유예",
+    "title": "중국 제외 국가별 상호관세 90일 유예",
+    "category": "macro",
+    "importance": 3,
+    "summary": "미국이 다수 교역국의 국가별 고율 상호관세를 90일 유예했지만 기본 10%와 중국 예외는 남았다.",
+    "description": "미국이 다수 교역국의 국가별 고율 상호관세를 90일 유예했지만 기본 10%와 중국 예외는 남았다.",
+    "detail": "정책 완화와 중국에 대한 추가 강화를 동시에 기록한다. 유예 발표 뒤 위험자산 안도 반응이 보도됐으며, 이를 모든 관세 철폐나 ETH의 확정 반등 효과로 설명하지 않는다.",
+    "policyAction": "4월 9일 명령은 중국을 제외한 국가별 고율을 4월 10일 00:01 EDT부터 7월 9일 00:01 EDT까지 유예하고 10%를 적용했다. 중국 상호관세 부분은 125%로 높였다.",
+    "marketContext": "Reuters 시장 칼럼은 유예 발표 뒤 미국 주식시장의 큰 폭 반등을 전하며 중국 갈등과 채권시장 불안이 남았다고 설명했다.",
+    "followUp": "중국과의 별도 완화 합의는 5월 12일 발표됐다. 4월 11일에는 일부 전자제품의 상호관세 예외가 명확해졌다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "명령 서명일 4월 9일을 사용한다. 4월 10일 적용 시작과 혼동하지 않는다.",
+    "crossCheck": "행정명령의 중국 제외·10% 유지·유예 기간을 읽고 Reuters의 독립 시장 칼럼과 대조했다. 칼럼의 해석은 공식 정책 사실과 구분했다.",
+    "limitations": [
+      "중국 125%는 상호관세 구성 요소이며 모든 기존 관세를 합한 총 실효세율이 아니다.",
+      "중국·상품별 예외·별도 법률 관세까지 모두 90일간 없어졌다고 표시하지 않는다.",
+      "Reuters 자료는 시장 칼럼이며 ETH의 별도 반응을 측정한 분석이 아니다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "90일 유예",
+      "중국 제외",
+      "10% 기본관세",
+      "risk-on"
+    ],
+    "sources": [
+      {
+        "title": "Modifying Reciprocal Tariff Rates to Reflect Trading Partner Retaliation and Alignment",
+        "url": "https://www.whitehouse.gov/presidential-actions/2025/04/modifying-reciprocal-tariff-rates-to-reflect-trading-partner-retaliation-and-alignment/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-04-09",
+        "accessedAt": "2026-10-24",
+        "role": "signed-policy-order",
+        "claim": "중국 제외 유예, 기본 10%, 중국 상호관세 조정 및 적용 일정을 명시한다."
+      },
+      {
+        "title": "Trading Day: Boom! Trump tariff pause sparks monster rally",
+        "url": "https://www.reuters.com/markets/global-markets-trading-day-graphics-2025-04-09/",
+        "publisher": "Reuters — Jamie McGeever, markets column",
+        "type": "secondary",
+        "publishedAt": "2025-04-09",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-market-commentary",
+        "claim": "유예 후 주식 반등 및 남은 중국·채권시장 위험을 설명한다."
+      },
+      {
+        "title": "Joint Statement on U.S.-China Economic and Trade Meeting in Geneva",
+        "url": "https://www.whitehouse.gov/briefings-statements/2025/05/joint-statement-on-u-s-china-economic-and-trade-meeting-in-geneva/",
+        "publisher": "The White House — U.S.-China joint statement",
+        "type": "primary",
+        "publishedAt": "2025-05-12",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-bilateral-agreement",
+        "claim": "중국 대상 별도 완화가 5월에 이뤄졌음을 확인한다."
+      }
+    ],
+    "commonEventId": "trump-tariff-pause-2025"
+  },
+  {
+    "id": "eth-policy-electronics-exemptions-2025",
+    "date": "2025-04-11",
+    "label": "전자제품 예외",
+    "title": "스마트폰·컴퓨터 등 상호관세 예외 구체화",
+    "category": "macro",
+    "importance": 2,
+    "summary": "미국이 일부 전자제품의 상호관세 예외를 구체화하고 4월 5일 수입분부터 소급 적용한다고 밝혔다.",
+    "description": "미국이 일부 전자제품의 상호관세 예외를 구체화하고 4월 5일 수입분부터 소급 적용한다고 밝혔다.",
+    "detail": "4월 11일 정책 문서와 같은 날 밤 CBP 안내가 기준이다. 보도는 주로 4월 12일에 나왔으므로 보도 날짜나 소급 적용일을 새 발표일로 사용하지 않는다.",
+    "policyAction": "대통령 각서는 정해진 HTSUS 품목을 상호관세 대상에서 제외했고 CBP가 신고·환급 지침을 냈다.",
+    "marketContext": "AP가 전한 업계 해석은 일부 기술기업의 부담 완화였다. ETH의 직접 수혜나 가격 효과는 이 자료로 확인하지 않는다.",
+    "followUp": "예외의 범위는 EO 14257과 그 수정 명령의 상호관세다. 다른 관세의 일괄 철폐로 확대 해석하지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "대통령 각서 및 CBP 안내의 미국 현지 게시 날짜 4월 11일을 사용한다. CBP 안내는 22:36 EDT이며 UTC로는 다음 날이지만 이 마커는 출처 달력 날짜다.",
+    "crossCheck": "백악관 각서와 CBP 집행 지침을 대조하고 AP 보도로 독립 확인했다. 백악관·CBP는 같은 행정부의 정책·집행 자료다.",
+    "limitations": [
+      "소급 적용 시작일인 4월 5일과 실제 예외 발표일인 4월 11일을 구분한다.",
+      "초기 AP 재게시 문구는 중국 전체 관세 면제로 읽힐 여지가 있어 법적 범위는 각서·CBP의 상호관세 표현을 따른다.",
+      "모든 전자제품이나 모든 중국산 상품에 적용되는 예외가 아니다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "스마트폰",
+      "컴퓨터",
+      "반도체",
+      "품목 예외",
+      "CBP"
+    ],
+    "sources": [
+      {
+        "title": "Clarification of Exceptions Under Executive Order 14257 of April 2, 2025, as Amended",
+        "url": "https://www.whitehouse.gov/presidential-actions/2025/04/clarification-of-exceptions-under-executive-order-14257-of-april-2-2025-as-amended/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-04-11",
+        "accessedAt": "2026-10-24",
+        "role": "signed-exemption-memorandum",
+        "claim": "상호관세 예외 품목과 4월 5일 소급 적용을 정한다."
+      },
+      {
+        "title": "CSMS # 64724565 — UPDATED GUIDANCE: Reciprocal Tariff Exclusion for Specified Products; April 5, 2025 Effective Date",
+        "url": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/3db9e55",
+        "publisher": "U.S. Customs and Border Protection",
+        "type": "primary",
+        "publishedAt": "2025-04-11",
+        "accessedAt": "2026-10-24",
+        "role": "implementation-guidance",
+        "claim": "4월 11일 22:36 EDT 안내가 해당 예외의 신고·환급 범위를 확인한다."
+      },
+      {
+        "title": "Trump administration says it will exclude some electronics from 'reciprocal' tariffs",
+        "url": "https://www.wbur.org/news/2025/04/12/trump-administration-says-it-will-exclude-some-electronics-from-reciprocal-tariffs",
+        "publisher": "Associated Press, republished by WBUR",
+        "type": "secondary",
+        "publishedAt": "2025-04-12",
+        "accessedAt": "2026-10-24",
+        "role": "independent-contemporaneous-report",
+        "claim": "4월 11일 밤 발표와 일부 기술기업의 부담 완화 해석을 보도한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-geneva-truce-2025",
+    "date": "2025-05-12",
+    "label": "미중 제네바 합의",
+    "title": "미중 제네바 90일 관세 조정 합의",
+    "category": "macro",
+    "importance": 3,
+    "summary": "미국과 중국이 제네바 협상 후 고율 관세를 낮추는 90일 조정 합의를 발표했다.",
+    "description": "미국과 중국이 제네바 협상 후 고율 관세를 낮추는 90일 조정 합의를 발표했다.",
+    "detail": "공동성명은 발표일과 실제 조정 기한을 구분한다. 10% 상호관세 부분과 다른 기존 관세가 남기 때문에 미중 무역의 전면 무관세 전환으로 표시하지 않는다.",
+    "policyAction": "양측은 5월 14일까지 상호관세의 24%포인트를 90일 중단하고 10% 부분을 유지하며, 4월의 후속 인상 조치를 해제·조정하기로 했다.",
+    "marketContext": "Reuters는 합의 발표 뒤 주식선물과 달러의 강세, 금의 약세를 보도했다. ETH와의 연결은 공통 위험선호 환경에 한정한다.",
+    "followUp": "8월 11일 공동성명은 같은 조정의 90일 연장을 발표했다. 10월 말 정상회담 후에는 추가 합의가 나왔다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공동성명의 5월 12일 발표일을 사용한다. 5월 14일 조정 기한과 구분한다.",
+    "crossCheck": "미중 공동성명과 Reuters 보도를 대조했다. 공동성명의 양국 입장 일치는 하나의 공동 문서이며 두 독립 취재로 세지 않는다.",
+    "limitations": [
+      "당시 자주 쓰인 양국 총 요율은 관세 구성 요소를 합산한 값이므로 이 기록에서는 기본 구성과 변경만 적는다.",
+      "Reuters의 주식·외환 반응을 ETH의 일정 수익률로 환산하지 않는다.",
+      "합의 이후 이행 여부와 모든 상품별 세율을 계속 추적한 관세표가 아니다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "미중",
+      "제네바",
+      "90일 합의",
+      "관세 완화"
+    ],
+    "sources": [
+      {
+        "title": "Joint Statement on U.S.-China Economic and Trade Meeting in Geneva",
+        "url": "https://www.whitehouse.gov/briefings-statements/2025/05/joint-statement-on-u-s-china-economic-and-trade-meeting-in-geneva/",
+        "publisher": "The White House — U.S.-China joint statement",
+        "type": "primary",
+        "publishedAt": "2025-05-12",
+        "accessedAt": "2026-10-24",
+        "role": "bilateral-policy-statement",
+        "claim": "90일 조정, 10% 잔존 부분, 5월 14일까지의 조치를 정한다."
+      },
+      {
+        "title": "Stocks, dollar surge as US and China agree 90-day tariff relief",
+        "url": "https://www.kitco.com/news/off-the-wire/2025-05-12/stocks-dollar-surge-us-and-china-agree-90-day-tariff-relief",
+        "publisher": "Reuters, republished by Kitco",
+        "type": "secondary",
+        "publishedAt": "2025-05-12",
+        "accessedAt": "2026-10-24",
+        "role": "independent-market-report",
+        "claim": "합의 후 주식선물·달러·금의 움직임을 보도한다."
+      },
+      {
+        "title": "Joint Statement on U.S.-China Economic and Trade Meeting in Stockholm",
+        "url": "https://www.whitehouse.gov/briefings-statements/2025/08/joint-statement-on-u-s-china-economic-and-trade-meeting-in-stockholm/",
+        "publisher": "The White House — U.S.-China joint statement",
+        "type": "primary",
+        "publishedAt": "2025-08-11",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-extension",
+        "claim": "제네바 조정의 90일 연장을 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-cit-tariff-ruling-2025",
+    "date": "2025-05-28",
+    "label": "무역법원 관세 제동",
+    "title": "미 국제무역법원, IEEPA 관세 권한에 제동",
+    "category": "macro",
+    "importance": 2,
+    "summary": "미 국제무역법원이 쟁점 IEEPA 관세에 대해 대통령 권한을 넘었다고 판단했으나 항소 절차가 이어졌다.",
+    "description": "미 국제무역법원이 쟁점 IEEPA 관세에 대해 대통령 권한을 넘었다고 판단했으나 항소 절차가 이어졌다.",
+    "detail": "법원 판결이라는 정책 불확실성의 전환점을 기록한다. 다음 날 항소법원이 집행을 일시 정지했으므로 5월 28일부터 모든 관세가 영구 폐지됐다고 설명하지 않는다.",
+    "policyAction": "국제무역법원은 V.O.S. Selections 사건에서 쟁점 상호관세·마약 관련 관세의 IEEPA 권한을 부정하고 정부의 부과를 금지하는 판결을 내렸다.",
+    "marketContext": "Reuters는 초기 안도 반응과 함께 항소 장기화에 따른 불확실성이 남았다고 보도했다.",
+    "followUp": "5월 29일 항소법원의 정지 결정으로 쟁점 관세가 유지됐다. 최종 대법원 판단은 2026년 2월 20일의 별도 사건이다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "원심 판결 표지의 2025-05-28과 항소심이 회고한 원심 날짜가 일치한다.",
+    "crossCheck": "국제무역법원 판결의 날짜·사건 식별자를 확인하고, 항소심 원문 12쪽의 원심·정지 절차 회고 및 Reuters 보도를 대조했다.",
+    "limitations": [
+      "원심 PDF의 추가 본문 재요청에 시간 초과가 있어 판결 범위는 본문을 읽은 항소심 원문의 회고와도 대조했다.",
+      "판결·금지명령·항소심 집행정지는 서로 다른 절차이며 영구적인 관세 종료로 합치지 않는다.",
+      "시장 보도의 낙관론은 ETH 반응 또는 인과효과의 증명이 아니다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "CIT",
+      "V.O.S. Selections",
+      "IEEPA",
+      "관세 소송"
+    ],
+    "sources": [
+      {
+        "title": "V.O.S. Selections, Inc. v. United States — Slip Opinion 25-66",
+        "url": "https://www.cit.uscourts.gov/sites/cit/files/25-66.pdf",
+        "publisher": "U.S. Court of International Trade",
+        "type": "primary",
+        "publishedAt": "2025-05-28",
+        "accessedAt": "2026-10-24",
+        "role": "original-court-document",
+        "claim": "원심 판결의 사건·서명 날짜 및 요약판결 결정을 확인한다."
+      },
+      {
+        "title": "V.O.S. Selections, Inc. v. Trump — Federal Circuit opinion, cases 2025-1812 and 2025-1813",
+        "url": "https://www.cafc.uscourts.gov/opinions-orders/25-1812.OPINION.8-29-2025_2566151.pdf",
+        "publisher": "U.S. Court of Appeals for the Federal Circuit",
+        "type": "primary",
+        "publishedAt": "2025-08-29",
+        "accessedAt": "2026-10-24",
+        "role": "appellate-primary-procedural-history",
+        "claim": "12쪽은 5월 28일 판결 내용과 5월 29일 정지를 회고한다."
+      },
+      {
+        "title": "Trump’s tariffs to remain in effect after appeals court grants stay",
+        "url": "https://www.investing.com/news/stock-market-news/us-ruling-that-trump-tariffs-are-unlawful-stirs-relief-and-uncertainty-4069816",
+        "publisher": "Reuters, republished by Investing.com",
+        "type": "secondary",
+        "publishedAt": "2025-05-29",
+        "accessedAt": "2026-10-24",
+        "role": "independent-legal-and-market-report",
+        "claim": "초기 안도 및 항소 불확실성을 보도한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-tariff-ruling-stay-2025",
+    "date": "2025-05-29",
+    "label": "관세 판결 집행정지",
+    "title": "미 항소법원, 관세 금지 판결 일시 정지",
+    "category": "macro",
+    "importance": 2,
+    "summary": "항소법원이 전날 국제무역법원의 금지 판결을 일시 정지해 쟁점 관세가 유지됐다.",
+    "description": "항소법원이 전날 국제무역법원의 금지 판결을 일시 정지해 쟁점 관세가 유지됐다.",
+    "detail": "무역법원의 권한 판단과 항소 중 효력 유지는 다른 사건이다. 법원 절차가 실제 관세 종료와 곧바로 일치하지 않는다는 점을 차트에서 확인할 수 있도록 분리한다.",
+    "policyAction": "연방순회항소법원은 정부의 항소를 심리하는 동안 하급심 판결의 효력을 정지했다.",
+    "marketContext": "Reuters는 항소 절차가 시장의 초기 안도감을 제한하고 무역정책 불확실성을 남겼다고 보도했다.",
+    "followUp": "이 정지는 관세의 적법성을 최종 확정한 판단이 아니다. 2026년 2월 20일 대법원이 IEEPA의 관세 부과 권한을 부정했다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "항소심 공식 절차 회고에 인용된 2025-05-29 결정과 Reuters 본문상의 목요일 사건을 대조했다.",
+    "crossCheck": "연방순회항소법원의 후속 판결 원문과 Reuters 보도로 사건 날짜·정지 성격을 확인했다. 최초 정지 명령 원본 대신 공식 사후 절차 기록을 사용한 한계를 명시한다.",
+    "limitations": [
+      "최초 정지 명령 원본을 직접 인용하지 않으며, 공식 항소심의 후속 회고를 사용했다.",
+      "집행정지는 쟁점 관세가 최종 적법하다는 판결이 아니다.",
+      "5월 28일과 29일의 연속 사건은 가격 관측 창이 겹칠 수 있다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "항소",
+      "집행정지",
+      "IEEPA",
+      "관세 소송"
+    ],
+    "sources": [
+      {
+        "title": "V.O.S. Selections, Inc. v. Trump — Federal Circuit opinion, cases 2025-1812 and 2025-1813",
+        "url": "https://www.cafc.uscourts.gov/opinions-orders/25-1812.OPINION.8-29-2025_2566151.pdf",
+        "publisher": "U.S. Court of Appeals for the Federal Circuit",
+        "type": "primary",
+        "publishedAt": "2025-08-29",
+        "accessedAt": "2026-10-24",
+        "role": "appellate-primary-procedural-history",
+        "claim": "5월 29일 정지 결정을 사건 번호와 함께 확인한다."
+      },
+      {
+        "title": "Trump’s tariffs to remain in effect after appeals court grants stay",
+        "url": "https://www.investing.com/news/stock-market-news/us-ruling-that-trump-tariffs-are-unlawful-stirs-relief-and-uncertainty-4069816",
+        "publisher": "Reuters, republished by Investing.com",
+        "type": "secondary",
+        "publishedAt": "2025-05-29",
+        "accessedAt": "2026-10-24",
+        "role": "independent-contemporaneous-report",
+        "claim": "항소법원 결정 뒤 관세 효력이 유지됐다고 보도한다."
+      },
+      {
+        "title": "Learning Resources, Inc. v. Trump / Trump v. V.O.S. Selections, Inc. — Supreme Court opinion",
+        "url": "https://www.supremecourt.gov/opinions/25pdf/24-1287_4gcj.pdf",
+        "publisher": "Supreme Court of the United States",
+        "type": "primary",
+        "publishedAt": "2026-02-20",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-final-legal-ruling",
+        "claim": "2026년 대법원의 별도 IEEPA 권한 판단을 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-country-rate-reset-2025",
+    "date": "2025-07-31",
+    "label": "국가별 관세 재설정",
+    "title": "미국, 국가별 상호관세 요율 재설정",
+    "category": "macro",
+    "importance": 3,
+    "summary": "미국이 다수 교역국의 상호관세 요율을 다시 정하고 일주일 뒤 적용하는 명령을 발표했다.",
+    "description": "미국이 다수 교역국의 상호관세 요율을 다시 정하고 일주일 뒤 적용하는 명령을 발표했다.",
+    "detail": "4월 유예 이후 국가별 요율이 다시 구체화된 전환점이다. 다음 날 금융시장 약세에는 미국 고용지표도 겹쳤으므로 관세만으로 설명하지 않는다.",
+    "policyAction": "EO 14326은 부속서의 국가별 요율을 8월 7일부터 적용하도록 정했다. 명시되지 않은 교역국의 10% 기본 요율과 일부 경과 규정이 남았다.",
+    "marketContext": "Reuters는 8월 1일 세계 주식시장 약세를 관세 재설정과 부진한 미국 고용지표가 함께 나온 상황으로 설명했다.",
+    "followUp": "중국 대상 제네바 조정은 이 명령으로 바뀌지 않았고, 8월 11일 별도로 연장됐다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "행정명령 서명일 7월 31일을 사용한다. 명령의 7일 후 적용 조항과 Reuters가 확인한 8월 7일을 분리한다.",
+    "crossCheck": "행정명령의 적용 일정·중국 예외를 Reuters 보도 및 8월 항소심 절차 배경에 명시된 시행일과 대조했다.",
+    "limitations": [
+      "국가·상품별 세율이 달라 하나의 평균 관세율로 단순화하지 않는다.",
+      "8월 1일 고용지표와 관세 뉴스가 겹치므로 관세만의 시장 효과는 식별하지 않는다.",
+      "미국 주가 반응을 ETH 일봉 반응으로 대체하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "국가별 관세",
+      "8월 7일",
+      "고용지표",
+      "EO 14326"
+    ],
+    "sources": [
+      {
+        "title": "Further Modifying the Reciprocal Tariff Rates — Executive Order 14326",
+        "url": "https://www.whitehouse.gov/presidential-actions/2025/07/further-modifying-the-reciprocal-tariff-rates/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-07-31",
+        "accessedAt": "2026-10-24",
+        "role": "signed-policy-order",
+        "claim": "새 국가별 요율, 7일 후 적용 및 중국 조정 유지 조항을 명시한다."
+      },
+      {
+        "title": "Markets dive after Trump hits more countries with steep tariffs",
+        "url": "https://www.investing.com/news/economic-indicators/trump-hits-more-countries-with-steep-tariffs-markets-tumble-4165747",
+        "publisher": "Reuters, republished by Investing.com",
+        "type": "secondary",
+        "publishedAt": "2025-08-01",
+        "accessedAt": "2026-10-24",
+        "role": "independent-policy-and-market-report",
+        "claim": "8월 7일 시행 일정과 다음 날 관세·고용지표 동반 시장 약세를 보도한다."
+      },
+      {
+        "title": "V.O.S. Selections, Inc. v. Trump — Federal Circuit opinion, cases 2025-1812 and 2025-1813",
+        "url": "https://www.cafc.uscourts.gov/opinions-orders/25-1812.OPINION.8-29-2025_2566151.pdf",
+        "publisher": "U.S. Court of Appeals for the Federal Circuit",
+        "type": "primary",
+        "publishedAt": "2025-08-29",
+        "accessedAt": "2026-10-24",
+        "role": "independent-official-retrospective",
+        "claim": "중국 외 상호관세가 8월 7일 시행됐다고 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-stockholm-truce-extension-2025",
+    "date": "2025-08-11",
+    "label": "미중 유예 연장",
+    "title": "미중 관세 조정 90일 추가 연장",
+    "category": "macro",
+    "importance": 2,
+    "summary": "미국과 중국이 제네바 관세 조정의 90일 추가 연장을 발표했다.",
+    "description": "미국과 중국이 제네바 관세 조정의 90일 추가 연장을 발표했다.",
+    "detail": "기존 고율이 즉시 복귀하는 상황을 피한 연장 사건이다. 종전의 모든 관세가 사라지거나 미중 분쟁이 최종 해결됐다는 의미는 아니다.",
+    "policyAction": "공동성명은 8월 12일부터 90일 더 24%포인트의 적용을 중단하고 10% 부분을 유지한다고 밝혔다. 미국 명령은 11월 10일 00:01 EST까지 연장했다.",
+    "marketContext": "Reuters는 연장이 협상 시간을 벌었으며 아시아 주식시장에는 합의 기대가 반영됐다고 보도했다.",
+    "followUp": "10월 10일 추가 관세 위협으로 긴장이 다시 높아졌고 10월 30일 정상회담에서 별도 완화 합의가 발표됐다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공동성명과 행정명령의 8월 11일을 사용한다. 기존 조정 만료 예정일·연장 시작일인 8월 12일과 구분한다.",
+    "crossCheck": "양국 공동성명, 미국 시행 명령, Reuters 보도를 대조했다. 백악관의 두 문서는 독립 취재 두 건으로 세지 않는다.",
+    "limitations": [
+      "기본 상호관세 부분 및 그 밖의 관세 조치가 남아 있었다.",
+      "Reuters에 나타난 아시아 주식의 기대 반영을 ETH의 직접 반등으로 단정하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "스톡홀름",
+      "미중",
+      "90일 연장",
+      "관세 유예"
+    ],
+    "sources": [
+      {
+        "title": "Joint Statement on U.S.-China Economic and Trade Meeting in Stockholm",
+        "url": "https://www.whitehouse.gov/briefings-statements/2025/08/joint-statement-on-u-s-china-economic-and-trade-meeting-in-stockholm/",
+        "publisher": "The White House — U.S.-China joint statement",
+        "type": "primary",
+        "publishedAt": "2025-08-11",
+        "accessedAt": "2026-10-24",
+        "role": "bilateral-extension-statement",
+        "claim": "8월 12일부터의 90일 연장과 10% 부분 유지를 확인한다."
+      },
+      {
+        "title": "Further Modifying Reciprocal Tariff Rates to Reflect Ongoing Discussions with The People's Republic of China",
+        "url": "https://www.whitehouse.gov/presidential-actions/2025/08/further-modifying-reciprocal-tariff-rates-to-reflect-ongoing-discussions-with-the-peoples-republic-of-china/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-08-11",
+        "accessedAt": "2026-10-24",
+        "role": "signed-extension-order",
+        "claim": "미국의 연장 종료 시점을 11월 10일 00:01 EST로 정한다."
+      },
+      {
+        "title": "US, China extend tariff truce by 90 days, staving off surge in duties",
+        "url": "https://www.investing.com/news/world-news/trump-says-well-see-what-happens-on-august-12-deadline-for-china-tariffs-4183460",
+        "publisher": "Reuters, republished by Investing.com",
+        "type": "secondary",
+        "publishedAt": "2025-08-11",
+        "accessedAt": "2026-10-24",
+        "role": "independent-policy-and-market-report",
+        "claim": "협상 연장과 당시 금융시장 기대를 보도한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-china-additional-tariff-threat-2025",
+    "date": "2025-10-10",
+    "label": "대중 100% 추가 예고",
+    "title": "트럼프, 중국에 추가 100% 관세 예고",
+    "category": "macro",
+    "importance": 3,
+    "summary": "트럼프의 대중 추가 100% 관세 예고와 같은 구간에 ETH를 포함한 가상자산 급락·레버리지 청산이 보도됐다.",
+    "description": "트럼프의 대중 추가 100% 관세 예고와 같은 구간에 ETH를 포함한 가상자산 급락·레버리지 청산이 보도됐다.",
+    "detail": "이는 당일 발효된 관세가 아닌 향후 부과 예고다. Reuters의 후속 보도는 ETH 하락과 시장 전체 청산·낮은 유동성을 함께 다뤘으며, 관세만의 단독 효과로 기록하지 않는다.",
+    "policyAction": "트럼프는 11월 1일 또는 중국의 후속 조치에 따라 더 이르게, 기존 관세에 추가하는 100% 관세와 핵심 소프트웨어 수출통제를 예고했다.",
+    "marketContext": "Reuters는 10월 10~11일 급락 이후 ETH 하방 방어 수요와 시장 전체 레버리지 청산·유동성 문제를 보도했다.",
+    "followUp": "10월 30일 정상회담 뒤 완화 합의가 발표됐고 11월 공식 문서가 이를 구체화했다. 이 기록은 추가 100%가 11월 1일 실제 시행됐다고 주장하지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "대통령 게시물 아카이브의 10월 10일을 사용한다. 13:50 PDT 게시 시각은 20:50 UTC로 환산되지만 마커 자체는 출처 달력 날짜다.",
+    "crossCheck": "대통령 원문을 보존한 UCSB 아카이브를 Reuters 당일 정책 보도와 대조하고, 별도 후속 기사로 ETH와 청산 맥락을 확인했다. Reuters 두 기사는 같은 매체의 보도다.",
+    "limitations": [
+      "대통령 게시물은 정책 의사의 기록이며 실제 시행 명령과 동일하지 않다.",
+      "당일 앞선 일반적인 관세 위협 발언과 20:50 UTC의 구체적 100% 게시를 구분한다.",
+      "Reuters 청산액은 시장 전체 집계이며 ETH 전용 청산액이 아니다. 기사 저점·변화율을 Coinbase 일봉 값으로 사용하지 않는다.",
+      "후속 Reuters 페이지의 URL·본문 사건 설명은 10월 13일이지만 현재 게시 헤더는 10월 14일로 표시된다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "추가 100%",
+      "수출통제",
+      "강제청산",
+      "유동성"
+    ],
+    "sources": [
+      {
+        "title": "Truth Social Posts of October 10, 2025",
+        "url": "https://www.presidency.ucsb.edu/documents/truth-social-posts-october-10-2025",
+        "publisher": "The American Presidency Project — Donald J. Trump post archive",
+        "type": "primary",
+        "publishedAt": "2025-10-10",
+        "accessedAt": "2026-10-24",
+        "role": "archived-original-statement",
+        "claim": "13:50 Pacific 게시물에 기존 관세 외 100% 및 11월 1일 예정 문구가 있다."
+      },
+      {
+        "title": "US will impose additional 100% tariff on Chinese imports from November, Trump says",
+        "url": "https://www.reuters.com/world/china/us-will-impose-additional-100-tariff-chinese-imports-november-trump-says-2025-10-10/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2025-10-10",
+        "accessedAt": "2026-10-24",
+        "role": "independent-contemporaneous-policy-report",
+        "claim": "기존 관세에 추가하는 100% 부과 예고를 확인한다."
+      },
+      {
+        "title": "After record crypto crash, a rush to hedge against another freefall",
+        "url": "https://www.reuters.com/world/asia-pacific/after-record-crypto-crash-rush-hedge-against-another-freefall-2025-10-13/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2025-10-14",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-market-report",
+        "claim": "ETH 동반 하락과 시장 전체 레버리지·유동성 문제를 보도한다."
+      },
+      {
+        "title": "Fact Sheet: President Donald J. Trump Strikes Deal on Economic and Trade Relations with China",
+        "url": "https://www.whitehouse.gov/fact-sheets/2025/11/fact-sheet-president-donald-j-trump-strikes-deal-on-economic-and-trade-relations-with-china/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-11-01",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-policy-agreement",
+        "claim": "후속 미중 완화 합의를 설명한다."
+      }
+    ],
+    "commonEventId": "trump-china-tariff-threat-2025",
+    "facts": {
+      "announcementUtc": "2025-10-10T20:50:00Z",
+      "announcementTimeBasis": "UCSB 원문 아카이브의 13:50 Pacific 표기, 해당 날짜 PDT(UTC−07:00).",
+      "announcedEffectiveDate": "2025-11-01",
+      "policyStatusAtAnnouncement": "threat-announcement"
+    }
+  },
+  {
+    "id": "eth-policy-busan-trade-arrangement-2025",
+    "date": "2025-10-30",
+    "label": "미중 정상 합의",
+    "title": "미중 정상회담 후 관세·희토류 완화 합의",
+    "category": "macro",
+    "importance": 3,
+    "summary": "부산 미중 정상회담 뒤 관세 일부 인하와 희토류 관련 조치의 완화를 포함한 합의가 발표됐다.",
+    "description": "부산 미중 정상회담 뒤 관세 일부 인하와 희토류 관련 조치의 완화를 포함한 합의가 발표됐다.",
+    "detail": "10월 30일 회담 결과 발표, 11월 1일 상세 설명, 11월 4일 시행 명령을 구분한다. 발표를 근거로 ETH가 즉시 상승했다고 설명하지 않는다.",
+    "policyAction": "미국은 중국 대상 펜타닐 관세를 10%포인트 낮추고 고율 상호관세의 중단을 연장하는 합의를 발표했다.",
+    "marketContext": "Reuters는 예상됐던 정상회담 결과에 대한 글로벌 시장 반응이 제한적이었다고 보도했다.",
+    "followUp": "11월 1일 백악관은 인하 적용일을 11월 10일로 설명했고, 11월 4일 명령은 고율 상호관세 중단을 2026년 11월 10일까지 연장했다. 당시 기본 10% 부분은 유지됐다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "Reuters의 10월 30일 회담 결과 보도와 11월 4일 명령에 명시된 회담일이 일치한다. 후속 문서 게시일을 최초 합의 발표일로 쓰지 않는다.",
+    "crossCheck": "당일 Reuters 보도, 백악관 후속 설명, 합의를 시행하는 명령을 대조했다. 같은 행정부의 후속 두 문서를 별개의 독립 취재로 세지 않는다.",
+    "limitations": [
+      "회담 직후의 발언과 뒤에 확정된 적용 날짜를 구별한다.",
+      "10월 10일 예고된 추가 100% 관세가 먼저 시행된 뒤 취소됐다는 식으로 연결하지 않는다.",
+      "합의의 약속을 모든 조항이 완전히 이행됐다는 확인으로 사용하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "부산",
+      "미중 정상회담",
+      "희토류",
+      "관세 인하"
+    ],
+    "sources": [
+      {
+        "title": "Trump shaves China tariffs in deal with Xi on fentanyl, rare earths",
+        "url": "https://www.reuters.com/world/china/looming-trump-xi-meeting-revives-hope-us-china-trade-truce-2025-10-29/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2025-10-30",
+        "accessedAt": "2026-10-24",
+        "role": "independent-contemporaneous-report",
+        "claim": "10월 30일 합의 발표와 제한적인 글로벌 시장 반응을 확인한다."
+      },
+      {
+        "title": "Fact Sheet: President Donald J. Trump Strikes Deal on Economic and Trade Relations with China",
+        "url": "https://www.whitehouse.gov/fact-sheets/2025/11/fact-sheet-president-donald-j-trump-strikes-deal-on-economic-and-trade-relations-with-china/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-11-01",
+        "accessedAt": "2026-10-24",
+        "role": "official-agreement-details",
+        "claim": "11월 10일 인하 일정 및 당시 10% 상호관세 부분 유지를 설명한다."
+      },
+      {
+        "title": "Modifying Reciprocal Tariff Rates Consistent with the Economic and Trade Arrangement Between the United States and the People’s Republic of China",
+        "url": "https://www.whitehouse.gov/presidential-actions/2025/11/modifying-reciprocal-tariff-rates-consistent-with-the-economic-and-trade-arrangement-between-the-united-states-and-the-peoples-republic-of-china/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-11-04",
+        "accessedAt": "2026-10-24",
+        "role": "signed-implementation-order",
+        "claim": "회담 날짜와 고율 상호관세 중단 연장을 명시한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-greenland-tariff-threat-2026",
+    "date": "2026-01-17",
+    "label": "그린란드 관세 예고",
+    "title": "그린란드 갈등 속 유럽 8개국 추가 관세 예고",
+    "category": "macro",
+    "importance": 3,
+    "summary": "트럼프가 그린란드 문제와 연계해 유럽 8개국에 단계적 추가 관세를 예고했다.",
+    "description": "트럼프가 그린란드 문제와 연계해 유럽 8개국에 단계적 추가 관세를 예고했다.",
+    "detail": "지정학 갈등이 무역정책 위협으로 연결된 발표를 기록한다. 이미 시행된 관세로 표시하지 않으며, 1월 21일의 철회 발표를 후속 사건으로 연결한다.",
+    "policyAction": "대통령 게시물은 8개국 상품에 2월 1일부터 10%, 6월 1일부터 25% 추가 관세를 예고하고 그린란드 매입 합의와 연계했다.",
+    "marketContext": "Reuters는 이 예고가 유럽과의 긴장 및 기존 무역합의의 불확실성을 높였다고 보도했다. 이 자료만으로 ETH의 직접 반응은 확정하지 않는다.",
+    "followUp": "1월 21일 트럼프는 협의의 틀을 이유로 2월 1일 예정 관세를 부과하지 않겠다고 밝혔다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "UCSB 게시물 아카이브와 Reuters의 1월 17일 발표를 대조했다. 예고된 2월 1일 시행일과 구분한다.",
+    "crossCheck": "대통령 게시물의 원문·시각을 대학 아카이브에서 확인하고 Reuters 독립 보도의 대상국·요율·일정과 대조했다.",
+    "limitations": [
+      "그린란드의 소유권 이전 또는 합병이 이뤄진 사건으로 표시하지 않는다.",
+      "정치적 목적에 대한 판단은 대통령의 발표 내용에 귀속한다.",
+      "관세 부과 예고는 법적 시행과 다르며, 이 기록은 실제 부과를 주장하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "그린란드",
+      "유럽",
+      "NATO",
+      "지정학",
+      "관세 예고"
+    ],
+    "sources": [
+      {
+        "title": "Truth Social Posts of January 17, 2026",
+        "url": "https://www.presidency.ucsb.edu/documents/truth-social-posts-january-17-2026",
+        "publisher": "The American Presidency Project — Donald J. Trump post archive",
+        "type": "primary",
+        "publishedAt": "2026-01-17",
+        "accessedAt": "2026-10-24",
+        "role": "archived-original-statement",
+        "claim": "8개국에 대한 단계적 관세 예고와 그린란드 조건을 담는다."
+      },
+      {
+        "title": "Trump vows tariffs on eight European nations over Greenland",
+        "url": "https://www.reuters.com/world/europe/trump-vows-tariffs-eight-european-nations-over-greenland-2026-01-17/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2026-01-17",
+        "accessedAt": "2026-10-24",
+        "role": "independent-contemporaneous-report",
+        "claim": "예고 대상국·일정과 유럽의 반응을 확인한다."
+      },
+      {
+        "title": "Truth Social Posts of January 21, 2026",
+        "url": "https://www.presidency.ucsb.edu/documents/truth-social-posts-january-21-2026",
+        "publisher": "The American Presidency Project — Donald J. Trump post archive",
+        "type": "primary",
+        "publishedAt": "2026-01-21",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-withdrawal-statement",
+        "claim": "2월 1일 예정 관세를 부과하지 않겠다는 후속 발언이다."
+      }
+    ],
+    "facts": {
+      "announcementUtc": "2026-01-17T16:19:00Z",
+      "announcementTimeBasis": "UCSB의 08:19 Pacific 표기, 해당 날짜 PST(UTC−08:00).",
+      "announcedEffectiveDate": "2026-02-01",
+      "policyStatusAtAnnouncement": "threat-announcement"
+    }
+  },
+  {
+    "id": "eth-policy-greenland-tariff-withdrawal-2026",
+    "date": "2026-01-21",
+    "label": "그린란드 관세 철회",
+    "title": "그린란드 관련 2월 관세 부과 계획 철회",
+    "category": "macro",
+    "importance": 3,
+    "summary": "트럼프가 그린란드 협의의 틀을 이유로 2월 1일 예정 관세를 부과하지 않겠다고 밝혔다.",
+    "description": "트럼프가 그린란드 협의의 틀을 이유로 2월 1일 예정 관세를 부과하지 않겠다고 밝혔다.",
+    "detail": "1월 17일 위협과 다른 방향의 정책 발표다. 그린란드의 최종 지위가 확정되거나 이미 걷고 있던 관세가 환급된 사건으로 설명하지 않는다.",
+    "policyAction": "대통령은 NATO 사무총장과 논의 뒤 2월 1일 예정 관세를 부과하지 않겠다고 발표했다.",
+    "marketContext": "Reuters는 관련 발언 뒤 세계 주식시장이 반등했다고 보도했으며, 같은 날 군사력 사용을 배제한 발언도 시장 맥락으로 다뤘다.",
+    "followUp": "발표 당시 표현은 향후 합의의 틀이었고 추가 협상이 예정돼 있었다. 최종 합의 이행을 이 사건에서 확정하지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "UCSB의 1월 21일 11:27 PST 게시 기록과 Reuters 당일 보도를 대조했다. UTC 환산 시 19:27이다.",
+    "crossCheck": "대통령의 원문 보존 자료와 독립 시장 보도를 대조했다. 정책 철회 발언과 시장 반응의 동시성은 확인하지만 ETH의 인과효과를 측정하지 않는다.",
+    "limitations": [
+      "관세 위협 철회와 그린란드에 관한 최종 법적 합의는 다르다.",
+      "동일한 날의 다른 지정학 발언·금리·자금 흐름의 영향을 통제하지 않는다.",
+      "보도된 주식 반등을 ETH 반등 수치로 재사용하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "그린란드",
+      "유럽",
+      "관세 철회",
+      "NATO",
+      "위험선호"
+    ],
+    "sources": [
+      {
+        "title": "Truth Social Posts of January 21, 2026",
+        "url": "https://www.presidency.ucsb.edu/documents/truth-social-posts-january-21-2026",
+        "publisher": "The American Presidency Project — Donald J. Trump post archive",
+        "type": "primary",
+        "publishedAt": "2026-01-21",
+        "accessedAt": "2026-10-24",
+        "role": "archived-original-withdrawal-statement",
+        "claim": "2월 1일 예정 관세를 부과하지 않겠다고 밝힌 원문이다."
+      },
+      {
+        "title": "Stocks stage dramatic rebound after Trump announces Greenland framework",
+        "url": "https://www.reuters.com/world/china/global-markets-wrapup-1-pix-2026-01-21/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2026-01-21",
+        "accessedAt": "2026-10-24",
+        "role": "independent-market-report",
+        "claim": "글로벌 주식 반등과 군사력 사용 관련 같은 날 발언을 함께 설명한다."
+      }
+    ],
+    "facts": {
+      "announcementUtc": "2026-01-21T19:27:00Z",
+      "announcementTimeBasis": "UCSB의 11:27 Pacific 표기, 해당 날짜 PST(UTC−08:00).",
+      "policyStatusAtAnnouncement": "withdrawal-of-threat"
+    }
+  },
+  {
+    "id": "eth-policy-ieepa-supreme-court-2026",
+    "date": "2026-02-20",
+    "label": "IEEPA 대법원 판결",
+    "title": "미 대법원, IEEPA의 관세 부과 권한 부정",
+    "category": "macro",
+    "importance": 3,
+    "summary": "미 대법원이 IEEPA는 대통령에게 관세 부과 권한을 부여하지 않는다고 판단했다.",
+    "description": "미 대법원이 IEEPA는 대통령에게 관세 부과 권한을 부여하지 않는다고 판단했다.",
+    "detail": "판결일과 세관의 실제 징수 중단일은 구분한다. 같은 날 행정부가 다른 법률에 근거한 대체 관세를 발표했으므로 모든 미국 관세가 없어진 날로 표시하지 않는다.",
+    "policyAction": "대법원은 Learning Resources / V.O.S. Selections 병합 사건에서 IEEPA의 관세 권한을 부정했다. 백악관은 해당 IEEPA 추가 관세 종료 명령을 냈다.",
+    "marketContext": "Reuters는 판결 후 주가 상승과 함께 같은 날 GDP·물가 지표도 시장이 소화했다고 보도했다.",
+    "followUp": "CBP는 해당 IEEPA 관세의 징수를 2월 24일 00:00 동부시간부터 중단한다고 안내했다. Section 232·301 관세는 유지됐으며 대체 Section 122 조치가 이어졌다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "대법원 판결의 Decided February 20, 2026을 사용한다. 백악관 명령일·세관 지침 게시일·실제 징수 중단일을 분리한다.",
+    "crossCheck": "대법원 원문, 행정부의 종료 명령, CBP 집행 지침 및 Reuters 독립 보도를 대조했다. 법원 판단의 범위를 시행 문서와 구분했다.",
+    "limitations": [
+      "판결은 IEEPA의 관세 권한에 관한 것으로 다른 법률에 근거한 모든 관세의 폐지를 뜻하지 않는다.",
+      "관세 환급의 규모·개별 대상·완료 여부를 이 사건에서 확정하지 않는다.",
+      "GDP·물가 발표와 후속 정책 대응이 겹쳐 하루 수익률을 판결만의 효과로 해석하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "대법원",
+      "IEEPA",
+      "Learning Resources",
+      "V.O.S. Selections",
+      "관세 소송"
+    ],
+    "sources": [
+      {
+        "title": "Learning Resources, Inc. v. Trump / Trump v. V.O.S. Selections, Inc. — Supreme Court opinion",
+        "url": "https://www.supremecourt.gov/opinions/25pdf/24-1287_4gcj.pdf",
+        "publisher": "Supreme Court of the United States",
+        "type": "primary",
+        "publishedAt": "2026-02-20",
+        "accessedAt": "2026-10-24",
+        "role": "original-final-court-opinion",
+        "claim": "판결 날짜와 IEEPA의 관세 권한 부정이라는 결론을 확인한다."
+      },
+      {
+        "title": "Ending Certain Tariff Actions — Executive Order 14389",
+        "url": "https://www.whitehouse.gov/presidential-actions/2026/02/ending-certain-tariff-actions/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2026-02-20",
+        "accessedAt": "2026-10-24",
+        "role": "official-response-order",
+        "claim": "쟁점 IEEPA 추가 관세 종료 및 다른 관세의 잔존 범위를 명시한다."
+      },
+      {
+        "title": "CSMS # 67834313 — Ending Collection of International Emergency Economic Powers Act Duties",
+        "url": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+        "publisher": "U.S. Customs and Border Protection",
+        "type": "primary",
+        "publishedAt": "2026-02-22",
+        "accessedAt": "2026-10-24",
+        "role": "implementation-date-guidance",
+        "claim": "IEEPA 징수 중단의 적용 시점과 Section 232·301 제외를 확인한다."
+      },
+      {
+        "title": "US stocks end higher, Treasury yields gain after Supreme Court strikes down Trump tariffs",
+        "url": "https://www.reuters.com/world/china/global-markets-global-markets-2026-02-20/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2026-02-20",
+        "accessedAt": "2026-10-24",
+        "role": "independent-market-report",
+        "claim": "판결 및 같은 날 GDP·물가 발표가 겹친 금융시장 상황을 보도한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-section122-effective-2026",
+    "date": "2026-02-24",
+    "label": "대체 관세 시행",
+    "title": "IEEPA 징수 종료와 Section 122 임시 관세 시행",
+    "category": "macro",
+    "importance": 3,
+    "summary": "쟁점 IEEPA 관세의 징수가 중단되고, 별도 법률에 근거한 10% 임시 수입부가금이 시행됐다.",
+    "description": "쟁점 IEEPA 관세의 징수가 중단되고, 별도 법률에 근거한 10% 임시 수입부가금이 시행됐다.",
+    "detail": "2월 20일의 정책 발표·법원 판단과 실제 세관 적용일을 나누어 기록한다. 확인한 시행 지침의 요율은 10%이며, 당시 거론된 15% 인상 의사를 실제 시행 요율로 바꾸지 않는다.",
+    "policyAction": "CBP는 2월 24일 00:00 동부시간부터 IEEPA 추가 관세 징수 종료를, 00:01 EST부터 예외를 둔 Section 122 추가 10% 적용을 안내했다.",
+    "marketContext": "이 기록은 공식 적용 전환의 사실을 담는다. 이 날짜의 ETH 움직임을 대체 관세만의 결과로 설명할 독립 근거는 확보하지 않았다.",
+    "followUp": "임시 조치에는 7월 24일 종료 일정과 품목·협정별 예외가 있었다. 7월 23일 USTR는 다음 날 적용하는 별도 Section 301 관세를 발표했다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "두 CBP 지침이 명시한 2월 24일 실제 적용일을 사용한다. 2월 20일 포고와 2월 22·23일 안내 게시일은 분리한다.",
+    "crossCheck": "대통령 포고와 두 CBP 지침으로 요율·적용 시점·예외를 교차 대조했다. 모두 같은 행정부의 1차 자료이며 독립 시장 보도로 ETH 반응을 확인한 사건은 아니다.",
+    "limitations": [
+      "10%는 확인한 최초 시행 지침의 요율이다. 발표·예고만 확인된 15%를 실제 부과 사실로 쓰지 않는다.",
+      "USMCA 적격 상품 등 예외가 있어 모든 상품에 동일하게 적용된다고 표현하지 않는다.",
+      "징수 중단은 과거 납부분의 자동 환급 완료와 다르다.",
+      "정책 시행 사실과 ETH 가격 인과관계는 별개다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "Section 122",
+      "10%",
+      "임시 관세",
+      "CBP",
+      "IEEPA 종료"
+    ],
+    "sources": [
+      {
+        "title": "Imposing a Temporary Import Surcharge to Address Fundamental International Payments Problems",
+        "url": "https://www.whitehouse.gov/presidential-actions/2026/02/imposing-a-temporary-import-surcharge-to-address-fundamental-international-payments-problems/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2026-02-20",
+        "accessedAt": "2026-10-24",
+        "role": "signed-surcharge-proclamation",
+        "claim": "예외를 둔 10% 임시 부가금과 2월 24일 시작·7월 24일 종료 일정을 정한다."
+      },
+      {
+        "title": "CSMS # 67834313 — Ending Collection of International Emergency Economic Powers Act Duties",
+        "url": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+        "publisher": "U.S. Customs and Border Protection",
+        "type": "primary",
+        "publishedAt": "2026-02-22",
+        "accessedAt": "2026-10-24",
+        "role": "ieepa-collection-termination-guidance",
+        "claim": "2월 24일 00:00 동부시간부터의 IEEPA 징수 종료를 명시한다."
+      },
+      {
+        "title": "CSMS # 67844987 — Imposing Temporary Section 122 Duties",
+        "url": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b3b7b",
+        "publisher": "U.S. Customs and Border Protection",
+        "type": "primary",
+        "publishedAt": "2026-02-23",
+        "accessedAt": "2026-10-24",
+        "role": "section122-implementation-guidance",
+        "claim": "2월 24일 00:01 EST부터의 10% 시행과 예외를 확인한다."
+      },
+      {
+        "title": "USTR Takes Action in Forced Labor Section 301 Investigations",
+        "url": "https://ustr.gov/about/policy-offices/press-office/press-releases/2026/july/ustr-takes-action-forced-labor-section-301-investigations",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2026-07-23",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-policy-announcement",
+        "claim": "7월 후속 Section 301 관세 발표를 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-section301-transition-2026",
+    "date": "2026-07-23",
+    "label": "Section301 전환",
+    "title": "미국, 60개 교역 상대 Section 301 관세 발표",
+    "category": "macro",
+    "importance": 3,
+    "summary": "미국이 임시 Section 122 조치 종료를 앞두고 60개 교역 상대에 적용할 별도 Section 301 관세를 발표했다.",
+    "description": "미국이 임시 Section 122 조치 종료를 앞두고 60개 교역 상대에 적용할 별도 Section 301 관세를 발표했다.",
+    "detail": "무역정책의 법적 근거가 다시 바뀐 주요 전환점이다. USTR의 강제노동 관련 판단은 미국 당국의 조사 결론으로 귀속하며 각국의 모든 상품이 강제노동 산물이라는 의미로 확대하지 않는다.",
+    "policyAction": "USTR는 조사 대상에 10% 또는 12.5%를 기본으로 하는 관세를 발표했다. 일부 교역 상대는 기존 MFN 세율을 반영하는 방식이었고 품목·협정별 예외가 있었다.",
+    "marketContext": "Reuters는 임시 10% 조치 종료 시점에 새 관세가 적용되는 전환으로 보도했다. ETH의 별도 당일 반응은 이 자료에서 확인하지 않는다.",
+    "followUp": "공식 관보는 적용 시작을 7월 24일 00:01 동부시간으로 명시했다. 7월 28일은 관보 게시일이며 최초 발표일이나 적용 시작일이 아니다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "USTR 발표일 7월 23일을 사용한다. 실제 적용일인 7월 24일 및 관보의 7월 28일을 구분한다.",
+    "crossCheck": "USTR 발표와 공식 관보의 적용 규정을 Reuters 보도와 대조했다. USTR와 관보는 동일 정책 문서 계열이며 독립 두 조사로 세지 않는다.",
+    "limitations": [
+      "정책 명분인 강제노동 관련 결론은 USTR 판단에 귀속한다.",
+      "국가·상품별 예외와 MFN 조정이 있어 모든 수입에 단순히 동일 요율을 더한다고 설명하지 않는다.",
+      "이 기록은 발표 당시 범위이며 이후 모든 양자 협상·예외·소송을 완전히 추적한 현행 관세 안내가 아니다.",
+      "정책 전환 사실만으로 ETH의 방향이나 향후 가격을 예측하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "Section 301",
+      "USTR",
+      "60개 교역 상대",
+      "강제노동 수입금지",
+      "관세 전환"
+    ],
+    "sources": [
+      {
+        "title": "USTR Takes Action in Forced Labor Section 301 Investigations",
+        "url": "https://ustr.gov/about/policy-offices/press-office/press-releases/2026/july/ustr-takes-action-forced-labor-section-301-investigations",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2026-07-23",
+        "accessedAt": "2026-10-24",
+        "role": "official-policy-announcement",
+        "claim": "60개 조사 대상에 대한 최종 조치·요율 구조·예외를 발표한다."
+      },
+      {
+        "title": "Notice of Actions in Section 301 Investigations of Acts, Policies, and Practices of Various Economies Related to the Failure of Each Economy To Impose and Effectively Enforce a Prohibition on the Importation of Goods Produced With Forced Labor",
+        "url": "https://www.federalregister.gov/documents/2026/07/28/2026-15181/notice-of-actions-in-section-301-investigations-of-acts-policies-and-practices-of-various-economies",
+        "publisher": "Office of the United States Trade Representative / Federal Register",
+        "type": "primary",
+        "publishedAt": "2026-07-28",
+        "accessedAt": "2026-10-24",
+        "role": "official-implementation-notice",
+        "claim": "7월 24일 실제 적용 시작 및 경과 규정을 명시한다."
+      },
+      {
+        "title": "Trump to impose forced labor duties on Friday as temporary 10% US tariffs expire",
+        "url": "https://www.investing.com/news/economic-indicators/trump-to-impose-forced-labor-duties-on-friday-as-temporary-10-us-tariffs-expire-4810104",
+        "publisher": "Reuters, republished by Investing.com",
+        "type": "secondary",
+        "publishedAt": "2026-07-23",
+        "accessedAt": "2026-10-24",
+        "role": "independent-contemporaneous-report",
+        "claim": "Section 122 종료 시점과 새 Section 301 적용 전환을 보도한다."
+      }
+    ]
+  }
+]

@@ -1,0 +1,862 @@
+[
+  {
+    "id": "eth-ether-presale-launch",
+    "date": "2014-07-22",
+    "label": "이더 사전판매",
+    "title": "이더 사전판매 개시",
+    "category": "ecosystem",
+    "importance": 3,
+    "description": "이더리움 개발 자금을 마련하는 이더 사전판매가 공식 개시됐다. 메인넷 출시와 거래소 현물 가격 이력보다 앞선 형성 단계다.",
+    "detail": "당시 공지는 BTC로 참여하는 판매 구조와 제네시스 블록이 나오기 전에는 이더를 사용하거나 전송할 수 없다는 점을 설명했다. 후속 집계는 실제 판매가 진행됐음을 확인한다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공식 개시 글이 게시된 2014년 7월 22일을 사용한다. 사후 연대표의 00:00 표기를 정확한 개시 시각으로 복사하지 않는다.",
+    "crossCheck": "개시 당일 EF 글을 8월의 판매 진행 집계 및 공식 Homestead 가이드의 회고와 대조했다. 모두 같은 프로젝트 측 기록이며 독립 회계감사로 간주하지 않는다.",
+    "limitations": [
+      "사전판매 참여 비율을 달러 현물 OHLC 가격으로 변환해 차트에 만들지 않는다.",
+      "공식 글의 법적 자기 설명을 규제기관의 확정 판단으로 채택하지 않는다.",
+      "판매 개시일, 메인넷 출시일과 실제 거래소의 가격 이력 시작일을 구분한다."
+    ],
+    "keywords": [
+      "presale",
+      "crowdsale",
+      "ICO",
+      "이더 사전판매",
+      "초기 자금조달",
+      "형성"
+    ],
+    "sources": [
+      {
+        "title": "Launching the Ether Sale",
+        "url": "https://blog.ethereum.org/2014/07/22/launching-the-ether-sale",
+        "publisher": "Vitalik Buterin / Ethereum Foundation",
+        "type": "primary",
+        "role": "completed-launch-announcement",
+        "claim": "판매 개시 발표와 제네시스 이전의 전송 제한을 확인한다.",
+        "publishedAt": "2014-07-22",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Ether Sale: A Statistical Overview",
+        "url": "https://blog.ethereum.org/2014/08/08/ether-sale-a-statistical-overview",
+        "publisher": "Vitalik Buterin / Ethereum Foundation",
+        "type": "primary",
+        "role": "same-organization-completed-progress-record",
+        "claim": "개시 공지 이후 실제 판매가 진행됐다는 중간 집계 기록을 확인한다. 최종 총액으로 사용하지 않는다.",
+        "publishedAt": "2014-08-08",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "History of Ethereum — Homestead guide",
+        "url": "https://github.com/ethereum/homestead-guide/blob/master/source/introduction/history-of-ethereum.rst",
+        "publisher": "Ethereum documentation contributors",
+        "type": "primary",
+        "role": "same-organization-retrospective",
+        "claim": "2014년 7월의 사전판매와 2015년 7월의 메인넷 출시를 구분하는 공식 회고를 확인한다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "ethereum-frontier-thawing",
+    "date": "2015-09-07",
+    "label": "초기 난이도 폭탄",
+    "title": "Frontier 초기 난이도 폭탄 기준 블록",
+    "category": "protocol",
+    "importance": 2,
+    "description": "초기 난이도 조정 규칙이 지정한 블록 200,000에 도달했다. 훗날 여러 차례 연기된 난이도 폭탄의 초기 기준점이다.",
+    "detail": "당시 EF 공지는 난이도 증가가 점진적으로 나타나는 장기 전환 장치라고 설명했다. 이후 실제 PoS 전환은 2022년 머지에서 이뤄졌다.",
+    "datePrecision": "block-timestamp",
+    "dateBasis": "독립 운영 탐색기의 블록 200,000 헤더 시각 2015-09-07T21:33:09Z를 UTC 날짜로 사용한다. 사전 공지의 예상 일자와 구분한다.",
+    "crossCheck": "EF 당시 공지와 공식 연대표를 대조하고 Blockscout의 실제 블록 응답으로 높이·해시·시각을 별도 확인했다. EF 공지와 ethereum.org를 서로 독립된 운영기관으로 세지는 않는다.",
+    "limitations": [
+      "일부 연대표는 Frontier thawing 설명에 8월의 가스 제한 완화도 묶는다. 여기서는 확인한 9월 7일 블록 높이와 난이도 규칙만 기록하며, 이날 처음 거래가 가능해졌다고 주장하지 않는다.",
+      "블록 시각은 원장의 헤더 기록이며 모든 노드의 수신 순간이나 사건 시점의 ETH 체결가가 아니다. 업그레이드의 단독 가격 효과는 추정하지 않는다."
+    ],
+    "keywords": [
+      "Frontier thawing",
+      "Ice Age",
+      "difficulty bomb",
+      "난이도 폭탄"
+    ],
+    "facts": {
+      "block": 200000,
+      "blockHash": "0x13ced9eaa49a522d4e7dcf80a739a57dbf08f4ce5efc4edbac86a66d8010f693",
+      "utcTimestamp": "2015-09-07T21:33:09Z"
+    },
+    "sources": [
+      {
+        "publisher": "Ethereum Foundation",
+        "title": "Ethereum Protocol Update 1",
+        "url": "https://blog.ethereum.org/2015/08/04/ethereum-protocol-update-1",
+        "type": "primary",
+        "role": "upgrade-announcement",
+        "claim": "난이도 조정 규칙의 시작 높이가 200,000이라는 당시 개발자 설명을 확인한다.",
+        "publishedAt": "2015-08-04",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "ethereum.org",
+        "title": "Timeline of all Ethereum forks",
+        "url": "https://ethereum.org/ethereum-forks/",
+        "type": "primary",
+        "role": "same-organization-retrospective",
+        "claim": "공식 기술 연대표의 실제 업그레이드 날짜와 적용 높이를 확인한다. 연대표의 가격 수치는 사용하지 않는다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Blockscout",
+        "title": "Ethereum block 200000",
+        "url": "https://eth.blockscout.com/api/v2/blocks/200000",
+        "type": "primary",
+        "role": "independent-observed-block-header",
+        "claim": "실제 메인넷 블록 높이·해시·UTC 헤더 시각을 확인한다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "importance": 2,
+    "datePrecision": "source-calendar-day",
+    "id": "eth-security-dos-disclosure-2016",
+    "date": "2016-09-22",
+    "label": "네트워크 DoS 대응",
+    "title": "이더리움 DoS 공격 공지와 초기 대응",
+    "category": "security",
+    "description": "연산 비용에 비해 가스 비용이 낮은 명령을 악용한 공격으로 블록 처리와 네트워크 진행이 느려졌다는 공지가 나왔다.",
+    "detail": "당일 개발자 분석은 합의 실패나 네트워크 전체 중단은 없었다고 명시했다. 10월의 Tangerine Whistle과 11월의 Spurious Dragon이 후속 프로토콜 대응으로 이어졌다.",
+    "dateBasis": "서로 다른 두 EF 개발자 글이 공개된 9월 22일을 기록한다. 공격이 처음 시작된 순간으로 사용하지 않는다. 후속 FAQ는 9월 18일부터의 공격 기간도 언급한다.",
+    "crossCheck": "당일 EF 경보와 Vitalik Buterin의 당일 기술 분석을 대조했다. 두 자료는 같은 조직의 관측이며 독립된 두 기관의 조사로 간주하지 않는다.",
+    "limitations": [
+      "공격 기간 전체를 한 순간으로 축약하지 않는다. 날짜는 공개 대응일이다.",
+      "네트워크 성능 저하를 원장 전체 중단 또는 자금 탈취로 바꾸어 설명하지 않는다."
+    ],
+    "keywords": [
+      "DoS",
+      "DDoS",
+      "서비스 거부",
+      "네트워크 공격",
+      "EXTCODESIZE"
+    ],
+    "sources": [
+      {
+        "publisher": "Ethereum Foundation",
+        "title": "The Ethereum network is currently undergoing a DoS attack",
+        "url": "https://blog.ethereum.org/2016/09/22/ethereum-network-currently-undergoing-dos-attack",
+        "type": "primary",
+        "role": "incident-disclosure",
+        "claim": "당일의 네트워크 처리 지연과 합의 실패가 없었다는 개발자 관측을 확인한다.",
+        "publishedAt": "2016-09-22",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Vitalik Buterin / Ethereum Foundation",
+        "title": "Transaction spam attack: Next Steps",
+        "url": "https://blog.ethereum.org/en/2016/09/22/transaction-spam-attack-next-steps",
+        "type": "primary",
+        "role": "same-organization-technical-postmortem",
+        "claim": "당일 공격의 방식과 회복, 후속 대응 방향을 확인한다.",
+        "publishedAt": "2016-09-22",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "ethereum-tangerine-whistle",
+    "date": "2016-10-18",
+    "label": "Tangerine Whistle",
+    "title": "탠저린 휘슬: DoS 대응 가스 비용 조정",
+    "category": "protocol",
+    "importance": 2,
+    "description": "반복적인 네트워크 서비스 거부 공격에 대응해 비용이 지나치게 낮던 연산의 가스 비용을 조정했다.",
+    "detail": "EIP-150을 적용한 첫 번째 DoS 대응 업그레이드다. 뒤이은 Spurious Dragon의 상태 정리와 재전송 공격 보호는 별개의 후속 단계다.",
+    "datePrecision": "block-timestamp",
+    "dateBasis": "독립 운영 탐색기의 블록 2,463,000 헤더 시각 2016-10-18T13:19:31Z를 UTC 날짜로 사용한다. 사전 공지의 예상 일자와 구분한다.",
+    "crossCheck": "EF 당시 공지와 공식 연대표를 대조하고 Blockscout의 실제 블록 응답으로 높이·해시·시각을 별도 확인했다. EF 공지와 ethereum.org를 서로 독립된 운영기관으로 세지는 않는다.",
+    "limitations": [
+      "블록 시각은 원장의 헤더 기록이며 모든 노드의 수신 순간이나 사건 시점의 ETH 체결가가 아니다. 업그레이드의 단독 가격 효과는 추정하지 않는다."
+    ],
+    "keywords": [
+      "Tangerine Whistle",
+      "EIP-150",
+      "DoS",
+      "가스 비용",
+      "서비스 거부"
+    ],
+    "facts": {
+      "block": 2463000,
+      "blockHash": "0x2086799aeebeae135c246c65021c82b4e15a2c451340993aacfd2751886514f0",
+      "utcTimestamp": "2016-10-18T13:19:31Z"
+    },
+    "sources": [
+      {
+        "publisher": "Ethereum Foundation",
+        "title": "FAQ: Upcoming Ethereum Hard Fork",
+        "url": "https://blog.ethereum.org/2016/10/18/faq-upcoming-ethereum-hard-fork",
+        "type": "primary",
+        "role": "upgrade-announcement",
+        "claim": "DoS 대응 이유와 적용 높이 2,463,000을 확인한다. 공지의 예상 시각을 실제 시각으로 사용하지 않는다.",
+        "publishedAt": "2016-10-18",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "ethereum.org",
+        "title": "Timeline of all Ethereum forks",
+        "url": "https://ethereum.org/ethereum-forks/",
+        "type": "primary",
+        "role": "same-organization-retrospective",
+        "claim": "공식 기술 연대표의 실제 업그레이드 날짜와 적용 높이를 확인한다. 연대표의 가격 수치는 사용하지 않는다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Blockscout",
+        "title": "Ethereum block 2463000",
+        "url": "https://eth.blockscout.com/api/v2/blocks/2463000",
+        "type": "primary",
+        "role": "independent-observed-block-header",
+        "claim": "실제 메인넷 블록 높이·해시·UTC 헤더 시각을 확인한다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Ethereum EIPs",
+        "title": "EIP-608: Hardfork Meta: Tangerine Whistle",
+        "url": "https://eips.ethereum.org/EIPS/eip-608",
+        "type": "primary",
+        "role": "upgrade-specification",
+        "claim": "업그레이드에 포함된 규칙을 명세 원문에서 확인한다. EIP 작성일은 실행일이 아니다.",
+        "publishedAt": "2017-04-23",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "ethereum-spurious-dragon",
+    "date": "2016-11-22",
+    "label": "Spurious Dragon",
+    "title": "스퓨리어스 드래곤: 상태 정리와 재전송 보호",
+    "category": "protocol",
+    "importance": 2,
+    "description": "DoS 대응의 후속 업그레이드로 연산 비용, 빈 계정 정리, 체인 간 거래 재전송 보호 등을 도입했다.",
+    "detail": "EIP-155·160·161·170을 포함한다. EIP-155의 보호를 받으려면 새 거래 형식이 필요하며, 기존 거래 형식도 호환성을 위해 계속 허용됐다.",
+    "datePrecision": "block-timestamp",
+    "dateBasis": "독립 운영 탐색기의 블록 2,675,000 헤더 시각 2016-11-22T16:15:44Z를 UTC 날짜로 사용한다. 사전 공지의 예상 일자와 구분한다.",
+    "crossCheck": "EF 당시 공지와 공식 연대표를 대조하고 Blockscout의 실제 블록 응답으로 높이·해시·시각을 별도 확인했다. EF 공지와 ethereum.org를 서로 독립된 운영기관으로 세지는 않는다.",
+    "limitations": [
+      "블록 시각은 원장의 헤더 기록이며 모든 노드의 수신 순간이나 사건 시점의 ETH 체결가가 아니다. 업그레이드의 단독 가격 효과는 추정하지 않는다."
+    ],
+    "keywords": [
+      "Spurious Dragon",
+      "EIP-155",
+      "DoS",
+      "replay protection",
+      "재전송"
+    ],
+    "facts": {
+      "block": 2675000,
+      "blockHash": "0x58eff9265aedf8a54da8121de1324e1e0d9aac99f694d16c6a41afffe3817d73",
+      "utcTimestamp": "2016-11-22T16:15:44Z"
+    },
+    "sources": [
+      {
+        "publisher": "Ethereum Foundation",
+        "title": "Hard Fork No. 4: Spurious Dragon",
+        "url": "https://blog.ethereum.org/2016/11/18/hard-fork-no-4-spurious-dragon",
+        "type": "primary",
+        "role": "upgrade-announcement",
+        "claim": "두 번째 DoS 대응 단계의 목적과 EIP 구성, 적용 높이 2,675,000을 확인한다.",
+        "publishedAt": "2016-11-18",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "ethereum.org",
+        "title": "Timeline of all Ethereum forks",
+        "url": "https://ethereum.org/ethereum-forks/",
+        "type": "primary",
+        "role": "same-organization-retrospective",
+        "claim": "공식 기술 연대표의 실제 업그레이드 날짜와 적용 높이를 확인한다. 연대표의 가격 수치는 사용하지 않는다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Blockscout",
+        "title": "Ethereum block 2675000",
+        "url": "https://eth.blockscout.com/api/v2/blocks/2675000",
+        "type": "primary",
+        "role": "independent-observed-block-header",
+        "claim": "실제 메인넷 블록 높이·해시·UTC 헤더 시각을 확인한다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Ethereum EIPs",
+        "title": "EIP-607: Hardfork Meta: Spurious Dragon",
+        "url": "https://eips.ethereum.org/EIPS/eip-607",
+        "type": "primary",
+        "role": "upgrade-specification",
+        "claim": "업그레이드에 포함된 규칙을 명세 원문에서 확인한다. EIP 작성일은 실행일이 아니다.",
+        "publishedAt": "2017-04-23",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "importance": 2,
+    "datePrecision": "source-calendar-day",
+    "id": "eth-security-constantinople-delay",
+    "date": "2019-01-15",
+    "label": "콘스탄티노플 연기",
+    "title": "보안 취약점 발견에 따른 콘스탄티노플 연기",
+    "category": "security",
+    "description": "도입을 앞둔 가스 규칙이 일부 기존 계약에 재진입 위험을 만들 수 있다는 분석에 따라 업그레이드를 연기했다.",
+    "detail": "ChainSecurity의 기술 공개, EF의 연기 결정, Geth 긴급 릴리스를 함께 확인했다. 실제 Constantinople·Petersburg 적용은 2월 28일의 별도 사건이다.",
+    "dateBasis": "ChainSecurity 분석과 EF 보안 공지, Geth 긴급 릴리스가 나온 1월 15일이다. 당초의 활성화 목표일을 실행일로 표시하지 않는다.",
+    "crossCheck": "취약점 발견 업체의 원 분석과 프로토콜 운영 측의 연기 공지, 실제 Geth 릴리스 기록을 대조했다.",
+    "limitations": [
+      "당시 메인넷에서 이 취약점을 악용한 자금 탈취가 이미 발생했다는 기록이 아니다.",
+      "공개 분석은 특정 조건의 계약 위험이며 모든 계약이 동일하게 취약하다는 뜻이 아니다."
+    ],
+    "keywords": [
+      "Constantinople",
+      "ChainSecurity",
+      "reentrancy",
+      "EIP-1283",
+      "연기",
+      "재진입"
+    ],
+    "followUp": "2019-02-28에 Constantinople과 문제의 EIP-1283을 비활성화하는 Petersburg가 같은 적용 높이에서 실행됐다.",
+    "sources": [
+      {
+        "publisher": "Ethereum Foundation",
+        "title": "Security Alert: Ethereum Constantinople Postponement",
+        "url": "https://blog.ethereum.org/2019/01/15/security-alert-ethereum-constantinople-postponement",
+        "type": "primary",
+        "role": "security-decision",
+        "claim": "보안상 연기 결정과 당시 실제 공격 사례가 확인되지 않았다는 조사 범위를 확인한다.",
+        "publishedAt": "2019-01-15",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "ChainSecurity",
+        "title": "Constantinople enables new Reentrancy Attack",
+        "url": "https://www.chainsecurity.com/blog/constantinople-enables-new-reentrancy-attack/index.html",
+        "type": "primary",
+        "role": "independent-discoverer-analysis",
+        "claim": "발견자가 설명한 EIP-1283 관련 재진입 위험을 확인한다.",
+        "publishedAt": "2019-01-15",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Go Ethereum",
+        "title": "Byzantium Revert (v1.8.21)",
+        "url": "https://github.com/ethereum/go-ethereum/releases/tag/v1.8.21",
+        "type": "primary",
+        "role": "implemented-response",
+        "claim": "메인넷 Constantinople 연기를 위한 긴급 클라이언트 릴리스를 확인한다.",
+        "publishedAt": "2019-01-15",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "ethereum-muir-glacier",
+    "date": "2020-01-02",
+    "label": "Muir Glacier",
+    "title": "뮤어 글레이셔: 난이도 폭탄 연기",
+    "category": "protocol",
+    "importance": 2,
+    "description": "작업증명 체인의 블록 생성 지연을 완화하기 위해 난이도 폭탄을 뒤로 미뤘다.",
+    "detail": "EIP-2384에 따른 난이도 규칙 변경이다. 당시의 PoS 준비 과정에 속하며 이 업그레이드 자체가 PoS 전환을 완료한 것은 아니다.",
+    "datePrecision": "block-timestamp",
+    "dateBasis": "독립 운영 탐색기의 블록 9,200,000 헤더 시각 2020-01-02T08:30:49Z를 UTC 날짜로 사용한다. 사전 공지의 예상 일자와 구분한다.",
+    "crossCheck": "EF 당시 공지와 공식 연대표를 대조하고 Blockscout의 실제 블록 응답으로 높이·해시·시각을 별도 확인했다. EF 공지와 ethereum.org를 서로 독립된 운영기관으로 세지는 않는다.",
+    "limitations": [
+      "블록 시각은 원장의 헤더 기록이며 모든 노드의 수신 순간이나 사건 시점의 ETH 체결가가 아니다. 업그레이드의 단독 가격 효과는 추정하지 않는다."
+    ],
+    "keywords": [
+      "Muir Glacier",
+      "EIP-2384",
+      "난이도 폭탄",
+      "PoW"
+    ],
+    "facts": {
+      "block": 9200000,
+      "blockHash": "0x6ba9486095de7d96a75b67954cfe2581234eae1ef2a92ab03b84fc2eae2deb8a",
+      "utcTimestamp": "2020-01-02T08:30:49Z"
+    },
+    "sources": [
+      {
+        "publisher": "Ethereum Foundation",
+        "title": "Ethereum Muir Glacier Upgrade Announcement",
+        "url": "https://blog.ethereum.org/2019/12/23/ethereum-muir-glacier-upgrade-announcement",
+        "type": "primary",
+        "role": "upgrade-announcement",
+        "claim": "적용 높이 9,200,000을 확인한다. 공지의 1월 1일 예상과 실제 1월 2일을 구분한다.",
+        "publishedAt": "2019-12-23",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "ethereum.org",
+        "title": "Timeline of all Ethereum forks",
+        "url": "https://ethereum.org/ethereum-forks/",
+        "type": "primary",
+        "role": "same-organization-retrospective",
+        "claim": "공식 기술 연대표의 실제 업그레이드 날짜와 적용 높이를 확인한다. 연대표의 가격 수치는 사용하지 않는다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Blockscout",
+        "title": "Ethereum block 9200000",
+        "url": "https://eth.blockscout.com/api/v2/blocks/9200000",
+        "type": "primary",
+        "role": "independent-observed-block-header",
+        "claim": "실제 메인넷 블록 높이·해시·UTC 헤더 시각을 확인한다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Ethereum EIPs",
+        "title": "EIP-2384: Muir Glacier Difficulty Bomb Delay",
+        "url": "https://eips.ethereum.org/EIPS/eip-2384",
+        "type": "primary",
+        "role": "upgrade-specification",
+        "claim": "업그레이드에 포함된 규칙을 명세 원문에서 확인한다. EIP 작성일은 실행일이 아니다.",
+        "publishedAt": "2019-11-20",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "importance": 2,
+    "datePrecision": "source-calendar-day",
+    "id": "ethereum-staking-deposit-announcement",
+    "date": "2020-11-04",
+    "label": "PoS 예치 계약 공개",
+    "title": "PoS 스테이킹 예치 계약 주소와 v1.0 명세 공개",
+    "category": "protocol",
+    "description": "비콘 체인 시작을 준비하는 메인넷 예치 계약 주소, v1.0 명세와 Launch Pad가 공식 공개됐다.",
+    "detail": "검증자 예치금이 비콘 체인의 시작 조건을 충족하는 준비 단계다. 계약의 온체인 생성, 주소 공개, 비콘 체인 시작, 이후 출금 허용은 서로 다른 이정표다.",
+    "dateBasis": "EF의 v1.0 명세와 계약 주소 공개일인 11월 4일을 사용한다. Status/Nimbus가 확인한 계약 생성일 10월 14일과 구분한다.",
+    "crossCheck": "EF의 당일 공개와 독립 클라이언트 팀 Status/Nimbus의 같은 날 계약 코드 검증·지원 발표를 대조했다.",
+    "limitations": [
+      "이 날짜를 계약이 처음 배포된 날이나 PoS 전환 완료일로 표시하지 않는다.",
+      "당시 공개된 최소 제네시스 목표 시각을 실제 비콘 체인 시작 시각으로 복사하지 않는다."
+    ],
+    "keywords": [
+      "staking",
+      "deposit contract",
+      "스테이킹",
+      "예치",
+      "비콘 체인",
+      "Eth2"
+    ],
+    "sources": [
+      {
+        "publisher": "Ethereum Foundation",
+        "title": "eth2 quick update no. 19",
+        "url": "https://blog.ethereum.org/en/2020/11/04/eth2-quick-update-no-19",
+        "type": "primary",
+        "role": "completed-publication",
+        "claim": "v1.0 명세·예치 계약 주소·Launch Pad가 공개됐다는 당일 기록을 확인한다.",
+        "publishedAt": "2020-11-04",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Status / Nimbus",
+        "title": "Status Supports the ETH 2.0 Deposit Contract",
+        "url": "https://status.app/blog/status-supports-the-eth-2-0-deposit-contract",
+        "type": "primary",
+        "role": "independent-client-verification",
+        "claim": "독립적으로 계약 바이트코드를 대조한 개발팀의 지원 발표와 더 이른 계약 생성 날짜를 확인한다.",
+        "publishedAt": "2020-11-04",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "importance": 2,
+    "datePrecision": "source-calendar-day",
+    "id": "eth-security-geth-minority-split",
+    "date": "2021-08-27",
+    "label": "Geth 소수 체인 분리",
+    "title": "취약한 Geth 버전의 소수 체인 분리",
+    "category": "security",
+    "description": "Geth의 합의 처리 취약점을 건드린 거래로 일부 구버전 노드가 정규 체인과 다른 상태를 계산했다.",
+    "detail": "개발자 사후 보고서는 블록 13,107,518에서 소수 체인 분리가 발생했으며 다수 채굴자는 올바른 체인을 계속 처리했다고 설명한다.",
+    "dateBasis": "개발자 사후 보고서가 명시한 실제 사건일 8월 27일이다. 보안 공지·패치 공개일인 8월 24일이나 사후 보고서 파일명의 8월 22일을 사건일로 사용하지 않는다.",
+    "crossCheck": "Geth 보안 권고의 실제 악용 높이와 개발팀 사후 보고서의 해당 높이·UTC 사건일을 대조했다. 같은 개발팀의 두 문서이므로 외부 독립 사고 조사 두 건으로 세지 않는다.",
+    "limitations": [
+      "소수 체인 분리를 Ethereum 전체가 중단되거나 모든 클라이언트가 취약했던 사건으로 일반화하지 않는다.",
+      "사후 보고서의 원인 설명을 사용했으며 공격 거래를 재실행하거나 별도 합의 검증을 수행하지 않았다."
+    ],
+    "keywords": [
+      "Geth",
+      "CVE-2021-39137",
+      "chain split",
+      "소수 체인",
+      "합의 버그"
+    ],
+    "sources": [
+      {
+        "publisher": "Go Ethereum",
+        "title": "RETURNDATA corruption via datacopy",
+        "url": "https://github.com/ethereum/go-ethereum/security/advisories/GHSA-9856-9gg9-qcmq",
+        "type": "primary",
+        "role": "maintainer-security-advisory",
+        "claim": "영향받는 버전, 패치와 메인넷 블록 13,107,518에서의 실제 악용 기록을 확인한다.",
+        "publishedAt": "2021-08-24",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Go Ethereum",
+        "title": "Minority split 2021-08-27 post mortem",
+        "url": "https://github.com/ethereum/go-ethereum/blob/master/docs/postmortems/2021-08-22-split-postmortem.md",
+        "type": "primary",
+        "role": "same-organization-postmortem",
+        "claim": "파일명과 다른 실제 사건일·높이, 다수 체인의 계속된 진행을 확인한다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "ethereum-arrow-glacier",
+    "date": "2021-12-09",
+    "label": "Arrow Glacier",
+    "title": "애로 글레이셔: PoS 준비 기간의 난이도 폭탄 연기",
+    "category": "protocol",
+    "importance": 2,
+    "description": "머지 준비 기간에 작업증명 메인넷의 난이도 폭탄을 연기했다.",
+    "detail": "EIP-4345만 포함한 업그레이드다. 일반적인 기능 확장이나 PoS 전환 완료와 구분한다.",
+    "datePrecision": "block-timestamp",
+    "dateBasis": "독립 운영 탐색기의 블록 13,773,000 헤더 시각 2021-12-09T19:55:23Z를 UTC 날짜로 사용한다. 사전 공지의 예상 일자와 구분한다.",
+    "crossCheck": "EF 당시 공지와 공식 연대표를 대조하고 Blockscout의 실제 블록 응답으로 높이·해시·시각을 별도 확인했다. EF 공지와 ethereum.org를 서로 독립된 운영기관으로 세지는 않는다.",
+    "limitations": [
+      "블록 시각은 원장의 헤더 기록이며 모든 노드의 수신 순간이나 사건 시점의 ETH 체결가가 아니다. 업그레이드의 단독 가격 효과는 추정하지 않는다."
+    ],
+    "keywords": [
+      "Arrow Glacier",
+      "EIP-4345",
+      "난이도 폭탄",
+      "머지 준비"
+    ],
+    "facts": {
+      "block": 13773000,
+      "blockHash": "0x594e4880f077ff9cf01500976d8c0b47cc8d3c77995860353e222a334b8060ad",
+      "utcTimestamp": "2021-12-09T19:55:23Z"
+    },
+    "sources": [
+      {
+        "publisher": "Ethereum Foundation",
+        "title": "Arrow Glacier Upgrade Announcement",
+        "url": "https://blog.ethereum.org/2021/11/10/arrow-glacier-announcement",
+        "type": "primary",
+        "role": "upgrade-announcement",
+        "claim": "단일 난이도 폭탄 변경과 적용 높이 13,773,000을 확인한다. 예상일 12월 8일 대신 실제 12월 9일을 사용한다.",
+        "publishedAt": "2021-11-10",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "ethereum.org",
+        "title": "Timeline of all Ethereum forks",
+        "url": "https://ethereum.org/ethereum-forks/",
+        "type": "primary",
+        "role": "same-organization-retrospective",
+        "claim": "공식 기술 연대표의 실제 업그레이드 날짜와 적용 높이를 확인한다. 연대표의 가격 수치는 사용하지 않는다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Blockscout",
+        "title": "Ethereum block 13773000",
+        "url": "https://eth.blockscout.com/api/v2/blocks/13773000",
+        "type": "primary",
+        "role": "independent-observed-block-header",
+        "claim": "실제 메인넷 블록 높이·해시·UTC 헤더 시각을 확인한다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Ethereum EIPs",
+        "title": "EIP-4345: Difficulty Bomb Delay to June 2022",
+        "url": "https://eips.ethereum.org/EIPS/eip-4345",
+        "type": "primary",
+        "role": "upgrade-specification",
+        "claim": "업그레이드에 포함된 규칙을 명세 원문에서 확인한다. EIP 작성일은 실행일이 아니다.",
+        "publishedAt": "2021-10-05",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "ethereum-gray-glacier",
+    "date": "2022-06-30",
+    "label": "Gray Glacier",
+    "title": "그레이 글레이셔: 머지 전 난이도 폭탄 추가 연기",
+    "category": "protocol",
+    "importance": 2,
+    "description": "머지를 앞두고 작업증명 메인넷의 난이도 폭탄을 추가로 연기했다.",
+    "detail": "EIP-5133에 따라 난이도 폭탄을 700,000블록 더 늦췄다. 이후 Bellatrix와 Paris를 거쳐 머지가 완료됐다.",
+    "datePrecision": "block-timestamp",
+    "dateBasis": "독립 운영 탐색기의 블록 15,050,000 헤더 시각 2022-06-30T10:54:04Z를 UTC 날짜로 사용한다. 사전 공지의 예상 일자와 구분한다.",
+    "crossCheck": "EF 당시 공지와 공식 연대표를 대조하고 Blockscout의 실제 블록 응답으로 높이·해시·시각을 별도 확인했다. EF 공지와 ethereum.org를 서로 독립된 운영기관으로 세지는 않는다.",
+    "limitations": [
+      "블록 시각은 원장의 헤더 기록이며 모든 노드의 수신 순간이나 사건 시점의 ETH 체결가가 아니다. 업그레이드의 단독 가격 효과는 추정하지 않는다."
+    ],
+    "keywords": [
+      "Gray Glacier",
+      "EIP-5133",
+      "난이도 폭탄",
+      "머지 준비"
+    ],
+    "facts": {
+      "block": 15050000,
+      "blockHash": "0xc43d35f6a64f8a64f046c8deb4069572d622dfe7f028f62301b186f08f0e96f2",
+      "utcTimestamp": "2022-06-30T10:54:04Z"
+    },
+    "sources": [
+      {
+        "publisher": "Ethereum Foundation",
+        "title": "Gray Glacier Upgrade Announcement",
+        "url": "https://blog.ethereum.org/2022/06/16/gray-glacier-announcement",
+        "type": "primary",
+        "role": "upgrade-announcement",
+        "claim": "적용 높이 15,050,000과 난이도 폭탄 추가 연기를 확인한다. 예상일 6월 29일과 실제 6월 30일을 구분한다.",
+        "publishedAt": "2022-06-16",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "ethereum.org",
+        "title": "Timeline of all Ethereum forks",
+        "url": "https://ethereum.org/ethereum-forks/",
+        "type": "primary",
+        "role": "same-organization-retrospective",
+        "claim": "공식 기술 연대표의 실제 업그레이드 날짜와 적용 높이를 확인한다. 연대표의 가격 수치는 사용하지 않는다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Blockscout",
+        "title": "Ethereum block 15050000",
+        "url": "https://eth.blockscout.com/api/v2/blocks/15050000",
+        "type": "primary",
+        "role": "independent-observed-block-header",
+        "claim": "실제 메인넷 블록 높이·해시·UTC 헤더 시각을 확인한다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Ethereum EIPs",
+        "title": "EIP-5133: Delaying Difficulty Bomb to mid-September 2022",
+        "url": "https://eips.ethereum.org/EIPS/eip-5133",
+        "type": "primary",
+        "role": "upgrade-specification",
+        "claim": "업그레이드에 포함된 규칙을 명세 원문에서 확인한다. EIP 작성일은 실행일이 아니다.",
+        "publishedAt": "2022-06-01",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "importance": 2,
+    "datePrecision": "source-calendar-day",
+    "id": "ethereum-bellatrix",
+    "date": "2022-09-06",
+    "label": "벨라트릭스",
+    "title": "벨라트릭스: 머지를 준비한 합의층 업그레이드",
+    "category": "protocol",
+    "description": "비콘 체인의 합의층이 머지를 지원하는 Bellatrix 규칙으로 업그레이드됐다.",
+    "detail": "Bellatrix는 합의층 준비 단계이고 실행층의 PoS 전환인 Paris는 9월 15일에 뒤따랐다. 두 단계를 하나의 날짜로 합치지 않는다.",
+    "dateBasis": "공식 기술 연대표와 완료 후 네트워크 관측 보고가 확인한 9월 6일을 사용한다. epoch 144,896의 일정 정보를 특정 실행 블록의 실제 시각으로 바꾸지 않는다.",
+    "crossCheck": "EF 공지의 두 단계 설계와 공식 연대표를 확인하고, Coinbase의 9월 9일 네트워크 관측 보고에서 9월 6일 실제 활성화를 교차 확인했다.",
+    "limitations": [
+      "EF의 사전 epoch 시각만으로 별도의 실행 블록 해시나 체결 시각을 만들지 않는다.",
+      "Bellatrix 당일에 실행층의 PoW가 이미 종료됐다고 설명하지 않는다."
+    ],
+    "keywords": [
+      "Bellatrix",
+      "벨라트릭스",
+      "Merge",
+      "머지",
+      "합의층"
+    ],
+    "sources": [
+      {
+        "publisher": "Ethereum Foundation",
+        "title": "Mainnet Merge Announcement",
+        "url": "https://blog.ethereum.org/2022/08/24/mainnet-merge-announcement",
+        "type": "primary",
+        "role": "upgrade-design",
+        "claim": "Bellatrix 합의층 단계와 Paris 실행층 단계를 구분하는 원문을 확인한다.",
+        "publishedAt": "2022-08-24",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "ethereum.org",
+        "title": "Timeline of all Ethereum forks",
+        "url": "https://ethereum.org/ethereum-forks/",
+        "type": "primary",
+        "role": "same-organization-retrospective",
+        "claim": "공식 기술 연대표의 실제 업그레이드 날짜와 적용 높이를 확인한다. 연대표의 가격 수치는 사용하지 않는다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Coinbase Institutional Research",
+        "title": "The Merge: Waiting is the hardest part",
+        "url": "https://www.coinbase.com/institutional/research-insights/research/weekly-market-commentary/weekly-market-commentary-september-9-2022",
+        "type": "primary",
+        "role": "independent-provider-retrospective",
+        "claim": "9월 6일 Bellatrix 실제 활성화와 이후 네트워크 참여 관측을 확인한다.",
+        "publishedAt": "2022-09-09",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "importance": 2,
+    "datePrecision": "source-calendar-day",
+    "id": "eth-security-finality-delay-first",
+    "date": "2023-05-11",
+    "label": "첫 확정 지연",
+    "title": "비콘 체인의 일시적 최종 확정 지연",
+    "category": "security",
+    "description": "비콘 체인의 최종 확정이 일시적으로 지연됐다. 일부 블록은 계속 생성돼 전체 원장 중단과는 구분된다.",
+    "detail": "일부 합의 클라이언트가 오래된 유효 증명을 처리하는 데 과도한 자원을 사용했다. 클라이언트 개발팀과 별도 노드 데이터 분석은 블록 생성과 최종 확정을 구분한다.",
+    "dateBasis": "사후 보고서의 UTC 사건일 2023-05-11를 사용한다. 보고서의 작성일·게시일과 구분하며 정확한 시작·종료의 측정 정의는 각 원문에 남긴다.",
+    "crossCheck": "Prysm 개발팀의 사후 분석과 여러 지역·클라이언트의 노드 데이터를 분석한 Ethereum Research 원문을 대조했다. 두 연구가 원인 설명을 일부 공유하지만 후자는 별도 관측 자료를 제시한다.",
+    "limitations": [
+      "확정 지연을 모든 거래 처리의 중단, 확정된 원장 전체의 번복, 또는 ETH 가격 폭락의 단독 원인으로 기술하지 않는다.",
+      "자료마다 지연 구간의 시작·끝을 정의하는 방식이 달라 분 단위 지속 시간을 하나로 강제하지 않는다."
+    ],
+    "keywords": [
+      "finality",
+      "최종 확정",
+      "Prysm",
+      "Teku",
+      "비콘 체인",
+      "합의"
+    ],
+    "sources": [
+      {
+        "publisher": "Prysm / Offchain Labs",
+        "title": "Post-Mortem Report: Ethereum Mainnet Finality (05/11/2023)",
+        "url": "https://medium.com/offchainlabs/post-mortem-report-ethereum-mainnet-finality-05-11-2023-95e271dfd8b2",
+        "type": "primary",
+        "role": "client-postmortem",
+        "claim": "5월 11일과 12일의 별도 사건, 복구와 수정 내용을 확인한다. 원문은 내부 날짜 5월 12일과 게시일 5월 18일을 함께 가진다.",
+        "publishedAt": "2023-05-18",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Thomas Thiery / Ethereum Research",
+        "title": "Cascading Network Effects on Ethereum’s Finality",
+        "url": "https://ethresear.ch/t/cascading-network-effects-on-ethereums-finality/15871",
+        "type": "primary",
+        "role": "independent-measurement-analysis",
+        "claim": "다지역·다클라이언트 노드 관측을 통해 두 사건의 날짜, 블록 생성 지속과 확정 지연을 교차 확인한다.",
+        "publishedAt": "2023-06-13",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "importance": 2,
+    "datePrecision": "source-calendar-day",
+    "id": "eth-security-finality-delay-repeat",
+    "date": "2023-05-12",
+    "label": "확정 지연 재발",
+    "title": "최종 확정 지연 재발과 클라이언트 대응",
+    "category": "security",
+    "description": "비콘 체인의 최종 확정이 일시적으로 지연됐다. 일부 블록은 계속 생성돼 전체 원장 중단과는 구분된다.",
+    "detail": "전날보다 길게 확정 지연이 재발했고 비활성 패널티가 적용됐다. 네트워크는 회복됐고 Prysm·Teku에 후속 수정이 제공됐다.",
+    "dateBasis": "사후 보고서의 UTC 사건일 2023-05-12를 사용한다. 보고서의 작성일·게시일과 구분하며 정확한 시작·종료의 측정 정의는 각 원문에 남긴다.",
+    "crossCheck": "Prysm 개발팀의 사후 분석과 여러 지역·클라이언트의 노드 데이터를 분석한 Ethereum Research 원문을 대조했다. 두 연구가 원인 설명을 일부 공유하지만 후자는 별도 관측 자료를 제시한다.",
+    "limitations": [
+      "확정 지연을 모든 거래 처리의 중단, 확정된 원장 전체의 번복, 또는 ETH 가격 폭락의 단독 원인으로 기술하지 않는다.",
+      "자료마다 지연 구간의 시작·끝을 정의하는 방식이 달라 분 단위 지속 시간을 하나로 강제하지 않는다."
+    ],
+    "keywords": [
+      "finality",
+      "최종 확정",
+      "Prysm",
+      "Teku",
+      "비콘 체인",
+      "합의"
+    ],
+    "sources": [
+      {
+        "publisher": "Prysm / Offchain Labs",
+        "title": "Post-Mortem Report: Ethereum Mainnet Finality (05/11/2023)",
+        "url": "https://medium.com/offchainlabs/post-mortem-report-ethereum-mainnet-finality-05-11-2023-95e271dfd8b2",
+        "type": "primary",
+        "role": "client-postmortem",
+        "claim": "5월 11일과 12일의 별도 사건, 복구와 수정 내용을 확인한다. 원문은 내부 날짜 5월 12일과 게시일 5월 18일을 함께 가진다.",
+        "publishedAt": "2023-05-18",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Thomas Thiery / Ethereum Research",
+        "title": "Cascading Network Effects on Ethereum’s Finality",
+        "url": "https://ethresear.ch/t/cascading-network-effects-on-ethereums-finality/15871",
+        "type": "primary",
+        "role": "independent-measurement-analysis",
+        "claim": "다지역·다클라이언트 노드 관측을 통해 두 사건의 날짜, 블록 생성 지속과 확정 지연을 교차 확인한다.",
+        "publishedAt": "2023-06-13",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "eth-security-prysm-fusaka-incident",
+    "date": "2025-12-04",
+    "label": "Prysm 처리 장애",
+    "title": "푸사카 이후 Prysm 자원 고갈과 검증자 처리 장애",
+    "category": "security",
+    "importance": 2,
+    "description": "푸사카 적용 다음 날 일부 증명 처리에서 Prysm 클라이언트가 자원을 과도하게 사용해 해당 검증자의 블록 제안과 증명이 누락됐다.",
+    "detail": "개발팀의 사후 보고서는 오래된 체크포인트에 대한 상태 재계산을 원인으로 설명한다. 임시 설정 대응과 이후 수정 릴리스가 이어졌으며, 다른 클라이언트의 운영이 네트워크 영향을 제한했다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "개발팀 사후 보고서가 모든 시각을 UTC로 명시한 실제 사건일 2025-12-04를 사용한다. 푸사카 적용일인 12월 3일 및 분석·릴리스 게시일과 구분한다.",
+    "crossCheck": "Prysm 공식 사후 보고서와 해당 구현에 참여한 Potuz의 별도 기술 설명을 대조했다. 두 자료는 같은 개발팀에 속한 1차 설명이므로 독립 기관 두 곳의 검증으로 세지 않는다.",
+    "limitations": [
+      "Prysm 검증자 일부의 장애를 Ethereum 전체 중단이나 이 사건에서 최종 확정이 중단됐다는 주장으로 확대하지 않는다.",
+      "누락된 검증자 보상을 자금 탈취나 ETH 시장가격 손실로 바꾸지 않는다.",
+      "설명은 당시 사건의 원인·대응 기록이며 현재 노드 운영 설정을 권고하는 안내가 아니다."
+    ],
+    "keywords": [
+      "Prysm",
+      "Fusaka",
+      "푸사카",
+      "검증자",
+      "자원 고갈",
+      "합의 클라이언트"
+    ],
+    "sources": [
+      {
+        "title": "Mainnet postmortems — Fusaka Mainnet Prysm Incident",
+        "url": "https://prysm.offchainlabs.com/docs/misc/mainnet-postmortems/",
+        "publisher": "Prysm / Offchain Labs",
+        "type": "primary",
+        "role": "client-postmortem",
+        "claim": "실제 UTC 사건일, 영향받은 검증자 처리, 복구와 수정 릴리스를 확인한다. 문서의 사건 날짜를 게시 날짜로 간주하지 않는다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "History of a buggy bug",
+        "url": "https://www.potuz.net/posts/fulu-bug/",
+        "publisher": "Potuz — Prysm developer",
+        "type": "primary",
+        "role": "same-team-author-analysis",
+        "claim": "구현 참여자가 설명한 오래된 증명 처리와 상태 재생성 경로를 사후 보고서와 대조한다.",
+        "publishedAt": "2025-12-11",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  }
+]

@@ -7,8 +7,8 @@ import { mountChartTouchTracking } from './chart-touch-tracking.js?v=1.14.0-mobi
 import { clearChartHover } from './chart-hover.js?v=1.12.1-cursor-hud.1';
 import { mountSymbolSelector } from './symbol-selector.js?v=1.15.0-eth.1';
 import { readEthView, ethViewQuery, ethHistoryRange } from './eth-view-state.js?v=1.15.0-eth.1';
-import { ETHEREUM_EVENTS, ETHEREUM_EVENT_COLORS, getEthereumEvents } from './ethereum-events.js?v=1.16.0-history.1';
-import { mountEthereumHistory, readEthereumEventSettings, ethereumEventQuery, ethereumEventRange } from './ethereum-history.js?v=1.16.0-history.1';
+import { ETHEREUM_EVENTS, ETHEREUM_EVENT_COLORS, getEthereumEvents } from './ethereum-events.js?v=1.17.0-context.1';
+import { mountEthereumHistory, readEthereumEventSettings, ethereumEventQuery, ethereumEventRange } from './ethereum-history.js?v=1.17.0-context.1';
 
 const glyphs = {
   line:'<path d="m3 17 5-7 5 4 8-11"/>',
@@ -107,7 +107,7 @@ export async function initEthView() {
     historyWorkbench.setSettings(state.eventSettings);persist();schedule();announce(`${event.date} ${event.title} 구간을 표시합니다.`);return true;
   }
   function openHistoricalEvent(id){cancelInteraction();state.selectedHistoryEvent=id;historyWorkbench.open(id);schedule();}
-  function updateHistoryContext(){historyWorkbench.update({frequency:state.frequency,firstDate:daily?.firstDate?.slice(0,10),lastDate:daily?.lastDate?.slice(0,10),visibleCount:Number(svg.dataset.historyEventCount||0)});}
+  function updateHistoryContext(){historyWorkbench.update({frequency:state.frequency,firstDate:daily?.firstDate?.slice(0,10),lastDate:daily?.lastDate?.slice(0,10),dailySeries:daily,visibleCount:Number(svg.dataset.historyEventCount||0)});}
   function showReadout(row){
     if(row.kind==='unavailable'){$('#eth-price').textContent='—';$('#eth-change').textContent='';$('#eth-bar-time').textContent='';$('#eth-ohlc').textContent='이 구간에 완료된 봉이 없습니다.';return;}
     $('#eth-price').textContent=`$${number(row.close)}`;

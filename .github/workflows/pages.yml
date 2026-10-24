@@ -26,6 +26,8 @@ jobs:
           package-manager-cache: false
       - name: Test before deployment
         run: npm test
+      - name: Verify reviewed Ethereum history matches the published catalog
+        run: npm run verify:eth-events
       - name: Verify bounded request ownership and negative controls
         run: npm run verify:formal
       - name: Verify the published calibration and chart performance gate

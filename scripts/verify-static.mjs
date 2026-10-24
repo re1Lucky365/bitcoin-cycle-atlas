@@ -4,6 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
+import { javascriptModuleSpecifiers } from './module-references.mjs';
 
 // No server, dependencies or network are required. Resolve resources as a browser
 // would at a GitHub Pages project subpath, not only at the domain root.
@@ -46,8 +47,8 @@ for (const file of files) {
     await run(process.execPath, ['--check', file]);
     // This project's ES modules use literal relative imports. Dynamic computed
     // URLs (for the optional public data refresh) are deliberately not guessed.
-    for (const match of source.matchAll(/\b(?:from\s*|import\s*\(\s*|import\s*)(['"])([^'"\r\n]+)\1/g)) {
-      await checkReference(match[2], file, { module: true });
+    for (const specifier of javascriptModuleSpecifiers(source)) {
+      await checkReference(specifier, file, { module: true });
     }
     for (const match of source.matchAll(/\bfetch\(\s*(['"])([^'"\r\n]+)\1/g)) {
       await checkReference(match[2], file);

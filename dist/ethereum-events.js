@@ -2,10 +2,68 @@
  * Dates describe historical events, never forecasts or causal price signals.
  * Block timestamps and source calendar days retain their different meanings. */
 export const ETHEREUM_EVENTS_REVIEW_DATE = '2026-10-24';
-export const ETHEREUM_EVENT_CATEGORIES = Object.freeze({protocol:'프로토콜',security:'보안 사건',market:'시장·제도',ecosystem:'생태계'});
-export const ETHEREUM_EVENT_COLORS = Object.freeze({protocol:'#d8b779',security:'#d3a5c5',market:'#84bce5',ecosystem:'#79c6b6'});
+export const ETHEREUM_EVENT_CATEGORIES = Object.freeze({"protocol":"프로토콜","security":"보안 사건","market":"시장·금융","ecosystem":"생태계","macro":"정책·거시","regulation":"규제·제도","geopolitics":"지정학"});
+export const ETHEREUM_EVENT_COLORS = Object.freeze({"protocol":"#d8b779","security":"#d3a5c5","market":"#84bce5","ecosystem":"#79c6b6","macro":"#e3b189","regulation":"#a7b3ef","geopolitics":"#dda0a6"});
 function deepFreeze(value){if(value&&typeof value==='object'&&!Object.isFrozen(value)){for(const child of Object.values(value))deepFreeze(child);Object.freeze(value);}return value;}
 export const ETHEREUM_EVENTS = deepFreeze([
+  {
+    "id": "eth-ether-presale-launch",
+    "date": "2014-07-22",
+    "label": "이더 사전판매",
+    "title": "이더 사전판매 개시",
+    "category": "ecosystem",
+    "importance": 3,
+    "description": "이더리움 개발 자금을 마련하는 이더 사전판매가 공식 개시됐다. 메인넷 출시와 거래소 현물 가격 이력보다 앞선 형성 단계다.",
+    "detail": "당시 공지는 BTC로 참여하는 판매 구조와 제네시스 블록이 나오기 전에는 이더를 사용하거나 전송할 수 없다는 점을 설명했다. 후속 집계는 실제 판매가 진행됐음을 확인한다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공식 개시 글이 게시된 2014년 7월 22일을 사용한다. 사후 연대표의 00:00 표기를 정확한 개시 시각으로 복사하지 않는다.",
+    "crossCheck": "개시 당일 EF 글을 8월의 판매 진행 집계 및 공식 Homestead 가이드의 회고와 대조했다. 모두 같은 프로젝트 측 기록이며 독립 회계감사로 간주하지 않는다.",
+    "limitations": [
+      "사전판매 참여 비율을 달러 현물 OHLC 가격으로 변환해 차트에 만들지 않는다.",
+      "공식 글의 법적 자기 설명을 규제기관의 확정 판단으로 채택하지 않는다.",
+      "판매 개시일, 메인넷 출시일과 실제 거래소의 가격 이력 시작일을 구분한다."
+    ],
+    "keywords": [
+      "presale",
+      "crowdsale",
+      "ICO",
+      "이더 사전판매",
+      "초기 자금조달",
+      "형성"
+    ],
+    "sources": [
+      {
+        "title": "Launching the Ether Sale",
+        "url": "https://blog.ethereum.org/2014/07/22/launching-the-ether-sale",
+        "publisher": "Vitalik Buterin / Ethereum Foundation",
+        "type": "primary",
+        "role": "completed-launch-announcement",
+        "claim": "판매 개시 발표와 제네시스 이전의 전송 제한을 확인한다.",
+        "publishedAt": "2014-07-22",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Ether Sale: A Statistical Overview",
+        "url": "https://blog.ethereum.org/2014/08/08/ether-sale-a-statistical-overview",
+        "publisher": "Vitalik Buterin / Ethereum Foundation",
+        "type": "primary",
+        "role": "same-organization-completed-progress-record",
+        "claim": "개시 공지 이후 실제 판매가 진행됐다는 중간 집계 기록을 확인한다. 최종 총액으로 사용하지 않는다.",
+        "publishedAt": "2014-08-08",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "History of Ethereum — Homestead guide",
+        "url": "https://github.com/ethereum/homestead-guide/blob/master/source/introduction/history-of-ethereum.rst",
+        "publisher": "Ethereum documentation contributors",
+        "type": "primary",
+        "role": "same-organization-retrospective",
+        "claim": "2014년 7월의 사전판매와 2015년 7월의 메인넷 출시를 구분하는 공식 회고를 확인한다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
   {
     "id": "ethereum-frontier-launch",
     "date": "2015-07-30",
@@ -67,6 +125,115 @@ export const ETHEREUM_EVENTS = deepFreeze([
       }
     ],
     "facts": {}
+  },
+  {
+    "id": "ethereum-frontier-thawing",
+    "date": "2015-09-07",
+    "label": "초기 난이도 폭탄",
+    "title": "Frontier 초기 난이도 폭탄 기준 블록",
+    "category": "protocol",
+    "importance": 2,
+    "description": "초기 난이도 조정 규칙이 지정한 블록 200,000에 도달했다. 훗날 여러 차례 연기된 난이도 폭탄의 초기 기준점이다.",
+    "detail": "당시 EF 공지는 난이도 증가가 점진적으로 나타나는 장기 전환 장치라고 설명했다. 이후 실제 PoS 전환은 2022년 머지에서 이뤄졌다.",
+    "datePrecision": "block-timestamp",
+    "dateBasis": "독립 운영 탐색기의 블록 200,000 헤더 시각 2015-09-07T21:33:09Z를 UTC 날짜로 사용한다. 사전 공지의 예상 일자와 구분한다.",
+    "crossCheck": "EF 당시 공지와 공식 연대표를 대조하고 Blockscout의 실제 블록 응답으로 높이·해시·시각을 별도 확인했다. EF 공지와 ethereum.org를 서로 독립된 운영기관으로 세지는 않는다.",
+    "limitations": [
+      "일부 연대표는 Frontier thawing 설명에 8월의 가스 제한 완화도 묶는다. 여기서는 확인한 9월 7일 블록 높이와 난이도 규칙만 기록하며, 이날 처음 거래가 가능해졌다고 주장하지 않는다.",
+      "블록 시각은 원장의 헤더 기록이며 모든 노드의 수신 순간이나 사건 시점의 ETH 체결가가 아니다. 업그레이드의 단독 가격 효과는 추정하지 않는다."
+    ],
+    "keywords": [
+      "Frontier thawing",
+      "Ice Age",
+      "difficulty bomb",
+      "난이도 폭탄"
+    ],
+    "facts": {
+      "block": 200000,
+      "blockHash": "0x13ced9eaa49a522d4e7dcf80a739a57dbf08f4ce5efc4edbac86a66d8010f693",
+      "utcTimestamp": "2015-09-07T21:33:09Z"
+    },
+    "sources": [
+      {
+        "publisher": "Ethereum Foundation",
+        "title": "Ethereum Protocol Update 1",
+        "url": "https://blog.ethereum.org/2015/08/04/ethereum-protocol-update-1",
+        "type": "primary",
+        "role": "upgrade-announcement",
+        "claim": "난이도 조정 규칙의 시작 높이가 200,000이라는 당시 개발자 설명을 확인한다.",
+        "publishedAt": "2015-08-04",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "ethereum.org",
+        "title": "Timeline of all Ethereum forks",
+        "url": "https://ethereum.org/ethereum-forks/",
+        "type": "primary",
+        "role": "same-organization-retrospective",
+        "claim": "공식 기술 연대표의 실제 업그레이드 날짜와 적용 높이를 확인한다. 연대표의 가격 수치는 사용하지 않는다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Blockscout",
+        "title": "Ethereum block 200000",
+        "url": "https://eth.blockscout.com/api/v2/blocks/200000",
+        "type": "primary",
+        "role": "independent-observed-block-header",
+        "claim": "실제 메인넷 블록 높이·해시·UTC 헤더 시각을 확인한다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "blockHeight": 200000,
+    "timestampUtc": "2015-09-07T21:33:09Z",
+    "blockHash": "0x13ced9eaa49a522d4e7dcf80a739a57dbf08f4ce5efc4edbac86a66d8010f693"
+  },
+  {
+    "id": "eth-policy-fed-2015-liftoff",
+    "date": "2015-12-16",
+    "label": "美 금리 정상화",
+    "title": "연준, 금융위기 후 첫 금리 인상",
+    "category": "macro",
+    "importance": 2,
+    "description": "연준이 연방기금금리 목표 범위를 0.25–0.50%로 올렸다.",
+    "detail": "2006년 이후 첫 인상으로 금융위기 뒤의 사실상 제로금리 정책에서 이탈한 결정이다. ETH 출시 이후 달러 자금조달 환경의 초기 전환점으로 표시한다. ETH만을 대상으로 한 정책은 아니다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공식 발표문에 명시된 발표 날짜를 사건일로 사용한다. 시행·결제 시점이나 문서의 후속 갱신일과 구분한다.",
+    "crossCheck": "정책을 발표한 기관의 원문과 별도 언론사의 당시 보도를 대조해 결정 내용과 날짜를 확인했다. 언론의 전망이나 가격 해석은 확정된 정책 사실로 사용하지 않는다.",
+    "limitations": [
+      "사건 표시와 ETH 가격의 동시 관측은 인과관계를 입증하지 않는다."
+    ],
+    "keywords": [
+      "Fed",
+      "FOMC",
+      "금리",
+      "달러",
+      "정상화"
+    ],
+    "sources": [
+      {
+        "title": "FOMC statement — 2015-12-16",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20151216a.htm",
+        "publisher": "Federal Reserve",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "연방기금금리 목표 범위를 0.25–0.50%로 올리기로 결정했다.",
+        "publishedAt": "2015-12-16",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Economists see next Fed rate increase in first quarter of 2016: Reuters poll",
+        "url": "https://www.reuters.com/article/business/economists-see-next-fed-rate-increase-in-first-quarter-of-2016-reuters-poll-idUSKBN0TZ31O/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "당일 25bp 인상과 2006년 이후 첫 인상이라는 사실을 확인한다. 설문에 실린 미래 금리 전망은 사용하지 않는다.",
+        "publishedAt": "2015-12-16",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "연방기금금리 목표 범위 0.25–0.50%; 25bp 인상."
   },
   {
     "id": "ethereum-homestead",
@@ -229,6 +396,245 @@ export const ETHEREUM_EVENTS = deepFreeze([
     "blockHash": "0x4985f5ca3d2afbec36529aa96f74de3cc10a2a4a6c44f2157a57d2c6059a11bb"
   },
   {
+    "importance": 2,
+    "datePrecision": "source-calendar-day",
+    "id": "eth-security-dos-disclosure-2016",
+    "date": "2016-09-22",
+    "label": "네트워크 DoS 대응",
+    "title": "이더리움 DoS 공격 공지와 초기 대응",
+    "category": "security",
+    "description": "연산 비용에 비해 가스 비용이 낮은 명령을 악용한 공격으로 블록 처리와 네트워크 진행이 느려졌다는 공지가 나왔다.",
+    "detail": "당일 개발자 분석은 합의 실패나 네트워크 전체 중단은 없었다고 명시했다. 10월의 Tangerine Whistle과 11월의 Spurious Dragon이 후속 프로토콜 대응으로 이어졌다.",
+    "dateBasis": "서로 다른 두 EF 개발자 글이 공개된 9월 22일을 기록한다. 공격이 처음 시작된 순간으로 사용하지 않는다. 후속 FAQ는 9월 18일부터의 공격 기간도 언급한다.",
+    "crossCheck": "당일 EF 경보와 Vitalik Buterin의 당일 기술 분석을 대조했다. 두 자료는 같은 조직의 관측이며 독립된 두 기관의 조사로 간주하지 않는다.",
+    "limitations": [
+      "공격 기간 전체를 한 순간으로 축약하지 않는다. 날짜는 공개 대응일이다.",
+      "네트워크 성능 저하를 원장 전체 중단 또는 자금 탈취로 바꾸어 설명하지 않는다."
+    ],
+    "keywords": [
+      "DoS",
+      "DDoS",
+      "서비스 거부",
+      "네트워크 공격",
+      "EXTCODESIZE"
+    ],
+    "sources": [
+      {
+        "publisher": "Ethereum Foundation",
+        "title": "The Ethereum network is currently undergoing a DoS attack",
+        "url": "https://blog.ethereum.org/2016/09/22/ethereum-network-currently-undergoing-dos-attack",
+        "type": "primary",
+        "role": "incident-disclosure",
+        "claim": "당일의 네트워크 처리 지연과 합의 실패가 없었다는 개발자 관측을 확인한다.",
+        "publishedAt": "2016-09-22",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Vitalik Buterin / Ethereum Foundation",
+        "title": "Transaction spam attack: Next Steps",
+        "url": "https://blog.ethereum.org/en/2016/09/22/transaction-spam-attack-next-steps",
+        "type": "primary",
+        "role": "same-organization-technical-postmortem",
+        "claim": "당일 공격의 방식과 회복, 후속 대응 방향을 확인한다.",
+        "publishedAt": "2016-09-22",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "ethereum-tangerine-whistle",
+    "date": "2016-10-18",
+    "label": "Tangerine Whistle",
+    "title": "탠저린 휘슬: DoS 대응 가스 비용 조정",
+    "category": "protocol",
+    "importance": 2,
+    "description": "반복적인 네트워크 서비스 거부 공격에 대응해 비용이 지나치게 낮던 연산의 가스 비용을 조정했다.",
+    "detail": "EIP-150을 적용한 첫 번째 DoS 대응 업그레이드다. 뒤이은 Spurious Dragon의 상태 정리와 재전송 공격 보호는 별개의 후속 단계다.",
+    "datePrecision": "block-timestamp",
+    "dateBasis": "독립 운영 탐색기의 블록 2,463,000 헤더 시각 2016-10-18T13:19:31Z를 UTC 날짜로 사용한다. 사전 공지의 예상 일자와 구분한다.",
+    "crossCheck": "EF 당시 공지와 공식 연대표를 대조하고 Blockscout의 실제 블록 응답으로 높이·해시·시각을 별도 확인했다. EF 공지와 ethereum.org를 서로 독립된 운영기관으로 세지는 않는다.",
+    "limitations": [
+      "블록 시각은 원장의 헤더 기록이며 모든 노드의 수신 순간이나 사건 시점의 ETH 체결가가 아니다. 업그레이드의 단독 가격 효과는 추정하지 않는다."
+    ],
+    "keywords": [
+      "Tangerine Whistle",
+      "EIP-150",
+      "DoS",
+      "가스 비용",
+      "서비스 거부"
+    ],
+    "facts": {
+      "block": 2463000,
+      "blockHash": "0x2086799aeebeae135c246c65021c82b4e15a2c451340993aacfd2751886514f0",
+      "utcTimestamp": "2016-10-18T13:19:31Z"
+    },
+    "sources": [
+      {
+        "publisher": "Ethereum Foundation",
+        "title": "FAQ: Upcoming Ethereum Hard Fork",
+        "url": "https://blog.ethereum.org/2016/10/18/faq-upcoming-ethereum-hard-fork",
+        "type": "primary",
+        "role": "upgrade-announcement",
+        "claim": "DoS 대응 이유와 적용 높이 2,463,000을 확인한다. 공지의 예상 시각을 실제 시각으로 사용하지 않는다.",
+        "publishedAt": "2016-10-18",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "ethereum.org",
+        "title": "Timeline of all Ethereum forks",
+        "url": "https://ethereum.org/ethereum-forks/",
+        "type": "primary",
+        "role": "same-organization-retrospective",
+        "claim": "공식 기술 연대표의 실제 업그레이드 날짜와 적용 높이를 확인한다. 연대표의 가격 수치는 사용하지 않는다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Blockscout",
+        "title": "Ethereum block 2463000",
+        "url": "https://eth.blockscout.com/api/v2/blocks/2463000",
+        "type": "primary",
+        "role": "independent-observed-block-header",
+        "claim": "실제 메인넷 블록 높이·해시·UTC 헤더 시각을 확인한다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Ethereum EIPs",
+        "title": "EIP-608: Hardfork Meta: Tangerine Whistle",
+        "url": "https://eips.ethereum.org/EIPS/eip-608",
+        "type": "primary",
+        "role": "upgrade-specification",
+        "claim": "업그레이드에 포함된 규칙을 명세 원문에서 확인한다. EIP 작성일은 실행일이 아니다.",
+        "publishedAt": "2017-04-23",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "blockHeight": 2463000,
+    "timestampUtc": "2016-10-18T13:19:31Z",
+    "blockHash": "0x2086799aeebeae135c246c65021c82b4e15a2c451340993aacfd2751886514f0"
+  },
+  {
+    "id": "ethereum-spurious-dragon",
+    "date": "2016-11-22",
+    "label": "Spurious Dragon",
+    "title": "스퓨리어스 드래곤: 상태 정리와 재전송 보호",
+    "category": "protocol",
+    "importance": 2,
+    "description": "DoS 대응의 후속 업그레이드로 연산 비용, 빈 계정 정리, 체인 간 거래 재전송 보호 등을 도입했다.",
+    "detail": "EIP-155·160·161·170을 포함한다. EIP-155의 보호를 받으려면 새 거래 형식이 필요하며, 기존 거래 형식도 호환성을 위해 계속 허용됐다.",
+    "datePrecision": "block-timestamp",
+    "dateBasis": "독립 운영 탐색기의 블록 2,675,000 헤더 시각 2016-11-22T16:15:44Z를 UTC 날짜로 사용한다. 사전 공지의 예상 일자와 구분한다.",
+    "crossCheck": "EF 당시 공지와 공식 연대표를 대조하고 Blockscout의 실제 블록 응답으로 높이·해시·시각을 별도 확인했다. EF 공지와 ethereum.org를 서로 독립된 운영기관으로 세지는 않는다.",
+    "limitations": [
+      "블록 시각은 원장의 헤더 기록이며 모든 노드의 수신 순간이나 사건 시점의 ETH 체결가가 아니다. 업그레이드의 단독 가격 효과는 추정하지 않는다."
+    ],
+    "keywords": [
+      "Spurious Dragon",
+      "EIP-155",
+      "DoS",
+      "replay protection",
+      "재전송"
+    ],
+    "facts": {
+      "block": 2675000,
+      "blockHash": "0x58eff9265aedf8a54da8121de1324e1e0d9aac99f694d16c6a41afffe3817d73",
+      "utcTimestamp": "2016-11-22T16:15:44Z"
+    },
+    "sources": [
+      {
+        "publisher": "Ethereum Foundation",
+        "title": "Hard Fork No. 4: Spurious Dragon",
+        "url": "https://blog.ethereum.org/2016/11/18/hard-fork-no-4-spurious-dragon",
+        "type": "primary",
+        "role": "upgrade-announcement",
+        "claim": "두 번째 DoS 대응 단계의 목적과 EIP 구성, 적용 높이 2,675,000을 확인한다.",
+        "publishedAt": "2016-11-18",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "ethereum.org",
+        "title": "Timeline of all Ethereum forks",
+        "url": "https://ethereum.org/ethereum-forks/",
+        "type": "primary",
+        "role": "same-organization-retrospective",
+        "claim": "공식 기술 연대표의 실제 업그레이드 날짜와 적용 높이를 확인한다. 연대표의 가격 수치는 사용하지 않는다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Blockscout",
+        "title": "Ethereum block 2675000",
+        "url": "https://eth.blockscout.com/api/v2/blocks/2675000",
+        "type": "primary",
+        "role": "independent-observed-block-header",
+        "claim": "실제 메인넷 블록 높이·해시·UTC 헤더 시각을 확인한다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Ethereum EIPs",
+        "title": "EIP-607: Hardfork Meta: Spurious Dragon",
+        "url": "https://eips.ethereum.org/EIPS/eip-607",
+        "type": "primary",
+        "role": "upgrade-specification",
+        "claim": "업그레이드에 포함된 규칙을 명세 원문에서 확인한다. EIP 작성일은 실행일이 아니다.",
+        "publishedAt": "2017-04-23",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "blockHeight": 2675000,
+    "timestampUtc": "2016-11-22T16:15:44Z",
+    "blockHash": "0x58eff9265aedf8a54da8121de1324e1e0d9aac99f694d16c6a41afffe3817d73"
+  },
+  {
+    "id": "eth-context-gdax-flash-crash",
+    "date": "2017-06-21",
+    "label": "GDAX 급변",
+    "title": "GDAX ETH-USD 시장의 순간 급락",
+    "category": "market",
+    "importance": 3,
+    "description": "GDAX의 ETH-USD 주문장에서 순간적인 급락과 연쇄 청산이 발생했다.",
+    "detail": "거래소는 6월 21일 ETH-USD 거래에서 급격한 가격 변화가 발생했다고 확인했다. Coinbase 계열 거래소의 실제 거래 이력이므로 이 차트의 장기 저가 꼬리를 해석할 때 참고할 수 있다. 거래소는 이후 해당 구간에서 손실을 본 일부 고객에게 회사 자금으로 보상하겠다고 발표했다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "GDAX의 6월 23일 후속 공지가 사건을 6월 21일 오후 12시 30분 PT로 명시한다. 다음 날 보도일과 구분하여 발생한 달력 날짜를 사용한다.",
+    "crossCheck": "거래소 책임자 Adam White의 공식 후속 공지와 Finance Magnates의 6월 22일 동시대 보도가 6월 21일 사건을 확인한다. 언론 보도는 거래소 설명을 인용하므로 원인 진술 전부가 독립 조사로 확정된 것은 아니다.",
+    "limitations": [
+      "단일 거래소 주문장의 순간 체결을 전 세계 ETH 가격이나 일봉 종가로 일반화하지 않는다.",
+      "거래소의 고객 보상 발표와 기존 거래 취소는 다르다."
+    ],
+    "keywords": [
+      "GDAX",
+      "Coinbase",
+      "flash crash",
+      "플래시 크래시",
+      "ETH-USD",
+      "청산"
+    ],
+    "sources": [
+      {
+        "title": "ETH-USD Trading Update #2",
+        "url": "https://medium.com/@AdamLWhite/eth-usd-trading-update-2-216a3b946ef6",
+        "publisher": "GDAX / Adam White",
+        "type": "primary",
+        "role": "exchange-follow-up",
+        "claim": "6월 21일 ETH-USD 급변의 시점과 일부 고객에 대한 보상 방침을 확인한다.",
+        "publishedAt": "2017-06-23",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Ethereum Flash Crash Causes ETH to Temporarily Trade as Low as $0.10",
+        "url": "https://www.financemagnates.com/cryptocurrency/trading/ethereum-flash-crash-causes-eth-temporarily-trade-low-0-10/",
+        "publisher": "Finance Magnates",
+        "type": "secondary",
+        "role": "contemporaneous-reporting",
+        "claim": "6월 21일 GDAX의 ETH-USD 주문장 급락을 보도한다.",
+        "publishedAt": "2017-06-22",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
     "id": "eth-parity-multisig-exploit",
     "date": "2017-07-19",
     "label": "Parity 유출",
@@ -270,6 +676,100 @@ export const ETHEREUM_EVENTS = deepFreeze([
       "incidentKind": "contract-exploit"
     },
     "description": "일부 Parity 멀티시그 지갑의 초기화 취약점이 악용돼 자금이 유출됐다."
+  },
+  {
+    "id": "eth-policy-dao-sec-report",
+    "date": "2017-07-25",
+    "label": "SEC DAO 보고서",
+    "title": "SEC, DAO 토큰에 관한 증권법 조사보고서 발표",
+    "category": "regulation",
+    "importance": 3,
+    "description": "SEC가 Ethereum 기반 DAO의 토큰 판매에 미국 증권법이 적용된다는 조사보고서를 발표했다.",
+    "detail": "2016년 DAO 공격이나 하드포크와는 다른 2017년 규제 사건이다. 보고서는 DAO 토큰의 거래 구조를 분석했으며 이 조사에서 제재 절차를 진행하지 않기로 했다. ETH 자체 전체를 증권으로 확정한 법원 판결이 아니다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "조사보고서 표지의 2017-07-25를 사용한다. Reuters 페이지의 다음 날 게시일과 구분한다.",
+    "crossCheck": "정책을 발표한 기관의 원문과 별도 언론사의 당시 보도를 대조해 결정 내용과 날짜를 확인했다. 언론의 전망이나 가격 해석은 확정된 정책 사실로 사용하지 않는다.",
+    "limitations": [
+      "DAO 토큰과 네이티브 자산 ETH를 구분한다.",
+      "행정 조사보고서의 판단을 법원의 확정 판결이나 모든 ICO에 대한 일괄 판단으로 확대하지 않는다."
+    ],
+    "keywords": [
+      "DAO",
+      "SEC",
+      "ICO",
+      "증권법",
+      "토큰 발행"
+    ],
+    "sources": [
+      {
+        "title": "Report of Investigation Pursuant to Section 21(a): The DAO, Release 81207",
+        "url": "https://www.sec.gov/files/litigation/investreport/34-81207.pdf",
+        "publisher": "SEC",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "7월 25일 조사보고서는 DAO 토큰의 증권법 적용을 분석했다. 보고서의 대상은 DAO 토큰이며 ETH 전체에 대한 판결이 아니다.",
+        "publishedAt": "2017-07-25",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Wall Street regulator sets sights on digital coin offerings",
+        "url": "https://www.reuters.com/article/business/wall-street-regulator-sets-sights-on-digital-coin-offerings-idUSKBN1AA2OK/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "7월 25일 화요일 공개된 DAO 조사보고서와 제재 없이 보고서로 종결한 조치를 확인한다.",
+        "publishedAt": "2017-07-26",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "DAO 토큰 판매에 관한 SEC 조사보고서 공개."
+  },
+  {
+    "id": "eth-policy-china-ico-ban",
+    "date": "2017-09-04",
+    "label": "중국 ICO 금지",
+    "title": "중국, 토큰 발행을 통한 자금조달 중단 발표",
+    "category": "regulation",
+    "importance": 3,
+    "description": "중국 당국이 ICO 중단과 기존 자금조달의 환급 정리를 요구했다.",
+    "detail": "공동 공고는 토큰 발행자가 비트코인·이더 등을 받아 자금을 모으는 행위를 직접 다뤘다. Ethereum 기반 토큰 발행 생태계와 연결되는 규제 이정표다. 중국 내 모든 개인 보유를 일괄 형사범죄로 선언한 사건으로 표현하지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공동 공고 게시일 2017-09-04. 다음 날 Reuters 보도는 월요일의 공표를 확인한다.",
+    "crossCheck": "정책을 발표한 기관의 원문과 별도 언론사의 당시 보도를 대조해 결정 내용과 날짜를 확인했다. 언론의 전망이나 가격 해석은 확정된 정책 사실로 사용하지 않는다.",
+    "limitations": [
+      "ICO 자금조달·서비스 규제와 개인의 암호자산 보유를 구분한다.",
+      "중국 관할 정책이며 전 세계 Ethereum 프로토콜의 중단을 뜻하지 않는다."
+    ],
+    "keywords": [
+      "중국",
+      "ICO",
+      "PBoC",
+      "토큰 발행",
+      "규제"
+    ],
+    "sources": [
+      {
+        "title": "关于防范代币发行融资风险的公告",
+        "url": "https://www.cac.gov.cn/2017-09/04/c_1121603512.htm",
+        "publisher": "People’s Bank of China and six co-issuing authorities / Cyberspace Administration of China",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "ICO를 중단하도록 하고 이미 진행한 발행의 환급 정리를 요구했다. 모집 자산의 예로 비트코인과 이더를 명시했다.",
+        "publishedAt": "2017-09-04",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "China’s virtual coin fundraising ban just the start of tighter regulations — Yicai",
+        "url": "https://www.reuters.com/jp/article/chinas-virtual-coin-fundraising-ban-just-the-start-of-tighter-regulations-yic-idUSL4N1LM186/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "월요일인 9월 4일 당국의 ICO 금지 공표를 확인한다. 향후 규제 전망은 사용하지 않는다.",
+        "publishedAt": "2017-09-05",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "토큰 발행 자금조달 중단 및 기존 자금조달의 환급 정리 요구."
   },
   {
     "id": "ethereum-byzantium",
@@ -373,6 +873,402 @@ export const ETHEREUM_EVENTS = deepFreeze([
     "description": "Parity 멀티시그 지갑들이 참조하던 공통 라이브러리가 삭제돼 해당 지갑의 자금 이동이 막혔다."
   },
   {
+    "id": "eth-context-cryptokitties-public-launch",
+    "date": "2017-11-28",
+    "label": "CryptoKitties",
+    "title": "CryptoKitties 일반 사용자 공개",
+    "category": "ecosystem",
+    "importance": 2,
+    "description": "Ethereum에서 ETH로 디지털 고양이를 수집·교배하는 CryptoKitties가 일반에 공개됐다.",
+    "detail": "개발사 Axiom Zen은 11월 28일 공개 출시를 발표했다. Ethereum의 게임·NFT 활용을 설명할 수 있는 구체적인 서비스 공개 이정표다. 11월 23일의 비공개 베타 및 이후 거래 혼잡이 심해진 시점과 구분한다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "개발사 당일 보도자료가 일반 공개일을 11월 28일로 명시하고 IEEE Spectrum의 회고 기사도 같은 날짜를 확인한다.",
+    "crossCheck": "Axiom Zen의 원문 발표와 IEEE Spectrum의 취재·회고를 대조했다. CNW는 보도자료 배포처이며 별도의 독립 언론 검증으로 세지 않는다. IEEE 기사도 출시일에 대해 개발사 발표를 참조한다.",
+    "limitations": [
+      "공개일을 NFT의 최초 탄생일이나 네트워크 혼잡의 정확한 시작일로 해석하지 않는다.",
+      "개발사의 '세계 최초' 등 홍보성 최상급 표현은 채택하지 않는다."
+    ],
+    "keywords": [
+      "CryptoKitties",
+      "크립토키티",
+      "NFT",
+      "게임",
+      "Axiom Zen"
+    ],
+    "sources": [
+      {
+        "title": "CryptoKitties: The World's First Ethereum Game Launches Today",
+        "url": "https://www.newswire.ca/news-releases/cryptokitties-the-worlds-first-ethereum-game-launches-today-660494073.html",
+        "publisher": "Axiom Zen / CNW 배포",
+        "type": "primary",
+        "role": "developer-launch-announcement",
+        "claim": "2017년 11월 28일 일반 공개 및 ETH를 사용하는 게임이라는 사실을 명시한다.",
+        "publishedAt": "2017-11-28",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "The Spectacular Collapse of CryptoKitties, the First Big Blockchain Game",
+        "url": "https://spectrum.ieee.org/cryptokitties",
+        "publisher": "IEEE Spectrum",
+        "type": "secondary",
+        "role": "independent-retrospective-reporting",
+        "claim": "5일의 비공개 베타 후 2017년 11월 28일 공개됐다는 연혁을 확인한다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-korea-real-name-accounts",
+    "date": "2018-01-23",
+    "label": "한국 실명계정",
+    "title": "한국, 가상통화 실명확인 입출금 계정 도입 발표",
+    "category": "regulation",
+    "importance": 2,
+    "description": "금융위원회가 가상통화 거래의 실명확인 입출금 계정 서비스를 1월 30일 도입한다고 발표했다.",
+    "detail": "은행 계좌와 거래소 이용자의 명의를 일치시키는 금융 접근·자금세탁방지 조치다. 한국 원화 시장의 거래 경로와 관련되므로 ETH 역사에 포함한다. 발표일을 사용하며 당시 논의되던 거래소 전면 폐쇄가 확정됐다고 쓰지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "금융위 발표와 Reuters 브리핑 보도가 일치하는 2018-01-23. 시행 예정일 1월 30일과 구분한다.",
+    "crossCheck": "정책을 발표한 기관의 원문과 별도 언론사의 당시 보도를 대조해 결정 내용과 날짜를 확인했다. 언론의 전망이나 가격 해석은 확정된 정책 사실로 사용하지 않는다.",
+    "limitations": [
+      "실명확인 제도를 암호자산 거래 전면 금지나 정부의 자산 가치 보증으로 표현하지 않는다.",
+      "국내 원화 거래 조건의 변경을 Coinbase ETH-USD에 그대로 적용하지 않는다."
+    ],
+    "keywords": [
+      "한국",
+      "실명계정",
+      "금융위원회",
+      "AML",
+      "거래소"
+    ],
+    "sources": [
+      {
+        "title": "FSC Announces Measures to Curb Speculation in Cryptocurrency Trading",
+        "url": "https://www.fsc.go.kr/eng/pr010101/22173",
+        "publisher": "Financial Services Commission, Korea",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "1월 23일 발표문은 1월 30일부터 가상통화 거래에 실명확인 입출금 계정 서비스를 도입하는 일정을 명시한다.",
+        "publishedAt": "2018-01-23",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "South Korea to ban cryptocurrency traders from using anonymous bank accounts",
+        "url": "https://www.reuters.com/article/technology/south-korea-to-ban-cryptocurrency-traders-from-using-anonymous-bank-accounts-idUSKBN1FC069/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "1월 23일 브리핑과 1월 30일 실명 일치 요건 시행 계획을 확인한다.",
+        "publishedAt": "2018-01-23",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "1월 30일 실명확인 입출금 계정 도입 일정 발표."
+  },
+  {
+    "id": "eth-policy-steel-aluminum-announcement-2018",
+    "date": "2018-03-01",
+    "label": "철강·알루미늄 관세 예고",
+    "title": "트럼프, 철강·알루미늄 수입 관세 예고",
+    "category": "macro",
+    "importance": 2,
+    "description": "철강·알루미늄 관세 계획이 공개되며 미국 무역정책의 보호무역 전환이 금융시장의 쟁점으로 부상했다.",
+    "detail": "대통령이 업계 간담회에서 관세율을 제시한 날을 기록한다. 정식 포고문 서명과 세관 적용은 뒤에 이뤄졌으며, ETH에 직접 부과하는 세금이 아니다.",
+    "policyAction": "트럼프는 철강 수입에 25%, 알루미늄 수입에 10% 관세를 부과하겠다고 말하고 다음 주 서명을 예고했다.",
+    "marketContext": "Reuters는 3월 1일 주식시장 약세와 무역갈등 우려를 보도했으며, 발표 이전부터 연준 발언·금리 우려도 시장에 작용했다고 설명했다.",
+    "followUp": "CBP는 3월 8일 포고문 발행, 3월 23일 적용 시작 및 뒤이은 국가별 예외 변경을 확인한다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "백악관 간담회 기록의 3월 1일을 사용한다. Reuters 재배포 페이지의 3월 2일 표시는 3월 1일 미국 거래일과 구분한다.",
+    "crossCheck": "백악관 발언 원문, CBP 후속 집행 기록, Reuters 시장 보도를 대조했다. 백악관과 CBP는 같은 행정부 자료다.",
+    "limitations": [
+      "이 사건은 광범위한 무역정책 배경이며 ETH 고유 반응을 직접 확인한 보도가 아니다.",
+      "관세 예고일과 실제 부과일은 다르며 국가별 예외가 후속 변경됐다.",
+      "간담회 기록의 시각 표기에 불일치 소지가 있어 정확한 UTC 발표 시각을 생성하지 않았다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "철강",
+      "알루미늄",
+      "Section 232",
+      "보호무역"
+    ],
+    "sources": [
+      {
+        "title": "Remarks by President Trump in Listening Session with Representatives from the Steel and Aluminum Industry",
+        "url": "https://trumpwhitehouse.archives.gov/briefings-statements/remarks-president-trump-listening-session-representatives-steel-aluminum-industry/",
+        "publisher": "The White House — archived",
+        "type": "primary",
+        "publishedAt": "2018-03-01",
+        "accessedAt": "2026-10-24",
+        "role": "policy-announcement",
+        "claim": "철강 25%·알루미늄 10% 관세 예고 발언을 확인한다."
+      },
+      {
+        "title": "GLOBAL MARKETS-Stocks tumble, dollar gains on Trump tariff comments",
+        "url": "https://in.investing.com/news/stock-market-news/global-marketsstocks-tumble-dollar-gains-on-trump-tariff-comments-1046160",
+        "publisher": "Reuters, republished by Investing.com",
+        "type": "secondary",
+        "publishedAt": "2018-03-02",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-market-report",
+        "claim": "무역갈등 우려 및 금리 우려가 겹친 당시 시장을 보도한다."
+      },
+      {
+        "title": "CSMS# 18-000317 — UPDATE: Additional Duty on Imports of Steel and Aluminum Articles under Section 232",
+        "url": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/1ed564e",
+        "publisher": "U.S. Customs and Border Protection",
+        "type": "primary",
+        "publishedAt": "2018-05-01",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-implementation-record",
+        "claim": "3월 8일 포고문과 3월 23일 적용 시작을 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-section301-memorandum-2018",
+    "date": "2018-03-22",
+    "label": "대중 관세 절차 지시",
+    "title": "미국, 중국 대상 Section 301 관세 절차 지시",
+    "category": "macro",
+    "importance": 3,
+    "description": "대통령 각서가 중국 대상 관세안 작성과 의견수렴 절차를 지시하며 미중 무역갈등이 확대됐다.",
+    "detail": "3월 22일 각서는 당일 모든 관세를 즉시 징수한 명령이 아니다. 무역정책의 전환점으로 표시하며 당시 ETH 약세 전체의 원인이라고 단정하지 않는다.",
+    "policyAction": "USTR에 15일 이내 관세 대상·인상안 공표, 의견수렴 후 최종 결정·시행을 지시하고 WTO 분쟁 절차와 투자제한 검토도 주문했다.",
+    "marketContext": "Reuters는 관세 계획과 세계경제 우려 속 미국 주식시장 하락을 보도했다. 기사에는 기술기업 관련 악재 등 다른 요인도 포함됐다.",
+    "followUp": "6월 15일 USTR가 첫 340억 달러 품목의 25% 관세를 확정하고 7월 6일 징수 시작을 예고했다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "대통령 각서 발행일 3월 22일을 사용한다. 4월 제안 목록, 6월 확정, 7월 시행과 구분한다.",
+    "crossCheck": "대통령 각서의 절차 문구를 Reuters 동시기 보도 및 USTR 6월 확정 발표와 대조했다.",
+    "limitations": [
+      "정책 추진 근거에 관한 미국 정부의 대중 비난을 독립적으로 확정한 사실로 채택하지 않는다.",
+      "주식시장 보도는 ETH의 인과효과나 수익률을 입증하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "Section 301",
+      "미중 무역전쟁",
+      "지식재산"
+    ],
+    "sources": [
+      {
+        "title": "Presidential Memorandum on the Actions by the United States Related to the Section 301 Investigation",
+        "url": "https://trumpwhitehouse.archives.gov/presidential-actions/presidential-memorandum-actions-united-states-related-section-301-investigation/",
+        "publisher": "The White House — archived",
+        "type": "primary",
+        "publishedAt": "2018-03-22",
+        "accessedAt": "2026-10-24",
+        "role": "legal-policy-directive",
+        "claim": "관세안 공표와 의견수렴·후속 시행 절차를 지시한다."
+      },
+      {
+        "title": "Stocks tumble to worst day in six weeks after Trump tariff action",
+        "url": "https://www.investing.com/news/stock-market-news/futures-back-off-on-trade-war-fears-tech-woes-persist-1354165?ampMode=1",
+        "publisher": "Reuters, republished by Investing.com",
+        "type": "secondary",
+        "publishedAt": "2018-03-22",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-market-report",
+        "claim": "미국 주식 하락과 무역갈등 우려를 보도한다."
+      },
+      {
+        "title": "USTR Issues Tariffs on Chinese Products in Response to Unfair Trade Practices",
+        "url": "https://ustr.gov/about-us/policy-offices/press-office/press-releases/2018/june/ustr-issues-tariffs-chinese-products",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2018-06-15",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-final-action",
+        "claim": "첫 관세 목록과 7월 6일 징수 일정을 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-hinman-ether-speech",
+    "date": "2018-06-14",
+    "label": "Hinman ETH 발언",
+    "title": "SEC 국장 Hinman, 당시 ETH 거래에 관한 견해 발표",
+    "category": "regulation",
+    "importance": 3,
+    "description": "Hinman이 당시 Ethereum의 분산 상태를 전제로 현재 ETH 거래는 증권 거래가 아니라는 견해를 밝혔다.",
+    "detail": "발언은 초기 자금조달을 별도로 두고 당시 ETH 제공·판매에 관한 분석을 제시했다. 원문 각주는 발언자의 견해이며 SEC 위원회와 일치하지 않을 수 있다고 명시한다. 법원의 ETH 증권성 확정 판결이나 모든 상품·서비스의 면제를 뜻하지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공식 발표문에 명시된 발표 날짜를 사건일로 사용한다. 시행·결제 시점이나 문서의 후속 갱신일과 구분한다.",
+    "crossCheck": "정책을 발표한 기관의 원문과 별도 언론사의 당시 보도를 대조해 결정 내용과 날짜를 확인했다. 언론의 전망이나 가격 해석은 확정된 정책 사실로 사용하지 않는다.",
+    "limitations": [
+      "개인 연설의 견해를 SEC의 구속력 있는 최종 규칙 또는 법원 판결로 표현하지 않는다.",
+      "ETH를 포함한 투자상품이나 서비스의 법적 판단은 거래 구조에 따라 달라질 수 있다."
+    ],
+    "keywords": [
+      "SEC",
+      "Hinman",
+      "ETH",
+      "증권성",
+      "Howey"
+    ],
+    "sources": [
+      {
+        "title": "Digital Asset Transactions: When Howey Met Gary (Plastic)",
+        "url": "https://www.sec.gov/newsroom/speeches-statements/speech-hinman-061418",
+        "publisher": "SEC — William Hinman",
+        "type": "primary",
+        "role": "original-speech-with-personal-view-disclaimer",
+        "claim": "당시 네트워크의 분산 상태를 전제로 현재의 ETH 제공·판매는 증권 거래가 아니라는 개인 견해를 밝혔다. 각주 1은 위원회 견해와 다를 수 있음을 명시한다.",
+        "publishedAt": "2018-06-14",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "U.S. SEC official says ether not a security, price surges",
+        "url": "https://www.reuters.com/article/technology/us-sec-official-says-ether-not-a-security-price-surges-idUSKBN1JA30P/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "Hinman의 ETH 관련 발언이 6월 14일 공개됐음을 당일 보도한다.",
+        "publishedAt": "2018-06-14",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "SEC 기업금융국장의 공개 연설; 개인 견해라는 명시적 한계가 있다."
+  },
+  {
+    "id": "eth-policy-first-china-tariffs-effective-2018",
+    "date": "2018-07-06",
+    "label": "첫 대중 관세 시행",
+    "title": "미중 첫 대규모 상호 관세 시행",
+    "category": "macro",
+    "importance": 3,
+    "description": "미국의 340억 달러 중국산 품목 추가 관세가 실제 적용되며 발표 단계였던 무역갈등이 상호 관세 징수로 이어졌다.",
+    "detail": "정책 시행일을 기록한다. Reuters의 당일 보도에서는 세계 주식이 오르는 구간도 관측됐으므로 이 사건을 일률적인 가격 급락 표식으로 쓰지 않는다.",
+    "policyAction": "미국은 첫 목록의 약 340억 달러 중국산 수입품에 25% 추가 관세를 적용했다. Reuters는 중국의 대응 관세 시행도 보도했다.",
+    "marketContext": "Reuters는 무역갈등 확대 우려가 남아 있었지만 당일 주식시장이 초기 관세를 비교적 차분히 소화했다고 설명했다.",
+    "followUp": "USTR는 8월 7일 두 번째 약 160억 달러 목록을 확정하고 8월 23일 징수 시작을 발표했다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "6월 15일 USTR 발표가 지정한 7월 6일 시행일을 쓰고, 8월 USTR 회고에서 실제 시행을 재확인했다.",
+    "crossCheck": "USTR의 사전 일정과 후속 실제 시행 확인을 Reuters의 당일 상호 관세·시장 보도와 대조했다.",
+    "limitations": [
+      "관세 시행은 이미 예고된 뉴스였으며 당일 가격 방향을 사전에 결정하지 않는다.",
+      "세계 주식시장 관측을 ETH 반응으로 대체하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "Section 301",
+      "미중 무역전쟁",
+      "List 1",
+      "시행"
+    ],
+    "sources": [
+      {
+        "title": "USTR Issues Tariffs on Chinese Products in Response to Unfair Trade Practices",
+        "url": "https://ustr.gov/about-us/policy-offices/press-office/press-releases/2018/june/ustr-issues-tariffs-chinese-products",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2018-06-15",
+        "accessedAt": "2026-10-24",
+        "role": "announced-implementation-schedule",
+        "claim": "첫 340억 달러 목록과 7월 6일 징수 시작을 지정한다."
+      },
+      {
+        "title": "USTR Finalizes Second Tranche of Tariffs on Chinese Products in Response to China’s Unfair Trade Practices",
+        "url": "https://ustr.gov/about-us/policy-offices/press-office/press-releases/2018/august/ustr-finalizes-second-tranche",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2018-08-07",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-official-confirmation",
+        "claim": "첫 목록의 실제 7월 6일 시행과 두 번째 목록의 일정을 확인한다."
+      },
+      {
+        "title": "GLOBAL MARKETS-Stocks, euro survive first battle of U.S.-China trade war",
+        "url": "https://ca.investing.com/news/stock-market-news/global-marketsstocks-euro-survive-first-battle-of-uschina-trade-war-1197532",
+        "publisher": "Reuters, republished by Investing.com",
+        "type": "secondary",
+        "publishedAt": "2018-07-06",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-market-report",
+        "claim": "상호 관세 시행과 시장의 비교적 차분한 반응을 보도한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-china-list3-announcement-2018",
+    "date": "2018-09-17",
+    "label": "대중 관세 대상 확대",
+    "title": "미국, 2천억 달러 중국산 상품 관세 확대 발표",
+    "category": "macro",
+    "importance": 2,
+    "description": "미국이 약 2천억 달러 중국산 수입품으로 관세 범위를 확대하는 일정을 발표했다.",
+    "detail": "대상 범위의 큰 확대를 기록한다. 다음 날 미국 주식에는 예상보다 완만한 초기 관세율이라는 해석도 나타나, 악재 제목과 가격 방향을 일치시키지 않는다.",
+    "policyAction": "9월 24일부터 10% 추가 관세를 적용하고 2019년 1월 1일 25%로 올리는 계획을 발표했다.",
+    "marketContext": "Reuters는 9월 18일 투자자들이 초기 10% 관세와 중국 대응을 우려보다 약한 조치로 해석하는 가운데 미국 주식이 올랐다고 보도했다.",
+    "followUp": "12월 1일 정상회담에서 1월 인상 계획이 유예됐다. 10%에서 25%로의 실제 인상은 2019년 5월에 이뤄졌다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "백악관 성명 날짜 9월 17일을 사용하며, 9월 24일 적용과 9월 18일 시장 관측을 구분한다.",
+    "crossCheck": "백악관 확대 성명과 후속 유예 성명, Reuters의 다음 날 시장 보도, CBP의 실제 인상 기록을 대조했다.",
+    "limitations": [
+      "당초 1월 1일 인상 계획은 그대로 시행되지 않았다.",
+      "보도된 주식 상승은 ETH 상승이나 관세의 긍정적 경제 효과를 증명하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "Section 301",
+      "List 3",
+      "미중 무역전쟁"
+    ],
+    "sources": [
+      {
+        "title": "Statement from the President — tariffs on approximately $200 billion of imports from China",
+        "url": "https://trumpwhitehouse.archives.gov/briefings-statements/statement-from-the-president-4/",
+        "publisher": "The White House — archived",
+        "type": "primary",
+        "publishedAt": "2018-09-17",
+        "accessedAt": "2026-10-24",
+        "role": "policy-announcement",
+        "claim": "약 2천억 달러 대상의 초기 10% 관세와 후속 인상 계획을 발표한다."
+      },
+      {
+        "title": "Wall Street rallies as blow from fresh tariffs less than feared",
+        "url": "https://www.business-standard.com/article/reuters/wall-street-rallies-as-blow-from-fresh-tariffs-less-than-feared-118091801480_1.html",
+        "publisher": "Reuters, republished by Business Standard",
+        "type": "secondary",
+        "publishedAt": "2018-09-18",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-market-report",
+        "claim": "다음 날 주식시장의 안도성 해석을 보도한다."
+      },
+      {
+        "title": "Statement from the Press Secretary Regarding the President’s Working Dinner with China",
+        "url": "https://trumpwhitehouse.archives.gov/briefings-statements/statement-press-secretary-regarding-presidents-working-dinner-china/",
+        "publisher": "The White House — archived",
+        "type": "primary",
+        "publishedAt": "2018-12-01",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-policy-pause",
+        "claim": "1월 관세 인상 계획 유예를 확인한다."
+      },
+      {
+        "title": "CSMS# 19-000238 — UPDATE: Section 301 (Tranche 3) Duties as of May 10, 2019",
+        "url": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/24419b4",
+        "publisher": "U.S. Customs and Border Protection",
+        "type": "primary",
+        "publishedAt": "2019-05-10",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-implementation-record",
+        "claim": "2019년 5월 실제 요율 인상을 확인한다."
+      }
+    ]
+  },
+  {
     "id": "eth-uniswap-v1-mainnet",
     "date": "2018-11-02",
     "label": "Uniswap 시작",
@@ -416,6 +1312,126 @@ export const ETHEREUM_EVENTS = deepFreeze([
       "network": "Ethereum mainnet"
     },
     "description": "Uniswap이 Ethereum 메인넷에 공개되며 유동성 풀을 이용한 토큰 교환 서비스를 시작했다."
+  },
+  {
+    "id": "eth-policy-buenos-aires-truce-2018",
+    "date": "2018-12-01",
+    "label": "미중 90일 협상 유예",
+    "title": "미중 G20 회담, 관세 인상 유예와 90일 협상 합의",
+    "category": "macro",
+    "importance": 2,
+    "description": "미중 정상이 추가 관세 인상을 잠시 멈추고 90일 동안 협상을 추진하기로 했다.",
+    "detail": "완전한 무역합의나 기존 관세 철폐가 아닌 인상 유예다. 주말 회담일과 뒤이은 주식시장 반응일을 나누어 기록한다.",
+    "policyAction": "미국은 약 2천억 달러 중국산 상품의 10% 관세를 2019년 1월에 25%로 올리지 않기로 했고 양측은 90일 협상을 추진했다.",
+    "marketContext": "Reuters는 12월 3일 미국 주식시장이 무역갈등 완화에 안도하며 올랐지만 해결할 쟁점이 남았다고 보도했다.",
+    "followUp": "관세 인상은 이후 추가로 미뤄졌으나 2019년 5월 10일 관련 요율이 25%로 높아졌다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "백악관의 12월 1일 회담 결과 성명을 사용한다. 시장 보도일 12월 3일과 구분한다.",
+    "crossCheck": "백악관 회담 결과, Reuters 다음 거래일 보도, USTR의 후속 관보 절차를 대조했다.",
+    "limitations": [
+      "90일 협상은 영구적인 분쟁 종결을 뜻하지 않는다.",
+      "주식시장 안도 반응을 ETH 반등으로 단정하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "G20",
+      "부에노스아이레스",
+      "유예",
+      "무역협상"
+    ],
+    "sources": [
+      {
+        "title": "Statement from the Press Secretary Regarding the President’s Working Dinner with China",
+        "url": "https://trumpwhitehouse.archives.gov/briefings-statements/statement-press-secretary-regarding-presidents-working-dinner-china/",
+        "publisher": "The White House — archived",
+        "type": "primary",
+        "publishedAt": "2018-12-01",
+        "accessedAt": "2026-10-24",
+        "role": "policy-pause-announcement",
+        "claim": "1월 요율 인상 유예와 90일 협상 계획을 확인한다."
+      },
+      {
+        "title": "U.S.-China trade truce boosts Wall Street",
+        "url": "https://www.investing.com/news/stock-market-news/uschina-trade-truce-boosts-wall-street-1708279",
+        "publisher": "Reuters, republished by Investing.com",
+        "type": "secondary",
+        "publishedAt": "2018-12-03",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-market-report",
+        "claim": "12월 3일 주식시장 안도 반응과 잔존 불확실성을 보도한다."
+      },
+      {
+        "title": "Notice of Modification of Section 301 Action — 84 FR 20459",
+        "url": "https://www.govinfo.gov/content/pkg/FR-2019-05-09/pdf/2019-09681.pdf",
+        "publisher": "Office of the United States Trade Representative / Federal Register",
+        "type": "primary",
+        "publishedAt": "2019-05-09",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-legal-record",
+        "claim": "추가 유예 경과와 5월 10일 25% 인상 일정을 확인한다."
+      }
+    ]
+  },
+  {
+    "importance": 2,
+    "datePrecision": "source-calendar-day",
+    "id": "eth-security-constantinople-delay",
+    "date": "2019-01-15",
+    "label": "콘스탄티노플 연기",
+    "title": "보안 취약점 발견에 따른 콘스탄티노플 연기",
+    "category": "security",
+    "description": "도입을 앞둔 가스 규칙이 일부 기존 계약에 재진입 위험을 만들 수 있다는 분석에 따라 업그레이드를 연기했다.",
+    "detail": "ChainSecurity의 기술 공개, EF의 연기 결정, Geth 긴급 릴리스를 함께 확인했다. 실제 Constantinople·Petersburg 적용은 2월 28일의 별도 사건이다.",
+    "dateBasis": "ChainSecurity 분석과 EF 보안 공지, Geth 긴급 릴리스가 나온 1월 15일이다. 당초의 활성화 목표일을 실행일로 표시하지 않는다.",
+    "crossCheck": "취약점 발견 업체의 원 분석과 프로토콜 운영 측의 연기 공지, 실제 Geth 릴리스 기록을 대조했다.",
+    "limitations": [
+      "당시 메인넷에서 이 취약점을 악용한 자금 탈취가 이미 발생했다는 기록이 아니다.",
+      "공개 분석은 특정 조건의 계약 위험이며 모든 계약이 동일하게 취약하다는 뜻이 아니다."
+    ],
+    "keywords": [
+      "Constantinople",
+      "ChainSecurity",
+      "reentrancy",
+      "EIP-1283",
+      "연기",
+      "재진입"
+    ],
+    "followUp": "2019-02-28에 Constantinople과 문제의 EIP-1283을 비활성화하는 Petersburg가 같은 적용 높이에서 실행됐다.",
+    "sources": [
+      {
+        "publisher": "Ethereum Foundation",
+        "title": "Security Alert: Ethereum Constantinople Postponement",
+        "url": "https://blog.ethereum.org/2019/01/15/security-alert-ethereum-constantinople-postponement",
+        "type": "primary",
+        "role": "security-decision",
+        "claim": "보안상 연기 결정과 당시 실제 공격 사례가 확인되지 않았다는 조사 범위를 확인한다.",
+        "publishedAt": "2019-01-15",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "ChainSecurity",
+        "title": "Constantinople enables new Reentrancy Attack",
+        "url": "https://www.chainsecurity.com/blog/constantinople-enables-new-reentrancy-attack/index.html",
+        "type": "primary",
+        "role": "independent-discoverer-analysis",
+        "claim": "발견자가 설명한 EIP-1283 관련 재진입 위험을 확인한다.",
+        "publishedAt": "2019-01-15",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Go Ethereum",
+        "title": "Byzantium Revert (v1.8.21)",
+        "url": "https://github.com/ethereum/go-ethereum/releases/tag/v1.8.21",
+        "type": "primary",
+        "role": "implemented-response",
+        "claim": "메인넷 Constantinople 연기를 위한 긴급 클라이언트 릴리스를 확인한다.",
+        "publishedAt": "2019-01-15",
+        "accessedAt": "2026-10-24"
+      }
+    ]
   },
   {
     "id": "ethereum-constantinople-petersburg",
@@ -474,6 +1490,545 @@ export const ETHEREUM_EVENTS = deepFreeze([
     "blockHeight": 7280000,
     "timestampUtc": "2019-02-28T19:52:04Z",
     "blockHash": "0xeddb0590e1095fbe51205a51a297daef7259e229af0432214ae6cb2c1f750750"
+  },
+  {
+    "id": "eth-policy-china-tariff-escalation-threat-2019",
+    "date": "2019-05-05",
+    "label": "대중 관세 재인상 예고",
+    "title": "트럼프, 중국산 상품 관세 25% 재인상 예고",
+    "category": "macro",
+    "importance": 3,
+    "description": "미중 협상 중 트럼프가 약 2천억 달러 중국산 상품의 추가 관세를 다시 올리겠다고 발표했다.",
+    "detail": "일요일 게시물의 새 정책 정보를 마커로 삼는다. 다음 날 아시아 시장 보도와 5월 10일 실제 적용은 별도 단계이며, ETH 가격 변화의 단독 원인으로 취급하지 않는다.",
+    "policyAction": "트럼프는 기존 10% 추가 관세를 다음 금요일 25%로 높이고 추가 품목에도 관세를 부과하겠다고 예고했다.",
+    "marketContext": "Reuters는 5월 6일 중국 주식과 위안화가 약세를 보였으며 협상 지속 소식 뒤 일부 낙폭을 줄였다고 보도했다.",
+    "followUp": "5월 9일 관보와 5월 10일 CBP 지침이 실제 25% 인상을 확인했다. 이미 선적된 상품에는 당시 별도 경과 규정이 있었다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "보존된 5월 5일 대통령 게시물의 날짜를 사용한다. 아카이브의 시각 시간대를 별도 확인하지 않아 UTC 시각을 생성하지 않았다.",
+    "crossCheck": "대통령 게시물 원문을 Reuters의 5월 6일 보도, USTR 관보, CBP 집행 지침과 대조했다.",
+    "limitations": [
+      "게시물의 관세 부담 주체·경제 효과에 대한 주장을 검증된 사실로 채택하지 않는다.",
+      "기사 시점의 중국 주가·환율 변화는 ETH 일봉 수익률과 다르다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "Section 301",
+      "무역협상",
+      "인상 예고"
+    ],
+    "sources": [
+      {
+        "title": "Tweets of May 5, 2019",
+        "url": "https://www.presidency.ucsb.edu/documents/tweets-may-5-2019",
+        "publisher": "The American Presidency Project — Donald J. Trump post archive",
+        "type": "primary",
+        "publishedAt": "2019-05-05",
+        "accessedAt": "2026-10-24",
+        "role": "policy-announcement",
+        "claim": "10%에서 25%로 인상하겠다는 대통령 발언을 보존한다."
+      },
+      {
+        "title": "China stocks fall most in over 3 years on tariff threats, yuan tumbles",
+        "url": "https://www.reuters.com/article/world/china-stocks-fall-most-in-over-3-years-on-tariff-threats-yuan-tumbles-idUSKCN1SC0MK/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2019-05-06",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-market-report",
+        "claim": "5월 6일 중국 주식·위안화 및 협상 지속 소식에 대한 반응을 보도한다."
+      },
+      {
+        "title": "Notice of Modification of Section 301 Action — 84 FR 20459",
+        "url": "https://www.govinfo.gov/content/pkg/FR-2019-05-09/pdf/2019-09681.pdf",
+        "publisher": "Office of the United States Trade Representative / Federal Register",
+        "type": "primary",
+        "publishedAt": "2019-05-09",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-legal-action",
+        "claim": "5월 10일 인상 적용을 정한 관보 원문이다."
+      },
+      {
+        "title": "CSMS# 19-000238 — UPDATE: Section 301 (Tranche 3) Duties as of May 10, 2019",
+        "url": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/24419b4",
+        "publisher": "U.S. Customs and Border Protection",
+        "type": "primary",
+        "publishedAt": "2019-05-10",
+        "accessedAt": "2026-10-24",
+        "role": "implementation-guidance",
+        "claim": "실제 적용과 선적 시점별 경과 규정을 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-osaka-trade-truce-2019",
+    "date": "2019-06-29",
+    "label": "오사카 무역협상 재개",
+    "title": "미중 오사카 회담, 추가 관세 보류·협상 재개",
+    "category": "macro",
+    "importance": 2,
+    "description": "오사카 G20 회담 뒤 미국은 새 대중 관세를 당분간 추가하지 않고 협상을 재개하겠다고 발표했다.",
+    "detail": "기존 관세는 유지된 가운데 추가 확대를 보류한 전환점이다. 주말 회담과 월요일 주식시장 관측을 같은 시각의 움직임으로 합치지 않는다.",
+    "policyAction": "트럼프는 기자회견에서 기존 관세를 없애지 않되 아직 관세가 붙지 않은 중국산 품목에 추가 관세를 당분간 부과하지 않겠다고 밝혔다.",
+    "marketContext": "Reuters는 7월 1일 협상 재개와 화웨이 관련 완화 기대 속 미국 기술주가 올랐다고 보도했다.",
+    "followUp": "8월 1일 트럼프는 추가 중국산 품목의 9월 관세 계획을 발표하며 긴장을 다시 높였다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "백악관의 6월 29일 일본 현지 기자회견 날짜를 사용한다. 7월 1일 시장 기사일과 구분한다.",
+    "crossCheck": "백악관 기자회견의 기존·추가 관세 구분을 Reuters 시장 보도 및 8월 대통령 게시물과 대조했다.",
+    "limitations": [
+      "협상 재개는 포괄 합의나 기존 관세 철폐가 아니다.",
+      "기술주 보도에는 화웨이와 금리 기대도 포함돼 있으며 ETH에 대한 독립 인과 검증은 없다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "G20",
+      "오사카",
+      "협상 재개",
+      "유예"
+    ],
+    "sources": [
+      {
+        "title": "Remarks by President Trump in Press Conference | Osaka, Japan",
+        "url": "https://trumpwhitehouse.archives.gov/briefings-statements/remarks-president-trump-press-conference-osaka-japan/",
+        "publisher": "The White House — archived",
+        "type": "primary",
+        "publishedAt": "2019-06-29",
+        "accessedAt": "2026-10-24",
+        "role": "policy-announcement",
+        "claim": "기존 관세 유지와 추가 관세 보류·협상 재개를 확인한다."
+      },
+      {
+        "title": "Wall Street rallies as trade optimism lifts tech stocks",
+        "url": "https://www.brecorder.com/news/506696/wall-street-rallies-as-trade-optimism-lifts-tech-stocks",
+        "publisher": "Reuters, republished by Business Recorder",
+        "type": "secondary",
+        "publishedAt": "2019-07-01",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-market-report",
+        "claim": "7월 1일 기술주와 위험선호의 반응을 보도한다."
+      },
+      {
+        "title": "Tweets of August 1, 2019",
+        "url": "https://www.presidency.ucsb.edu/documents/tweets-august-1-2019",
+        "publisher": "The American Presidency Project — Donald J. Trump post archive",
+        "type": "primary",
+        "publishedAt": "2019-08-01",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-policy-reversal",
+        "claim": "8월 1일 새 추가 관세 계획 발표를 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-fed-2019-easing",
+    "date": "2019-07-31",
+    "label": "美 금리 인하",
+    "title": "연준, 2008년 이후 첫 금리 인하",
+    "category": "macro",
+    "importance": 2,
+    "description": "연준이 정책금리 목표 범위를 2.00–2.25%로 25bp 낮췄다.",
+    "detail": "달러 금리 방향이 인상에서 인하로 바뀐 결정이다. 같은 성명은 보유 증권 축소를 8월에 종료한다고 밝혔다. 정책일은 7월 31일이며 일부 국제 보도의 8월 1일 게시일을 사건일로 쓰지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "2019-07-31 FOMC 발표일. Reuters의 8월 1일 갱신 보도 본문이 전날 수요일 결정을 확인한다.",
+    "crossCheck": "정책을 발표한 기관의 원문과 별도 언론사의 당시 보도를 대조해 결정 내용과 날짜를 확인했다. 언론의 전망이나 가격 해석은 확정된 정책 사실로 사용하지 않는다.",
+    "limitations": [
+      "사건 표시와 ETH 가격의 동시 관측은 인과관계를 입증하지 않는다."
+    ],
+    "keywords": [
+      "Fed",
+      "FOMC",
+      "금리 인하",
+      "달러"
+    ],
+    "sources": [
+      {
+        "title": "FOMC statement — 2019-07-31",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20190731a.htm",
+        "publisher": "Federal Reserve",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "목표 범위를 2.00–2.25%로 낮추고 증권 보유액 축소를 8월에 끝내겠다고 발표했다.",
+        "publishedAt": "2019-07-31",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Fed cuts interest rates, signals it may not need to do more",
+        "url": "https://www.reuters.com/article/business/fed-cuts-interest-rates-signals-it-may-not-need-to-do-more-idUSKCN1UQ0DS/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "수요일인 2019-07-31의 25bp 인하 결정과 2008년 이후 첫 인하를 보도한다.",
+        "publishedAt": "2019-08-01",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "목표 범위 2.00–2.25%; 25bp 인하."
+  },
+  {
+    "id": "eth-policy-china-list4-tariff-threat-2019",
+    "date": "2019-08-01",
+    "label": "중국 잔여품목 관세 예고",
+    "title": "트럼프, 중국산 추가 3천억 달러 품목 관세 예고",
+    "category": "macro",
+    "importance": 3,
+    "description": "오사카 협상 재개 이후 트럼프가 아직 추가 관세가 없던 중국산 품목으로 대상 확대를 예고했다.",
+    "detail": "새 예고의 날짜를 표시하며 전체 품목이 그날 또는 9월 1일에 일괄 과세됐다고 쓰지 않는다. 후속 유예와 요율 수정이 이어졌다.",
+    "policyAction": "트럼프는 약 3천억 달러 중국산 수입품에 9월 1일부터 10% 추가 관세를 적용하겠다고 발표했다.",
+    "marketContext": "Reuters는 8월 1일 미국 주식이 장중 상승에서 하락으로 전환했고, 전날 연준 결정과 금리 기대 변화도 배경에 있었다고 보도했다.",
+    "followUp": "8월 13일 일부 품목은 12월 15일로 연기됐고 일부는 제외됐다. 8월 23일 미국은 예고한 10%를 15%로 올리는 계획을 발표했다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "8월 1일 대통령 게시물 날짜를 사용한다. Reuters 재배포의 8월 2일 게시일과 본문 8월 1일 거래일을 구분한다.",
+    "crossCheck": "대통령 게시물, USTR 후속 품목별 일정·요율 발표, Reuters의 해당 거래일 보도를 대조했다.",
+    "limitations": [
+      "추가 관세 계획의 약 3천억 달러는 당시 제시한 수입품 범위이며 ETH 시가총액·손실액이 아니다.",
+      "기사의 주식시장 반응은 ETH의 동일 방향 반응을 입증하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "Section 301",
+      "List 4",
+      "소비재",
+      "관세 위협"
+    ],
+    "sources": [
+      {
+        "title": "Tweets of August 1, 2019",
+        "url": "https://www.presidency.ucsb.edu/documents/tweets-august-1-2019",
+        "publisher": "The American Presidency Project — Donald J. Trump post archive",
+        "type": "primary",
+        "publishedAt": "2019-08-01",
+        "accessedAt": "2026-10-24",
+        "role": "policy-announcement",
+        "claim": "추가 중국산 품목의 9월 1일 10% 관세 계획을 보존한다."
+      },
+      {
+        "title": "Wall St dragged down by Trump trade tweet",
+        "url": "https://www.moneyweb.co.za/news-fast-news/wall-st-dragged-down-by-trump-trade-tweet/",
+        "publisher": "Reuters, republished by Moneyweb",
+        "type": "secondary",
+        "publishedAt": "2019-08-02",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-market-report",
+        "claim": "8월 1일 장중 주가 전환과 다른 거시 배경을 보도한다."
+      },
+      {
+        "title": "USTR Announces Next Steps on Proposed 10 Percent Tariff on Imports from China",
+        "url": "https://www.ustr.gov/about-us/policy-offices/press-office/press-releases/2019/august/ustr-announces-next-steps-proposed",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2019-08-13",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-partial-delay",
+        "claim": "일부 품목의 12월 유예와 제외를 확인한다."
+      },
+      {
+        "title": "USTR Statement on Section 301 Tariff Action Regarding China",
+        "url": "https://www.ustr.gov/about-us/policy-offices/press-office/press-releases/2019/august/ustr-statement-section-301-tariff",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2019-08-23",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-rate-change",
+        "claim": "예고한 10% 요율의 15% 상향 계획을 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-china-currency-designation-2019",
+    "date": "2019-08-05",
+    "label": "중국 환율조작국 지정",
+    "title": "미국 재무부, 중국 환율조작국 지정",
+    "category": "macro",
+    "importance": 3,
+    "description": "관세 갈등이 환율정책 충돌로 번지며 미국 재무부가 중국을 환율조작국으로 지정했다.",
+    "detail": "지정은 미국 정부의 법적·정책적 판단이라는 사실로 기록한다. 위안화 약세와 정규장 하락이 먼저 발생한 뒤 늦게 지정이 발표됐으므로 하루 전체 움직임의 선행 원인으로 쓰지 않는다.",
+    "policyAction": "재무부는 1988년 법에 따라 중국을 환율조작국으로 판단하고 IMF와 협의하겠다고 발표했다.",
+    "marketContext": "Reuters는 지정 발표 뒤 미국 주가지수 선물 약세를 보도했다. 별도 종합 기사에서는 중국 인민은행이 경쟁적 평가절하를 부인했다고 전했다.",
+    "followUp": "2020년 1월 13일 재무부 보고서는 어느 주요 교역국도 환율조작 기준을 충족하지 않는다고 밝혔고 중국은 관찰대상 명단에 남았다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "재무부 발표일 8월 5일을 사용한다. 종합 Reuters 기사 헤더의 8월 6일 UTC와 발표 이후 선물 기사일을 구분한다.",
+    "crossCheck": "재무부 공식 지정과 해제 시점의 보고서, Reuters 발표 이후 선물 보도 및 양측 입장 보도를 대조했다. Reuters 두 기사는 같은 통신사다.",
+    "limitations": [
+      "미국 정부의 지정 사실과 중국이 실제 환율을 부당 조작했다는 독립적인 경제학적 결론은 다르다.",
+      "정규장 주가, 야간 선물, 위안화, ETH의 관측 창을 동일시하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "위안화",
+      "환율",
+      "환율조작국",
+      "무역전쟁",
+      "Treasury"
+    ],
+    "sources": [
+      {
+        "title": "Treasury Designates China as a Currency Manipulator",
+        "url": "https://home.treasury.gov/news/press-releases/sm751",
+        "publisher": "U.S. Department of the Treasury",
+        "type": "primary",
+        "publishedAt": "2019-08-05",
+        "accessedAt": "2026-10-24",
+        "role": "official-designation",
+        "claim": "미국 재무부의 법적 지정과 IMF 협의 계획을 확인한다."
+      },
+      {
+        "title": "S&P 500 futures fall after U.S. Treasury calls China currency manipulator",
+        "url": "https://www.reuters.com/article/business/sp-500-futures-fall-after-us-treasury-calls-china-currency-manipulator-idUSKCN1UV2D7/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2019-08-05",
+        "accessedAt": "2026-10-24",
+        "role": "post-announcement-market-report",
+        "claim": "지정 뒤 미국 주가지수 선물 약세를 보도한다."
+      },
+      {
+        "title": "U.S. designates China a currency manipulator, escalating trade war",
+        "url": "https://www.reuters.com/article/us-china-markets/u-s-designates-china-a-currency-manipulator-escalating-trade-war-idUSKCN1UV061/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2019-08-06",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-policy-report",
+        "claim": "발표 순서와 중국 측 경쟁적 평가절하 부인을 보도한다."
+      },
+      {
+        "title": "Treasury Releases Report on Macroeconomic and Foreign Exchange Policies of Major Trading Partners of the United States",
+        "url": "https://home.treasury.gov/news/press-releases/sm873",
+        "publisher": "U.S. Department of the Treasury",
+        "type": "primary",
+        "publishedAt": "2020-01-13",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-designation-change",
+        "claim": "2020년 1월 조작국 판단 변경과 관찰대상 유지 사실을 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-china-consumer-tariff-delay-2019",
+    "date": "2019-08-13",
+    "label": "소비재 관세 일부 유예",
+    "title": "미국, 중국산 일부 소비재 관세를 12월로 유예",
+    "category": "macro",
+    "importance": 2,
+    "description": "미국이 새 관세 대상 중 스마트폰·노트북 등 일부 품목의 적용을 늦추고 일부 상품을 목록에서 제외했다.",
+    "detail": "8월 1일의 전면 확대 예고가 품목별로 달라진 사건이다. 기존 관세나 모든 9월 관세의 철폐로 해석하지 않는다.",
+    "policyAction": "USTR는 일부 품목을 건강·안전 등 이유로 제외하고, 휴대전화·노트북 등 특정 품목의 추가 관세를 12월 15일로 미뤘다.",
+    "marketContext": "Reuters는 이날 선택적 관세 유예 발표 후 미국 주식시장이 상승했다고 보도했다.",
+    "followUp": "8월 23일 미국이 해당 관세 요율 인상 계획을 발표했다. 12월 시행 예정 목록은 12월 합의 뒤 추가 공지가 있을 때까지 정지됐다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "USTR 발표일 8월 13일을 사용한다. 9월 1일·12월 15일의 서로 다른 적용 예정일과 구분한다.",
+    "crossCheck": "USTR 원문을 Reuters 당일 시장 보도와 후속 요율 발표·12월 법적 정지 문서로 대조했다.",
+    "limitations": [
+      "유예는 특정 품목에 한정됐으며 이미 시행된 관세를 모두 없앤 조치가 아니다.",
+      "보도된 주식 상승을 ETH의 인과효과로 바꾸지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "List 4",
+      "스마트폰",
+      "노트북",
+      "관세 유예"
+    ],
+    "sources": [
+      {
+        "title": "USTR Announces Next Steps on Proposed 10 Percent Tariff on Imports from China",
+        "url": "https://www.ustr.gov/about-us/policy-offices/press-office/press-releases/2019/august/ustr-announces-next-steps-proposed",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2019-08-13",
+        "accessedAt": "2026-10-24",
+        "role": "partial-policy-delay",
+        "claim": "12월 15일로 미룬 품목과 일부 제외를 확인한다."
+      },
+      {
+        "title": "Wall Street rebounds as tariff delay prompts rally",
+        "url": "https://www.investing.com/news/stock-market-news/futures-slide-amid-geopolitical-tensions-trade-worries-1953540",
+        "publisher": "Reuters, republished by Investing.com",
+        "type": "secondary",
+        "publishedAt": "2019-08-13",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-market-report",
+        "claim": "선택적 유예 이후 미국 주식 상승을 보도한다."
+      },
+      {
+        "title": "USTR Statement on Section 301 Tariff Action Regarding China",
+        "url": "https://www.ustr.gov/about-us/policy-offices/press-office/press-releases/2019/august/ustr-statement-section-301-tariff",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2019-08-23",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-rate-change",
+        "claim": "추가 요율 변경 발표를 확인한다."
+      },
+      {
+        "title": "Notice of Modification of Section 301 Action — FR Doc. 2019-27306, public inspection copy",
+        "url": "https://s3.amazonaws.com/public-inspection.federalregister.gov/2019-27306.pdf",
+        "publisher": "Office of the United States Trade Representative / Federal Register",
+        "type": "primary",
+        "publishedAt": "2019-12-13",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-legal-suspension",
+        "claim": "12월 예정 목록의 무기한 정지를 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-china-retaliatory-escalation-2019",
+    "date": "2019-08-23",
+    "label": "미중 보복관세 재확대",
+    "title": "미중 보복관세 발표와 미국 추가 요율 인상 예고",
+    "category": "macro",
+    "importance": 3,
+    "description": "중국의 보복관세 발표에 이어 미국이 기존·예정 대중 관세율을 추가로 높이겠다고 발표했다.",
+    "detail": "Reuters는 중국 발표와 트럼프의 대중 발언 뒤 정규장 주식 하락을 보도했으며, 미국의 구체적 추가 요율 발표는 정규장 종료 뒤였다고 명시했다. 순서를 뒤집어 인과관계를 만들지 않는다.",
+    "policyAction": "USTR는 약 2,500억 달러 대상 25%를 30%로 높이는 절차와 약 3천억 달러 대상 예정 요율 10%를 15%로 높이는 방침을 발표했다.",
+    "marketContext": "Reuters는 무역갈등 심화 우려 속 주식·원유 약세와 안전자산 선호를 보도했으며 미국 요율 대응의 발표 순서를 구분했다.",
+    "followUp": "25%에서 30%로의 인상은 당초 10월 1일 계획 뒤 10월 15일로 조정됐고, 10월 11일 미국이 그 인상을 보류했다. 12월 예정 추가 목록도 이후 정지됐다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "USTR 공식 발표일 8월 23일을 사용한다. Reuters 현재 헤더의 8월 24일 UTC와 미국 금요일 사건일을 구분한다.",
+    "crossCheck": "USTR 요율 계획을 Reuters 발표 순서 보도, 10월 백악관 인상 보류 기록, 12월 정지 문서와 대조했다.",
+    "limitations": [
+      "미국이 예고한 30% 관세를 8월 23일 실제 징수했거나 이후 그대로 시행했다고 기록하지 않는다.",
+      "하루에 여러 발표가 겹쳤고, 전체 일봉을 특정 후행 발언의 효과로 설명하지 않는다.",
+      "ETH 동반 반응에 대한 직접 인과 검증은 없다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "보복관세",
+      "Section 301",
+      "무역전쟁",
+      "인상 예고"
+    ],
+    "sources": [
+      {
+        "title": "USTR Statement on Section 301 Tariff Action Regarding China",
+        "url": "https://www.ustr.gov/about-us/policy-offices/press-office/press-releases/2019/august/ustr-statement-section-301-tariff",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2019-08-23",
+        "accessedAt": "2026-10-24",
+        "role": "policy-rate-announcement",
+        "claim": "기존 25%의 30% 상향 절차와 예정 10%의 15% 변경을 발표한다."
+      },
+      {
+        "title": "Trump heaps another 5% tariff on Chinese goods in latest tit-for-tat escalation",
+        "url": "https://www.reuters.com/article/world/trump-heaps-another-5-tariff-on-chinese-goods-in-latest-tit-for-tat-escalation-idUSKCN1VD21E/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2019-08-24",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-policy-and-market-report",
+        "claim": "미중 발표와 정규장·장후의 시간 순서를 보도한다."
+      },
+      {
+        "title": "Remarks by President Trump and Vice Premier Liu He of the People’s Republic of China in a Meeting",
+        "url": "https://trumpwhitehouse.archives.gov/briefings-statements/remarks-president-trump-vice-premier-liu-peoples-republic-china-meeting/",
+        "publisher": "The White House — archived",
+        "type": "primary",
+        "publishedAt": "2019-10-11",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-rate-pause",
+        "claim": "10월 예정 25%에서 30% 인상의 보류를 확인한다."
+      },
+      {
+        "title": "Notice of Modification of Section 301 Action — FR Doc. 2019-27306, public inspection copy",
+        "url": "https://s3.amazonaws.com/public-inspection.federalregister.gov/2019-27306.pdf",
+        "publisher": "Office of the United States Trade Representative / Federal Register",
+        "type": "primary",
+        "publishedAt": "2019-12-13",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-list-suspension",
+        "claim": "12월 예정 추가 목록의 정지를 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-phase-one-outline-2019",
+    "date": "2019-10-11",
+    "label": "1단계 합의 윤곽",
+    "title": "미중 1단계 합의 윤곽 발표·10월 관세 인상 보류",
+    "category": "macro",
+    "importance": 2,
+    "description": "미중 협상 뒤 1단계 합의의 윤곽이 공개되고 다음 주로 예정된 관세율 인상이 보류됐다.",
+    "detail": "이날의 정치적 발표는 서명 완료나 협정 발효와 다르다. 백악관 발언에서도 문서화를 위해 추가 시간이 필요하다고 설명했다.",
+    "policyAction": "미국은 10월 15일 예정된 약 2,500억 달러 대상 25%에서 30%로의 관세 인상을 진행하지 않겠다고 밝혔다.",
+    "marketContext": "Reuters는 합의 기대 속 미국 주가가 상승했으나 발표 뒤 장중 고점보다 낮아졌고, 합의 문서와 세부사항이 아직 남아 있다고 보도했다.",
+    "followUp": "12월 13일 양측은 1단계 합의 도달을 발표했고, 실제 서명은 2020년 1월 15일, 발효는 2월 14일이었다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "백악관 회동 기록 날짜 10월 11일을 사용한다. 재배포 기사의 이른 게시 시각은 갱신된 본문 사건의 정확한 시각으로 쓰지 않는다.",
+    "crossCheck": "백악관 회동 발언을 Reuters 협상·시장 보도, USTR 12월 발표 및 후속 발효 확인과 대조했다.",
+    "limitations": [
+      "합의 윤곽 공개 당시 12월 관세 계획까지 모두 취소된 것은 아니다.",
+      "합의 기대가 발표 전 가격에 반영됐을 수 있으며 주가 움직임을 ETH 반응으로 복사하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "1단계 합의",
+      "Phase One",
+      "관세 인상 보류"
+    ],
+    "sources": [
+      {
+        "title": "Remarks by President Trump and Vice Premier Liu He of the People’s Republic of China in a Meeting",
+        "url": "https://trumpwhitehouse.archives.gov/briefings-statements/remarks-president-trump-vice-premier-liu-peoples-republic-china-meeting/",
+        "publisher": "The White House — archived",
+        "type": "primary",
+        "publishedAt": "2019-10-11",
+        "accessedAt": "2026-10-24",
+        "role": "policy-outline-and-pause",
+        "claim": "문서화가 남은 합의 윤곽과 10월 관세 인상 보류를 확인한다."
+      },
+      {
+        "title": "U.S. outlines 'Phase 1' trade deal with China, suspends October tariff hike",
+        "url": "https://www.streetinsider.com/ETFs/U.S.%2Boutlines%2BPhase%2B1%2Btrade%2Bdeal%2Bwith%2BChina,%2Bsuspends%2BOctober%2Btariff%2Bhike/16002465.html",
+        "publisher": "Reuters, republished by StreetInsider",
+        "type": "secondary",
+        "publishedAt": "2019-10-11",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-policy-and-market-report",
+        "claim": "미완성 합의의 성격과 주식시장 관측을 보도한다."
+      },
+      {
+        "title": "United States and China Reach Phase One Trade Agreement",
+        "url": "https://ustr.gov/about-us/policy-offices/press-office/press-releases/2019/december/united-states-and-china-reach",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2019-12-13",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-agreement-announcement",
+        "claim": "12월 합의 발표를 확인한다."
+      },
+      {
+        "title": "USTR Announces Formation of Bilateral Evaluation and Dispute Resolution Office Pursuant to U.S.-China Phase One Agreement",
+        "url": "https://www.ustr.gov/about-us/policy-offices/press-office/press-releases/2020/february/ustr-announces-formation-bilateral-evaluation-and-dispute-resolution-office-pursuant-us-china-phase",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2020-02-14",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-effective-date",
+        "claim": "서명일과 실제 2월 14일 발효를 확인한다."
+      }
+    ]
   },
   {
     "id": "ethereum-istanbul",
@@ -544,6 +2099,465 @@ export const ETHEREUM_EVENTS = deepFreeze([
     "blockHash": "0x451226b98bf4f784314e9ca2daaa30dc664a387c342ef775ba2d88682a27c084"
   },
   {
+    "id": "eth-policy-phase-one-agreement-announcement-2019",
+    "date": "2019-12-13",
+    "label": "미중 1단계 합의 발표",
+    "title": "미중 1단계 합의 도달·12월 추가 관세 중단 발표",
+    "category": "macro",
+    "importance": 3,
+    "description": "미중이 1단계 무역합의 도달을 발표했고 곧 시행될 예정이던 추가 관세 목록은 정지됐다.",
+    "detail": "합의 발표, 정지 문서의 공개·관보 게시, 실제 협정 서명·발효 날짜를 구분한다. 기존 대중 관세의 상당 부분은 남아 있었다.",
+    "policyAction": "USTR는 1단계 합의와 관세 일부 조정을 발표했다. 같은 날 공개된 정지 문서는 12월 15일 예정 15% 추가 관세 목록의 적용을 무기한 멈췄다.",
+    "marketContext": "AP는 전날 합의 기대에 주가가 오른 뒤 12월 13일 실제 확인 때는 미국 주식의 반응이 제한적이었다고 보도했다.",
+    "followUp": "기존 약 2,500억 달러 대상 25% 관세는 유지됐다. 다른 대상의 15%에서 7.5% 인하는 2020년 2월 14일 적용으로 확정됐다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "USTR 합의 발표 및 정지 문서의 12월 13일 공개일을 사용한다. 정지 문서는 12월 18일 관보 게시, 12월 15일 예정 관세 중단을 명시한다.",
+    "crossCheck": "USTR 합의 발표, 공개열람용 법적 정지 문서, AP 시장 보도, 후속 인하 관보를 대조했다.",
+    "limitations": [
+      "합의 발표일에 협정이 이미 서명·발효됐거나 모든 관세가 철폐됐다고 쓰지 않는다.",
+      "전날 보도·기대와 당일 확정 발표가 겹쳐 하루 가격을 단일 뉴스의 효과로 해석할 수 없다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "Phase One",
+      "1단계 합의",
+      "관세 중단",
+      "List 4B"
+    ],
+    "sources": [
+      {
+        "title": "United States and China Reach Phase One Trade Agreement",
+        "url": "https://ustr.gov/about-us/policy-offices/press-office/press-releases/2019/december/united-states-and-china-reach",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2019-12-13",
+        "accessedAt": "2026-10-24",
+        "role": "agreement-announcement",
+        "claim": "1단계 합의 및 잔존 관세·일부 인하 방침을 발표한다."
+      },
+      {
+        "title": "Notice of Modification of Section 301 Action — FR Doc. 2019-27306, public inspection copy",
+        "url": "https://s3.amazonaws.com/public-inspection.federalregister.gov/2019-27306.pdf",
+        "publisher": "Office of the United States Trade Representative / Federal Register",
+        "type": "primary",
+        "publishedAt": "2019-12-13",
+        "accessedAt": "2026-10-24",
+        "role": "legal-suspension-public-inspection",
+        "claim": "12월 13일 공개와 12월 15일 예정 관세 정지를 확인한다."
+      },
+      {
+        "title": "Markets have muted reaction to long-awaited China trade deal",
+        "url": "https://www.clickorlando.com/business/2019/12/13/us-stocks-open-lower-as-traders-await-clarity-on-trade-deal/",
+        "publisher": "Associated Press, republished by ClickOrlando",
+        "type": "secondary",
+        "publishedAt": "2019-12-13",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-market-report",
+        "claim": "기대가 선반영된 뒤 제한적인 주가 반응을 보도한다."
+      },
+      {
+        "title": "Notice of Modification of Section 301 Action — 85 FR 3741",
+        "url": "https://ustr.gov/sites/default/files/enforcement/301Investigations/Notice_of_Modification-January_2020.pdf",
+        "publisher": "Office of the United States Trade Representative / Federal Register",
+        "type": "primary",
+        "publishedAt": "2020-01-22",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-legal-rate-reduction",
+        "claim": "7.5% 인하의 실제 적용일을 2월 14일로 정한다."
+      }
+    ]
+  },
+  {
+    "id": "ethereum-muir-glacier",
+    "date": "2020-01-02",
+    "label": "Muir Glacier",
+    "title": "뮤어 글레이셔: 난이도 폭탄 연기",
+    "category": "protocol",
+    "importance": 2,
+    "description": "작업증명 체인의 블록 생성 지연을 완화하기 위해 난이도 폭탄을 뒤로 미뤘다.",
+    "detail": "EIP-2384에 따른 난이도 규칙 변경이다. 당시의 PoS 준비 과정에 속하며 이 업그레이드 자체가 PoS 전환을 완료한 것은 아니다.",
+    "datePrecision": "block-timestamp",
+    "dateBasis": "독립 운영 탐색기의 블록 9,200,000 헤더 시각 2020-01-02T08:30:49Z를 UTC 날짜로 사용한다. 사전 공지의 예상 일자와 구분한다.",
+    "crossCheck": "EF 당시 공지와 공식 연대표를 대조하고 Blockscout의 실제 블록 응답으로 높이·해시·시각을 별도 확인했다. EF 공지와 ethereum.org를 서로 독립된 운영기관으로 세지는 않는다.",
+    "limitations": [
+      "블록 시각은 원장의 헤더 기록이며 모든 노드의 수신 순간이나 사건 시점의 ETH 체결가가 아니다. 업그레이드의 단독 가격 효과는 추정하지 않는다."
+    ],
+    "keywords": [
+      "Muir Glacier",
+      "EIP-2384",
+      "난이도 폭탄",
+      "PoW"
+    ],
+    "facts": {
+      "block": 9200000,
+      "blockHash": "0x6ba9486095de7d96a75b67954cfe2581234eae1ef2a92ab03b84fc2eae2deb8a",
+      "utcTimestamp": "2020-01-02T08:30:49Z"
+    },
+    "sources": [
+      {
+        "publisher": "Ethereum Foundation",
+        "title": "Ethereum Muir Glacier Upgrade Announcement",
+        "url": "https://blog.ethereum.org/2019/12/23/ethereum-muir-glacier-upgrade-announcement",
+        "type": "primary",
+        "role": "upgrade-announcement",
+        "claim": "적용 높이 9,200,000을 확인한다. 공지의 1월 1일 예상과 실제 1월 2일을 구분한다.",
+        "publishedAt": "2019-12-23",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "ethereum.org",
+        "title": "Timeline of all Ethereum forks",
+        "url": "https://ethereum.org/ethereum-forks/",
+        "type": "primary",
+        "role": "same-organization-retrospective",
+        "claim": "공식 기술 연대표의 실제 업그레이드 날짜와 적용 높이를 확인한다. 연대표의 가격 수치는 사용하지 않는다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Blockscout",
+        "title": "Ethereum block 9200000",
+        "url": "https://eth.blockscout.com/api/v2/blocks/9200000",
+        "type": "primary",
+        "role": "independent-observed-block-header",
+        "claim": "실제 메인넷 블록 높이·해시·UTC 헤더 시각을 확인한다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Ethereum EIPs",
+        "title": "EIP-2384: Muir Glacier Difficulty Bomb Delay",
+        "url": "https://eips.ethereum.org/EIPS/eip-2384",
+        "type": "primary",
+        "role": "upgrade-specification",
+        "claim": "업그레이드에 포함된 규칙을 명세 원문에서 확인한다. EIP 작성일은 실행일이 아니다.",
+        "publishedAt": "2019-11-20",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "blockHeight": 9200000,
+    "timestampUtc": "2020-01-02T08:30:49Z",
+    "blockHash": "0x6ba9486095de7d96a75b67954cfe2581234eae1ef2a92ab03b84fc2eae2deb8a"
+  },
+  {
+    "id": "eth-policy-phase-one-agreement-signing-2020",
+    "date": "2020-01-15",
+    "label": "미중 1단계 합의 서명",
+    "title": "미중 1단계 무역합의 서명",
+    "category": "macro",
+    "importance": 2,
+    "description": "미국과 중국이 1단계 무역합의에 서명하며 2018년 이후 관세 갈등의 일부를 제도적 합의로 전환했다.",
+    "detail": "12월의 합의 발표와 1월의 서명, 2월의 발효를 별도 단계로 보존한다. 모든 갈등 해결이나 관세 전면 철폐를 의미하지 않는다.",
+    "policyAction": "양측은 지식재산·기술이전·농업·금융서비스·환율·구매 약정 등을 포함하는 1단계 합의에 서명했다.",
+    "marketContext": "Reuters는 합의에 대한 시장의 안도와 함께 남은 쟁점·관세·이행 가능성에 대한 회의도 보도했다.",
+    "followUp": "USTR는 협정이 2월 14일 발효됐다고 확인했다. 일부 추가 관세는 그날 15%에서 7.5%로 낮아졌으나 기존 25% 대상은 남았다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "백악관 서명 기록의 1월 15일을 사용한다. 관보 게시 1월 22일, 협정·일부 관세 인하의 2월 14일 적용과 구분한다.",
+    "crossCheck": "백악관 서명 사실, Reuters 보도, USTR 발효 확인 및 관세 인하 관보 원문을 대조했다.",
+    "limitations": [
+      "공식 문서의 향후 경제성과·구매 목표를 실현된 성과로 간주하지 않는다.",
+      "광범위한 시장 맥락을 제공하는 사건이며 ETH 가격의 독립적인 인과효과를 추정하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "Phase One",
+      "1단계 합의",
+      "무역협정",
+      "서명"
+    ],
+    "sources": [
+      {
+        "title": "President Donald J. Trump is Signing a Landmark Phase One Trade Agreement with China",
+        "url": "https://trumpwhitehouse.archives.gov/briefings-statements/president-donald-j-trump-signing-landmark-phase-one-trade-agreement-china/",
+        "publisher": "The White House — archived",
+        "type": "primary",
+        "publishedAt": "2020-01-15",
+        "accessedAt": "2026-10-24",
+        "role": "agreement-signing-record",
+        "claim": "1월 15일 서명과 합의의 주요 분야를 확인한다."
+      },
+      {
+        "title": "China Signs 'Phase 1' Trade Deal with United States",
+        "url": "https://gcaptain.com/china-signs-phase-1-trade-deal-with-united-states/",
+        "publisher": "Reuters, republished by gCaptain",
+        "type": "secondary",
+        "publishedAt": "2020-01-15",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-policy-and-market-report",
+        "claim": "합의에 대한 안도와 미해결 쟁점을 보도한다."
+      },
+      {
+        "title": "USTR Announces Formation of Bilateral Evaluation and Dispute Resolution Office Pursuant to U.S.-China Phase One Agreement",
+        "url": "https://www.ustr.gov/about-us/policy-offices/press-office/press-releases/2020/february/ustr-announces-formation-bilateral-evaluation-and-dispute-resolution-office-pursuant-us-china-phase",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2020-02-14",
+        "accessedAt": "2026-10-24",
+        "role": "official-effective-date",
+        "claim": "실제 2월 14일 발효를 확인한다."
+      },
+      {
+        "title": "Notice of Modification of Section 301 Action — 85 FR 3741",
+        "url": "https://ustr.gov/sites/default/files/enforcement/301Investigations/Notice_of_Modification-January_2020.pdf",
+        "publisher": "Office of the United States Trade Representative / Federal Register",
+        "type": "primary",
+        "publishedAt": "2020-01-22",
+        "accessedAt": "2026-10-24",
+        "role": "legal-tariff-reduction",
+        "claim": "2월 14일 일부 관세 인하 및 관련 목록의 경과를 확인한다."
+      },
+      {
+        "title": "United States and China Reach Phase One Trade Agreement",
+        "url": "https://ustr.gov/about-us/policy-offices/press-office/press-releases/2019/december/united-states-and-china-reach",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2019-12-13",
+        "accessedAt": "2026-10-24",
+        "role": "prior-agreement-and-retained-tariffs",
+        "claim": "앞선 합의 발표와 잔존 25% 대상 관세를 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-fed-emergency-cut-march3",
+    "date": "2020-03-03",
+    "label": "연준 긴급 인하",
+    "title": "코로나19 대응 연준의 50bp 긴급 금리 인하",
+    "category": "macro",
+    "importance": 2,
+    "description": "연준이 예정된 정례 회의 전에 50bp 긴급 인하를 발표했다.",
+    "detail": "코로나19가 경제에 주는 위험을 이유로 연방기금금리 목표 범위를 1.00–1.25%로 낮췄다. 3월 15일의 추가 인하와 3월 23일의 자산매입 확대는 별도 결정이다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공식 발표문에 명시된 발표 날짜를 사건일로 사용한다. 시행·결제 시점이나 문서의 후속 갱신일과 구분한다.",
+    "crossCheck": "정책을 발표한 기관의 원문과 별도 언론사의 당시 보도를 대조해 결정 내용과 날짜를 확인했다. 언론의 전망이나 가격 해석은 확정된 정책 사실로 사용하지 않는다.",
+    "limitations": [
+      "사건 표시와 ETH 가격의 동시 관측은 인과관계를 입증하지 않는다."
+    ],
+    "keywords": [
+      "코로나19",
+      "Fed",
+      "긴급 금리 인하",
+      "유동성"
+    ],
+    "sources": [
+      {
+        "title": "FOMC statement — 2020-03-03",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20200303a.htm",
+        "publisher": "Federal Reserve",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "코로나19 위험에 대응해 목표 범위를 1.00–1.25%로 50bp 낮췄다.",
+        "publishedAt": "2020-03-03",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Fed cuts rates to blunt coronavirus impact, markets drop",
+        "url": "https://www.reuters.com/article/business/fed-cuts-rates-to-blunt-coronavirus-impact-markets-drop-idUSKBN20Q22A/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "정례 회의 사이에 실시한 50bp 긴급 인하를 당일 보도한다.",
+        "publishedAt": "2020-03-03",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "목표 범위 1.00–1.25%; 50bp 인하."
+  },
+  {
+    "id": "eth-context-who-pandemic-characterization",
+    "date": "2020-03-11",
+    "label": "WHO 팬데믹",
+    "title": "WHO의 COVID-19 팬데믹 평가",
+    "category": "market",
+    "importance": 3,
+    "description": "WHO가 COVID-19의 전 세계 확산을 팬데믹으로 평가한다고 발표했다.",
+    "detail": "WHO 사무총장은 3월 11일 브리핑에서 COVID-19를 팬데믹으로 묘사할 수 있다고 밝혔다. 글로벌 금융·실물경제 충격의 배경을 표시하는 사건이다. 다음 날의 ETH 담보 청산 위기와는 별도 단계로 기록한다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "WHO의 3월 11일 브리핑 원문과 당일 Reuters 보도 날짜를 대조했다.",
+    "crossCheck": "발표 기관의 원문과 Reuters의 현장 브리핑 보도를 대조했다. Cyprus Mail은 Reuters 기사의 전재처이며 두 언론사가 각각 독립 취재한 것으로 세지 않는다.",
+    "limitations": [
+      "팬데믹 평가는 1월 30일 국제적 공중보건 비상사태 선언과 다른 발표다.",
+      "이 발표 하나가 ETH 가격 변화를 일으켰다는 인과관계를 추정하지 않는다."
+    ],
+    "keywords": [
+      "COVID-19",
+      "코로나19",
+      "WHO",
+      "팬데믹",
+      "글로벌 위기"
+    ],
+    "sources": [
+      {
+        "title": "WHO Director-General's opening remarks at the media briefing on COVID-19 — 11 March 2020",
+        "url": "https://www.who.int/news-room/speeches/item/who-director-general-s-opening-remarks-at-the-media-briefing-on-covid-19---11-march-2020",
+        "publisher": "World Health Organization",
+        "type": "primary",
+        "role": "official-briefing",
+        "claim": "3월 11일 COVID-19를 팬데믹으로 평가한 발표를 담고 있다.",
+        "publishedAt": "2020-03-11",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "WHO describes coronavirus outbreak as pandemic",
+        "url": "https://archive.cyprus-mail.com/2020/03/11/who-describes-coronavirus-outbreak-as-pandemic/",
+        "publisher": "Reuters / Cyprus Mail 전재",
+        "type": "secondary",
+        "role": "contemporaneous-reporting",
+        "claim": "당일 WHO의 팬데믹 표현과 기존 비상사태 선언의 차이를 보도한다.",
+        "publishedAt": "2020-03-11",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "eth-context-maker-black-thursday",
+    "date": "2020-03-12",
+    "label": "Maker 청산 위기",
+    "title": "Black Thursday의 Maker 담보 청산 위기",
+    "category": "market",
+    "importance": 3,
+    "description": "ETH 급변 속에서 Maker의 담보 청산 경매와 DAI 담보 관리가 큰 압박을 받았다.",
+    "detail": "3월 12일의 시장 급변은 Ethereum 담보 대출의 청산 구조를 시험한 사건이었다. 동시대 보도는 경매와 담보 부족, 긴급 대응 논의를 기록한다. Maker의 후속 거버넌스 문서도 3월 12일 청산 피해를 특정한다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "Maker의 후속 보상 논의가 대상으로 삼은 2020년 3월 12일 청산과 당일 CoinDesk 보도를 대조했다.",
+    "crossCheck": "Maker 거버넌스의 사후 기록과 CoinDesk가 당일 이해관계자 회의 및 재단 발언을 취재한 보도를 대조했다. 보상 투표 문서의 존재를 보상금 지급 완료로 해석하지 않는다.",
+    "limitations": [
+      "긴급 종료가 논의됐다는 사실을 프로토콜이 실제 종료됐다는 뜻으로 바꾸지 않는다.",
+      "팬데믹, 시장 유동성, 가격 변동, 경매 작동이 겹친 상황이며 하나의 원인이나 예측식으로 환원하지 않는다."
+    ],
+    "keywords": [
+      "MakerDAO",
+      "DAI",
+      "Black Thursday",
+      "검은 목요일",
+      "청산",
+      "DeFi",
+      "코로나"
+    ],
+    "sources": [
+      {
+        "title": "Vault Compensation Plan — September 8, 2020",
+        "url": "https://vote.makerdao.com/polling/QmZKAqzN",
+        "publisher": "MakerDAO Governance",
+        "type": "primary",
+        "role": "governance-retrospective",
+        "claim": "3월 12일 시장 급락 때 발생한 Vault 청산 피해를 후속 거버넌스가 검토했음을 확인한다.",
+        "publishedAt": "2020-09-08",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "DeFi Leader MakerDAO Weighs Emergency Shutdown Following ETH Price Drop",
+        "url": "https://www.coindesk.com/tech/2020/03/12/defi-leader-makerdao-weighs-emergency-shutdown-following-eth-price-drop",
+        "publisher": "CoinDesk",
+        "type": "secondary",
+        "role": "contemporaneous-reporting",
+        "claim": "3월 12일 ETH 담보 경매와 부족 담보, 긴급 대응 논의를 보도한다.",
+        "publishedAt": "2020-03-12",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-fed-zero-rates-qe",
+    "date": "2020-03-15",
+    "label": "제로금리·QE",
+    "title": "연준, 제로금리 복귀와 자산매입 확대 발표",
+    "category": "macro",
+    "importance": 3,
+    "description": "연준이 목표 금리를 0–0.25%로 낮추고 국채·기관 MBS 매입을 확대했다.",
+    "detail": "공식 시행 지침은 다음 날인 3월 16일부터 0–0.25% 범위를 적용하고 국채 최소 5,000억 달러와 기관 MBS 최소 2,000억 달러를 매입하도록 했다. 결정 발표일인 3월 15일을 표시한다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "일요일인 2020-03-15에 발표한 결정이다. 공식 시행 지침의 효력 발생일 3월 16일 및 해외 보도의 다음 날 게시일과 구분한다.",
+    "crossCheck": "정책을 발표한 기관의 원문과 별도 언론사의 당시 보도를 대조해 결정 내용과 날짜를 확인했다. 언론의 전망이나 가격 해석은 확정된 정책 사실로 사용하지 않는다.",
+    "limitations": [
+      "정책금리 100bp 인하와 재할인창구의 별도 대출금리 150bp 인하를 혼동하지 않는다.",
+      "자산매입은 지정된 국채·기관 MBS에 관한 것이며 ETH 매입을 뜻하지 않는다."
+    ],
+    "keywords": [
+      "코로나19",
+      "Fed",
+      "제로금리",
+      "QE",
+      "양적완화"
+    ],
+    "sources": [
+      {
+        "title": "Implementation Note issued March 15, 2020",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20200315a1.htm",
+        "publisher": "Federal Reserve",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "3월 16일부터 0–0.25% 목표 범위를 시행하고 국채 최소 5,000억 달러·기관 MBS 최소 2,000억 달러 매입을 지시했다.",
+        "publishedAt": "2020-03-15",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Fed slashes rates, global central banks coordinate to cushion coronavirus blow",
+        "url": "https://www.reuters.com/article/economy/fed-slashes-rates-global-central-banks-coordinate-to-cushion-coronavirus-blow-idUSKBN21219J/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "3월 15일 일요일의 100bp 금리 인하와 자산매입 대응을 보도한다.",
+        "publishedAt": "2020-03-16",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "목표 범위 0–0.25%; 국채·기관 MBS 매입 확대 발표."
+  },
+  {
+    "id": "eth-policy-fed-open-ended-purchases",
+    "date": "2020-03-23",
+    "label": "연준 매입 확대",
+    "title": "연준, 필요 규모의 국채·기관 MBS 매입 선언",
+    "category": "macro",
+    "importance": 3,
+    "description": "연준이 국채와 기관 MBS를 시장 기능에 필요한 규모로 매입하겠다고 발표했다.",
+    "detail": "3월 15일 최소 매입액을 정했던 조치를 확장한 결정이다. 별도 기업 신용지원 시설도 발표됐다. 흔히 무제한 QE라고 불리지만, 모든 금융자산을 무제한 매입하거나 ETH 가격을 보장한다는 뜻은 아니다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공식 발표문에 명시된 발표 날짜를 사건일로 사용한다. 시행·결제 시점이나 문서의 후속 갱신일과 구분한다.",
+    "crossCheck": "3월 23일 연준의 원문과 Reuters의 4월 14일 사후 정책 연표를 대조했다. 사후 보도의 요약보다 원문의 매입 자산과 조건을 우선했다.",
+    "limitations": [
+      "국채·기관 MBS 매입과 별도 신용지원 시설을 구분한다.",
+      "유동성 조치가 특정 ETH 가격 변동의 단독 원인이었다고 해석하지 않는다."
+    ],
+    "keywords": [
+      "코로나19",
+      "Fed",
+      "양적완화",
+      "QE",
+      "유동성"
+    ],
+    "sources": [
+      {
+        "title": "Federal Reserve announces extensive new measures to support the economy",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20200323b.htm",
+        "publisher": "Federal Reserve",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "국채·기관 MBS를 시장 기능과 통화정책 전달에 필요한 규모로 매입한다고 발표했다.",
+        "publishedAt": "2020-03-23",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Factbox: Global economic policy response to coronavirus crisis",
+        "url": "https://www.reuters.com/article/business/factbox-global-economic-policy-response-to-coronavirus-crisis-idUSKCN21W2A9/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "후속 연표에서 3월 23일의 매입 규모 제한 없는 QE 전환을 확인한다.",
+        "publishedAt": "2020-04-14",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "국채·기관 MBS를 원문에 명시된 시장 기능에 필요한 규모로 매입."
+  },
+  {
     "id": "eth-uniswap-v2-mainnet",
     "date": "2020-05-18",
     "label": "Uniswap v2",
@@ -587,6 +2601,100 @@ export const ETHEREUM_EVENTS = deepFreeze([
       "network": "Ethereum mainnet"
     },
     "description": "Uniswap v2가 Ethereum 메인넷에 공개돼 ERC-20 토큰 간 직접 풀 등의 기능을 제공했다."
+  },
+  {
+    "id": "eth-context-comp-distribution",
+    "date": "2020-06-15",
+    "label": "COMP 배포",
+    "title": "Compound 사용자 대상 COMP 배포 시작",
+    "category": "ecosystem",
+    "importance": 3,
+    "description": "Compound의 공급자와 차입자에게 COMP 거버넌스 토큰이 배포되기 시작했다.",
+    "detail": "Compound는 실행된 거버넌스 제안에 따라 6월 15일부터 프로토콜 이용자에게 COMP를 배포했다. ETH를 포함한 대출 시장의 이용과 토큰 보상을 연결한 구체적인 DeFi 이정표다. 추상적인 'DeFi 열풍 시작' 날짜 대신 실제 배포 개시일을 사용한다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "Compound의 사후 뉴스레터가 6월 15일 월요일 아침 배포가 시작됐다고 명시한다. 사전 제안이나 토큰 최초 소개일과 구분한다.",
+    "crossCheck": "Compound의 배포 완료 확인과 The Block의 당일 배포·거래 보도를 대조했다. 사전 안내 글은 조건부 일정이므로 단독 실행 증거로 사용하지 않았다.",
+    "limitations": [
+      "COMP의 2월 소개, 4월 초기 거버넌스 가동과 6월 사용자 배포는 다른 단계다.",
+      "보상 배포를 확정 수익이나 ETH 가격 상승의 증거로 해석하지 않는다."
+    ],
+    "keywords": [
+      "Compound",
+      "COMP",
+      "유동성 채굴",
+      "liquidity mining",
+      "DeFi",
+      "거버넌스"
+    ],
+    "sources": [
+      {
+        "title": "COMP Distribution, Key Delegates, New Asset Pages",
+        "url": "https://compound.substack.com/p/comp-distribution-key-delegates-new",
+        "publisher": "Compound / Adam Bavosa",
+        "type": "primary",
+        "role": "developer-post-launch-confirmation",
+        "claim": "뉴스레터는 6월 15일 사용자 배포가 이미 시작됐고 제안이 실행됐다고 확인한다.",
+        "publishedAt": "2020-06-18",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Compound governance token begins its first day of trading",
+        "url": "https://www.theblock.co/news/defi/2020-06-15-compound-governance-tokens-begin-its-first-day-of-trading-68369",
+        "publisher": "The Block",
+        "type": "secondary",
+        "role": "contemporaneous-reporting",
+        "claim": "6월 15일 COMP 사용자 배포 개시와 당일 시장 거래를 보도한다.",
+        "publishedAt": "2020-06-15",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "importance": 2,
+    "datePrecision": "source-calendar-day",
+    "id": "ethereum-staking-deposit-announcement",
+    "date": "2020-11-04",
+    "label": "PoS 예치 계약 공개",
+    "title": "PoS 스테이킹 예치 계약 주소와 v1.0 명세 공개",
+    "category": "protocol",
+    "description": "비콘 체인 시작을 준비하는 메인넷 예치 계약 주소, v1.0 명세와 Launch Pad가 공식 공개됐다.",
+    "detail": "검증자 예치금이 비콘 체인의 시작 조건을 충족하는 준비 단계다. 계약의 온체인 생성, 주소 공개, 비콘 체인 시작, 이후 출금 허용은 서로 다른 이정표다.",
+    "dateBasis": "EF의 v1.0 명세와 계약 주소 공개일인 11월 4일을 사용한다. Status/Nimbus가 확인한 계약 생성일 10월 14일과 구분한다.",
+    "crossCheck": "EF의 당일 공개와 독립 클라이언트 팀 Status/Nimbus의 같은 날 계약 코드 검증·지원 발표를 대조했다.",
+    "limitations": [
+      "이 날짜를 계약이 처음 배포된 날이나 PoS 전환 완료일로 표시하지 않는다.",
+      "당시 공개된 최소 제네시스 목표 시각을 실제 비콘 체인 시작 시각으로 복사하지 않는다."
+    ],
+    "keywords": [
+      "staking",
+      "deposit contract",
+      "스테이킹",
+      "예치",
+      "비콘 체인",
+      "Eth2"
+    ],
+    "sources": [
+      {
+        "publisher": "Ethereum Foundation",
+        "title": "eth2 quick update no. 19",
+        "url": "https://blog.ethereum.org/en/2020/11/04/eth2-quick-update-no-19",
+        "type": "primary",
+        "role": "completed-publication",
+        "claim": "v1.0 명세·예치 계약 주소·Launch Pad가 공개됐다는 당일 기록을 확인한다.",
+        "publishedAt": "2020-11-04",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Status / Nimbus",
+        "title": "Status Supports the ETH 2.0 Deposit Contract",
+        "url": "https://status.app/blog/status-supports-the-eth-2-0-deposit-contract",
+        "type": "primary",
+        "role": "independent-client-verification",
+        "claim": "독립적으로 계약 바이트코드를 대조한 개발팀의 지원 발표와 더 이른 계약 생성 날짜를 확인한다.",
+        "publishedAt": "2020-11-04",
+        "accessedAt": "2026-10-24"
+      }
+    ]
   },
   {
     "id": "ethereum-beacon-genesis",
@@ -640,6 +2748,64 @@ export const ETHEREUM_EVENTS = deepFreeze([
     "facts": {
       "consensusGenesisScheduledUtc": "2020-12-01T12:00:23Z"
     }
+  },
+  {
+    "id": "eth-context-beeple-christies-auction",
+    "date": "2021-03-11",
+    "label": "Beeple NFT 경매",
+    "title": "Christie's의 Beeple NFT 경매 완료",
+    "category": "ecosystem",
+    "importance": 2,
+    "description": "Christie's에서 Beeple의 NFT 작품 'Everydays: The First 5000 Days' 경매가 완료됐다.",
+    "detail": "전통 미술 경매사의 NFT 거래를 보여 주는 대표적 사례다. 경매 결과 공지와 작품 목록은 완료된 판매, 토큰 식별자 및 ETH 결제 허용 조건을 확인한다. 작품의 2월 민팅과 3월 경매 완료를 구분한다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "Christie's의 3월 11일 결과 공지와 당일 The Block의 완료 보도를 사용한다. 목록에 적힌 2월 16일 민팅 날짜를 판매일로 사용하지 않는다.",
+    "crossCheck": "경매 주최자의 결과·작품 원문과 The Block의 동시대 결과 보도를 대조했다. 경매 결과와 목록은 같은 기관의 문서이며 서로 독립된 두 기관으로 세지 않는다.",
+    "limitations": [
+      "NFT 전체의 최초 발행이나 최초 거래라는 표현을 쓰지 않는다.",
+      "낙찰가와 구매자 수수료를 포함한 총액은 다르므로 이 기록에 가격 수치를 일반화하지 않는다."
+    ],
+    "keywords": [
+      "Beeple",
+      "비플",
+      "Christie's",
+      "크리스티",
+      "NFT",
+      "MakersPlace",
+      "Everydays"
+    ],
+    "sources": [
+      {
+        "title": "Beeple's purely digital NFT-based work of art achieves $69.3 million at Christie's",
+        "url": "https://press.christies.com/results-beeples-purely-digital-nft-based-work-of-art-achieves-693-million-at-christies-1/",
+        "publisher": "Christie's",
+        "type": "primary",
+        "role": "auction-result",
+        "claim": "3월 11일 해당 NFT 작품의 경매 완료를 확인한다.",
+        "publishedAt": "2021-03-11",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "EVERYDAYS: THE FIRST 5000 DAYS — lot details",
+        "url": "https://onlineonly.christies.com/s/beeple-first-5000-days/beeple-b-1981-1/112924",
+        "publisher": "Christie's",
+        "type": "primary",
+        "role": "auction-lot-record",
+        "claim": "토큰 ID, 계약 주소, 2월 16일 민팅 및 ETH 결제 조건을 기록한다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Beeple's 5,000-day digital art collection sells for $69.4 million",
+        "url": "https://www.theblock.co/news/web3/2021-03-11-christies-beeple-auction-ends-digital-art-98047",
+        "publisher": "The Block",
+        "type": "secondary",
+        "role": "contemporaneous-reporting",
+        "claim": "3월 11일 경매 종료 및 수수료 포함 총액과 낙찰가의 구분을 보도한다.",
+        "publishedAt": "2021-03-11",
+        "accessedAt": "2026-10-24"
+      }
+    ]
   },
   {
     "id": "ethereum-berlin",
@@ -743,6 +2909,65 @@ export const ETHEREUM_EVENTS = deepFreeze([
     "description": "집중 유동성과 여러 수수료 구간을 제공하는 Uniswap v3가 Ethereum 메인넷에 공개됐다."
   },
   {
+    "id": "eth-policy-china-state-council-crackdown",
+    "date": "2021-05-21",
+    "label": "중국 단속 방침",
+    "title": "중국 국무원 금융위, 채굴·거래 단속 방침 발표",
+    "category": "regulation",
+    "importance": 3,
+    "description": "중국 국무원 금융안정발전위원회가 비트코인 채굴·거래 단속 방침을 공개했다.",
+    "detail": "공식 회의 결과는 비트코인을 명시했다. ETH를 포함한 시장이 함께 주목한 정책 신호로 기록하며, ETH를 명시한 9월 24일의 별도 가상통화 서비스 통지와 구분한다. 개별 지역의 채굴장 폐쇄가 이 날 모두 완료됐다는 뜻은 아니다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공식 재게시 문서가 명시한 회의일과 Reuters의 당일 보도가 일치하는 2021-05-21. 상하이 당국의 재게시일 5월 24일과 구분한다.",
+    "crossCheck": "인민은행 회의 결과를 전재한 공식 지방정부 페이지와 별도 Reuters 취재를 대조했다. Reuters의 두 기사는 같은 언론사이며 두 개의 독립 기관으로 세지 않는다.",
+    "limitations": [
+      "원문이 명시한 BTC 단속을 ETH만을 겨냥한 별도 명령으로 바꾸지 않는다.",
+      "정책 방침·지방 집행·9월의 거래 통지는 서로 다른 단계다.",
+      "당시 보도된 시장 반응은 인과관계를 증명하는 분석이 아니다."
+    ],
+    "keywords": [
+      "중국",
+      "국무원",
+      "금융안정위원회",
+      "채굴",
+      "거래 단속"
+    ],
+    "sources": [
+      {
+        "title": "刘鹤主持召开国务院金融稳定发展委员会第五十一次会议",
+        "url": "https://jrj.sh.gov.cn/ZXYW178/20210524/d99780f9cc2144be9b54f90abb764a99.html",
+        "publisher": "People’s Bank of China / Shanghai financial authorities official republication",
+        "type": "primary",
+        "role": "official-republication-of-meeting-record",
+        "claim": "5월 21일 제51차 국무원 금융안정발전위원회 회의 결과를 재게시하며 비트코인 채굴·거래 단속 방침을 기록한다.",
+        "publishedAt": "2021-05-24",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "China vows to crack down on bitcoin mining, trading activities",
+        "url": "https://www.reuters.com/technology/china-says-it-will-crack-down-bitcoin-mining-trading-activities-2021-05-21/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "5월 21일 금요일 회의 결과 공개와 채굴·거래 단속 방침을 당일 확인한다.",
+        "publishedAt": "2021-05-21",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Bitcoin ends day on the ropes after China clamps down on mining, trading",
+        "url": "https://www.reuters.com/technology/bitcoin-under-pressure-comeback-fades-2021-05-21/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "당시 기사에서 중국 정책 발표와 같은 시기의 ETH 시장 약세를 함께 보도한다. 보도 수익률을 Coinbase 일봉 수익률로 사용하지 않는다.",
+        "publishedAt": "2021-05-21",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "국무원 금융안정발전위원회 회의 결과로 채굴·거래 단속 방침 공개.",
+    "marketContext": "Reuters는 같은 날 정책 발표와 ETH 약세를 함께 보도했다. 이 보도의 관측 가격과 Coinbase UTC 일봉은 다른 측정치다."
+  },
+  {
     "id": "ethereum-london",
     "date": "2021-08-05",
     "label": "런던·1559",
@@ -810,6 +3035,168 @@ export const ETHEREUM_EVENTS = deepFreeze([
     "blockHash": "0x9b83c12c69edb74f6c8dd5d052765c1adf940e320bd1291696e6fa07829eee71"
   },
   {
+    "importance": 2,
+    "datePrecision": "source-calendar-day",
+    "id": "eth-security-geth-minority-split",
+    "date": "2021-08-27",
+    "label": "Geth 소수 체인 분리",
+    "title": "취약한 Geth 버전의 소수 체인 분리",
+    "category": "security",
+    "description": "Geth의 합의 처리 취약점을 건드린 거래로 일부 구버전 노드가 정규 체인과 다른 상태를 계산했다.",
+    "detail": "개발자 사후 보고서는 블록 13,107,518에서 소수 체인 분리가 발생했으며 다수 채굴자는 올바른 체인을 계속 처리했다고 설명한다.",
+    "dateBasis": "개발자 사후 보고서가 명시한 실제 사건일 8월 27일이다. 보안 공지·패치 공개일인 8월 24일이나 사후 보고서 파일명의 8월 22일을 사건일로 사용하지 않는다.",
+    "crossCheck": "Geth 보안 권고의 실제 악용 높이와 개발팀 사후 보고서의 해당 높이·UTC 사건일을 대조했다. 같은 개발팀의 두 문서이므로 외부 독립 사고 조사 두 건으로 세지 않는다.",
+    "limitations": [
+      "소수 체인 분리를 Ethereum 전체가 중단되거나 모든 클라이언트가 취약했던 사건으로 일반화하지 않는다.",
+      "사후 보고서의 원인 설명을 사용했으며 공격 거래를 재실행하거나 별도 합의 검증을 수행하지 않았다."
+    ],
+    "keywords": [
+      "Geth",
+      "CVE-2021-39137",
+      "chain split",
+      "소수 체인",
+      "합의 버그"
+    ],
+    "sources": [
+      {
+        "publisher": "Go Ethereum",
+        "title": "RETURNDATA corruption via datacopy",
+        "url": "https://github.com/ethereum/go-ethereum/security/advisories/GHSA-9856-9gg9-qcmq",
+        "type": "primary",
+        "role": "maintainer-security-advisory",
+        "claim": "영향받는 버전, 패치와 메인넷 블록 13,107,518에서의 실제 악용 기록을 확인한다.",
+        "publishedAt": "2021-08-24",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Go Ethereum",
+        "title": "Minority split 2021-08-27 post mortem",
+        "url": "https://github.com/ethereum/go-ethereum/blob/master/docs/postmortems/2021-08-22-split-postmortem.md",
+        "type": "primary",
+        "role": "same-organization-postmortem",
+        "claim": "파일명과 다른 실제 사건일·높이, 다수 체인의 계속된 진행을 확인한다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "eth-context-arbitrum-one-public",
+    "date": "2021-08-31",
+    "label": "Arbitrum 공개",
+    "title": "Arbitrum One 일반 사용자 공개",
+    "category": "ecosystem",
+    "importance": 3,
+    "description": "Ethereum 확장 네트워크 Arbitrum One이 일반 사용자에게 공개됐다.",
+    "detail": "Offchain Labs는 8월 31일 Arbitrum One의 일반 공개를 발표했다. Uniswap도 같은 날 해당 네트워크에서 사용자가 거래할 수 있다고 확인했다. 5월의 개발자 베타 및 이후 Nitro 업그레이드와 구분되는 공개 이정표다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "8월 31일 개발사 발표와 같은 날의 Uniswap 가동 확인, The Block 보도를 대조했다.",
+    "crossCheck": "개발사와 별도 운영 주체인 Uniswap의 직접 가동 확인을 사용하고 The Block의 공동창업자 인터뷰로 대조했다. Uniswap은 생태계 참여자이며 이해관계가 없는 독립 감사자는 아니다.",
+    "limitations": [
+      "일반 공개가 모든 운영·보안 권한의 완전한 탈중앙화를 뜻하지 않는다.",
+      "개발자 전용 베타와 일반 사용자 접근 허용을 구분한다."
+    ],
+    "keywords": [
+      "Arbitrum",
+      "아비트럼",
+      "Offchain Labs",
+      "L2",
+      "롤업",
+      "확장성"
+    ],
+    "sources": [
+      {
+        "title": "Offchain Labs Rolls Out Arbitrum One Ethereum Scaling Solution to the Public",
+        "url": "https://www.prnewswire.com/news-releases/offchain-labs-rolls-out-arbitrum-one-ethereum-scaling-solution-to-the-public-and-announces-120m-in-funding-301365642.html",
+        "publisher": "Offchain Labs / PR Newswire 배포",
+        "type": "primary",
+        "role": "developer-launch-announcement",
+        "claim": "8월 31일 일반 공개와 이전 개발자 베타를 구분한다.",
+        "publishedAt": "2021-08-31",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Uniswap on Arbitrum (Alpha release)",
+        "url": "https://blog.uniswap.org/uniswap-arbitrum-alpha",
+        "publisher": "Uniswap Labs",
+        "type": "primary",
+        "role": "separate-operator-live-confirmation",
+        "claim": "Arbitrum이 일반에 공개되어 사용자가 Uniswap에서 거래할 수 있다고 당일 확인한다.",
+        "publishedAt": "2021-08-31",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Ethereum scaling solution Arbitrum launches mainnet and raises $120 million in new funding",
+        "url": "https://www.theblock.co/news/deals/2021-08-31-ethereum-scaling-solution-arbitrum-launches-mainnet-raises-120-million-funding-116148",
+        "publisher": "The Block",
+        "type": "secondary",
+        "role": "contemporaneous-interview",
+        "claim": "개발자만 쓰던 네트워크가 일반 사용자에게 열렸다는 개발사 인터뷰를 보도한다.",
+        "publishedAt": "2021-08-31",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-china-trading-ban-notice",
+    "date": "2021-09-24",
+    "label": "중국 거래 규제",
+    "title": "중국, 가상통화 거래 서비스 금지 통지 공개",
+    "category": "regulation",
+    "importance": 3,
+    "description": "중국이 이더를 포함한 가상통화 관련 거래 서비스를 불법 금융활동으로 규정한 공동 통지를 공개했다.",
+    "detail": "중개·환전·토큰 발행·파생상품 및 해외 거래소의 중국 본토 대상 서비스 등을 다뤘다. 문서 서명일은 9월 15일이지만 시장에 공개된 9월 24일을 표시한다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "SAFE가 표시한 공개일 2021-09-24. 본문 서명일 2021-09-15와 구분하며 공개일을 당시 관측 가능한 사건 날짜로 채택한다.",
+    "crossCheck": "2021년 당국 원문과 당시 별도 언론 보도로 공개일을 확인하고, 2026년 후속 공동 통지에서 명시적 폐지를 점검했다. 두 공식 문서는 같은 정책 체계의 전후 기록이다.",
+    "limitations": [
+      "금융활동·서비스 규제의 범위를 개인의 단순 보유 전체로 확대하지 않는다.",
+      "동일 날짜에 공개된 채굴 관련 별도 정책과 이 거래 통지를 혼합하지 않는다.",
+      "현재 유효한 규정과 혼동하지 않도록 2026년의 명시적 대체·폐지를 함께 표시한다."
+    ],
+    "keywords": [
+      "중국",
+      "PBoC",
+      "SAFE",
+      "거래 규제",
+      "해외 거래소"
+    ],
+    "sources": [
+      {
+        "title": "关于进一步防范和处置虚拟货币交易炒作风险的通知",
+        "url": "https://www.safe.gov.cn/safe/2021/0924/19911.html",
+        "publisher": "People’s Bank of China and nine co-issuing authorities / SAFE",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "2021-09-24 공개된 통지는 이더를 포함한 가상통화 관련 거래·중개·파생상품 서비스와 해외 플랫폼의 본토 대상 서비스를 불법 금융활동으로 규정했다.",
+        "publishedAt": "2021-09-24",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "China declares transactions involving cryptocurrencies illegal",
+        "url": "https://www.theguardian.com/world/2021/sep/24/china-declares-transactions-cryptocurrencies-illegal",
+        "publisher": "The Guardian",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "9월 24일 규제 공표를 보도했다.",
+        "publishedAt": "2021-09-24",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "关于进一步防范和处置虚拟货币等相关风险的通知",
+        "url": "https://www.csrc.gov.cn/csrc/c100028/c7614318/content.shtml",
+        "publisher": "People’s Bank of China and seven co-issuing authorities / CSRC",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "2월 6일 공동 통지는 가상통화·스테이블코인·RWA 관련 위험 통제를 정하고 같은 날 시행하며 2021년 통지를 폐지했다.",
+        "publishedAt": "2026-02-06",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "가상통화 관련 금융서비스 및 해외 거래소의 본토 대상 서비스 규제 공표.",
+    "followUp": "2026-02-06의 새 8개 기관 공동 통지가 이 2021년 통지를 대체·폐지했다. 과거 공표 사실을 기록하는 표식이다."
+  },
+  {
     "id": "ethereum-altair",
     "date": "2021-10-27",
     "label": "알테어",
@@ -852,6 +3239,864 @@ export const ETHEREUM_EVENTS = deepFreeze([
       "consensusEpoch": 74240,
       "epochActivationUtc": "2021-10-27T10:56:23Z"
     }
+  },
+  {
+    "id": "eth-policy-fed-taper-announcement",
+    "date": "2021-11-03",
+    "label": "테이퍼링 발표",
+    "title": "연준, 코로나19 자산매입 테이퍼링 결정",
+    "category": "macro",
+    "importance": 2,
+    "description": "연준이 월 자산매입 속도를 줄이는 테이퍼링을 시작하기로 했다.",
+    "detail": "국채와 기관 MBS의 월 순매입 증가분을 각각 100억 달러와 50억 달러 낮추는 결정이다. 매입 자체는 계속됐으므로 이 날을 보유자산 축소인 양적긴축의 시작이라고 표기하지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공식 발표문에 명시된 발표 날짜를 사건일로 사용한다. 시행·결제 시점이나 문서의 후속 갱신일과 구분한다.",
+    "crossCheck": "정책을 발표한 기관의 원문과 별도 언론사의 당시 보도를 대조해 결정 내용과 날짜를 확인했다. 언론의 전망이나 가격 해석은 확정된 정책 사실로 사용하지 않는다.",
+    "limitations": [
+      "테이퍼링은 순매입 속도의 감소이며 보유 자산의 감소와 같지 않다.",
+      "당시 계획에 제시된 향후 경로는 실제 완료 사실로 옮기지 않는다."
+    ],
+    "keywords": [
+      "Fed",
+      "테이퍼링",
+      "QE",
+      "통화정책"
+    ],
+    "sources": [
+      {
+        "title": "FOMC statement — 2021-11-03",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20211103a.htm",
+        "publisher": "Federal Reserve",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "11월부터 국채와 기관 MBS의 월 순매입 속도를 각각 100억·50억 달러 줄이기로 했다.",
+        "publishedAt": "2021-11-03",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Explainer: Federal Reserve’s taper: How does it work?",
+        "url": "https://www.reuters.com/business/federal-reserves-taper-how-does-it-work-2021-11-03/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "11월의 매입 축소 개시와 국채·MBS 매입 속도 조정을 설명한다.",
+        "publishedAt": "2021-11-03",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "월 순매입 속도 축소; 정책금리 목표 범위 0–0.25% 유지."
+  },
+  {
+    "id": "ethereum-arrow-glacier",
+    "date": "2021-12-09",
+    "label": "Arrow Glacier",
+    "title": "애로 글레이셔: PoS 준비 기간의 난이도 폭탄 연기",
+    "category": "protocol",
+    "importance": 2,
+    "description": "머지 준비 기간에 작업증명 메인넷의 난이도 폭탄을 연기했다.",
+    "detail": "EIP-4345만 포함한 업그레이드다. 일반적인 기능 확장이나 PoS 전환 완료와 구분한다.",
+    "datePrecision": "block-timestamp",
+    "dateBasis": "독립 운영 탐색기의 블록 13,773,000 헤더 시각 2021-12-09T19:55:23Z를 UTC 날짜로 사용한다. 사전 공지의 예상 일자와 구분한다.",
+    "crossCheck": "EF 당시 공지와 공식 연대표를 대조하고 Blockscout의 실제 블록 응답으로 높이·해시·시각을 별도 확인했다. EF 공지와 ethereum.org를 서로 독립된 운영기관으로 세지는 않는다.",
+    "limitations": [
+      "블록 시각은 원장의 헤더 기록이며 모든 노드의 수신 순간이나 사건 시점의 ETH 체결가가 아니다. 업그레이드의 단독 가격 효과는 추정하지 않는다."
+    ],
+    "keywords": [
+      "Arrow Glacier",
+      "EIP-4345",
+      "난이도 폭탄",
+      "머지 준비"
+    ],
+    "facts": {
+      "block": 13773000,
+      "blockHash": "0x594e4880f077ff9cf01500976d8c0b47cc8d3c77995860353e222a334b8060ad",
+      "utcTimestamp": "2021-12-09T19:55:23Z"
+    },
+    "sources": [
+      {
+        "publisher": "Ethereum Foundation",
+        "title": "Arrow Glacier Upgrade Announcement",
+        "url": "https://blog.ethereum.org/2021/11/10/arrow-glacier-announcement",
+        "type": "primary",
+        "role": "upgrade-announcement",
+        "claim": "단일 난이도 폭탄 변경과 적용 높이 13,773,000을 확인한다. 예상일 12월 8일 대신 실제 12월 9일을 사용한다.",
+        "publishedAt": "2021-11-10",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "ethereum.org",
+        "title": "Timeline of all Ethereum forks",
+        "url": "https://ethereum.org/ethereum-forks/",
+        "type": "primary",
+        "role": "same-organization-retrospective",
+        "claim": "공식 기술 연대표의 실제 업그레이드 날짜와 적용 높이를 확인한다. 연대표의 가격 수치는 사용하지 않는다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Blockscout",
+        "title": "Ethereum block 13773000",
+        "url": "https://eth.blockscout.com/api/v2/blocks/13773000",
+        "type": "primary",
+        "role": "independent-observed-block-header",
+        "claim": "실제 메인넷 블록 높이·해시·UTC 헤더 시각을 확인한다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Ethereum EIPs",
+        "title": "EIP-4345: Difficulty Bomb Delay to June 2022",
+        "url": "https://eips.ethereum.org/EIPS/eip-4345",
+        "type": "primary",
+        "role": "upgrade-specification",
+        "claim": "업그레이드에 포함된 규칙을 명세 원문에서 확인한다. EIP 작성일은 실행일이 아니다.",
+        "publishedAt": "2021-10-05",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "blockHeight": 13773000,
+    "timestampUtc": "2021-12-09T19:55:23Z",
+    "blockHash": "0x594e4880f077ff9cf01500976d8c0b47cc8d3c77995860353e222a334b8060ad"
+  },
+  {
+    "id": "eth-context-wormhole-exploit",
+    "date": "2022-02-02",
+    "label": "Wormhole 공격",
+    "title": "Wormhole 브리지의 무담보 래핑 ETH 발행 공격",
+    "category": "security",
+    "importance": 3,
+    "description": "Wormhole 브리지 취약점을 이용해 Solana 측에서 담보 없는 래핑 ETH가 발행됐다.",
+    "detail": "공격자는 브리지 검증의 취약점을 이용했으며 일부 자산을 Ethereum으로 이동시켰다. Ethereum과 다른 네트워크를 연결하는 브리지의 보안 의존성을 보여 준 사건이다. 다음 날의 담보 보충 발표와 공격 발생일을 구분한다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "2월 3일 Chainalysis 원문의 '전날' 공격 설명과 Reuters의 수요일 공격 보도를 대조해 2월 2일을 사용한다.",
+    "crossCheck": "Chainalysis의 직접 온체인 분석과 Reuters의 Wormhole·Jump 발표 및 별도 분석기관 취재를 대조했다. 공격 규모의 달러 환산 시점이 달라질 수 있어 수치를 고정하지 않는다.",
+    "limitations": [
+      "Solana 측 Wormhole 검증 문제를 Ethereum 합의 프로토콜 자체의 침해로 표현하지 않는다.",
+      "담보 보충은 공격자가 탈취 자산 전부를 반환했다는 의미가 아니다."
+    ],
+    "keywords": [
+      "Wormhole",
+      "웜홀",
+      "브리지",
+      "bridge",
+      "wETH",
+      "Solana",
+      "해킹"
+    ],
+    "sources": [
+      {
+        "title": "Lessons from the Wormhole Exploit",
+        "url": "https://www.chainalysis.com/blog/wormhole-hack-february-2022/",
+        "publisher": "Chainalysis",
+        "type": "primary",
+        "role": "independent-onchain-analysis",
+        "claim": "2월 2일 공격, Solana의 무담보 토큰 발행과 Ethereum으로의 이동을 분석한다.",
+        "publishedAt": "2022-02-03",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Jump Trading replaces stolen Wormhole funds after $320 mln crypto hack",
+        "url": "https://www.reuters.com/technology/crypto-network-wormhole-hit-with-possible-320-mln-hack-2022-02-03/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-reporting",
+        "claim": "수요일 공격과 목요일 Jump의 담보 보충 발표를 구분해 보도한다.",
+        "publishedAt": "2022-02-03",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "followUp": "2월 3일 Reuters는 Jump Crypto가 부족 담보를 보충했고 Wormhole이 운영 재개를 알렸다고 보도했다."
+  },
+  {
+    "id": "eth-context-russia-ukraine-invasion",
+    "date": "2022-02-24",
+    "label": "우크라이나 침공",
+    "title": "러시아의 우크라이나 전면 침공",
+    "category": "geopolitics",
+    "importance": 3,
+    "description": "러시아가 우크라이나에 대한 전면적인 군사 침공을 시작했다.",
+    "detail": "유엔 사무총장은 2월 24일 우크라이나 내부의 러시아 군사 작전에 관해 성명을 냈다. 세계 금융시장과 암호자산 시장이 함께 주목한 지정학적 사건으로 기록한다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "당일 유엔 성명과 Reuters의 침공 및 시장 보도를 대조하여 2월 24일을 사용한다.",
+    "crossCheck": "국제기구의 당일 공식 성명과 Reuters의 독립 취재·시장 보도를 대조했다. 전쟁의 법적·정치적 주장 전체를 특정 당사자의 설명만으로 확정하지 않는다.",
+    "limitations": [
+      "2014년부터 이어진 분쟁과 2022년의 전면 침공 단계를 구분한다.",
+      "당일 시장 동행은 ETH의 중장기 수익률이나 단일 원인을 증명하지 않는다."
+    ],
+    "keywords": [
+      "Russia",
+      "Ukraine",
+      "러시아",
+      "우크라이나",
+      "전쟁",
+      "지정학"
+    ],
+    "sources": [
+      {
+        "title": "Statement by the Secretary-General — on Ukraine",
+        "url": "https://georgia.un.org/en/173303-statement-secretary-general-%E2%80%93-ukraine",
+        "publisher": "United Nations Secretary-General / UN Georgia",
+        "type": "primary",
+        "role": "official-contemporaneous-statement",
+        "claim": "2월 24일 우크라이나 내부의 러시아 군사 작전을 확인한다.",
+        "publishedAt": "2022-02-24",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Stablecoins gain as bitcoin, ether fall after Russia invades Ukraine",
+        "url": "https://www.reuters.com/technology/stablecoins-gain-bitcoin-ether-fall-after-russia-invades-ukraine-2022-02-24/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-market-reporting",
+        "claim": "침공 당일 ETH·BTC 하락과 스테이블코인 수요를 함께 보도한다.",
+        "publishedAt": "2022-02-24",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "marketContext": "Reuters는 당일 ETH와 BTC 하락 및 스테이블코인 수요를 함께 보도했다. 이는 당시 관측·해석이며 ETH 움직임 전체에 대한 인과 추정은 아니다."
+  },
+  {
+    "id": "eth-policy-biden-digital-assets-order",
+    "date": "2022-03-09",
+    "label": "美 디지털자산 명령",
+    "title": "Biden, 디지털자산 범정부 검토 행정명령 서명",
+    "category": "regulation",
+    "importance": 2,
+    "description": "미국 대통령이 디지털자산의 위험·기회와 디지털 달러를 검토하도록 하는 행정명령에 서명했다.",
+    "detail": "소비자 보호, 금융 안정, 불법 금융, 미국의 경쟁력 등에 관한 부처 간 연구·조정을 지시한 사건이다. 이 날 CBDC가 발행되거나 ETH 거래를 전면 금지한 것은 아니다. 해당 명령은 2025년 1월 23일 새 행정명령으로 폐지됐다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "행정명령 서명일 2022-03-09. 관보 게재일 3월 14일과 Reuters 페이지의 3월 10일 갱신일을 사건일로 쓰지 않는다.",
+    "crossCheck": "서명된 행정명령과 Reuters 보도로 2022년 조치를 확인하고 2025년 후속 명령의 명시적 폐지 조항까지 점검했다.",
+    "limitations": [
+      "검토·보고 지시와 실제 법률 제정 또는 CBDC 발행은 다르다.",
+      "폐지된 행정명령을 현재 유효한 지시로 제시하지 않는다."
+    ],
+    "keywords": [
+      "Biden",
+      "행정명령 14067",
+      "디지털자산",
+      "CBDC",
+      "미국"
+    ],
+    "sources": [
+      {
+        "title": "Executive Order 14067 — Ensuring Responsible Development of Digital Assets",
+        "url": "https://www.govinfo.gov/content/pkg/FR-2022-03-14/html/2022-05471.htm",
+        "publisher": "U.S. President / Federal Register",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "3월 9일 서명된 행정명령은 디지털자산 위험·기회와 CBDC 관련 정부 연구·보고를 지시한다.",
+        "publishedAt": "2022-03-14",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Biden orders government to study digital dollar, other cryptocurrency risks",
+        "url": "https://www.reuters.com/business/finance/biden-orders-government-study-digital-dollar-other-cryptocurrency-risks-2022-03-09/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "3월 9일 수요일 대통령 서명과 부처별 검토 지시를 확인한다.",
+        "publishedAt": "2022-03-10",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Strengthening American Leadership in Digital Financial Technology",
+        "url": "https://www.whitehouse.gov/presidential-actions/2025/01/strengthening-american-leadership-in-digital-financial-technology/",
+        "publisher": "The White House",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "디지털자산 작업반, 공개 블록체인·자기보관 정책과 CBDC 관련 행정 방침을 정하고 EO 14067을 폐지했다.",
+        "publishedAt": "2025-01-23",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "EO 14067 서명; 디지털자산 관련 범정부 검토 지시.",
+    "followUp": "2025-01-23 EO 14178 제3조가 EO 14067을 폐지했다."
+  },
+  {
+    "id": "eth-policy-fed-2022-liftoff",
+    "date": "2022-03-16",
+    "label": "美 긴축 전환",
+    "title": "연준, 팬데믹 이후 금리 인상 시작",
+    "category": "macro",
+    "importance": 3,
+    "description": "연준이 목표 범위를 0.25–0.50%로 올리며 제로금리에서 이탈했다.",
+    "detail": "25bp 인상이 확정됐다. 이후 회의의 금리 경로와 자산 축소는 별도 조치이며, 달러 금리·차입 환경의 전환점으로 표시한다. ETH에 대한 직접 규제나 ETH 가격 하락의 증거는 아니다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공식 발표문에 명시된 발표 날짜를 사건일로 사용한다. 시행·결제 시점이나 문서의 후속 갱신일과 구분한다.",
+    "crossCheck": "정책을 발표한 기관의 원문과 별도 언론사의 당시 보도를 대조해 결정 내용과 날짜를 확인했다. 언론의 전망이나 가격 해석은 확정된 정책 사실로 사용하지 않는다.",
+    "limitations": [
+      "사건 표시와 ETH 가격의 동시 관측은 인과관계를 입증하지 않는다."
+    ],
+    "keywords": [
+      "Fed",
+      "FOMC",
+      "금리 인상",
+      "긴축",
+      "인플레이션"
+    ],
+    "sources": [
+      {
+        "title": "FOMC statement — 2022-03-16",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20220316a.htm",
+        "publisher": "Federal Reserve",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "목표 범위를 0.25–0.50%로 인상했다.",
+        "publishedAt": "2022-03-16",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Wall Street closes higher after Fed hikes rates, signals more to come",
+        "url": "https://www.reuters.com/business/futures-climb-ukraine-peace-talks-fed-decision-ahead-2022-03-16/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "당일 25bp 금리 인상 결정을 보도한다. 주식 수익률과 금리 전망은 사용하지 않는다.",
+        "publishedAt": "2022-03-16",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "목표 범위 0.25–0.50%; 25bp 인상."
+  },
+  {
+    "id": "eth-context-ronin-bridge-theft",
+    "date": "2022-03-23",
+    "label": "Ronin 탈취",
+    "title": "Ronin 브리지의 ETH·USDC 탈취",
+    "category": "security",
+    "importance": 3,
+    "description": "Ronin 브리지의 검증자 서명 권한이 악용되어 ETH와 USDC가 유출됐다.",
+    "detail": "공격자는 손상된 검증자 키를 이용해 브리지 출금을 승인했다. 실제 유출은 3월 23일 발생했으며 대외 공개는 3월 29일이었다. 날짜를 공개일로 옮기지 않고 두 단계를 상세에 남긴다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "SlowMist의 온체인 자금 추적과 Reuters의 운영사 확인 보도가 실제 공격일을 3월 23일로 명시한다.",
+    "crossCheck": "SlowMist가 자체 MistTrack 분석으로 확인한 자금 이동과 Reuters가 전한 운영사 발표를 대조했다. SlowMist의 공격 경위 일부는 운영사 설명에 의존하지만 이동 날짜는 직접 추적 기록으로도 확인된다.",
+    "limitations": [
+      "3월 23일 공격과 3월 29일 발견·공개를 구분한다.",
+      "Ronin 브리지의 서명·운영 문제이며 Ethereum 메인넷 합의 공격을 뜻하지 않는다."
+    ],
+    "keywords": [
+      "Ronin",
+      "로닌",
+      "Axie Infinity",
+      "Sky Mavis",
+      "브리지",
+      "ETH",
+      "USDC",
+      "해킹"
+    ],
+    "sources": [
+      {
+        "title": "Ronin Exploit, Largest Crypto Hack to Date",
+        "url": "https://slowmist.medium.com/ronin-exploit-largest-crypto-hack-to-date-8b7c581e38fd",
+        "publisher": "SlowMist",
+        "type": "primary",
+        "role": "independent-onchain-analysis",
+        "claim": "자체 추적 기록으로 3월 23일 자금 이동을 확인하고 3월 29일 공개와 구분한다.",
+        "publishedAt": "2022-03-31",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Blockchain company Ronin hit by $615 million crypto heist",
+        "url": "https://www.reuters.com/technology/blockchain-company-ronin-hit-by-615-million-crypto-heist-2022-03-29/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-disclosure-reporting",
+        "claim": "3월 29일 공개된 사고의 실제 발생일이 3월 23일임을 보도한다.",
+        "publishedAt": "2022-03-29",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-fed-qt-plan",
+    "date": "2022-05-04",
+    "label": "양적긴축 결정",
+    "title": "연준, 50bp 인상과 6월 양적긴축 개시 결정",
+    "category": "macro",
+    "importance": 3,
+    "description": "연준이 금리를 50bp 인상하고 6월 1일부터 보유 증권을 줄이기로 했다.",
+    "detail": "금리 목표 범위는 0.75–1.00%가 됐다. 이 표식은 자산 축소 계획의 발표일이며 실제 축소 개시일인 6월 1일과 다르다. 2021년의 순매입 속도 감축인 테이퍼링과도 구분한다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공식 결정 발표일 2022-05-04. 문서가 별도로 지정한 양적긴축 개시일 2022-06-01을 발표일에 소급하지 않는다.",
+    "crossCheck": "정책을 발표한 기관의 원문과 별도 언론사의 당시 보도를 대조해 결정 내용과 날짜를 확인했다. 언론의 전망이나 가격 해석은 확정된 정책 사실로 사용하지 않는다.",
+    "limitations": [
+      "발표일과 실제 양적긴축 시작일이 다르다.",
+      "연준 보유 증권 정책을 암호자산 매각으로 해석하지 않는다."
+    ],
+    "keywords": [
+      "Fed",
+      "QT",
+      "양적긴축",
+      "50bp",
+      "금리"
+    ],
+    "sources": [
+      {
+        "title": "FOMC statement — 2022-05-04",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20220504a.htm",
+        "publisher": "Federal Reserve",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "목표 범위 0.75–1.00% 인상과 6월 1일부터 보유 증권 축소를 시작하는 결정을 발표했다.",
+        "publishedAt": "2022-05-04",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Stocks rally after Fed hikes rates, crude jumps",
+        "url": "https://www.reuters.com/business/global-markets-wrapup-1-2022-05-04/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "50bp 인상 및 6월 자산 축소 시작 계획을 당일 확인한다.",
+        "publishedAt": "2022-05-04",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "50bp 인상; 6월 1일부터 보유 국채·기관채·기관 MBS 축소 계획 확정."
+  },
+  {
+    "id": "eth-context-ust-collapse-escalation",
+    "date": "2022-05-09",
+    "label": "UST 페그 붕괴",
+    "title": "TerraUSD의 달러 페그 붕괴 확대",
+    "category": "market",
+    "importance": 3,
+    "description": "TerraUSD의 달러 연동 이탈이 심화되며 Terra 생태계의 위기가 확대됐다.",
+    "detail": "5월 초 UST의 이탈은 여러 단계에 걸쳐 진행됐다. 이 표시는 SEC 사후 문서와 Reuters가 붕괴의 주요 날짜로 기록한 5월 9일을 사용한다. Fed 연구가 기록한 5월 7일 Curve 시장의 초기 이탈도 날짜 근거에 함께 남긴다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "SEC 배분계획 초안은 5월 9일 UST 가치 하락을 명시하고 Reuters도 그날의 붕괴를 기록한다. Fed 연구는 앞선 5월 7일 이탈을 확인하므로 5월 9일을 최초 이탈로 부르지 않는다.",
+    "crossCheck": "SEC의 사건 관련 행정 문서, Fed 연구자의 사후 시장 기록, Reuters의 동시대 보도를 대조했다. 서로 다른 기관·연구·보도이며, 각 문서가 사용하는 '붕괴'와 '초기 페그 이탈'의 정의 차이를 보존한다.",
+    "limitations": [
+      "UST는 Terra의 알고리즘형 스테이블코인이며 ETH나 USDC와 동일한 자산·담보 구조가 아니다.",
+      "2021년의 이전 페그 이탈, 2022년 5월 7일 초기 이탈, 5월 9일 이후 붕괴는 서로 구분한다.",
+      "SEC의 배분계획 초안은 과거 날짜 확인에만 쓰며 배분 완료를 뜻하지 않는다."
+    ],
+    "keywords": [
+      "Terra",
+      "UST",
+      "LUNA",
+      "테라",
+      "루나",
+      "디페깅",
+      "스테이블코인",
+      "Curve"
+    ],
+    "sources": [
+      {
+        "title": "Tai Mo Shan Limited — Proposed Plan of Distribution",
+        "url": "https://www.sec.gov/files/litigation/admin/2026/34-106168-pdp.pdf",
+        "publisher": "U.S. Securities and Exchange Commission",
+        "type": "primary",
+        "role": "administrative-retrospective",
+        "claim": "UST 가치가 2022년 5월 9일 하락했다는 과거 경과를 명시한다.",
+        "publishedAt": "2026-08-20",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Interconnected DeFi: Ripple Effects from the Terra Collapse",
+        "url": "https://www.federalreserve.gov/econres/feds/files/2023044pap.pdf",
+        "publisher": "Federal Reserve staff researchers",
+        "type": "primary",
+        "role": "independent-retrospective-research",
+        "claim": "5월 7일 Ethereum의 Curve 시장에서 시작된 초기 페그 이탈을 기록한다. 원고 표지 날짜는 2023-05-09이며 Fed 서지의 공개일은 2023-06-29다.",
+        "publishedAt": "2023-06-29",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "TerraUSD developers vote to create new blockchain without failed stablecoin",
+        "url": "https://www.reuters.com/technology/terrausd-developers-vote-create-new-blockchain-without-failed-stablecoin-2022-05-25/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-retrospective-reporting",
+        "claim": "5월 9일의 UST 붕괴를 후속 생태계 논의와 함께 기록한다.",
+        "publishedAt": "2022-05-25",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "eth-context-celsius-withdrawal-pause",
+    "date": "2022-06-12",
+    "label": "Celsius 출금 중단",
+    "title": "Celsius의 출금·스왑·내부 이체 중단",
+    "category": "market",
+    "importance": 3,
+    "description": "Celsius가 고객 출금, 스왑 및 계정 간 이체를 중단했다.",
+    "detail": "중앙화된 암호자산 대출 서비스의 고객 접근이 제한된 사건이다. 법원에 제출된 선언서는 이 날을 Pause Date로 정의하며 그날 밤 공지가 나왔다고 기록한다. 7월의 Chapter 11 신청과는 별개로 표시한다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "선서 선언서의 6월 12일 Pause Date를 사용한다. 미국 일요일 밤 공지와 6월 13일 이후 국제 보도·UTC 날짜가 다를 수 있어 임의의 UTC 순간을 지정하지 않는다.",
+    "crossCheck": "회사 CEO가 법원에 제출한 선언서와 Reuters의 동시대 취재를 대조했다. 회사의 행동 날짜는 확인하되 선언서에 적힌 경영진의 정당화 주장은 독립 사실로 채택하지 않는다.",
+    "limitations": [
+      "중단 범위는 Celsius 서비스이며 Ethereum 네트워크 전체의 출금 중단을 뜻하지 않는다.",
+      "6월 출금 중단과 7월 법원 절차를 하나의 날짜로 합치지 않는다."
+    ],
+    "keywords": [
+      "Celsius",
+      "셀시우스",
+      "CeFi",
+      "신용 위기",
+      "출금 중단",
+      "대출"
+    ],
+    "sources": [
+      {
+        "title": "Declaration of Alex Mashinsky, Celsius Network LLC, case 22-10964, document 23",
+        "url": "https://pacer-documents.s3.amazonaws.com/115/312902/126122257414.pdf",
+        "publisher": "U.S. Bankruptcy Court filing / Celsius Network",
+        "type": "primary",
+        "role": "sworn-court-filing",
+        "claim": "6월 12일을 Pause Date로 정의하고 그날 밤 중단 공지를 했다고 기록한다.",
+        "publishedAt": "2022-07-14",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Crypto contagion fears spread after Celsius Network freezes withdrawals",
+        "url": "https://www.reuters.com/technology/crypto-firm-celsius-pauses-all-transfers-withdrawals-between-accounts-2022-06-13/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-reporting-updated",
+        "claim": "Celsius 중단과 당시 ETH·암호자산 시장의 긴장을 보도한다. 열람 판본은 6월 14일 갱신됐다.",
+        "publishedAt": "2022-06-14",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-fed-75bp-june",
+    "date": "2022-06-15",
+    "label": "연준 75bp 인상",
+    "title": "연준, 1994년 이후 최대 폭의 75bp 인상",
+    "category": "macro",
+    "importance": 3,
+    "description": "연준이 정책금리 목표 범위를 한 번에 75bp 올려 1.50–1.75%로 정했다.",
+    "detail": "인플레이션 대응 긴축이 가속된 주요 결정이다. 같은 시기 암호화폐 업계의 유동성 위기와 날짜가 겹쳐도 이 금리 결정만으로 ETH 움직임을 설명하지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공식 발표문에 명시된 발표 날짜를 사건일로 사용한다. 시행·결제 시점이나 문서의 후속 갱신일과 구분한다.",
+    "crossCheck": "정책을 발표한 기관의 원문과 별도 언론사의 당시 보도를 대조해 결정 내용과 날짜를 확인했다. 언론의 전망이나 가격 해석은 확정된 정책 사실로 사용하지 않는다.",
+    "limitations": [
+      "사건 표시와 ETH 가격의 동시 관측은 인과관계를 입증하지 않는다."
+    ],
+    "keywords": [
+      "Fed",
+      "75bp",
+      "금리 인상",
+      "인플레이션",
+      "긴축"
+    ],
+    "sources": [
+      {
+        "title": "FOMC statement — 2022-06-15",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20220615a.htm",
+        "publisher": "Federal Reserve",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "목표 범위를 1.50–1.75%로 높이고 보유 자산 축소를 계속한다고 밝혔다.",
+        "publishedAt": "2022-06-15",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Dollar dips as Fed hikes rates, flags slowing economy",
+        "url": "https://www.reuters.com/markets/europe/dollar-towers-over-peers-markets-bet-large-fed-rate-hike-2022-06-15/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "75bp 인상과 1994년 이후 가장 큰 단일 인상폭임을 당일 확인한다.",
+        "publishedAt": "2022-06-15",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "목표 범위 1.50–1.75%; 75bp 인상."
+  },
+  {
+    "id": "eth-context-three-arrows-liquidation",
+    "date": "2022-06-27",
+    "label": "3AC 청산",
+    "title": "Three Arrows Capital의 BVI 법원 청산",
+    "category": "market",
+    "importance": 3,
+    "description": "영국령 버진아일랜드 법원이 Three Arrows Capital의 청산을 명령했다.",
+    "detail": "암호자산 투자회사 3AC의 법적 청산 단계다. 청산인이 작성한 공식 공지는 청산 날짜를 6월 27일로 명시한다. 널리 보도된 6월 29일과 구분하여 법적 사건 날짜를 표시한다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "청산인의 공식 공지에 적힌 Date of Liquidation: 27 June 2022와 Reuters의 6월 29일 기사에서 지칭하는 월요일 법원 명령을 대조했다.",
+    "crossCheck": "법원 지정 청산인의 직접 문서와 Reuters가 별도 취재한 법원 명령 보도를 대조했다. 공지 게시일이 2023년이라는 이유로 사건 날짜를 옮기지 않는다.",
+    "limitations": [
+      "BVI 청산과 다른 관할에서의 후속 파산 인정 절차는 동일한 법적 행위가 아니다.",
+      "청산 명령이 그날 모든 자산 처분·채권 회수를 완료했다는 의미는 아니다."
+    ],
+    "keywords": [
+      "Three Arrows Capital",
+      "3AC",
+      "쓰리애로우",
+      "Teneo",
+      "청산",
+      "신용 위기"
+    ],
+    "sources": [
+      {
+        "title": "Notice of sales of certain NFTs — Three Arrows Capital Limited (in liquidation)",
+        "url": "https://3acliquidation.com/wp-content/uploads/2023/02/230222-Notice-3AC-Asset-Sales-Website.pdf",
+        "publisher": "Three Arrows Capital joint liquidators / Teneo",
+        "type": "primary",
+        "role": "liquidator-official-record",
+        "claim": "서명된 공지에 청산 날짜가 2022년 6월 27일로 기재돼 있다.",
+        "publishedAt": "2023-02-22",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Crypto hedge fund Three Arrows Capital has entered liquidation, source says",
+        "url": "https://www.reuters.com/technology/crypto-hedge-fund-three-arrows-capital-has-entered-liquidation-source-says-2022-06-29/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-reporting",
+        "claim": "6월 29일 보도에서 월요일인 6월 27일의 BVI 법원 청산 명령을 확인한다.",
+        "publishedAt": "2022-06-29",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "ethereum-gray-glacier",
+    "date": "2022-06-30",
+    "label": "Gray Glacier",
+    "title": "그레이 글레이셔: 머지 전 난이도 폭탄 추가 연기",
+    "category": "protocol",
+    "importance": 2,
+    "description": "머지를 앞두고 작업증명 메인넷의 난이도 폭탄을 추가로 연기했다.",
+    "detail": "EIP-5133에 따라 난이도 폭탄을 700,000블록 더 늦췄다. 이후 Bellatrix와 Paris를 거쳐 머지가 완료됐다.",
+    "datePrecision": "block-timestamp",
+    "dateBasis": "독립 운영 탐색기의 블록 15,050,000 헤더 시각 2022-06-30T10:54:04Z를 UTC 날짜로 사용한다. 사전 공지의 예상 일자와 구분한다.",
+    "crossCheck": "EF 당시 공지와 공식 연대표를 대조하고 Blockscout의 실제 블록 응답으로 높이·해시·시각을 별도 확인했다. EF 공지와 ethereum.org를 서로 독립된 운영기관으로 세지는 않는다.",
+    "limitations": [
+      "블록 시각은 원장의 헤더 기록이며 모든 노드의 수신 순간이나 사건 시점의 ETH 체결가가 아니다. 업그레이드의 단독 가격 효과는 추정하지 않는다."
+    ],
+    "keywords": [
+      "Gray Glacier",
+      "EIP-5133",
+      "난이도 폭탄",
+      "머지 준비"
+    ],
+    "facts": {
+      "block": 15050000,
+      "blockHash": "0xc43d35f6a64f8a64f046c8deb4069572d622dfe7f028f62301b186f08f0e96f2",
+      "utcTimestamp": "2022-06-30T10:54:04Z"
+    },
+    "sources": [
+      {
+        "publisher": "Ethereum Foundation",
+        "title": "Gray Glacier Upgrade Announcement",
+        "url": "https://blog.ethereum.org/2022/06/16/gray-glacier-announcement",
+        "type": "primary",
+        "role": "upgrade-announcement",
+        "claim": "적용 높이 15,050,000과 난이도 폭탄 추가 연기를 확인한다. 예상일 6월 29일과 실제 6월 30일을 구분한다.",
+        "publishedAt": "2022-06-16",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "ethereum.org",
+        "title": "Timeline of all Ethereum forks",
+        "url": "https://ethereum.org/ethereum-forks/",
+        "type": "primary",
+        "role": "same-organization-retrospective",
+        "claim": "공식 기술 연대표의 실제 업그레이드 날짜와 적용 높이를 확인한다. 연대표의 가격 수치는 사용하지 않는다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Blockscout",
+        "title": "Ethereum block 15050000",
+        "url": "https://eth.blockscout.com/api/v2/blocks/15050000",
+        "type": "primary",
+        "role": "independent-observed-block-header",
+        "claim": "실제 메인넷 블록 높이·해시·UTC 헤더 시각을 확인한다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Ethereum EIPs",
+        "title": "EIP-5133: Delaying Difficulty Bomb to mid-September 2022",
+        "url": "https://eips.ethereum.org/EIPS/eip-5133",
+        "type": "primary",
+        "role": "upgrade-specification",
+        "claim": "업그레이드에 포함된 규칙을 명세 원문에서 확인한다. EIP 작성일은 실행일이 아니다.",
+        "publishedAt": "2022-06-01",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "blockHeight": 15050000,
+    "timestampUtc": "2022-06-30T10:54:04Z",
+    "blockHash": "0xc43d35f6a64f8a64f046c8deb4069572d622dfe7f028f62301b186f08f0e96f2"
+  },
+  {
+    "id": "eth-context-celsius-chapter11",
+    "date": "2022-07-13",
+    "label": "Celsius 파산 신청",
+    "title": "Celsius의 Chapter 11 신청",
+    "category": "market",
+    "importance": 3,
+    "description": "Celsius가 미국에서 Chapter 11 구조조정 절차를 신청했다.",
+    "detail": "6월 출금 중단 뒤 이어진 법원 절차다. 회사의 당일 발표와 후속 법원 선언서가 7월 13일 신청을 확인한다. 고객 출금 재개나 채권자 변제 완료와는 다른 단계다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "회사 발표의 7월 13일 날짜와 법원 선언서가 정의한 Petition Date를 사용한다. Reuters 기사는 7월 14일 게시됐지만 본문은 수요일인 7월 13일 신청을 기록한다.",
+    "crossCheck": "회사의 직접 발표·법원 서류와 Reuters의 법원 신청 취재를 대조했다. 회사의 두 문서는 같은 당사자의 기록이므로 독립된 두 기관으로 세지 않는다.",
+    "limitations": [
+      "Chapter 11 신청일을 출금 중단일이나 고객 변제일로 사용하지 않는다.",
+      "기업의 도산 절차와 ETH 프로토콜의 지속 작동은 별개다."
+    ],
+    "keywords": [
+      "Celsius",
+      "셀시우스",
+      "Chapter 11",
+      "파산",
+      "구조조정",
+      "신용 위기"
+    ],
+    "sources": [
+      {
+        "title": "Celsius Network Initiates Financial Restructuring to Stabilize Business and Maximize Value for All Stakeholders",
+        "url": "https://www.businesswire.com/news/home/20220713005911/en/Celsius-Network-Initiates-Financial-Restructuring-to-Stabilize-Business-and-Maximize-Value-for-All-Stakeholders",
+        "publisher": "Celsius Network / Business Wire 배포",
+        "type": "primary",
+        "role": "company-filing-announcement",
+        "claim": "미국 Chapter 11 신청을 완료했다고 당일 발표한다.",
+        "publishedAt": "2022-07-13",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Declaration of Alex Mashinsky, Celsius Network LLC, case 22-10964, document 23",
+        "url": "https://pacer-documents.s3.amazonaws.com/115/312902/126122257414.pdf",
+        "publisher": "U.S. Bankruptcy Court filing / Celsius Network",
+        "type": "primary",
+        "role": "sworn-court-filing",
+        "claim": "7월 13일을 Chapter 11 Petition Date로 정의한다.",
+        "publishedAt": "2022-07-14",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Major crypto lender Celsius files for bankruptcy",
+        "url": "https://www.reuters.com/technology/crypto-lender-celsius-files-bankruptcy-2022-07-14/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-court-reporting",
+        "claim": "7월 13일 뉴욕의 파산 신청 및 앞선 출금 중단을 구분해 보도한다.",
+        "publishedAt": "2022-07-14",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-tornado-cash-sanctions",
+    "date": "2022-08-08",
+    "label": "Tornado 제재",
+    "title": "미 OFAC, Tornado Cash 제재 발표",
+    "category": "regulation",
+    "importance": 3,
+    "description": "미 재무부가 Ethereum 기반 거래 프라이버시 도구 Tornado Cash를 제재 대상으로 지정했다.",
+    "detail": "당국의 행정 제재 조치로 스마트 계약과 서비스의 제재 적용 범위가 쟁점이 됐다. 법원은 2024년 불변 스마트 계약에 대한 권한 문제를 판단했고, 재무부는 2025년 3월 21일 경제제재를 해제했다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공식 발표문에 명시된 발표 날짜를 사건일로 사용한다. 시행·결제 시점이나 문서의 후속 갱신일과 구분한다.",
+    "crossCheck": "제재 당국의 당시 발표, 별도 사법부의 판결, 당국의 후속 해제 기록을 대조했다. 초기·후속 재무부 문서는 같은 기관이며 법원 문서가 제도적으로 별도 확인 경로다.",
+    "limitations": [
+      "당국의 제재 사유를 형사재판에서 확정된 유죄 사실로 바꾸지 않는다.",
+      "이 기록은 과거 지정이며 2025년의 해제까지 함께 읽어야 한다."
+    ],
+    "keywords": [
+      "Tornado Cash",
+      "OFAC",
+      "제재",
+      "Ethereum",
+      "프라이버시"
+    ],
+    "sources": [
+      {
+        "title": "U.S. Treasury Sanctions Notorious Virtual Currency Mixer Tornado Cash",
+        "url": "https://home.treasury.gov/news/press-releases/jy0916",
+        "publisher": "U.S. Department of the Treasury",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "OFAC가 Ethereum 기반 Tornado Cash에 대한 제재를 발표했다. 자금세탁 관련 내용은 당국의 제재 사유 주장이다.",
+        "publishedAt": "2022-08-08",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Van Loon v. Department of the Treasury, No. 23-50669",
+        "url": "https://www.ca5.uscourts.gov/opinions/pub/23/23-50669-CV0.pdf",
+        "publisher": "U.S. Court of Appeals for the Fifth Circuit",
+        "type": "primary",
+        "role": "independent-judicial-record",
+        "claim": "불변 스마트 계약이 해당 IEEPA 제재 권한의 재산에 해당하지 않는다고 판단하고 일부 약식판결을 원고에게 하도록 파기환송했다.",
+        "publishedAt": "2024-11-26",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Tornado Cash Delisting",
+        "url": "https://home.treasury.gov/news/press-releases/sb0057",
+        "publisher": "U.S. Department of the Treasury",
+        "type": "primary",
+        "role": "subsequent-official-policy-change",
+        "claim": "법적·정책적 검토 후 Tornado Cash에 대한 경제제재를 제거한다고 발표했다.",
+        "publishedAt": "2025-03-21",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "OFAC의 Tornado Cash 제재 지정.",
+    "followUp": "2024-11-26 항소심의 권한 판단 이후 2025-03-21 재무부가 경제제재를 해제했다. 개발자 개인의 별도 형사사건 판단과 동일하지 않다."
+  },
+  {
+    "importance": 2,
+    "datePrecision": "source-calendar-day",
+    "id": "ethereum-bellatrix",
+    "date": "2022-09-06",
+    "label": "벨라트릭스",
+    "title": "벨라트릭스: 머지를 준비한 합의층 업그레이드",
+    "category": "protocol",
+    "description": "비콘 체인의 합의층이 머지를 지원하는 Bellatrix 규칙으로 업그레이드됐다.",
+    "detail": "Bellatrix는 합의층 준비 단계이고 실행층의 PoS 전환인 Paris는 9월 15일에 뒤따랐다. 두 단계를 하나의 날짜로 합치지 않는다.",
+    "dateBasis": "공식 기술 연대표와 완료 후 네트워크 관측 보고가 확인한 9월 6일을 사용한다. epoch 144,896의 일정 정보를 특정 실행 블록의 실제 시각으로 바꾸지 않는다.",
+    "crossCheck": "EF 공지의 두 단계 설계와 공식 연대표를 확인하고, Coinbase의 9월 9일 네트워크 관측 보고에서 9월 6일 실제 활성화를 교차 확인했다.",
+    "limitations": [
+      "EF의 사전 epoch 시각만으로 별도의 실행 블록 해시나 체결 시각을 만들지 않는다.",
+      "Bellatrix 당일에 실행층의 PoW가 이미 종료됐다고 설명하지 않는다."
+    ],
+    "keywords": [
+      "Bellatrix",
+      "벨라트릭스",
+      "Merge",
+      "머지",
+      "합의층"
+    ],
+    "sources": [
+      {
+        "publisher": "Ethereum Foundation",
+        "title": "Mainnet Merge Announcement",
+        "url": "https://blog.ethereum.org/2022/08/24/mainnet-merge-announcement",
+        "type": "primary",
+        "role": "upgrade-design",
+        "claim": "Bellatrix 합의층 단계와 Paris 실행층 단계를 구분하는 원문을 확인한다.",
+        "publishedAt": "2022-08-24",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "ethereum.org",
+        "title": "Timeline of all Ethereum forks",
+        "url": "https://ethereum.org/ethereum-forks/",
+        "type": "primary",
+        "role": "same-organization-retrospective",
+        "claim": "공식 기술 연대표의 실제 업그레이드 날짜와 적용 높이를 확인한다. 연대표의 가격 수치는 사용하지 않는다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Coinbase Institutional Research",
+        "title": "The Merge: Waiting is the hardest part",
+        "url": "https://www.coinbase.com/institutional/research-insights/research/weekly-market-commentary/weekly-market-commentary-september-9-2022",
+        "type": "primary",
+        "role": "independent-provider-retrospective",
+        "claim": "9월 6일 Bellatrix 실제 활성화와 이후 네트워크 참여 관측을 확인한다.",
+        "publishedAt": "2022-09-09",
+        "accessedAt": "2026-10-24"
+      }
+    ]
   },
   {
     "id": "ethereum-merge",
@@ -925,6 +4170,458 @@ export const ETHEREUM_EVENTS = deepFreeze([
     "blockHash": "0x56a9bb0302da44b8c0b3df540781424684c3af04d0b7a38d72842b762076a664"
   },
   {
+    "id": "eth-context-ftx-withdrawal-pause",
+    "date": "2022-11-08",
+    "label": "FTX 출금 중단",
+    "title": "FTX.com의 고객 출금 중단",
+    "category": "market",
+    "importance": 3,
+    "description": "FTX.com의 고객 출금이 사실상 중단됐다.",
+    "detail": "Reuters가 확인한 사내 메시지는 11월 8일 FTX.com 출금이 사실상 멈췄다고 설명한다. SEC의 후속 소장도 같은 날 중단을 기록한다. 그날의 Binance 비구속적 인수 의향과 11월 11일 Chapter 11 신청은 서로 다른 단계다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "Reuters가 당일 확인한 메시지와 SEC 소장 79항의 11월 8일 기록을 대조했다.",
+    "crossCheck": "사내 메시지를 확보한 Reuters 보도와 SEC의 후속 법원 제출 문서를 대조했다. SEC 소장은 법적 주장 문서이며 이 항목은 동시대 보도가 확인한 출금 중단 경과만 사용한다.",
+    "limitations": [
+      "FTX.com과 FTX US의 서비스 상태를 같은 시각의 동일한 중단으로 일반화하지 않는다.",
+      "비구속적 인수 의향을 완료된 인수로 표현하지 않는다."
+    ],
+    "keywords": [
+      "FTX",
+      "FTX.com",
+      "출금 중단",
+      "거래소",
+      "신용 위기",
+      "Alameda"
+    ],
+    "sources": [
+      {
+        "title": "SEC v. Samuel Bankman-Fried — complaint",
+        "url": "https://www.sec.gov/files/litigation/complaints/2022/comp-pr2022-219.pdf",
+        "publisher": "U.S. Securities and Exchange Commission",
+        "type": "primary",
+        "role": "court-complaint-chronology",
+        "claim": "79항은 11월 8일 FTX의 고객 출금 중단을 기록한다.",
+        "publishedAt": "2022-12-13",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Crypto exchange FTX saw $6 bln in withdrawals in 72 hours",
+        "url": "https://www.reuters.com/business/finance/crypto-exchange-ftx-saw-6-bln-withdrawals-72-hours-ceo-message-staff-2022-11-08/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-document-reporting",
+        "claim": "Reuters가 본 당일 사내 메시지에서 FTX.com 출금이 사실상 중단됐음을 확인한다.",
+        "publishedAt": "2022-11-08",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "eth-context-ftx-chapter11",
+    "date": "2022-11-11",
+    "label": "FTX 파산 신청",
+    "title": "FTX 그룹의 Chapter 11 신청",
+    "category": "market",
+    "importance": 3,
+    "description": "FTX와 Alameda Research 등 관련 기업들이 미국 Chapter 11 절차를 시작했다.",
+    "detail": "11월 8일의 유동성·출금 위기 뒤 법적 구조조정 절차가 시작됐다. 회사 최고경영자 교체도 같은 날 발표됐다. 기업의 파산 신청을 Ethereum 블록체인의 기술 장애로 해석하지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "SEC 후속 소장에 적힌 11월 11일 파산 경과와 Reuters의 당일 신청 보도를 대조했다.",
+    "crossCheck": "SEC의 법원 문서와 Reuters의 동시대 파산 취재를 대조했다. 법적 혐의의 최종 판단이나 이후 변제 상태를 이 날짜의 사실로 소급하지 않는다.",
+    "limitations": [
+      "관련 회사의 범위가 그룹의 모든 법인을 뜻하는 것은 아니다.",
+      "Chapter 11 신청은 형사 유죄 확정이나 채권 변제 완료와 다르다."
+    ],
+    "keywords": [
+      "FTX",
+      "Alameda",
+      "Chapter 11",
+      "파산",
+      "신용 위기",
+      "거래소"
+    ],
+    "sources": [
+      {
+        "title": "SEC v. Samuel Bankman-Fried — complaint",
+        "url": "https://www.sec.gov/files/litigation/complaints/2022/comp-pr2022-219.pdf",
+        "publisher": "U.S. Securities and Exchange Commission",
+        "type": "primary",
+        "role": "court-complaint-chronology",
+        "claim": "FTX의 2022년 11월 11일 파산 신청 경과를 기록한다.",
+        "publishedAt": "2022-12-13",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Crypto exchange FTX files for bankruptcy as wunderkind CEO exits",
+        "url": "https://www.reuters.com/business/ftx-start-us-bankruptcy-proceedings-ceo-exit-2022-11-11/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-court-reporting",
+        "claim": "FTX·Alameda 등 관련 기업의 Chapter 11 개시와 CEO 교체를 보도한다.",
+        "publishedAt": "2022-11-11",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "eth-context-genesis-redemption-pause",
+    "date": "2022-11-16",
+    "label": "Genesis 상환 중단",
+    "title": "Genesis 대출 부문의 고객 상환 중단",
+    "category": "market",
+    "importance": 3,
+    "description": "Genesis Global Capital이 대출 사업의 고객 상환과 신규 대출을 중단했다.",
+    "detail": "회사는 대출 부문에서 유동성 제약에 직면했다고 발표했다. 같은 공지에서 현물·파생 거래와 수탁 사업은 계속 운영된다고 구분했다. 여러 암호자산 기업의 신용 관계를 보여 주는 사건이다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "Genesis의 11월 16일 공식 공지와 Reuters의 당일 보도를 사용한다.",
+    "crossCheck": "대출 사업자의 공식 상태 공지와 Reuters의 회사·고객사 취재를 대조했다. Investing.com은 Reuters 전재처로 표시한다.",
+    "limitations": [
+      "대출 부문의 상환 중단을 Genesis 전체 거래·수탁 서비스 중단으로 확대하지 않는다.",
+      "이 날짜는 후속 법원 절차나 고객 변제 완료일이 아니다."
+    ],
+    "keywords": [
+      "Genesis",
+      "제네시스",
+      "Gemini Earn",
+      "상환 중단",
+      "대출",
+      "신용 위기"
+    ],
+    "sources": [
+      {
+        "title": "Genesis Global Capital update 11/16/22",
+        "url": "https://www.genesiscap.co/update/genesis-global-capital-update-11-16-22",
+        "publisher": "Genesis Global Capital",
+        "type": "primary",
+        "role": "company-service-status",
+        "claim": "대출 상환과 신규 대출 중단 및 다른 사업의 계속 운영을 명시한다.",
+        "publishedAt": "2022-11-16",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "FTX fallout hits crypto lender Genesis; Bankman-Fried, celebs sued",
+        "url": "https://www.investing.com/news/stock-market-news/crypto-broker-genesis-to-suspend-redemptions-new-loan-originations--tweet-2945845",
+        "publisher": "Reuters / Investing.com 전재",
+        "type": "secondary",
+        "role": "contemporaneous-reporting",
+        "claim": "11월 16일 대출 부문 상환 중단 및 고객 서비스 연결 관계를 보도한다.",
+        "publishedAt": "2022-11-16",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-kraken-staking-settlement",
+    "date": "2023-02-09",
+    "label": "Kraken 스테이킹",
+    "title": "SEC, Kraken 스테이킹 서비스 제재 합의 발표",
+    "category": "regulation",
+    "importance": 3,
+    "description": "SEC가 Kraken의 특정 스테이킹 서비스 중단과 3,000만 달러 지급 합의를 발표했다.",
+    "detail": "미국 고객 대상 중앙화 서비스의 등록 문제를 다룬 사건이다. 발표 당시 합의는 법원 승인을 전제로 했으며, 지급액은 부당이득 환수·이자·제재금을 포함한다. 이를 Ethereum의 모든 검증 활동에 대한 금지로 읽지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공식 발표문에 명시된 발표 날짜를 사건일로 사용한다. 시행·결제 시점이나 문서의 후속 갱신일과 구분한다.",
+    "crossCheck": "정책을 발표한 기관의 원문과 별도 언론사의 당시 보도를 대조해 결정 내용과 날짜를 확인했다. 언론의 전망이나 가격 해석은 확정된 정책 사실로 사용하지 않는다.",
+    "limitations": [
+      "혐의를 인정하거나 부인하지 않는 합의의 성격을 유지한다.",
+      "중앙화 사업자의 특정 서비스와 프로토콜 수준 PoS를 구분한다.",
+      "발표 당시 법원 승인 조건과 최종 사법 절차를 혼동하지 않는다."
+    ],
+    "keywords": [
+      "SEC",
+      "Kraken",
+      "스테이킹",
+      "PoS",
+      "등록"
+    ],
+    "sources": [
+      {
+        "title": "Kraken to Discontinue Unregistered Offer and Sale of Crypto Asset Staking-As-A-Service Program and Pay $30 Million to Settle SEC Charges",
+        "url": "https://www.sec.gov/newsroom/press-releases/2023-25",
+        "publisher": "SEC",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "Kraken의 특정 스테이킹 서비스에 관한 미등록 증권 판매 혐의, 서비스 중단 및 3,000만 달러 지급 합의를 발표했다.",
+        "publishedAt": "2023-02-09",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Kraken shuts down staking service, pays $30 million fine in SEC settlement",
+        "url": "https://www.axios.com/2023/02/09/kraken-staking-sec-settlement",
+        "publisher": "Axios",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "2월 9일 미국 고객 대상 서비스 중단 합의를 보도했다.",
+        "publishedAt": "2023-02-09",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "특정 스테이킹 서비스에 대한 중단 및 금전 지급 합의 발표."
+  },
+  {
+    "id": "eth-context-silvergate-wind-down-announcement",
+    "date": "2023-03-08",
+    "label": "Silvergate 정리 발표",
+    "title": "Silvergate의 자발적 정리 계획 발표",
+    "category": "market",
+    "importance": 3,
+    "description": "Silvergate가 은행 영업의 질서 있는 종료와 자발적 청산 계획을 발표했다.",
+    "detail": "암호자산 기업의 달러 결제·은행 관계에 관련된 사건이다. 공시된 발표는 정리 계획의 발표이며 이날 모든 청산이 완료됐다는 뜻이 아니다. 3월 10일 SVB의 당국 폐쇄와도 법적 성격이 다르다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "SEC에 제출된 회사 보도자료의 3월 8일 발표일과 당일 Reuters 보도를 대조했다.",
+    "crossCheck": "회사 공시 원문과 Reuters의 동시대 보도를 대조했다. SEC는 회사 문서의 보관처이며 해당 계획의 작성 주체로 표시하지 않는다.",
+    "limitations": [
+      "완료된 사건은 정리 계획의 발표다. 청산 완료일로 표시하지 않는다.",
+      "자발적 정리와 규제기관의 은행 폐쇄·관리인 지정은 다른 행위다."
+    ],
+    "keywords": [
+      "Silvergate",
+      "실버게이트",
+      "은행",
+      "SEN",
+      "결제",
+      "달러 유동성"
+    ],
+    "sources": [
+      {
+        "title": "Silvergate Capital Corporation Announces Intent to Wind Down Operations and Voluntarily Liquidate Silvergate Bank",
+        "url": "https://www.sec.gov/Archives/edgar/data/1312109/000131210923000058/ex991sipressrelease3x8x23.htm",
+        "publisher": "Silvergate Capital / SEC EDGAR 보관",
+        "type": "primary",
+        "role": "issuer-filed-announcement",
+        "claim": "3월 8일 은행 정리 및 자발적 청산 의향을 발표한 원문이다.",
+        "publishedAt": "2023-03-08",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Crypto-focused bank Silvergate plans to wind down following blow from FTX",
+        "url": "https://www.investing.com/news/stock-market-news/cryptofocused-bank-silvergate-plans-to-wind-down-operations-3025518",
+        "publisher": "Reuters / Investing.com 전재",
+        "type": "secondary",
+        "role": "contemporaneous-reporting",
+        "claim": "3월 8일 정리 계획 발표와 암호자산 기업의 은행 관계를 보도한다.",
+        "publishedAt": "2023-03-08",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "eth-context-svb-closure",
+    "date": "2023-03-10",
+    "label": "SVB 폐쇄",
+    "title": "Silicon Valley Bank의 당국 폐쇄",
+    "category": "market",
+    "importance": 3,
+    "description": "캘리포니아 당국이 Silicon Valley Bank를 폐쇄하고 FDIC가 관리인으로 지정됐다.",
+    "detail": "은행 실패는 주말의 달러 준비자산과 스테이블코인 관련 논의의 배경이 됐다. 3월 11일 USDC 페그 이탈 및 3월 12일 예금자 보호 대책과 나누어 기록한다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "Fed의 공식 SVB 검토 보고서가 명시한 3월 10일 폐쇄 날짜와 당일 Reuters 보도를 사용한다.",
+    "crossCheck": "Fed의 감독 검토 보고서와 Reuters의 당시 규제기관 발표 취재를 대조했다. 회고 보고서는 당시 감독기관의 자체 검토라는 성격을 함께 밝힌다.",
+    "limitations": [
+      "은행 자체의 폐쇄와 지주회사 SVB Financial Group의 후속 파산 절차는 구분한다.",
+      "폐쇄 당일 조치와 이틀 뒤 확대된 예금자 보호 조치를 혼합하지 않는다."
+    ],
+    "keywords": [
+      "SVB",
+      "Silicon Valley Bank",
+      "실리콘밸리은행",
+      "FDIC",
+      "은행 위기",
+      "USDC"
+    ],
+    "sources": [
+      {
+        "title": "Review of the Federal Reserve's Supervision and Regulation of Silicon Valley Bank — Executive Summary",
+        "url": "https://www.federalreserve.gov/publications/2023-April-SVB-Executive-Summary.htm",
+        "publisher": "Federal Reserve Board",
+        "type": "primary",
+        "role": "official-supervisory-review",
+        "claim": "SVB가 2023년 3월 10일 캘리포니아 당국에 의해 폐쇄됐음을 확인한다.",
+        "publishedAt": "2023-04-28",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Silicon Valley Bank shut by California regulator",
+        "url": "https://www.investing.com/news/economy/california-regulator-shuts-silicon-valley-bank-3027821",
+        "publisher": "Reuters / Investing.com 전재",
+        "type": "secondary",
+        "role": "contemporaneous-reporting",
+        "claim": "3월 10일 은행 폐쇄와 FDIC 관리인 지정을 보도한다.",
+        "publishedAt": "2023-03-10",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "eth-context-usdc-depeg",
+    "date": "2023-03-11",
+    "label": "USDC 페그 이탈",
+    "title": "SVB 사태 중 USDC의 달러 페그 이탈",
+    "category": "market",
+    "importance": 3,
+    "description": "USDC가 주말 유통시장에서 달러 연동 수준을 크게 이탈했다.",
+    "detail": "Circle의 SVB 준비자산 노출 공개 뒤 USDC와 관련 스테이블코인 거래에 긴장이 나타났다. 3월 11일 당일 보도와 후속 시장 기록을 사용한다. USDC의 유통시장 가격과 발행사의 상환 절차를 구분한다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "3월 11일의 실제 페그 이탈 보도를 기준으로 삼는다. 준비자산 공개는 미국 동부시간 3월 10일 밤이었으며 여러 시간대에 걸친 상황을 한 순간으로 압축하지 않는다.",
+    "crossCheck": "발행사 Circle의 준비자산·회복 공지, The Block의 당일 시장 보도, Fed 연구자의 사후 거래 분석을 대조했다. 발행사 주장과 별개인 보도·관측 기록으로 페그 이탈을 확인한다.",
+    "limitations": [
+      "USDC의 가격 이탈은 ETH 자체의 달러 페그 붕괴를 뜻하지 않는다. ETH는 달러 연동 토큰이 아니다.",
+      "거래소별 최저가와 장중 스냅샷이 달라 단일 가격 수치를 전체 시장의 확정 최저가로 넣지 않는다."
+    ],
+    "keywords": [
+      "USDC",
+      "Circle",
+      "SVB",
+      "DAI",
+      "디페깅",
+      "스테이블코인",
+      "은행 위기"
+    ],
+    "sources": [
+      {
+        "title": "USDC Reserve Risk Removed, Dollar De-Peg Closes",
+        "url": "https://www.circle.com/pressroom/3-3-billion-of-usdc-reserve-risk-removed-dollar-de-peg-closes",
+        "publisher": "Circle",
+        "type": "primary",
+        "role": "issuer-reserve-and-recovery-statement",
+        "claim": "3월 11일 준비자산 설명 및 3월 12일 당국 대응 뒤의 상태를 기록한다. 페이지 게시는 3월 13일이다.",
+        "publishedAt": "2023-03-13",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "USDC remains at about $0.90 following Circle's disclosure of funds at SVB",
+        "url": "https://www.theblock.co/news/markets/2023-03-11-usdc-and-dai-remain-at-about-0-90-following-circles-disclosure-of-funds-at-svb-218993",
+        "publisher": "The Block",
+        "type": "secondary",
+        "role": "contemporaneous-market-reporting",
+        "claim": "3월 11일 USDC의 유통시장 페그 이탈과 관련 거래 상황을 보도한다.",
+        "publishedAt": "2023-03-11",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "In the Shadow of Bank Runs: Lessons from the Silicon Valley Bank Failure and Its Impact on Stablecoins",
+        "url": "https://www.federalreserve.gov/econres/notes/feds-notes/in-the-shadow-of-bank-run-lessons-from-the-silicon-valley-bank-failure-and-its-impact-on-stablecoins-20251217.html",
+        "publisher": "Federal Reserve staff researchers",
+        "type": "primary",
+        "role": "independent-retrospective-market-research",
+        "claim": "3월 10일 밤 공개, 11일 시장 긴장, 12일 당국 발표와 13일 상환 재개를 나누어 기록한다.",
+        "publishedAt": "2025-12-17",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "followUp": "Fed 연구자의 사후 기록은 3월 12일 당국 발표 뒤 가격이 회복하기 시작했고 13일 발행사 상환 처리 재개와 함께 페그가 회복됐다고 설명한다."
+  },
+  {
+    "id": "eth-context-us-bank-deposit-backstop",
+    "date": "2023-03-12",
+    "label": "美 은행위기 대응",
+    "title": "미국의 SVB·Signature 예금자 보호 및 BTFP 발표",
+    "category": "market",
+    "importance": 3,
+    "description": "미국 당국이 SVB·Signature 예금자 보호와 은행 유동성 지원 수단을 발표했다.",
+    "detail": "재무부·Fed·FDIC의 공동 발표는 해당 두 은행의 예금자를 보호하는 조치를 설명했다. Fed는 같은 날 Bank Term Funding Program을 발표했다. 은행 위기와 달러 준비자산 문제의 후속 대응을 표시한다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공동 성명과 BTFP 공지의 3월 12일 오후 6시 15분 EDT 발표 날짜를 사용한다. 예금 접근이 가능해지는 3월 13일과 구분한다.",
+    "crossCheck": "서로 연계된 두 공식 공지를 Reuters의 당일 시장·정책 보도로 대조했다. 같은 공동 대응의 공식 문서 둘을 별개의 독립 확인으로 과장하지 않는다.",
+    "limitations": [
+      "대상 은행의 주주와 일부 무담보 채권자까지 보호했다는 의미가 아니다.",
+      "모든 암호자산 또는 모든 은행 예금에 대한 영구·무조건 보증으로 일반화하지 않는다."
+    ],
+    "keywords": [
+      "SVB",
+      "Signature",
+      "BTFP",
+      "Fed",
+      "FDIC",
+      "예금자 보호",
+      "은행 위기",
+      "USDC"
+    ],
+    "sources": [
+      {
+        "title": "Joint Statement by the Department of the Treasury, Federal Reserve, and FDIC",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20230312b.htm",
+        "publisher": "U.S. Treasury / Federal Reserve / FDIC",
+        "type": "primary",
+        "role": "joint-official-announcement",
+        "claim": "3월 12일 SVB·Signature 예금자 보호, 다음 날 접근 및 보호 대상의 한계를 설명한다.",
+        "publishedAt": "2023-03-12",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Federal Reserve Board announces additional funding to eligible depository institutions",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20230312a.htm",
+        "publisher": "Federal Reserve Board",
+        "type": "primary",
+        "role": "facility-announcement",
+        "claim": "3월 12일 BTFP 신설 및 적격 예금취급기관 대상 자금 지원을 발표한다.",
+        "publishedAt": "2023-03-12",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "US intervenes to shore up SVB deposits, limit financial fallout",
+        "url": "https://www.investing.com/news/stock-market-news/instant-view-us-intervenes-to-shore-up-svb-deposits-stem-financial-fallout-3028419",
+        "publisher": "Reuters / Investing.com 전재",
+        "type": "secondary",
+        "role": "contemporaneous-policy-and-market-reporting",
+        "claim": "당일 예금자 보호와 BTFP 발표에 대한 시장 관계자 반응을 기록한다.",
+        "publishedAt": "2023-03-12",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "eth-context-euler-exploit",
+    "date": "2023-03-13",
+    "label": "Euler 공격",
+    "title": "Euler 대출 프로토콜 취약점 악용",
+    "category": "security",
+    "importance": 3,
+    "description": "Ethereum의 Euler 대출 프로토콜에서 담보·청산 검증의 취약점이 악용돼 자산이 유출됐다.",
+    "detail": "공격자는 담보를 기부하는 기능의 건전성 검사 누락과 청산 구조를 함께 악용했다. Euler의 직접 회고와 Coinbase 조사팀의 계약·거래 분석이 날짜와 경위를 확인한다. 은행·USDC 위기와 가까운 시기에 일어났지만 별도의 스마트 계약 공격으로 기록한다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "Euler 공식 회고의 March 13th 항목과 Coinbase Unit 0x의 2023년 3월 13일 거래 분석을 대조했다. 공격 계약 배포와 자산 유출은 다른 단계이므로 하나의 초 단위 시각으로 합치지 않는다.",
+    "crossCheck": "프로토콜 운영팀의 사후 기록과 별도 조직인 Coinbase Unit 0x의 독립적인 코드·온체인 분석을 대조했다. 업체의 복구 성과 홍보나 초기 감사 책임 논쟁을 확정 결론으로 채택하지 않는다.",
+    "limitations": [
+      "Euler 애플리케이션 계약의 취약점이며 Ethereum 합의 프로토콜의 침해를 뜻하지 않는다.",
+      "회수 시점의 자산 가격과 공격 시점 가격이 달라 달러 환산액을 단순 비교하지 않는다.",
+      "당시 USDC 사건과 시간상 가깝다는 사실만으로 공격의 원인 관계를 연결하지 않는다."
+    ],
+    "keywords": [
+      "Euler",
+      "오일러",
+      "DeFi",
+      "대출",
+      "청산",
+      "플래시론",
+      "스마트 계약",
+      "해킹"
+    ],
+    "sources": [
+      {
+        "title": "War & Peace: Behind the Scenes of Euler's $240M Exploit Recovery",
+        "url": "https://www.euler.finance/blog/war-peace-behind-the-scenes-of-eulers-240m-exploit-recovery",
+        "publisher": "Euler Labs",
+        "type": "primary",
+        "role": "operator-retrospective",
+        "claim": "3월 13일 공격과 담보 기부 기능의 검사 누락, 후속 자산 반환 과정을 직접 기록한다.",
+        "publishedAt": "2024-01-10",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Euler Compromise Investigation — Part 1 — The Exploit",
+        "url": "https://www.coinbase.com/blog/euler-compromise-investigation-part-1-the-exploit",
+        "publisher": "Coinbase Unit 0x",
+        "type": "primary",
+        "role": "independent-contract-and-onchain-analysis",
+        "claim": "3월 13일 공격을 거래와 계약 코드로 분석하고 후속 자산 반환을 확인한다.",
+        "publishedAt": "2023-04-19",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "followUp": "후속 Euler·Coinbase 보고서는 상당한 탈취 자산의 반환을 기록한다. 공격 발생일과 자산 반환·이용자 복구 절차의 시점을 구분한다."
+  },
+  {
     "id": "ethereum-shapella",
     "date": "2023-04-12",
     "label": "샤펠라",
@@ -993,6 +4690,353 @@ export const ETHEREUM_EVENTS = deepFreeze([
     "blockHeight": 17034870,
     "timestampUtc": "2023-04-12T22:27:59Z",
     "blockHash": "0xe22c56f211f03baadcc91e4eb9a24344e6848c5df4473988f893b58223f5216c"
+  },
+  {
+    "importance": 2,
+    "datePrecision": "source-calendar-day",
+    "id": "eth-security-finality-delay-first",
+    "date": "2023-05-11",
+    "label": "첫 확정 지연",
+    "title": "비콘 체인의 일시적 최종 확정 지연",
+    "category": "security",
+    "description": "비콘 체인의 최종 확정이 일시적으로 지연됐다. 일부 블록은 계속 생성돼 전체 원장 중단과는 구분된다.",
+    "detail": "일부 합의 클라이언트가 오래된 유효 증명을 처리하는 데 과도한 자원을 사용했다. 클라이언트 개발팀과 별도 노드 데이터 분석은 블록 생성과 최종 확정을 구분한다.",
+    "dateBasis": "사후 보고서의 UTC 사건일 2023-05-11를 사용한다. 보고서의 작성일·게시일과 구분하며 정확한 시작·종료의 측정 정의는 각 원문에 남긴다.",
+    "crossCheck": "Prysm 개발팀의 사후 분석과 여러 지역·클라이언트의 노드 데이터를 분석한 Ethereum Research 원문을 대조했다. 두 연구가 원인 설명을 일부 공유하지만 후자는 별도 관측 자료를 제시한다.",
+    "limitations": [
+      "확정 지연을 모든 거래 처리의 중단, 확정된 원장 전체의 번복, 또는 ETH 가격 폭락의 단독 원인으로 기술하지 않는다.",
+      "자료마다 지연 구간의 시작·끝을 정의하는 방식이 달라 분 단위 지속 시간을 하나로 강제하지 않는다."
+    ],
+    "keywords": [
+      "finality",
+      "최종 확정",
+      "Prysm",
+      "Teku",
+      "비콘 체인",
+      "합의"
+    ],
+    "sources": [
+      {
+        "publisher": "Prysm / Offchain Labs",
+        "title": "Post-Mortem Report: Ethereum Mainnet Finality (05/11/2023)",
+        "url": "https://medium.com/offchainlabs/post-mortem-report-ethereum-mainnet-finality-05-11-2023-95e271dfd8b2",
+        "type": "primary",
+        "role": "client-postmortem",
+        "claim": "5월 11일과 12일의 별도 사건, 복구와 수정 내용을 확인한다. 원문은 내부 날짜 5월 12일과 게시일 5월 18일을 함께 가진다.",
+        "publishedAt": "2023-05-18",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Thomas Thiery / Ethereum Research",
+        "title": "Cascading Network Effects on Ethereum’s Finality",
+        "url": "https://ethresear.ch/t/cascading-network-effects-on-ethereums-finality/15871",
+        "type": "primary",
+        "role": "independent-measurement-analysis",
+        "claim": "다지역·다클라이언트 노드 관측을 통해 두 사건의 날짜, 블록 생성 지속과 확정 지연을 교차 확인한다.",
+        "publishedAt": "2023-06-13",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "importance": 2,
+    "datePrecision": "source-calendar-day",
+    "id": "eth-security-finality-delay-repeat",
+    "date": "2023-05-12",
+    "label": "확정 지연 재발",
+    "title": "최종 확정 지연 재발과 클라이언트 대응",
+    "category": "security",
+    "description": "비콘 체인의 최종 확정이 일시적으로 지연됐다. 일부 블록은 계속 생성돼 전체 원장 중단과는 구분된다.",
+    "detail": "전날보다 길게 확정 지연이 재발했고 비활성 패널티가 적용됐다. 네트워크는 회복됐고 Prysm·Teku에 후속 수정이 제공됐다.",
+    "dateBasis": "사후 보고서의 UTC 사건일 2023-05-12를 사용한다. 보고서의 작성일·게시일과 구분하며 정확한 시작·종료의 측정 정의는 각 원문에 남긴다.",
+    "crossCheck": "Prysm 개발팀의 사후 분석과 여러 지역·클라이언트의 노드 데이터를 분석한 Ethereum Research 원문을 대조했다. 두 연구가 원인 설명을 일부 공유하지만 후자는 별도 관측 자료를 제시한다.",
+    "limitations": [
+      "확정 지연을 모든 거래 처리의 중단, 확정된 원장 전체의 번복, 또는 ETH 가격 폭락의 단독 원인으로 기술하지 않는다.",
+      "자료마다 지연 구간의 시작·끝을 정의하는 방식이 달라 분 단위 지속 시간을 하나로 강제하지 않는다."
+    ],
+    "keywords": [
+      "finality",
+      "최종 확정",
+      "Prysm",
+      "Teku",
+      "비콘 체인",
+      "합의"
+    ],
+    "sources": [
+      {
+        "publisher": "Prysm / Offchain Labs",
+        "title": "Post-Mortem Report: Ethereum Mainnet Finality (05/11/2023)",
+        "url": "https://medium.com/offchainlabs/post-mortem-report-ethereum-mainnet-finality-05-11-2023-95e271dfd8b2",
+        "type": "primary",
+        "role": "client-postmortem",
+        "claim": "5월 11일과 12일의 별도 사건, 복구와 수정 내용을 확인한다. 원문은 내부 날짜 5월 12일과 게시일 5월 18일을 함께 가진다.",
+        "publishedAt": "2023-05-18",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "publisher": "Thomas Thiery / Ethereum Research",
+        "title": "Cascading Network Effects on Ethereum’s Finality",
+        "url": "https://ethresear.ch/t/cascading-network-effects-on-ethereums-finality/15871",
+        "type": "primary",
+        "role": "independent-measurement-analysis",
+        "claim": "다지역·다클라이언트 노드 관측을 통해 두 사건의 날짜, 블록 생성 지속과 확정 지연을 교차 확인한다.",
+        "publishedAt": "2023-06-13",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-mica-council-adoption",
+    "date": "2023-05-16",
+    "label": "MiCA 이사회 채택",
+    "title": "EU 이사회, MiCA 암호자산 규제 채택",
+    "category": "regulation",
+    "importance": 3,
+    "description": "EU 이사회가 암호자산 발행·서비스 제공자에 대한 MiCA를 채택했다.",
+    "detail": "유럽의 공통 암호자산 규제 체계를 확정하는 입법 단계다. 이사회 채택일은 법률 서명·관보 게재·실제 적용일과 다르다. ETH가 거래되는 서비스와 Ethereum 기반 토큰 생태계의 제도적 환경에 관한 사건이다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "EU 이사회 발표와 당일 Reuters 보도가 확인하는 2023-05-16 채택일. 이후 법률 서명·적용일과 구분한다.",
+    "crossCheck": "정책을 발표한 기관의 원문과 별도 언론사의 당시 보도를 대조해 결정 내용과 날짜를 확인했다. 언론의 전망이나 가격 해석은 확정된 정책 사실로 사용하지 않는다.",
+    "limitations": [
+      "5월 16일 모든 사업자에게 규제가 적용됐다고 표현하지 않는다.",
+      "MiCA의 적용 범위를 모든 탈중앙화 소프트웨어나 모든 금융상품에 일괄 확대하지 않는다."
+    ],
+    "keywords": [
+      "EU",
+      "MiCA",
+      "암호자산 규제",
+      "이사회",
+      "CASP"
+    ],
+    "sources": [
+      {
+        "title": "Digital finance: Council adopts new rules on markets in crypto-assets (MiCA)",
+        "url": "https://www.consilium.europa.eu/en/press/press-releases/2023/05/16/digital-finance-council-adopts-new-rules-on-markets-in-crypto-assets-mica/",
+        "publisher": "Council of the European Union",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "5월 16일 EU 이사회가 MiCA를 채택했다고 발표했다.",
+        "publishedAt": "2023-05-16",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "EU states approve world’s first comprehensive crypto rules",
+        "url": "https://www.reuters.com/technology/eu-council-adopts-first-legal-framework-regulate-crypto-sector-2023-05-16/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "당일 EU 회원국 장관들의 MiCA 채택을 확인한다.",
+        "publishedAt": "2023-05-16",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "EU 이사회의 MiCA 채택."
+  },
+  {
+    "id": "eth-policy-coinbase-sec-complaint",
+    "date": "2023-06-06",
+    "label": "SEC Coinbase 소송",
+    "title": "SEC, Coinbase 거래·스테이킹 관련 민사소송 제기",
+    "category": "regulation",
+    "importance": 3,
+    "description": "SEC가 Coinbase의 거래 및 스테이킹 서비스 등에 대해 미등록 증권 업무 혐의를 제기했다.",
+    "detail": "미국의 주요 ETH 거래 경로와 스테이킹 서비스에 관련된 집행 사건이다. 혐의 제기 자체가 법원의 유죄 또는 ETH 자산 전체의 증권성 확정은 아니다. SEC는 2025년 2월 27일 정책적 이유로 소송 철회를 발표했다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공식 발표문에 명시된 발표 날짜를 사건일로 사용한다. 시행·결제 시점이나 문서의 후속 갱신일과 구분한다.",
+    "crossCheck": "당시 SEC 제소 발표와 후속 SEC 철회 발표, 이를 확인한 별도 Reuters 보도를 대조했다. 두 SEC 문서는 같은 기관의 사건 전후 기록이다.",
+    "limitations": [
+      "민사 혐의를 확정 판결로 표현하지 않는다.",
+      "ETH 자체와 거래 플랫폼·스테이킹 상품의 법적 쟁점을 구분한다.",
+      "후속 철회를 반영하며 과거 소송이 그대로 진행 중이라고 쓰지 않는다."
+    ],
+    "keywords": [
+      "SEC",
+      "Coinbase",
+      "소송",
+      "거래소",
+      "스테이킹"
+    ],
+    "sources": [
+      {
+        "title": "SEC Charges Coinbase for Operating as an Unregistered Securities Exchange, Broker, and Clearing Agency",
+        "url": "https://www.sec.gov/newsroom/press-releases/2023-102",
+        "publisher": "SEC",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "Coinbase 거래소·브로커·청산 및 스테이킹 서비스 관련 민사 혐의 제기를 발표했다.",
+        "publishedAt": "2023-06-06",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "SEC Announces Dismissal of Civil Enforcement Action Against Coinbase",
+        "url": "https://www.sec.gov/newsroom/press-releases/2025-47",
+        "publisher": "SEC",
+        "type": "primary",
+        "role": "subsequent-official-litigation-record",
+        "claim": "소송 철회 합의 제출을 발표하며 정책적 판단이고 사건의 본안에 관한 판단이 아니라고 명시했다.",
+        "publishedAt": "2025-02-27",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "US SEC announces dismissal of civil enforcement action against Coinbase",
+        "url": "https://www.reuters.com/technology/us-sec-announces-dismissal-civil-enforcement-action-against-coinbase-2025-02-27/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "2023년 제기된 소송과 2025년 2월 27일 철회 발표를 확인한다.",
+        "publishedAt": "2025-02-27",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "SEC의 Coinbase 민사 집행 소송 제기.",
+    "followUp": "SEC는 2025-02-27 정책적 이유로 소송 철회 합의 제출을 발표했다. 본안에 대한 판단은 아니라고 명시했다."
+  },
+  {
+    "id": "eth-context-curve-vyper-exploits",
+    "date": "2023-07-30",
+    "label": "Curve·Vyper 공격",
+    "title": "Vyper 컴파일러 결함에 따른 일부 Curve 풀 공격",
+    "category": "security",
+    "importance": 3,
+    "description": "특정 Vyper 버전의 재진입 방어 결함이 일부 Curve 유동성 풀 공격에 악용됐다.",
+    "detail": "7월 30일 여러 ETH 관련 Curve 풀이 공격받았다. 대응에 참여한 ChainLight의 직접 기록은 컴파일된 코드의 방어 결함과 당일 사건 순서를 설명한다. 모든 Curve 풀이나 모든 Vyper 버전이 같은 영향을 받았다고 일반화하지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "ChainLight의 내부 대응·거래 연혁이 7월 30일 발생을 명시한다. 7월 31일 Decrypt 보도도 전날 일요일의 공격 및 7월 30일 Vyper 공지를 확인한다.",
+    "crossCheck": "사고 대응에 참여한 ChainLight의 직접 기술 분석과 Decrypt가 Vyper 공지·별도 보안 전문가를 취재한 동시대 기사를 대조했다. 동일 기술 결함에 관한 여러 풀의 공격을 하루의 사건 묶음으로 표시하되 영향을 받은 범위를 한정한다.",
+    "limitations": [
+      "결함이 있는 컴파일러 버전으로 만들어진 일부 계약에 관한 사건이며 Ethereum 합의 장애가 아니다.",
+      "공격자 탈취, 화이트햇 구조, 후속 반환액은 서로 달라 잠정 손실 수치를 고정하지 않는다.",
+      "여러 풀이 순차적으로 공격받았으므로 전체 사건에 하나의 정확한 공격 시각을 지정하지 않는다."
+    ],
+    "keywords": [
+      "Curve",
+      "커브",
+      "Vyper",
+      "바이퍼",
+      "CRV",
+      "재진입",
+      "reentrancy",
+      "DeFi",
+      "해킹"
+    ],
+    "sources": [
+      {
+        "title": "Curve Finance Analysis and Post-mortem",
+        "url": "https://blog.chainlight.io/curve-finance-analysis-and-post-mortem-ba55f2b26909",
+        "publisher": "ChainLight",
+        "type": "primary",
+        "role": "incident-responder-direct-analysis",
+        "claim": "7월 30일 공격과 대응 연혁, Vyper 컴파일러의 재진입 방어 결함을 직접 분석한다.",
+        "publishedAt": "2023-08-08",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "DeFi Contagion? Curve Finance Exploit Ripples Across Industry",
+        "url": "https://decrypt.co/150679/defi-contagion-curve-finance-exploit-ripples-across-industry",
+        "publisher": "Decrypt",
+        "type": "secondary",
+        "role": "contemporaneous-reporting",
+        "claim": "7월 30일 공격과 특정 Vyper 버전에 대한 개발자 경고, 보안 전문가 견해를 보도한다.",
+        "publishedAt": "2023-07-31",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "eth-context-base-public-mainnet",
+    "date": "2023-08-09",
+    "label": "Base 일반 공개",
+    "title": "Base 메인넷 일반 사용자 공개",
+    "category": "ecosystem",
+    "importance": 2,
+    "description": "Ethereum L2 네트워크 Base가 일반 사용자에게 공개됐다.",
+    "detail": "Base는 8월 9일 누구나 네트워크와 앱을 사용할 수 있다고 발표했다. 공식 글은 2월 테스트넷 및 7월 개발자 공개와 이번 일반 공개를 구분한다. Ethereum 확장 생태계의 실제 접근 단계 변화를 표시한다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "Base의 당일 공식 공지와 The Block의 일반 공개 완료 보도를 사용한다.",
+    "crossCheck": "개발·운영 주체의 원문과 The Block의 당일 보도를 대조했다. 과거 테스트넷·개발자 공개 날짜를 함께 확인하여 하나의 '최초 메인넷' 날짜로 뭉뚱그리지 않았다.",
+    "limitations": [
+      "일반 공개가 별도 Base 토큰 발행을 의미하지 않는다.",
+      "공개 당시 운영 구조를 완전한 탈중앙화로 표현하지 않는다."
+    ],
+    "keywords": [
+      "Base",
+      "베이스",
+      "Coinbase",
+      "L2",
+      "롤업",
+      "Onchain Summer"
+    ],
+    "sources": [
+      {
+        "title": "Base is open for everyone",
+        "url": "https://www.base.org/blog/base-is-open-for-everyone",
+        "publisher": "Base",
+        "type": "primary",
+        "role": "operator-public-launch",
+        "claim": "8월 9일 일반 공개 및 이전 테스트넷·개발자 공개 단계를 확인한다.",
+        "publishedAt": "2023-08-09",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Base officially launches mainnet with Onchain Summer",
+        "url": "https://www.theblock.co/news/ecosystems/2023-08-09-base-mainnet-onchain-summer-243899",
+        "publisher": "The Block",
+        "type": "secondary",
+        "role": "contemporaneous-reporting",
+        "claim": "8월 9일 일반 사용자 대상 메인넷 공개를 보도한다.",
+        "publishedAt": "2023-08-09",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "eth-context-hamas-israel-october7",
+    "date": "2023-10-07",
+    "label": "10·7 중동 충격",
+    "title": "하마스 주도의 이스라엘 공격과 중동 분쟁 격화",
+    "category": "geopolitics",
+    "importance": 3,
+    "description": "하마스 주도의 이스라엘 공격으로 중동 분쟁이 크게 격화됐다.",
+    "detail": "10월 7일 로켓 발사와 국경을 넘은 공격이 발생했다. 유엔의 당일 성명과 Reuters의 사건 전개 보도를 기준으로 기록한다. 이후 이어진 전쟁의 모든 전개를 이 하루에 합치지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "유엔 사무총장 대변인의 당일 성명과 Reuters의 10월 7일 사건 전개 보도가 같은 날짜를 확인한다.",
+    "crossCheck": "국제기구의 당일 성명과 Reuters의 별도 취재를 대조했다. 특정 당사자의 정치적 정당화나 검증되지 않은 피해 수치를 채택하지 않는다.",
+    "limitations": [
+      "분쟁의 장기적 배경과 개별 후속 군사행동·휴전은 이 마커의 범위 밖이다.",
+      "지정학적 배경 표시이며 ETH 가격에 대한 단독 인과 판단이 아니다."
+    ],
+    "keywords": [
+      "Hamas",
+      "Israel",
+      "Gaza",
+      "하마스",
+      "이스라엘",
+      "가자",
+      "중동",
+      "전쟁"
+    ],
+    "sources": [
+      {
+        "title": "Middle East — Statement attributable to the Spokesperson for the Secretary-General",
+        "url": "https://india.un.org/en/248771-middle-east",
+        "publisher": "United Nations Secretary-General / UN India",
+        "type": "primary",
+        "role": "official-contemporaneous-statement",
+        "claim": "10월 7일 이스라엘에 대한 하마스 공격을 당일 성명으로 기록한다.",
+        "publishedAt": "2023-10-07",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "How the Hamas attack on Israel unfolded",
+        "url": "https://www.reuters.com/world/middle-east/how-hamas-attack-israel-unfolded-2023-10-07/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-reporting",
+        "claim": "10월 7일 새벽 이후 공격 전개를 보도한다.",
+        "publishedAt": "2023-10-07",
+        "accessedAt": "2026-10-24"
+      }
+    ]
   },
   {
     "id": "ethereum-dencun",
@@ -1064,6 +5108,101 @@ export const ETHEREUM_EVENTS = deepFreeze([
     "blockHash": "0xf8e2f40d98fe5862bc947c8c83d34799c50fb344d7445d020a8a946d891b62ee"
   },
   {
+    "id": "eth-policy-boj-negative-rates-end",
+    "date": "2024-03-19",
+    "label": "日 마이너스금리 종료",
+    "title": "일본은행, 마이너스 금리·YCC 종료 결정",
+    "category": "macro",
+    "importance": 3,
+    "description": "일본은행이 마이너스 금리와 수익률곡선통제 정책을 끝내는 결정을 발표했다.",
+    "detail": "새 단기금리 목표는 0–0.1% 정도이며 3월 21일부터 적용된다. 엔화 자금조달과 국제 금융 여건을 볼 거시 사건이다. 국채 매입 자체를 즉시 전면 중단한 조치는 아니며 ETH 가격의 단일 원인으로 해석하지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "일본은행의 결정 발표일 2024-03-19. 적용일 3월 21일 및 Reuters URL에 남은 3월 18일 문자열과 구분한다.",
+    "crossCheck": "정책을 발표한 기관의 원문과 별도 언론사의 당시 보도를 대조해 결정 내용과 날짜를 확인했다. 언론의 전망이나 가격 해석은 확정된 정책 사실로 사용하지 않는다.",
+    "limitations": [
+      "수익률곡선통제 종료와 국채 매입 전면 중단을 동일시하지 않는다.",
+      "엔화 금융 여건의 변화가 ETH 움직임을 일방적으로 결정한다고 주장하지 않는다."
+    ],
+    "keywords": [
+      "일본은행",
+      "BOJ",
+      "마이너스금리",
+      "YCC",
+      "엔화"
+    ],
+    "sources": [
+      {
+        "title": "Changes in the Monetary Policy Framework",
+        "url": "https://www.boj.or.jp/en/mopo/mpmdeci/state_2024/k240319a.htm",
+        "publisher": "Bank of Japan",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "단기금리 목표를 0–0.1% 정도로 변경하고 마이너스 금리·수익률곡선통제를 종료하는 정책 틀을 발표했다. 새 단기금리 지침은 3월 21일부터 적용된다.",
+        "publishedAt": "2024-03-19",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "BOJ ends negative rates, closing era of radical monetary policy",
+        "url": "https://www.reuters.com/markets/asia/japan-poised-end-negative-rates-closing-era-radical-policy-2024-03-18/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "3월 19일의 마이너스 금리 종료와 17년 만의 금리 인상을 확인한다.",
+        "publishedAt": "2024-03-19",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "단기금리 목표 0–0.1% 정도로 정책 틀 변경; 3월 21일 적용."
+  },
+  {
+    "id": "eth-context-iran-israel-april-attack",
+    "date": "2024-04-13",
+    "label": "이란 직접 공격",
+    "title": "이란의 이스라엘에 대한 직접 드론·미사일 공격",
+    "category": "geopolitics",
+    "importance": 3,
+    "description": "이란이 이스라엘을 향해 직접 드론과 미사일 공격을 시작했다.",
+    "detail": "4월 13일 시작된 직접 공격을 중동 긴장의 별도 단계로 표시한다. 국제기구의 안보리 발언은 날짜가 적힌 양국 서한과 해당 공격을 다룬다. 2025년과 2026년의 다른 충돌과 구분한다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "유엔의 4월 14일 발언이 확인하는 4월 13일 공격과 Reuters의 4월 13일 사건 보도를 대조했다. 유엔 페이지 게시일 4월 18일 및 기사 갱신일 4월 14일과 구분한다.",
+    "crossCheck": "유엔 사무총장 안보리 발언과 Reuters의 당일·다음 날 보도를 대조했다. 양국의 공격 정당화 주장은 해당 당사자 발언이며 이 기록의 자체 판단으로 채택하지 않는다.",
+    "limitations": [
+      "여러 시간대의 야간 사건이므로 단일 UTC 공격 시각을 지정하지 않는다.",
+      "후속 보복이나 전체 분쟁의 시작일을 이 날짜로 일반화하지 않는다."
+    ],
+    "keywords": [
+      "Iran",
+      "Israel",
+      "이란",
+      "이스라엘",
+      "중동",
+      "드론",
+      "미사일"
+    ],
+    "sources": [
+      {
+        "title": "Secretary-General: We have a shared responsibility to work for peace",
+        "url": "https://india.un.org/en/266257-secretary-general-we-have-shared-responsibility-work-peace",
+        "publisher": "United Nations Secretary-General / UN India",
+        "type": "primary",
+        "role": "official-security-council-remarks",
+        "claim": "4월 14일 안보리 발언에서 4월 13일 이란의 직접 공격을 확인한다. 페이지는 4월 18일 게시됐다.",
+        "publishedAt": "2024-04-18",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Iran's attack on Israel: World leaders react",
+        "url": "https://www.reuters.com/world/middle-east/reaction-irans-drone-missile-attack-israel-2024-04-13/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-reporting-updated",
+        "claim": "4월 13일 토요일 드론·미사일 공격을 보도한다. 열람 판본은 4월 14일 갱신됐다.",
+        "publishedAt": "2024-04-14",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
     "id": "eth-us-spot-etp-rule-approval",
     "date": "2024-05-23",
     "label": "美 현물 ETF 승인",
@@ -1106,6 +5245,53 @@ export const ETHEREUM_EVENTS = deepFreeze([
       "milestone": "exchange-rule-approval"
     },
     "description": "SEC가 미국 거래소의 현물 ETH ETP 상장·거래 규칙 변경안을 승인했다."
+  },
+  {
+    "id": "eth-policy-korea-user-protection-act",
+    "date": "2024-07-19",
+    "label": "한국 이용자보호법",
+    "title": "한국 가상자산이용자보호법 시행",
+    "category": "regulation",
+    "importance": 3,
+    "description": "한국의 가상자산이용자보호법이 시행돼 이용자 자산 보호와 불공정거래 감독 체계가 적용됐다.",
+    "detail": "표시일은 2024년 7월 19일 시행일이다. 법률 제정일인 2023년 7월 18일이나 금융위의 사전 안내일인 2024년 7월 17일과 구분한다. 국내 ETH 거래 서비스의 운영·감독 환경에 관한 사건이다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "7월 17일 사전 안내가 지정한 2024-07-19 시행일을 2025년 2월 13일 후속 공식 기록으로 재확인했다.",
+    "crossCheck": "시행 직전 안내와 실제 시행 후 정책 기록을 대조했다. 둘 다 금융위 자료이므로 서로 독립된 기관의 검증이라고 표현하지 않는다.",
+    "limitations": [
+      "거래소 이용자 보호를 ETH의 원금·수익 보장 또는 손실 보상으로 표현하지 않는다.",
+      "법률 제정·사전 발표·시행을 서로 다른 날짜로 구분한다."
+    ],
+    "keywords": [
+      "한국",
+      "가상자산이용자보호법",
+      "금융위원회",
+      "거래소",
+      "불공정거래"
+    ],
+    "sources": [
+      {
+        "title": "Virtual Asset User Protection Act to Take Effect on July 19",
+        "url": "https://www.fsc.go.kr/eng/pr010101/82683",
+        "publisher": "Financial Services Commission, Korea",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "7월 19일 가상자산이용자보호법 시행과 예치금·자산 보호, 불공정거래·감독 체계를 설명한다.",
+        "publishedAt": "2024-07-17",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "FSC Unveils Roadmap for Corporate Participation in Virtual Asset Market",
+        "url": "https://www.fsc.go.kr/eng/pr010101/84004",
+        "publisher": "Financial Services Commission, Korea",
+        "type": "primary",
+        "role": "subsequent-official-implementation-record",
+        "claim": "후속 정책 문서가 가상자산이용자보호법의 2024년 7월 19일 시행을 확인한다.",
+        "publishedAt": "2025-02-13",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "한국 가상자산이용자보호법 시행."
   },
   {
     "id": "eth-us-spot-etp-trading",
@@ -1154,6 +5340,1212 @@ export const ETHEREUM_EVENTS = deepFreeze([
       ]
     },
     "description": "미국 거래소에서 현물 ETH 가격에 노출되는 상장 상품들의 거래가 시작됐다."
+  },
+  {
+    "id": "eth-policy-boj-july-rate-hike",
+    "date": "2024-07-31",
+    "label": "日 금리 인상",
+    "title": "일본은행, 0.25% 금리 목표와 국채 매입 감축 발표",
+    "category": "macro",
+    "importance": 3,
+    "description": "일본은행이 단기금리 목표를 0.25% 정도로 높이고 국채 매입 감축 계획을 발표했다.",
+    "detail": "엔화 금리·유동성 환경이 바뀐 정책 결정이다. 금리 적용일은 8월 1일이다. 발표된 향후 국채 매입 경로가 모두 이 날 집행됐다는 뜻은 아니며, 며칠 뒤 시장 급변의 단일 원인으로 연결하지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "2024-07-31 정책 결정 발표일. 8월 1일 금리 지침 적용 및 Reuters URL의 7월 30일과 구분한다.",
+    "crossCheck": "정책을 발표한 기관의 원문과 별도 언론사의 당시 보도를 대조해 결정 내용과 날짜를 확인했다. 언론의 전망이나 가격 해석은 확정된 정책 사실로 사용하지 않는다.",
+    "limitations": [
+      "국채 매입 감축 계획과 보유 국채의 즉시 매각을 혼동하지 않는다.",
+      "정책 발표와 이후 캐리 거래·ETH 움직임 간 인과관계는 이 기록으로 증명되지 않는다."
+    ],
+    "keywords": [
+      "일본은행",
+      "BOJ",
+      "엔화",
+      "금리",
+      "국채 매입"
+    ],
+    "sources": [
+      {
+        "title": "Changes in the Guideline for Money Market Operations and Plan for the Reduction of the Purchase Amount of Japanese Government Bonds",
+        "url": "https://www.boj.or.jp/en/mopo/mpmdeci/mpr_2024/k240731a.pdf",
+        "publisher": "Bank of Japan",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "단기금리 목표를 0.25% 정도로 올리고 국채 매입 감축 계획을 발표했다. 금리 지침은 8월 1일부터 적용된다.",
+        "publishedAt": "2024-07-31",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "BOJ hikes interest rates, unveils bond tapering plan",
+        "url": "https://www.reuters.com/markets/rates-bonds/bank-japan-outline-bond-taper-plan-debate-rate-hike-timing-2024-07-30/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "7월 31일의 금리 인상 및 국채 매입 감축 계획 발표를 당일 확인한다.",
+        "publishedAt": "2024-07-31",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "단기금리 목표 약 0.25%; 8월 1일 적용 및 국채 매입 감축 계획 발표."
+  },
+  {
+    "id": "eth-policy-fed-2024-easing",
+    "date": "2024-09-18",
+    "label": "美 인하 전환",
+    "title": "연준, 50bp 인하로 금리 완화 전환",
+    "category": "macro",
+    "importance": 3,
+    "description": "연준이 2020년 이후 처음 금리를 낮추고 목표 범위를 4.75–5.00%로 정했다.",
+    "detail": "50bp 인하가 확정됐지만 같은 성명에서 보유 증권 축소는 계속한다고 밝혔다. 금리 인하를 모든 통화정책 수단의 동시 완화나 ETH 상승 보장으로 읽지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공식 발표문에 명시된 발표 날짜를 사건일로 사용한다. 시행·결제 시점이나 문서의 후속 갱신일과 구분한다.",
+    "crossCheck": "정책을 발표한 기관의 원문과 별도 언론사의 당시 보도를 대조해 결정 내용과 날짜를 확인했다. 언론의 전망이나 가격 해석은 확정된 정책 사실로 사용하지 않는다.",
+    "limitations": [
+      "사건 표시와 ETH 가격의 동시 관측은 인과관계를 입증하지 않는다."
+    ],
+    "keywords": [
+      "Fed",
+      "금리 인하",
+      "50bp",
+      "완화"
+    ],
+    "sources": [
+      {
+        "title": "FOMC statement — 2024-09-18",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20240918a.htm",
+        "publisher": "Federal Reserve",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "정책금리 목표 범위를 4.75–5.00%로 50bp 낮췄으며 보유 증권 축소는 계속했다.",
+        "publishedAt": "2024-09-18",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Fed slashes rates 50 bp in first easing since pandemic",
+        "url": "https://www.reuters.com/markets/us/view-fed-slashes-rates-50-bp-first-easing-since-pandemic-hit-2024-09-18/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "팬데믹 이후 첫 인하와 50bp 인하 폭을 확인한다. 기사 내 향후 전망은 사건에 포함하지 않는다.",
+        "publishedAt": "2024-09-18",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "목표 범위 4.75–5.00%; 50bp 인하. 보유 증권 축소 유지."
+  },
+  {
+    "id": "eth-policy-us-election-result-2024",
+    "date": "2024-11-06",
+    "label": "美 대선 결과",
+    "title": "미국 대선: Trump 승리 판정 보도",
+    "category": "macro",
+    "importance": 3,
+    "description": "미국 대통령 선거에서 Trump의 승리가 주요 통신사의 개표 판정으로 확인됐다.",
+    "detail": "AP는 미국 동부시간 11월 6일 아침 승리를 판정했다. 정부의 디지털자산 정책 방향을 살펴볼 정치적 전환점으로 표시하며, 구체적 정책의 법적 확정일로 사용하지 않는다. 최종 선거인단 결과는 별도 국가기록원 기록으로 확인한다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "AP의 승리 판정은 2024-11-06 05:34 미국 동부표준시, 같은 UTC 날짜다. 11월 5일 투표일·선거인단 투표·의회 인증·2025년 취임일과 구분한다.",
+    "crossCheck": "AP는 자사의 판정 시점을 직접 기록하고 국가기록원은 최종 선거인단 결과를 제공한다. 서로 독립된 역할의 기록이며 국가기록원이 11월 6일 판정 시각을 확인했다고 주장하지 않는다.",
+    "limitations": [
+      "언론의 개표 판정은 공식 법적 인증 자체가 아니다.",
+      "선거 결과를 모든 디지털자산 공약의 즉시 시행이나 ETH 가격 원인으로 표현하지 않는다."
+    ],
+    "keywords": [
+      "미국 대선",
+      "Trump",
+      "정권 교체",
+      "정치",
+      "디지털자산 정책"
+    ],
+    "sources": [
+      {
+        "title": "Why AP called Wisconsin and the White House for Donald Trump",
+        "url": "https://apnews.com/article/trump-harris-wisconsin-president-race-call-winner-explain-d07049f884d25ceae0d1376157d07c35",
+        "publisher": "Associated Press",
+        "type": "primary",
+        "role": "newsroom-record-of-its-own-race-call",
+        "claim": "11월 6일 오전 5시 34분 미국 동부시간에 AP가 Wisconsin 및 대통령 선거 승리를 판정한 과정을 설명한다.",
+        "publishedAt": "2024-11-06",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "2024 Electoral College Results",
+        "url": "https://www.archives.gov/electoral-college/2024",
+        "publisher": "U.S. National Archives",
+        "type": "primary",
+        "role": "independent-final-election-record",
+        "claim": "최종 선거인단 결과에서 Trump 312, Harris 226을 확인한다. 보도기관의 승리 판정 시각을 입증하는 문서는 아니다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "선거 결과에 관한 보도 시점. 이 날 새로운 암호자산 법률이 시행된 것은 아니다."
+  },
+  {
+    "id": "eth-policy-tornado-cash-appeal",
+    "date": "2024-11-26",
+    "label": "Tornado 항소심",
+    "title": "미 항소법원, Tornado Cash 불변 계약 제재 권한 판단",
+    "category": "regulation",
+    "importance": 3,
+    "description": "제5연방항소법원이 문제 된 불변 스마트 계약에 대한 OFAC 제재가 법률상 권한을 벗어났다고 판단했다.",
+    "detail": "판결은 해당 불변 계약이 IEEPA에서 제재할 수 있는 재산에 해당하지 않는다는 해석에 근거했다. 하급심을 파기환송한 날짜이며, 제재 명단의 실제 삭제일이나 개발자 형사사건의 무죄 선고일이 아니다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "판결문 첫 페이지의 filed 날짜 2024-11-26. 보도일 또는 2025년 행정 해제일과 구분한다.",
+    "crossCheck": "법원의 원판결과 재무부의 후속 조치, Reuters의 후속 보도를 대조했다. 판결 범위와 실제 제재 해제를 별도 사건으로 확인한다.",
+    "limitations": [
+      "불변 스마트 계약에 대한 특정 법률 해석을 모든 소프트웨어 또는 모든 제재의 포괄적 면제로 확장하지 않는다.",
+      "별도 형사사건의 결론을 이 판결에서 추론하지 않는다."
+    ],
+    "keywords": [
+      "Tornado Cash",
+      "OFAC",
+      "IEEPA",
+      "항소심",
+      "스마트 계약"
+    ],
+    "sources": [
+      {
+        "title": "Van Loon v. Department of the Treasury, No. 23-50669",
+        "url": "https://www.ca5.uscourts.gov/opinions/pub/23/23-50669-CV0.pdf",
+        "publisher": "U.S. Court of Appeals for the Fifth Circuit",
+        "type": "primary",
+        "role": "independent-judicial-record",
+        "claim": "불변 스마트 계약이 해당 IEEPA 제재 권한의 재산에 해당하지 않는다고 판단하고 일부 약식판결을 원고에게 하도록 파기환송했다.",
+        "publishedAt": "2024-11-26",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Tornado Cash Delisting",
+        "url": "https://home.treasury.gov/news/press-releases/sb0057",
+        "publisher": "U.S. Department of the Treasury",
+        "type": "primary",
+        "role": "subsequent-official-policy-change",
+        "claim": "법적·정책적 검토 후 Tornado Cash에 대한 경제제재를 제거한다고 발표했다.",
+        "publishedAt": "2025-03-21",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "US scraps sanctions on Tornado Cash, crypto mixer accused of laundering North Korea money",
+        "url": "https://www.reuters.com/business/finance/us-scraps-sanctions-tornado-cash-crypto-mixer-accused-laundering-north-korea-2025-03-21/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "당일 경제제재 해제와 앞선 항소심 판단을 확인한다.",
+        "publishedAt": "2025-03-21",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "문제 된 불변 계약에 관한 OFAC 권한 판단; 파기환송.",
+    "followUp": "재무부는 2025-03-21 Tornado Cash 경제제재를 해제했다."
+  },
+  {
+    "id": "eth-policy-korea-martial-law",
+    "date": "2024-12-03",
+    "label": "한국 비상계엄",
+    "title": "한국 비상계엄 선포와 해제: UTC 기준 같은 날",
+    "category": "macro",
+    "importance": 3,
+    "description": "한국에서 비상계엄이 선포된 뒤 국회의 해제 요구와 국무회의 의결을 거쳐 해제됐다.",
+    "detail": "현지 달력으로는 12월 3일 밤 선포와 12월 4일 새벽 해제지만 두 시점 모두 UTC 12월 3일에 해당한다. 한국 정치·금융시장의 불확실성 사건으로 한 표식에 묶는다. 2025년 4월 4일 헌법재판소는 관련 탄핵심판에서 파면을 결정했다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "선포는 2024-12-03 밤 KST, 해제 국무회의는 2024-12-04 04:30 KST(12-03 19:30 UTC)로 보도됐다. UTC 차트에서 둘 다 2024-12-03으로 배치한다. 정확한 선포 분·초는 자료 간 차이가 있어 단정하지 않는다.",
+    "crossCheck": "Reuters와 연합뉴스의 당시 경과를 대조하고 헌법재판소의 후속 공식 판단을 별도 확인했다. 연합뉴스의 두 기사는 같은 기관이며 법원 기록은 당시 가격 움직임의 증거가 아니다.",
+    "limitations": [
+      "한국 원화 거래소의 급등락·접속 장애를 Coinbase ETH-USD 가격 변화로 바꾸지 않는다.",
+      "헌법재판소 탄핵심판과 별도 형사사건의 결과를 혼동하지 않는다.",
+      "현지 날짜 12월 4일을 그대로 UTC 차트의 별도 사건일로 더하지 않는다."
+    ],
+    "keywords": [
+      "한국",
+      "비상계엄",
+      "윤석열",
+      "정치",
+      "원화 거래소"
+    ],
+    "sources": [
+      {
+        "title": "Constitutional Court decision in the impeachment trial of President Yoon Suk Yeol",
+        "url": "https://english.ccourt.go.kr/site/eng/ex/bbs/List.do?cbIdx=1143&searchBcIdx=4258448",
+        "publisher": "Constitutional Court of Korea",
+        "type": "primary",
+        "role": "independent-subsequent-constitutional-decision",
+        "claim": "후속 탄핵심판 결정은 비상계엄의 위헌·위법 문제와 대통령 파면 결론을 기록한다. 선포 시각의 직접 근거로 사용하지 않는다.",
+        "publishedAt": "2025-04-04",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "South Korea president backs down from martial law, lawmakers demand resignation",
+        "url": "https://www.reuters.com/world/asia-pacific/south-korea-president-yoon-declares-martial-law-2024-12-03/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "12월 3일 밤 계엄 선포, 국회 해제 요구, 12월 4일 새벽 해제에 이르는 당시 경과를 보도한다.",
+        "publishedAt": "2024-12-03",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "尹, 비상계엄 선포 6시간 만에 해제…국무회의 의결",
+        "url": "https://www.yna.co.kr/view/AKR20241204019252001",
+        "publisher": "Yonhap News Agency",
+        "type": "secondary",
+        "role": "contemporaneous-timeline-reporting",
+        "claim": "한국시간 12월 4일 04:30 국무회의 해제 의결을 기록한다. UTC로는 12월 3일 19:30이다.",
+        "publishedAt": "2024-12-04",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "비상계엄에 가상자산 시장 급락·거래소 접속 지연",
+        "url": "https://www.yna.co.kr/view/AKR20241204097600002",
+        "publisher": "Yonhap News Agency",
+        "type": "secondary",
+        "role": "contemporaneous-local-market-context",
+        "claim": "국내 원화 거래소에서 ETH 등 가상자산 가격 급변과 접속 지연이 관측됐다고 보도한다.",
+        "publishedAt": "2024-12-04",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "비상계엄 선포 및 해제; UTC 기준 2024-12-03에 모두 발생.",
+    "marketContext": "연합뉴스는 국내 거래소의 ETH 등 가격 급변과 접속 지연을 보도했다. 시장·통화·측정시각이 Coinbase UTC 일봉과 다르다.",
+    "followUp": "헌법재판소는 2025-04-04 탄핵심판에서 파면을 결정했다. 이 설명은 별도 형사사건의 확정 여부를 주장하지 않는다."
+  },
+  {
+    "id": "eth-policy-mica-main-application",
+    "date": "2024-12-30",
+    "label": "MiCA 주요 규정 적용",
+    "title": "EU MiCA 주요 암호자산 서비스 규정 적용",
+    "category": "regulation",
+    "importance": 3,
+    "description": "MiCA의 주요 암호자산 서비스 규정이 적용되기 시작했다.",
+    "detail": "2023년 입법 채택과 구분되는 실제 규정 적용 단계다. 기존 사업자에게는 회원국별로 다른 전환 기간이 있었으므로 이 날 모든 거래소가 새 인가를 받았거나 모든 전환이 끝났다고 표현하지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "ESMA의 2024년 12월호가 특정한 2024-12-30 적용일. 발행일이 불명확한 월간 간행물에는 publishedAt을 임의로 부여하지 않는다.",
+    "crossCheck": "ESMA의 당시 시행 정리와 2025년 전환 기간 관리 문서를 대조했다. 두 문서는 같은 감독기관이므로 독립된 두 기관의 법 해석이라고 주장하지 않는다.",
+    "limitations": [
+      "기존 사업자의 국가별 전환 기간이 존재했다.",
+      "스테이블코인 관련 앞선 적용 단계나 법률의 발효·채택 날짜와 구분한다.",
+      "규제 대상 서비스의 적용을 모든 DeFi 소프트웨어에 일괄 확대하지 않는다."
+    ],
+    "keywords": [
+      "EU",
+      "MiCA",
+      "CASP",
+      "인가",
+      "규제 시행"
+    ],
+    "sources": [
+      {
+        "title": "Spotlight on Markets — December 2024, edition 60",
+        "url": "https://www.esma.europa.eu/sites/default/files/2025-01/Newsletter_December_2024.pdf",
+        "publisher": "European Securities and Markets Authority",
+        "type": "primary",
+        "role": "official-implementation-recap",
+        "claim": "2024년 12월호는 MiCA의 12월 30일 적용 및 기존 서비스 제공자의 전환 체계를 설명한다. 정확한 발행 날짜는 확인되지 않았다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "ESMA Statement on MiCA Transitional Measures",
+        "url": "https://www.esma.europa.eu/sites/default/files/2025-12/ESMA75-113276571-1631_Statement_on_end_of_MiCA_transitional_periods.pdf",
+        "publisher": "European Securities and Markets Authority",
+        "type": "primary",
+        "role": "subsequent-official-implementation-record",
+        "claim": "2024년 12월 30일 이전 서비스 제공자에 대한 국가별 전환 기간 및 미인가 사업자의 정리 필요성을 후속 기록한다.",
+        "publishedAt": "2025-12-04",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "MiCA의 주요 서비스·시장 규정 적용 단계 개시."
+  },
+  {
+    "id": "eth-policy-sec-sab122",
+    "date": "2025-01-23",
+    "label": "SAB 121 철회",
+    "title": "SEC 직원, 암호자산 보관 회계 지침 SAB 121 철회 발표",
+    "category": "regulation",
+    "importance": 2,
+    "description": "SEC 직원이 SAB 122를 발표해 암호자산 보관 의무에 관한 SAB 121 지침을 철회했다.",
+    "detail": "고객 암호자산을 보관하는 기업의 회계 처리에 관한 변화다. 발표일은 1월 23일이고 문서의 효력일은 1월 30일이다. 기존 회계·공시 의무가 모두 없어지거나 ETH의 증권성 문제가 일괄 해결됐다는 뜻은 아니다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "SAB 122의 발표일 2025-01-23. 원문이 명시한 효력 발생일 1월 30일과 구분한다.",
+    "crossCheck": "SEC 직원 회계 공보 원문과 독립 회계법인 Deloitte의 1월 27일 해설을 대조했다.",
+    "limitations": [
+      "직원 회계 해석을 의회 법률이나 모든 수탁 규제의 폐지로 표현하지 않는다.",
+      "암호자산 보관 회계 처리와 개별 토큰의 증권성 판단을 구분한다."
+    ],
+    "keywords": [
+      "SEC",
+      "SAB 121",
+      "SAB 122",
+      "수탁",
+      "회계"
+    ],
+    "sources": [
+      {
+        "title": "Staff Accounting Bulletin No. 122",
+        "url": "https://www.sec.gov/rules-regulations/staff-guidance/staff-accounting-bulletins/staff-accounting-bulletin-122",
+        "publisher": "SEC staff",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "SAB 121이 추가했던 암호자산 보관 관련 회계 지침을 철회한다. 명시된 효력일은 1월 30일이다.",
+        "publishedAt": "2025-01-23",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "SEC Rescinds SAB 121 and Issues SAB 122",
+        "url": "https://dart.deloitte.com/USDART/home/publications/deloitte/heads-up/2025/sec-rescinds-sab-121-issues-sab-122-crypto-cryptocurrency",
+        "publisher": "Deloitte",
+        "type": "secondary",
+        "role": "independent-accounting-analysis",
+        "claim": "1월 23일 SAB 122 발표와 SAB 121 철회, 기존 회계 기준에 따른 의무의 존속을 해설한다.",
+        "publishedAt": "2025-01-27",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "SAB 122 발표; SAB 121 관련 회계 지침 철회, 1월 30일 효력."
+  },
+  {
+    "id": "eth-policy-trump-digital-assets-order",
+    "date": "2025-01-23",
+    "label": "美 디지털자산 전환",
+    "title": "Trump, 디지털자산 작업반·정책 전환 행정명령",
+    "category": "regulation",
+    "importance": 3,
+    "description": "미국 대통령이 디지털자산 작업반 설치와 정책 검토를 지시하고 이전 행정부의 관련 명령을 폐지했다.",
+    "detail": "공개 블록체인 접근과 자기보관, 달러 스테이블코인 등 관련 행정 정책의 방향을 제시했다. 작업반의 검토 지시를 이미 통과된 시장구조 법률이나 실제 ETH 매입으로 바꾸지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공식 발표문에 명시된 발표 날짜를 사건일로 사용한다. 시행·결제 시점이나 문서의 후속 갱신일과 구분한다.",
+    "crossCheck": "정책을 발표한 기관의 원문과 별도 언론사의 당시 보도를 대조해 결정 내용과 날짜를 확인했다. 언론의 전망이나 가격 해석은 확정된 정책 사실로 사용하지 않는다.",
+    "limitations": [
+      "행정명령의 검토·보고 지시와 의회의 법률 제정을 구분한다.",
+      "디지털자산 비축 평가 지시가 ETH 구매를 승인하거나 집행했다는 뜻은 아니다."
+    ],
+    "keywords": [
+      "Trump",
+      "행정명령 14178",
+      "작업반",
+      "자기보관",
+      "디지털자산"
+    ],
+    "sources": [
+      {
+        "title": "Strengthening American Leadership in Digital Financial Technology",
+        "url": "https://www.whitehouse.gov/presidential-actions/2025/01/strengthening-american-leadership-in-digital-financial-technology/",
+        "publisher": "The White House",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "디지털자산 작업반, 공개 블록체인·자기보관 정책과 CBDC 관련 행정 방침을 정하고 EO 14067을 폐지했다.",
+        "publishedAt": "2025-01-23",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Trump orders crypto working group to draft new regulations, explore national stockpile",
+        "url": "https://www.reuters.com/business/finance/trump-signs-order-create-cryptocurrency-working-group-2025-01-23/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "1월 23일 디지털자산 작업반 설치, 규제 검토 및 비축 평가를 지시한 명령을 보도한다.",
+        "publishedAt": "2025-01-24",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "디지털자산 작업반 설치·정책 검토 지시 및 EO 14067 폐지."
+  },
+  {
+    "id": "eth-policy-three-country-tariffs-2025",
+    "date": "2025-02-01",
+    "label": "3개국 관세",
+    "title": "미국, 캐나다·멕시코·중국 추가 관세 발표",
+    "category": "macro",
+    "importance": 3,
+    "description": "미국이 주요 교역국에 추가 관세를 발표했고, 뒤이은 거래일에 ETH를 포함한 위험자산의 매도 압력이 보도됐다.",
+    "detail": "정책 발표일은 2월 1일이다. Reuters의 2월 3일 기사는 무역전쟁 우려 속 ETH 하락을 관측했지만, 그 기사에 나온 금요일 이후 변화율을 발표 당일의 일봉 수익률로 사용하지 않는다.",
+    "policyAction": "미국은 캐나다·멕시코산 상품에 25%, 중국산에 10% 추가 관세를 발표했다. 캐나다 에너지에는 10%가 제시됐다.",
+    "marketContext": "Reuters는 2월 3일 가상자산 약세를 광범위한 위험회피 및 무역갈등 우려와 함께 설명했다.",
+    "followUp": "캐나다·멕시코 조치는 2월 3일 별도 명령으로 3월 4일까지 유예됐다. 중국은 이 유예 대상이 아니었다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "백악관 2월 1일 발표의 달력 날짜를 사용한다. 2월 3일 시장 기사일과 이후 시행일을 분리한다.",
+    "crossCheck": "백악관 정책 발표와 Reuters의 독립 시장 보도를 대조하고, 두 국경 유예 명령으로 후속 변경을 확인했다.",
+    "limitations": [
+      "관세는 수입 상품에 대한 정책이며 ETH에 직접 부과된 세금이 아니다.",
+      "관세 발표와 동반 하락의 관측만으로 ETH 하락의 단독 원인이나 기여도를 확정하지 않는다.",
+      "Reuters URL은 02-02이나 본문 날짜는 02-03이다. 기사 수익률의 관측 창은 UTC 일봉과 다르다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "캐나다",
+      "멕시코",
+      "중국",
+      "IEEPA",
+      "risk-off"
+    ],
+    "sources": [
+      {
+        "title": "Fact Sheet: President Donald J. Trump Imposes Tariffs on Imports from Canada, Mexico and China",
+        "url": "https://www.whitehouse.gov/fact-sheets/2025/02/fact-sheet-president-donald-j-trump-imposes-tariffs-on-imports-from-canada-mexico-and-china/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-02-01",
+        "accessedAt": "2026-10-24",
+        "role": "policy-announcement",
+        "claim": "세 나라 추가 관세와 캐나다 에너지 예외를 발표한다."
+      },
+      {
+        "title": "Bitcoin drops to 3-week low as Trump tariffs rattle markets",
+        "url": "https://www.reuters.com/markets/currencies/bitcoin-slides-below-100000-tariffs-rattle-markets-2025-02-02/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2025-02-03",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-market-report",
+        "claim": "2월 3일 ETH 동반 하락과 무역전쟁 우려를 보도한다."
+      },
+      {
+        "title": "Progress on the Situation at Our Northern Border",
+        "url": "https://www.whitehouse.gov/presidential-actions/2025/02/progress-on-the-situation-at-our-northern-border/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-02-03",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-policy-pause",
+        "claim": "캐나다 조치의 적용 시점을 3월 4일로 미룬다."
+      },
+      {
+        "title": "Progress on the Situation at Our Southern Border",
+        "url": "https://www.whitehouse.gov/presidential-actions/2025/02/progress-on-the-situation-at-our-southern-border/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-02-03",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-policy-pause",
+        "claim": "멕시코 조치의 적용 시점을 3월 4일로 미룬다."
+      }
+    ],
+    "commonEventId": "trump-three-country-tariffs-2025"
+  },
+  {
+    "id": "eth-policy-canada-mexico-pause-2025",
+    "date": "2025-02-03",
+    "label": "북미 관세 유예",
+    "title": "캐나다·멕시코 추가 관세 시행 유예",
+    "category": "macro",
+    "importance": 2,
+    "description": "2월 4일로 예정됐던 캐나다·멕시코 추가 관세가 3월 4일까지 유예됐다.",
+    "detail": "관세 강화 직후 나온 완화 조치를 별도 사건으로 표시한다. 같은 날짜 안에서도 급락과 정책 유예가 순차적으로 발생할 수 있으므로 2월 3일의 전체 움직임을 하나의 방향으로 설명하지 않는다.",
+    "policyAction": "캐나다와 멕시코에 대한 두 행정명령이 최초 적용 시점을 3월 4일 00:01 미국 동부시간으로 변경했다.",
+    "marketContext": "Reuters는 멕시코 유예 발표 뒤 미국 주식시장이 초기 낙폭 일부를 되돌렸다고 보도했다. 이는 ETH의 특정 수익률을 뜻하지 않는다.",
+    "followUp": "중국은 북미 유예에서 제외됐다. 캐나다·멕시코 조치는 3월 4일 시행됐고, 3월 6일에는 USMCA 적격 상품 예외가 발표됐다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "두 행정명령의 서명일 2월 3일을 사용한다. Reuters 후속 기사에 표시된 2월 4일 UTC 게시일과 구분한다.",
+    "crossCheck": "캐나다·멕시코 각각의 법적 변경 문서와 Reuters 시장 보도를 대조했다. 두 백악관 문서는 같은 행정부의 자료이므로 독립 두 기관의 검증으로 세지 않는다.",
+    "limitations": [
+      "유예는 관세 정책의 영구 폐지를 뜻하지 않는다.",
+      "주식시장 반응을 ETH 반등으로 바꾸어 기록하지 않는다.",
+      "발표의 세부 순서를 UTC 일봉만으로 재구성할 수 없다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "캐나다",
+      "멕시코",
+      "유예",
+      "USMCA"
+    ],
+    "sources": [
+      {
+        "title": "Progress on the Situation at Our Northern Border",
+        "url": "https://www.whitehouse.gov/presidential-actions/2025/02/progress-on-the-situation-at-our-northern-border/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-02-03",
+        "accessedAt": "2026-10-24",
+        "role": "legal-pause-order",
+        "claim": "캐나다 추가 관세의 적용 시점을 변경한다."
+      },
+      {
+        "title": "Progress on the Situation at Our Southern Border",
+        "url": "https://www.whitehouse.gov/presidential-actions/2025/02/progress-on-the-situation-at-our-southern-border/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-02-03",
+        "accessedAt": "2026-10-24",
+        "role": "legal-pause-order",
+        "claim": "멕시코 추가 관세의 적용 시점을 변경한다."
+      },
+      {
+        "title": "Wall Street closes down, pares losses after Trump delays Mexico tariffs",
+        "url": "https://www.reuters.com/markets/us/futures-tumble-trumps-tariffs-stoke-trade-war-risks-2025-02-03/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2025-02-04",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-market-report",
+        "claim": "멕시코 유예 뒤 주식시장의 초기 낙폭 축소를 보도한다."
+      },
+      {
+        "title": "Fact Sheet: President Donald J. Trump Adjusts Tariffs on Canada and Mexico to Minimize Disruption to the Automotive Industry",
+        "url": "https://www.whitehouse.gov/fact-sheets/2025/03/fact-sheet-president-donald-j-trump-adjusts-tariffs-on-canada-and-mexico-to-minimize-disruption-to-the-automotive-industry/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-03-06",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-policy-record",
+        "claim": "3월 4일 시행 및 3월 6일 예외 조치를 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-context-bybit-ether-wallet-theft",
+    "date": "2025-02-21",
+    "label": "Bybit ETH 탈취",
+    "title": "Bybit의 Ether 지갑 자산 탈취",
+    "category": "security",
+    "importance": 3,
+    "description": "Bybit의 Ether 지갑에서 자산이 탈취됐다.",
+    "detail": "거래소가 2월 21일 사고를 공개했으며 FBI의 후속 공지도 사건 시기를 확인한다. 거래소 지갑·서명 절차의 보안 사건으로 기록한다. 공격 주체에 관한 후속 기관 판단은 사건 발생일과 구분한다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "Reuters의 2월 21일 사건 보도와 FBI의 2월 26일 공지에 적힌 2월 21일 전후 발생 기록을 대조했다.",
+    "crossCheck": "거래소 확인을 담은 Reuters 보도와 미국 FBI의 별도 후속 수사 공지를 대조했다. 발생 날짜는 동시대 보도로 확정하고 FBI의 'on or about' 표현의 정밀도 한계를 보존한다.",
+    "limitations": [
+      "거래소 지갑 탈취가 Ethereum 합의 프로토콜이나 모든 ETH 지갑의 침해를 뜻하지 않는다.",
+      "사고 당시 달러 환산 손실과 이후 회수·재조달 규모를 하나의 숫자로 혼합하지 않는다."
+    ],
+    "keywords": [
+      "Bybit",
+      "바이비트",
+      "ETH",
+      "지갑",
+      "해킹",
+      "FBI",
+      "Safe"
+    ],
+    "sources": [
+      {
+        "title": "North Korea Responsible for $1.5 Billion Bybit Hack",
+        "url": "https://www.ic3.gov/psa/2025/psa250226",
+        "publisher": "Federal Bureau of Investigation / IC3",
+        "type": "primary",
+        "role": "official-investigation-notice",
+        "claim": "2월 21일 전후 Bybit 자산 탈취 발생을 후속 공지에서 확인한다.",
+        "publishedAt": "2025-02-26",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Crypto exchange Bybit says ether wallet hacked",
+        "url": "https://www.reuters.com/technology/crypto-exchange-bybit-says-ether-wallet-hacked-2025-02-21/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-reporting-updated",
+        "claim": "2월 21일 금요일 거래소의 Ether 지갑 사고 공개를 보도한다. 열람 판본은 2월 22일 갱신됐다.",
+        "publishedAt": "2025-02-22",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-coinbase-sec-dismissal-announcement",
+    "date": "2025-02-27",
+    "label": "Coinbase 소송 철회",
+    "title": "SEC, Coinbase 소송 철회 합의 제출 발표",
+    "category": "regulation",
+    "importance": 3,
+    "description": "SEC가 Coinbase 민사 집행 소송을 철회하는 합의 제출을 발표했다.",
+    "detail": "이 표식은 2월 27일 SEC의 발표 시점이다. SEC는 새로운 규제 접근을 마련하려는 정책적 결정이며 사건의 본안에 대한 판단이 아니라고 명시했다. ETH나 모든 스테이킹 서비스가 법원에서 포괄적으로 면책됐다는 뜻은 아니다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공식 발표문에 명시된 발표 날짜를 사건일로 사용한다. 시행·결제 시점이나 문서의 후속 갱신일과 구분한다.",
+    "crossCheck": "SEC의 당일 철회 발표와 Reuters의 별도 보도를 대조하고 원래 제소 발표로 사건의 범위를 확인했다.",
+    "limitations": [
+      "발표·합의 제출과 법원의 후속 종결 문서 날짜를 혼동하지 않는다.",
+      "SEC가 명시한 정책적 이유를 본안에서의 무죄·승소 확정으로 바꾸지 않는다."
+    ],
+    "keywords": [
+      "SEC",
+      "Coinbase",
+      "소송 철회",
+      "스테이킹",
+      "규제 전환"
+    ],
+    "sources": [
+      {
+        "title": "SEC Announces Dismissal of Civil Enforcement Action Against Coinbase",
+        "url": "https://www.sec.gov/newsroom/press-releases/2025-47",
+        "publisher": "SEC",
+        "type": "primary",
+        "role": "subsequent-official-litigation-record",
+        "claim": "소송 철회 합의 제출을 발표하며 정책적 판단이고 사건의 본안에 관한 판단이 아니라고 명시했다.",
+        "publishedAt": "2025-02-27",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "US SEC announces dismissal of civil enforcement action against Coinbase",
+        "url": "https://www.reuters.com/technology/us-sec-announces-dismissal-civil-enforcement-action-against-coinbase-2025-02-27/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "2023년 제기된 소송과 2025년 2월 27일 철회 발표를 확인한다.",
+        "publishedAt": "2025-02-27",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "SEC Charges Coinbase for Operating as an Unregistered Securities Exchange, Broker, and Clearing Agency",
+        "url": "https://www.sec.gov/newsroom/press-releases/2023-102",
+        "publisher": "SEC",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "Coinbase 거래소·브로커·청산 및 스테이킹 서비스 관련 민사 혐의 제기를 발표했다.",
+        "publishedAt": "2023-06-06",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "SEC가 Coinbase 소송 철회 합의 제출 사실을 발표."
+  },
+  {
+    "id": "eth-policy-north-america-tariffs-effective-2025",
+    "date": "2025-03-04",
+    "label": "관세 실제 시행",
+    "title": "북미 관세 시행과 대중 관세 확대",
+    "category": "macro",
+    "importance": 3,
+    "description": "유예됐던 캐나다·멕시코 관세가 시행됐고 중국 대상 추가 관세도 확대됐다.",
+    "detail": "The Block은 당일 ETH 약세를 관세 불확실성, 미국 경제지표, 직전 가상자산 준비자산 발표 뒤 되돌림과 함께 설명했다. 여러 뉴스가 겹친 구간으로 보존한다.",
+    "policyAction": "캐나다·멕시코 추가 관세가 3월 4일 시행됐다. 중국산 상품에 대한 펜타닐 명목 추가 관세는 10%에서 20%로 확대됐다.",
+    "marketContext": "The Block은 ETH 하락을 보도하면서 관세와 약한 미국 경제지표를 함께 거론했다.",
+    "followUp": "3월 6일 미국은 USMCA 요건을 충족하는 캐나다·멕시코 상품에 예외를 발표했다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "2월 3일 유예 명령의 예정일을 3월 6일 백악관의 실제 시행 회고 및 당일 보도와 대조했다. 3월 3일 재확인 발표와 구분한다.",
+    "crossCheck": "법적 예정일, 백악관 후속 설명, The Block의 당일 ETH 보도, Reuters의 중국 관세 확대 설명을 대조했다.",
+    "limitations": [
+      "The Block 본문은 최초 2025-03-04 게시 외에 2026-10-19 수정 표시가 있다. 당시 원본의 고정 스냅샷으로 취급하지 않는다.",
+      "기사의 최근 24시간 변화율을 Coinbase UTC 일봉 변화율로 사용하지 않는다.",
+      "경제지표와 준비자산 관련 뉴스의 영향을 관세와 분리 계량하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "캐나다",
+      "멕시코",
+      "중국",
+      "시행",
+      "미국 경제지표"
+    ],
+    "sources": [
+      {
+        "title": "Progress on the Situation at Our Northern Border",
+        "url": "https://www.whitehouse.gov/presidential-actions/2025/02/progress-on-the-situation-at-our-northern-border/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-02-03",
+        "accessedAt": "2026-10-24",
+        "role": "legal-effective-date",
+        "claim": "유예 종료 및 최초 적용 예정일을 3월 4일로 정한다."
+      },
+      {
+        "title": "Fact Sheet: President Donald J. Trump Adjusts Tariffs on Canada and Mexico to Minimize Disruption to the Automotive Industry",
+        "url": "https://www.whitehouse.gov/fact-sheets/2025/03/fact-sheet-president-donald-j-trump-adjusts-tariffs-on-canada-and-mexico-to-minimize-disruption-to-the-automotive-industry/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-03-06",
+        "accessedAt": "2026-10-24",
+        "role": "official-retrospective-confirmation",
+        "claim": "3월 4일 북미 관세가 시행됐다고 명시한다."
+      },
+      {
+        "title": "Bitcoin, ether lose over 10% as Trump's tariffs take effect",
+        "url": "https://www.theblock.co/news/markets/2025-03-04-bitcoin-ether-lose-over-10-as-trumps-tariffs-take-effect-344377",
+        "publisher": "The Block",
+        "type": "secondary",
+        "publishedAt": "2025-03-04",
+        "accessedAt": "2026-10-24",
+        "role": "market-report-with-later-update",
+        "claim": "ETH 약세와 관세·경제지표 등 복합 배경을 설명한다."
+      },
+      {
+        "title": "Trump delays tariffs for goods under Mexico, Canada trade deal",
+        "url": "https://www.reuters.com/business/tariff-reprieve-likely-be-extended-all-usmca-compliant-goods-lutnick-says-2025-03-06/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2025-03-07",
+        "accessedAt": "2026-10-24",
+        "role": "independent-policy-report",
+        "claim": "북미 시행과 중국 추가 관세의 20% 확대를 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-us-digital-asset-stockpile",
+    "date": "2025-03-06",
+    "label": "美 디지털자산 비축",
+    "title": "미국, 비BTC 디지털자산 비축 계정 설치 지시",
+    "category": "regulation",
+    "importance": 3,
+    "description": "미국 대통령이 BTC 준비금과 별도로 비BTC 디지털자산 비축 계정 설치를 지시했다.",
+    "detail": "비BTC 계정의 초기 자산은 정부가 최종 몰수한 자산을 중심으로 구성된다. 명령은 추가 행정·입법 조치 없이 몰수·민사 제재금 등 정해진 경로 밖의 추가 취득을 허용하지 않는다. ETH를 시장에서 즉시 사들이는 계획의 확정·집행으로 표현하지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "백악관 명령의 서명·발표 날짜 2025-03-06. Reuters의 3월 7일 게시일과 구분한다.",
+    "crossCheck": "정책을 발표한 기관의 원문과 별도 언론사의 당시 보도를 대조해 결정 내용과 날짜를 확인했다. 언론의 전망이나 가격 해석은 확정된 정책 사실로 사용하지 않는다.",
+    "limitations": [
+      "BTC 준비금과 비BTC 비축 계정은 다른 제도다.",
+      "정책이 ETH를 특정 수량 신규 매입했다는 증거가 아니다.",
+      "정부 보유·비축은 토큰 가격의 보증이 아니다."
+    ],
+    "keywords": [
+      "미국",
+      "디지털자산 비축",
+      "Stockpile",
+      "행정명령",
+      "ETH"
+    ],
+    "sources": [
+      {
+        "title": "Establishment of the Strategic Bitcoin Reserve and United States Digital Asset Stockpile",
+        "url": "https://www.whitehouse.gov/presidential-actions/2025/03/establishment-of-the-strategic-bitcoin-reserve-and-united-states-digital-asset-stockpile/",
+        "publisher": "The White House",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "BTC 준비금과 구분되는 비BTC 디지털자산 비축 계정 설치를 지시하며 추가 자산 취득을 별도 행정·입법 조치 없이 확대하지 못하도록 한다.",
+        "publishedAt": "2025-03-06",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Trump signs order to establish strategic bitcoin reserve",
+        "url": "https://www.reuters.com/technology/trump-signs-order-establish-strategic-bitcoin-reserve-white-house-crypto-czar-2025-03-07/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "3월 6일 목요일 발표와 비BTC 자산 비축의 구분을 확인한다.",
+        "publishedAt": "2025-03-07",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "몰수 자산 등을 기초로 하는 비BTC 디지털자산 비축 계정 설치 지시."
+  },
+  {
+    "id": "eth-policy-usmca-exemptions-2025",
+    "date": "2025-03-06",
+    "label": "USMCA 예외",
+    "title": "USMCA 적격 캐나다·멕시코 상품 관세 예외",
+    "category": "macro",
+    "importance": 2,
+    "description": "미국이 USMCA 요건을 충족하는 북미 상품의 추가 관세 예외를 발표했다.",
+    "detail": "전면 관세 철회로 표시하지 않는다. 백악관은 적격·비적격 상품을 구별했고, 당시 보도는 잦은 정책 변경에 따른 불확실성이 남았다고 설명했다.",
+    "policyAction": "USMCA 적격 캐나다·멕시코 상품은 해당 추가 관세에서 제외하고, 비적격 상품의 관세와 캐나다 에너지·양국 칼륨비료의 별도 요율을 유지·조정했다.",
+    "marketContext": "Reuters는 완화 발표에도 미국 주식시장이 하락했고 정책의 잦은 변경이 우려 요인으로 지목됐다고 보도했다.",
+    "followUp": "4월 2일 상호관세 발표에서도 캐나다·멕시코는 별도 IEEPA 체계로 취급됐다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "백악관 설명 및 Reuters 본문이 가리키는 발표일 3월 6일을 쓴다. Reuters의 3월 7일 갱신 날짜와 구분한다.",
+    "crossCheck": "백악관의 적용 대상 설명을 Reuters 독립 보도와 대조했다. 후속 4월 2일 공식 발표로 별도 체계가 유지됐음을 확인했다.",
+    "limitations": [
+      "USMCA 적격 여부는 상품별로 다르며 모든 캐나다·멕시코 수입의 무관세를 의미하지 않는다.",
+      "당일 주가 반응을 ETH의 방향 또는 관세 단독 효과로 대체하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "USMCA",
+      "캐나다",
+      "멕시코",
+      "예외",
+      "potash"
+    ],
+    "sources": [
+      {
+        "title": "Fact Sheet: President Donald J. Trump Adjusts Tariffs on Canada and Mexico to Minimize Disruption to the Automotive Industry",
+        "url": "https://www.whitehouse.gov/fact-sheets/2025/03/fact-sheet-president-donald-j-trump-adjusts-tariffs-on-canada-and-mexico-to-minimize-disruption-to-the-automotive-industry/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-03-06",
+        "accessedAt": "2026-10-24",
+        "role": "policy-exemption-announcement",
+        "claim": "USMCA 적격 상품 예외와 비적격 상품의 잔존 관세를 설명한다."
+      },
+      {
+        "title": "Trump delays tariffs for goods under Mexico, Canada trade deal",
+        "url": "https://www.reuters.com/business/tariff-reprieve-likely-be-extended-all-usmca-compliant-goods-lutnick-says-2025-03-06/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2025-03-07",
+        "accessedAt": "2026-10-24",
+        "role": "independent-policy-and-market-report",
+        "claim": "3월 6일 예외 발표와 시장의 지속된 불확실성을 보도한다."
+      },
+      {
+        "title": "Fact Sheet: President Donald J. Trump Declares National Emergency to Increase our Competitive Edge, Protect our Sovereignty, and Strengthen our National and Economic Security",
+        "url": "https://www.whitehouse.gov/fact-sheets/2025/04/fact-sheet-president-donald-j-trump-declares-national-emergency-to-increase-our-competitive-edge-protect-our-sovereignty-and-strengthen-our-national-and-economic-security/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-04-02",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-policy-scope",
+        "claim": "캐나다·멕시코가 별도 IEEPA 체계로 남는다고 설명한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-tornado-cash-delisting",
+    "date": "2025-03-21",
+    "label": "Tornado 제재 해제",
+    "title": "미 재무부, Tornado Cash 경제제재 해제",
+    "category": "regulation",
+    "importance": 3,
+    "description": "미 재무부가 Tornado Cash에 대한 경제제재를 해제했다.",
+    "detail": "재무부는 관련 법적·정책적 문제를 검토한 뒤 지정 해제를 발표했다. 2024년 항소심 판단과 연결되는 후속 행정 조치이며, 개발자 개인을 상대로 한 별도 형사사건 전체의 종료나 모든 거래의 면책을 뜻하지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공식 발표문에 명시된 발표 날짜를 사건일로 사용한다. 시행·결제 시점이나 문서의 후속 갱신일과 구분한다.",
+    "crossCheck": "재무부 당일 발표와 독립된 Reuters 보도를 대조하고 앞선 항소심 원판결로 법적 쟁점의 범위를 확인했다.",
+    "limitations": [
+      "경제제재 해제와 별도 형사책임·자금세탁 관련 법 적용은 구분한다.",
+      "모든 프라이버시 서비스에 대한 일반적 면책 선언이 아니다."
+    ],
+    "keywords": [
+      "Tornado Cash",
+      "OFAC",
+      "제재 해제",
+      "Ethereum"
+    ],
+    "sources": [
+      {
+        "title": "Tornado Cash Delisting",
+        "url": "https://home.treasury.gov/news/press-releases/sb0057",
+        "publisher": "U.S. Department of the Treasury",
+        "type": "primary",
+        "role": "subsequent-official-policy-change",
+        "claim": "법적·정책적 검토 후 Tornado Cash에 대한 경제제재를 제거한다고 발표했다.",
+        "publishedAt": "2025-03-21",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "US scraps sanctions on Tornado Cash, crypto mixer accused of laundering North Korea money",
+        "url": "https://www.reuters.com/business/finance/us-scraps-sanctions-tornado-cash-crypto-mixer-accused-laundering-north-korea-2025-03-21/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "당일 경제제재 해제와 앞선 항소심 판단을 확인한다.",
+        "publishedAt": "2025-03-21",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Van Loon v. Department of the Treasury, No. 23-50669",
+        "url": "https://www.ca5.uscourts.gov/opinions/pub/23/23-50669-CV0.pdf",
+        "publisher": "U.S. Court of Appeals for the Fifth Circuit",
+        "type": "primary",
+        "role": "independent-judicial-record",
+        "claim": "불변 스마트 계약이 해당 IEEPA 제재 권한의 재산에 해당하지 않는다고 판단하고 일부 약식판결을 원고에게 하도록 파기환송했다.",
+        "publishedAt": "2024-11-26",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "Tornado Cash 경제제재 해제."
+  },
+  {
+    "id": "eth-policy-reciprocal-tariffs-2025",
+    "date": "2025-04-02",
+    "label": "상호관세 발표",
+    "title": "미국 기본·국가별 상호관세 발표",
+    "category": "macro",
+    "importance": 3,
+    "description": "미국이 기본 10% 및 국가별 상호관세를 발표했고, 다음 날 ETH를 포함한 위험자산 약세가 보도됐다.",
+    "detail": "4월 2일은 정책 발표일이다. 기본 관세 적용 예정일인 4월 5일과 국가별 고율 적용 예정일인 4월 9일을 별도로 설명하며, 4월 3일 시장 기사의 스냅샷을 발표일 수익률로 붙이지 않는다.",
+    "policyAction": "기본 10%는 4월 5일, 국가별 추가 요율은 4월 9일 적용하는 일정이 제시됐으며 상품별 예외와 캐나다·멕시코 별도 체계가 있었다.",
+    "marketContext": "Reuters는 4월 3일 가상자산 관련 주식 및 ETH 약세를 광범위한 위험자산 매도와 연결해 보도했다.",
+    "followUp": "중국의 4월 4일 대응 발표와 4월 9일 미국의 중국 제외 유예로 정책이 다시 바뀌었다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "백악관 발표의 4월 2일 달력 날짜를 사용한다. 발효일·기사일을 사건 발표일과 분리한다.",
+    "crossCheck": "정책 요율·적용 일정은 백악관 원문, 시장 동반 반응은 Reuters의 다음 날 보도로 교차 확인했다.",
+    "limitations": [
+      "다음 날 기사에 표시된 등락률은 기사 갱신 시각에 따라 달라지므로 고정된 일봉 수치로 사용하지 않는다.",
+      "관세 외 당시 뉴스·포지션·유동성 요인을 통제한 인과효과 추정은 하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "상호관세",
+      "Liberation Day",
+      "기본관세",
+      "위험회피"
+    ],
+    "sources": [
+      {
+        "title": "Fact Sheet: President Donald J. Trump Declares National Emergency to Increase our Competitive Edge, Protect our Sovereignty, and Strengthen our National and Economic Security",
+        "url": "https://www.whitehouse.gov/fact-sheets/2025/04/fact-sheet-president-donald-j-trump-declares-national-emergency-to-increase-our-competitive-edge-protect-our-sovereignty-and-strengthen-our-national-and-economic-security/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-04-02",
+        "accessedAt": "2026-10-24",
+        "role": "policy-announcement",
+        "claim": "기본·국가별 관세와 각각의 적용 일정 및 예외를 발표한다."
+      },
+      {
+        "title": "U.S. crypto stocks slide as Trump's sweeping tariffs jolt markets",
+        "url": "https://www.reuters.com/markets/us-crypto-stocks-slide-trumps-sweeping-tariffs-jolt-markets-2025-04-03/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2025-04-03",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-market-report",
+        "claim": "4월 3일 ETH와 가상자산 관련 주식 약세를 보도한다."
+      },
+      {
+        "title": "国务院关税税则委员会关于对原产于美国的进口商品加征关税的公告 — 税委会公告2025年第4号",
+        "url": "https://gss.mof.gov.cn/gzdt/zhengcefabu/202504/t20250404_3961451.htm",
+        "publisher": "Customs Tariff Commission of the State Council / Ministry of Finance of China",
+        "type": "primary",
+        "publishedAt": "2025-04-04",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-retaliation",
+        "claim": "중국의 4월 4일 대응 발표를 확인한다."
+      },
+      {
+        "title": "Modifying Reciprocal Tariff Rates to Reflect Trading Partner Retaliation and Alignment",
+        "url": "https://www.whitehouse.gov/presidential-actions/2025/04/modifying-reciprocal-tariff-rates-to-reflect-trading-partner-retaliation-and-alignment/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-04-09",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-policy-pause",
+        "claim": "중국을 제외한 국가별 고율 관세 유예를 확인한다."
+      }
+    ],
+    "commonEventId": "trump-reciprocal-tariffs-2025"
+  },
+  {
+    "id": "eth-policy-china-retaliation-2025",
+    "date": "2025-04-04",
+    "label": "중국 보복관세",
+    "title": "중국, 미국산 상품 추가 관세 발표",
+    "category": "macro",
+    "importance": 3,
+    "description": "중국이 미국산 수입 상품에 34% 추가 관세를 발표하며 무역갈등이 확대됐다.",
+    "detail": "중국 재정부 원문에서 발표일과 적용 예정일을 확인했다. 이후 관세가 다시 인상됐으므로 최초 발표의 34%를 4월 내내 유지된 최종 요율로 해석하지 않는다.",
+    "policyAction": "중국 국무원 관세세칙위원회 제4호 공고는 4월 10일 12:01부터 미국산 상품에 기존 적용 관세 외 34%를 추가한다고 발표했다.",
+    "marketContext": "AP는 중국의 대응 발표와 미국 주식시장 급락을 함께 보도했다. ETH에는 공통 위험환경을 보여 주는 사건으로 표시한다.",
+    "followUp": "4월 9일 미국의 유예는 중국을 제외했다. 5월 12일 미중 공동성명은 고율 관세를 조정하는 합의를 발표했다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "중국 재정부 공고의 서명·게시 날짜 4월 4일을 사용한다. 공고가 정한 4월 10일 적용 예정일과 분리한다.",
+    "crossCheck": "중국 재정부의 중국어 원문과 AP 당일 보도를 대조했다. 영사관의 Global Times 재게시물은 독립 1차 자료로 세지 않았다.",
+    "limitations": [
+      "이 기록은 최초 대응 발표이며, 후속 인상·협상까지 같은 관세율이 지속됐다는 뜻이 아니다.",
+      "주식시장 동반 반응만으로 ETH의 직접 반응을 확정하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "미중 무역갈등",
+      "보복관세",
+      "34%"
+    ],
+    "sources": [
+      {
+        "title": "国务院关税税则委员会关于对原产于美国的进口商品加征关税的公告 — 税委会公告2025年第4号",
+        "url": "https://gss.mof.gov.cn/gzdt/zhengcefabu/202504/t20250404_3961451.htm",
+        "publisher": "Customs Tariff Commission of the State Council / Ministry of Finance of China",
+        "type": "primary",
+        "publishedAt": "2025-04-04",
+        "accessedAt": "2026-10-24",
+        "role": "original-policy-announcement",
+        "claim": "추가 관세율과 4월 10일 적용 예정일을 명시한다."
+      },
+      {
+        "title": "China slaps a 34% tax on all US imports in retaliation for Trump's tariffs",
+        "url": "https://apnews.com/article/02cd23e913649f32985f075058e787c4",
+        "publisher": "Associated Press",
+        "type": "secondary",
+        "publishedAt": "2025-04-04",
+        "accessedAt": "2026-10-24",
+        "role": "independent-contemporaneous-report",
+        "claim": "중국의 대응 발표와 미국 금융시장 긴장을 보도한다."
+      },
+      {
+        "title": "Joint Statement on U.S.-China Economic and Trade Meeting in Geneva",
+        "url": "https://www.whitehouse.gov/briefings-statements/2025/05/joint-statement-on-u-s-china-economic-and-trade-meeting-in-geneva/",
+        "publisher": "The White House — U.S.-China joint statement",
+        "type": "primary",
+        "publishedAt": "2025-05-12",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-bilateral-agreement",
+        "claim": "양측이 관세를 다시 조정하는 공동 합의를 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-reciprocal-pause-2025",
+    "date": "2025-04-09",
+    "label": "90일 관세 유예",
+    "title": "중국 제외 국가별 상호관세 90일 유예",
+    "category": "macro",
+    "importance": 3,
+    "description": "미국이 다수 교역국의 국가별 고율 상호관세를 90일 유예했지만 기본 10%와 중국 예외는 남았다.",
+    "detail": "정책 완화와 중국에 대한 추가 강화를 동시에 기록한다. 유예 발표 뒤 위험자산 안도 반응이 보도됐으며, 이를 모든 관세 철폐나 ETH의 확정 반등 효과로 설명하지 않는다.",
+    "policyAction": "4월 9일 명령은 중국을 제외한 국가별 고율을 4월 10일 00:01 EDT부터 7월 9일 00:01 EDT까지 유예하고 10%를 적용했다. 중국 상호관세 부분은 125%로 높였다.",
+    "marketContext": "Reuters 시장 칼럼은 유예 발표 뒤 미국 주식시장의 큰 폭 반등을 전하며 중국 갈등과 채권시장 불안이 남았다고 설명했다.",
+    "followUp": "중국과의 별도 완화 합의는 5월 12일 발표됐다. 4월 11일에는 일부 전자제품의 상호관세 예외가 명확해졌다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "명령 서명일 4월 9일을 사용한다. 4월 10일 적용 시작과 혼동하지 않는다.",
+    "crossCheck": "행정명령의 중국 제외·10% 유지·유예 기간을 읽고 Reuters의 독립 시장 칼럼과 대조했다. 칼럼의 해석은 공식 정책 사실과 구분했다.",
+    "limitations": [
+      "중국 125%는 상호관세 구성 요소이며 모든 기존 관세를 합한 총 실효세율이 아니다.",
+      "중국·상품별 예외·별도 법률 관세까지 모두 90일간 없어졌다고 표시하지 않는다.",
+      "Reuters 자료는 시장 칼럼이며 ETH의 별도 반응을 측정한 분석이 아니다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "90일 유예",
+      "중국 제외",
+      "10% 기본관세",
+      "risk-on"
+    ],
+    "sources": [
+      {
+        "title": "Modifying Reciprocal Tariff Rates to Reflect Trading Partner Retaliation and Alignment",
+        "url": "https://www.whitehouse.gov/presidential-actions/2025/04/modifying-reciprocal-tariff-rates-to-reflect-trading-partner-retaliation-and-alignment/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-04-09",
+        "accessedAt": "2026-10-24",
+        "role": "signed-policy-order",
+        "claim": "중국 제외 유예, 기본 10%, 중국 상호관세 조정 및 적용 일정을 명시한다."
+      },
+      {
+        "title": "Trading Day: Boom! Trump tariff pause sparks monster rally",
+        "url": "https://www.reuters.com/markets/global-markets-trading-day-graphics-2025-04-09/",
+        "publisher": "Reuters — Jamie McGeever, markets column",
+        "type": "secondary",
+        "publishedAt": "2025-04-09",
+        "accessedAt": "2026-10-24",
+        "role": "contemporaneous-market-commentary",
+        "claim": "유예 후 주식 반등 및 남은 중국·채권시장 위험을 설명한다."
+      },
+      {
+        "title": "Joint Statement on U.S.-China Economic and Trade Meeting in Geneva",
+        "url": "https://www.whitehouse.gov/briefings-statements/2025/05/joint-statement-on-u-s-china-economic-and-trade-meeting-in-geneva/",
+        "publisher": "The White House — U.S.-China joint statement",
+        "type": "primary",
+        "publishedAt": "2025-05-12",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-bilateral-agreement",
+        "claim": "중국 대상 별도 완화가 5월에 이뤄졌음을 확인한다."
+      }
+    ],
+    "commonEventId": "trump-tariff-pause-2025"
+  },
+  {
+    "id": "eth-policy-defi-broker-cra-repeal",
+    "date": "2025-04-10",
+    "label": "DeFi 보고규칙 폐기",
+    "title": "미국, 특정 DeFi 브로커 보고 규칙 폐기 법률 성립",
+    "category": "regulation",
+    "importance": 3,
+    "description": "미국에서 CRA 절차에 따라 특정 DeFi 브로커 세무 보고 규칙을 폐기하는 법률이 성립했다.",
+    "detail": "Ethereum의 DeFi 프런트엔드 등에 관련된 특정 규칙을 대상으로 한 입법 조치다. 모든 디지털자산 세금이나 모든 중앙화 브로커의 보고 의무를 없애는 법률은 아니다. 7월 11일 재무부·IRS의 규정 정리 문서가 후속 이행을 확인한다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "Public Law 119-5의 2025-04-10 승인일. 의회 개별 표결일 및 7월 11일 후속 규정집 정리일과 구분한다.",
+    "crossCheck": "의회가 성립시킨 법률과 이를 이행한 재무부·IRS의 후속 관보 문서를 대조했다. 두 문서는 같은 법적 절차의 서로 다른 단계이며 독립된 시장 효과 분석은 아니다.",
+    "limitations": [
+      "폐기 대상은 특정 DeFi 브로커 규칙이다.",
+      "모든 암호자산 과세·자금세탁방지·중앙화 브로커 보고 의무가 사라졌다고 쓰지 않는다."
+    ],
+    "keywords": [
+      "DeFi",
+      "IRS",
+      "CRA",
+      "세무 보고",
+      "브로커"
+    ],
+    "sources": [
+      {
+        "title": "Public Law 119-5 — H.J. Res. 25",
+        "url": "https://www.govinfo.gov/content/pkg/PLAW-119publ5/html/PLAW-119publ5.htm",
+        "publisher": "U.S. Congress / U.S. Government Publishing Office",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "4월 10일 성립한 법률은 특정 DeFi 브로커 보고 최종 규칙에 대한 의회의 불승인을 확정했다.",
+        "publishedAt": "2025-04-10",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Gross Proceeds Reporting by Brokers That Regularly Provide Services Effectuating Digital Asset Sales; Congressional Review Act Revocation",
+        "url": "https://www.govinfo.gov/content/pkg/FR-2025-07-11/html/2025-12967.htm",
+        "publisher": "U.S. Department of the Treasury / Internal Revenue Service",
+        "type": "primary",
+        "role": "subsequent-official-implementation-record",
+        "claim": "4월 10일 CRA 법률 성립에 따라 해당 DeFi 규칙을 규정집에서 제거하는 후속 조치를 기록한다.",
+        "publishedAt": "2025-07-11",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "H.J.Res.25가 Public Law 119-5로 성립해 특정 DeFi 보고 규칙 불승인.",
+    "followUp": "2025-07-11 재무부·IRS가 관련 규정을 규정집에서 제거하는 후속 조치를 공표했다."
+  },
+  {
+    "id": "eth-policy-electronics-exemptions-2025",
+    "date": "2025-04-11",
+    "label": "전자제품 예외",
+    "title": "스마트폰·컴퓨터 등 상호관세 예외 구체화",
+    "category": "macro",
+    "importance": 2,
+    "description": "미국이 일부 전자제품의 상호관세 예외를 구체화하고 4월 5일 수입분부터 소급 적용한다고 밝혔다.",
+    "detail": "4월 11일 정책 문서와 같은 날 밤 CBP 안내가 기준이다. 보도는 주로 4월 12일에 나왔으므로 보도 날짜나 소급 적용일을 새 발표일로 사용하지 않는다.",
+    "policyAction": "대통령 각서는 정해진 HTSUS 품목을 상호관세 대상에서 제외했고 CBP가 신고·환급 지침을 냈다.",
+    "marketContext": "AP가 전한 업계 해석은 일부 기술기업의 부담 완화였다. ETH의 직접 수혜나 가격 효과는 이 자료로 확인하지 않는다.",
+    "followUp": "예외의 범위는 EO 14257과 그 수정 명령의 상호관세다. 다른 관세의 일괄 철폐로 확대 해석하지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "대통령 각서 및 CBP 안내의 미국 현지 게시 날짜 4월 11일을 사용한다. CBP 안내는 22:36 EDT이며 UTC로는 다음 날이지만 이 마커는 출처 달력 날짜다.",
+    "crossCheck": "백악관 각서와 CBP 집행 지침을 대조하고 AP 보도로 독립 확인했다. 백악관·CBP는 같은 행정부의 정책·집행 자료다.",
+    "limitations": [
+      "소급 적용 시작일인 4월 5일과 실제 예외 발표일인 4월 11일을 구분한다.",
+      "초기 AP 재게시 문구는 중국 전체 관세 면제로 읽힐 여지가 있어 법적 범위는 각서·CBP의 상호관세 표현을 따른다.",
+      "모든 전자제품이나 모든 중국산 상품에 적용되는 예외가 아니다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "스마트폰",
+      "컴퓨터",
+      "반도체",
+      "품목 예외",
+      "CBP"
+    ],
+    "sources": [
+      {
+        "title": "Clarification of Exceptions Under Executive Order 14257 of April 2, 2025, as Amended",
+        "url": "https://www.whitehouse.gov/presidential-actions/2025/04/clarification-of-exceptions-under-executive-order-14257-of-april-2-2025-as-amended/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-04-11",
+        "accessedAt": "2026-10-24",
+        "role": "signed-exemption-memorandum",
+        "claim": "상호관세 예외 품목과 4월 5일 소급 적용을 정한다."
+      },
+      {
+        "title": "CSMS # 64724565 — UPDATED GUIDANCE: Reciprocal Tariff Exclusion for Specified Products; April 5, 2025 Effective Date",
+        "url": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/3db9e55",
+        "publisher": "U.S. Customs and Border Protection",
+        "type": "primary",
+        "publishedAt": "2025-04-11",
+        "accessedAt": "2026-10-24",
+        "role": "implementation-guidance",
+        "claim": "4월 11일 22:36 EDT 안내가 해당 예외의 신고·환급 범위를 확인한다."
+      },
+      {
+        "title": "Trump administration says it will exclude some electronics from 'reciprocal' tariffs",
+        "url": "https://www.wbur.org/news/2025/04/12/trump-administration-says-it-will-exclude-some-electronics-from-reciprocal-tariffs",
+        "publisher": "Associated Press, republished by WBUR",
+        "type": "secondary",
+        "publishedAt": "2025-04-12",
+        "accessedAt": "2026-10-24",
+        "role": "independent-contemporaneous-report",
+        "claim": "4월 11일 밤 발표와 일부 기술기업의 부담 완화 해석을 보도한다."
+      }
+    ]
   },
   {
     "id": "ethereum-pectra",
@@ -1226,6 +6618,811 @@ export const ETHEREUM_EVENTS = deepFreeze([
     "blockHash": "0x50c8cab760b2948349c590461b166773c45d8f4858cccf5a43025ab2960152e8"
   },
   {
+    "id": "eth-policy-geneva-truce-2025",
+    "date": "2025-05-12",
+    "label": "미중 제네바 합의",
+    "title": "미중 제네바 90일 관세 조정 합의",
+    "category": "macro",
+    "importance": 3,
+    "description": "미국과 중국이 제네바 협상 후 고율 관세를 낮추는 90일 조정 합의를 발표했다.",
+    "detail": "공동성명은 발표일과 실제 조정 기한을 구분한다. 10% 상호관세 부분과 다른 기존 관세가 남기 때문에 미중 무역의 전면 무관세 전환으로 표시하지 않는다.",
+    "policyAction": "양측은 5월 14일까지 상호관세의 24%포인트를 90일 중단하고 10% 부분을 유지하며, 4월의 후속 인상 조치를 해제·조정하기로 했다.",
+    "marketContext": "Reuters는 합의 발표 뒤 주식선물과 달러의 강세, 금의 약세를 보도했다. ETH와의 연결은 공통 위험선호 환경에 한정한다.",
+    "followUp": "8월 11일 공동성명은 같은 조정의 90일 연장을 발표했다. 10월 말 정상회담 후에는 추가 합의가 나왔다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공동성명의 5월 12일 발표일을 사용한다. 5월 14일 조정 기한과 구분한다.",
+    "crossCheck": "미중 공동성명과 Reuters 보도를 대조했다. 공동성명의 양국 입장 일치는 하나의 공동 문서이며 두 독립 취재로 세지 않는다.",
+    "limitations": [
+      "당시 자주 쓰인 양국 총 요율은 관세 구성 요소를 합산한 값이므로 이 기록에서는 기본 구성과 변경만 적는다.",
+      "Reuters의 주식·외환 반응을 ETH의 일정 수익률로 환산하지 않는다.",
+      "합의 이후 이행 여부와 모든 상품별 세율을 계속 추적한 관세표가 아니다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "미중",
+      "제네바",
+      "90일 합의",
+      "관세 완화"
+    ],
+    "sources": [
+      {
+        "title": "Joint Statement on U.S.-China Economic and Trade Meeting in Geneva",
+        "url": "https://www.whitehouse.gov/briefings-statements/2025/05/joint-statement-on-u-s-china-economic-and-trade-meeting-in-geneva/",
+        "publisher": "The White House — U.S.-China joint statement",
+        "type": "primary",
+        "publishedAt": "2025-05-12",
+        "accessedAt": "2026-10-24",
+        "role": "bilateral-policy-statement",
+        "claim": "90일 조정, 10% 잔존 부분, 5월 14일까지의 조치를 정한다."
+      },
+      {
+        "title": "Stocks, dollar surge as US and China agree 90-day tariff relief",
+        "url": "https://www.kitco.com/news/off-the-wire/2025-05-12/stocks-dollar-surge-us-and-china-agree-90-day-tariff-relief",
+        "publisher": "Reuters, republished by Kitco",
+        "type": "secondary",
+        "publishedAt": "2025-05-12",
+        "accessedAt": "2026-10-24",
+        "role": "independent-market-report",
+        "claim": "합의 후 주식선물·달러·금의 움직임을 보도한다."
+      },
+      {
+        "title": "Joint Statement on U.S.-China Economic and Trade Meeting in Stockholm",
+        "url": "https://www.whitehouse.gov/briefings-statements/2025/08/joint-statement-on-u-s-china-economic-and-trade-meeting-in-stockholm/",
+        "publisher": "The White House — U.S.-China joint statement",
+        "type": "primary",
+        "publishedAt": "2025-08-11",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-extension",
+        "claim": "제네바 조정의 90일 연장을 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-cit-tariff-ruling-2025",
+    "date": "2025-05-28",
+    "label": "무역법원 관세 제동",
+    "title": "미 국제무역법원, IEEPA 관세 권한에 제동",
+    "category": "macro",
+    "importance": 2,
+    "description": "미 국제무역법원이 쟁점 IEEPA 관세에 대해 대통령 권한을 넘었다고 판단했으나 항소 절차가 이어졌다.",
+    "detail": "법원 판결이라는 정책 불확실성의 전환점을 기록한다. 다음 날 항소법원이 집행을 일시 정지했으므로 5월 28일부터 모든 관세가 영구 폐지됐다고 설명하지 않는다.",
+    "policyAction": "국제무역법원은 V.O.S. Selections 사건에서 쟁점 상호관세·마약 관련 관세의 IEEPA 권한을 부정하고 정부의 부과를 금지하는 판결을 내렸다.",
+    "marketContext": "Reuters는 초기 안도 반응과 함께 항소 장기화에 따른 불확실성이 남았다고 보도했다.",
+    "followUp": "5월 29일 항소법원의 정지 결정으로 쟁점 관세가 유지됐다. 최종 대법원 판단은 2026년 2월 20일의 별도 사건이다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "원심 판결 표지의 2025-05-28과 항소심이 회고한 원심 날짜가 일치한다.",
+    "crossCheck": "국제무역법원 판결의 날짜·사건 식별자를 확인하고, 항소심 원문 12쪽의 원심·정지 절차 회고 및 Reuters 보도를 대조했다.",
+    "limitations": [
+      "원심 PDF의 추가 본문 재요청에 시간 초과가 있어 판결 범위는 본문을 읽은 항소심 원문의 회고와도 대조했다.",
+      "판결·금지명령·항소심 집행정지는 서로 다른 절차이며 영구적인 관세 종료로 합치지 않는다.",
+      "시장 보도의 낙관론은 ETH 반응 또는 인과효과의 증명이 아니다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "CIT",
+      "V.O.S. Selections",
+      "IEEPA",
+      "관세 소송"
+    ],
+    "sources": [
+      {
+        "title": "V.O.S. Selections, Inc. v. United States — Slip Opinion 25-66",
+        "url": "https://www.cit.uscourts.gov/sites/cit/files/25-66.pdf",
+        "publisher": "U.S. Court of International Trade",
+        "type": "primary",
+        "publishedAt": "2025-05-28",
+        "accessedAt": "2026-10-24",
+        "role": "original-court-document",
+        "claim": "원심 판결의 사건·서명 날짜 및 요약판결 결정을 확인한다."
+      },
+      {
+        "title": "V.O.S. Selections, Inc. v. Trump — Federal Circuit opinion, cases 2025-1812 and 2025-1813",
+        "url": "https://www.cafc.uscourts.gov/opinions-orders/25-1812.OPINION.8-29-2025_2566151.pdf",
+        "publisher": "U.S. Court of Appeals for the Federal Circuit",
+        "type": "primary",
+        "publishedAt": "2025-08-29",
+        "accessedAt": "2026-10-24",
+        "role": "appellate-primary-procedural-history",
+        "claim": "12쪽은 5월 28일 판결 내용과 5월 29일 정지를 회고한다."
+      },
+      {
+        "title": "Trump’s tariffs to remain in effect after appeals court grants stay",
+        "url": "https://www.investing.com/news/stock-market-news/us-ruling-that-trump-tariffs-are-unlawful-stirs-relief-and-uncertainty-4069816",
+        "publisher": "Reuters, republished by Investing.com",
+        "type": "secondary",
+        "publishedAt": "2025-05-29",
+        "accessedAt": "2026-10-24",
+        "role": "independent-legal-and-market-report",
+        "claim": "초기 안도 및 항소 불확실성을 보도한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-sec-protocol-staking-staff",
+    "date": "2025-05-29",
+    "label": "SEC 스테이킹 견해",
+    "title": "SEC 직원, 특정 프로토콜 스테이킹에 관한 견해 발표",
+    "category": "regulation",
+    "importance": 3,
+    "description": "SEC 기업금융국 직원이 특정 조건의 프로토콜 스테이킹 활동에 관한 증권법 견해를 발표했다.",
+    "detail": "원문에서 다룬 조건에 맞는 PoS 활동은 증권의 제공·판매에 해당하지 않는다는 직원 분석이다. Ethereum 스테이킹 생태계와 직접 관련되지만 위원회 규칙·법원 판결은 아니다. 이 문서의 범위 밖인 유동성 스테이킹과 재스테이킹까지 일괄 면제됐다고 쓰지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공식 발표문에 명시된 발표 날짜를 사건일로 사용한다. 시행·결제 시점이나 문서의 후속 갱신일과 구분한다.",
+    "crossCheck": "직원 성명 원문과 Dechert의 별도 법률 해설을 대조했다. 법률 해설은 독립된 해석이며 법적 효력을 추가하는 문서는 아니다.",
+    "limitations": [
+      "SEC 직원 견해이며 위원회 승인 규칙이 아니고 법적 구속력이 없다.",
+      "특정 사실관계·조건을 벗어난 상품까지 포괄하지 않는다."
+    ],
+    "keywords": [
+      "SEC",
+      "프로토콜 스테이킹",
+      "PoS",
+      "Ethereum",
+      "직원 견해"
+    ],
+    "sources": [
+      {
+        "title": "Statement on Certain Protocol Staking Activities",
+        "url": "https://www.sec.gov/newsroom/speeches-statements/statement-certain-protocol-staking-activities-052925",
+        "publisher": "SEC Division of Corporation Finance",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "직원은 명시된 조건에 맞는 특정 프로토콜 스테이킹 활동에 증권 등록이 필요하지 않다는 견해를 제시했다. 위원회가 승인한 규칙이 아니며 법적 효력이 없다는 한계를 명시한다.",
+        "publishedAt": "2025-05-29",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "SEC Staff Issues Statement on Protocol Staking Activities",
+        "url": "https://www.dechert.com/knowledge/onpoint/2025/6/sec-staff-issues-statement-on-protocol-staking-activities.html",
+        "publisher": "Dechert",
+        "type": "secondary",
+        "role": "independent-legal-analysis",
+        "claim": "5월 29일 직원 성명의 범위와 비구속적 성격, 조건을 해설한다.",
+        "publishedAt": "2025-06-09",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "특정 프로토콜 스테이킹 활동에 대한 비구속적 직원 성명 공개."
+  },
+  {
+    "id": "eth-policy-tariff-ruling-stay-2025",
+    "date": "2025-05-29",
+    "label": "관세 판결 집행정지",
+    "title": "미 항소법원, 관세 금지 판결 일시 정지",
+    "category": "macro",
+    "importance": 2,
+    "description": "항소법원이 전날 국제무역법원의 금지 판결을 일시 정지해 쟁점 관세가 유지됐다.",
+    "detail": "무역법원의 권한 판단과 항소 중 효력 유지는 다른 사건이다. 법원 절차가 실제 관세 종료와 곧바로 일치하지 않는다는 점을 차트에서 확인할 수 있도록 분리한다.",
+    "policyAction": "연방순회항소법원은 정부의 항소를 심리하는 동안 하급심 판결의 효력을 정지했다.",
+    "marketContext": "Reuters는 항소 절차가 시장의 초기 안도감을 제한하고 무역정책 불확실성을 남겼다고 보도했다.",
+    "followUp": "이 정지는 관세의 적법성을 최종 확정한 판단이 아니다. 2026년 2월 20일 대법원이 IEEPA의 관세 부과 권한을 부정했다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "항소심 공식 절차 회고에 인용된 2025-05-29 결정과 Reuters 본문상의 목요일 사건을 대조했다.",
+    "crossCheck": "연방순회항소법원의 후속 판결 원문과 Reuters 보도로 사건 날짜·정지 성격을 확인했다. 최초 정지 명령 원본 대신 공식 사후 절차 기록을 사용한 한계를 명시한다.",
+    "limitations": [
+      "최초 정지 명령 원본을 직접 인용하지 않으며, 공식 항소심의 후속 회고를 사용했다.",
+      "집행정지는 쟁점 관세가 최종 적법하다는 판결이 아니다.",
+      "5월 28일과 29일의 연속 사건은 가격 관측 창이 겹칠 수 있다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "항소",
+      "집행정지",
+      "IEEPA",
+      "관세 소송"
+    ],
+    "sources": [
+      {
+        "title": "V.O.S. Selections, Inc. v. Trump — Federal Circuit opinion, cases 2025-1812 and 2025-1813",
+        "url": "https://www.cafc.uscourts.gov/opinions-orders/25-1812.OPINION.8-29-2025_2566151.pdf",
+        "publisher": "U.S. Court of Appeals for the Federal Circuit",
+        "type": "primary",
+        "publishedAt": "2025-08-29",
+        "accessedAt": "2026-10-24",
+        "role": "appellate-primary-procedural-history",
+        "claim": "5월 29일 정지 결정을 사건 번호와 함께 확인한다."
+      },
+      {
+        "title": "Trump’s tariffs to remain in effect after appeals court grants stay",
+        "url": "https://www.investing.com/news/stock-market-news/us-ruling-that-trump-tariffs-are-unlawful-stirs-relief-and-uncertainty-4069816",
+        "publisher": "Reuters, republished by Investing.com",
+        "type": "secondary",
+        "publishedAt": "2025-05-29",
+        "accessedAt": "2026-10-24",
+        "role": "independent-contemporaneous-report",
+        "claim": "항소법원 결정 뒤 관세 효력이 유지됐다고 보도한다."
+      },
+      {
+        "title": "Learning Resources, Inc. v. Trump / Trump v. V.O.S. Selections, Inc. — Supreme Court opinion",
+        "url": "https://www.supremecourt.gov/opinions/25pdf/24-1287_4gcj.pdf",
+        "publisher": "Supreme Court of the United States",
+        "type": "primary",
+        "publishedAt": "2026-02-20",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-final-legal-ruling",
+        "claim": "2026년 대법원의 별도 IEEPA 권한 판단을 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-context-israel-iran-june-strikes",
+    "date": "2025-06-13",
+    "label": "이스라엘·이란 충돌",
+    "title": "이스라엘의 이란 공습과 양국 직접 충돌 확대",
+    "category": "geopolitics",
+    "importance": 3,
+    "description": "이스라엘이 이란을 공습하며 양국의 직접 군사 충돌이 확대됐다.",
+    "detail": "6월 13일 이스라엘의 공습에는 이란 핵 관련 시설이 포함됐다. 국제기구 기록과 당일 시장 보도를 대조한다. 이후 6월 22일 미국의 직접 공격은 별도 사건으로 표시한다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "슬로베니아의 6월 13일 안보리 발언, IAEA의 후속 공식 연혁 및 Reuters의 당일 보도를 대조했다.",
+    "crossCheck": "안보리 참가국의 당일 공식 기록, IAEA 사무국의 후속 보고서, Reuters의 독립 시장 취재가 날짜와 사건의 존재를 교차 확인한다. 공격 목적이나 피해 범위에 대한 당사자 주장을 그대로 확정하지 않는다.",
+    "limitations": [
+      "2024년 4월 충돌이나 2026년 2월 공격과 다른 사건이다.",
+      "유가·금융시장 보도를 ETH의 특정 등락 폭이나 중장기 인과 효과로 바꾸지 않는다."
+    ],
+    "keywords": [
+      "Israel",
+      "Iran",
+      "이스라엘",
+      "이란",
+      "중동",
+      "원유",
+      "지정학"
+    ],
+    "sources": [
+      {
+        "title": "Statement on the latest developments in Iran",
+        "url": "https://buildingtrust.si/statement/statement-on-the-latest-developments-in-iran/",
+        "publisher": "Republic of Slovenia — UN Security Council mission",
+        "type": "primary",
+        "role": "official-contemporaneous-statement",
+        "claim": "6월 13일 당일 이스라엘의 이란 공습과 이란의 대응을 기록한다.",
+        "publishedAt": "2025-06-13",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "IAEA activities relevant to article III of the NPT — NPT/CONF.2026/7",
+        "url": "https://docs-library.unoda.org/Treaty_on_the_Non-Proliferation_of_Nuclear_Weapons_-EleventhReview_Conference_(2026)/NPT_CONF.2026_07_-_07._ADVANCE_IAEA_Non-Proliferation_.pdf",
+        "publisher": "IAEA Secretariat / United Nations document",
+        "type": "primary",
+        "role": "official-retrospective-record",
+        "claim": "19항은 2025년 6월 13일부터 이란 핵시설 공격이 발생했다고 명시한다.",
+        "publishedAt": "2026-02-24",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Oil settles up 7% as Israel, Iran trade air strikes",
+        "url": "https://www.reuters.com/world/china/oil-prices-jump-more-than-4-after-israel-strikes-iran-2025-06-13/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-market-reporting",
+        "claim": "6월 13일 양국 공습과 원유시장 반응을 기록한다.",
+        "publishedAt": "2025-06-13",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "marketContext": "Reuters는 당일 공습과 원유 공급 우려를 함께 보도했다. 그 기사에 나온 원유 가격 변화는 ETH 수익률로 치환하지 않는다."
+  },
+  {
+    "id": "eth-context-us-iran-nuclear-strikes",
+    "date": "2025-06-22",
+    "label": "美 이란 시설 공격",
+    "title": "미국의 이란 핵시설 직접 공격",
+    "category": "geopolitics",
+    "importance": 3,
+    "description": "미국이 이란의 세 핵시설을 직접 공격했다.",
+    "detail": "6월 22일의 직접 공격을 앞선 이스라엘·이란 충돌과 구분한다. IAEA는 Fordow, Esfahan, Natanz의 관측 상황을 안보리에 설명했다. 초기 피해 평가나 군사적 성과를 확정하지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "IAEA의 6월 22일 발언, 후속 IAEA 공식 연혁의 명시적 6월 22일 기록, Reuters의 일요일 공격 보도를 사용한다. 미국 현지 6월 21일 저녁 발표와 구분한다.",
+    "crossCheck": "핵시설 감시기관의 당일 설명 및 후속 공식 연혁을 Reuters의 독립 보도와 대조했다. IAEA 문서 둘은 같은 기관의 기록이므로 독립 기관 두 곳으로 세지 않는다.",
+    "limitations": [
+      "미국 현지 발표일과 이란 현지·국제 보도의 작전 날짜가 다를 수 있다.",
+      "당시 IAEA도 지하 시설의 피해 전체를 평가할 수 없다고 밝혔다. 파괴 완료·장기 성과를 단정하지 않는다."
+    ],
+    "keywords": [
+      "United States",
+      "Iran",
+      "미국",
+      "이란",
+      "Fordow",
+      "Natanz",
+      "핵시설",
+      "중동"
+    ],
+    "sources": [
+      {
+        "title": "IAEA Director General Grossi's Statement to UNSC on Situation in Iran — 22 June 2025",
+        "url": "https://www.iaea.org/newscenter/statements/iaea-director-general-grossis-statement-to-unsc-on-situation-in-iran-22-june-2025",
+        "publisher": "International Atomic Energy Agency",
+        "type": "primary",
+        "role": "official-contemporaneous-assessment",
+        "claim": "미국 공격 이후 세 핵시설의 관측 상황과 피해 평가 한계를 설명한다.",
+        "publishedAt": "2025-06-22",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "IAEA activities relevant to article III of the NPT — NPT/CONF.2026/7",
+        "url": "https://docs-library.unoda.org/Treaty_on_the_Non-Proliferation_of_Nuclear_Weapons_-EleventhReview_Conference_(2026)/NPT_CONF.2026_07_-_07._ADVANCE_IAEA_Non-Proliferation_.pdf",
+        "publisher": "IAEA Secretariat / United Nations document",
+        "type": "primary",
+        "role": "official-retrospective-record",
+        "claim": "19항이 미국의 세 핵시설 공격 날짜를 2025년 6월 22일로 명시한다.",
+        "publishedAt": "2026-02-24",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "World reaction to US attacks on Iranian nuclear sites",
+        "url": "https://www.reuters.com/world/americas/world-leaders-react-us-attack-iran-2025-06-22/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-reporting-updated",
+        "claim": "6월 22일 일요일 미국 공격을 기록한다. 열람 판본은 6월 23일 갱신됐다.",
+        "publishedAt": "2025-06-23",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-genius-act-enactment",
+    "date": "2025-07-18",
+    "label": "GENIUS 법률 성립",
+    "title": "미국 GENIUS Act: 지급용 스테이블코인 법률 성립",
+    "category": "regulation",
+    "importance": 3,
+    "description": "미국에서 지급용 스테이블코인 발행·감독 체계를 정한 GENIUS Act가 법률로 성립했다.",
+    "detail": "Ethereum에서도 사용되는 스테이블코인 생태계와 관련된 제도 변화다. 표시일은 대통령 서명으로 법률이 성립한 날이며, 제20조가 정한 일반 효력 발생 조건과 별도다. ETH 자체가 스테이블코인이 되거나 연방정부의 보증을 받는다는 의미는 아니다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "Public Law 119-27의 승인일 2025-07-18과 당일 서명 보도가 일치한다. 하원 통과일 7월 17일 및 일반 시행 조건과 구분한다.",
+    "crossCheck": "정책을 발표한 기관의 원문과 별도 언론사의 당시 보도를 대조해 결정 내용과 날짜를 확인했다. 언론의 전망이나 가격 해석은 확정된 정책 사실로 사용하지 않는다.",
+    "limitations": [
+      "법률 성립과 모든 조항의 즉시 적용을 동일시하지 않는다.",
+      "제20조는 성립 18개월 뒤와 주요 연방 감독기관의 최종 규정 후 120일 가운데 이른 날을 일반 효력 발생 조건으로 정한다.",
+      "특정 체인이나 ETH의 가격·수익률을 보장하는 법률이 아니다."
+    ],
+    "keywords": [
+      "GENIUS Act",
+      "스테이블코인",
+      "미국",
+      "법률",
+      "달러"
+    ],
+    "sources": [
+      {
+        "title": "Public Law 119-27 — GENIUS Act",
+        "url": "https://www.govinfo.gov/content/pkg/PLAW-119publ27/html/PLAW-119publ27.htm",
+        "publisher": "U.S. Congress / U.S. Government Publishing Office",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "7월 18일 법률 성립과 지급용 스테이블코인 제도, 제20조의 별도 효력 발생 조건을 명시한다.",
+        "publishedAt": "2025-07-18",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Trump signs stablecoin law as crypto industry aims for mainstream adoption",
+        "url": "https://www.reuters.com/legal/government/trump-signs-stablecoin-law-crypto-industry-aims-mainstream-adoption-2025-07-18/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "7월 18일 대통령 서명과 지급용 스테이블코인 규제 체계의 입법을 당일 확인한다.",
+        "publishedAt": "2025-07-18",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "지급용 스테이블코인에 관한 연방법 Public Law 119-27 성립."
+  },
+  {
+    "id": "eth-policy-country-rate-reset-2025",
+    "date": "2025-07-31",
+    "label": "국가별 관세 재설정",
+    "title": "미국, 국가별 상호관세 요율 재설정",
+    "category": "macro",
+    "importance": 3,
+    "description": "미국이 다수 교역국의 상호관세 요율을 다시 정하고 일주일 뒤 적용하는 명령을 발표했다.",
+    "detail": "4월 유예 이후 국가별 요율이 다시 구체화된 전환점이다. 다음 날 금융시장 약세에는 미국 고용지표도 겹쳤으므로 관세만으로 설명하지 않는다.",
+    "policyAction": "EO 14326은 부속서의 국가별 요율을 8월 7일부터 적용하도록 정했다. 명시되지 않은 교역국의 10% 기본 요율과 일부 경과 규정이 남았다.",
+    "marketContext": "Reuters는 8월 1일 세계 주식시장 약세를 관세 재설정과 부진한 미국 고용지표가 함께 나온 상황으로 설명했다.",
+    "followUp": "중국 대상 제네바 조정은 이 명령으로 바뀌지 않았고, 8월 11일 별도로 연장됐다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "행정명령 서명일 7월 31일을 사용한다. 명령의 7일 후 적용 조항과 Reuters가 확인한 8월 7일을 분리한다.",
+    "crossCheck": "행정명령의 적용 일정·중국 예외를 Reuters 보도 및 8월 항소심 절차 배경에 명시된 시행일과 대조했다.",
+    "limitations": [
+      "국가·상품별 세율이 달라 하나의 평균 관세율로 단순화하지 않는다.",
+      "8월 1일 고용지표와 관세 뉴스가 겹치므로 관세만의 시장 효과는 식별하지 않는다.",
+      "미국 주가 반응을 ETH 일봉 반응으로 대체하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "국가별 관세",
+      "8월 7일",
+      "고용지표",
+      "EO 14326"
+    ],
+    "sources": [
+      {
+        "title": "Further Modifying the Reciprocal Tariff Rates — Executive Order 14326",
+        "url": "https://www.whitehouse.gov/presidential-actions/2025/07/further-modifying-the-reciprocal-tariff-rates/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-07-31",
+        "accessedAt": "2026-10-24",
+        "role": "signed-policy-order",
+        "claim": "새 국가별 요율, 7일 후 적용 및 중국 조정 유지 조항을 명시한다."
+      },
+      {
+        "title": "Markets dive after Trump hits more countries with steep tariffs",
+        "url": "https://www.investing.com/news/economic-indicators/trump-hits-more-countries-with-steep-tariffs-markets-tumble-4165747",
+        "publisher": "Reuters, republished by Investing.com",
+        "type": "secondary",
+        "publishedAt": "2025-08-01",
+        "accessedAt": "2026-10-24",
+        "role": "independent-policy-and-market-report",
+        "claim": "8월 7일 시행 일정과 다음 날 관세·고용지표 동반 시장 약세를 보도한다."
+      },
+      {
+        "title": "V.O.S. Selections, Inc. v. Trump — Federal Circuit opinion, cases 2025-1812 and 2025-1813",
+        "url": "https://www.cafc.uscourts.gov/opinions-orders/25-1812.OPINION.8-29-2025_2566151.pdf",
+        "publisher": "U.S. Court of Appeals for the Federal Circuit",
+        "type": "primary",
+        "publishedAt": "2025-08-29",
+        "accessedAt": "2026-10-24",
+        "role": "independent-official-retrospective",
+        "claim": "중국 외 상호관세가 8월 7일 시행됐다고 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-sec-liquid-staking-staff",
+    "date": "2025-08-05",
+    "label": "SEC 유동성 스테이킹",
+    "title": "SEC 직원, 특정 유동성 스테이킹에 관한 견해 발표",
+    "category": "regulation",
+    "importance": 3,
+    "description": "SEC 직원이 특정 유동성 스테이킹과 수령 토큰에 관한 증권법 견해를 공개했다.",
+    "detail": "5월 프로토콜 스테이킹 성명과 구분되는 후속 문서다. 설명된 사실관계에 맞는 활동에 관한 분석으로, 스테이킹 자산·서비스 구조가 달라지면 동일한 결론을 자동 적용할 수 없다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공식 발표문에 명시된 발표 날짜를 사건일로 사용한다. 시행·결제 시점이나 문서의 후속 갱신일과 구분한다.",
+    "crossCheck": "8월 5일 SEC 직원 원문과 9월 16일 발행된 Gibson Dunn의 월간 정리를 대조했다. 제목의 August를 정확한 게시일로 오인하지 않는다.",
+    "limitations": [
+      "구속력 없는 직원 견해이며 위원회의 최종 규칙이 아니다.",
+      "모든 유동성 토큰·재스테이킹·DeFi 상품에 대한 포괄적 면책이 아니다."
+    ],
+    "keywords": [
+      "SEC",
+      "유동성 스테이킹",
+      "LST",
+      "Ethereum",
+      "직원 견해"
+    ],
+    "sources": [
+      {
+        "title": "Statement on Certain Liquid Staking Activities",
+        "url": "https://www.sec.gov/newsroom/speeches-statements/corpfin-certain-liquid-staking-activities-080525",
+        "publisher": "SEC Division of Corporation Finance",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "일정 사실관계의 유동성 스테이킹과 수령 토큰에 관한 직원 견해를 제시했다. 위원회 승인 규칙이나 모든 스테이킹 상품의 면제는 아니다.",
+        "publishedAt": "2025-08-05",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Digital Assets Recent Updates — August 2025",
+        "url": "https://www.gibsondunn.com/digital-assets-recent-updates-august-2025/",
+        "publisher": "Gibson Dunn",
+        "type": "secondary",
+        "role": "independent-legal-review",
+        "claim": "8월 5일 SEC 직원의 유동성 스테이킹 성명과 조건부 분석을 후속 정리한다.",
+        "publishedAt": "2025-09-16",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "특정 유동성 스테이킹 활동에 대한 비구속적 직원 성명 공개."
+  },
+  {
+    "id": "eth-policy-stockholm-truce-extension-2025",
+    "date": "2025-08-11",
+    "label": "미중 유예 연장",
+    "title": "미중 관세 조정 90일 추가 연장",
+    "category": "macro",
+    "importance": 2,
+    "description": "미국과 중국이 제네바 관세 조정의 90일 추가 연장을 발표했다.",
+    "detail": "기존 고율이 즉시 복귀하는 상황을 피한 연장 사건이다. 종전의 모든 관세가 사라지거나 미중 분쟁이 최종 해결됐다는 의미는 아니다.",
+    "policyAction": "공동성명은 8월 12일부터 90일 더 24%포인트의 적용을 중단하고 10% 부분을 유지한다고 밝혔다. 미국 명령은 11월 10일 00:01 EST까지 연장했다.",
+    "marketContext": "Reuters는 연장이 협상 시간을 벌었으며 아시아 주식시장에는 합의 기대가 반영됐다고 보도했다.",
+    "followUp": "10월 10일 추가 관세 위협으로 긴장이 다시 높아졌고 10월 30일 정상회담에서 별도 완화 합의가 발표됐다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공동성명과 행정명령의 8월 11일을 사용한다. 기존 조정 만료 예정일·연장 시작일인 8월 12일과 구분한다.",
+    "crossCheck": "양국 공동성명, 미국 시행 명령, Reuters 보도를 대조했다. 백악관의 두 문서는 독립 취재 두 건으로 세지 않는다.",
+    "limitations": [
+      "기본 상호관세 부분 및 그 밖의 관세 조치가 남아 있었다.",
+      "Reuters에 나타난 아시아 주식의 기대 반영을 ETH의 직접 반등으로 단정하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "스톡홀름",
+      "미중",
+      "90일 연장",
+      "관세 유예"
+    ],
+    "sources": [
+      {
+        "title": "Joint Statement on U.S.-China Economic and Trade Meeting in Stockholm",
+        "url": "https://www.whitehouse.gov/briefings-statements/2025/08/joint-statement-on-u-s-china-economic-and-trade-meeting-in-stockholm/",
+        "publisher": "The White House — U.S.-China joint statement",
+        "type": "primary",
+        "publishedAt": "2025-08-11",
+        "accessedAt": "2026-10-24",
+        "role": "bilateral-extension-statement",
+        "claim": "8월 12일부터의 90일 연장과 10% 부분 유지를 확인한다."
+      },
+      {
+        "title": "Further Modifying Reciprocal Tariff Rates to Reflect Ongoing Discussions with The People's Republic of China",
+        "url": "https://www.whitehouse.gov/presidential-actions/2025/08/further-modifying-reciprocal-tariff-rates-to-reflect-ongoing-discussions-with-the-peoples-republic-of-china/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-08-11",
+        "accessedAt": "2026-10-24",
+        "role": "signed-extension-order",
+        "claim": "미국의 연장 종료 시점을 11월 10일 00:01 EST로 정한다."
+      },
+      {
+        "title": "US, China extend tariff truce by 90 days, staving off surge in duties",
+        "url": "https://www.investing.com/news/world-news/trump-says-well-see-what-happens-on-august-12-deadline-for-china-tariffs-4183460",
+        "publisher": "Reuters, republished by Investing.com",
+        "type": "secondary",
+        "publishedAt": "2025-08-11",
+        "accessedAt": "2026-10-24",
+        "role": "independent-policy-and-market-report",
+        "claim": "협상 연장과 당시 금융시장 기대를 보도한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-fed-2025-easing-resumes",
+    "date": "2025-09-17",
+    "label": "美 금리 인하 재개",
+    "title": "연준, 2025년 금리 인하 재개",
+    "category": "macro",
+    "importance": 3,
+    "description": "연준이 목표 금리를 4.00–4.25%로 25bp 낮췄다.",
+    "detail": "2024년 12월 이후 유지하던 금리를 다시 낮춘 회의다. 이 날 성명은 보유 증권 축소를 계속한다고 밝혔다. 금리 인하와 이후 양적긴축 종료 결정을 구분한다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공식 발표문에 명시된 발표 날짜를 사건일로 사용한다. 시행·결제 시점이나 문서의 후속 갱신일과 구분한다.",
+    "crossCheck": "정책을 발표한 기관의 원문과 별도 언론사의 당시 보도를 대조해 결정 내용과 날짜를 확인했다. 언론의 전망이나 가격 해석은 확정된 정책 사실로 사용하지 않는다.",
+    "limitations": [
+      "사건 표시와 ETH 가격의 동시 관측은 인과관계를 입증하지 않는다."
+    ],
+    "keywords": [
+      "Fed",
+      "FOMC",
+      "금리 인하",
+      "달러",
+      "2025"
+    ],
+    "sources": [
+      {
+        "title": "FOMC statement — 2025-09-17",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20250917a.htm",
+        "publisher": "Federal Reserve",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "목표 범위를 4.00–4.25%로 25bp 낮췄고 보유 증권 축소는 계속한다고 밝혔다.",
+        "publishedAt": "2025-09-17",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Fed lowers interest rates, signals more cuts ahead; Miran dissents",
+        "url": "https://www.reuters.com/business/fed-lowers-interest-rates-signals-more-cuts-ahead-miran-dissents-2025-09-17/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "2024년 12월 이후 첫 금리 인하와 4.00–4.25% 목표 범위를 확인한다. 향후 전망은 사용하지 않는다.",
+        "publishedAt": "2025-09-17",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "정책금리 목표 범위 4.00–4.25%; 25bp 인하."
+  },
+  {
+    "id": "eth-policy-china-additional-tariff-threat-2025",
+    "date": "2025-10-10",
+    "label": "대중 100% 추가 예고",
+    "title": "트럼프, 중국에 추가 100% 관세 예고",
+    "category": "macro",
+    "importance": 3,
+    "description": "트럼프의 대중 추가 100% 관세 예고와 같은 구간에 ETH를 포함한 가상자산 급락·레버리지 청산이 보도됐다.",
+    "detail": "이는 당일 발효된 관세가 아닌 향후 부과 예고다. Reuters의 후속 보도는 ETH 하락과 시장 전체 청산·낮은 유동성을 함께 다뤘으며, 관세만의 단독 효과로 기록하지 않는다.",
+    "policyAction": "트럼프는 11월 1일 또는 중국의 후속 조치에 따라 더 이르게, 기존 관세에 추가하는 100% 관세와 핵심 소프트웨어 수출통제를 예고했다.",
+    "marketContext": "Reuters는 10월 10~11일 급락 이후 ETH 하방 방어 수요와 시장 전체 레버리지 청산·유동성 문제를 보도했다.",
+    "followUp": "10월 30일 정상회담 뒤 완화 합의가 발표됐고 11월 공식 문서가 이를 구체화했다. 이 기록은 추가 100%가 11월 1일 실제 시행됐다고 주장하지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "대통령 게시물 아카이브의 10월 10일을 사용한다. 13:50 PDT 게시 시각은 20:50 UTC로 환산되지만 마커 자체는 출처 달력 날짜다.",
+    "crossCheck": "대통령 원문을 보존한 UCSB 아카이브를 Reuters 당일 정책 보도와 대조하고, 별도 후속 기사로 ETH와 청산 맥락을 확인했다. Reuters 두 기사는 같은 매체의 보도다.",
+    "limitations": [
+      "대통령 게시물은 정책 의사의 기록이며 실제 시행 명령과 동일하지 않다.",
+      "당일 앞선 일반적인 관세 위협 발언과 20:50 UTC의 구체적 100% 게시를 구분한다.",
+      "Reuters 청산액은 시장 전체 집계이며 ETH 전용 청산액이 아니다. 기사 저점·변화율을 Coinbase 일봉 값으로 사용하지 않는다.",
+      "후속 Reuters 페이지의 URL·본문 사건 설명은 10월 13일이지만 현재 게시 헤더는 10월 14일로 표시된다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "중국",
+      "추가 100%",
+      "수출통제",
+      "강제청산",
+      "유동성"
+    ],
+    "sources": [
+      {
+        "title": "Truth Social Posts of October 10, 2025",
+        "url": "https://www.presidency.ucsb.edu/documents/truth-social-posts-october-10-2025",
+        "publisher": "The American Presidency Project — Donald J. Trump post archive",
+        "type": "primary",
+        "publishedAt": "2025-10-10",
+        "accessedAt": "2026-10-24",
+        "role": "archived-original-statement",
+        "claim": "13:50 Pacific 게시물에 기존 관세 외 100% 및 11월 1일 예정 문구가 있다."
+      },
+      {
+        "title": "US will impose additional 100% tariff on Chinese imports from November, Trump says",
+        "url": "https://www.reuters.com/world/china/us-will-impose-additional-100-tariff-chinese-imports-november-trump-says-2025-10-10/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2025-10-10",
+        "accessedAt": "2026-10-24",
+        "role": "independent-contemporaneous-policy-report",
+        "claim": "기존 관세에 추가하는 100% 부과 예고를 확인한다."
+      },
+      {
+        "title": "After record crypto crash, a rush to hedge against another freefall",
+        "url": "https://www.reuters.com/world/asia-pacific/after-record-crypto-crash-rush-hedge-against-another-freefall-2025-10-13/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2025-10-14",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-market-report",
+        "claim": "ETH 동반 하락과 시장 전체 레버리지·유동성 문제를 보도한다."
+      },
+      {
+        "title": "Fact Sheet: President Donald J. Trump Strikes Deal on Economic and Trade Relations with China",
+        "url": "https://www.whitehouse.gov/fact-sheets/2025/11/fact-sheet-president-donald-j-trump-strikes-deal-on-economic-and-trade-relations-with-china/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-11-01",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-policy-agreement",
+        "claim": "후속 미중 완화 합의를 설명한다."
+      }
+    ],
+    "commonEventId": "trump-china-tariff-threat-2025",
+    "facts": {
+      "announcementUtc": "2025-10-10T20:50:00Z",
+      "announcementTimeBasis": "UCSB 원문 아카이브의 13:50 Pacific 표기, 해당 날짜 PDT(UTC−07:00).",
+      "announcedEffectiveDate": "2025-11-01",
+      "policyStatusAtAnnouncement": "threat-announcement"
+    }
+  },
+  {
+    "id": "eth-policy-fed-qt-end-announcement",
+    "date": "2025-10-29",
+    "label": "연준 QT 종료 결정",
+    "title": "연준, 12월 양적긴축 종료 결정 발표",
+    "category": "macro",
+    "importance": 3,
+    "description": "연준이 금리를 25bp 낮추고 12월 1일부터 보유 증권 축소를 끝내기로 했다.",
+    "detail": "목표 금리는 3.75–4.00%가 됐다. 표시일은 종료 방침의 발표일이며 실제 종료 예정일인 12월 1일과 다르다. 자산 축소 중단 자체를 새 대규모 순매입이나 ETH 매입으로 표현하지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "2025-10-29 결정 발표일. 성명에 별도로 지정된 양적긴축 종료일 12월 1일과 구분한다.",
+    "crossCheck": "정책을 발표한 기관의 원문과 별도 언론사의 당시 보도를 대조해 결정 내용과 날짜를 확인했다. 언론의 전망이나 가격 해석은 확정된 정책 사실로 사용하지 않는다.",
+    "limitations": [
+      "보유 자산 축소 중단과 새로운 대규모 자산 순매입은 동일하지 않다.",
+      "이 표식은 발표 사실이며 이후 모든 집행 결과를 입증하지 않는다."
+    ],
+    "keywords": [
+      "Fed",
+      "QT",
+      "양적긴축 종료",
+      "유동성",
+      "금리"
+    ],
+    "sources": [
+      {
+        "title": "FOMC statement — 2025-10-29",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20251029a.htm",
+        "publisher": "Federal Reserve",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "목표 범위를 3.75–4.00%로 낮추고 12월 1일 보유 증권 축소를 끝내기로 했다.",
+        "publishedAt": "2025-10-29",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Fed winding down balance sheet contraction amid tightening money markets",
+        "url": "https://www.reuters.com/business/finance/fed-end-balance-sheet-reduction-december-1-2025-10-29/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "10월 29일 연준의 12월 1일 보유 자산 축소 종료 결정을 확인한다.",
+        "publishedAt": "2025-10-29",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "25bp 인하 및 12월 1일 보유 증권 축소 종료 결정."
+  },
+  {
+    "id": "eth-policy-busan-trade-arrangement-2025",
+    "date": "2025-10-30",
+    "label": "미중 정상 합의",
+    "title": "미중 정상회담 후 관세·희토류 완화 합의",
+    "category": "macro",
+    "importance": 3,
+    "description": "부산 미중 정상회담 뒤 관세 일부 인하와 희토류 관련 조치의 완화를 포함한 합의가 발표됐다.",
+    "detail": "10월 30일 회담 결과 발표, 11월 1일 상세 설명, 11월 4일 시행 명령을 구분한다. 발표를 근거로 ETH가 즉시 상승했다고 설명하지 않는다.",
+    "policyAction": "미국은 중국 대상 펜타닐 관세를 10%포인트 낮추고 고율 상호관세의 중단을 연장하는 합의를 발표했다.",
+    "marketContext": "Reuters는 예상됐던 정상회담 결과에 대한 글로벌 시장 반응이 제한적이었다고 보도했다.",
+    "followUp": "11월 1일 백악관은 인하 적용일을 11월 10일로 설명했고, 11월 4일 명령은 고율 상호관세 중단을 2026년 11월 10일까지 연장했다. 당시 기본 10% 부분은 유지됐다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "Reuters의 10월 30일 회담 결과 보도와 11월 4일 명령에 명시된 회담일이 일치한다. 후속 문서 게시일을 최초 합의 발표일로 쓰지 않는다.",
+    "crossCheck": "당일 Reuters 보도, 백악관 후속 설명, 합의를 시행하는 명령을 대조했다. 같은 행정부의 후속 두 문서를 별개의 독립 취재로 세지 않는다.",
+    "limitations": [
+      "회담 직후의 발언과 뒤에 확정된 적용 날짜를 구별한다.",
+      "10월 10일 예고된 추가 100% 관세가 먼저 시행된 뒤 취소됐다는 식으로 연결하지 않는다.",
+      "합의의 약속을 모든 조항이 완전히 이행됐다는 확인으로 사용하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "부산",
+      "미중 정상회담",
+      "희토류",
+      "관세 인하"
+    ],
+    "sources": [
+      {
+        "title": "Trump shaves China tariffs in deal with Xi on fentanyl, rare earths",
+        "url": "https://www.reuters.com/world/china/looming-trump-xi-meeting-revives-hope-us-china-trade-truce-2025-10-29/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2025-10-30",
+        "accessedAt": "2026-10-24",
+        "role": "independent-contemporaneous-report",
+        "claim": "10월 30일 합의 발표와 제한적인 글로벌 시장 반응을 확인한다."
+      },
+      {
+        "title": "Fact Sheet: President Donald J. Trump Strikes Deal on Economic and Trade Relations with China",
+        "url": "https://www.whitehouse.gov/fact-sheets/2025/11/fact-sheet-president-donald-j-trump-strikes-deal-on-economic-and-trade-relations-with-china/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-11-01",
+        "accessedAt": "2026-10-24",
+        "role": "official-agreement-details",
+        "claim": "11월 10일 인하 일정 및 당시 10% 상호관세 부분 유지를 설명한다."
+      },
+      {
+        "title": "Modifying Reciprocal Tariff Rates Consistent with the Economic and Trade Arrangement Between the United States and the People’s Republic of China",
+        "url": "https://www.whitehouse.gov/presidential-actions/2025/11/modifying-reciprocal-tariff-rates-consistent-with-the-economic-and-trade-arrangement-between-the-united-states-and-the-peoples-republic-of-china/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2025-11-04",
+        "accessedAt": "2026-10-24",
+        "role": "signed-implementation-order",
+        "claim": "회담 날짜와 고율 상호관세 중단 연장을 명시한다."
+      }
+    ]
+  },
+  {
     "id": "ethereum-fusaka",
     "date": "2025-12-03",
     "label": "푸사카",
@@ -1296,6 +7493,54 @@ export const ETHEREUM_EVENTS = deepFreeze([
     "blockHeight": 23935694,
     "timestampUtc": "2025-12-03T21:49:23Z",
     "blockHash": "0x8281db4990564caca17e620a70847c7b001ad70cd7bb5e64aa78adea16747677"
+  },
+  {
+    "id": "eth-security-prysm-fusaka-incident",
+    "date": "2025-12-04",
+    "label": "Prysm 처리 장애",
+    "title": "푸사카 이후 Prysm 자원 고갈과 검증자 처리 장애",
+    "category": "security",
+    "importance": 2,
+    "description": "푸사카 적용 다음 날 일부 증명 처리에서 Prysm 클라이언트가 자원을 과도하게 사용해 해당 검증자의 블록 제안과 증명이 누락됐다.",
+    "detail": "개발팀의 사후 보고서는 오래된 체크포인트에 대한 상태 재계산을 원인으로 설명한다. 임시 설정 대응과 이후 수정 릴리스가 이어졌으며, 다른 클라이언트의 운영이 네트워크 영향을 제한했다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "개발팀 사후 보고서가 모든 시각을 UTC로 명시한 실제 사건일 2025-12-04를 사용한다. 푸사카 적용일인 12월 3일 및 분석·릴리스 게시일과 구분한다.",
+    "crossCheck": "Prysm 공식 사후 보고서와 해당 구현에 참여한 Potuz의 별도 기술 설명을 대조했다. 두 자료는 같은 개발팀에 속한 1차 설명이므로 독립 기관 두 곳의 검증으로 세지 않는다.",
+    "limitations": [
+      "Prysm 검증자 일부의 장애를 Ethereum 전체 중단이나 이 사건에서 최종 확정이 중단됐다는 주장으로 확대하지 않는다.",
+      "누락된 검증자 보상을 자금 탈취나 ETH 시장가격 손실로 바꾸지 않는다.",
+      "설명은 당시 사건의 원인·대응 기록이며 현재 노드 운영 설정을 권고하는 안내가 아니다."
+    ],
+    "keywords": [
+      "Prysm",
+      "Fusaka",
+      "푸사카",
+      "검증자",
+      "자원 고갈",
+      "합의 클라이언트"
+    ],
+    "sources": [
+      {
+        "title": "Mainnet postmortems — Fusaka Mainnet Prysm Incident",
+        "url": "https://prysm.offchainlabs.com/docs/misc/mainnet-postmortems/",
+        "publisher": "Prysm / Offchain Labs",
+        "type": "primary",
+        "role": "client-postmortem",
+        "claim": "실제 UTC 사건일, 영향받은 검증자 처리, 복구와 수정 릴리스를 확인한다. 문서의 사건 날짜를 게시 날짜로 간주하지 않는다.",
+        "publishedAt": null,
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "History of a buggy bug",
+        "url": "https://www.potuz.net/posts/fulu-bug/",
+        "publisher": "Potuz — Prysm developer",
+        "type": "primary",
+        "role": "same-team-author-analysis",
+        "claim": "구현 참여자가 설명한 오래된 증명 처리와 상태 재생성 경로를 사후 보고서와 대조한다.",
+        "publishedAt": "2025-12-11",
+        "accessedAt": "2026-10-24"
+      }
+    ]
   },
   {
     "id": "ethereum-bpo1",
@@ -1371,6 +7616,54 @@ export const ETHEREUM_EVENTS = deepFreeze([
     "blockHash": "0xb0b41a47d2d2e1dbf65465b21ee0babaf4c95352eae75f4cf75f571a2440d314"
   },
   {
+    "id": "eth-context-us-venezuela-operation",
+    "date": "2026-01-03",
+    "label": "美 베네수엘라 작전",
+    "title": "미국의 베네수엘라 군사작전과 마두로 신병 확보",
+    "category": "geopolitics",
+    "importance": 3,
+    "description": "미국이 베네수엘라에서 군사작전을 벌여 니콜라스 마두로의 신병을 확보했다.",
+    "detail": "1월 3일 작전과 미국으로의 이송을 별도의 지정학적 사건으로 기록한다. 유엔의 후속 안보리 설명과 Reuters의 당시 취재를 대조했다. 작전의 적법성이나 향후 국가 통치에 관한 당사자 주장을 이 기록의 결론으로 채택하지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "유엔 사무총장의 1월 5일 설명이 명시한 1월 3일 군사행동과 Reuters의 1월 3일 사건 보도를 사용한다.",
+    "crossCheck": "유엔의 공식 안보리 설명과 Reuters의 취재·확인을 대조했다. 미국과 베네수엘라의 상반된 정당화 주장은 사실 발생 확인과 분리한다.",
+    "limitations": [
+      "베네수엘라의 이후 통치·정책 전개 전체를 이 날짜에 완료된 것으로 표현하지 않는다.",
+      "글로벌 지정학적 맥락이며 ETH 가격과의 직접 인과관계는 검증한 바 없다."
+    ],
+    "keywords": [
+      "Venezuela",
+      "Maduro",
+      "베네수엘라",
+      "마두로",
+      "미국",
+      "지정학",
+      "원유"
+    ],
+    "sources": [
+      {
+        "title": "UN chief deeply concerned over possible intensification of instability in Venezuela",
+        "url": "https://caribbean.un.org/en/307990-un-chief-deeply-concerned-over-%E2%80%98possible-intensification-instability%E2%80%99-venezuela",
+        "publisher": "United Nations / UN Caribbean",
+        "type": "primary",
+        "role": "official-security-council-account",
+        "claim": "1월 5일 설명에서 1월 3일 미국 군사행동과 마두로 신병 확보를 명시한다.",
+        "publishedAt": "2026-01-05",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Trump says U.S. will run Venezuela after U.S. captures Maduro",
+        "url": "https://www.reuters.com/world/americas/loud-noises-heard-venezuela-capital-southern-area-without-electricity-2026-01-03/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-reporting-updated",
+        "claim": "1월 3일 작전 및 미국 이송을 보도한다. 열람 판본은 1월 4일 갱신됐다.",
+        "publishedAt": "2026-01-04",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
     "id": "ethereum-bpo2",
     "date": "2026-01-07",
     "label": "블롭 확장 2",
@@ -1442,6 +7735,646 @@ export const ETHEREUM_EVENTS = deepFreeze([
     "blockHeight": 24179383,
     "timestampUtc": "2026-01-07T01:01:11Z",
     "blockHash": "0x9e48fb2817558d92856efb79f2ced6f460cb061b64053cca591f0aa587320a82"
+  },
+  {
+    "id": "eth-policy-greenland-tariff-threat-2026",
+    "date": "2026-01-17",
+    "label": "그린란드 관세 예고",
+    "title": "그린란드 갈등 속 유럽 8개국 추가 관세 예고",
+    "category": "macro",
+    "importance": 3,
+    "description": "트럼프가 그린란드 문제와 연계해 유럽 8개국에 단계적 추가 관세를 예고했다.",
+    "detail": "지정학 갈등이 무역정책 위협으로 연결된 발표를 기록한다. 이미 시행된 관세로 표시하지 않으며, 1월 21일의 철회 발표를 후속 사건으로 연결한다.",
+    "policyAction": "대통령 게시물은 8개국 상품에 2월 1일부터 10%, 6월 1일부터 25% 추가 관세를 예고하고 그린란드 매입 합의와 연계했다.",
+    "marketContext": "Reuters는 이 예고가 유럽과의 긴장 및 기존 무역합의의 불확실성을 높였다고 보도했다. 이 자료만으로 ETH의 직접 반응은 확정하지 않는다.",
+    "followUp": "1월 21일 트럼프는 협의의 틀을 이유로 2월 1일 예정 관세를 부과하지 않겠다고 밝혔다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "UCSB 게시물 아카이브와 Reuters의 1월 17일 발표를 대조했다. 예고된 2월 1일 시행일과 구분한다.",
+    "crossCheck": "대통령 게시물의 원문·시각을 대학 아카이브에서 확인하고 Reuters 독립 보도의 대상국·요율·일정과 대조했다.",
+    "limitations": [
+      "그린란드의 소유권 이전 또는 합병이 이뤄진 사건으로 표시하지 않는다.",
+      "정치적 목적에 대한 판단은 대통령의 발표 내용에 귀속한다.",
+      "관세 부과 예고는 법적 시행과 다르며, 이 기록은 실제 부과를 주장하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "그린란드",
+      "유럽",
+      "NATO",
+      "지정학",
+      "관세 예고"
+    ],
+    "sources": [
+      {
+        "title": "Truth Social Posts of January 17, 2026",
+        "url": "https://www.presidency.ucsb.edu/documents/truth-social-posts-january-17-2026",
+        "publisher": "The American Presidency Project — Donald J. Trump post archive",
+        "type": "primary",
+        "publishedAt": "2026-01-17",
+        "accessedAt": "2026-10-24",
+        "role": "archived-original-statement",
+        "claim": "8개국에 대한 단계적 관세 예고와 그린란드 조건을 담는다."
+      },
+      {
+        "title": "Trump vows tariffs on eight European nations over Greenland",
+        "url": "https://www.reuters.com/world/europe/trump-vows-tariffs-eight-european-nations-over-greenland-2026-01-17/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2026-01-17",
+        "accessedAt": "2026-10-24",
+        "role": "independent-contemporaneous-report",
+        "claim": "예고 대상국·일정과 유럽의 반응을 확인한다."
+      },
+      {
+        "title": "Truth Social Posts of January 21, 2026",
+        "url": "https://www.presidency.ucsb.edu/documents/truth-social-posts-january-21-2026",
+        "publisher": "The American Presidency Project — Donald J. Trump post archive",
+        "type": "primary",
+        "publishedAt": "2026-01-21",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-withdrawal-statement",
+        "claim": "2월 1일 예정 관세를 부과하지 않겠다는 후속 발언이다."
+      }
+    ],
+    "facts": {
+      "announcementUtc": "2026-01-17T16:19:00Z",
+      "announcementTimeBasis": "UCSB의 08:19 Pacific 표기, 해당 날짜 PST(UTC−08:00).",
+      "announcedEffectiveDate": "2026-02-01",
+      "policyStatusAtAnnouncement": "threat-announcement"
+    }
+  },
+  {
+    "id": "eth-policy-greenland-tariff-withdrawal-2026",
+    "date": "2026-01-21",
+    "label": "그린란드 관세 철회",
+    "title": "그린란드 관련 2월 관세 부과 계획 철회",
+    "category": "macro",
+    "importance": 3,
+    "description": "트럼프가 그린란드 협의의 틀을 이유로 2월 1일 예정 관세를 부과하지 않겠다고 밝혔다.",
+    "detail": "1월 17일 위협과 다른 방향의 정책 발표다. 그린란드의 최종 지위가 확정되거나 이미 걷고 있던 관세가 환급된 사건으로 설명하지 않는다.",
+    "policyAction": "대통령은 NATO 사무총장과 논의 뒤 2월 1일 예정 관세를 부과하지 않겠다고 발표했다.",
+    "marketContext": "Reuters는 관련 발언 뒤 세계 주식시장이 반등했다고 보도했으며, 같은 날 군사력 사용을 배제한 발언도 시장 맥락으로 다뤘다.",
+    "followUp": "발표 당시 표현은 향후 합의의 틀이었고 추가 협상이 예정돼 있었다. 최종 합의 이행을 이 사건에서 확정하지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "UCSB의 1월 21일 11:27 PST 게시 기록과 Reuters 당일 보도를 대조했다. UTC 환산 시 19:27이다.",
+    "crossCheck": "대통령의 원문 보존 자료와 독립 시장 보도를 대조했다. 정책 철회 발언과 시장 반응의 동시성은 확인하지만 ETH의 인과효과를 측정하지 않는다.",
+    "limitations": [
+      "관세 위협 철회와 그린란드에 관한 최종 법적 합의는 다르다.",
+      "동일한 날의 다른 지정학 발언·금리·자금 흐름의 영향을 통제하지 않는다.",
+      "보도된 주식 반등을 ETH 반등 수치로 재사용하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "그린란드",
+      "유럽",
+      "관세 철회",
+      "NATO",
+      "위험선호"
+    ],
+    "sources": [
+      {
+        "title": "Truth Social Posts of January 21, 2026",
+        "url": "https://www.presidency.ucsb.edu/documents/truth-social-posts-january-21-2026",
+        "publisher": "The American Presidency Project — Donald J. Trump post archive",
+        "type": "primary",
+        "publishedAt": "2026-01-21",
+        "accessedAt": "2026-10-24",
+        "role": "archived-original-withdrawal-statement",
+        "claim": "2월 1일 예정 관세를 부과하지 않겠다고 밝힌 원문이다."
+      },
+      {
+        "title": "Stocks stage dramatic rebound after Trump announces Greenland framework",
+        "url": "https://www.reuters.com/world/china/global-markets-wrapup-1-pix-2026-01-21/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2026-01-21",
+        "accessedAt": "2026-10-24",
+        "role": "independent-market-report",
+        "claim": "글로벌 주식 반등과 군사력 사용 관련 같은 날 발언을 함께 설명한다."
+      }
+    ],
+    "facts": {
+      "announcementUtc": "2026-01-21T19:27:00Z",
+      "announcementTimeBasis": "UCSB의 11:27 Pacific 표기, 해당 날짜 PST(UTC−08:00).",
+      "policyStatusAtAnnouncement": "withdrawal-of-threat"
+    }
+  },
+  {
+    "id": "eth-policy-china-crypto-rwa-notice",
+    "date": "2026-02-06",
+    "label": "중국 새 가상자산 통지",
+    "title": "중국, 가상통화·스테이블코인·RWA 새 통지 시행",
+    "category": "regulation",
+    "importance": 3,
+    "description": "중국 8개 기관이 가상통화와 현실자산 토큰화 관련 새 공동 통지를 발표·시행했다.",
+    "detail": "원문은 ETH를 포함한 가상통화의 법정화폐 지위를 부인하고 관련 금융활동 규제를 재확인한다. 승인 없는 역외 위안화 스테이블코인과 RWA 관련 활동도 다룬다. 허용·승인 예외가 있는 RWA 절차를 모두 동일한 전면 금지로 요약하지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공동 통지의 작성·공개 날짜 2026-02-06과 Reuters 당일 보도가 일치한다. 원문은 공개일부터 시행한다고 명시한다.",
+    "crossCheck": "정책을 발표한 기관의 원문과 별도 언론사의 당시 보도를 대조해 결정 내용과 날짜를 확인했다. 언론의 전망이나 가격 해석은 확정된 정책 사실로 사용하지 않는다.",
+    "limitations": [
+      "개인의 단순 보유 전체에 대한 형사적 금지로 확대하지 않는다.",
+      "RWA의 특정 승인 경로와 금지되는 활동을 구분한다.",
+      "중국 본토의 통지를 홍콩의 별도 제도와 동일시하지 않는다."
+    ],
+    "keywords": [
+      "중국",
+      "PBoC",
+      "RWA",
+      "스테이블코인",
+      "ETH",
+      "규제"
+    ],
+    "sources": [
+      {
+        "title": "关于进一步防范和处置虚拟货币等相关风险的通知",
+        "url": "https://www.csrc.gov.cn/csrc/c100028/c7614318/content.shtml",
+        "publisher": "People’s Bank of China and seven co-issuing authorities / CSRC",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "2월 6일 공동 통지는 가상통화·스테이블코인·RWA 관련 위험 통제를 정하고 같은 날 시행하며 2021년 통지를 폐지했다.",
+        "publishedAt": "2026-02-06",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "China steps up crypto crackdown, will vet real-world asset tokens",
+        "url": "https://www.reuters.com/world/asia-pacific/china-vows-tighten-virtual-currency-restrictions-2026-02-06/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "당일 새 통지, 승인 없는 역외 위안화 스테이블코인 제한 및 RWA 관련 감독을 확인한다.",
+        "publishedAt": "2026-02-06",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "새 공동 통지 발표·시행 및 2021년 가상통화 거래 통지 폐지.",
+    "followUp": "이 통지는 2021년 9월 공개된 은발〔2021〕237호 통지를 대체·폐지한다고 명시한다."
+  },
+  {
+    "id": "eth-policy-ieepa-supreme-court-2026",
+    "date": "2026-02-20",
+    "label": "IEEPA 대법원 판결",
+    "title": "미 대법원, IEEPA의 관세 부과 권한 부정",
+    "category": "macro",
+    "importance": 3,
+    "description": "미 대법원이 IEEPA는 대통령에게 관세 부과 권한을 부여하지 않는다고 판단했다.",
+    "detail": "판결일과 세관의 실제 징수 중단일은 구분한다. 같은 날 행정부가 다른 법률에 근거한 대체 관세를 발표했으므로 모든 미국 관세가 없어진 날로 표시하지 않는다.",
+    "policyAction": "대법원은 Learning Resources / V.O.S. Selections 병합 사건에서 IEEPA의 관세 권한을 부정했다. 백악관은 해당 IEEPA 추가 관세 종료 명령을 냈다.",
+    "marketContext": "Reuters는 판결 후 주가 상승과 함께 같은 날 GDP·물가 지표도 시장이 소화했다고 보도했다.",
+    "followUp": "CBP는 해당 IEEPA 관세의 징수를 2월 24일 00:00 동부시간부터 중단한다고 안내했다. Section 232·301 관세는 유지됐으며 대체 Section 122 조치가 이어졌다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "대법원 판결의 Decided February 20, 2026을 사용한다. 백악관 명령일·세관 지침 게시일·실제 징수 중단일을 분리한다.",
+    "crossCheck": "대법원 원문, 행정부의 종료 명령, CBP 집행 지침 및 Reuters 독립 보도를 대조했다. 법원 판단의 범위를 시행 문서와 구분했다.",
+    "limitations": [
+      "판결은 IEEPA의 관세 권한에 관한 것으로 다른 법률에 근거한 모든 관세의 폐지를 뜻하지 않는다.",
+      "관세 환급의 규모·개별 대상·완료 여부를 이 사건에서 확정하지 않는다.",
+      "GDP·물가 발표와 후속 정책 대응이 겹쳐 하루 수익률을 판결만의 효과로 해석하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "대법원",
+      "IEEPA",
+      "Learning Resources",
+      "V.O.S. Selections",
+      "관세 소송"
+    ],
+    "sources": [
+      {
+        "title": "Learning Resources, Inc. v. Trump / Trump v. V.O.S. Selections, Inc. — Supreme Court opinion",
+        "url": "https://www.supremecourt.gov/opinions/25pdf/24-1287_4gcj.pdf",
+        "publisher": "Supreme Court of the United States",
+        "type": "primary",
+        "publishedAt": "2026-02-20",
+        "accessedAt": "2026-10-24",
+        "role": "original-final-court-opinion",
+        "claim": "판결 날짜와 IEEPA의 관세 권한 부정이라는 결론을 확인한다."
+      },
+      {
+        "title": "Ending Certain Tariff Actions — Executive Order 14389",
+        "url": "https://www.whitehouse.gov/presidential-actions/2026/02/ending-certain-tariff-actions/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2026-02-20",
+        "accessedAt": "2026-10-24",
+        "role": "official-response-order",
+        "claim": "쟁점 IEEPA 추가 관세 종료 및 다른 관세의 잔존 범위를 명시한다."
+      },
+      {
+        "title": "CSMS # 67834313 — Ending Collection of International Emergency Economic Powers Act Duties",
+        "url": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+        "publisher": "U.S. Customs and Border Protection",
+        "type": "primary",
+        "publishedAt": "2026-02-22",
+        "accessedAt": "2026-10-24",
+        "role": "implementation-date-guidance",
+        "claim": "IEEPA 징수 중단의 적용 시점과 Section 232·301 제외를 확인한다."
+      },
+      {
+        "title": "US stocks end higher, Treasury yields gain after Supreme Court strikes down Trump tariffs",
+        "url": "https://www.reuters.com/world/china/global-markets-global-markets-2026-02-20/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "publishedAt": "2026-02-20",
+        "accessedAt": "2026-10-24",
+        "role": "independent-market-report",
+        "claim": "판결 및 같은 날 GDP·물가 발표가 겹친 금융시장 상황을 보도한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-section122-effective-2026",
+    "date": "2026-02-24",
+    "label": "대체 관세 시행",
+    "title": "IEEPA 징수 종료와 Section 122 임시 관세 시행",
+    "category": "macro",
+    "importance": 3,
+    "description": "쟁점 IEEPA 관세의 징수가 중단되고, 별도 법률에 근거한 10% 임시 수입부가금이 시행됐다.",
+    "detail": "2월 20일의 정책 발표·법원 판단과 실제 세관 적용일을 나누어 기록한다. 확인한 시행 지침의 요율은 10%이며, 당시 거론된 15% 인상 의사를 실제 시행 요율로 바꾸지 않는다.",
+    "policyAction": "CBP는 2월 24일 00:00 동부시간부터 IEEPA 추가 관세 징수 종료를, 00:01 EST부터 예외를 둔 Section 122 추가 10% 적용을 안내했다.",
+    "marketContext": "이 기록은 공식 적용 전환의 사실을 담는다. 이 날짜의 ETH 움직임을 대체 관세만의 결과로 설명할 독립 근거는 확보하지 않았다.",
+    "followUp": "임시 조치에는 7월 24일 종료 일정과 품목·협정별 예외가 있었다. 7월 23일 USTR는 다음 날 적용하는 별도 Section 301 관세를 발표했다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "두 CBP 지침이 명시한 2월 24일 실제 적용일을 사용한다. 2월 20일 포고와 2월 22·23일 안내 게시일은 분리한다.",
+    "crossCheck": "대통령 포고와 두 CBP 지침으로 요율·적용 시점·예외를 교차 대조했다. 모두 같은 행정부의 1차 자료이며 독립 시장 보도로 ETH 반응을 확인한 사건은 아니다.",
+    "limitations": [
+      "10%는 확인한 최초 시행 지침의 요율이다. 발표·예고만 확인된 15%를 실제 부과 사실로 쓰지 않는다.",
+      "USMCA 적격 상품 등 예외가 있어 모든 상품에 동일하게 적용된다고 표현하지 않는다.",
+      "징수 중단은 과거 납부분의 자동 환급 완료와 다르다.",
+      "정책 시행 사실과 ETH 가격 인과관계는 별개다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "Section 122",
+      "10%",
+      "임시 관세",
+      "CBP",
+      "IEEPA 종료"
+    ],
+    "sources": [
+      {
+        "title": "Imposing a Temporary Import Surcharge to Address Fundamental International Payments Problems",
+        "url": "https://www.whitehouse.gov/presidential-actions/2026/02/imposing-a-temporary-import-surcharge-to-address-fundamental-international-payments-problems/",
+        "publisher": "The White House",
+        "type": "primary",
+        "publishedAt": "2026-02-20",
+        "accessedAt": "2026-10-24",
+        "role": "signed-surcharge-proclamation",
+        "claim": "예외를 둔 10% 임시 부가금과 2월 24일 시작·7월 24일 종료 일정을 정한다."
+      },
+      {
+        "title": "CSMS # 67834313 — Ending Collection of International Emergency Economic Powers Act Duties",
+        "url": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+        "publisher": "U.S. Customs and Border Protection",
+        "type": "primary",
+        "publishedAt": "2026-02-22",
+        "accessedAt": "2026-10-24",
+        "role": "ieepa-collection-termination-guidance",
+        "claim": "2월 24일 00:00 동부시간부터의 IEEPA 징수 종료를 명시한다."
+      },
+      {
+        "title": "CSMS # 67844987 — Imposing Temporary Section 122 Duties",
+        "url": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b3b7b",
+        "publisher": "U.S. Customs and Border Protection",
+        "type": "primary",
+        "publishedAt": "2026-02-23",
+        "accessedAt": "2026-10-24",
+        "role": "section122-implementation-guidance",
+        "claim": "2월 24일 00:01 EST부터의 10% 시행과 예외를 확인한다."
+      },
+      {
+        "title": "USTR Takes Action in Forced Labor Section 301 Investigations",
+        "url": "https://ustr.gov/about/policy-offices/press-office/press-releases/2026/july/ustr-takes-action-forced-labor-section-301-investigations",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2026-07-23",
+        "accessedAt": "2026-10-24",
+        "role": "subsequent-policy-announcement",
+        "claim": "7월 후속 Section 301 관세 발표를 확인한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-context-us-israel-iran-2026",
+    "date": "2026-02-28",
+    "label": "美·이스라엘 이란 공격",
+    "title": "미국·이스라엘의 이란 공격 개시",
+    "category": "geopolitics",
+    "importance": 3,
+    "description": "미국과 이스라엘이 이란에 대한 공격을 시작했다.",
+    "detail": "2월 28일 시작된 새로운 군사 충돌을 2025년 6월의 공격과 구분한다. Reuters의 당시 보도와 유엔 OCHA의 후속 현장 상황 기록으로 발생 날짜를 확인한다. 검증이 계속되는 피해 수치와 작전 성과는 넣지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "Reuters의 2월 28일 발생 보도와 OCHA의 2월 28일부터 시작되는 상황 기록을 대조했다. 기사 갱신·보고서 게시일은 별도로 기록한다.",
+    "crossCheck": "Reuters의 현장·당국 취재와 유엔 OCHA의 별도 인도주의 상황 기록을 대조했다. 서로 다른 작성 기관이며 국가 당사자의 단일 발표에만 의존하지 않는다.",
+    "limitations": [
+      "2025년 6월의 별도 작전과 합치지 않는다.",
+      "전쟁의 후속 상태·종결 여부를 이 개시일 기록으로 추론하지 않는다.",
+      "지정학적 사건 표시이며 ETH 가격에 관한 예측이나 단독 원인 판정은 아니다."
+    ],
+    "keywords": [
+      "Iran",
+      "Israel",
+      "United States",
+      "이란",
+      "이스라엘",
+      "미국",
+      "전쟁",
+      "중동"
+    ],
+    "sources": [
+      {
+        "title": "Islamic Republic of Iran: Humanitarian Update No. 01 — as of 17 March 2026",
+        "url": "https://iran.un.org/en/313396-islamic-republic-iran-humanitarian-update-no-01-17-march-2026",
+        "publisher": "United Nations OCHA / UN Iran",
+        "type": "primary",
+        "role": "independent-humanitarian-situation-record",
+        "claim": "2월 28일 이후 공격의 시작 시점과 현장 상황을 기록한다. 3월 18일 게시됐다.",
+        "publishedAt": "2026-03-18",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Iranian leader Khamenei killed in air strikes as U.S., Israel launch attacks",
+        "url": "https://www.reuters.com/business/aerospace-defense/israel-us-launch-strikes-iran-2026-02-28/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-reporting",
+        "claim": "2월 28일 미국·이스라엘 공격 개시를 보도한다. 기사에는 3월 1일 갱신 내용도 포함된다.",
+        "publishedAt": "2026-02-28",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-sec-cftc-crypto-interpretation",
+    "date": "2026-03-17",
+    "label": "SEC·CFTC 자산 해석",
+    "title": "SEC·CFTC, 암호자산 분류·거래 해석 발표",
+    "category": "regulation",
+    "importance": 3,
+    "description": "SEC가 CFTC와 함께 암호자산과 관련 거래에 대한 공식 해석을 발표하고 ETH를 디지털 상품의 예로 제시했다.",
+    "detail": "2025년의 직원 성명과 달리 위원회 차원의 해석이다. 자산 자체와 이를 이용한 투자계약 거래는 구분되며 문서는 특정 시점의 자산 특성을 전제로 한다. 발표일은 3월 17일, 문서에 기재된 효력일은 3월 23일이다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "3월 17일 발표된 해석과 같은 날 CFTC 발표를 사용한다. 3월 23일 효력 발생·관보 단계와 구분한다.",
+    "crossCheck": "공식 해석 전문과 공동 정책에 참여한 CFTC의 발표를 대조했다. 공동 발표 기관 두 곳이며 독립된 두 법원 판결이나 시장 관측 자료가 아니다.",
+    "limitations": [
+      "ETH 자산의 예시 분류를 ETH를 이용하는 모든 투자상품의 면제로 확대하지 않는다.",
+      "행정기관 해석을 새 의회 법률이나 모든 법원의 확정 판결로 표현하지 않는다."
+    ],
+    "keywords": [
+      "SEC",
+      "CFTC",
+      "ETH",
+      "디지털 상품",
+      "증권법",
+      "스테이킹"
+    ],
+    "sources": [
+      {
+        "title": "Application of the Federal Securities Laws to Certain Types of Crypto Assets and Certain Transactions Involving Crypto Assets",
+        "url": "https://www.sec.gov/files/rules/interp/2026/33-11412.pdf",
+        "publisher": "SEC / CFTC",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "위원회 해석은 자산 자체와 투자계약 거래를 구분하며 ETH를 디지털 상품의 예로 든다. 문서의 효력일은 3월 23일이다.",
+        "publishedAt": "2026-03-17",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "CFTC Joins SEC to Clarify the Application of Federal Securities Laws to Crypto Assets",
+        "url": "https://www.cftc.gov/PressRoom/PressReleases/9198-26",
+        "publisher": "Commodity Futures Trading Commission",
+        "type": "primary",
+        "role": "co-issuing-agency-confirmation",
+        "claim": "3월 17일 SEC 해석에 CFTC가 참여하는 공동 정책과 적용 범위를 확인한다.",
+        "publishedAt": "2026-03-17",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "암호자산·거래에 관한 위원회 해석 발표; 3월 23일 효력."
+  },
+  {
+    "id": "eth-context-kelp-rseth-bridge-exploit",
+    "date": "2026-04-18",
+    "label": "Kelp rsETH 공격",
+    "title": "KelpDAO rsETH 브리지의 위조 메시지 공격",
+    "category": "security",
+    "importance": 3,
+    "description": "KelpDAO의 rsETH 브리지가 위조된 크로스체인 메시지를 받아들여 Ethereum 측 자산을 내보냈다.",
+    "detail": "LayerZero의 최종 사후 보고서는 4월 18일 공격과 앞선 인프라 침해를 구분한다. Chainalysis도 독립적인 자금 흐름 분석으로 브리지 자산 이동을 확인했다. RPC·검증 구성과 브리지의 보안 문제로 기록한다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "LayerZero의 5월 20일 사고 보고서와 Chainalysis의 4월 23일 분석이 실제 공격 날짜를 4월 18일로 명시한다. 보고서 공개일 및 선행 인프라 침해일과 구분한다.",
+    "crossCheck": "서비스 제공자의 최종 사후 보고서와 별도 기관 Chainalysis의 직접 온체인·사건 분석을 대조했다. 초기 책임 공방보다 후속 보고서와 확인된 자산 이동을 우선했다.",
+    "limitations": [
+      "브리지 및 메시지 검증 인프라의 침해이며 Ethereum 합의 자체의 침해로 표현하지 않는다.",
+      "사후 복구·개선 조치가 모든 피해 자산 회수나 모든 이용자 보상 완료를 뜻하지 않는다."
+    ],
+    "keywords": [
+      "KelpDAO",
+      "Kelp",
+      "rsETH",
+      "LayerZero",
+      "RPC",
+      "브리지",
+      "리스테이킹",
+      "해킹"
+    ],
+    "sources": [
+      {
+        "title": "LayerZero Labs KelpDAO Incident Report",
+        "url": "https://layerzero.network/blog/layerzero-labs-kelpdao-incident-report",
+        "publisher": "LayerZero Labs",
+        "type": "primary",
+        "role": "vendor-final-postmortem",
+        "claim": "4월 18일 위조 메시지 공격, 앞선 RPC 인프라 침해 및 검증 구성을 설명한다.",
+        "publishedAt": "2026-05-20",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "The KelpDAO Bridge Exploit",
+        "url": "https://www.chainalysis.com/blog/kelpdao-bridge-exploit-april-2026/",
+        "publisher": "Chainalysis",
+        "type": "primary",
+        "role": "independent-onchain-analysis",
+        "claim": "4월 18일 브리지 공격과 Ethereum 측 rsETH 방출을 별도로 분석한다.",
+        "publishedAt": "2026-04-23",
+        "accessedAt": "2026-10-24"
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-section301-transition-2026",
+    "date": "2026-07-23",
+    "label": "Section301 전환",
+    "title": "미국, 60개 교역 상대 Section 301 관세 발표",
+    "category": "macro",
+    "importance": 3,
+    "description": "미국이 임시 Section 122 조치 종료를 앞두고 60개 교역 상대에 적용할 별도 Section 301 관세를 발표했다.",
+    "detail": "무역정책의 법적 근거가 다시 바뀐 주요 전환점이다. USTR의 강제노동 관련 판단은 미국 당국의 조사 결론으로 귀속하며 각국의 모든 상품이 강제노동 산물이라는 의미로 확대하지 않는다.",
+    "policyAction": "USTR는 조사 대상에 10% 또는 12.5%를 기본으로 하는 관세를 발표했다. 일부 교역 상대는 기존 MFN 세율을 반영하는 방식이었고 품목·협정별 예외가 있었다.",
+    "marketContext": "Reuters는 임시 10% 조치 종료 시점에 새 관세가 적용되는 전환으로 보도했다. ETH의 별도 당일 반응은 이 자료에서 확인하지 않는다.",
+    "followUp": "공식 관보는 적용 시작을 7월 24일 00:01 동부시간으로 명시했다. 7월 28일은 관보 게시일이며 최초 발표일이나 적용 시작일이 아니다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "USTR 발표일 7월 23일을 사용한다. 실제 적용일인 7월 24일 및 관보의 7월 28일을 구분한다.",
+    "crossCheck": "USTR 발표와 공식 관보의 적용 규정을 Reuters 보도와 대조했다. USTR와 관보는 동일 정책 문서 계열이며 독립 두 조사로 세지 않는다.",
+    "limitations": [
+      "정책 명분인 강제노동 관련 결론은 USTR 판단에 귀속한다.",
+      "국가·상품별 예외와 MFN 조정이 있어 모든 수입에 단순히 동일 요율을 더한다고 설명하지 않는다.",
+      "이 기록은 발표 당시 범위이며 이후 모든 양자 협상·예외·소송을 완전히 추적한 현행 관세 안내가 아니다.",
+      "정책 전환 사실만으로 ETH의 방향이나 향후 가격을 예측하지 않는다."
+    ],
+    "keywords": [
+      "관세",
+      "무역정책",
+      "트럼프",
+      "Section 301",
+      "USTR",
+      "60개 교역 상대",
+      "강제노동 수입금지",
+      "관세 전환"
+    ],
+    "sources": [
+      {
+        "title": "USTR Takes Action in Forced Labor Section 301 Investigations",
+        "url": "https://ustr.gov/about/policy-offices/press-office/press-releases/2026/july/ustr-takes-action-forced-labor-section-301-investigations",
+        "publisher": "Office of the United States Trade Representative",
+        "type": "primary",
+        "publishedAt": "2026-07-23",
+        "accessedAt": "2026-10-24",
+        "role": "official-policy-announcement",
+        "claim": "60개 조사 대상에 대한 최종 조치·요율 구조·예외를 발표한다."
+      },
+      {
+        "title": "Notice of Actions in Section 301 Investigations of Acts, Policies, and Practices of Various Economies Related to the Failure of Each Economy To Impose and Effectively Enforce a Prohibition on the Importation of Goods Produced With Forced Labor",
+        "url": "https://www.federalregister.gov/documents/2026/07/28/2026-15181/notice-of-actions-in-section-301-investigations-of-acts-policies-and-practices-of-various-economies",
+        "publisher": "Office of the United States Trade Representative / Federal Register",
+        "type": "primary",
+        "publishedAt": "2026-07-28",
+        "accessedAt": "2026-10-24",
+        "role": "official-implementation-notice",
+        "claim": "7월 24일 실제 적용 시작 및 경과 규정을 명시한다."
+      },
+      {
+        "title": "Trump to impose forced labor duties on Friday as temporary 10% US tariffs expire",
+        "url": "https://www.investing.com/news/economic-indicators/trump-to-impose-forced-labor-duties-on-friday-as-temporary-10-us-tariffs-expire-4810104",
+        "publisher": "Reuters, republished by Investing.com",
+        "type": "secondary",
+        "publishedAt": "2026-07-23",
+        "accessedAt": "2026-10-24",
+        "role": "independent-contemporaneous-report",
+        "claim": "Section 122 종료 시점과 새 Section 301 적용 전환을 보도한다."
+      }
+    ]
+  },
+  {
+    "id": "eth-policy-sec-reg-crypto-proposal",
+    "date": "2026-08-18",
+    "label": "SEC 규칙안 제안",
+    "title": "SEC, Regulation Crypto Assets 규칙안 제안",
+    "category": "regulation",
+    "importance": 2,
+    "description": "SEC가 암호자산 관련 투자계약의 자금조달·등록 예외 등을 다루는 규칙안을 제안했다.",
+    "detail": "실제로 일어난 사건은 규칙안 공개와 의견 수렴 개시다. 관보는 이를 제안 규칙으로 분류하며, 10월 20일 업계 의견서도 최종 채택을 요청하는 문서다. 이 표식은 최종 규칙의 성립이나 효력 발생을 주장하지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "SEC 최초 제안 발표일 2026-08-18. 관보 게재일 8월 21일 및 의견 제출 마감일 10월 20일과 구분한다.",
+    "crossCheck": "SEC 발표와 같은 기관의 정식 관보 제안문을 대조하고 별도 이해관계자 Ripple의 의견 제출 기록으로 절차를 확인했다. Ripple은 이해관계자이며 그 찬성 법리는 독립된 확정 판단으로 취급하지 않는다.",
+    "limitations": [
+      "제안은 최종 채택·시행이 아니다.",
+      "특정 자금조달 예외의 제안이 모든 토큰·투자계약의 무규제를 의미하지 않는다.",
+      "향후 최종 규칙의 내용이나 채택 시점을 예측하지 않는다."
+    ],
+    "keywords": [
+      "SEC",
+      "Regulation Crypto Assets",
+      "규칙안",
+      "투자계약",
+      "의견 수렴"
+    ],
+    "sources": [
+      {
+        "title": "SEC Proposes New Regulation Crypto Assets",
+        "url": "https://www.sec.gov/newsroom/press-releases/2026-76-sec-proposes-new-regulation-crypto-assets",
+        "publisher": "SEC",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "8월 18일 암호자산 관련 투자계약의 등록 예외와 조건부 안전항을 포함한 규칙안을 제안했다.",
+        "publishedAt": "2026-08-18",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Regulation Crypto Assets — Proposed Rule, 91 FR 54510",
+        "url": "https://www.govinfo.gov/content/pkg/FR-2026-08-21/html/2026-17183.htm",
+        "publisher": "SEC / Federal Register",
+        "type": "primary",
+        "role": "official-proposed-rule-publication",
+        "claim": "관보의 Proposed Rules 항목은 규칙안의 성격과 10월 20일 의견 제출 기한을 명시한다.",
+        "publishedAt": "2026-08-21",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Ripple comment on Regulation Crypto Assets, File S7-2026-27",
+        "url": "https://www.sec.gov/comments/S7-2026-27/s7202627-1102200-3881828.pdf",
+        "publisher": "Ripple Labs",
+        "type": "primary",
+        "role": "interested-party-rulemaking-comment",
+        "claim": "10월 20일 제출된 의견서는 8월 18일 규칙안을 인용하고 최종 채택을 요청한다. 제출자의 법적 찬성 논리는 확정 사실로 채택하지 않는다.",
+        "publishedAt": "2026-10-20",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "Regulation Crypto Assets 제안 규칙 공개; 확정 규칙이 아님."
+  },
+  {
+    "id": "eth-policy-fed-2026-rate-hike",
+    "date": "2026-09-16",
+    "label": "美 금리 인상 재개",
+    "title": "연준, 25bp 금리 인상 결정",
+    "category": "macro",
+    "importance": 3,
+    "description": "연준이 연방기금금리 목표 범위를 3.75–4.00%로 25bp 올렸다.",
+    "detail": "9월 16일 공식 성명이 결정 내용을 기록하고 10월 7일 Reuters의 회의록 보도가 이를 다시 확인한다. 이후 10월·12월 회의의 예상이나 전망은 사건 데이터에 포함하지 않는다.",
+    "datePrecision": "source-calendar-day",
+    "dateBasis": "공식 발표문에 명시된 발표 날짜를 사건일로 사용한다. 시행·결제 시점이나 문서의 후속 갱신일과 구분한다.",
+    "crossCheck": "연준의 당일 결정문과 10월 7일 Reuters의 후속 회의록 보도를 대조했다. 날짜·인상폭·목표 범위만 사용하고 향후 정책 전망은 제외했다.",
+    "limitations": [
+      "역사적으로 확인한 결정이며 향후 금리나 ETH 가격에 대한 전망이 아니다.",
+      "금리 변화와 특정 ETH 일봉 수익률의 인과관계를 입증하지 않는다."
+    ],
+    "keywords": [
+      "Fed",
+      "FOMC",
+      "2026",
+      "금리 인상",
+      "달러"
+    ],
+    "sources": [
+      {
+        "title": "FOMC statement — 2026-09-16",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm",
+        "publisher": "Federal Reserve",
+        "type": "primary",
+        "role": "official-policy-record",
+        "claim": "연방기금금리 목표 범위를 3.75–4.00%로 25bp 올리는 결정을 발표했다.",
+        "publishedAt": "2026-09-16",
+        "accessedAt": "2026-10-24"
+      },
+      {
+        "title": "Fed policymakers divided over rate-hike logic in September, minutes show",
+        "url": "https://www.reuters.com/business/fed-policymakers-divided-over-rate-hike-logic-september-minutes-show-2026-10-07/",
+        "publisher": "Reuters",
+        "type": "secondary",
+        "role": "contemporaneous-independent-reporting",
+        "claim": "후속 회의록 보도가 9월 15–16일 회의에서 25bp 인상과 3.75–4.00% 범위가 결정됐음을 재확인한다. 향후 금리 전망은 사용하지 않는다.",
+        "publishedAt": "2026-10-07",
+        "accessedAt": "2026-10-24"
+      }
+    ],
+    "policyAction": "연방기금금리 목표 범위 3.75–4.00%; 25bp 인상."
   }
 ]);
 
@@ -1459,7 +8392,7 @@ export function getEthereumEvents({category='all',query='',startDate=null,endDat
   const terms=String(query??'').trim().toLocaleLowerCase().split(/\s+/u).filter(Boolean);
   return ETHEREUM_EVENTS.filter(event=>{
     if((category!=='all'&&event.category!==category)||(startDate&&event.date<startDate)||(endDate&&event.date>endDate))return false;
-    const searchable=[event.id,event.date,event.label,event.title,event.description,event.detail,ETHEREUM_EVENT_CATEGORIES[event.category],...(event.keywords||[]),...event.sources.map(source=>source.title)].join(' ').toLocaleLowerCase();
+    const searchable=[event.id,event.date,event.label,event.title,event.description,event.detail,event.policyAction,event.marketContext,event.followUp,ETHEREUM_EVENT_CATEGORIES[event.category],...(event.keywords||[]),...event.sources.map(source=>source.title)].join(' ').toLocaleLowerCase();
     return terms.every(term=>searchable.includes(term));
   });
 }

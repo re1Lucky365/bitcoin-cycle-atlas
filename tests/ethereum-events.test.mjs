@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
+import { BITCOIN_EVENTS } from '../dist/bitcoin-events.js';
 import {
   ETHEREUM_EVENTS,
   ETHEREUM_EVENTS_REVIEW_DATE,
@@ -32,7 +33,7 @@ function assertDeepFrozen(value, path = 'catalog') {
 
 test('reviewed Ethereum records are chronological, unique, completed and source-backed', () => {
   assert.equal(ETHEREUM_EVENTS_REVIEW_DATE, '2026-10-24');
-  assert.deepEqual(new Set(Object.keys(ETHEREUM_EVENT_CATEGORIES)), new Set(['protocol', 'security', 'market', 'ecosystem']));
+  assert.deepEqual(new Set(Object.keys(ETHEREUM_EVENT_CATEGORIES)), new Set(['protocol', 'security', 'market', 'ecosystem', 'macro', 'regulation', 'geopolitics']));
   assert.deepEqual(new Set(ETHEREUM_EVENTS.map(event => event.category)), new Set(Object.keys(ETHEREUM_EVENT_CATEGORIES)));
   assert.equal(new Set(ids(ETHEREUM_EVENTS)).size, ETHEREUM_EVENTS.length);
   let previous = '';
@@ -49,17 +50,18 @@ test('reviewed Ethereum records are chronological, unique, completed and source-
     assert.ok(['source-calendar-day', 'block-timestamp'].includes(event.datePrecision));
     assert.ok(Array.isArray(event.limitations) && event.limitations.length > 0);
     assert.ok(event.limitations.every(text => typeof text === 'string' && text.trim()));
-    assert.doesNotMatch(event.title, /예정|예고|\bplanned\b|\bscheduled\b/i, `${event.id}: completed event, not a target date`);
+    assert.doesNotMatch(event.title, /예정|\bplanned\b|\bscheduled\b/i, `${event.id}: a historical occurrence or announcement, not a future target date`);
     for (const field of ['forecast', 'prediction', 'priceTarget', 'sentiment', 'priceImpact', 'causalReturn']) {
       assert.ok(!Object.hasOwn(event, field), `${event.id}: no invented ${field}`);
     }
     assert.ok(new Set(event.sources.map(source => source.url)).size >= 2, `${event.id}: two distinct source documents`);
+    assert.ok(event.sources.some(source => source.type === 'primary'), `${event.id}: primary evidence for the historical event`);
     for (const source of event.sources) {
       const url = new URL(source.url);
       assert.equal(url.protocol, 'https:');
       assert.equal(url.username + url.password, '', `${event.id}: public source link`);
       assert.ok(source.publisher && source.title && source.role && source.claim, `${event.id}: per-source provenance`);
-      assert.equal(source.type, 'primary');
+      assert.ok(['primary','secondary'].includes(source.type));
       assert.equal(source.accessedAt, ETHEREUM_EVENTS_REVIEW_DATE);
       if (source.publishedAt !== null && source.publishedAt !== undefined) {
         assert.ok(isDay(source.publishedAt), `${event.id}: source publication date`);
@@ -67,7 +69,7 @@ test('reviewed Ethereum records are chronological, unique, completed and source-
       }
     }
     if (event.category === 'protocol') {
-      assert.ok(event.sources.some(source => /completion|retrospective|observed/.test(source.role)), `${event.id}: completion evidence beyond an advance schedule`);
+      assert.ok(event.sources.some(source => /completion|completed-publication|retrospective|observed/.test(source.role)), `${event.id}: completed milestone evidence beyond an advance schedule`);
     }
     previous = event.date;
   }
@@ -217,7 +219,7 @@ test('invalid date, category and reversed-range filters fail instead of silently
     assert.throws(() => getEthereumEvents({ startDate: date }), RangeError);
     assert.throws(() => getEthereumEvents({ endDate: date }), RangeError);
   }
-  for (const category of ['unverified', 'macro', '__proto__', 'constructor', 'toString', '', null, 1, ['security']]) {
+  for (const category of ['unverified', '__proto__', 'constructor', 'toString', '', null, 1, ['security']]) {
     assert.throws(() => getEthereumEvents({ category }), RangeError, `invalid category ${String(category)}`);
   }
   assert.throws(() => getEthereumEvents({ startDate: '2025-01-01', endDate: '2024-12-31' }), RangeError);
@@ -226,7 +228,46 @@ test('invalid date, category and reversed-range filters fail instead of silently
 test('wide or future chart windows never manufacture hypothetical events', () => {
   assert.deepEqual(getEthereumEvents({ startDate: '2027-01-01', endDate: '2050-12-31' }), []);
   assert.deepEqual(getEthereumEvents({ startDate: '2010-01-01', endDate: '2050-12-31' }), ETHEREUM_EVENTS);
-  assert.equal(getEthereumEvents()[0].id, 'ethereum-frontier-launch', 'pre-price-history context remains available to the event list');
+  assert.equal(getEthereumEvents()[0].id, 'eth-ether-presale-launch', 'pre-mainnet and pre-price context remains available to the event list');
+});
+
+test('shared tariff IDs retain one policy date while keeping the ETH context separate from BTC prices',()=>{
+  const common=new Map(BITCOIN_EVENTS.map(event=>[event.id,event]));
+  const shared=ETHEREUM_EVENTS.filter(event=>event.commonEventId);
+  assert.equal(shared.length,4);
+  for(const event of shared){
+    const btc=common.get(event.commonEventId);
+    assert.ok(btc,event.commonEventId);assert.equal(event.date,btc.date);
+    assert.notEqual(event.description,btc.description,'asset-specific price prose is not copied');
+    assert.ok(event.policyAction&&event.marketContext&&event.followUp);
+    assert.ok(event.sources.some(source=>btc.sources.some(other=>other.url===source.url)),'shared event identity has common documentary evidence');
+  }
+  const threat=byId('eth-policy-china-additional-tariff-threat-2025');
+  assert.equal(threat.facts.announcementUtc,'2025-10-10T20:50:00Z');
+  assert.equal(threat.datePrecision,'source-calendar-day');
+  assert.ok(!threat.timestampUtc,'a verified announcement does not become a block timestamp');
+  assert.match(threat.limitations.join(' '),/실제 시행|시행 명령/);
+});
+
+test('supplemental protocol dates use observed execution rather than the advance schedule or publication date',()=>{
+  for(const [id,date,height] of [
+    ['ethereum-frontier-thawing','2015-09-07',200000],
+    ['ethereum-tangerine-whistle','2016-10-18',2463000],
+    ['ethereum-spurious-dragon','2016-11-22',2675000],
+    ['ethereum-muir-glacier','2020-01-02',9200000],
+    ['ethereum-arrow-glacier','2021-12-09',13773000],
+    ['ethereum-gray-glacier','2022-06-30',15050000],
+  ]){
+    const event=byId(id);assert.equal(event.date,date);assert.equal(event.blockHeight,height);
+    assert.equal(event.blockHash,blocks.get(height).observed.hash);
+  }
+  assert.equal(byId('eth-security-constantinople-delay').date,'2019-01-15');
+  assert.equal(byId('ethereum-staking-deposit-announcement').date,'2020-11-04');
+  assert.match(byId('ethereum-staking-deposit-announcement').dateBasis,/10월 14일/);
+  assert.equal(byId('eth-security-geth-minority-split').date,'2021-08-27');
+  assert.equal(byId('ethereum-bellatrix').date,'2022-09-06');
+  assert.equal(byId('eth-security-finality-delay-first').date,'2023-05-11');
+  assert.equal(byId('eth-security-finality-delay-repeat').date,'2023-05-12');
 });
 
 test('returned views cannot mutate shared events, nested source evidence, facts or category metadata', () => {
