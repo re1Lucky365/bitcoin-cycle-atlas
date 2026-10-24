@@ -24,6 +24,16 @@ test('published metadata, incomplete days and gaps cannot silently enter the act
   assert.throws(()=>inspectPublishedDataset(data,null,{now:new Date('2026-10-20T12:00:00Z')}),/unfinished/);
 });
 
+test('a newer cache candidate cannot hide a missing old day behind an unchanged total row count',()=>{
+  const cached=structuredClone(data);
+  cached.prices.splice(5000,1);
+  cached.prices.push(['2026-10-21',data.prices.at(-1)[1]]);
+  cached.meta.lastDate='2026-10-21';cached.meta.retrievedAt=now.toISOString();
+  assert.equal(cached.prices.length,data.prices.length);
+  assert.throws(()=>inspectPublishedDataset(cached,data,{now}),/missing UTC day/);
+  assert.throws(()=>inspectPublishedDataset(cached,null,{now}),/missing UTC day/);
+});
+
 test('an older published revision cannot overwrite a newer manual correction at the same cutoff',()=>{
   const published=structuredClone(data);published.meta.retrievedAt='2026-10-21T12:00:00.000Z';
   const manual=structuredClone(published);manual.meta.retrievedAt='2026-10-22T11:00:00.000Z';manual.prices[5000][1]+=1;

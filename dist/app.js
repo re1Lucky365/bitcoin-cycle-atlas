@@ -1,6 +1,6 @@
 import { buildComparison, getAnchors, getPointAtDay, comparisonToCsv, validateDataset, utcDay } from './cycle-engine.js?v=1.19.0';
-import { fetchLatestDataset } from './data-source.js?v=1.19.0';
-import { inspectPublishedDataset, shouldCheckPublishedSnapshot } from './published-data.js?v=1.19.0';
+import { fetchLatestDataset } from "./data-source.js?v=1.21.0";
+import { inspectPublishedDataset, shouldCheckPublishedSnapshot } from "./published-data.js?v=1.21.0";
 import { analyzeCycleTiming } from './cycle-timing.js?v=1.19.0';
 import { renderTimingView } from './timing-view.js?v=1.11.0';
 import { analyzePeakZones } from './peak-zones.js?v=1.19.0';
@@ -10,7 +10,7 @@ import { renderForecastView, exportForecastSvg } from './forecast-view.js?v=1.19
 // Changed release modules use a versioned URL so a cached v1.5 module cannot
 // leave a new long-horizon page running the old three-year workbench.
 import { initViewportWorkspace } from './viewport-workspace.js?v=1.19.0';
-import { initLabView } from './lab-view.js?v=1.20.0';
+import { initLabView } from "./lab-view.js?v=1.21.0";
 import { initEvidenceView, showEvidenceView } from './evidence-view.js?v=1.20.0';
 
 const $ = (selector) => document.querySelector(selector);
@@ -437,8 +437,8 @@ let resizeTimer;new ResizeObserver(()=>{clearTimeout(resizeTimer);resizeTimer=se
 let researchResizeTimer;const researchObserver=new ResizeObserver(()=>{clearTimeout(researchResizeTimer);researchResizeTimer=setTimeout(()=>renderResearch(),100);});researchObserver.observe($('#forecast-chart-stage'));researchObserver.observe($('#peak-chart-stage'));
 async function init() {
   try {
-    const embedded=document.getElementById('embedded-btc-data');let bundled;if(embedded){bundled=JSON.parse(embedded.textContent);}else{const response=await fetch('./data/btc-daily.json',{signal:AbortSignal.timeout(15000)});if(!response.ok)throw Error('Bundled data unavailable');bundled=await response.json();}validateDataset(bundled);state.dataset=bundled;
-    try{const cached=JSON.parse(localStorage.getItem('btc-cycles-daily-v1'));if(cached){validateDataset(cached);const latest=cached.prices.at(-1)[0],today=new Date().toISOString().slice(0,10);if(latest>=bundled.prices.at(-1)[0]&&latest<today&&cached.prices[0][0]===bundled.prices[0][0]&&cached.prices.length>=bundled.prices.length)state.dataset=cached;}}catch{}
+    const embedded=document.getElementById('embedded-btc-data');let bundled;if(embedded){bundled=JSON.parse(embedded.textContent);}else{const response=await fetch('./data/btc-daily.json',{signal:AbortSignal.timeout(15000)});if(!response.ok)throw Error('Bundled data unavailable');bundled=await response.json();}inspectPublishedDataset(bundled,null);state.dataset=bundled;
+    try{const cached=JSON.parse(localStorage.getItem('btc-cycles-daily-v1'));if(cached&&inspectPublishedDataset(cached,bundled).changed)state.dataset=cached;}catch{}
     render();
     const today=new Date().toISOString().slice(0,10);if(utcDay(today)-utcDay(state.dataset.prices.at(-1)[0])>1)refreshData({quiet:true});
   } catch (error) {

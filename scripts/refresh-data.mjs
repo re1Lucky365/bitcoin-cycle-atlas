@@ -40,11 +40,6 @@ export function validateSnapshot(dataset, { now = new Date(), label = 'Dataset' 
   const first = rows[0], last = rows.at(-1), meta = dataset.meta;
   const today = now.toISOString().slice(0, 10);
   if (last.date >= today) throw new Error(`${label} includes an unfinished or future UTC day: ${last.date}`);
-  for (let index = 1; index < rows.length; index++) {
-    if (rows[index].epochDay !== rows[index - 1].epochDay + 1) {
-      throw new Error(`${label} has a missing UTC day before ${rows[index].date}`);
-    }
-  }
   if (meta.firstDate !== first.date || meta.lastDate !== last.date || meta.count !== rows.length || meta.missingDayCount !== 0) {
     throw new Error(`${label} metadata does not match its complete daily observations`);
   }

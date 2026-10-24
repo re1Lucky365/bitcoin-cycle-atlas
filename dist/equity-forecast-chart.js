@@ -1,8 +1,9 @@
+import {utcDay} from './cycle-engine.js?v=1.19.0';
+import {dateWindow,lowerBoundDate,upperBoundDate} from './chart-window.js?v=1.11.0';
+
 const esc=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 function forecastTime(value){
-  const time=typeof value==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(value)?Date.parse(`${value}T00:00:00Z`)/1000:NaN;
-  if(!Number.isSafeInteger(time)||new Date(time*1000).toISOString().slice(0,10)!==value)throw new TypeError('Invalid equity forecast date');
-  return time;
+  try{return utcDay(value)*86400;}catch{throw new TypeError('Invalid equity forecast date');}
 }
 
 export function equityForecastAnchor(forecast,lastObserved){
@@ -61,11 +62,12 @@ export function equityForecastCandles(forecast,interval='daily'){
 
 export function equityForecastWindowRows(points,lastObserved,minTime,maxTime,scale='log'){
   if(!points.length)return [];
-  const values=lastObserved?[{...lastObserved,price:lastObserved.close,low:lastObserved.close,high:lastObserved.close},...points]:points;
-  const visible=points.filter(row=>row.time>=minTime&&row.time<=maxTime);
+  const anchor=lastObserved?{...lastObserved,price:lastObserved.close,low:lastObserved.close,high:lastObserved.close}:null;
+  const visible=dateWindow(points,minTime,maxTime,row=>row.time);
   for(const time of new Set([minTime,maxTime])){
-    if(time<=values[0].time||time>=values.at(-1).time||visible.some(row=>row.time===time))continue;
-    const next=values.findIndex(row=>row.time>time),left=values[next-1],right=values[next];
+    if(time<=(anchor||points[0]).time||time>=points.at(-1).time)continue;
+    const next=upperBoundDate(points,time,row=>row.time),left=next?points[next-1]:anchor,right=points[next];
+    if(left.time===time)continue;
     if(scale==='log'&&((left.price===0)!==(right.price===0)))continue;
     const fraction=(time-left.time)/(right.time-left.time);
     const interpolate=key=>scale==='log'&&left[key]>0&&right[key]>0?Math.exp(Math.log(left[key])*(1-fraction)+Math.log(right[key])*fraction):scale==='log'&&((left[key]===0)!==(right[key]===0))?null:left[key]*(1-fraction)+right[key]*fraction;
@@ -76,18 +78,26 @@ export function equityForecastWindowRows(points,lastObserved,minTime,maxTime,sca
 }
 
 export function equityForecastLogGaps(points,lastObserved,minTime,maxTime){
-  const values=lastObserved?[{...lastObserved,price:lastObserved.close,low:lastObserved.close,high:lastObserved.close},...points]:points;
-  return values.slice(1).flatMap((row,index)=>{
-    const before=values[index],fields=['price','low','high'].filter(key=>(before[key]===0)!==(row[key]===0));
-    return fields.length&&row.time>minTime&&before.time<maxTime?[{from:before.time,to:row.time,fields}]:[];
-  });
+  if(!points.length||maxTime<minTime)return [];
+  let index=upperBoundDate(points,minTime,row=>row.time);
+  let before=index?points[index-1]:lastObserved?{...lastObserved,price:lastObserved.close,low:lastObserved.close,high:lastObserved.close}:null;
+  const gaps=[];
+  for(;index<points.length;index++){
+    const row=points[index];
+    if(before&&before.time>=maxTime)break;
+    if(before){
+      const fields=['price','low','high'].filter(key=>(before[key]===0)!==(row[key]===0));
+      if(fields.length)gaps.push({from:before.time,to:row.time,fields});
+    }
+    before=row;
+  }
+  return gaps;
 }
 
 export function equityForecastMarkup({forecast,points,lastObserved,x,y,left,right,top,bottom,clipId,minTime,maxTime,showBand=true,scale='log',chartType='line',candles=[],barWidth=4,visibleRows=equityForecastWindowRows(points,lastObserved,minTime,maxTime,scale)}){
   if(!forecast||!points.length)return {markup:'',markerIds:new Set()};
-  const pointBefore=points.findLast(row=>row.time<minTime);
-  const included=points.filter(row=>row.time>=minTime&&row.time<=maxTime);
-  const pointAfter=points.find(row=>row.time>maxTime);
+  const first=lowerBoundDate(points,minTime,row=>row.time),last=upperBoundDate(points,maxTime,row=>row.time);
+  const pointBefore=points[first-1],included=points.slice(first,last),pointAfter=points[last];
   const values=[...(pointBefore?[pointBefore]:lastObserved?[{...lastObserved,price:lastObserved.close,low:lastObserved.close,high:lastObserved.close}]:[]),...included,...(pointAfter?[pointAfter]:[])];
   let path='',continuous=false;
   for(const row of values){if(row.price===0&&scale==='log'){continuous=false;continue;}path+=`${continuous?'L':'M'}${x(row.time).toFixed(2)},${y(row.price).toFixed(2)} `;continuous=true;}
@@ -121,7 +131,8 @@ export function equityForecastMarkup({forecast,points,lastObserved,x,y,left,righ
   for(const item of forecast.milestones||[]){
     const time=Date.parse(`${String(item.date).slice(0,10)}T00:00:00Z`)/1000;
     if(!Number.isFinite(time)||time<minTime||time>maxTime||typeof item.id!=='string')continue;
-    const point=points.reduce((closest,row)=>Math.abs(row.time-time)<Math.abs(closest.time-time)?row:closest,points[0]);
+    const next=lowerBoundDate(points,time,row=>row.time),before=points[next-1],after=points[next];
+    const point=!before?after:!after?before:after.time-time<time-before.time?after:before;
     const xx=x(time),yy=point.price<=0?bottom-20:Math.max(top+12,Math.min(bottom-12,y(point.price))),label=xx-lastLabelX>145,color=item.turnType==='high'?'#bc9bd7':item.turnType==='low'?'#7bbfae':'#e2b66c';
     markup+=`<g class="equity-forecast-evidence" role="button" tabindex="0" data-forecast-evidence="${esc(item.id)}" data-turn-type="${esc(item.turnType||'assumption')}" aria-label="${esc(item.title)} · 미래 가정 근거"><title>${esc(item.date)} · ${esc(item.title)} · ${esc(item.description)}</title><line x1="${xx}" x2="${xx}" y1="${yy}" y2="${bottom}" stroke="${color}" opacity=".22" stroke-dasharray="2 5"/><circle cx="${xx}" cy="${yy}" r="5" fill="#181b21" stroke="${color}" stroke-width="1.8"/>${label?`<text x="${Math.min(right-5,Math.max(left+5,xx+8))}" y="${yy-10}" fill="${color}" font-size="10">${esc(item.title)}</text>`:''}</g>`;
     if(label)lastLabelX=xx;markerIds.add(item.id);

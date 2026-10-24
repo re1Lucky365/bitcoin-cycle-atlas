@@ -1,0 +1,52 @@
+{
+  "syncCommit": "c7fbf50c34a45386300336756b5fd42a0fab0363",
+  "pstackCommit": "9580c23696ac8d7abed0c166f2f9918800afb819",
+  "tool": "pstack statechart from-spec, --fixed, --cover, --png",
+  "bounds": {
+    "requestGenerations": 3,
+    "intervals": [
+      "daily",
+      "weekly"
+    ],
+    "ranges": [
+      "auto",
+      "custom"
+    ]
+  },
+  "modelSha256": "9fc922185ef569b017c335c8477ac200394161f6f51a6b1a5ce813ed416641bc",
+  "outputs": {
+    "chart.png": {
+      "bytes": 356069,
+      "sha256": "361651d64052616fb94fe29ed174a45b2ed0cfcfec53cafdbf80b5a9823b5cec"
+    },
+    "chart.mmd": {
+      "bytes": 2314,
+      "sha256": "cdb8491999fe28a456ef9cc5b27f0e158534c4a133aba7fecdca6cdc46675047"
+    },
+    "bug-1.png": {
+      "bytes": 162803,
+      "sha256": "4df783e90dbe9dbb1dfd982f396a8b6112d20e4e8a7ba056e2c24fd2a03995b4"
+    },
+    "bug-1.mmd": {
+      "bytes": 1681,
+      "sha256": "909c0a79b147f20f5abf5af4f324c1de32285967ed8a564aba49b4e574db050a"
+    },
+    "bug-2.png": {
+      "bytes": 159894,
+      "sha256": "748ea621ccfaba049b75160a329ad9b68e8dc3de8adc91e97f1a5ca08f1b4ca8"
+    },
+    "bug-2.mmd": {
+      "bytes": 1671,
+      "sha256": "3ef5b826247146b91d3ea0a98550bd2b579baad49d3529e97e47c24658d3a90a"
+    },
+    "summary.json": {
+      "bytes": 4989,
+      "sha256": "9d4aa972d06c06753c21b1bed88aeed51faf1e764623697a3a7d43200e6ee705"
+    },
+    "stories.md": {
+      "bytes": 1315,
+      "sha256": "33b3de07e314bd78b89ba3692058f8e453aa7945740efab91bcd891e437c4712"
+    }
+  },
+  "uncitedConditions": 0
+}

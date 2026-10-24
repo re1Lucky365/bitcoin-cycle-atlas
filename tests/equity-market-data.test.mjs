@@ -61,6 +61,27 @@ test('a truncated response cannot replace the saved full history',async t=>{
   assert.equal(await readFile(file,'utf8'),original);
 });
 
+test('adding new sessions cannot conceal an omitted previously observed session during a full refresh',async t=>{
+  const directory=await mkdtemp(join(tmpdir(),'atlas-equity-coverage-'));t.after(()=>rm(directory,{recursive:true,force:true}));const file=join(directory,'mstr.json');
+  const original=JSON.stringify(parseYahooEquity(provider(),options));await writeFile(file,original);
+  for(const dates of [['2026-10-21','2026-10-23','2026-10-26'],['2026-10-21','2026-10-23','2026-10-26','2026-10-27']]){
+    await assert.rejects(refreshEquityFile('MSTR',file,{now:Date.parse('2026-10-28T08:00:00Z'),fetchImpl:async()=>({ok:true,text:async()=>JSON.stringify(provider(dates))})}),/omitted previously observed session 2026-10-22/);
+    assert.equal(await readFile(file,'utf8'),original,'a failed coverage check preserves the entire existing file');
+  }
+});
+
+test('a complete refresh replaces all old split-adjusted prices together and admits additional sessions',async t=>{
+  const directory=await mkdtemp(join(tmpdir(),'atlas-equity-split-'));t.after(()=>rm(directory,{recursive:true,force:true}));const file=join(directory,'mstr.json');
+  await writeFile(file,JSON.stringify(parseYahooEquity(provider(),options)));
+  const payload=provider(['2026-10-21','2026-10-22','2026-10-23','2026-10-26']);
+  const result=payload.chart.result[0];
+  for(const key of ['open','high','low','close'])result.indicators.quote[0][key]=result.indicators.quote[0][key].map(value=>value/2);
+  result.indicators.adjclose[0].adjclose=result.indicators.adjclose[0].adjclose.map(value=>value/2);
+  const refreshed=await refreshEquityFile('MSTR',file,{now:Date.parse('2026-10-27T08:00:00Z'),fetchImpl:async()=>({ok:true,text:async()=>JSON.stringify(payload)})});
+  assert.deepEqual(refreshed.candles.map(item=>item.close),[50,50,50,50]);
+  assert.deepEqual(JSON.parse(await readFile(file,'utf8')),refreshed);
+});
+
 test('every equity time preset stays on its day or Monday-week navigation grid with future dates',async()=>{
   const payload=JSON.parse(await readFile(new URL('../dist/data/mstr-ohlc.json',import.meta.url),'utf8'));
   for(const interval of ['daily','weekly'])for(const span of ['1m','6m','1y','4y','all']){

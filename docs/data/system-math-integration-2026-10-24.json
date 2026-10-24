@@ -1,0 +1,378 @@
+{
+  "status": "PASS",
+  "reviewDate": "2026-10-24T13:19:07.363Z",
+  "node": "v24.22.1",
+  "scope": "Fixed-input full-object integration compatibility against freshly executed committed baseline; not predictive validation or a proof for all floating-point inputs.",
+  "baseline": {
+    "commit": "347997f02d3674259d4ad6e1f788419bde4811bd",
+    "tree": "21b5d7a7c701c734851b03d342c85693c00976a9",
+    "extraction": "Fresh local git archive; every recorded baseline source/input file hash verified against git show of the exact commit",
+    "reusedPriorOutputFiles": false
+  },
+  "integrated": {
+    "commit": "1f6405b90ad21df321a51530b75e7eb941776666",
+    "sourceAndInputFilesMatchCommit": true,
+    "workingTreeStatusBefore": "?? docs/RELEASE_V1_21.md\n?? docs/SYSTEM_AUDIT_SUMMARY.md",
+    "unchangedSourceAndInputHashesDuringRun": true,
+    "observedHeadAfter": "1f6405b90ad21df321a51530b75e7eb941776666",
+    "workingTreeStatusAfter": "M README.md\n M docs/SYSTEM_AUDIT_WORK.md\n?? docs/RELEASE_V1_21.md\n?? docs/SYSTEM_AUDIT_SUMMARY.md",
+    "sourceAndInputsMatchObservedHeadAfter": true
+  },
+  "fixedInputs": {
+    "asOf": "2026-10-23",
+    "endYear": 2035,
+    "seed": 20261022
+  },
+  "marketOptions": {
+    "asOf": "2026-10-23",
+    "threshold": 0.12,
+    "includeDailyStates": true,
+    "includeFibonacciSensitivity": true
+  },
+  "baselineSourceHashes": {
+    "dist/cycle-calibration.js": "747e0e31c306e64bfb8814fbebac1b1a4fd6de20e1b7981733d106906e23bb81",
+    "dist/cycle-engine.js": "f6b88a839f22b96c72306e87bd4760337d259a3190830325b570520472c84346",
+    "dist/cycle-timing.js": "cf97b803b7fadbec0d7ebd95bd83f79c2e4f9586b435a99fe38f1a6aa091e44f",
+    "dist/detailed-forecast.js": "f9e3179c969e79e8dfacd40288e00a8093826bd2f97a57a0ef43d45a47bbfe24",
+    "dist/long-horizon-evidence.js": "7b5f9fc162e0c621b6a7df9f0f3d77e76c274040e83b88b0a8301638cb29f2f8",
+    "dist/long-horizon-forecast.js": "bca77ad4ac88952bf221bbaaf6f6bfbc825492b75b69df627d7b60db73136bfc",
+    "dist/market-structure.js": "a97e83224357d97d12b0f14c7a20ec9022dd045ab2dbb0b8952b98c07c595883",
+    "dist/treasury-asset-paths.js": "0369199bb1dcbc591582b23e9e47e06d3d00e89a30a37011f02fea03d6fbaf38",
+    "dist/treasury-catalog.js": "4195bccf59f85a91298e966c954db727021fd54958fb4797c1be052f23ed56b6",
+    "dist/treasury-model.js": "6c7da486657cf0c3d97a71b2cbf9ed720e0e54bf6c2beef3df0d88959263b801",
+    "dist/treasury-projection.js": "6727576f150d97a8b571b40bb5f98a6b996619890baf85334c98c30e0df9c3d8",
+    "dist/treasury-research.js": "ad9f947f8832a8a0f7cedd187e51243eb00453d2476fb5d4154cc645dce0bddb",
+    "scripts/verify-treasury-paths.mjs": "4b6f0e02dda50a25534d723de17ef4b24ffe985c1ebf9479da558311f523e362"
+  },
+  "finalSourceHashes": {
+    "dist/cycle-calibration.js": "747e0e31c306e64bfb8814fbebac1b1a4fd6de20e1b7981733d106906e23bb81",
+    "dist/cycle-engine.js": "f6b88a839f22b96c72306e87bd4760337d259a3190830325b570520472c84346",
+    "dist/cycle-timing.js": "cf97b803b7fadbec0d7ebd95bd83f79c2e4f9586b435a99fe38f1a6aa091e44f",
+    "dist/detailed-forecast.js": "c8041b4cc094bf38320d88890e9209ef13b6b10602d8d1c6668eba7850aeb078",
+    "dist/long-horizon-evidence.js": "7b5f9fc162e0c621b6a7df9f0f3d77e76c274040e83b88b0a8301638cb29f2f8",
+    "dist/long-horizon-forecast.js": "0408394be63fe18a14fbf7513d905325d5a77604d066e6da7070b9e7d3dce8e6",
+    "dist/market-structure.js": "8093c52d7beeaa64f268642424dd8b9e6eb9807d02860d9364fd34f27e462437",
+    "dist/treasury-asset-paths.js": "6e0ebef29ea525d29d70a4de4c5ff629d0774d9d70d1828e98d12e0af2fa8dbd",
+    "dist/treasury-catalog.js": "4195bccf59f85a91298e966c954db727021fd54958fb4797c1be052f23ed56b6",
+    "dist/treasury-model.js": "a7acbc6214db72d535f9e6439d462c1380fa99d9c5098559b59512ed565075ea",
+    "dist/treasury-projection.js": "80fd02c05a104ec7cbb340b520b719fa67df62f374044263f6beb48f578a9162",
+    "dist/treasury-research.js": "ad9f947f8832a8a0f7cedd187e51243eb00453d2476fb5d4154cc645dce0bddb",
+    "scripts/verify-treasury-paths.mjs": "996ea4d65518bb621af618e0899acb42fcd5b784b6f0cc59b657c2d024e1bd60"
+  },
+  "baselineInputHashes": {
+    "dist/data/btc-daily.json": "ba002ee272c8b8f6fe2111e32df85080b3352756d1f46ba11d5dffa5c4ab5bf2",
+    "dist/data/eth-ohlc.json": "a37b7f12542fc2ee86e3434b44529f21cee17a725b92669e28e48be6a67f8812",
+    "dist/data/mstr-ohlc.json": "4ae3d0e84624f421adf0b9c48f77089cfbd6bfe1cf92fd1ff3e315b7072979bc",
+    "dist/data/bmnr-ohlc.json": "5e832682f7ae2c2f1ac01f047823ce28e313819ee83849de0694dec5e6f52363",
+    "research-data/treasury-mstr.json": "cac107e363aba4ceb95db085ac351911a3771ba1c1c7818c8adebbfaa7414de1",
+    "research-data/treasury-bmnr.json": "08724dc7eee6b00c303445ef9da9aff266c1f5bb0c0ec863e87846a282041105"
+  },
+  "finalInputHashes": {
+    "dist/data/btc-daily.json": "ba002ee272c8b8f6fe2111e32df85080b3352756d1f46ba11d5dffa5c4ab5bf2",
+    "dist/data/eth-ohlc.json": "a37b7f12542fc2ee86e3434b44529f21cee17a725b92669e28e48be6a67f8812",
+    "dist/data/mstr-ohlc.json": "4ae3d0e84624f421adf0b9c48f77089cfbd6bfe1cf92fd1ff3e315b7072979bc",
+    "dist/data/bmnr-ohlc.json": "5e832682f7ae2c2f1ac01f047823ce28e313819ee83849de0694dec5e6f52363",
+    "research-data/treasury-mstr.json": "cac107e363aba4ceb95db085ac351911a3771ba1c1c7818c8adebbfaa7414de1",
+    "research-data/treasury-bmnr.json": "08724dc7eee6b00c303445ef9da9aff266c1f5bb0c0ec863e87846a282041105"
+  },
+  "moduleGraphs": {
+    "baseline": [
+      "dist/cycle-calibration.js",
+      "dist/cycle-engine.js",
+      "dist/cycle-timing.js",
+      "dist/detailed-forecast.js",
+      "dist/long-horizon-evidence.js",
+      "dist/long-horizon-forecast.js",
+      "dist/market-structure.js",
+      "dist/treasury-asset-paths.js",
+      "dist/treasury-catalog.js",
+      "dist/treasury-model.js",
+      "dist/treasury-projection.js",
+      "dist/treasury-research.js"
+    ],
+    "integrated": [
+      "dist/cycle-calibration.js",
+      "dist/cycle-engine.js",
+      "dist/cycle-timing.js",
+      "dist/detailed-forecast.js",
+      "dist/long-horizon-evidence.js",
+      "dist/long-horizon-forecast.js",
+      "dist/market-structure.js",
+      "dist/treasury-asset-paths.js",
+      "dist/treasury-catalog.js",
+      "dist/treasury-model.js",
+      "dist/treasury-projection.js",
+      "dist/treasury-research.js"
+    ]
+  },
+  "inputBytesIdenticalAcrossCommits": true,
+  "market": {
+    "numericDifferences": 1338,
+    "maxNormalizedDifference": 1.7719942259452871e-15,
+    "maxAbsoluteDifference": 1.8917489796876907e-10,
+    "byField": {
+      "currentRetracementLog": 228,
+      "logPrice": 1084,
+      "linearPrice": 26
+    },
+    "maxNormalizedExample": {
+      "path": "market.monthly[146].fibonacciAnchor.log[2].price",
+      "baseline": 20530.42134012033,
+      "integrated": 20530.421340120294,
+      "absoluteDifference": 3.637978807091713e-11,
+      "normalizedDifference": 1.7719942259452871e-15
+    },
+    "maxAbsoluteExample": {
+      "path": "market.monthly[181].fibonacciAnchor.log[0].price",
+      "baseline": 110210.85548512105,
+      "integrated": 110210.85548512086,
+      "absoluteDifference": 1.8917489796876907e-10,
+      "normalizedDifference": 1.7164815311165833e-15
+    },
+    "comparedLeaves": 200306,
+    "unexpectedDifferences": [],
+    "examples": [
+      {
+        "path": "market.monthly[0].fibonacciAnchor.currentRetracementLog",
+        "baseline": 0.5475255508918545,
+        "integrated": 0.5475255508918543,
+        "absoluteDifference": 2.220446049250313e-16,
+        "normalizedDifference": 2.220446049250313e-16
+      },
+      {
+        "path": "market.monthly[1].fibonacciAnchor.log[2].price",
+        "baseline": 0.06335543330513276,
+        "integrated": 0.06335543330513274,
+        "absoluteDifference": 1.3877787807814457e-17,
+        "normalizedDifference": 1.3877787807814457e-17
+      },
+      {
+        "path": "market.monthly[1].fibonacciAnchor.log[3].price",
+        "baseline": 0.06179846818180485,
+        "integrated": 0.06179846818180482,
+        "absoluteDifference": 2.7755575615628914e-17,
+        "normalizedDifference": 2.7755575615628914e-17
+      },
+      {
+        "path": "market.monthly[1].fibonacciAnchor.log[4].price",
+        "baseline": 0.0596475590201524,
+        "integrated": 0.05964755902015238,
+        "absoluteDifference": 2.0816681711721685e-17,
+        "normalizedDifference": 2.0816681711721685e-17
+      },
+      {
+        "path": "market.monthly[1].fibonacciAnchor.currentRetracementLog",
+        "baseline": 0.7580611244547745,
+        "integrated": 0.7580611244547746,
+        "absoluteDifference": 1.1102230246251565e-16,
+        "normalizedDifference": 1.1102230246251565e-16
+      },
+      {
+        "path": "market.monthly[2].fibonacciAnchor.log[2].price",
+        "baseline": 0.06335543330513276,
+        "integrated": 0.06335543330513274,
+        "absoluteDifference": 1.3877787807814457e-17,
+        "normalizedDifference": 1.3877787807814457e-17
+      },
+      {
+        "path": "market.monthly[2].fibonacciAnchor.log[3].price",
+        "baseline": 0.06179846818180485,
+        "integrated": 0.06179846818180482,
+        "absoluteDifference": 2.7755575615628914e-17,
+        "normalizedDifference": 2.7755575615628914e-17
+      },
+      {
+        "path": "market.monthly[2].fibonacciAnchor.log[4].price",
+        "baseline": 0.0596475590201524,
+        "integrated": 0.05964755902015238,
+        "absoluteDifference": 2.0816681711721685e-17,
+        "normalizedDifference": 2.0816681711721685e-17
+      }
+    ],
+    "normalizedDifferenceDefinition": "abs(baseline-integrated) / max(1, abs(baseline), abs(integrated))",
+    "normalizedDifferenceCeiling": 1.4210854715202004e-14,
+    "allowedDifferences": "Only monthly/quarterly Fibonacci anchor linear/log price levels and currentRetracementLog; all other fields, array lengths, object keys and nonnumeric labels exactly equal",
+    "allOtherFieldsExactlyUnchanged": true
+  },
+  "treasury": {
+    "forecastCount": 6,
+    "pathRowsExactlyUnchangedExcludingValuationState": 20142,
+    "addedValuationStates": 20142,
+    "changedFormulas": [
+      {
+        "symbol": "MSTR",
+        "scenario": "stress",
+        "baseline": "주가 가정 = 프리미엄 × max(코인 가치 + 현금 + 포함 자산 − 채무 원금 − 우선주 청구권 − 기타 부채 − 비지배지분, 0) ÷ 보통주 수",
+        "integrated": "주가 가정 = 흡수 상태이면 0; 정상 평가 상태이면 프리미엄 × max(코인 가치 + 현금 + 포함 자산 − 채무 원금 − 우선주 청구권 − 기타 부채 − 비지배지분, 0) ÷ 보통주 수"
+      },
+      {
+        "symbol": "MSTR",
+        "scenario": "base",
+        "baseline": "주가 가정 = 프리미엄 × max(코인 가치 + 현금 + 포함 자산 − 채무 원금 − 우선주 청구권 − 기타 부채 − 비지배지분, 0) ÷ 보통주 수",
+        "integrated": "주가 가정 = 흡수 상태이면 0; 정상 평가 상태이면 프리미엄 × max(코인 가치 + 현금 + 포함 자산 − 채무 원금 − 우선주 청구권 − 기타 부채 − 비지배지분, 0) ÷ 보통주 수"
+      },
+      {
+        "symbol": "MSTR",
+        "scenario": "bull",
+        "baseline": "주가 가정 = 프리미엄 × max(코인 가치 + 현금 + 포함 자산 − 채무 원금 − 우선주 청구권 − 기타 부채 − 비지배지분, 0) ÷ 보통주 수",
+        "integrated": "주가 가정 = 흡수 상태이면 0; 정상 평가 상태이면 프리미엄 × max(코인 가치 + 현금 + 포함 자산 − 채무 원금 − 우선주 청구권 − 기타 부채 − 비지배지분, 0) ÷ 보통주 수"
+      },
+      {
+        "symbol": "BMNR",
+        "scenario": "stress",
+        "baseline": "주가 가정 = 프리미엄 × max(코인 가치 + 현금 + 포함 자산 − 채무 원금 − 우선주 청구권 − 기타 부채 − 비지배지분, 0) ÷ 보통주 수",
+        "integrated": "주가 가정 = 흡수 상태이면 0; 정상 평가 상태이면 프리미엄 × max(코인 가치 + 현금 + 포함 자산 − 채무 원금 − 우선주 청구권 − 기타 부채 − 비지배지분, 0) ÷ 보통주 수"
+      },
+      {
+        "symbol": "BMNR",
+        "scenario": "base",
+        "baseline": "주가 가정 = 프리미엄 × max(코인 가치 + 현금 + 포함 자산 − 채무 원금 − 우선주 청구권 − 기타 부채 − 비지배지분, 0) ÷ 보통주 수",
+        "integrated": "주가 가정 = 흡수 상태이면 0; 정상 평가 상태이면 프리미엄 × max(코인 가치 + 현금 + 포함 자산 − 채무 원금 − 우선주 청구권 − 기타 부채 − 비지배지분, 0) ÷ 보통주 수"
+      },
+      {
+        "symbol": "BMNR",
+        "scenario": "bull",
+        "baseline": "주가 가정 = 프리미엄 × max(코인 가치 + 현금 + 포함 자산 − 채무 원금 − 우선주 청구권 − 기타 부채 − 비지배지분, 0) ÷ 보통주 수",
+        "integrated": "주가 가정 = 흡수 상태이면 0; 정상 평가 상태이면 프리미엄 × max(코인 가치 + 현금 + 포함 자산 − 채무 원금 − 우선주 청구권 − 기타 부채 − 비지배지분, 0) ÷ 보통주 수"
+      }
+    ],
+    "comparedLeaves": 714586,
+    "perForecast": [
+      {
+        "symbol": "MSTR",
+        "scenario": "stress",
+        "asOf": "2026-10-23",
+        "firstDate": "2026-10-23",
+        "lastDate": "2035-12-31",
+        "rows": 3357,
+        "valuationStates": {
+          "active": 3357,
+          "absorbed": 0
+        },
+        "allExistingRowFieldsExact": true
+      },
+      {
+        "symbol": "MSTR",
+        "scenario": "base",
+        "asOf": "2026-10-23",
+        "firstDate": "2026-10-23",
+        "lastDate": "2035-12-31",
+        "rows": 3357,
+        "valuationStates": {
+          "active": 3357,
+          "absorbed": 0
+        },
+        "allExistingRowFieldsExact": true
+      },
+      {
+        "symbol": "MSTR",
+        "scenario": "bull",
+        "asOf": "2026-10-23",
+        "firstDate": "2026-10-23",
+        "lastDate": "2035-12-31",
+        "rows": 3357,
+        "valuationStates": {
+          "active": 3357,
+          "absorbed": 0
+        },
+        "allExistingRowFieldsExact": true
+      },
+      {
+        "symbol": "BMNR",
+        "scenario": "stress",
+        "asOf": "2026-10-23",
+        "firstDate": "2026-10-23",
+        "lastDate": "2035-12-31",
+        "rows": 3357,
+        "valuationStates": {
+          "active": 3357,
+          "absorbed": 0
+        },
+        "allExistingRowFieldsExact": true
+      },
+      {
+        "symbol": "BMNR",
+        "scenario": "base",
+        "asOf": "2026-10-23",
+        "firstDate": "2026-10-23",
+        "lastDate": "2035-12-31",
+        "rows": 3357,
+        "valuationStates": {
+          "active": 3357,
+          "absorbed": 0
+        },
+        "allExistingRowFieldsExact": true
+      },
+      {
+        "symbol": "BMNR",
+        "scenario": "bull",
+        "asOf": "2026-10-23",
+        "firstDate": "2026-10-23",
+        "lastDate": "2035-12-31",
+        "rows": 3357,
+        "valuationStates": {
+          "active": 3357,
+          "absorbed": 0
+        },
+        "allExistingRowFieldsExact": true
+      }
+    ],
+    "unexpectedDifferences": [],
+    "allFullProjectionFieldsExactlyUnchangedExceptAllowedAdditions": true,
+    "allowedDifferences": [
+      "New path[].valuationState consistent with first residual exhaustion and subsequent absorbing state",
+      "Forecast formula explains the absorbing zero branch"
+    ],
+    "includesMetadataMilestonesProvenanceAssumptionsAndEnvelopes": true
+  },
+  "outputHashes": {
+    "market": {
+      "baseline": "02a7f0fd4a8b5978cc580c94acb949ac77f8e49485bc964a92e07a56467cf66d",
+      "integrated": "179f43bbf13df3cf70e3b34c47fcdddfd12bf9df98bc4010d620b3bece95d701"
+    },
+    "treasury": {
+      "MSTR": {
+        "baseline": "225c46a04cce314819991372ede5703631264b45d84af4c056d47d51a94f8656",
+        "integrated": "37bf653a61cb70b6d02ae86fe33198d1364352e643ea0dad5161fa210b60478a",
+        "integratedWithoutAllowedAdditions": "225c46a04cce314819991372ede5703631264b45d84af4c056d47d51a94f8656"
+      },
+      "BMNR": {
+        "baseline": "94d1aeae82f63dff08ba8f12c0fac1c7b22c9e728ffc371989f603dd1244c9bc",
+        "integrated": "dae55192521efd19d2ba685b50c815f7fb23e6e6aac62494a985f029c253e739",
+        "integratedWithoutAllowedAdditions": "94d1aeae82f63dff08ba8f12c0fac1c7b22c9e728ffc371989f603dd1244c9bc"
+      }
+    }
+  },
+  "existingIndependentFinancialVerifier": {
+    "file": "build/system-audit-treasury.json",
+    "sha256": "b8ccd9be178363cff882ea2f73ca7ad2dbd50fc0b160a4801f11e6465d6537ea",
+    "status": "PASS",
+    "asOf": "2026-10-23",
+    "endYear": 2050,
+    "seed": 20261022,
+    "sourceAndInputHashesExactlyMatchIntegratedRun": true,
+    "rerunInThisTask": false,
+    "counts": {
+      "activeSteps": 44988,
+      "absorbedSteps": 8022,
+      "financingSteps": 10839,
+      "rewardSaleSteps": 14797,
+      "debtRepayments": 15
+    },
+    "totalFinancialTransitions": 53010,
+    "ethResidualChecks": 26505
+  },
+  "execution": {
+    "scriptFile": "/tmp/atlas-system-math-final-check.mjs",
+    "scriptSha256": "83f71fbf3a1fdc87ce5488d70acec7fc63870a1be752d2eae45f252a072a1ed8",
+    "postRunVerification": "Separate Python process checked current source/input SHA-256 values and exact git HEAD blob hashes after Node computation; untracked documentation changes are outside the production measurement.",
+    "completedAt": "2026-10-24T13:19:24.049499+00:00"
+  },
+  "limitations": [
+    "The original isolated math audit artifact remains an immutable author record; this record describes the final integration sources named above.",
+    "Compatibility is established for the recorded archives, cutoff, seed and parameters; it does not prove all possible finite inputs.",
+    "Numerical retracement differences are roundoff-scale at these actual source prices; synthetic extreme-range regressions address different boundary inputs.",
+    "The 2050 financial identity verifier was not rerun here; its existing result was accepted only after source and input SHA-256 values matched this integration.",
+    "No conclusion about future prices, probability calibration, legal insolvency or feasibility of financial assumptions."
+  ]
+}

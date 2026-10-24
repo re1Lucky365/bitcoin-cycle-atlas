@@ -1,0 +1,162 @@
+{
+  "status": "PASS",
+  "node": "v24.22.1",
+  "cpus": 9,
+  "loadBefore": [
+    0.48,
+    0.37,
+    0.21
+  ],
+  "loadAfter": [
+    0.67,
+    0.42,
+    0.22
+  ],
+  "asOf": "2026-10-23",
+  "seed": 20261022,
+  "endYear": 2035,
+  "beforeRevision": "347997f02d3674259d4ad6e1f788419bde4811bd",
+  "afterRevision": "7f84ac0a142ebb242093626f5a61c7652ed3360b",
+  "scope": "Node computation and SVG-string generation after module and data loading. Excludes network, DOM parsing, style, layout, paint and user input latency. No browser or mobile speed claim.",
+  "method": "7 samples per side after 2 warmups; alternate before, after for every pair; same real snapshots, seed, horizon and 128-sample BTC source ensemble. Each timed call fully recalculates all three financial paths and the initial 1280×720 MSTR line chart. Hashes and full deep equality are checked outside the timer. A separate paired case times 20 successive 90-day future viewport redraws of the already calculated projection, also after 2 warmups.",
+  "inputSha256": {
+    "mstr-ohlc": "4ae3d0e84624f421adf0b9c48f77089cfbd6bfe1cf92fd1ff3e315b7072979bc",
+    "btc-daily": "ba002ee272c8b8f6fe2111e32df85080b3352756d1f46ba11d5dffa5c4ab5bf2"
+  },
+  "moduleSha256": {
+    "before": {
+      "long-horizon-forecast.js": "bca77ad4ac88952bf221bbaaf6f6bfbc825492b75b69df627d7b60db73136bfc",
+      "treasury-asset-paths.js": "0369199bb1dcbc591582b23e9e47e06d3d00e89a30a37011f02fea03d6fbaf38",
+      "treasury-model.js": "6c7da486657cf0c3d97a71b2cbf9ed720e0e54bf6c2beef3df0d88959263b801",
+      "treasury-projection.js": "6727576f150d97a8b571b40bb5f98a6b996619890baf85334c98c30e0df9c3d8",
+      "equity-forecast-chart.js": "c652088ee2ea56cb57a581376938c092e7c83d94c03fe6b1757547e994980a84",
+      "intraday-chart.js": "fe0a4fe93362fbc3f5190dcb3c3ea532de5dd15b2ac84370a96618d6bec0476f"
+    },
+    "after": {
+      "long-horizon-forecast.js": "563198241cae68cfc72b7fa0a8c2e086cfc2086d36d392946cf323c910664acd",
+      "treasury-asset-paths.js": "bc2f4a8dc8ce9c249bf38559b9f82fcd46e459bf674f57bcc086e5fa74f6d2f6",
+      "treasury-model.js": "6c7da486657cf0c3d97a71b2cbf9ed720e0e54bf6c2beef3df0d88959263b801",
+      "treasury-projection.js": "6727576f150d97a8b571b40bb5f98a6b996619890baf85334c98c30e0df9c3d8",
+      "equity-forecast-chart.js": "3e74aa84f25c1d45b34af3d7a74ea6a2194e11101f6c16e9bece1d51238eae2d",
+      "intraday-chart.js": "fe0a4fe93362fbc3f5190dcb3c3ea532de5dd15b2ac84370a96618d6bec0476f"
+    }
+  },
+  "results": {
+    "before": {
+      "calculation": {
+        "medianMs": 923.6965499999997,
+        "minMs": 835.7398909999993,
+        "maxMs": 1057.6519349999999,
+        "samplesMs": [
+          923.6965499999997,
+          1057.6519349999999,
+          1010.0791669999999,
+          977.5749780000006,
+          863.9714370000002,
+          835.7398909999993,
+          896.588772000001
+        ]
+      },
+      "calculationAndInitialSvg": {
+        "medianMs": 933.3088149999994,
+        "minMs": 845.172525,
+        "maxMs": 1066.6992599999994,
+        "samplesMs": [
+          933.3088149999994,
+          1066.6992599999994,
+          1019.0992009999991,
+          987.4058810000006,
+          872.8637190000009,
+          845.172525,
+          905.4138739999999
+        ]
+      },
+      "successes": 7,
+      "failures": 0,
+      "dailyRows": [
+        3357,
+        3357,
+        3357
+      ],
+      "modelSha256": "225c46a04cce314819991372ede5703631264b45d84af4c056d47d51a94f8656",
+      "markupSha256": "ee80d9767407cdbeac6fdd496267b1982fc6562e708c44ad0e05ed3c50b47be9",
+      "markupBytes": 52629,
+      "twentyNarrowRedraws": {
+        "medianMs": 97.10603200000332,
+        "minMs": 89.06766400000197,
+        "maxMs": 99.64934100000028,
+        "samplesMs": [
+          99.64934100000028,
+          99.0611719999979,
+          97.6251830000001,
+          89.96040599999833,
+          93.45037500000035,
+          89.06766400000197,
+          97.10603200000332
+        ],
+        "drawsPerSample": 20,
+        "successes": 7,
+        "failures": 0,
+        "markupSha256": "7e0c25054ee90335c6b41826f6819bde72c76c0751b1561a88ac395145679cdf"
+      }
+    },
+    "after": {
+      "calculation": {
+        "medianMs": 696.1750440000005,
+        "minMs": 599.1773059999996,
+        "maxMs": 735.0439919999999,
+        "samplesMs": [
+          735.0439919999999,
+          696.1750440000005,
+          714.2608650000002,
+          700.459777,
+          692.3268630000002,
+          599.1773059999996,
+          622.9530709999981
+        ]
+      },
+      "calculationAndInitialSvg": {
+        "medianMs": 699.9412970000003,
+        "minMs": 602.4373689999993,
+        "maxMs": 740.0527840000004,
+        "samplesMs": [
+          740.0527840000004,
+          699.9412970000003,
+          717.9295120000006,
+          703.8121780000001,
+          695.5860950000006,
+          602.4373689999993,
+          625.7891459999973
+        ]
+      },
+      "successes": 7,
+      "failures": 0,
+      "dailyRows": [
+        3357,
+        3357,
+        3357
+      ],
+      "modelSha256": "225c46a04cce314819991372ede5703631264b45d84af4c056d47d51a94f8656",
+      "markupSha256": "ee80d9767407cdbeac6fdd496267b1982fc6562e708c44ad0e05ed3c50b47be9",
+      "markupBytes": 52629,
+      "twentyNarrowRedraws": {
+        "medianMs": 12.737635000001319,
+        "minMs": 12.367607000000135,
+        "maxMs": 17.652736000000004,
+        "samplesMs": [
+          17.652736000000004,
+          15.485586999999214,
+          12.737635000001319,
+          12.474637999999686,
+          13.415304000001925,
+          12.612516000001051,
+          12.367607000000135
+        ],
+        "drawsPerSample": 20,
+        "successes": 7,
+        "failures": 0,
+        "markupSha256": "7e0c25054ee90335c6b41826f6819bde72c76c0751b1561a88ac395145679cdf"
+      }
+    }
+  }
+}

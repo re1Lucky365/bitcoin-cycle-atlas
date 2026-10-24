@@ -1,4 +1,4 @@
-import { validateFullSeries, COMMUNITY_ENDPOINT } from './data-source.js?v=1.19.0';
+import { validateFullSeries, COMMUNITY_ENDPOINT } from "./data-source.js?v=1.21.0";
 
 export const PUBLISHED_REFRESH_INTERVAL_MS = 6 * 60 * 60 * 1000;
 
@@ -20,7 +20,6 @@ export function inspectPublishedDataset(candidate, current, { now = new Date() }
   const source = new URL(meta.source);
   if (`${source.origin}${source.pathname}` !== COMMUNITY_ENDPOINT || source.username || source.password) throw new Error('Published price source changed');
   if (meta.firstDate !== rows[0].date || meta.lastDate !== lastDate || meta.count !== rows.length || meta.missingDayCount !== 0) throw new Error('Published price metadata does not match its rows');
-  for (let index = 1; index < rows.length; index++) if (rows[index].epochDay !== rows[index - 1].epochDay + 1) throw new Error('Published daily observations have a gap');
   const retrievedAt = retrievalTime(meta.retrievedAt);
   if (!Number.isFinite(retrievedAt) || retrievedAt > now.getTime() + 5_000 || meta.retrievedAt.slice(0, 10) <= lastDate) throw new Error('Published retrieval time is inconsistent with completed observations');
   const previous = current?.prices;

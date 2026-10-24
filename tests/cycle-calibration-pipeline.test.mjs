@@ -71,7 +71,7 @@ test('invalid or unfinished observations fail before replacing a published calib
     await writeFile(options.datasetPath, JSON.stringify(incomplete));
     await assert.rejects(refreshCycleCalibration(options), /missing UTC day/);
     assert.equal(await readFile(options.outputPath, 'utf8'), 'published-clock');
-    const unfinished = snapshot([...data.prices, ['2026-10-22', data.prices.at(-1)[1]]]);
+    const unfinished = snapshot([...data.prices, ...['2026-10-21','2026-10-22'].map(date => [date, data.prices.at(-1)[1]])]);
     await writeFile(options.datasetPath, JSON.stringify(unfinished));
     await assert.rejects(refreshCycleCalibration(options), /unfinished or future UTC day/);
     assert.equal(await readFile(options.outputPath, 'utf8'), 'published-clock');

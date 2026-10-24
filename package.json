@@ -1,6 +1,6 @@
 {
   "name": "bitcoin-cycle-atlas",
-  "version": "1.20.0",
+  "version": "1.21.0",
   "private": true,
   "type": "module",
   "engines": { "node": ">=24" },
@@ -19,7 +19,7 @@
     "verify:eth-events": "node scripts/build-ethereum-events.mjs --check",
     "verify:cycle": "node scripts/refresh-cycle-calibration.mjs --check",
     "verify:performance": "node scripts/verify-chart-performance.mjs",
-    "verify:formal": "node scripts/verify-market-state.mjs",
+    "verify:formal": "node scripts/verify-market-state.mjs && node scripts/verify-equity-state.mjs",
     "build:standalone": "node scripts/build-standalone.mjs",
     "release:package": "node scripts/package-release.mjs"
   }

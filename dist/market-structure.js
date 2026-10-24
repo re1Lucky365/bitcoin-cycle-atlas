@@ -407,10 +407,27 @@ export function fibonacciLevels(startPrice, endPrice, { ratios = FIBONACCI_RATIO
   if (!Array.isArray(ratios) || !ratios.length) throw new TypeError('Ratios must be a nonempty array');
   return ratios.map((ratio) => {
     fraction(ratio, 'retracement ratio');
-    return { ratio, price: scale === 'linear'
-      ? endPrice - ratio * (endPrice - startPrice)
-      : Math.exp(Math.log(endPrice) - ratio * Math.log(endPrice / startPrice)) };
+    const price = scale === 'linear'
+      ? ratio<=0.5 ? endPrice+ratio*(startPrice-endPrice) : startPrice+(1-ratio)*(endPrice-startPrice)
+      : interpolateLogPrice(startPrice,endPrice,ratio);
+    if (!(Number.isFinite(price) && price > 0)) throw new RangeError('Retracement price exceeds the finite positive numeric range');
+    return { ratio, price };
   });
+}
+
+function logPriceRatio(price, reference) {
+  const relativeChange = (price-reference)/reference;
+  if (Math.abs(relativeChange)<=0.5) return Math.log1p(relativeChange);
+  const ratio=price/reference;
+  return Number.isFinite(ratio)&&ratio>0 ? Math.log(ratio) : Math.log(price)-Math.log(reference);
+}
+
+function interpolateLogPrice(start, end, ratio) {
+  const base=ratio<=0.5?end:start,other=ratio<=0.5?start:end,weight=ratio<=0.5?ratio:1-ratio;
+  const logChange=weight*logPriceRatio(other,base);
+  return Math.abs(logChange)<=0.5
+    ? base+base*Math.expm1(logChange)
+    : Math.exp(Math.log(base)+logChange);
 }
 
 export function confirmedSwingRetracement(pivots, asOf, currentPrice) {
@@ -426,7 +443,9 @@ export function confirmedSwingRetracement(pivots, asOf, currentPrice) {
     linear: fibonacciLevels(start.eventPrice, end.eventPrice, { scale: 'linear' }),
     log: fibonacciLevels(start.eventPrice, end.eventPrice, { scale: 'log' }),
     currentRetracementLinear: Number.isFinite(currentPrice) ? (end.eventPrice - currentPrice) / (end.eventPrice - start.eventPrice) : null,
-    currentRetracementLog: Number.isFinite(currentPrice) && currentPrice > 0 ? Math.log(end.eventPrice / currentPrice) / Math.log(end.eventPrice / start.eventPrice) : null,
+    currentRetracementLog: Number.isFinite(currentPrice) && currentPrice > 0
+      ? currentPrice===end.eventPrice ? 0 : currentPrice===start.eventPrice ? 1
+        : logPriceRatio(end.eventPrice,currentPrice) / logPriceRatio(end.eventPrice,start.eventPrice) : null,
     ratiosAreConventions: true, halfIsNotAFibonacciNumber: true,
   };
 }

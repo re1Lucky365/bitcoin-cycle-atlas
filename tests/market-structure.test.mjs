@@ -12,6 +12,68 @@ const data = JSON.parse(await readFile(new URL('./fixtures/btc-daily-2026-10-20.
 const rows = (prices, start = '2020-01-01') => prices.map((price, index) => [dateFromDay(utcDay(start) + index), price]);
 const close = (a, b, tolerance = 1e-10) => assert.ok(Math.abs(a - b) <= tolerance * Math.max(1, Math.abs(b)), `${a} != ${b}`);
 
+test('log retracement remains finite when the endpoint ratio is outside the numeric range', () => {
+  for (const [start, end] of [[1e-200, 1e200], [1e200, 1e-200]]) {
+    const levels = fibonacciLevels(start, end, {ratios:[0.25, 0.5, 0.75], scale:'log'});
+    const expectedExponents = start < end ? [100, 0, -100] : [-100, 0, 100];
+    levels.forEach((level, index) => {
+      assert.ok(Number.isFinite(level.price) && level.price > 0);
+      assert.ok(Math.abs(Math.log10(level.price) - expectedExponents[index]) < 1e-12);
+    });
+    const pivots = [
+      {type:start < end ? 'low' : 'high',eventDate:'2020-01-01',confirmationDate:'2020-01-02',eventPrice:start,leftCensored:false},
+      {type:start < end ? 'high' : 'low',eventDate:'2020-01-03',confirmationDate:'2020-01-04',eventPrice:end,leftCensored:false},
+    ];
+    const retracement = confirmedSwingRetracement(pivots, '2020-01-04', 1);
+    close(retracement.currentRetracementLog, 0.5);
+    for (const price of [start, end]) {
+      assert.equal(confirmedSwingRetracement(pivots, '2020-01-04', price).currentRetracementLog, price === end ? 0 : 1);
+    }
+  }
+  const pivots=[
+    {type:'high',eventDate:'2020-01-01',confirmationDate:'2020-01-02',eventPrice:1e16,leftCensored:false},
+    {type:'low',eventDate:'2020-01-03',confirmationDate:'2020-01-04',eventPrice:2,leftCensored:false},
+  ];
+  const current=confirmedSwingRetracement(pivots,'2020-01-04',1e8);
+  close(current.currentRetracementLog,Math.log(2e-8)/Math.log(2e-16),1e-14);
+});
+
+test('interior linear retracements avoid cancellation and keep the open-ratio input contract', () => {
+  const fraction=2**-53,expected=1e200*fraction;
+  const forward=fibonacciLevels(1e-200,1e200,{ratios:[1-fraction],scale:'linear'})[0].price;
+  const reverse=fibonacciLevels(1e200,1e-200,{ratios:[fraction],scale:'linear'})[0].price;
+  assert.ok(Math.abs(forward/expected-1)<1e-15);
+  assert.ok(Math.abs(reverse/expected-1)<1e-15);
+  for(const [start,end] of [[9.999999999999999e299,1e300],[1e300,9.999999999999999e299]])for(const ratio of [0.061,0.939]){
+    const price=fibonacciLevels(start,end,{ratios:[ratio],scale:'linear'})[0].price;
+    assert.ok(price>=Math.min(start,end)&&price<=Math.max(start,end),'rounding must not put a linear level outside its endpoints');
+  }
+  for(const scale of ['linear','log']){
+    for(const ratio of [0,1,-Number.EPSILON,1+Number.EPSILON])assert.throws(()=>fibonacciLevels(1e-200,1e200,{ratios:[ratio],scale}),/strictly between 0 and 1/);
+    for(const [start,end] of [[Number.MIN_VALUE,Number.MAX_VALUE],[Number.MAX_VALUE,Number.MIN_VALUE]]){
+      for(const ratio of [fraction,0.5,1-fraction]){
+        const price=fibonacciLevels(start,end,{ratios:[ratio],scale})[0].price;
+        assert.ok(price>=Math.min(start,end)&&price<=Math.max(start,end)&&Number.isFinite(price));
+      }
+    }
+  }
+});
+
+test('log interpolation preserves finite endpoint bounds near maximum and subnormal values', () => {
+  const endpoints=[Number.MIN_VALUE,2*Number.MIN_VALUE,3*Number.MIN_VALUE,1e-308,1e-300,1e-200,1e-20,0.1,1,100,1e20,1e200,9.999999999999999e299,1e300,1e308,1.7976931348623155e308,Number.MAX_VALUE];
+  const ratios=[Number.MIN_VALUE,Number.EPSILON/2,1e-10,0.0001,0.061,0.25,0.49,0.5,0.51,0.75,0.939,0.9999,1-Number.EPSILON/2];
+  for(const start of endpoints)for(const end of endpoints)if(start!==end){
+    const levels=fibonacciLevels(start,end,{ratios,scale:'log'});
+    for(const {ratio,price} of levels)assert.ok(Number.isFinite(price)&&price>=Math.min(start,end)&&price<=Math.max(start,end),`${start}, ${end}, ${ratio}: ${price}`);
+  }
+  assert.equal(fibonacciLevels(1.7976931348623155e308,Number.MAX_VALUE,{ratios:[0.0001],scale:'log'})[0].price,Number.MAX_VALUE);
+  for(const [start,end] of [[Number.MIN_VALUE,Number.MAX_VALUE],[1e-200,1e200],[100,200]]){
+    const expected=Math.sqrt(start)*Math.sqrt(end);
+    const actual=fibonacciLevels(start,end,{ratios:[0.5],scale:'log'})[0].price;
+    assert.ok(Math.abs(actual/expected-1)<1e-12,'the midpoint remains the geometric mean');
+  }
+});
+
 test('calendar MDD and period return carry in the previous close', () => {
   const periods = aggregateCloseBars([
     ['2023-12-31', 100], ['2024-01-01', 80], ['2024-01-02', 90],

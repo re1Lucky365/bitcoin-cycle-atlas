@@ -102,6 +102,11 @@ export function validateFullSeries(prices) {
   for (const halving of HALVINGS) {
     if (!dates.has(halving.date)) throw new Error(`Required halving-day observation is missing: ${halving.date}`);
   }
+  for (let index = 1; index < rows.length; index++) {
+    if (rows[index].epochDay !== rows[index - 1].epochDay + 1) {
+      throw new Error(`Full BTC history has a missing UTC day (gap) before ${rows[index].date}`);
+    }
+  }
   return rows;
 }
 

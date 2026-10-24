@@ -1,0 +1,98 @@
+{
+  "view": "customer",
+  "second": {
+    "role": "fix",
+    "label": "observed readiness fix",
+    "lacks": []
+  },
+  "modelStates": 56592,
+  "modelTransitions": 341646,
+  "chartStates": 9,
+  "chartTransitions": 11,
+  "chartStatus": {
+    "works": 7,
+    "wrong": 0,
+    "fixed": 2,
+    "mixed": 0,
+    "after": 0,
+    "worse": 0
+  },
+  "mixedStatus": [],
+  "cover": {
+    "drawn": true,
+    "states": 9,
+    "transitions": 41,
+    "leftOutStates": [],
+    "leftOutTransitions": [
+      "Loading price archive --> Observed chart ready; forecast failed: initial loader finishes",
+      "Loading price archive --> Observed chart ready; forecast pending: initial loader finishes or stock prices arrive",
+      "Loading price archive --> Price error and retry button visible: stock price request fails",
+      "Loading price archive --> Waiting for usable chart: stock price request fails or coin archive fails or forecast calculation rejects its inputs",
+      "Observed chart and forecast ready --> Loading price archive: stock prices arrive",
+      "Observed chart and forecast ready --> Observed chart ready; forecast pending: stock prices arrive",
+      "Observed chart and forecast ready --> Page suspended: leave the page",
+      "Observed chart and forecast ready --> Usable chart remains behind loading shell: render the available chart",
+      "Observed chart ready; forecast failed --> Observed chart ready; forecast pending: stock prices arrive",
+      "Observed chart ready; forecast failed --> Page suspended: leave the page",
+      "Observed chart ready; forecast pending --> Observed chart and forecast ready: compute the three forecasts",
+      "Observed chart ready; forecast pending --> Observed chart ready; forecast failed: coin archive fails or forecast calculation rejects its inputs",
+      "Observed chart ready; forecast pending --> Page suspended: leave the page",
+      "Page suspended --> Loading price archive: restore the page",
+      "Page suspended --> Observed chart and forecast ready: restore the page",
+      "Page suspended --> Observed chart ready; forecast failed: restore the page",
+      "Page suspended --> Observed chart ready; forecast pending: restore the page",
+      "Page suspended --> Price error and retry button visible: restore the page",
+      "Page suspended --> Usable chart remains behind loading shell: render the available chart",
+      "Page suspended --> Waiting for usable chart: restore the page",
+      "Price error and retry button visible --> Loading price archive: open or retry the chart",
+      "Price error and retry button visible --> Page suspended: leave the page",
+      "Usable chart remains behind loading shell --> A hidden page announces readiness: initial loader finishes",
+      "Usable chart remains behind loading shell --> Loading price archive: render the available chart or initial loader finishes",
+      "Usable chart remains behind loading shell --> Observed chart and forecast ready: initial loader finishes",
+      "Usable chart remains behind loading shell --> Observed chart ready; forecast failed: initial loader finishes",
+      "Usable chart remains behind loading shell --> Observed chart ready; forecast pending: initial loader finishes",
+      "Usable chart remains behind loading shell --> Page suspended: render the available chart",
+      "Usable chart remains behind loading shell --> Price error and retry button visible: initial loader finishes",
+      "Usable chart remains behind loading shell --> Waiting for usable chart: render the available chart or initial loader finishes",
+      "Waiting for usable chart --> Usable chart remains behind loading shell: render the available chart"
+    ]
+  },
+  "classes": [
+    {
+      "n": 1,
+      "end": "Usable chart remains behind loading shell",
+      "invariant": "UsableRenderReleasesBoot",
+      "rule": "An observed or actionable-error render releases the loading shell immediately.",
+      "cause": "The boot event waits for coin retrieval and forecast computation",
+      "readerSteps": 2,
+      "modelSteps": 4,
+      "counterexamples": 7104,
+      "lastSteps": [
+        "render the available chart"
+      ],
+      "startsHere": false,
+      "fix": "Observed chart ready; forecast pending"
+    },
+    {
+      "n": 2,
+      "end": "A hidden page announces readiness",
+      "invariant": "NoHiddenReadiness",
+      "rule": "A suspended document never publishes its first ready event.",
+      "cause": "The final initialization callback publishes readiness while suspended",
+      "readerSteps": 3,
+      "modelSteps": 5,
+      "counterexamples": 1552,
+      "lastSteps": [
+        "initial loader finishes"
+      ],
+      "startsHere": false,
+      "fix": "Page suspended"
+    }
+  ],
+  "codeLike": [],
+  "uncited": {
+    "/workspace/scratch/22778b8922a0/equity-statechart-audit-final/EquityLoadBefore.tla": [],
+    "/workspace/scratch/22778b8922a0/equity-statechart-audit-final/EquityLoadFixed.tla": []
+  },
+  "brokenProperties": []
+}

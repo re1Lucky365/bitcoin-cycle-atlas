@@ -1,7 +1,7 @@
 import { CHART_INTERVALS, chartInterval, isIntradayInterval, fetchMarketCandles } from './ohlc-data.js?v=1.15.0-eth.1';
 import { parseEthArchive, mergeEthArchive } from './eth-market-data.js?v=1.15.0-eth.1';
 import { createMarketDataController, marketStatusText } from './market-data-controller.js?v=1.15.0-eth.1';
-import { drawIntradayChart } from './intraday-chart.js?v=1.20.0';
+import { drawIntradayChart } from "./intraday-chart.js?v=1.21.0";
 import { bindChartNavigation } from './chart-navigation.js?v=1.19.0';
 import { mountChartTouchTracking } from './chart-touch-tracking.js?v=1.14.0-mobile.1';
 import { clearChartHover } from './chart-hover.js?v=1.12.1-cursor-hud.1';

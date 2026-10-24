@@ -1,5 +1,5 @@
 import { TREASURY_SNAPSHOTS, TREASURY_MARKET_ANCHORS, TREASURY_FUTURE_EVENTS, TREASURY_TARGETS } from './treasury-research.js?v=1.19.0';
-import { detectDirectionalChanges } from './market-structure.js?v=1.19.0';
+import { detectDirectionalChanges } from "./market-structure.js?v=1.21.0";
 
 const DAY = 86400000, YEAR = 365.25;
 const day = value => {
@@ -75,7 +75,7 @@ export function fundCashOutflow(state, amount, coinPrice, saleFee=0) {
 
 export function repayPrincipal(state, principal, coinPrice, saleFee=0) {
   nonnegative(principal,'principal');
-  if (principal>(state.debtUsd||0)+0.01) throw new RangeError('Repayment exceeds outstanding principal');
+  if (principal>(state.debtUsd||0)) throw new RangeError('Repayment exceeds outstanding principal');
   const payment=fundCashOutflow(state,principal,coinPrice,saleFee);
   return {...payment,state:{...payment.state,debtUsd:Math.max(0,(state.debtUsd||0)-principal)}};
 }
@@ -217,7 +217,7 @@ function simulate(symbol,snapshot,coinAnchor,latest,scenario,endYear,assetPath=n
     if(components.insolvent&&!insolventAt)insolventAt=at;
     const price=nonnegative(insolventAt?0:components.navPerShare*premium,'scenario price');
     const pointSources=assetPoint?.sourceIds?.length?[...new Set([...sourceIds,...assetPoint.sourceIds])]:sourceIds;
-    path.push({date:at,price,kind:at===latest.date?'anchor':'forecast',sourceIds:pointSources,components:{...components,coinPrice,...(assetPoint?.baselinePrice!==undefined?{coinBaselinePrice:assetPoint.baselinePrice}:{}),coinUnits:state.coinUnits,cashUsd:state.cashUsd,otherAssetsUsd:state.otherAssetsUsd,debtUsd:state.debtUsd,preferredUsd:state.preferredUsd,otherLiabilitiesUsd:state.otherLiabilitiesUsd,nonControllingInterestUsd:state.nonControllingInterestUsd,shares:state.shares,premium,coinsSold:totalSold,capitalRaised,rewardsSold,rewardSaleProceeds,holdingCap:settings.holdingPolicy.maxCoinUnits},financialAsOf:snapshot.asOf,probability:null});
+    path.push({date:at,price,valuationState:insolventAt?'absorbed':'active',kind:at===latest.date?'anchor':'forecast',sourceIds:pointSources,components:{...components,coinPrice,...(assetPoint?.baselinePrice!==undefined?{coinBaselinePrice:assetPoint.baselinePrice}:{}),coinUnits:state.coinUnits,cashUsd:state.cashUsd,otherAssetsUsd:state.otherAssetsUsd,debtUsd:state.debtUsd,preferredUsd:state.preferredUsd,otherLiabilitiesUsd:state.otherLiabilitiesUsd,nonControllingInterestUsd:state.nonControllingInterestUsd,shares:state.shares,premium,coinsSold:totalSold,capitalRaised,rewardsSold,rewardSaleProceeds,holdingCap:settings.holdingPolicy.maxCoinUnits},financialAsOf:snapshot.asOf,probability:null});
     prior=at;
   }
   return {path,settings,initialPremium,insolventAt,capacityReachedAt,adjustments:adjusted.applied};
@@ -283,7 +283,7 @@ export function buildTreasuryForecasts({symbol,history,asOf,endYear=2035,snapsho
     return [scenario.id,{symbol,asOf:latest.date,issuedAt:'2026-10-24',financialAsOf:snapshot.asOf,displayEnd:`${endYear}-12-31`,path,milestones,snapshot,coinAnchor,scenario,assumptions:selected.settings,
     pathMode:assets?'asset-linked-daily':'target-interpolation',
     assetPath:asset?{asset:assets.asset,asOf:assets.asOf,endDate:assets.endDate,scenario:asset.id,method:asset.method,sourceIds:asset.sourceIds,anchors:asset.anchors,training:asset.training,metadata:{...assets.metadata,...asset.metadata},warnings:[...(assets.warnings||[]),...(asset.warnings||[])]}:null,
-    formula:'주가 가정 = 프리미엄 × max(코인 가치 + 현금 + 포함 자산 − 채무 원금 − 우선주 청구권 − 기타 부채 − 비지배지분, 0) ÷ 보통주 수',
+    formula:'주가 가정 = 흡수 상태이면 0; 정상 평가 상태이면 프리미엄 × max(코인 가치 + 현금 + 포함 자산 − 채무 원금 − 우선주 청구권 − 기타 부채 − 비지배지분, 0) ÷ 보통주 수',
     warnings:[`재무 기준 ${snapshot.asOf} · 가격 기준 ${latest.date} · ${age}일 시차. 최신 NAV가 아닌 과거 구조의 가격 정규화 민감도입니다.`,
       '최근 보유량과 과거 주식 수를 합치지 않습니다. 공시 이후 모든 발행·매각·전환·세금을 복원한 현재 재무제표가 아닙니다.',
       '범위는 세 조건의 최소·최대입니다. 신뢰구간·발생 확률·상하한 보장이 아닙니다.',

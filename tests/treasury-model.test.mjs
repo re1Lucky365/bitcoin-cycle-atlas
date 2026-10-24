@@ -118,6 +118,37 @@ test('unpaid principal is reclassified, not erased', () => {
   assert.throws(() => repayPrincipal(initial, 101, 100), /exceeds/i);
 });
 
+test('principal cannot exceed outstanding debt by even a fraction of a cent', () => {
+  const initial = state({coinUnits: 0, cashUsd: 2, debtUsd: 1, shares: 1});
+  for (const principal of [1.005, 1.000001, 1 + Number.EPSILON]) {
+    assert.throws(() => repayPrincipal(initial, principal, 100), /exceeds/i);
+  }
+  const paid = repayPrincipal(initial, 1, 100);
+  assert.equal(paid.state.debtUsd, 0);
+  assert.equal(paid.state.cashUsd, 1);
+  assert.equal(treasuryResidual(paid.state, 100).residualUsd, treasuryResidual(initial, 100).residualUsd);
+  assert.deepEqual(initial, state({coinUnits: 0, cashUsd: 2, debtUsd: 1, shares: 1}));
+});
+
+test('funding and principal preserve their independent balance identities over a bounded state grid', () => {
+  let checks=0,unpaid=0;
+  for(const coinUnits of [0,0.25,10])for(const cashUsd of [0,5,100])for(const debtUsd of [0,1,100])for(const coinPrice of [10,10_000])for(const saleFee of [0,0.005,0.25]){
+    const initial=state({coinUnits,cashUsd,debtUsd}),before=treasuryResidual(initial,coinPrice).residualUsd;
+    const expense=125;
+    const funded=fundCashOutflow(initial,expense,coinPrice,saleFee);
+    const repaid=repayPrincipal(initial,debtUsd,coinPrice,saleFee);
+    near(treasuryResidual(funded.state,coinPrice).residualUsd,before-expense-funded.coinsSold*coinPrice*saleFee);
+    near(treasuryResidual(repaid.state,coinPrice).residualUsd,before-repaid.coinsSold*coinPrice*saleFee);
+    assert.equal(repaid.state.debtUsd,0);
+    assert.ok(funded.state.coinUnits>=0&&funded.state.cashUsd>=0&&repaid.state.coinUnits>=0&&repaid.state.cashUsd>=0);
+    assert.deepEqual(initial,state({coinUnits,cashUsd,debtUsd}));
+    unpaid+=Number(funded.shortfall>0)+Number(repaid.shortfall>0);
+    checks+=2;
+  }
+  assert.equal(checks,324);
+  assert.ok(unpaid>0,'the grid must include unpaid bills and principal reclassification');
+});
+
 test('invalid numerical state cannot silently propagate NaN or negative balances', () => {
   for (const bad of [NaN, Infinity, -1]) {
     assert.throws(() => treasuryResidual(state({cashUsd: bad}), 100));

@@ -76,6 +76,8 @@ assert(args.length === 0 || (args.length === 2 && args[0] === '--standalone'),
   'Usage: node scripts/verify-static.mjs [--standalone build/Bitcoin_Cycles_Comparison.html]');
 if (args.length) {
   const standalone = await readFile(path.resolve(root, args[1]), 'utf8');
+  const { verifyStandaloneArtifact } = await import('./standalone-verification.mjs');
+  await verifyStandaloneArtifact(standalone, dist);
   assert(/id=["']embedded-btc-data["']/.test(standalone), 'Standalone file lacks the embedded data snapshot');
   const ohlcSnapshot = standalone.match(/<script\b[^>]*id=["']embedded-ohlc-data["'][^>]*>([\s\S]*?)<\/script>/i)?.[1];
   assert(ohlcSnapshot, 'Standalone file lacks its real OHLC fallback');

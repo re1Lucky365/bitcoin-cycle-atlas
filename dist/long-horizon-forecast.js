@@ -1,6 +1,6 @@
 import { HALVINGS, utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.19.0';
-import { buildDetailedForecast } from './detailed-forecast.js?v=1.19.0';
-import { computeRollingStates, detectDirectionalChanges } from './market-structure.js?v=1.19.0';
+import { buildDetailedForecast } from "./detailed-forecast.js?v=1.21.0";
+import { computeRollingStates, detectDirectionalChanges } from "./market-structure.js?v=1.21.0";
 import { LONG_HORIZON_CLAIMS, LONG_HORIZON_REVIEW_DATE } from './long-horizon-evidence.js?v=1.11.0';
 import { calibrateCycleTiming } from './cycle-calibration.js?v=1.19.0';
 
@@ -178,12 +178,35 @@ function localTurnsFor(path, threshold, currentPrice) {
   }));
 }
 
-// Source targets set valuation assumptions. Neither the dates nor their prices
-// are calibrated future outcomes; stochastic residuals are never pinned to them.
+function scenarioFor(id) {
+  const scenario = LONG_HORIZON_SCENARIOS.find(item => item.id === id);
+  if (!scenario) throw new RangeError('scenario must be base, accelerated, wait, late or stress');
+  return scenario;
+}
+
+// Source targets are valuation assumptions; stochastic residuals are never pinned to them.
 export function buildLongHorizonForecast(input, options = {}) {
   const settings = { ...LONG_HORIZON_DEFAULTS, ...options };
-  const scenario = LONG_HORIZON_SCENARIOS.find(item => item.id === settings.scenario);
-  if (!scenario) throw new RangeError('scenario must be base, accelerated, wait, late or stress');
+  const scenario = scenarioFor(settings.scenario);
+  return projectLongHorizon(prepareLongHorizon(input, options, settings), scenario);
+}
+
+/** Share source preparation only within this synchronous batch, never across data revisions. */
+export function buildLongHorizonForecasts(input, { scenarios = LONG_HORIZON_SCENARIOS.map(item => item.id), ...options } = {}) {
+  if (!Array.isArray(scenarios) || !scenarios.length || new Set(scenarios).size !== scenarios.length) throw new RangeError('scenarios must be a nonempty array of unique scenario ids');
+  if (Object.hasOwn(options, 'scenario')) throw new TypeError('Use scenarios for a forecast batch');
+  const selected = scenarios.map(scenarioFor);
+  const settings = { ...LONG_HORIZON_DEFAULTS, ...options };
+  const prepared = prepareLongHorizon(input, options, settings);
+  return Object.fromEntries(selected.map(scenario => [scenario.id, projectLongHorizon({
+    ...prepared,
+    nearPhase: structuredClone(prepared.nearPhase),
+    cycleCalibration: structuredClone(prepared.cycleCalibration),
+    evidence: structuredClone(prepared.evidence),
+  }, scenario)]));
+}
+
+function prepareLongHorizon(input, options, settings) {
   bounded(settings.seed, 0, 4294967295, 'seed', true);
   bounded(settings.sampleCount, 16, 512, 'sampleCount', true);
   bounded(settings.blockDays, 7, 84, 'blockDays', true);
@@ -224,6 +247,13 @@ export function buildLongHorizonForecast(input, options = {}) {
       nearPhaseUnavailable = error.message;
     }
   }
+  return { options, settings, rows, current, cycleCalibration, referenceDate, researchAsOf, evidence,
+    horizonDays, recent, sourceReturns, sourceStats, sourceFirstRow, nearPhase, nearPhaseUnavailable };
+}
+
+function projectLongHorizon(prepared, scenario) {
+  const { options, settings, rows, current, cycleCalibration, referenceDate, researchAsOf, evidence,
+    horizonDays, recent, sourceReturns, sourceStats, sourceFirstRow, nearPhase, nearPhaseUnavailable } = prepared;
   const recentVol = recent.sd * Math.sqrt(365) * settings.volatilityMultiplier;
   const terminalVol = settings.terminalVolatilityPct / 100 * settings.volatilityMultiplier;
   const innovationVol = years => terminalVol + (recentVol - terminalVol) * 2 ** (-years / settings.volatilityHalfLifeYears);
