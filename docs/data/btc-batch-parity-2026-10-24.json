@@ -1,0 +1,51 @@
+{
+  "status": "PASS",
+  "baseline": "347997f02d3674259d4ad6e1f788419bde4811bd",
+  "implementation": "7f84ac0a142ebb242093626f5a61c7652ed3360b",
+  "asOf": "2026-10-23",
+  "seed": 20261022,
+  "sourceEnsembleCount": 128,
+  "scope": "Every field in all five scalar forecasts and every batch result compared with the original baseline implementation; no accuracy claim.",
+  "results": [
+    {
+      "scenario": "base",
+      "rows": 8836,
+      "through": "2050-12-31",
+      "sha256": "1aa5466b464d9fbd4cca06563552eec38b579922271209b542efd4106be7737c",
+      "scalarDeepEqual": true,
+      "batchDeepEqual": true
+    },
+    {
+      "scenario": "accelerated",
+      "rows": 8836,
+      "through": "2050-12-31",
+      "sha256": "df4276a71c6334cc7c5317bcff7576ca574446683d7f547b9fb9186409476de2",
+      "scalarDeepEqual": true,
+      "batchDeepEqual": true
+    },
+    {
+      "scenario": "wait",
+      "rows": 8836,
+      "through": "2050-12-31",
+      "sha256": "f233ab33f81db427f46708d67b9bf046a2d376aae48ef4e847ff4b8a9a6354c7",
+      "scalarDeepEqual": true,
+      "batchDeepEqual": true
+    },
+    {
+      "scenario": "late",
+      "rows": 8836,
+      "through": "2050-12-31",
+      "sha256": "e3ae41f7101ea420b26c1ddea71a37e65cb670463f9c0c047a3760b26ae20df5",
+      "scalarDeepEqual": true,
+      "batchDeepEqual": true
+    },
+    {
+      "scenario": "stress",
+      "rows": 8836,
+      "through": "2050-12-31",
+      "sha256": "3a93381f877a20f40ebfe699bb76ed9ab93464ef49623f28385c1cd3e3f9f0b2",
+      "scalarDeepEqual": true,
+      "batchDeepEqual": true
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+---
+title: "Equity chart readiness and request ownership"
+config:
+  markdownAutoWrap: false
+  state:
+    useMaxWidth: false
+---
+stateDiagram-v2
+  %% second model (fix): observed readiness fix
+  classDef works fill:#f4f6f7,stroke:#566573,color:#1b2631
+  classDef wrong fill:#fdedec,stroke:#c0392b,color:#7b241c
+  classDef fixed fill:#e9f7ef,stroke:#1e8449,color:#145a32
+  classDef mixed fill:#fdebd0,stroke:#d35400,color:#7e5109
+  classDef after fill:#ffffff,stroke:#808b96,color:#566573
+  classDef worse fill:#f4ecf7,stroke:#7d3c98,color:#4a235a
+  classDef worksPath fill:#f4f6f7,stroke:#1f3a93,stroke-width:4px,color:#1b2631
+  classDef wrongPath fill:#fdedec,stroke:#1f3a93,stroke-width:4px,color:#7b241c
+  classDef fixedPath fill:#e9f7ef,stroke:#1f3a93,stroke-width:4px,color:#145a32
+  classDef mixedPath fill:#fdebd0,stroke:#1f3a93,stroke-width:4px,color:#7e5109
+  classDef afterPath fill:#ffffff,stroke:#1f3a93,stroke-width:4px,color:#566573
+  classDef worsePath fill:#f4ecf7,stroke:#1f3a93,stroke-width:4px,color:#4a235a
+  state "Legend" as legend {
+    state "Works today" as legendWorks
+    state "Fixed or new with observed readiness fix" as legendFixed
+  }
+  class legendWorks works
+  class legendFixed fixed
+  state "A hidden page announces<br/>readiness" as s0
+  state "Loading price archive" as s1
+  state "Observed chart and<br/>forecast ready" as s2
+  state "Observed chart ready;<br/>forecast failed" as s3
+  state "Observed chart ready;<br/>forecast pending" as s4
+  state "Page suspended" as s5
+  state "Price error and retry<br/>button visible" as s6
+  state "Usable chart remains<br/>behind loading shell" as s7
+  state "Waiting for usable chart" as s8
+  [*] --> s8
+  s8 --> s1 : open or retry the chart
+  s8 --> s5 : leave the page
+  s1 --> s5 : leave the page
+  s1 --> s7 : render the available chart
+  s8 --> s6 : initial loader finishes
+  s5 --> s0 : initial loader finishes
+  s8 --> s3 : initial loader finishes
+  s8 --> s4 : initial loader finishes
+  s1 --> s2 : compute the three forecasts
+  s1 --> s4 : with observed readiness fix,<br/>render the available chart
+  s5 --> s5 : with observed readiness fix,<br/>initial loader finishes
+  class s0 fixed
+  class s1 works
+  class s2 works
+  class s3 works
+  class s4 works
+  class s5 works
+  class s6 works
+  class s7 fixed
+  class s8 works

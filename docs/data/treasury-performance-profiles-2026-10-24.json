@@ -1,0 +1,770 @@
+{
+  "scope": "Untimed V8 CPU sampling for bottleneck identification; inclusive stack times overlap and these timings are not benchmark results.",
+  "baseline": "347997f02d3674259d4ad6e1f788419bde4811bd",
+  "implementation": "7f84ac0a142ebb242093626f5a61c7652ed3360b",
+  "node": "v24.22.1",
+  "results": [
+    {
+      "stage": "baseline calculation",
+      "profile": "treasury-profile-before.cpuprofile",
+      "sha256": "41c58325a02439514ac1d2533673e195fcb3b90df4b021667423113f6260e8a4",
+      "projectionCalls": 3,
+      "redraws": 0,
+      "functions": [
+        {
+          "function": "buildTreasuryProjection",
+          "file": "treasury-projection.js",
+          "line": 7,
+          "inclusiveSampleMs": 3410.509,
+          "selfSampleMs": 2.163
+        },
+        {
+          "function": "buildTreasuryAssetPaths",
+          "file": "treasury-asset-paths.js?v=1.20.0",
+          "line": 175,
+          "inclusiveSampleMs": 3020.445,
+          "selfSampleMs": 3.19
+        },
+        {
+          "function": "bitcoinPaths",
+          "file": "treasury-asset-paths.js?v=1.20.0",
+          "line": 65,
+          "inclusiveSampleMs": 3005.567,
+          "selfSampleMs": 23.461
+        },
+        {
+          "function": "buildLongHorizonForecast",
+          "file": "long-horizon-forecast.js?v=1.19.0",
+          "line": 183,
+          "inclusiveSampleMs": 2974.875,
+          "selfSampleMs": 155.493
+        },
+        {
+          "function": "buildDetailedForecast",
+          "file": "detailed-forecast.js?v=1.19.0",
+          "line": 369,
+          "inclusiveSampleMs": 1350.652,
+          "selfSampleMs": 166.589
+        },
+        {
+          "function": "computeRollingStates",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 230,
+          "inclusiveSampleMs": 917.304,
+          "selfSampleMs": 29.59
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 242,
+          "inclusiveSampleMs": 803.995,
+          "selfSampleMs": 345.278
+        },
+        {
+          "function": "computeRollingStates",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 230,
+          "inclusiveSampleMs": 441.813,
+          "selfSampleMs": 7.543
+        },
+        {
+          "function": "makePool",
+          "file": "detailed-forecast.js?v=1.19.0",
+          "line": 212,
+          "inclusiveSampleMs": 413.558,
+          "selfSampleMs": 8.65
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 242,
+          "inclusiveSampleMs": 391.549,
+          "selfSampleMs": 142.339
+        },
+        {
+          "function": "computeRollingStates",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 230,
+          "inclusiveSampleMs": 382.039,
+          "selfSampleMs": 18.336
+        },
+        {
+          "function": "buildTreasuryForecasts",
+          "file": "treasury-model.js?v=1.20.0",
+          "line": 230,
+          "inclusiveSampleMs": 371.662,
+          "selfSampleMs": 5.472
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 242,
+          "inclusiveSampleMs": 341.884,
+          "selfSampleMs": 139.525
+        },
+        {
+          "function": "calibrateCycleTiming",
+          "file": "cycle-calibration.js?v=1.19.0",
+          "line": 82,
+          "inclusiveSampleMs": 288.216,
+          "selfSampleMs": 120.801
+        },
+        {
+          "function": "",
+          "file": "treasury-model.js?v=1.20.0",
+          "line": 265,
+          "inclusiveSampleMs": 241.817,
+          "selfSampleMs": 13.084
+        },
+        {
+          "function": "simulate",
+          "file": "treasury-model.js?v=1.20.0",
+          "line": 167,
+          "inclusiveSampleMs": 228.733,
+          "selfSampleMs": 76.143
+        },
+        {
+          "function": "earliestKnowable",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 55,
+          "inclusiveSampleMs": 135.142,
+          "selfSampleMs": 1.061
+        },
+        {
+          "function": "",
+          "file": "detailed-forecast.js?v=1.19.0",
+          "line": 371,
+          "inclusiveSampleMs": 126.037,
+          "selfSampleMs": 2.146
+        },
+        {
+          "function": "simulate",
+          "file": "detailed-forecast.js?v=1.19.0",
+          "line": 274,
+          "inclusiveSampleMs": 123.891,
+          "selfSampleMs": 45.149
+        },
+        {
+          "function": "day",
+          "file": "treasury-model.js?v=1.20.0",
+          "line": 5,
+          "inclusiveSampleMs": 122.974,
+          "selfSampleMs": 119.601
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 251,
+          "inclusiveSampleMs": 112.905,
+          "selfSampleMs": 112.905
+        },
+        {
+          "function": "dateFromDay",
+          "file": "cycle-engine.js?v=1.19.0",
+          "line": 44,
+          "inclusiveSampleMs": 99.563,
+          "selfSampleMs": 99.563
+        },
+        {
+          "function": "shiftCalendarMonths",
+          "file": "cycle-timing.js?v=1.19.0",
+          "line": 17,
+          "inclusiveSampleMs": 85.085,
+          "selfSampleMs": 83.988
+        },
+        {
+          "function": "dateFromDay",
+          "file": "cycle-engine.js?v=1.19.0",
+          "line": 44,
+          "inclusiveSampleMs": 75.539,
+          "selfSampleMs": 75.539
+        },
+        {
+          "function": "dateFromDay",
+          "file": "cycle-engine.js?v=1.19.0",
+          "line": 44,
+          "inclusiveSampleMs": 70.499,
+          "selfSampleMs": 70.499
+        },
+        {
+          "function": "earliestKnowable",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 55,
+          "inclusiveSampleMs": 66.396,
+          "selfSampleMs": 1.084
+        },
+        {
+          "function": "earliestKnowable",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 55,
+          "inclusiveSampleMs": 63.175,
+          "selfSampleMs": 1.022
+        },
+        {
+          "function": "sampleSD",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 33,
+          "inclusiveSampleMs": 62.056,
+          "selfSampleMs": 3.261
+        },
+        {
+          "function": "mean",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 27,
+          "inclusiveSampleMs": 59.208,
+          "selfSampleMs": 23.66
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 251,
+          "inclusiveSampleMs": 56.675,
+          "selfSampleMs": 56.675
+        },
+        {
+          "function": "dateFromDay",
+          "file": "cycle-engine.js?v=1.19.0",
+          "line": 44,
+          "inclusiveSampleMs": 53.179,
+          "selfSampleMs": 53.179
+        },
+        {
+          "function": "validateDataset",
+          "file": "cycle-engine.js?v=1.19.0",
+          "line": 53,
+          "inclusiveSampleMs": 52.004,
+          "selfSampleMs": 10.936
+        },
+        {
+          "function": "observations",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 44,
+          "inclusiveSampleMs": 52.004,
+          "selfSampleMs": 0.0
+        },
+        {
+          "function": "sampledRows",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 145,
+          "inclusiveSampleMs": 52.004,
+          "selfSampleMs": 0.0
+        },
+        {
+          "function": "",
+          "file": "treasury-model.js?v=1.20.0",
+          "line": 268,
+          "inclusiveSampleMs": 50.433,
+          "selfSampleMs": 7.308
+        }
+      ]
+    },
+    {
+      "stage": "batch preparation before renderer optimization",
+      "profile": "treasury-profile-renderer-before.cpuprofile",
+      "sha256": "04a82346495078abe44878fdfa9cfec470b48f92d74e147de302044537a382db",
+      "projectionCalls": 1,
+      "redraws": 100,
+      "functions": [
+        {
+          "function": "buildTreasuryProjection",
+          "file": "treasury-projection.js",
+          "line": 7,
+          "inclusiveSampleMs": 937.357,
+          "selfSampleMs": 1.041
+        },
+        {
+          "function": "buildTreasuryAssetPaths",
+          "file": "treasury-asset-paths.js?v=1.20.0",
+          "line": 176,
+          "inclusiveSampleMs": 794.472,
+          "selfSampleMs": 1.085
+        },
+        {
+          "function": "bitcoinPaths",
+          "file": "treasury-asset-paths.js?v=1.20.0",
+          "line": 65,
+          "inclusiveSampleMs": 788.372,
+          "selfSampleMs": 1.092
+        },
+        {
+          "function": "buildLongHorizonForecasts",
+          "file": "long-horizon-forecast.js?v=1.19.0",
+          "line": 196,
+          "inclusiveSampleMs": 782.583,
+          "selfSampleMs": 0.0
+        },
+        {
+          "function": "",
+          "file": "long-horizon-forecast.js?v=1.19.0",
+          "line": 202,
+          "inclusiveSampleMs": 546.598,
+          "selfSampleMs": 8.702
+        },
+        {
+          "function": "projectLongHorizon",
+          "file": "long-horizon-forecast.js?v=1.19.0",
+          "line": 255,
+          "inclusiveSampleMs": 510.746,
+          "selfSampleMs": 39.072
+        },
+        {
+          "function": "drawIntradayChart",
+          "file": "intraday-chart.js",
+          "line": 25,
+          "inclusiveSampleMs": 466.349,
+          "selfSampleMs": 29.317
+        },
+        {
+          "function": "computeRollingStates",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 230,
+          "inclusiveSampleMs": 394.733,
+          "selfSampleMs": 19.278
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 242,
+          "inclusiveSampleMs": 346.192,
+          "selfSampleMs": 112.495
+        },
+        {
+          "function": "equityForecastRows",
+          "file": "equity-forecast-chart.js?v=1.20.0",
+          "line": 16,
+          "inclusiveSampleMs": 321.205,
+          "selfSampleMs": 28.305
+        },
+        {
+          "function": "forecastTime",
+          "file": "equity-forecast-chart.js?v=1.20.0",
+          "line": 2,
+          "inclusiveSampleMs": 292.9,
+          "selfSampleMs": 283.132
+        },
+        {
+          "function": "prepareLongHorizon",
+          "file": "long-horizon-forecast.js?v=1.19.0",
+          "line": 210,
+          "inclusiveSampleMs": 235.985,
+          "selfSampleMs": 8.746
+        },
+        {
+          "function": "buildDetailedForecast",
+          "file": "detailed-forecast.js?v=1.19.0",
+          "line": 369,
+          "inclusiveSampleMs": 190.448,
+          "selfSampleMs": 25.016
+        },
+        {
+          "function": "buildTreasuryForecasts",
+          "file": "treasury-model.js?v=1.20.0",
+          "line": 230,
+          "inclusiveSampleMs": 128.862,
+          "selfSampleMs": 0.0
+        },
+        {
+          "function": "",
+          "file": "treasury-model.js?v=1.20.0",
+          "line": 265,
+          "inclusiveSampleMs": 85.992,
+          "selfSampleMs": 7.615
+        },
+        {
+          "function": "simulate",
+          "file": "treasury-model.js?v=1.20.0",
+          "line": 167,
+          "inclusiveSampleMs": 78.377,
+          "selfSampleMs": 31.062
+        },
+        {
+          "function": "makePool",
+          "file": "detailed-forecast.js?v=1.19.0",
+          "line": 212,
+          "inclusiveSampleMs": 63.903,
+          "selfSampleMs": 1.08
+        },
+        {
+          "function": "computeRollingStates",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 230,
+          "inclusiveSampleMs": 61.511,
+          "selfSampleMs": 3.259
+        },
+        {
+          "function": "computeRollingStates",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 230,
+          "inclusiveSampleMs": 60.807,
+          "selfSampleMs": 3.231
+        },
+        {
+          "function": "mean",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 27,
+          "inclusiveSampleMs": 58.681,
+          "selfSampleMs": 23.942
+        },
+        {
+          "function": "equityForecastMarkup",
+          "file": "equity-forecast-chart.js?v=1.20.0",
+          "line": 86,
+          "inclusiveSampleMs": 55.343,
+          "selfSampleMs": 17.877
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 242,
+          "inclusiveSampleMs": 54.379,
+          "selfSampleMs": 19.504
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 242,
+          "inclusiveSampleMs": 54.345,
+          "selfSampleMs": 15.285
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 251,
+          "inclusiveSampleMs": 52.868,
+          "selfSampleMs": 52.868
+        },
+        {
+          "function": "equityForecastLogGaps",
+          "file": "equity-forecast-chart.js?v=1.20.0",
+          "line": 78,
+          "inclusiveSampleMs": 42.737,
+          "selfSampleMs": 17.494
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 27,
+          "inclusiveSampleMs": 34.739,
+          "selfSampleMs": 34.739
+        },
+        {
+          "function": "day",
+          "file": "treasury-model.js?v=1.20.0",
+          "line": 5,
+          "inclusiveSampleMs": 34.259,
+          "selfSampleMs": 33.16
+        },
+        {
+          "function": "calibrateCycleTiming",
+          "file": "cycle-calibration.js?v=1.19.0",
+          "line": 82,
+          "inclusiveSampleMs": 33.498,
+          "selfSampleMs": 16.965
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 250,
+          "inclusiveSampleMs": 29.542,
+          "selfSampleMs": 29.542
+        },
+        {
+          "function": "earliestKnowable",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 55,
+          "inclusiveSampleMs": 26.335,
+          "selfSampleMs": 2.171
+        },
+        {
+          "function": "logCurve",
+          "file": "long-horizon-forecast.js?v=1.19.0",
+          "line": 134,
+          "inclusiveSampleMs": 26.269,
+          "selfSampleMs": 14.119
+        },
+        {
+          "function": "",
+          "file": "equity-forecast-chart.js?v=1.20.0",
+          "line": 80,
+          "inclusiveSampleMs": 25.243,
+          "selfSampleMs": 8.778
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 258,
+          "inclusiveSampleMs": 23.927,
+          "selfSampleMs": 23.927
+        },
+        {
+          "function": "sampleSD",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 33,
+          "inclusiveSampleMs": 22.757,
+          "selfSampleMs": 1.084
+        },
+        {
+          "function": "equityForecastLogGaps",
+          "file": "equity-forecast-chart.js?v=1.20.0",
+          "line": 78,
+          "inclusiveSampleMs": 22.1,
+          "selfSampleMs": 8.817
+        }
+      ]
+    },
+    {
+      "stage": "final implementation",
+      "profile": "treasury-profile-after.cpuprofile",
+      "sha256": "b8e105481b8f77e4409c57096a666da277df01f6e34672726b4af288e6f838a6",
+      "projectionCalls": 3,
+      "redraws": 100,
+      "functions": [
+        {
+          "function": "buildTreasuryProjection",
+          "file": "treasury-projection.js",
+          "line": 7,
+          "inclusiveSampleMs": 2386.483,
+          "selfSampleMs": 3.327
+        },
+        {
+          "function": "buildTreasuryAssetPaths",
+          "file": "treasury-asset-paths.js?v=1.20.0",
+          "line": 176,
+          "inclusiveSampleMs": 1998.495,
+          "selfSampleMs": 1.154
+        },
+        {
+          "function": "bitcoinPaths",
+          "file": "treasury-asset-paths.js?v=1.20.0",
+          "line": 65,
+          "inclusiveSampleMs": 1988.486,
+          "selfSampleMs": 4.452
+        },
+        {
+          "function": "buildLongHorizonForecasts",
+          "file": "long-horizon-forecast.js?v=1.19.0",
+          "line": 195,
+          "inclusiveSampleMs": 1979.712,
+          "selfSampleMs": 1.099
+        },
+        {
+          "function": "",
+          "file": "long-horizon-forecast.js?v=1.19.0",
+          "line": 201,
+          "inclusiveSampleMs": 1345.394,
+          "selfSampleMs": 14.963
+        },
+        {
+          "function": "projectLongHorizon",
+          "file": "long-horizon-forecast.js?v=1.19.0",
+          "line": 254,
+          "inclusiveSampleMs": 1245.45,
+          "selfSampleMs": 102.021
+        },
+        {
+          "function": "computeRollingStates",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 230,
+          "inclusiveSampleMs": 920.477,
+          "selfSampleMs": 22.279
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 242,
+          "inclusiveSampleMs": 815.61,
+          "selfSampleMs": 291.681
+        },
+        {
+          "function": "prepareLongHorizon",
+          "file": "long-horizon-forecast.js?v=1.19.0",
+          "line": 209,
+          "inclusiveSampleMs": 633.219,
+          "selfSampleMs": 13.691
+        },
+        {
+          "function": "buildDetailedForecast",
+          "file": "detailed-forecast.js?v=1.19.0",
+          "line": 369,
+          "inclusiveSampleMs": 513.512,
+          "selfSampleMs": 62.484
+        },
+        {
+          "function": "buildTreasuryForecasts",
+          "file": "treasury-model.js?v=1.20.0",
+          "line": 230,
+          "inclusiveSampleMs": 371.63,
+          "selfSampleMs": 6.551
+        },
+        {
+          "function": "",
+          "file": "treasury-model.js?v=1.20.0",
+          "line": 265,
+          "inclusiveSampleMs": 249.088,
+          "selfSampleMs": 11.073
+        },
+        {
+          "function": "simulate",
+          "file": "treasury-model.js?v=1.20.0",
+          "line": 167,
+          "inclusiveSampleMs": 238.015,
+          "selfSampleMs": 93.19
+        },
+        {
+          "function": "computeRollingStates",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 230,
+          "inclusiveSampleMs": 179.787,
+          "selfSampleMs": 12.014
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 242,
+          "inclusiveSampleMs": 153.231,
+          "selfSampleMs": 44.789
+        },
+        {
+          "function": "makePool",
+          "file": "detailed-forecast.js?v=1.19.0",
+          "line": 212,
+          "inclusiveSampleMs": 151.684,
+          "selfSampleMs": 4.196
+        },
+        {
+          "function": "computeRollingStates",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 230,
+          "inclusiveSampleMs": 138.909,
+          "selfSampleMs": 7.772
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 251,
+          "inclusiveSampleMs": 138.237,
+          "selfSampleMs": 138.237
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 242,
+          "inclusiveSampleMs": 123.402,
+          "selfSampleMs": 46.41
+        },
+        {
+          "function": "earliestKnowable",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 55,
+          "inclusiveSampleMs": 115.652,
+          "selfSampleMs": 1.088
+        },
+        {
+          "function": "day",
+          "file": "treasury-model.js?v=1.20.0",
+          "line": 5,
+          "inclusiveSampleMs": 115.436,
+          "selfSampleMs": 111.06
+        },
+        {
+          "function": "calibrateCycleTiming",
+          "file": "cycle-calibration.js?v=1.19.0",
+          "line": 82,
+          "inclusiveSampleMs": 98.156,
+          "selfSampleMs": 38.891
+        },
+        {
+          "function": "drawIntradayChart",
+          "file": "intraday-chart.js",
+          "line": 25,
+          "inclusiveSampleMs": 82.052,
+          "selfSampleMs": 13.162
+        },
+        {
+          "function": "dateFromDay",
+          "file": "cycle-engine.js?v=1.19.0",
+          "line": 44,
+          "inclusiveSampleMs": 81.662,
+          "selfSampleMs": 81.662
+        },
+        {
+          "function": "sampleSD",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 33,
+          "inclusiveSampleMs": 72.531,
+          "selfSampleMs": 6.505
+        },
+        {
+          "function": "mean",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 27,
+          "inclusiveSampleMs": 71.145,
+          "selfSampleMs": 23.258
+        },
+        {
+          "function": "dateFromDay",
+          "file": "cycle-engine.js?v=1.19.0",
+          "line": 44,
+          "inclusiveSampleMs": 60.667,
+          "selfSampleMs": 60.667
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 250,
+          "inclusiveSampleMs": 56.43,
+          "selfSampleMs": 55.33
+        },
+        {
+          "function": "mean",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 27,
+          "inclusiveSampleMs": 54.975,
+          "selfSampleMs": 27.75
+        },
+        {
+          "function": "logCurve",
+          "file": "long-horizon-forecast.js?v=1.19.0",
+          "line": 134,
+          "inclusiveSampleMs": 54.938,
+          "selfSampleMs": 39.375
+        },
+        {
+          "function": "validateDataset",
+          "file": "cycle-engine.js?v=1.19.0",
+          "line": 53,
+          "inclusiveSampleMs": 51.868,
+          "selfSampleMs": 6.613
+        },
+        {
+          "function": "observations",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 44,
+          "inclusiveSampleMs": 51.868,
+          "selfSampleMs": 0.0
+        },
+        {
+          "function": "sampledRows",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 145,
+          "inclusiveSampleMs": 51.868,
+          "selfSampleMs": 0.0
+        },
+        {
+          "function": "",
+          "file": "detailed-forecast.js?v=1.19.0",
+          "line": 371,
+          "inclusiveSampleMs": 50.382,
+          "selfSampleMs": 3.25
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.19.0",
+          "line": 258,
+          "inclusiveSampleMs": 50.318,
+          "selfSampleMs": 50.318
+        }
+      ]
+    }
+  ]
+}

@@ -79,8 +79,8 @@ test('backward, missing-day, revised-history and malformed datasets fail before 
 });
 
 test('unfinished or future UTC observations cannot enter the public bundle', () => {
-  for (const date of ['2026-10-22', '2026-10-23']) {
-    const unfinished = snapshot([...full.prices, [date, full.prices.at(-1)[1]]]);
+  for (const dates of [['2026-10-21','2026-10-22'], ['2026-10-21','2026-10-22','2026-10-23']]) {
+    const unfinished = snapshot([...full.prices, ...dates.map(date => [date, full.prices.at(-1)[1]])]);
     assert.throws(() => planRefresh(before, unfinished, { now }), /unfinished or future UTC day/);
   }
 });

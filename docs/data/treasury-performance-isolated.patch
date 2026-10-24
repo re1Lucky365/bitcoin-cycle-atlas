@@ -1,0 +1,159 @@
+diff --git a/dist/equity-forecast-chart.js b/dist/equity-forecast-chart.js
+index 2c21bbd..ac258bb 100644
+--- a/dist/equity-forecast-chart.js
++++ b/dist/equity-forecast-chart.js
+@@ -1,8 +1,9 @@
++import {utcDay} from './cycle-engine.js?v=1.19.0';
++import {dateWindow,lowerBoundDate,upperBoundDate} from './chart-window.js?v=1.11.0';
++
+ const esc=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+ function forecastTime(value){
+-  const time=typeof value==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(value)?Date.parse(`${value}T00:00:00Z`)/1000:NaN;
+-  if(!Number.isSafeInteger(time)||new Date(time*1000).toISOString().slice(0,10)!==value)throw new TypeError('Invalid equity forecast date');
+-  return time;
++  try{return utcDay(value)*86400;}catch{throw new TypeError('Invalid equity forecast date');}
+ }
+ 
+ export function equityForecastAnchor(forecast,lastObserved){
+@@ -61,11 +62,12 @@ export function equityForecastCandles(forecast,interval='daily'){
+ 
+ export function equityForecastWindowRows(points,lastObserved,minTime,maxTime,scale='log'){
+   if(!points.length)return [];
+-  const values=lastObserved?[{...lastObserved,price:lastObserved.close,low:lastObserved.close,high:lastObserved.close},...points]:points;
+-  const visible=points.filter(row=>row.time>=minTime&&row.time<=maxTime);
++  const anchor=lastObserved?{...lastObserved,price:lastObserved.close,low:lastObserved.close,high:lastObserved.close}:null;
++  const visible=dateWindow(points,minTime,maxTime,row=>row.time);
+   for(const time of new Set([minTime,maxTime])){
+-    if(time<=values[0].time||time>=values.at(-1).time||visible.some(row=>row.time===time))continue;
+-    const next=values.findIndex(row=>row.time>time),left=values[next-1],right=values[next];
++    if(time<=(anchor||points[0]).time||time>=points.at(-1).time)continue;
++    const next=upperBoundDate(points,time,row=>row.time),left=next?points[next-1]:anchor,right=points[next];
++    if(left.time===time)continue;
+     if(scale==='log'&&((left.price===0)!==(right.price===0)))continue;
+     const fraction=(time-left.time)/(right.time-left.time);
+     const interpolate=key=>scale==='log'&&left[key]>0&&right[key]>0?Math.exp(Math.log(left[key])*(1-fraction)+Math.log(right[key])*fraction):scale==='log'&&((left[key]===0)!==(right[key]===0))?null:left[key]*(1-fraction)+right[key]*fraction;
+@@ -76,18 +78,26 @@ export function equityForecastWindowRows(points,lastObserved,minTime,maxTime,sca
+ }
+ 
+ export function equityForecastLogGaps(points,lastObserved,minTime,maxTime){
+-  const values=lastObserved?[{...lastObserved,price:lastObserved.close,low:lastObserved.close,high:lastObserved.close},...points]:points;
+-  return values.slice(1).flatMap((row,index)=>{
+-    const before=values[index],fields=['price','low','high'].filter(key=>(before[key]===0)!==(row[key]===0));
+-    return fields.length&&row.time>minTime&&before.time<maxTime?[{from:before.time,to:row.time,fields}]:[];
+-  });
++  if(!points.length||maxTime<minTime)return [];
++  let index=upperBoundDate(points,minTime,row=>row.time);
++  let before=index?points[index-1]:lastObserved?{...lastObserved,price:lastObserved.close,low:lastObserved.close,high:lastObserved.close}:null;
++  const gaps=[];
++  for(;index<points.length;index++){
++    const row=points[index];
++    if(before&&before.time>=maxTime)break;
++    if(before){
++      const fields=['price','low','high'].filter(key=>(before[key]===0)!==(row[key]===0));
++      if(fields.length)gaps.push({from:before.time,to:row.time,fields});
++    }
++    before=row;
++  }
++  return gaps;
+ }
+ 
+ export function equityForecastMarkup({forecast,points,lastObserved,x,y,left,right,top,bottom,clipId,minTime,maxTime,showBand=true,scale='log',chartType='line',candles=[],barWidth=4,visibleRows=equityForecastWindowRows(points,lastObserved,minTime,maxTime,scale)}){
+   if(!forecast||!points.length)return {markup:'',markerIds:new Set()};
+-  const pointBefore=points.findLast(row=>row.time<minTime);
+-  const included=points.filter(row=>row.time>=minTime&&row.time<=maxTime);
+-  const pointAfter=points.find(row=>row.time>maxTime);
++  const first=lowerBoundDate(points,minTime,row=>row.time),last=upperBoundDate(points,maxTime,row=>row.time);
++  const pointBefore=points[first-1],included=points.slice(first,last),pointAfter=points[last];
+   const values=[...(pointBefore?[pointBefore]:lastObserved?[{...lastObserved,price:lastObserved.close,low:lastObserved.close,high:lastObserved.close}]:[]),...included,...(pointAfter?[pointAfter]:[])];
+   let path='',continuous=false;
+   for(const row of values){if(row.price===0&&scale==='log'){continuous=false;continue;}path+=`${continuous?'L':'M'}${x(row.time).toFixed(2)},${y(row.price).toFixed(2)} `;continuous=true;}
+@@ -121,7 +131,8 @@ export function equityForecastMarkup({forecast,points,lastObserved,x,y,left,righ
+   for(const item of forecast.milestones||[]){
+     const time=Date.parse(`${String(item.date).slice(0,10)}T00:00:00Z`)/1000;
+     if(!Number.isFinite(time)||time<minTime||time>maxTime||typeof item.id!=='string')continue;
+-    const point=points.reduce((closest,row)=>Math.abs(row.time-time)<Math.abs(closest.time-time)?row:closest,points[0]);
++    const next=lowerBoundDate(points,time,row=>row.time),before=points[next-1],after=points[next];
++    const point=!before?after:!after?before:after.time-time<time-before.time?after:before;
+     const xx=x(time),yy=point.price<=0?bottom-20:Math.max(top+12,Math.min(bottom-12,y(point.price))),label=xx-lastLabelX>145,color=item.turnType==='high'?'#bc9bd7':item.turnType==='low'?'#7bbfae':'#e2b66c';
+     markup+=`<g class="equity-forecast-evidence" role="button" tabindex="0" data-forecast-evidence="${esc(item.id)}" data-turn-type="${esc(item.turnType||'assumption')}" aria-label="${esc(item.title)} · 미래 가정 근거"><title>${esc(item.date)} · ${esc(item.title)} · ${esc(item.description)}</title><line x1="${xx}" x2="${xx}" y1="${yy}" y2="${bottom}" stroke="${color}" opacity=".22" stroke-dasharray="2 5"/><circle cx="${xx}" cy="${yy}" r="5" fill="#181b21" stroke="${color}" stroke-width="1.8"/>${label?`<text x="${Math.min(right-5,Math.max(left+5,xx+8))}" y="${yy-10}" fill="${color}" font-size="10">${esc(item.title)}</text>`:''}</g>`;
+     if(label)lastLabelX=xx;markerIds.add(item.id);
+diff --git a/dist/long-horizon-forecast.js b/dist/long-horizon-forecast.js
+index f498553..a330c56 100644
+--- a/dist/long-horizon-forecast.js
++++ b/dist/long-horizon-forecast.js
+@@ -178,12 +178,35 @@ function localTurnsFor(path, threshold, currentPrice) {
+   }));
+ }
+ 
+-// Source targets set valuation assumptions. Neither the dates nor their prices
+-// are calibrated future outcomes; stochastic residuals are never pinned to them.
++function scenarioFor(id) {
++  const scenario = LONG_HORIZON_SCENARIOS.find(item => item.id === id);
++  if (!scenario) throw new RangeError('scenario must be base, accelerated, wait, late or stress');
++  return scenario;
++}
++
++// Source targets are valuation assumptions; stochastic residuals are never pinned to them.
+ export function buildLongHorizonForecast(input, options = {}) {
+   const settings = { ...LONG_HORIZON_DEFAULTS, ...options };
+-  const scenario = LONG_HORIZON_SCENARIOS.find(item => item.id === settings.scenario);
+-  if (!scenario) throw new RangeError('scenario must be base, accelerated, wait, late or stress');
++  const scenario = scenarioFor(settings.scenario);
++  return projectLongHorizon(prepareLongHorizon(input, options, settings), scenario);
++}
++
++/** Share source preparation only within this synchronous batch, never across data revisions. */
++export function buildLongHorizonForecasts(input, { scenarios = LONG_HORIZON_SCENARIOS.map(item => item.id), ...options } = {}) {
++  if (!Array.isArray(scenarios) || !scenarios.length || new Set(scenarios).size !== scenarios.length) throw new RangeError('scenarios must be a nonempty array of unique scenario ids');
++  if (Object.hasOwn(options, 'scenario')) throw new TypeError('Use scenarios for a forecast batch');
++  const selected = scenarios.map(scenarioFor);
++  const settings = { ...LONG_HORIZON_DEFAULTS, ...options };
++  const prepared = prepareLongHorizon(input, options, settings);
++  return Object.fromEntries(selected.map(scenario => [scenario.id, projectLongHorizon({
++    ...prepared,
++    nearPhase: structuredClone(prepared.nearPhase),
++    cycleCalibration: structuredClone(prepared.cycleCalibration),
++    evidence: structuredClone(prepared.evidence),
++  }, scenario)]));
++}
++
++function prepareLongHorizon(input, options, settings) {
+   bounded(settings.seed, 0, 4294967295, 'seed', true);
+   bounded(settings.sampleCount, 16, 512, 'sampleCount', true);
+   bounded(settings.blockDays, 7, 84, 'blockDays', true);
+@@ -224,6 +247,13 @@ export function buildLongHorizonForecast(input, options = {}) {
+       nearPhaseUnavailable = error.message;
+     }
+   }
++  return { options, settings, rows, current, cycleCalibration, referenceDate, researchAsOf, evidence,
++    horizonDays, recent, sourceReturns, sourceStats, sourceFirstRow, nearPhase, nearPhaseUnavailable };
++}
++
++function projectLongHorizon(prepared, scenario) {
++  const { options, settings, rows, current, cycleCalibration, referenceDate, researchAsOf, evidence,
++    horizonDays, recent, sourceReturns, sourceStats, sourceFirstRow, nearPhase, nearPhaseUnavailable } = prepared;
+   const recentVol = recent.sd * Math.sqrt(365) * settings.volatilityMultiplier;
+   const terminalVol = settings.terminalVolatilityPct / 100 * settings.volatilityMultiplier;
+   const innovationVol = years => terminalVol + (recentVol - terminalVol) * 2 ** (-years / settings.volatilityHalfLifeYears);
+diff --git a/dist/treasury-asset-paths.js b/dist/treasury-asset-paths.js
+index daa7698..e2c3aa8 100644
+--- a/dist/treasury-asset-paths.js
++++ b/dist/treasury-asset-paths.js
+@@ -1,5 +1,5 @@
+ import { utcDay, dateFromDay } from './cycle-engine.js?v=1.19.0';
+-import { buildLongHorizonForecast } from './long-horizon-forecast.js?v=1.19.0';
++import { buildLongHorizonForecasts } from './long-horizon-forecast.js?v=1.19.0';
+ import { LONG_HORIZON_REVIEW_DATE } from './long-horizon-evidence.js?v=1.11.0';
+ 
+ const SCENARIOS = ['stress', 'base', 'bull'];
+@@ -66,8 +66,9 @@ function bitcoinPaths(rows, asOf, endDate, seed) {
+   const researchAsOf = asOf < LONG_HORIZON_REVIEW_DATE ? asOf : LONG_HORIZON_REVIEW_DATE;
+   const source = { prices: rows.map(row => [row.date, row.price]) };
+   const scenarios = {};
++  const models = buildLongHorizonForecasts(source, { asOf, seed, scenarios: SCENARIOS.map(id => BTC_SCENARIOS[id]), researchAsOf });
+   for (const id of SCENARIOS) {
+-    const model = buildLongHorizonForecast(source, { asOf, seed, scenario: BTC_SCENARIOS[id], researchAsOf });
++    const model = models[BTC_SCENARIOS[id]];
+     if (model.displayEnd < endDate) throw new RangeError('BTC source horizon does not cover the requested treasury horizon');
+     const sourceIds = [...model.longHorizon.assumptions.valuationSourceIds.map(value => `long-${value}`), 'mstr-model-method'];
+     const path = model.path.filter(point => point.date <= endDate).map(point => ({

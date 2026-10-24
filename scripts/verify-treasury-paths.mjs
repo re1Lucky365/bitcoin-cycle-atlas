@@ -52,6 +52,7 @@ function auditBalances(forecast) {
     near(b.grossAssets, gross, `${label} gross assets`, gross, 'grossAssetsUsd');
     near(b.seniorClaims, senior, `${label} senior claims`, senior, 'seniorClaimsUsd');
     near(b.residualUsd, gross - senior, `${label} common residual`, gross + senior, 'residualUsd');
+    assert.equal(point.valuationState, active && gross > senior ? 'active' : 'absorbed', `${label} valuation lifecycle`);
     const years = (Date.parse(point.date) - start) / DAY / 365.25;
     const premium = s.premiumTarget + (first.components.premium - s.premiumTarget) * 2 ** (-years / s.premiumHalfLifeYears);
     near(b.premium, premium, `${label} premium`, premium, 'premium');

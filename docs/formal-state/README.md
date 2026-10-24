@@ -2,7 +2,9 @@
 
 Audit base: [`e15ae31a4223d127244b6d630ae4b7c910f653ef`](https://github.com/twoimo/bitcoin-cycle-atlas/tree/e15ae31a4223d127244b6d630ae4b7c910f653ef).
 
-Last code/model correspondence review: [`780a33ccdaf5d5eb502249ab47ecf9d660858724`](https://github.com/twoimo/bitcoin-cycle-atlas/tree/780a33ccdaf5d5eb502249ab47ecf9d660858724). Compared with the preceding review, the covered controller changed only its cache-version import URLs. Request ownership behavior, the model, bounds, and mutation selector remain unchanged. The formal gate and all 30 implementation regressions were rerun successfully against the committed source; the state counts below were unchanged. This synchronization does not extend the TLA+ proof to workspace saving, command search, indicator templates, CSV export, chart rendering, or first-screen initialization.
+Last code/model correspondence review: [`1f6405b90ad21df321a51530b75e7eb941776666`](https://github.com/twoimo/bitcoin-cycle-atlas/tree/1f6405b90ad21df321a51530b75e7eb941776666). The previous synchronization commit was `780a33ccdaf5d5eb502249ab47ecf9d660858724`. The intervening `2ea9a54` ETH extension adds a product fixed for each controller, its snapshot URL, parser/fetch arguments and labels. Each controller still owns its cache, snapshot promise and active request. The covered `load`/`cancel` continuations gain no await or shared writer, and their publication guards do not move. The single-controller model therefore keeps its meaning with product treated as a fixed parameter.
+
+Maintenance outcome: **updated correspondence records; unchanged model semantics and bounds**. The current model, all 30 implementation regressions and the actual saved-fallback guard mutation were rerun successfully. Nine ETH regressions also passed; they are executable examples, not a cross-product TLA+ proof. The state counts below are unchanged. This check does not extend the model to pagination, workspace saving, indicator templates, CSV export, chart rendering or first-screen initialization.
 
 **The current ownership guard passed this audit.** No existing asynchronous overwrite defect was reproduced. The red/green comparison is a deliberate negative control: remove one guard, observe failure, then compare against the existing correct code. It is not evidence that this audit repaired a production race.
 
@@ -59,7 +61,7 @@ The negative control removes only the guard immediately after the saved snapshot
 node scripts/verify-market-state.mjs
 ```
 
-Requires Node 24+ and Java 11+. The script downloads and verifies official [TLC 1.7.4](https://github.com/tlaplus/tlaplus/releases/tag/v1.7.4), or accepts `TLA2TOOLS` pointing to the same jar. Its SHA-256 is `936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88`. The current controller SHA-256 at correspondence review is `dce96066268bb4e5ff0f5b81fe182904d6cb7d711172886872de3d387b6b7bee`.
+Requires Node 24+ and Java 11+. The script downloads and verifies official [TLC 1.7.4](https://github.com/tlaplus/tlaplus/releases/tag/v1.7.4), or accepts `TLA2TOOLS` pointing to the same jar. Its SHA-256 is `936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88`. The current controller SHA-256 at correspondence review is `5de1c4b3396551ae71400516f26d35fb6737b0bdad74fcdec403342b2c9991db`.
 
 ## Statecharts
 

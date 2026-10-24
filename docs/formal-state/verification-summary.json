@@ -29,12 +29,11 @@
   "implementation": {
     "regression": "pass",
     "mutation": "expected assertion failure",
-    "sourceSha256": "dce96066268bb4e5ff0f5b81fe182904d6cb7d711172886872de3d387b6b7bee",
-    "mutatedSourceSha256": "18d1ac6de0cb495dc161cf0001af81978bd922051fea4aacdaf8d0ad865dc19a"
+    "sourceSha256": "5de1c4b3396551ae71400516f26d35fb6737b0bdad74fcdec403342b2c9991db",
+    "mutatedSourceSha256": "100c75bff7c19bc9331eeac8dfb812d0a00c4dc51fd4430c0a403cfc8ec0d16e"
   },
   "limitations": [
     "Bounded abstract model, not a whole-program proof",
     "No pricing, numerical, history-pagination, wall-clock or liveness proof"
-  ],
-  "actualRegressionTests": 30
+  ]
 }

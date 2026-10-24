@@ -8,7 +8,7 @@ import {chartPaneLayout,volumePaneMarkup,historicalMarkersMarkup} from './chart-
 import { resolveMagnetPoint, advanceMeasurement, measurePriceAnchors, measurementOverlayMarkup, createMeasurementOverlay } from './chart-magnet.js?v=1.11.0';
 import { clearChartHover, clearChartHoverPointer, getChartHoverPointer, rememberChartHoverPointer, coalescedChartHover, paintPriceCursor } from './chart-hover.js?v=1.12.1-cursor-hud.1';
 import { dateWindow, pixelExtrema } from './chart-window.js?v=1.11.0';
-import { equityForecastAnchor, equityForecastRows, equityForecastWindowRows, equityForecastLogGaps, equityForecastMarkup, equityForecastCandles, EQUITY_FORECAST_BAR_NOTE } from './equity-forecast-chart.js?v=1.20.0';
+import { equityForecastAnchor, equityForecastRows, equityForecastWindowRows, equityForecastLogGaps, equityForecastMarkup, equityForecastCandles, EQUITY_FORECAST_BAR_NOTE } from "./equity-forecast-chart.js?v=1.21.0";
 
 const numberFormats=new Map();
 const number=(value,digits=2)=>{if(!numberFormats.has(digits))numberFormats.set(digits,new Intl.NumberFormat('en-US',{maximumFractionDigits:digits}));return numberFormats.get(digits).format(value);};

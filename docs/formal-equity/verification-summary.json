@@ -1,0 +1,96 @@
+{
+  "tool": {
+    "name": "TLC",
+    "release": "1.7.4",
+    "jarSha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+  },
+  "bounds": {
+    "requestGenerations": 3,
+    "intervals": [
+      "daily",
+      "weekly"
+    ],
+    "rangeChoices": [
+      "auto",
+      "custom"
+    ]
+  },
+  "model": {
+    "current": {
+      "status": "pass",
+      "invariant": null,
+      "generated": 303261,
+      "distinct": 46252,
+      "remaining": 0
+    },
+    "original-boot-order": {
+      "status": "expected invariant violation",
+      "invariant": "UsableRenderReleasesBoot",
+      "generated": 68,
+      "distinct": 38,
+      "remaining": 27
+    },
+    "unguarded-prices": {
+      "status": "expected invariant violation",
+      "invariant": "NoStalePublication",
+      "generated": 40,
+      "distinct": 25,
+      "remaining": 17
+    },
+    "unguarded-projection": {
+      "status": "expected invariant violation",
+      "invariant": "NoStalePublication",
+      "generated": 3383,
+      "distinct": 1147,
+      "remaining": 600
+    },
+    "unguarded-errors": {
+      "status": "expected invariant violation",
+      "invariant": "NoStalePublication",
+      "generated": 41,
+      "distinct": 26,
+      "remaining": 18
+    },
+    "retained-old-projection": {
+      "status": "expected invariant violation",
+      "invariant": "ProjectionMatchesPrices",
+      "generated": 7255,
+      "distinct": 2253,
+      "remaining": 1105
+    },
+    "hidden-ready": {
+      "status": "expected invariant violation",
+      "invariant": "NoHiddenReadiness",
+      "generated": 265,
+      "distinct": 115,
+      "remaining": 74
+    },
+    "overwritten-range": {
+      "status": "expected invariant violation",
+      "invariant": "UserRangePreserved",
+      "generated": 2317,
+      "distinct": 806,
+      "remaining": 429
+    }
+  },
+  "implementation": {
+    "tests": 28,
+    "original": "pass",
+    "restored": "pass",
+    "sourceSha256": "0e9cd421cdd831a6fdd618f2ceb87f1d8353a6054d93e40ecf4356dd8c490a3d",
+    "mutations": {
+      "deferred-readiness": "expected assertion failure",
+      "unguarded-prices": "expected assertion failure",
+      "unguarded-projection": "expected assertion failure",
+      "unguarded-coin-error": "expected assertion failure",
+      "retained-old-projection": "expected assertion failure",
+      "hidden-ready": "expected assertion failure",
+      "overwritten-range": "expected assertion failure"
+    }
+  },
+  "limitations": [
+    "Finite request-state model, not an unbounded proof",
+    "UI replay injects import, HTTP, animation-frame and DOM boundaries",
+    "No economic accuracy, visual pixels, browser timing or liveness proof"
+  ]
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Verify Equity State"
+  short_description: "Check equity loading, readiness and stale response safety"
+  default_prompt: "Use $verify-equity-state to verify changes to equity loading and chart readiness."

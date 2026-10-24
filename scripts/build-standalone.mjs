@@ -1,25 +1,11 @@
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { resolve, dirname, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { standaloneModuleMap } from './standalone-modules.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = resolve(root, 'dist');
 const output = resolve(process.argv[2] || resolve(root, 'build/Bitcoin_Cycles_Comparison.html'));
-const urls = new Map();
-async function inlineModule(file) {
-  if (urls.has(file)) return urls.get(file);
-  let source = await readFile(file, 'utf8');
-  const imports = [...source.matchAll(/\b(from\s+|import\s*\(\s*)(['"])(\.\.?\/[^'"]+)\2/g)];
-  for (const match of imports) {
-    const imported = resolve(dirname(file), match[3].split(/[?#]/)[0]);
-    if (!imported.startsWith(dist + '/')) throw new Error('Module outside dist');
-    const url = await inlineModule(imported);
-    source = source.replace(match[0], `${match[1]}${JSON.stringify(url)}`);
-  }
-  const url = `data:text/javascript;base64,${Buffer.from(source).toString('base64')}`;
-  urls.set(file, url);
-  return url;
-}
 let html = await readFile(resolve(dist, 'index.html'), 'utf8');
 for (const file of ['styles.css', 'compact.css', 'outlook.css', 'lab.css', 'atlas.css', 'viewport.css', 'chart-details-panel.css', 'analysis-dock.css', 'chart-magnet.css', 'mobile-workspace.css', 'workspace-tools.css', 'chart-workspace-controls.css', 'research-annotations.css', 'chart-export-workbench.css', 'cycle-milestones.css', 'compact-chart-layout.css', 'chart-bottom-bar.css', 'symbol-selector.css', 'eth-view.css', 'ethereum-history.css', 'equity-view.css', 'research-reader.css']) {
   // Font URLs contain semicolons in their weight lists. Consume the complete
@@ -35,10 +21,11 @@ const ohlc = (await readFile(resolve(dist, 'data/btc-ohlc.json'), 'utf8')).repla
 const volume = (await readFile(resolve(dist, 'data/btc-volume.json'), 'utf8')).replaceAll('<', '\\u003c');
 const eth = (await readFile(resolve(dist, 'data/eth-ohlc.json'), 'utf8')).replaceAll('<', '\\u003c');
 const equities=await Promise.all(['mstr','bmnr'].map(async symbol=>`<script id="embedded-${symbol}-data" type="application/json">${(await readFile(resolve(dist, `data/${symbol}-ohlc.json`),'utf8')).replaceAll('<','\\u003c')}</script>`));
-const app = await inlineModule(resolve(dist, 'site-entry.js'));
+const modules = await standaloneModuleMap(dist);
+const importMap = JSON.stringify({imports:modules.imports}).replaceAll('<', '\\u003c');
 html = html.replace(/<script type="module" src="\.\/site-entry\.js(?:\?[^"\s]*)?"><\/script>/,
-  `<script id="embedded-btc-data" type="application/json">${data}</script>\n  <script id="embedded-ohlc-data" type="application/json">${ohlc}</script>\n  <script id="embedded-volume-data" type="application/json">${volume}</script>\n  <script id="embedded-eth-data" type="application/json">${eth}</script>\n  ${equities.join('\n')}\n  <script type="module" src="${app}"></script>`);
+  `<script id="embedded-btc-data" type="application/json">${data}</script>\n  <script id="embedded-ohlc-data" type="application/json">${ohlc}</script>\n  <script id="embedded-volume-data" type="application/json">${volume}</script>\n  <script id="embedded-eth-data" type="application/json">${eth}</script>\n  ${equities.join('\n')}\n  <script type="importmap">${importMap}</script>\n  <script type="module">import ${JSON.stringify(modules.entry)};</script>`);
 if (/\b(?:src|href)=["']\.\//.test(html)) throw new Error('Unresolved local resource');
 await mkdir(dirname(output), { recursive: true });
 await writeFile(output, html);
-console.log(JSON.stringify({ file: basename(output), bytes: Buffer.byteLength(html), modules: urls.size, embeddedObservations: JSON.parse(data).prices.length }));
+console.log(JSON.stringify({ file: basename(output), bytes: Buffer.byteLength(html), modules: Object.keys(modules.imports).length, embeddedObservations: JSON.parse(data).prices.length }));

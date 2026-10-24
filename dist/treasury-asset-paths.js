@@ -1,5 +1,5 @@
 import { utcDay, dateFromDay } from './cycle-engine.js?v=1.19.0';
-import { buildLongHorizonForecast } from './long-horizon-forecast.js?v=1.19.0';
+import { buildLongHorizonForecasts } from "./long-horizon-forecast.js?v=1.21.0";
 import { LONG_HORIZON_REVIEW_DATE } from './long-horizon-evidence.js?v=1.11.0';
 
 const SCENARIOS = ['stress', 'base', 'bull'];
@@ -66,8 +66,9 @@ function bitcoinPaths(rows, asOf, endDate, seed) {
   const researchAsOf = asOf < LONG_HORIZON_REVIEW_DATE ? asOf : LONG_HORIZON_REVIEW_DATE;
   const source = { prices: rows.map(row => [row.date, row.price]) };
   const scenarios = {};
+  const models = buildLongHorizonForecasts(source, { asOf, seed, scenarios: SCENARIOS.map(id => BTC_SCENARIOS[id]), researchAsOf });
   for (const id of SCENARIOS) {
-    const model = buildLongHorizonForecast(source, { asOf, seed, scenario: BTC_SCENARIOS[id], researchAsOf });
+    const model = models[BTC_SCENARIOS[id]];
     if (model.displayEnd < endDate) throw new RangeError('BTC source horizon does not cover the requested treasury horizon');
     const sourceIds = [...model.longHorizon.assumptions.valuationSourceIds.map(value => `long-${value}`), 'mstr-model-method'];
     const path = model.path.filter(point => point.date <= endDate).map(point => ({

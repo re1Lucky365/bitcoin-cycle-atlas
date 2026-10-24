@@ -17,7 +17,7 @@ function codeTokens(source) {
       if (character === '\\') position += source[position] === '\r' && source[position + 1] === '\n' ? 2 : 1;
       else if (character === quote) break;
     }
-    add('string', source.slice(start, position));
+    tokens.push({type:'string', value:source.slice(start, position), start, end:position});
   }
   function template() {
     position++;
@@ -119,7 +119,7 @@ function stringValue(token) {
     });
 }
 
-export function javascriptModuleSpecifiers(source) {
+export function javascriptModuleReferences(source) {
   const tokens = codeTokens(source), specifiers = [];
   function afterBraces(start) {
     let depth = 0;
@@ -130,7 +130,9 @@ export function javascriptModuleSpecifiers(source) {
     }
     return tokens.length;
   }
-  const add = token => {if (token?.type === 'string') specifiers.push(stringValue(token));};
+  const add = token => {
+    if (token?.type === 'string') specifiers.push({specifier:stringValue(token), start:token.start, end:token.end});
+  };
   for (let index = 0; index < tokens.length; index++) {
     const token = tokens[index], previous = tokens[index - 1]?.value;
     if (token.type !== 'word' || !['import', 'export'].includes(token.value) || ['.', '?.'].includes(previous)) continue;
@@ -156,4 +158,8 @@ export function javascriptModuleSpecifiers(source) {
     if (tokens[cursor]?.type === 'word' && tokens[cursor].value === 'from') add(tokens[cursor + 1]);
   }
   return specifiers;
+}
+
+export function javascriptModuleSpecifiers(source) {
+  return javascriptModuleReferences(source).map(reference => reference.specifier);
 }

@@ -103,6 +103,22 @@ test('exhausted daily residual is absorbing even if the asset price later recove
   assert.ok(result.milestones.some(row=>row.kind==='simulated-insolvency'&&row.date===result.diagnostics.insolventAt));
 });
 
+test('absorbed valuation is explicit when frozen balances regain positive accounting residual',()=>{
+  const initial=snapshot({cashUsd:1_000_000_000,debtUsd:1_000_000_000});
+  const result=buildTreasuryForecast({...options(),snapshot:initial,scenario:'stress',assetPaths:assetPaths({prices:{stress:index=>index===1?0.1:2000}})});
+  const [anchor,exhausted,recovered]=result.path;
+  assert.equal(anchor.valuationState,'active');
+  assert.equal(exhausted.components.insolvent,true);
+  assert.equal(exhausted.valuationState,'absorbed');
+  assert.ok(recovered.components.residualUsd>0);
+  assert.equal(recovered.components.insolvent,false,'accounting insolvency remains a current-balance property');
+  assert.equal(recovered.valuationState,'absorbed');
+  assert.equal(recovered.price,0,'an accounting recovery does not revoke the chosen absorption convention');
+  assert.ok(result.path.slice(1).every(point=>point.valuationState==='absorbed'&&point.price===0));
+  for(const key of ['coinUnits','cashUsd','shares','debtUsd','otherLiabilitiesUsd'])assert.equal(recovered.components[key],exhausted.components[key],key);
+  assert.match(result.formula,/흡수 상태.*0/);
+});
+
 test('future turns are identified within the simulated path with separate confirmation dates',()=>{
   const result=buildTreasuryForecast({...options(),assetPaths:assetPaths({prices:{base:index=>2000*(1+0.35*Math.sin(index/12))}})});
   const turns=result.milestones.filter(row=>row.kind==='simulated-turn');

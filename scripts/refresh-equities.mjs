@@ -20,6 +20,11 @@ export async function refreshEquityFile(symbol,output,{now=Date.now(),fetchImpl=
   const next=await fetchEquitySnapshot(symbol,{now,fetchImpl});let previous=null;
   try{previous=parseEquityArchive(JSON.parse(await readFile(output,'utf8')),{symbol});}catch(error){if(error.code!=='ENOENT')throw error;}
   if(previous&&(next.firstDate>previous.firstDate||next.lastDate<previous.lastDate||next.candles.length<previous.candles.length))throw new Error(`${symbol} provider would truncate existing equity history`);
+  if(previous){
+    const nextSessions=new Set(next.candles.map(row=>row.time));
+    const missing=previous.candles.find(row=>!nextSessions.has(row.time));
+    if(missing)throw new Error(`${symbol} provider omitted previously observed session ${missing.date.slice(0,10)}`);
+  }
   // Refetch the complete history because future splits legitimately rewrite
   // prior split-adjusted prices. A partial response never replaces the file.
   await mkdir(dirname(output),{recursive:true});const temporary=`${output}.tmp-${process.pid}`;

@@ -57,6 +57,12 @@ await check('A partial series or a missing historical halving anchor cannot repl
   assert.equal(validateFullSeries(bundled.prices).length, bundled.prices.length);
 });
 
+await check('Any missing UTC day fails at the source boundary before a daily model or cache receives it', () => {
+  for (const date of ['2011-03-01','2026-10-20']) {
+    assert.throws(() => validateFullSeries(bundled.prices.filter(row => row[0] !== date)), /missing UTC day/);
+  }
+});
+
 const originalFetch = globalThis.fetch;
 try {
   await check('Fetch follows supported pagination and retains exact observed values and provenance', async () => {
@@ -82,6 +88,11 @@ try {
   await check('Network failure propagates without constructing fallback or synthetic prices', async () => {
     globalThis.fetch = async () => new Response('rate limited', { status: 429 });
     await assert.rejects(fetchLatestDataset(), /HTTP 429/);
+  });
+
+  await check('A successful HTTP response with an omitted ordinary day cannot become a manual-refresh dataset', async () => {
+    globalThis.fetch = async () => new Response(JSON.stringify({ data: fullData.filter(row => !row.time.startsWith('2026-10-20')) }), { status: 200 });
+    await assert.rejects(fetchLatestDataset(), /missing UTC day/);
   });
 
   await check('Cross-origin pagination fails before any request to the new host', async () => {
