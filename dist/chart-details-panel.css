@@ -287,6 +287,8 @@ body:not([data-page=outlook]) .workbench-detail-tools>[data-reader=selection],bo
 .readout-main>.atlas-symbol,.readout-main>strong,.readout-main>.atlas-day-change{flex:none}
 .readout-main>.atlas-observation-date{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#96acc4}
 .readout-detail{font-size:10px;line-height:14px;min-height:14px}
+/* Price-only and forecast readouts have no OHLC row to reserve. */
+.atlas-plot>.atlas-readout>.readout-detail:empty{display:none}
 .workbench-market-info{top:47px;min-height:18px;line-height:14px;font-size:10px;gap:6px}
 .history-event-preview{visibility:hidden;pointer-events:none}
 .history-event-marker:hover .history-event-preview,.history-event-marker:focus .history-event-preview{visibility:visible}
