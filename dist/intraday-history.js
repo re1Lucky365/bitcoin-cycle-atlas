@@ -1,4 +1,4 @@
-import { chartInterval } from './ohlc-data.js?v=1.11.0';
+import { chartInterval, marketProduct } from './ohlc-data.js?v=1.15.0';
 
 // A viewport budget, not a history-start date: panning can keep requesting older
 // windows. The latest saved window is retained separately for Reset.
@@ -6,6 +6,7 @@ export const INTRADAY_MAX_VISIBLE_BARS = 6000;
 export const INTRADAY_CACHE_BARS = 12000;
 export const INTRADAY_PAGE_SOURCE_BARS = 288;
 const GENESIS = Date.parse('2009-01-03T00:00:00Z') / 1000;
+const historyStart=series=>series.product?marketProduct(series.product).historyStart:GENESIS;
 
 export function mergeCoverage(windows) {
   const sorted=windows.filter(([a,b])=>Number.isFinite(a)&&b>a).sort((a,b)=>a[0]-b[0]),merged=[];
@@ -37,9 +38,9 @@ export function createHistoryState(series) {
 
 export function intradayNavigationRange(series,previousRange=null) {
   const step=chartInterval(series.interval).seconds,first=series.candles[0].time,last=series.candles.at(-1).time;
-  const min=Math.floor(GENESIS/step)*step,max=last+step;
+  const min=Math.floor(historyStart(series)/step)*step,max=last+step;
   const start=previousRange?.start??first-step,end=previousRange?.end??max;
-  return {unit:'seconds',start,end,min,max,step,minSpan:12,maxSpan:INTRADAY_MAX_VISIBLE_BARS,contextKey:`market:${series.interval}:${series.retrievedAt}`};
+  return {unit:'seconds',start,end,min,max,step,minSpan:12,maxSpan:INTRADAY_MAX_VISIBLE_BARS,contextKey:`market:${series.product||'BTC-USD'}:${series.interval}:${series.retrievedAt}`};
 }
 
 export function requestedHistoryWindow(history,range) {
@@ -60,7 +61,7 @@ export function nextHistoryPage(history) {
 export function appendHistoryPage(series,history,page) {
   const step=history.base.seconds,target=history.requested;
   const spare=Math.max(0,INTRADAY_CACHE_BARS-(target.end-target.start)/step);
-  const retainStart=Math.max(Math.floor(GENESIS/step)*step,target.start-Math.floor(spare/2)*step),retainEnd=retainStart+INTRADAY_CACHE_BARS*step;
+  const retainStart=Math.max(Math.floor(historyStart(history.base)/step)*step,target.start-Math.floor(spare/2)*step),retainEnd=retainStart+INTRADAY_CACHE_BARS*step;
   const fresh=page.candles.map(row=>({...row,retrievedAt:page.retrievedAt,snapshot:false}));
   const retained=mergeCandleRows(series.candles,fresh).filter(row=>row.time>=retainStart&&row.time<retainEnd);
   // Keep the newest fetched copy on an overlapping saved timestamp.

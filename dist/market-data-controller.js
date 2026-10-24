@@ -1,10 +1,15 @@
-import { chartInterval, fetchMarketCandles, parseMarketSnapshot } from './ohlc-data.js?v=1.11.0';
-import { createHistoryState, intradayNavigationRange, requestedHistoryWindow, nextHistoryPage, appendHistoryPage } from './intraday-history.js?v=1.11.0';
+import { chartInterval, fetchMarketCandles, marketProduct, parseMarketSnapshot as parseProductSnapshot } from './ohlc-data.js?v=1.15.0';
+import { createHistoryState, intradayNavigationRange, requestedHistoryWindow, nextHistoryPage, appendHistoryPage } from './intraday-history.js?v=1.15.0';
 
-export function createMarketDataController({ onChange = () => {}, fetchImpl = globalThis.fetch, readEmbedded = () => null, timeoutMs = 15000, preferSnapshot = false, historyRequestGapMs = 250 } = {}) {
+export function createMarketDataController({ product = 'BTC-USD', snapshotUrl, onChange = () => {}, fetchImpl = globalThis.fetch, readEmbedded = () => null, timeoutMs = 15000, preferSnapshot = false, historyRequestGapMs = 250 } = {}) {
+  // Product ownership is fixed for the lifetime of this controller. Separate
+  // controller instances cannot share a snapshot promise, cache or request slot.
+  const market=marketProduct(product);
+  snapshotUrl ??= market.snapshotUrl;
+  const parseMarketSnapshot=(payload,interval)=>parseProductSnapshot(payload,interval,{product:market.product});
   const entries = new Map(), histories = new Map();
   let active = null, snapshotPromise = null, lastHistoryRequestAt = 0;
-  const get = interval => entries.get(interval) || { status: 'idle', series: null, error: null };
+  const get = interval => entries.get(interval) || { status: 'idle', series: null, error: null, product:market.product };
   const publish = (interval, entry) => { entries.set(interval, entry); onChange(interval, entry); };
 
   async function snapshot() {
@@ -12,7 +17,7 @@ export function createMarketDataController({ onChange = () => {}, fetchImpl = gl
       snapshotPromise = (async () => {
         const embedded = readEmbedded();
         if (embedded) return JSON.parse(embedded);
-        const response = await fetchImpl('./data/btc-ohlc.json', { credentials: 'omit', cache: 'no-cache', signal: AbortSignal.timeout(timeoutMs) });
+        const response = await fetchImpl(snapshotUrl, { credentials: 'omit', cache: 'no-cache', signal: AbortSignal.timeout(timeoutMs) });
         if (!response.ok) throw new Error(`Saved candles HTTP ${response.status}`);
         return response.json();
       })().catch(error => { snapshotPromise = null; throw error; });
@@ -48,7 +53,7 @@ export function createMarketDataController({ onChange = () => {}, fetchImpl = gl
           histories.set(interval,createHistoryState(series));publish(interval,{status:'snapshot',series:{...series,snapshot:true},error:null});return;
         }catch(error){if(active!==request)return;controller.signal.throwIfAborted();}
       }
-      const series = await fetchMarketCandles({ interval, signal: controller.signal, count: interval === 'daily' ? 300 : 180, fetchImpl });
+      const series = await fetchMarketCandles({ interval, product:market.product, signal: controller.signal, count: interval === 'daily' ? 300 : 180, fetchImpl });
       if (active !== request) return;
       histories.set(interval,createHistoryState(series));
       publish(interval, { status: 'ready', series, error: null });
@@ -98,7 +103,7 @@ export function createMarketDataController({ onChange = () => {}, fetchImpl = gl
           controller.signal.throwIfAborted();
           lastHistoryRequestAt=Date.now();
           request.timer=setTimeout(()=>controller.abort(new Error('History request timed out')),timeoutMs);
-          const page=await fetchMarketCandles({interval,start:window.start,end:window.end,allowEmpty:true,signal:controller.signal,fetchImpl});
+          const page=await fetchMarketCandles({interval,product:market.product,start:window.start,end:window.end,allowEmpty:true,signal:controller.signal,fetchImpl});
           clearTimeout(request.timer);request.timer=null;
           if(active!==request)return;controller.signal.throwIfAborted();
           const entry=get(interval),series=appendHistoryPage(entry.series,history,page);
@@ -120,10 +125,11 @@ export function createMarketDataController({ onChange = () => {}, fetchImpl = gl
 
 export function marketStatusText(entry) {
   if (!entry || entry.status === 'idle') return '';
-  if (entry.status === 'loading' && !entry.series) return 'Coinbase BTC-USD · 완료 봉 조회 중';
+  const product=marketProduct(entry.series?.product||entry.product||'BTC-USD').product;
+  if (entry.status === 'loading' && !entry.series) return `Coinbase ${product} · 완료 봉 조회 중`;
   if (!entry.series) return '캔들 조회 실패 · 새로고침으로 재시도';
   const stamp = entry.series.retrievedAt.slice(0, 16).replace('T', ' ');
   const state = entry.status === 'loading' ? '갱신 중 · 이전 조회' : entry.status === 'snapshot' ? (entry.error?'연결 실패 · 저장 자료':'저장 자료') : '조회 완료';
   const history=entry.historyStatus==='loading'?' · 과거 봉 불러오는 중':entry.historyStatus==='error'?' · 과거 조회 실패 · 새로고침으로 재시도':entry.historyStatus==='ready'?` · ${entry.series.candles.length.toLocaleString('en-US')}개 완료 봉`:'';
-  return `Coinbase BTC-USD · ${state} ${stamp} UTC${entry.series.gapCount ? ` · 빈 봉 ${entry.series.gapCount}개` : ''}${history}`;
+  return `Coinbase ${product} · ${state} ${stamp} UTC${entry.series.gapCount ? ` · 빈 봉 ${entry.series.gapCount}개` : ''}${history}`;
 }

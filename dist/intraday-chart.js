@@ -14,11 +14,17 @@ const number=(value,digits=2)=>{if(!numberFormats.has(digits))numberFormats.set(
 const money=value=>`$${number(value,value<1?6:2)}`;
 const timestamp=time=>new Date(time*1000).toISOString().slice(0,16).replace('T',' ');
 const esc=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+// Long daily/weekly windows need calendar years; minute/hour charts keep their
+// familiar time labels until the visible range is wide enough to make dates useful.
+const timeTickLabel=(time,seconds,span)=>{
+  const value=timestamp(time);
+  return seconds>=86400||span>=14*86400?value.slice(0,span>=180*86400?7:10):value.slice(5);
+};
 
 export function drawIntradayChart({svg,series,chartType='candles',scale='log',priceDomain=null,invertScale=false,priceOnlyAuto=false,researchAnnotations=[],activeAnnotationId=null,onAnnotation=null,activeResearchAnnotationId=null,onResearchAnnotation=()=>{},scenarioId=null,unit='usd',tool='crosshair',magnet='off',measurement=null,onMeasurement=()=>{},range=null,historyStatus='ready',showVolume=true,headerInset=70,onHover=()=>{},onInspect=()=>{},selectedTime=null}) {
   clearChartHover(svg,{preservePointer:true});
   const selectedAnnotation=activeAnnotationId??activeResearchAnnotationId,activateAnnotation=onAnnotation||onResearchAnnotation;
-  const allRows=series.candles,interval=chartInterval(series.interval);
+  const allRows=series.candles,interval=chartInterval(series.interval),product=series.product||'BTC-USD',baseAsset=product.split('-')[0];
   if(!allRows.length&&(!Number.isFinite(range?.start)||!Number.isFinite(range?.end)))throw new RangeError('An empty market chart needs an explicit UTC range');
   const W=Math.max(1,Math.round(svg.clientWidth||1100)),H=Math.max(1,Math.round(svg.clientHeight||500)),small=W<600;
   const layout=chartPaneLayout({width:W,height:H,volume:showVolume,top:Number.isFinite(headerInset)?Math.max(12,headerInset):70});
@@ -28,20 +34,20 @@ export function drawIntradayChart({svg,series,chartType='candles',scale='log',pr
   const rows=dateWindow(allRows,minTime,maxTime,row=>row.time);
   const x=time=>L+(time-minTime)/Math.max(1,maxTime-minTime)*(W-L-R);
   svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
-  Object.assign(svg.dataset,{plotLeft:String(L),plotRight:String(W-R),plotTop:String(T),plotBottom:String(bottom),priceBottom:String(B),scale,chartType,interval:series.interval,historyLabelCount:'0',historyEventCount:'0'});
+  Object.assign(svg.dataset,{plotLeft:String(L),plotRight:String(W-R),plotTop:String(T),plotBottom:String(bottom),priceBottom:String(B),scale,chartType,interval:series.interval,product,historyLabelCount:'0',historyEventCount:'0'});
   svg.parentElement?.style.setProperty('--plot-bottom-gap',`${H-bottom+6}px`);svg.parentElement?.style.setProperty('--plot-right-gap',`${R+7}px`);
   Object.assign(svg.dataset,{visiblePointCount:String(rows.length),observedCandleCount:String(rows.length),candleRendering:'none'});
-  if(!rows.length)return renderEmptyPriceViewport({svg,layout,axisText,width:W,height:H,start:minTime,end:maxTime,seconds:true,scale,priceDomain,unit,denominator:allRows.at(-1)?.close,denominatorDate:allRows.at(-1)?.date,fallbackPrice:allRows.at(-1)?.close,invertScale,tool,message:historyStatus==='loading'?'이 구간의 과거 봉을 불러오고 있습니다.':historyStatus==='error'?'과거 자료 조회에 실패했습니다.':'이 구간에는 완료된 거래 봉이 없습니다.',onHover,source:series.source,frequency:series.interval,researchAnnotations,activeResearchAnnotationId:selectedAnnotation,onResearchAnnotation:activateAnnotation,scenarioId});
+  if(!rows.length)return renderEmptyPriceViewport({svg,layout,axisText,width:W,height:H,start:minTime,end:maxTime,seconds:true,scale,priceDomain,unit,denominator:allRows.at(-1)?.close,denominatorDate:allRows.at(-1)?.date,fallbackPrice:allRows.at(-1)?.close,invertScale,tool,message:historyStatus==='loading'?'이 구간의 과거 봉을 불러오고 있습니다.':historyStatus==='error'?'과거 자료 조회에 실패했습니다.':'이 구간에는 완료된 거래 봉이 없습니다.',onHover:detail=>onHover({...detail,product,volumeUnit:baseAsset}),source:series.source,frequency:series.interval,researchAnnotations,activeResearchAnnotationId:selectedAnnotation,onResearchAnnotation:activateAnnotation,scenarioId});
   const display=createPriceDisplay({unit,rows,denominator:allRows.at(-1).close,denominatorDate:allRows.at(-1).date,scale}),{factor,offset,effectiveScale}=display;
   const axis=createPriceScale(rows.flatMap(row=>chartType==='candles'?[row.low,row.high]:[row.close]),{scale:effectiveScale,top:T,bottom:B,tickCount:Math.max(2,Math.min(7,Math.floor((B-T)/45))),factor,offset,inverted:invertScale,paddingRatio:.12,domain:priceDomain});
   const y=axis.y,price=value=>formatDisplayPrice(value,display,unit==='usd'&&Math.abs(value)<1?6:2);
   const axisLabels=createPriceAxisFormatter({axis,display,layout:axisText});
   retainPriceViewport(svg,axis);Object.assign(svg.dataset,{scale:effectiveScale,unit,invertScale:String(Boolean(invertScale)),timeAxisTop:String(bottom+8)});
   const clip=`${svg.id}-market-clip`,axisClip=`${svg.id}-price-axis-clip`,width=Math.max(.7,Math.min(14,(W-L-R)*interval.seconds/(maxTime-minTime)*.68));
-  let s=`<title>${esc(series.source)} BTC-USD · ${interval.label} · ${chartType==='candles'?'캔들':'종가 선'}</title><desc>거래소가 제공한 완료 봉의 시가·고가·저가·종가와 BTC 거래량입니다. 빈 구간은 채우지 않습니다. 시간은 UTC입니다.</desc><defs><clipPath id="${clip}"><rect x="${L}" y="${T}" width="${W-L-R}" height="${B-T}"/></clipPath><clipPath id="${axisClip}"><rect x="${W-R}" y="${T}" width="${R}" height="${B-T}"/></clipPath></defs>`;
+  let s=`<title>${esc(series.source)} ${esc(product)} · ${interval.label} · ${chartType==='candles'?'캔들':'종가 선'}</title><desc>${esc(product)} 거래소 완료 봉의 시가·고가·저가·종가${showVolume?`와 ${esc(baseAsset)} 거래량`:''}입니다. 빈 구간은 채우지 않습니다. 시간은 UTC입니다.</desc><defs><clipPath id="${clip}"><rect x="${L}" y="${T}" width="${W-L-R}" height="${B-T}"/></clipPath><clipPath id="${axisClip}"><rect x="${W-R}" y="${T}" width="${R}" height="${B-T}"/></clipPath></defs>`;
   for(const tick of axis.ticks){const yy=y(tick),label=axisLabels.tick(tick);s+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#26323e"/><text x="${W-R+axisText.inset}" y="${yy+4}" ${axisText.attributes(label)} fill="#acbacb" font-size="${axisText.fontSize}">${esc(label)}</text>`;}
   const tickStep=Math.max(1,Math.ceil(rows.length/(small?3:7)));
-  for(let i=0;i<rows.length;i+=tickStep){const row=rows[i],xx=x(row.time),label=timestamp(row.time).slice(5);s+=`<line x1="${xx}" x2="${xx}" y1="${T}" y2="${bottom}" stroke="#212c37"/><text x="${xx}" y="${axisY}" text-anchor="${i===0?'start':'middle'}" fill="#aebaca" font-size="10">${label}</text>`;}
+  for(let i=0;i<rows.length;i+=tickStep){const row=rows[i],xx=x(row.time),label=timeTickLabel(row.time,interval.seconds,maxTime-minTime);s+=`<line x1="${xx}" x2="${xx}" y1="${T}" y2="${bottom}" stroke="#212c37"/><text class="market-time-label" x="${xx}" y="${axisY}" text-anchor="${i===0?'start':'middle'}" fill="#aebaca" font-size="10">${label}</text>`;}
   s+=`<g clip-path="url(#${clip})">`;
   if(chartType==='candles'){
     const dense=rows.length>256&&width<2;svg.dataset.candleRendering=dense?'batched':'individual';
@@ -86,7 +92,7 @@ export function drawIntradayChart({svg,series,chartType='candles',scale='log',pr
   const hoverContext=()=>['intraday',allRows,series.interval,series.source,series.product,chartType,tool,measurementState?.startDate,measurementState?.endDate,measurementState?.startPrice,measurementState?.endPrice];
   const retainedPointer=getChartHoverPointer(svg,hoverContext(),hoverSelection);
 
-  const hover=index=>{const row=rows[index],previous=allRows[nearestIn(allRows,row.time)-1];return {date:row.date,time:row.time,price:row.close,displayedPrice:display.toDisplay(row.close),display:display.metadata,open:row.open,high:row.high,low:row.low,close:row.close,volume:row.volume,volumeSource:series.source,volumeUnit:'BTC',...barPriceChange(row.close,previous?.close,row.open),previousCloseDate:previous?.date??null,changeInterval:interval.label,kind:'observed',interval:interval.label,source:series.source,product:series.product,completed:true};};
+  const hover=index=>{const row=rows[index],previous=allRows[nearestIn(allRows,row.time)-1];return {date:row.date,time:row.time,price:row.close,displayedPrice:display.toDisplay(row.close),display:display.metadata,open:row.open,high:row.high,low:row.low,close:row.close,volume:row.volume,volumeSource:series.source,volumeUnit:baseAsset,...barPriceChange(row.close,previous?.close,row.open),previousCloseDate:previous?.date??null,changeInterval:interval.label,kind:'observed',interval:interval.label,source:series.source,product,completed:true};};
   function mark(index,hovered=false,anchor=null,notify=true,pointerY=null){
     cursor=index;const row=rows[index],xx=x(row.time),tx=Math.max(L,Math.min(W-R-124,xx-62));
     vertical.setAttribute('x1',xx);vertical.setAttribute('x2',xx);dot.setAttribute('cx',xx);
@@ -95,7 +101,7 @@ export function drawIntradayChart({svg,series,chartType='candles',scale='log',pr
     if(!Number.isFinite(pointerY)&&((anchor?.price??row.close)<axis.min||(anchor?.price??row.close)>axis.max))for(const node of [horizontal,dot,priceTag])node.setAttribute('visibility','hidden');
     dateTag.querySelector('rect').setAttribute('x',tx);dateTag.querySelector('rect').setAttribute('y',axisY-12);dateTag.querySelector('text').setAttribute('x',tx+62);dateTag.querySelector('text').setAttribute('y',axisY+1);dateTag.querySelector('text').textContent=timestamp(row.time);if(notify)onHover({...hover(index),hovered});
   }
-  function inspection(index){const row=rows[index],snapshot=row.snapshot??series.snapshot,retrievedAt=row.retrievedAt||series.retrievedAt;return {label:`${timestamp(row.time)} UTC · ${interval.label} 완료 봉`,date:row.date,kind:'observed',fields:[...(unit==='usd'?[]:[{label:display.label,value:price(row.close)},{label:'표시 기준 · UTC',value:`${display.baseDate} · ${money(display.basePrice)}`}]),{label:'시가 O',value:money(row.open)},{label:'고가 H',value:money(row.high)},{label:'저가 L',value:money(row.low)},{label:'종가 C',value:money(row.close)},{label:'거래량 · BTC',value:number(row.volume,6)},{label:'출처',value:`${series.source} · ${series.product}`}],note:`${snapshot?'저장 자료':'조회 자료'} · 수집 ${retrievedAt.replace('T',' ').slice(0,19)} UTC. 봉 시작 시각 기준이며 이 거래소 현물쌍의 물량입니다. ${series.gapCount?`${series.gapCount}개 빈 구간은 채우지 않았습니다.`:'완료된 실제 거래 봉만 표시합니다.'}`};}
+  function inspection(index){const row=rows[index],snapshot=row.snapshot??series.snapshot,retrievedAt=row.retrievedAt||series.retrievedAt;return {label:`${timestamp(row.time)} UTC · ${interval.label} 완료 봉`,date:row.date,product,kind:'observed',fields:[...(unit==='usd'?[]:[{label:display.label,value:price(row.close)},{label:'표시 기준 · UTC',value:`${display.baseDate} · ${money(display.basePrice)}`}]),{label:'시가 O',value:money(row.open)},{label:'고가 H',value:money(row.high)},{label:'저가 L',value:money(row.low)},{label:'종가 C',value:money(row.close)},{label:`거래량 · ${baseAsset}`,value:number(row.volume,6)},{label:'출처',value:`${series.source} · ${product}`}],note:`${snapshot?'저장 자료':'조회 자료'} · 수집 ${retrievedAt.replace('T',' ').slice(0,19)} UTC. 봉 시작 시각 기준이며 이 거래소 현물쌍의 물량입니다. ${series.gapCount?`${series.gapCount}개 빈 구간은 채우지 않았습니다.`:'완료된 실제 거래 봉만 표시합니다.'}`};}
   const measurementOverlay=createMeasurementOverlay(svg,{x:value=>x(Date.parse(value)/1000),y,left:L,right:W-R,top:T,bottom:B,small,formatPrice:money,formatDate:value=>timestamp(Date.parse(value)/1000).slice(5),formatChange:value=>`${value>0?'+':value<0?'−':''}${number(Math.abs(value),2)}%`,formatDuration:result=>{const minutes=result.deltaSeconds/60;return `${minutes>0?'+':''}${number(minutes,1)}분 · ${number(result.deltaSeconds/interval.seconds,1)}봉 간격`;}});
   const lookupMeasurement=value=>{const time=Date.parse(value)/1000,row=allRows[nearestIn(allRows,time)];return row.time===time?row:{date:value,price:NaN};};
   function renderMeasurement(preview=null){measurementOverlay.paint(measurePriceAnchors(measurementState,{lookup:lookupMeasurement,preview}),Boolean(measurementState&&!measurementState.endDate));}

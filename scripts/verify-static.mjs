@@ -69,7 +69,7 @@ for (const file of files) {
   }
 }
 const index = await readFile(path.join(dist, 'index.html'), 'utf8');
-assert(/<script\b[^>]*type=["']module["'][^>]*src=["']\.\/app\.js(?:\?[^"'\s]*)?["']/.test(index), 'Missing app module entry point');
+assert(/<script\b[^>]*type=["']module["'][^>]*src=["']\.\/site-entry\.js(?:\?[^"'\s]*)?["']/.test(index), 'Missing instrument router entry point');
 const args = process.argv.slice(2);
 assert(args.length === 0 || (args.length === 2 && args[0] === '--standalone'),
   'Usage: node scripts/verify-static.mjs [--standalone build/Bitcoin_Cycles_Comparison.html]');
@@ -81,6 +81,10 @@ if (args.length) {
   const { parseMarketSnapshot, CHART_INTERVALS } = await import('../dist/ohlc-data.js');
   const savedCandles = JSON.parse(ohlcSnapshot);
   for (const interval of CHART_INTERVALS) parseMarketSnapshot(savedCandles, interval.id);
+  const ethSnapshot = standalone.match(/<script\b[^>]*id=["']embedded-eth-data["'][^>]*>([\s\S]*?)<\/script>/i)?.[1];
+  assert(ethSnapshot, 'Standalone file lacks its ETH-USD history');
+  const { validateEthSnapshot } = await import('../dist/eth-market-data.js');
+  validateEthSnapshot(JSON.parse(ethSnapshot));
   assert(/data:text\/javascript;base64,/.test(standalone), 'Standalone file lacks embedded ES modules');
   assert(!/\b(?:src|href)\s*=\s*["']\.\.?\//i.test(standalone), 'Standalone file still references a local file');
   const baseStyle = standalone.match(/<style>\s*([\s\S]*?)<\/style>/i)?.[1];

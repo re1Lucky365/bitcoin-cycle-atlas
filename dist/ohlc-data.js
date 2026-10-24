@@ -1,5 +1,15 @@
 export const CANDLE_ENDPOINT = 'https://api.exchange.coinbase.com/products/BTC-USD/candles';
 export const CANDLE_DOCUMENTATION = 'https://docs.cdp.coinbase.com/api-reference/exchange-api/rest-api/products/get-product-candles';
+const PRODUCTS = Object.freeze({
+  'BTC-USD': Object.freeze({product:'BTC-USD',baseCurrency:'BTC',snapshotUrl:'./data/btc-ohlc.json',historyStart:Date.parse('2009-01-03T00:00:00Z')/1000}),
+  // First daily ETH-USD observation returned by this venue's historical API.
+  'ETH-USD': Object.freeze({product:'ETH-USD',baseCurrency:'ETH',snapshotUrl:'./data/eth-ohlc.json',historyStart:Date.parse('2016-05-18T00:00:00Z')/1000}),
+});
+export function marketProduct(product='BTC-USD') {
+  const result=PRODUCTS[product];
+  if (!Object.hasOwn(PRODUCTS,product)) throw new RangeError('Unsupported USD market product');
+  return result;
+}
 export const CHART_INTERVALS = Object.freeze([
   {id:'1m',label:'1m',seconds:60,sourceSeconds:60},
   {id:'5m',label:'5m',seconds:300,sourceSeconds:300},
@@ -63,7 +73,8 @@ export function aggregateCandles(candles, intervalId) {
   return {candles:result,incompleteGroups};
 }
 
-export async function fetchMarketCandles({interval:intervalId='15m',signal,count=180,now=Date.now(),start:requestedStart,end:requestedEnd,allowEmpty=false,fetchImpl=globalThis.fetch}={}) {
+export async function fetchMarketCandles({interval:intervalId='15m',product='BTC-USD',signal,count=180,now=Date.now(),start:requestedStart,end:requestedEnd,allowEmpty=false,fetchImpl=globalThis.fetch}={}) {
+  const market=marketProduct(product);
   const interval = chartInterval(intervalId);
   if (!Number.isInteger(count) || count < 2 || count > 300) throw new RangeError('Candle count must be 2–300');
   if (!Number.isFinite(now) || now <= 0) throw new RangeError('Invalid candle cutoff');
@@ -77,7 +88,7 @@ export async function fetchMarketCandles({interval:intervalId='15m',signal,count
   for (let cursor=start;cursor<end;cursor+=interval.sourceSeconds*290) {
     signal?.throwIfAborted?.();
     const pageEnd = Math.min(end,cursor+interval.sourceSeconds*290);
-    const url = new URL(CANDLE_ENDPOINT);
+    const url = new URL(`https://api.exchange.coinbase.com/products/${market.product}/candles`);
     url.searchParams.set('granularity',String(interval.sourceSeconds));
     url.searchParams.set('start',iso(cursor));url.searchParams.set('end',iso(pageEnd));
     const response = await fetchImpl(url.href,{method:'GET',mode:'cors',credentials:'omit',redirect:'error',cache:'no-cache',headers:{Accept:'application/json'},signal});
@@ -89,20 +100,29 @@ export async function fetchMarketCandles({interval:intervalId='15m',signal,count
   const aggregated = aggregateCandles(rawCandles,intervalId), candles=aggregated.candles;
   if (!candles.length&&!allowEmpty) throw new Error('No completed candles in the requested interval');
   const gapCount=candles.slice(1).reduce((sum,candle,index)=>sum+Math.max(0,Math.round((candle.time-candles[index].time)/interval.seconds)-1),0);
-  return {interval:intervalId,seconds:interval.seconds,candles,source:'Coinbase Exchange',product:'BTC-USD',retrievedAt:new Date(now).toISOString(),firstDate:candles[0]?.date??null,lastDate:candles.at(-1)?.date??null,requestedStart:start,requestedEnd:end,excludedUnfinished,gapCount,incompleteGroups:aggregated.incompleteGroups,aggregation:interval.seconds===interval.sourceSeconds?'native':`${interval.seconds/interval.sourceSeconds} × ${interval.sourceSeconds}s`,sourceUrls,documentationUrl:CANDLE_DOCUMENTATION,completedOnly:true};
+  return {interval:intervalId,seconds:interval.seconds,candles,source:'Coinbase Exchange',product:market.product,baseCurrency:market.baseCurrency,quoteCurrency:'USD',historyStart:market.historyStart,retrievedAt:new Date(now).toISOString(),firstDate:candles[0]?.date??null,lastDate:candles.at(-1)?.date??null,requestedStart:start,requestedEnd:end,excludedUnfinished,gapCount,incompleteGroups:aggregated.incompleteGroups,aggregation:interval.seconds===interval.sourceSeconds?'native':`${interval.seconds/interval.sourceSeconds} × ${interval.sourceSeconds}s`,sourceUrls,documentationUrl:CANDLE_DOCUMENTATION,completedOnly:true};
 }
 
-/** Saved snapshots carry their original collection time, never the current time. */
-export function parseMarketSnapshot(payload,intervalId) {
-  const interval=chartInterval(intervalId), source=payload?.intervals?.[intervalId];
-  if (payload?.version!==1 || payload?.source!=='Coinbase Exchange' || payload?.product!=='BTC-USD' || !source || source.interval!==intervalId || source.seconds!==interval.seconds || !Number.isFinite(Date.parse(source.retrievedAt))) throw new TypeError('Invalid market snapshot metadata');
-  if (!Array.isArray(source.candles) || source.candles.length<1 || source.candles.length>300) throw new TypeError('Invalid market snapshot candles');
+/** Validate genuine completed OHLC rows; the ETH daily archive has a larger cap. */
+export function parseCompletedCandleRows(source,intervalId,{maxCandles=300}={}) {
+  const interval=chartInterval(intervalId);
+  if (!source || source.interval!==intervalId || source.seconds!==interval.seconds || !Number.isFinite(Date.parse(source.retrievedAt))) throw new TypeError('Invalid market snapshot metadata');
+  if (!Array.isArray(source.candles) || source.candles.length<1 || source.candles.length>maxCandles) throw new TypeError('Invalid market snapshot candles');
   const now=Date.parse(source.retrievedAt), origin=intervalId==='weekly'?4*86400:0;
   let previous=-Infinity;
   const candles=source.candles.map(row=>{
     if (!Number.isSafeInteger(row.time) || row.time<=previous || (row.time-origin)%interval.seconds!==0 || row.date!==iso(row.time) || ![row.open,row.high,row.low,row.close].every(finitePositive) || !Number.isFinite(row.volume) || row.volume<0 || row.low>Math.min(row.open,row.close) || row.high<Math.max(row.open,row.close) || (row.time+interval.seconds)*1000>now) throw new TypeError('Invalid saved candle');
+    if (row.retrievedAt!==undefined && (!Number.isFinite(Date.parse(row.retrievedAt)) || Date.parse(row.retrievedAt)>now || Date.parse(row.retrievedAt)<(row.time+interval.seconds)*1000)) throw new TypeError('Invalid saved candle collection time');
     previous=row.time;
-    return {time:row.time,date:row.date,open:row.open,high:row.high,low:row.low,close:row.close,volume:row.volume};
+    return {time:row.time,date:row.date,open:row.open,high:row.high,low:row.low,close:row.close,volume:row.volume,...(row.retrievedAt?{retrievedAt:row.retrievedAt}:{})};
   });
-  return {...source,candles,source:'Coinbase Exchange',product:'BTC-USD',firstDate:candles[0].date,lastDate:candles.at(-1).date,snapshot:true,completedOnly:true};
+  return candles;
+}
+
+/** Saved snapshots carry their original collection time, never the current time. */
+export function parseMarketSnapshot(payload,intervalId,{product='BTC-USD'}={}) {
+  const market=marketProduct(product), source=payload?.intervals?.[intervalId];
+  if (payload?.version!==1 || payload?.source!=='Coinbase Exchange' || payload?.product!==market.product || (source?.product!==undefined&&source.product!==market.product) || (source?.source!==undefined&&source.source!=='Coinbase Exchange')) throw new TypeError('Invalid market snapshot metadata');
+  const candles=parseCompletedCandleRows(source,intervalId);
+  return {...source,candles,source:'Coinbase Exchange',product:market.product,baseCurrency:market.baseCurrency,quoteCurrency:'USD',historyStart:market.historyStart,firstDate:candles[0].date,lastDate:candles.at(-1).date,snapshot:true,completedOnly:true};
 }

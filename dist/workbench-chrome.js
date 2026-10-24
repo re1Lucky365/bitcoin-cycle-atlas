@@ -4,6 +4,7 @@ import { mountChartGoTo } from './chart-go-to.js?v=1.14.0-mobile.1';
 import { isStartPriceUnit } from './price-display.js?v=1.13.0-research.1';
 import { mountWorkspaceTools } from './workspace-tools.js?v=1.14.0-mobile.1';
 import { mountChartBottomBar } from './chart-bottom-bar.js?v=1.14.0-mobile.1';
+import { mountSymbolSelector } from './symbol-selector.js?v=1.15.0-eth.1';
 const $ = selector => document.querySelector(selector);
 
 const paths = {
@@ -83,7 +84,8 @@ export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlSto
   liveControls.set('settings',settingsBody);liveControls.set('layers',layers);liveControls.set('scenarios',scenarios);
   controlStore.append(settingsBody,modeTabs,layers,scenarios);
   const heading=document.createElement('header');heading.className='atlas-canvas-heading';heading.setAttribute('aria-label','차트 상단 도구');
-  const symbol=document.createElement('span');symbol.className='workbench-symbol';symbol.textContent='BTCUSD';symbol.title='비트코인 / 미국 달러 · UTC 일말 가격';
+  const symbol=document.createElement('button');symbol.className='workbench-symbol';
+  const symbolSelector=mountSymbolSelector({button:symbol,symbol:'BTCUSD'});
   const menu=button('chart','인디케이터 추가·삭제',{'aria-controls':'indicator-library','aria-haspopup':'dialog','aria-expanded':'false'});menu.id='atlas-mode-menu';
   menu.onclick=()=>document.dispatchEvent(new CustomEvent('atlas:indicator-library',{detail:{opener:menu}}));
   const modeName=document.createElement('span');modeName.id='atlas-mode-name';modeName.textContent='인디케이터';menu.append(modeName);menu.classList.add('workbench-mode');
@@ -223,5 +225,5 @@ export function mountWorkbenchChrome({icon,stage,workspace,plot,tools,controlSto
   scale.setAttribute('aria-keyshortcuts','Alt+L');goDate.setAttribute('aria-keyshortcuts','Alt+G');
   document.addEventListener('atlas:workbench-state',handleState);
   document.addEventListener('keydown',handleKey);intervalButtons.addEventListener('keydown',handleIntervalKey);
-  return {destroy(){goTo.destroy();workspaceTools.destroy();bottomBar.destroy();document.removeEventListener('atlas:workbench-state',handleState);document.removeEventListener('keydown',handleKey);intervalButtons.removeEventListener('keydown',handleIntervalKey);document.removeEventListener('pointerdown',dismissMagnet,true);document.removeEventListener('focusin',dismissMagnet);document.removeEventListener('scroll',scrollMagnet,true);document.removeEventListener('visibilitychange',visibilityMagnet);window.removeEventListener('resize',resizeMagnet);window.removeEventListener('blur',resizeMagnet);magnetMenu.remove();}};
+  return {destroy(){symbolSelector.destroy();goTo.destroy();workspaceTools.destroy();bottomBar.destroy();document.removeEventListener('atlas:workbench-state',handleState);document.removeEventListener('keydown',handleKey);intervalButtons.removeEventListener('keydown',handleIntervalKey);document.removeEventListener('pointerdown',dismissMagnet,true);document.removeEventListener('focusin',dismissMagnet);document.removeEventListener('scroll',scrollMagnet,true);document.removeEventListener('visibilitychange',visibilityMagnet);window.removeEventListener('resize',resizeMagnet);window.removeEventListener('blur',resizeMagnet);magnetMenu.remove();}};
 }
