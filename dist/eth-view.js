@@ -205,7 +205,10 @@ export async function initEthView() {
     // Destroy them only when the browser discards this document entirely.
     if(!event.persisted){touch.destroy();navigation.destroy();observer.disconnect();}
   });
-  window.addEventListener('pageshow',event=>{if(event.persisted)schedule();});
+  window.addEventListener('pageshow',event=>{
+    if(!event.persisted)return;
+    if(!currentSeries())void load();else schedule();
+  });
   persist();await load();
   await new Promise(resolve=>requestAnimationFrame(()=>{render();resolve();}));
   document.dispatchEvent(new CustomEvent('atlas:ready'));
