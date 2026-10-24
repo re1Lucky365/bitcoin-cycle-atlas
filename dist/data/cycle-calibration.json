@@ -3,28 +3,28 @@
   "generatedBy": "node scripts/refresh-cycle-calibration.mjs",
   "source": {
     "path": "dist/data/btc-daily.json",
-    "pricesSha256": "fbbe7ca83daac9656f76e513f87f74262359b612955cc8614284b6b6f5e905db",
+    "pricesSha256": "139634076ed2da8b0a5cb3c28572f7b3eb273ab0d4fa5c214d2ab14b16393aa5",
     "provider": "Coin Metrics Community API",
     "metric": "PriceUSD",
     "firstDate": "2010-07-18",
-    "lastDate": "2026-10-22",
-    "observationCount": 5941,
+    "lastDate": "2026-10-23",
+    "observationCount": 5942,
     "completedUtcObservationsOnly": true
   },
   "version": "causal-cycle-clock-v1",
-  "asOf": "2026-10-22",
+  "asOf": "2026-10-23",
   "current": {
-    "date": "2026-10-22",
-    "epochDay": 20748,
+    "date": "2026-10-23",
+    "epochDay": 20749,
     "state": "shortened",
     "label": "단축 가정",
     "color": "#df7c83",
-    "shiftDays": -52.46959976005253,
-    "appliedShiftDays": -52,
-    "cycleLengthDays": 1409,
+    "shiftDays": -52.77863452863022,
+    "appliedShiftDays": -53,
+    "cycleLengthDays": 1408,
     "causal": true,
     "probability": null,
-    "asOf": "2026-10-22",
+    "asOf": "2026-10-23",
     "available": true,
     "rawShiftDays": -66,
     "referencePeakDate": "2025-10-06",
@@ -35,7 +35,7 @@
     "troughConfirmedAt": "2026-09-02",
     "candidateIsFinalCycleTurn": false,
     "nominalPeakDate": "2029-10-06",
-    "expectedNextPeakDate": "2029-08-15",
+    "expectedNextPeakDate": "2029-08-14",
     "nextPeakDateIsConditionalClock": true,
     "referenceCount": 3,
     "cycleIntervalCount": 3,
@@ -142,26 +142,26 @@
     "https://www.fidelity.com/learning-center/trading-investing/four-year-bitcoin-and-crypto-cycles",
     "https://fidelitydigitalassets.com/research-and-insights/bitcoins-four-year-cycle-over"
   ],
-  "observationCount": 5941,
+  "observationCount": 5942,
   "futureApplication": {
     "enabled": true,
-    "requestedShiftDays": -52,
-    "appliedShiftDays": -52,
+    "requestedShiftDays": -53,
+    "appliedShiftDays": -53,
     "applied": true,
     "reason": "causal-daily-clock-applied",
     "sourceValuationAnchorsChanged": false,
     "scope": "The optional near-phase clock only; no automatic repetition of four-year waves through 2050.",
     "displayEnd": "2050-12-31",
     "nominalPeakDate": "2029-10-06",
-    "effectivePeakDate": "2029-08-15",
+    "effectivePeakDate": "2029-08-14",
     "nominalTroughDate": "2026-10-06",
-    "nextLowDate": "2030-08-15",
+    "nextLowDate": "2030-08-14",
     "timingAdjustment": {
       "requested": true,
       "available": true,
-      "asOf": "2026-10-22",
-      "requestedShiftDays": -52,
-      "appliedShiftDays": -52,
+      "asOf": "2026-10-23",
+      "requestedShiftDays": -53,
+      "appliedShiftDays": -53,
       "applied": true,
       "sourceReferencePeakDate": "2025-10-06",
       "reason": "causal-daily-clock-applied",
@@ -174,12 +174,6 @@
     "clockVerifiedWithSampleCount": 16
   },
   "recentDailyStates": [
-    {
-      "date": "2026-04-26",
-      "state": "aligned",
-      "appliedShiftDays": -13,
-      "cycleLengthDays": 1448
-    },
     {
       "date": "2026-04-27",
       "state": "aligned",
@@ -1253,6 +1247,12 @@
       "state": "shortened",
       "appliedShiftDays": -52,
       "cycleLengthDays": 1409
+    },
+    {
+      "date": "2026-10-23",
+      "state": "shortened",
+      "appliedShiftDays": -53,
+      "cycleLengthDays": 1408
     }
   ],
   "interpretation": {
