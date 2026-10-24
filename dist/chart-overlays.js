@@ -138,11 +138,13 @@ function historicalLabelMarkup(anchor,box,label,color){
 export function historicalMarkersMarkup(anchors,bounds={}){
   const {markers,policy}=historicalMarkerLayout(anchors,bounds);
   const markup=markers.map(marker=>{
-    const {event,x,y,label,box,preview,active}=marker,color=EVENT_COLORS[event.category]||EVENT_COLORS.market;
+    const {event,x,y,label,box,preview,active}=marker,override=bounds.categoryColors?.[event.category];
+    const color=typeof override==='string'&&/^#(?:[\da-f]{3}|[\da-f]{4}|[\da-f]{6}|[\da-f]{8})$/i.test(override)?override:EVENT_COLORS[event.category]||EVENT_COLORS.market;
+    const note=typeof marker.anchorNote==='string'&&marker.anchorNote?` · ${marker.anchorNote}`:'';
     let content=box?historicalLabelMarkup(marker,box,label,color):'<circle cx="'+x+'" cy="'+y+'" r="10" fill="transparent"/>';
     content+=`<circle cx="${x}" cy="${y}" r="4" fill="#111b27" stroke="${color}" stroke-width="1.5"/>`;
     if(preview)content+=`<g class="history-event-preview" visibility="hidden" pointer-events="none" aria-hidden="true">${historicalLabelMarkup(marker,preview.box,preview.label,color)}</g>`;
-    return `<g class="history-event-marker${box?' has-label':''}${active?' is-active':''}" data-history-event="${esc(event.id)}" role="button" tabindex="0" aria-label="${esc(`${event.date} ${event.title} · 사건 원문 보기`)}"><title>${esc(`${event.date} · ${event.title}\n클릭하면 원문과 날짜 근거를 봅니다.`)}</title>${content}</g>`;
+    return `<g class="history-event-marker${box?' has-label':''}${active?' is-active':''}" data-history-event="${esc(event.id)}" role="button" tabindex="0" aria-label="${esc(`${event.date} ${event.title} · 사건 원문 보기${note}`)}"><title>${esc(`${event.date} · ${event.title}${note}\n클릭하면 원문과 날짜 근거를 봅니다.`)}</title>${content}</g>`;
   }).join('');
   const labelCount=markers.filter(marker=>marker.box).length;
   return {markup,markers,labelCount,totalCount:markers.length,hiddenLabelCount:markers.length-labelCount,labelMode:policy.mode,labelBudget:policy.budget};

@@ -6,7 +6,7 @@ const bootSymbol = document.querySelector('.atlas-boot-symbol');
 if (bootSymbol) bootSymbol.textContent = symbol;
 try {
   if (symbol === 'ETHUSD') {
-    const { initEthView } = await import('./eth-view.js?v=1.15.0-eth.1');
+    const { initEthView } = await import('./eth-view.js?v=1.16.0-history.1');
     await initEthView();
   } else {
     await import('./app.js?v=1.15.0-eth.1');

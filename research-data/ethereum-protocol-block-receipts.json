@@ -1,0 +1,434 @@
+[
+  {
+    "url": "https://eth.blockscout.com/api/v2/blocks/0",
+    "accessedAt": "2026-10-24",
+    "block": 0,
+    "observed": {
+      "height": 0,
+      "timestamp": "1970-01-01T00:00:00.000000Z",
+      "hash": "0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3",
+      "parent_hash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "blob_gas_used": "0",
+      "gas_limit": "5000",
+      "difficulty": "17179869184",
+      "total_difficulty": "17179869184",
+      "base_fee_per_gas": null
+    }
+  },
+  {
+    "url": "https://eth.blockscout.com/api/v2/blocks/1",
+    "accessedAt": "2026-10-24",
+    "block": 1,
+    "observed": {
+      "height": 1,
+      "timestamp": "2015-07-30T15:26:28.000000Z",
+      "hash": "0x88e96d4537bea4d9c05d12549907b32561d3bf31f45aae734cdc119f13406cb6",
+      "parent_hash": "0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3",
+      "blob_gas_used": "0",
+      "gas_limit": "5000",
+      "difficulty": "17171480576",
+      "total_difficulty": "34351349760",
+      "base_fee_per_gas": null
+    }
+  },
+  {
+    "url": "https://eth.blockscout.com/api/v2/blocks/1150000",
+    "accessedAt": "2026-10-24",
+    "block": 1150000,
+    "observed": {
+      "height": 1150000,
+      "timestamp": "2016-03-14T18:49:53.000000Z",
+      "hash": "0x584bdb5d4e74fe97f5a5222b533fe1322fd0b6ad3eb03f02c3221984e2c0b430",
+      "parent_hash": "0xaf674ef208df140303da41ba04be5a8689a7d842b548035872c09a8a1c258658",
+      "blob_gas_used": null,
+      "gas_limit": "4712388",
+      "difficulty": "20473100089179",
+      "total_difficulty": "9422705021808135124",
+      "base_fee_per_gas": null
+    }
+  },
+  {
+    "url": "https://eth.blockscout.com/api/v2/blocks/1920000",
+    "accessedAt": "2026-10-24",
+    "block": 1920000,
+    "observed": {
+      "height": 1920000,
+      "timestamp": "2016-07-20T13:20:40.000000Z",
+      "hash": "0x4985f5ca3d2afbec36529aa96f74de3cc10a2a4a6c44f2157a57d2c6059a11bb",
+      "parent_hash": "0xa218e2c611f21232d857e3c8cecdcdf1f65f25a4477f98f6f47e4063807f2308",
+      "blob_gas_used": null,
+      "gas_limit": "4712384",
+      "difficulty": "62413376722602",
+      "total_difficulty": "39490964433395682584",
+      "base_fee_per_gas": null
+    }
+  },
+  {
+    "url": "https://eth.blockscout.com/api/v2/blocks/4370000",
+    "accessedAt": "2026-10-24",
+    "block": 4370000,
+    "observed": {
+      "height": 4370000,
+      "timestamp": "2017-10-16T05:22:11.000000Z",
+      "hash": "0xb1fcff633029ee18ab6482b58ff8b6e95dd7c82a954c852157152a7a6d32785e",
+      "parent_hash": "0x51bc754831f33817e755039d90af3b20ea1e21905529ddaa03d7ba9f5fc9e66f",
+      "blob_gas_used": null,
+      "gas_limit": "6705806",
+      "difficulty": "2994347070619309",
+      "total_difficulty": "1196768507891266117779",
+      "base_fee_per_gas": null
+    }
+  },
+  {
+    "url": "https://eth.blockscout.com/api/v2/blocks/7280000",
+    "accessedAt": "2026-10-24",
+    "block": 7280000,
+    "observed": {
+      "height": 7280000,
+      "timestamp": "2019-02-28T19:52:04.000000Z",
+      "hash": "0xeddb0590e1095fbe51205a51a297daef7259e229af0432214ae6cb2c1f750750",
+      "parent_hash": "0x21506036220aee9bcfd42db8219d75d8d2bb2e4a03cad73748cae26b2c4d282d",
+      "blob_gas_used": null,
+      "gas_limit": "8000029",
+      "difficulty": "2957101900364072",
+      "total_difficulty": "9295093842767230183255",
+      "base_fee_per_gas": null
+    }
+  },
+  {
+    "url": "https://eth.blockscout.com/api/v2/blocks/9069000",
+    "accessedAt": "2026-10-24",
+    "block": 9069000,
+    "observed": {
+      "height": 9069000,
+      "timestamp": "2019-12-08T00:25:09.000000Z",
+      "hash": "0x451226b98bf4f784314e9ca2daaa30dc664a387c342ef775ba2d88682a27c084",
+      "parent_hash": "0x1db3fa70c7ceb9ee9f3fff29387c72d47080843a099b7ea9013697f57439538b",
+      "blob_gas_used": null,
+      "gas_limit": "8950633",
+      "difficulty": "2557722798171005",
+      "total_difficulty": "13188601718596044823848",
+      "base_fee_per_gas": null
+    }
+  },
+  {
+    "url": "https://eth.blockscout.com/api/v2/blocks/12244000",
+    "accessedAt": "2026-10-24",
+    "block": 12244000,
+    "observed": {
+      "height": 12244000,
+      "timestamp": "2021-04-15T10:07:03.000000Z",
+      "hash": "0x1638380ab737e0e916bd1c7f23bd2bab2a532e44b90047f045f262ee21c42b21",
+      "parent_hash": "0xd44a4d33e28d7ea9edd12b69bd32b394587eee498b0e2543ce2bad1877ffbeac",
+      "blob_gas_used": null,
+      "gas_limit": "12457275",
+      "difficulty": "6696239334037736",
+      "total_difficulty": "23316419380214989812302",
+      "base_fee_per_gas": null
+    }
+  },
+  {
+    "url": "https://eth.blockscout.com/api/v2/blocks/12965000",
+    "accessedAt": "2026-10-24",
+    "block": 12965000,
+    "observed": {
+      "height": 12965000,
+      "timestamp": "2021-08-05T12:33:42.000000Z",
+      "hash": "0x9b83c12c69edb74f6c8dd5d052765c1adf940e320bd1291696e6fa07829eee71",
+      "parent_hash": "0x3de6bb3849a138e6ab0b83a3a00dc7433f1e83f7fd488e4bba78f2fe2631a633",
+      "blob_gas_used": "0",
+      "gas_limit": "30029122",
+      "difficulty": "7742494561645080",
+      "total_difficulty": "28494409340649014490153",
+      "base_fee_per_gas": "1000000000"
+    }
+  },
+  {
+    "url": "https://eth.blockscout.com/api/v2/blocks/15537393",
+    "accessedAt": "2026-10-24",
+    "block": 15537393,
+    "observed": {
+      "height": 15537393,
+      "timestamp": "2022-09-15T06:42:42.000000Z",
+      "hash": "0x55b11b918355b1ef9c5db810302ebad0bf2544255b530cdce90674d5887bb286",
+      "parent_hash": "0x2b3ea3cd4befcab070812443affb08bf17a91ce382c714a536ca3cacab82278b",
+      "blob_gas_used": null,
+      "gas_limit": "30000000",
+      "difficulty": "11055787484078698",
+      "total_difficulty": "58750003716598352816469",
+      "base_fee_per_gas": "43391016710"
+    }
+  },
+  {
+    "url": "https://eth.blockscout.com/api/v2/blocks/15537394",
+    "accessedAt": "2026-10-24",
+    "block": 15537394,
+    "observed": {
+      "height": 15537394,
+      "timestamp": "2022-09-15T06:42:59.000000Z",
+      "hash": "0x56a9bb0302da44b8c0b3df540781424684c3af04d0b7a38d72842b762076a664",
+      "parent_hash": "0x55b11b918355b1ef9c5db810302ebad0bf2544255b530cdce90674d5887bb286",
+      "blob_gas_used": null,
+      "gas_limit": "30000000",
+      "difficulty": "0",
+      "total_difficulty": "58750003716598352816469",
+      "base_fee_per_gas": "48811794595"
+    }
+  },
+  {
+    "url": "https://eth.blockscout.com/api/v2/blocks/17034870",
+    "accessedAt": "2026-10-24",
+    "block": 17034870,
+    "observed": {
+      "height": 17034870,
+      "timestamp": "2023-04-12T22:27:59.000000Z",
+      "hash": "0xe22c56f211f03baadcc91e4eb9a24344e6848c5df4473988f893b58223f5216c",
+      "parent_hash": "0xc2558f8143d5f5acb8382b8cb2b8e2f1a10c8bdfeededad850eaca048ed85d8f",
+      "blob_gas_used": null,
+      "gas_limit": "30000000",
+      "difficulty": "0",
+      "total_difficulty": "58750003716598352816469",
+      "base_fee_per_gas": "17980647125"
+    }
+  },
+  {
+    "url": "https://eth.blockscout.com/api/v2/blocks/19426587",
+    "accessedAt": "2026-10-24",
+    "block": 19426587,
+    "observed": {
+      "height": 19426587,
+      "timestamp": "2024-03-13T13:55:35.000000Z",
+      "hash": "0xf8e2f40d98fe5862bc947c8c83d34799c50fb344d7445d020a8a946d891b62ee",
+      "parent_hash": "0xdb672c41cfd47c84ddb478ffde5a09b76964f77dceca0e62bdf719c965d73e7f",
+      "blob_gas_used": "0",
+      "gas_limit": "30000000",
+      "difficulty": "0",
+      "total_difficulty": "58750003716598352816469",
+      "base_fee_per_gas": "61952457264"
+    }
+  },
+  {
+    "url": "https://eth.blockscout.com/api/v2/blocks/22431084",
+    "accessedAt": "2026-10-24",
+    "block": 22431084,
+    "observed": {
+      "height": 22431084,
+      "timestamp": "2025-05-07T10:05:11.000000Z",
+      "hash": "0x50c8cab760b2948349c590461b166773c45d8f4858cccf5a43025ab2960152e8",
+      "parent_hash": "0x28fb2c1d988435955e569451c6ad772f7fb5e61cddd7463c7b60e933ed5ff237",
+      "blob_gas_used": "1179648",
+      "gas_limit": "35999965",
+      "difficulty": "0",
+      "total_difficulty": null,
+      "base_fee_per_gas": "1418171859"
+    }
+  },
+  {
+    "url": "https://eth.blockscout.com/api/v2/blocks/23935694",
+    "accessedAt": "2026-10-24",
+    "block": 23935694,
+    "observed": {
+      "height": 23935694,
+      "timestamp": "2025-12-03T21:49:23.000000Z",
+      "hash": "0x8281db4990564caca17e620a70847c7b001ad70cd7bb5e64aa78adea16747677",
+      "parent_hash": "0xe739e49cf9f9f704e0f9e0cbe7174b63e3704b6b57c83575d783e1acb578f704",
+      "blob_gas_used": "1179648",
+      "gas_limit": "59941294",
+      "difficulty": "0",
+      "total_difficulty": null,
+      "base_fee_per_gas": "31400124"
+    }
+  },
+  {
+    "url": "https://eth.blockscout.com/api/v2/blocks/23975777",
+    "accessedAt": "2026-10-24",
+    "block": 23975777,
+    "observed": {
+      "height": 23975777,
+      "timestamp": "2025-12-09T14:20:59.000000Z",
+      "hash": "0xfeed93af8a7d407382026e9825add8e9b176ea972b22431b2fc209ba7bb02b9d",
+      "parent_hash": "0x6d712d4f0ffc0933ef24891b838db1c2ccd163776a7f70add9b2f78db0706336",
+      "blob_gas_used": "917504",
+      "gas_limit": "60000000",
+      "difficulty": "0",
+      "total_difficulty": null,
+      "base_fee_per_gas": "237807771"
+    }
+  },
+  {
+    "url": "https://eth.blockscout.com/api/v2/blocks/23975778",
+    "accessedAt": "2026-10-24",
+    "block": 23975778,
+    "observed": {
+      "height": 23975778,
+      "timestamp": "2025-12-09T14:21:11.000000Z",
+      "hash": "0xb0b41a47d2d2e1dbf65465b21ee0babaf4c95352eae75f4cf75f571a2440d314",
+      "parent_hash": "0xfeed93af8a7d407382026e9825add8e9b176ea972b22431b2fc209ba7bb02b9d",
+      "blob_gas_used": "655360",
+      "gas_limit": "60000000",
+      "difficulty": "0",
+      "total_difficulty": null,
+      "base_fee_per_gas": "227355166"
+    }
+  },
+  {
+    "url": "https://eth.blockscout.com/api/v2/blocks/23975779",
+    "accessedAt": "2026-10-24",
+    "block": 23975779,
+    "observed": {
+      "height": 23975779,
+      "timestamp": "2025-12-09T14:21:23.000000Z",
+      "hash": "0x5982fa82aff739055918be1e326859031cb64876cd739023fedd69834999610d",
+      "parent_hash": "0xb0b41a47d2d2e1dbf65465b21ee0babaf4c95352eae75f4cf75f571a2440d314",
+      "blob_gas_used": "524288",
+      "gas_limit": "60000000",
+      "difficulty": "0",
+      "total_difficulty": null,
+      "base_fee_per_gas": "218750581"
+    }
+  },
+  {
+    "url": "https://eth.blockscout.com/api/v2/blocks/23975780",
+    "accessedAt": "2026-10-24",
+    "block": 23975780,
+    "observed": {
+      "height": 23975780,
+      "timestamp": "2025-12-09T14:21:35.000000Z",
+      "hash": "0x7024de0412a3341a071fa40eefc99803a362c72b561279b228ec3b8d0bf9d0b6",
+      "parent_hash": "0x5982fa82aff739055918be1e326859031cb64876cd739023fedd69834999610d",
+      "blob_gas_used": "393216",
+      "gas_limit": "60000000",
+      "difficulty": "0",
+      "total_difficulty": null,
+      "base_fee_per_gas": "205247976"
+    }
+  },
+  {
+    "url": "https://eth.blockscout.com/api/v2/blocks/24179382",
+    "accessedAt": "2026-10-24",
+    "block": 24179382,
+    "observed": {
+      "height": 24179382,
+      "timestamp": "2026-01-07T01:00:59.000000Z",
+      "hash": "0xd0bb672123c054b5f68fcd4750cb233a2dcf3ee60919ecd5e862d3e758e6229d",
+      "parent_hash": "0x1ef2b50293bcfbad92d1478bcca5a2c7a18fb3456320f0756b8b162a5167925c",
+      "blob_gas_used": "0",
+      "gas_limit": "60000000",
+      "difficulty": "0",
+      "total_difficulty": null,
+      "base_fee_per_gas": "36361111"
+    }
+  },
+  {
+    "url": "https://eth.blockscout.com/api/v2/blocks/24179383",
+    "accessedAt": "2026-10-24",
+    "block": 24179383,
+    "observed": {
+      "height": 24179383,
+      "timestamp": "2026-01-07T01:01:11.000000Z",
+      "hash": "0x9e48fb2817558d92856efb79f2ced6f460cb061b64053cca591f0aa587320a82",
+      "parent_hash": "0xd0bb672123c054b5f68fcd4750cb233a2dcf3ee60919ecd5e862d3e758e6229d",
+      "blob_gas_used": "1048576",
+      "gas_limit": "60000000",
+      "difficulty": "0",
+      "total_difficulty": null,
+      "base_fee_per_gas": "32870555"
+    }
+  },
+  {
+    "url": "https://eth.blockscout.com/api/v2/blocks/24179384",
+    "accessedAt": "2026-10-24",
+    "block": 24179384,
+    "observed": {
+      "height": 24179384,
+      "timestamp": "2026-01-07T01:01:23.000000Z",
+      "hash": "0x937ea21984a7e4fe49128d6389155e46e181baeabde60cf75db597bd24ebbc13",
+      "parent_hash": "0x9e48fb2817558d92856efb79f2ced6f460cb061b64053cca591f0aa587320a82",
+      "blob_gas_used": "393216",
+      "gas_limit": "60000000",
+      "difficulty": "0",
+      "total_difficulty": null,
+      "base_fee_per_gas": "32751168"
+    }
+  },
+  {
+    "url": "https://eth.blockscout.com/api/v2/blocks/24179385",
+    "accessedAt": "2026-10-24",
+    "block": 24179385,
+    "observed": {
+      "height": 24179385,
+      "timestamp": "2026-01-07T01:01:35.000000Z",
+      "hash": "0xf48668b520a5bff9f149459c939ff4b42e4aa2bab40b04e8f1ebc03d9997a073",
+      "parent_hash": "0x937ea21984a7e4fe49128d6389155e46e181baeabde60cf75db597bd24ebbc13",
+      "blob_gas_used": "0",
+      "gas_limit": "60000000",
+      "difficulty": "0",
+      "total_difficulty": null,
+      "base_fee_per_gas": "34699781"
+    }
+  },
+  {
+    "url": "https://eth.blockscout.com/api/v2/blocks/17034869",
+    "accessedAt": "2026-10-24",
+    "block": 17034869,
+    "observed": {
+      "height": 17034869,
+      "timestamp": "2023-04-12T22:27:23.000000Z",
+      "hash": "0xc2558f8143d5f5acb8382b8cb2b8e2f1a10c8bdfeededad850eaca048ed85d8f",
+      "parent_hash": "0x8514dc16265e910acc5d6d776f55c9cfbcec1320c816546415dc35b021801f63",
+      "blob_gas_used": null,
+      "gas_limit": "30000000",
+      "difficulty": "0",
+      "total_difficulty": "58750003716598352816469",
+      "base_fee_per_gas": "19018712210"
+    }
+  },
+  {
+    "url": "https://eth.blockscout.com/api/v2/blocks/19426586",
+    "accessedAt": "2026-10-24",
+    "block": 19426586,
+    "observed": {
+      "height": 19426586,
+      "timestamp": "2024-03-13T13:55:23.000000Z",
+      "hash": "0xdb672c41cfd47c84ddb478ffde5a09b76964f77dceca0e62bdf719c965d73e7f",
+      "parent_hash": "0x4fcd7915716bdcf8ba963e591577721000dd2bf7ef81f412d8f72f8146783909",
+      "blob_gas_used": "0",
+      "gas_limit": "30000000",
+      "difficulty": "0",
+      "total_difficulty": "58750003716598352816469",
+      "base_fee_per_gas": "61563636216"
+    }
+  },
+  {
+    "url": "https://eth.blockscout.com/api/v2/blocks/22431083",
+    "accessedAt": "2026-10-24",
+    "block": 22431083,
+    "observed": {
+      "height": 22431083,
+      "timestamp": "2025-05-07T10:04:59.000000Z",
+      "hash": "0x28fb2c1d988435955e569451c6ad772f7fb5e61cddd7463c7b60e933ed5ff237",
+      "parent_hash": "0x30039c8134afcaa2c23bd3aee3f9761f998061b07a5a01d459cf123d4059608e",
+      "blob_gas_used": "655360",
+      "gas_limit": "35964845",
+      "difficulty": "0",
+      "total_difficulty": null,
+      "base_fee_per_gas": "1260624455"
+    }
+  },
+  {
+    "url": "https://eth.blockscout.com/api/v2/blocks/23935693",
+    "accessedAt": "2026-10-24",
+    "block": 23935693,
+    "observed": {
+      "height": 23935693,
+      "timestamp": "2025-12-03T21:48:59.000000Z",
+      "hash": "0xe739e49cf9f9f704e0f9e0cbe7174b63e3704b6b57c83575d783e1acb578f704",
+      "parent_hash": "0x15c24ef358002d3716dd715c167efb82249962c51e90b80b2dbb501f9ba9769b",
+      "blob_gas_used": "1179648",
+      "gas_limit": "59999886",
+      "difficulty": "0",
+      "total_difficulty": null,
+      "base_fee_per_gas": "33413480"
+    }
+  }
+]

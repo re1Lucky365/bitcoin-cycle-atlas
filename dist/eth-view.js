@@ -1,12 +1,14 @@
 import { CHART_INTERVALS, chartInterval, isIntradayInterval, fetchMarketCandles } from './ohlc-data.js?v=1.15.0-eth.1';
 import { parseEthArchive, mergeEthArchive } from './eth-market-data.js?v=1.15.0-eth.1';
 import { createMarketDataController, marketStatusText } from './market-data-controller.js?v=1.15.0-eth.1';
-import { drawIntradayChart } from './intraday-chart.js?v=1.15.0-eth.1';
+import { drawIntradayChart } from './intraday-chart.js?v=1.16.0-history.1';
 import { bindChartNavigation } from './chart-navigation.js?v=1.14.0-mobile.1';
 import { mountChartTouchTracking } from './chart-touch-tracking.js?v=1.14.0-mobile.1';
 import { clearChartHover } from './chart-hover.js?v=1.12.1-cursor-hud.1';
 import { mountSymbolSelector } from './symbol-selector.js?v=1.15.0-eth.1';
 import { readEthView, ethViewQuery, ethHistoryRange } from './eth-view-state.js?v=1.15.0-eth.1';
+import { ETHEREUM_EVENTS, ETHEREUM_EVENT_COLORS, getEthereumEvents } from './ethereum-events.js?v=1.16.0-history.1';
+import { mountEthereumHistory, readEthereumEventSettings, ethereumEventQuery, ethereumEventRange } from './ethereum-history.js?v=1.16.0-history.1';
 
 const glyphs = {
   line:'<path d="m3 17 5-7 5 4 8-11"/>',
@@ -16,6 +18,7 @@ const glyphs = {
   refresh:'<path d="M20 7v5h-5M4 17v-5h5"/><path d="M6 6a8 8 0 0 1 13 2M5 16a8 8 0 0 0 13 2"/>',
   info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7h.01"/>',
   close:'<path d="m6 6 12 12M6 18 18 6"/>',
+  history:'<path d="M3 10a9 9 0 1 1 2 8M3 3v7h7"/><path d="M12 7v5l3 2"/>',
 };
 const icon = name => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${glyphs[name]}</svg>`;
 const nf = new Intl.NumberFormat('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -29,7 +32,8 @@ export async function initEthView() {
   for (const node of document.querySelectorAll('body > :not(#atlas-boot-shell):not(script)')) node.remove();
   document.body.dataset.market = 'ETHUSD';
   document.title = 'ETHUSD · Ethereum — Bitcoin Cycle Atlas';
-  const state = {...readEthView(new URLSearchParams(location.search)),tool:'crosshair',range:null,priceDomain:null,controller:null,selectedTime:null,frame:null,loading:false,error:null,refreshError:null};
+  const params = new URLSearchParams(location.search);
+  const state = {...readEthView(params),eventSettings:readEthereumEventSettings(params),selectedHistoryEvent:null,tool:'crosshair',range:null,priceDomain:null,controller:null,selectedTime:null,frame:null,loading:false,error:null,refreshError:null};
   let payload = null, daily = null, weekly = null, archiveRequest = null, generation = 0;
   const app = document.createElement('main');
   app.id = 'main';app.className = 'eth-app';app.dataset.bootContent = '';app.inert = true;app.setAttribute('aria-hidden','true');
@@ -46,6 +50,7 @@ export async function initEthView() {
       <span class="eth-divider" aria-hidden="true"></span>
       <div class="eth-chart-types" role="group" aria-label="차트 유형">${actionButton('line','가격선','line')}${actionButton('candles','캔들','candles')}</div>
       <span class="eth-top-spacer"></span>
+      <button id="eth-history-trigger" class="eth-icon" type="button" aria-label="이더리움 역사 사건" title="역사 사건 · 표시 설정과 원문">${icon('history')}</button>
       ${actionButton('refresh','ETH 가격 새로고침','refresh')}${actionButton('info','ETH 데이터 출처와 조회 상태','info')}
     </header>
     <section class="atlas-plot eth-plot" aria-label="이더리움 실제 가격 차트">
@@ -84,10 +89,25 @@ export async function initEthView() {
     onGestureStart:()=>touch.cancelPending(),onMenuOpen:()=>touch.cancel(),onRangeChange:range=>{state.range=range;if(isIntradayInterval(state.frequency))void market.ensureRange(state.frequency,range);schedule();},
     onPriceRangeChange:domain=>{state.priceDomain=domain;schedule();},onPriceReset:()=>{state.priceDomain=null;schedule();},onReset:()=>resetRange(false),onAnnounce:announce});
   document.addEventListener('atlas:modal-open',()=>{touch.cancel();navigation.cancelGesture();});
+  const historyWorkbench = mountEthereumHistory({button:$('#eth-history-trigger'),initialSettings:state.eventSettings,
+    onSettingsChange:settings=>{cancelInteraction();state.eventSettings=settings;persist();schedule();},onFocusEvent:focusHistoricalEvent});
 
-  function persist(){try{history.replaceState(null,'',`${location.pathname}?${ethViewQuery(state)}`);}catch{}}
+  function persist(){try{history.replaceState(null,'',`${location.pathname}?${ethereumEventQuery(ethViewQuery(state),state.eventSettings)}`);}catch{}}
   function cancelInteraction(){touch.cancel();navigation.cancelGesture();clearChartHover(svg);state.selectedTime=null;}
   function resetRange(cancel=true){if(cancel)cancelInteraction();state.range=null;state.priceDomain=null;state.span='4y';persist();schedule();}
+  async function focusHistoricalEvent(id){
+    const event=ETHEREUM_EVENTS.find(item=>item.id===id);if(!event)return false;
+    cancelInteraction();
+    if(state.frequency!=='daily')await changeInterval('daily');
+    else if(!daily)await load();
+    const range=ethereumEventRange(event,daily);
+    if(!range){announce('이 사건 날짜에는 표시할 일봉 가격 자료가 없습니다.');return false;}
+    state.selectedHistoryEvent=id;state.range=range;state.priceDomain=null;state.eventSettings.visible=true;
+    if(state.eventSettings.category!=='all'&&state.eventSettings.category!==event.category)state.eventSettings.category='all';
+    historyWorkbench.setSettings(state.eventSettings);persist();schedule();announce(`${event.date} ${event.title} 구간을 표시합니다.`);return true;
+  }
+  function openHistoricalEvent(id){cancelInteraction();state.selectedHistoryEvent=id;historyWorkbench.open(id);schedule();}
+  function updateHistoryContext(){historyWorkbench.update({frequency:state.frequency,firstDate:daily?.firstDate?.slice(0,10),lastDate:daily?.lastDate?.slice(0,10),visibleCount:Number(svg.dataset.historyEventCount||0)});}
   function showReadout(row){
     if(row.kind==='unavailable'){$('#eth-price').textContent='—';$('#eth-change').textContent='';$('#eth-bar-time').textContent='';$('#eth-ohlc').textContent='이 구간에 완료된 봉이 없습니다.';return;}
     $('#eth-price').textContent=`$${number(row.close)}`;
@@ -123,13 +143,16 @@ export async function initEthView() {
     readout.hidden=!series;
     if(!series){
       svg.innerHTML='';state.controller=null;state.range=null;
+      svg.dataset.historyEventCount='0';updateHistoryContext();
       const error=state.error||entry?.error;
       $('#eth-empty-message').textContent=error?'ETH-USD 가격 자료를 불러오지 못했습니다. 연결을 확인하고 다시 조회해 주세요.':'ETH-USD 가격 자료를 불러오고 있습니다.';
       $('#eth-empty button').hidden=!error;$('#eth-status').textContent=error?'조회 실패':'불러오는 중';
       navigation.update();return;
     }
     if(!state.range)state.range=intraday?market.range(state.frequency):ethHistoryRange(series,state.span);
-    state.controller=drawIntradayChart({svg,series,range:state.range,chartType:state.chartType,scale:state.scale,priceDomain:state.priceDomain,showVolume:false,tool:state.tool,selectedTime:state.selectedTime,headerInset:plot.clientHeight<300?54:76,historyStatus:entry?.historyStatus||'ready',onHover:showReadout});
+    state.controller=drawIntradayChart({svg,series,range:state.range,chartType:state.chartType,scale:state.scale,priceDomain:state.priceDomain,showVolume:false,tool:state.tool,selectedTime:state.selectedTime,headerInset:plot.clientHeight<300?54:76,historyStatus:entry?.historyStatus||'ready',onHover:showReadout,
+      historicalEvents:getEthereumEvents({category:state.eventSettings.category}),showHistoricalEvents:state.eventSettings.visible,activeHistoricalEventId:state.selectedHistoryEvent,historicalEventColors:ETHEREUM_EVENT_COLORS,onHistoricalEvent:openHistoricalEvent});
+    updateHistoryContext();
     const status=intraday?marketStatusText(entry):`Coinbase ETH-USD · ${busy?'갱신 중':state.refreshError?'연결 실패 · 저장 자료':series.snapshot?'저장 자료':'완료 봉'} · ${stamp(series.lastDate)}${series.gapCount?` · 빈 봉 ${series.gapCount}개`:''}`;
     $('#eth-status').textContent=entry?.historyStatus==='loading'?'과거 봉 조회 중':state.refreshError||entry?.error?'연결 실패 · 저장 자료':`${series.snapshot?'저장 자료':'완료 봉'} · ${series.lastDate.slice(0,10)}`;
     $('#eth-status').title=status;$('#eth-status').setAttribute('aria-label',status);
@@ -178,7 +201,7 @@ export async function initEthView() {
     const button=event.target.closest('[data-eth-action]');if(!button)return;
     const action=button.dataset.ethAction;
     if(action==='refresh'){void load({force:true});return;}
-    if(action==='info'){cancelInteraction();renderInfo();info.showModal();return;}
+    if(action==='info'){cancelInteraction();document.dispatchEvent(new CustomEvent('atlas:modal-open',{detail:{id:info.id}}));renderInfo();info.showModal();return;}
     if(action==='reset'){resetRange();return;}
     cancelInteraction();
     if(['line','candles'].includes(action)){state.chartType=action;state.priceDomain=null;}
@@ -203,7 +226,7 @@ export async function initEthView() {
     cancelInteraction();
     // A Back/Forward cache restoration keeps the same document and listeners.
     // Destroy them only when the browser discards this document entirely.
-    if(!event.persisted){touch.destroy();navigation.destroy();observer.disconnect();}
+    if(!event.persisted){touch.destroy();navigation.destroy();observer.disconnect();historyWorkbench.destroy();}
   });
   window.addEventListener('pageshow',event=>{
     if(!event.persisted)return;
