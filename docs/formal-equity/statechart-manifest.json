@@ -1,5 +1,5 @@
 {
-  "syncCommit": "1f6405b90ad21df321a51530b75e7eb941776666",
+  "syncCommit": "c7fbf50c34a45386300336756b5fd42a0fab0363",
   "pstackCommit": "9580c23696ac8d7abed0c166f2f9918800afb819",
   "tool": "pstack statechart from-spec, --fixed, --cover, --png",
   "bounds": {
