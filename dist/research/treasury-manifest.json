@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "reviewDate": "2026-10-24",
+  "scope": "source metadata and original research summaries; no complete third-party text or media copies",
+  "sources": 54,
+  "historicalEvents": 43,
+  "inputs": [
+    {
+      "path": "research-data/treasury-mstr.json",
+      "sha256": "4534bfb63dc4712ecc14efa3e94c196b2ffa46421675f3cb0a0c4b474245196f"
+    },
+    {
+      "path": "research-data/treasury-bmnr.json",
+      "sha256": "ccc059ba2ebba7a10fea384c582c028443fbbe2e2cba1e259980d40c56f1eece"
+    }
+  ]
+}

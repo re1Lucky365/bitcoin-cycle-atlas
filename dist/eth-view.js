@@ -1,11 +1,11 @@
 import { CHART_INTERVALS, chartInterval, isIntradayInterval, fetchMarketCandles } from './ohlc-data.js?v=1.15.0-eth.1';
 import { parseEthArchive, mergeEthArchive } from './eth-market-data.js?v=1.15.0-eth.1';
 import { createMarketDataController, marketStatusText } from './market-data-controller.js?v=1.15.0-eth.1';
-import { drawIntradayChart } from './intraday-chart.js?v=1.16.0-history.1';
+import { drawIntradayChart } from './intraday-chart.js?v=1.18.0';
 import { bindChartNavigation } from './chart-navigation.js?v=1.14.0-mobile.1';
 import { mountChartTouchTracking } from './chart-touch-tracking.js?v=1.14.0-mobile.1';
 import { clearChartHover } from './chart-hover.js?v=1.12.1-cursor-hud.1';
-import { mountSymbolSelector } from './symbol-selector.js?v=1.15.0-eth.1';
+import { mountSymbolSelector } from './symbol-selector.js?v=1.18.0';
 import { readEthView, ethViewQuery, ethHistoryRange } from './eth-view-state.js?v=1.15.0-eth.1';
 import { ETHEREUM_EVENTS, ETHEREUM_EVENT_COLORS, getEthereumEvents } from './ethereum-events.js?v=1.17.0-context.1';
 import { mountEthereumHistory, readEthereumEventSettings, ethereumEventQuery, ethereumEventRange } from './ethereum-history.js?v=1.17.0-context.1';

@@ -28,6 +28,8 @@ jobs:
           package-manager-cache: false
       - name: Run model and data tests
         run: npm test
+      - name: Verify treasury sources and persistent research summaries
+        run: npm run verify:research
       - name: Verify reviewed Ethereum history matches the published catalog
         run: npm run verify:eth-events
       - name: Verify bounded request ownership and negative controls

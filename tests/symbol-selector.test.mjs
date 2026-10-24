@@ -3,11 +3,11 @@ import test from 'node:test';
 import { SYMBOLS, normalizeSymbol, searchSymbols, createSymbolUrl, mountSymbolSelector } from '../dist/symbol-selector.js';
 
 test('only supported true USD symbols resolve and symbol search includes both names and venue',()=>{
-  assert.deepEqual(SYMBOLS.map(item=>item.product),['BTC-USD','ETH-USD']);
+  assert.deepEqual(SYMBOLS.map(item=>item.product),['BTC-USD','ETH-USD','MSTR','BMNR']);
   for(const value of ['ETHUSD','ethusd','ETH-USD',' ETH/USD '])assert.equal(normalizeSymbol(value),'ETHUSD');
   for(const value of ['ETHUSDT','ETHBTC','javascript:ETHUSD',null,undefined])assert.equal(normalizeSymbol(value),'BTCUSD');
   for(const query of ['ethereum','이더리움','ETH/USD','eth usd','ETH Coinbase'])assert.deepEqual(searchSymbols(query).map(item=>item.symbol),['ETHUSD']);
-  assert.equal(searchSymbols('USDT').length,0);assert.equal(searchSymbols('btc').length,1);assert.equal(searchSymbols('').length,2);
+  assert.equal(searchSymbols('USDT').length,0);assert.equal(searchSymbols('btc').length,1);assert.equal(searchSymbols('').length,4);
 });
 
 test('switching preserves supported chart choices and removes cross-asset models, bounds and layers',()=>{
@@ -26,6 +26,14 @@ test('invalid presentation choices are discarded and navigation cannot change de
   assert.equal(createSymbolUrl('file:///tmp/Bitcoin_Cycles_Comparison.html?granularity=weekly','ETHUSD'),'file:///tmp/Bitcoin_Cycles_Comparison.html?symbol=ETHUSD&granularity=weekly');
   assert.throws(()=>createSymbolUrl('javascript:alert(1)','ETHUSD'),/Invalid chart URL/);
   assert.throws(()=>createSymbolUrl('https://example.com/','ETHUSDT'),/Unsupported chart symbol/);
+});
+
+test('equity symbols resolve by company and executive while crypto intraday settings reset to real supported equity intervals',()=>{
+  for(const value of ['MSTR','mstr',' MSTR '])assert.equal(normalizeSymbol(value),'MSTR');
+  assert.equal(normalizeSymbol('BMNR'),'BMNR');assert.deepEqual(searchSymbols('마이클 세일러').map(item=>item.symbol),['MSTR']);assert.deepEqual(searchSymbols('Tom Lee').map(item=>item.symbol),['BMNR']);
+  const url=new URL(createSymbolUrl('https://example.com/?symbol=ETHUSD&granularity=1h&eth-span=all&type=candles&axis=linear','MSTR'));
+  assert.equal(url.searchParams.get('symbol'),'MSTR');assert.equal(url.searchParams.get('granularity'),'daily');assert.equal(url.searchParams.get('type'),'candles');assert.equal(url.searchParams.has('eth-span'),false);
+  assert.equal(new URL(createSymbolUrl(url,'BMNR')).searchParams.get('symbol'),'BMNR');
 });
 
 // A controller-boundary fixture tests the actual event listeners, focus and

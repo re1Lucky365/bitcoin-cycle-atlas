@@ -1,4 +1,4 @@
-name: Refresh completed BTC and ETH data
+name: Refresh completed crypto and equity data
 
 on:
   schedule:
@@ -73,6 +73,11 @@ jobs:
         # interval validates. A source failure preserves its previous timestamp.
         continue-on-error: true
         run: node scripts/refresh-eth.mjs
+      - name: Refresh completed US equity sessions
+        continue-on-error: true
+        run: npm run refresh:equities
+      - name: Rebuild dated treasury anchors and research preservation
+        run: npm run build:research
       - name: Test code, fixed research fixtures and refreshed source data
         run: npm test
       - name: Verify bounded request ownership and negative controls
@@ -96,11 +101,11 @@ jobs:
             echo 'Remote main changed during validation. Aborting; a later run will retry from the new revision.'
             exit 1
           fi
-          git add -- dist/data/btc-daily.json dist/data-update.js dist/data/btc-ohlc.json dist/data/btc-volume.json dist/data/cycle-calibration.json dist/data/eth-ohlc.json
+          git add -- dist/data/btc-daily.json dist/data-update.js dist/data/btc-ohlc.json dist/data/btc-volume.json dist/data/cycle-calibration.json dist/data/eth-ohlc.json dist/data/mstr-ohlc.json dist/data/bmnr-ohlc.json dist/treasury-catalog.js
           node --input-type=module <<'NODE'
           import { execFile } from 'node:child_process';
           import { promisify } from 'node:util';
-          const allowed = new Set(['dist/data/btc-daily.json', 'dist/data-update.js', 'dist/data/btc-ohlc.json', 'dist/data/btc-volume.json', 'dist/data/cycle-calibration.json', 'dist/data/eth-ohlc.json']);
+          const allowed = new Set(['dist/data/btc-daily.json', 'dist/data-update.js', 'dist/data/btc-ohlc.json', 'dist/data/btc-volume.json', 'dist/data/cycle-calibration.json', 'dist/data/eth-ohlc.json', 'dist/data/mstr-ohlc.json', 'dist/data/bmnr-ohlc.json', 'dist/treasury-catalog.js']);
           const { stdout } = await promisify(execFile)('git', ['diff', '--cached', '--name-only', '-z']);
           const staged = stdout.split('\0').filter(Boolean);
           if (staged.some(file => !allowed.has(file))) throw new Error('Unexpected file staged for the data refresh');
@@ -108,7 +113,7 @@ jobs:
           if ! git diff --cached --quiet; then
             git config user.name 'github-actions[bot]'
             git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-            git commit -m 'data: refresh validated completed BTC and ETH observations'
+            git commit -m 'data: refresh validated completed crypto and equity observations'
             # A concurrent push after the fetch makes this ordinary push fail.
             # Never force-push, merge unrelated changes, or replace a newer main.
             git push origin HEAD:main

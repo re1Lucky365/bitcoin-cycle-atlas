@@ -1,0 +1,3423 @@
+{
+  "version": 1,
+  "reviewedAt": "2026-10-24",
+  "archiveScope": "original summaries and metadata; not complete copyrighted sources or media",
+  "articles": [
+    {
+      "id": "price-mstr-yahoo",
+      "path": "dist/research/price-mstr-yahoo.md",
+      "sourceUrl": "https://finance.yahoo.com/quote/MSTR/history/",
+      "sha256": "e228dd655eaf91ff57336f4149f19ceccaf0c39f9cb241d91a32cb4959f10e86",
+      "bytes": 1744
+    },
+    {
+      "id": "price-mstr-nasdaq",
+      "path": "dist/research/price-mstr-nasdaq.md",
+      "sourceUrl": "https://www.nasdaq.com/market-activity/stocks/mstr/historical",
+      "sha256": "4f6f7c1187a88d9406ec1735e263a55ad710aafeb029ac5b90e1a694be2e650f",
+      "bytes": 1717
+    },
+    {
+      "id": "price-bmnr-yahoo",
+      "path": "dist/research/price-bmnr-yahoo.md",
+      "sourceUrl": "https://finance.yahoo.com/quote/BMNR/history/",
+      "sha256": "ad577a621ed0c54b32aef461bdbb7e8c44eb4fff8d0132fdd94d53475fcfc7f9",
+      "bytes": 1744
+    },
+    {
+      "id": "price-bmnr-nasdaq",
+      "path": "dist/research/price-bmnr-nasdaq.md",
+      "sourceUrl": "https://www.nasdaq.com/market-activity/stocks/bmnr/historical",
+      "sha256": "9bb5ec86a2616cd1d7808f0e0246bd0616bf2f1bc81989fcbbd219038b7bbe82",
+      "bytes": 1717
+    },
+    {
+      "id": "mstr-model-method",
+      "path": "dist/research/mstr-model-method.md",
+      "sourceUrl": "https://github.com/twoimo/bitcoin-cycle-atlas/blob/main/docs/TREASURY_MODEL.md",
+      "sha256": "6e5993ca7489a375c363a2d4f0cf2e2b3c95fc6b1c342483c0e72d7c243c91b4",
+      "bytes": 2839
+    },
+    {
+      "id": "bmnr-model-method",
+      "path": "dist/research/bmnr-model-method.md",
+      "sourceUrl": "https://github.com/twoimo/bitcoin-cycle-atlas/blob/main/docs/TREASURY_MODEL.md#bmnr",
+      "sha256": "f4397008f85aa59fb35bac257df0057d2535ca38e9f320d7c41547b16c0b0ad1",
+      "bytes": 2999
+    },
+    {
+      "id": "model-eth-valuation",
+      "path": "dist/research/model-eth-valuation.md",
+      "sourceUrl": "https://www.vaneck.com/us/en/blogs/digital-assets/matthew-sigel-eth-2030-price-target/",
+      "sha256": "12d9f351d718e7fe2f4d8b37a44fa49ea79d8bec66dfc0caf18fa32e89c8b31a",
+      "bytes": 2361
+    },
+    {
+      "id": "btc-model-method",
+      "path": "dist/research/btc-model-method.md",
+      "sourceUrl": "https://github.com/twoimo/bitcoin-cycle-atlas/blob/main/docs/MODEL_SCOPE.md",
+      "sha256": "499bbb077320880a01478191984ad3f93cb9401a06759bd0d0fab29b9a014e46",
+      "bytes": 2247
+    },
+    {
+      "id": "mstr-10q-2026q2",
+      "path": "dist/research/mstr-10q-2026q2.md",
+      "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1050446/000105044626000044/mstr-20260630.htm",
+      "sha256": "30d52eb368d2e45415e1fab68363f1bbb16f54cabf6c4dc4bb9c265107c46780",
+      "bytes": 2177
+    },
+    {
+      "id": "mstr-q2-results-2026",
+      "path": "dist/research/mstr-q2-results-2026.md",
+      "sourceUrl": "https://www.strategy.com/press/strategy-announces-second-quarter-2026-financial-results_07-30-2026",
+      "sha256": "083f093ba60c551895ff86a1c25189bce8c570ec67f5a6db0ce2f60c6c1028c8",
+      "bytes": 2132
+    },
+    {
+      "id": "mstr-8k-20261019",
+      "path": "dist/research/mstr-8k-20261019.md",
+      "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526424688/mstr-20261019.htm",
+      "sha256": "38464342e6022b31c1bd2d54c3e5b403495a1ffc83527ef4d12f17cedd55bc43",
+      "bytes": 1870
+    },
+    {
+      "id": "mstr-capital-framework-2026",
+      "path": "dist/research/mstr-capital-framework-2026.md",
+      "sourceUrl": "https://www.strategy.com/press/strategy-announces-digital-credit-capital-framework_06-29-2026",
+      "sha256": "88015b19d384581ac23c7f848fd3eb7a0268ce086ffb0d2810848ad8a295f49f",
+      "bytes": 2022
+    },
+    {
+      "id": "mstr-first-btc-2020",
+      "path": "dist/research/mstr-first-btc-2020.md",
+      "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1050446/000119312520215604/d921849dex991.htm",
+      "sha256": "730ddc5fc041701291626b7b2bb94aa235a98c46f8e1b88147015810216929a9",
+      "bytes": 1521
+    },
+    {
+      "id": "mstr-convert-2020",
+      "path": "dist/research/mstr-convert-2020.md",
+      "sourceUrl": "https://www.strategy.com/press/microstrategy-completes-650m-offering-of-convertible-senior-notes-due-2025",
+      "sha256": "b2186b3c5ae810e917d00d9e079866db87835152a0096278778f9b8e4ea46952",
+      "bytes": 1476
+    },
+    {
+      "id": "mstr-silvergate-loan",
+      "path": "dist/research/mstr-silvergate-loan.md",
+      "sourceUrl": "https://www.strategy.com/press/silvergate-bank-issues-205-m-loan-to-macrostrategy-collateralized-by-bitcoin_03-29-2022",
+      "sha256": "624ae748ce5d08de53e9a4debf57303d4deff80bbab0ae169637584340f8cff4",
+      "bytes": 1488
+    },
+    {
+      "id": "mstr-silvergate-repay",
+      "path": "dist/research/mstr-silvergate-repay.md",
+      "sourceUrl": "https://www.strategy.com/press/microstrategy-repaid-silvergate-loan-and-increased-bitcoin-holdings-by-6455-and-now-holds-138955-btc_3-27-2023",
+      "sha256": "2464f09ee45ed5accf71ca61bec52b979f19c6a68a4e427882a09fa57b42b464",
+      "bytes": 1618
+    },
+    {
+      "id": "mstr-management-2022",
+      "path": "dist/research/mstr-management-2022.md",
+      "sourceUrl": "https://www.strategy.com/press/microstrategy-announces-separation-of-chairman-and-ceo-roles-and-second-quarter-2022-financial-results",
+      "sha256": "a6b514aea43200d829ed3f8cd73fe4200f24127e2ab05cc21a8c1384592db055",
+      "bytes": 1514
+    },
+    {
+      "id": "mstr-split-2024",
+      "path": "dist/research/mstr-split-2024.md",
+      "sourceUrl": "https://www.strategy.com/press/microstrategy-announces-10-for-1-stock-split_07-11-2024",
+      "sha256": "a45886ca0ee0b22a4184ebc7f515f7d2e18cb1712759fd183c129c7959e501bf",
+      "bytes": 1488
+    },
+    {
+      "id": "mstr-plan-2121",
+      "path": "dist/research/mstr-plan-2121.md",
+      "sourceUrl": "https://www.strategy.com/press/microstrategy-announces-third-quarter-2024-financial-results-and-announces-42-billion-capital-plan_10-30-2024",
+      "sha256": "ce98795deb3f44305b006472047ca22ad43d4d408b1ef7f6b37041ddbdab5851",
+      "bytes": 1533
+    },
+    {
+      "id": "mstr-rebrand",
+      "path": "dist/research/mstr-rebrand.md",
+      "sourceUrl": "https://www.strategy.com/press/microstrategy-is-now-strategy_02-05-2025",
+      "sha256": "3d6893eb31f7f8e34bcece14c54fb69adb58f4492ca42a2c63d08df70caddc5c",
+      "bytes": 1332
+    },
+    {
+      "id": "mstr-strk-2025",
+      "path": "dist/research/mstr-strk-2025.md",
+      "sourceUrl": "https://www.strategy.com/press/microstrategy-announces-pricing-of-strike-preferred-stock-offering-strk_01-31-2025",
+      "sha256": "8e8433ac9737d66b4ccc6b749305983ebed9d9568229a47e2113c9703fea853d",
+      "bytes": 1836
+    },
+    {
+      "id": "mstr-strc-2025",
+      "path": "dist/research/mstr-strc-2025.md",
+      "sourceUrl": "https://www.strategy.com/press/strategy-announces-closing-of-2-point-521-billion-STRC-stock-initial-public-offering_07-29-2025",
+      "sha256": "e7687f3bea4bbaf41337330ac5882e9f6a4e3cbb48e16f01682ee3d9efec0a3e",
+      "bytes": 1493
+    },
+    {
+      "id": "mstr-reserve-2025",
+      "path": "dist/research/mstr-reserve-2025.md",
+      "sourceUrl": "https://www.strategy.com/press/strategy-announces-establishment-of-1-44-billion-usd-reserve-and-updates-fy-2025-guidance_12-1-2025",
+      "sha256": "799d4e352f3212b3bbb54530b42dcff5b4f5400a990648379de2eb96fec040e2",
+      "bytes": 1568
+    },
+    {
+      "id": "mstr-debt-buyback-2026",
+      "path": "dist/research/mstr-debt-buyback-2026.md",
+      "sourceUrl": "https://www.strategy.com/press/strategy-completes-1-5-billion-debt-repurchase-and-achieves-btc-yield-of-13-3-ytd-now-holds-843738-btc_05-26-2026",
+      "sha256": "ecf564a562406669e7a5762ec37419a100b5472dfa462bf0a33e55258905bbf5",
+      "bytes": 1559
+    },
+    {
+      "id": "mstr-q3-date-2026",
+      "path": "dist/research/mstr-q3-date-2026.md",
+      "sourceUrl": "https://www.strategy.com/press/strategy-announces-earnings-release-date-and-live-video-webinar-for-third-quarter-2026-financial-results_10-08-2026",
+      "sha256": "66f6629ba1225f184ea9ef8dda9dcc648660f37a760406feb037a90e777dc969",
+      "bytes": 1612
+    },
+    {
+      "id": "bmnr-fy2025-10k",
+      "path": "dist/research/bmnr-fy2025-10k.md",
+      "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000149315225024679/form10-k.htm",
+      "sha256": "4556f6c836a9bddf6a70f5f616c507c9a4ec4b44743a330311ebf66f77a3518b",
+      "bytes": 1721
+    },
+    {
+      "id": "bmnr-2025-may-10q",
+      "path": "dist/research/bmnr-2025-may-10q.md",
+      "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000168316825004889/bitmine_i10q-053125.htm",
+      "sha256": "0e48015785d00a285e46d9dac1493b375967c77a5f2dd030916a6aa6cdfddc85",
+      "bytes": 1708
+    },
+    {
+      "id": "bmnr-pipe-close-2025",
+      "path": "dist/research/bmnr-pipe-close-2025.md",
+      "sourceUrl": "https://www.prnewswire.com/news-releases/bitmine-immersion-technologies-closes-250-million-private-placement-to-advance-its-treasury-strategy-on-ethereum-302500920.html",
+      "sha256": "5f46f6091842bdaf7950d85662c868eddc0ddcb5bb0de16105a9876aef4f43ac",
+      "bytes": 1974
+    },
+    {
+      "id": "bmnr-warrants-2025",
+      "path": "dist/research/bmnr-warrants-2025.md",
+      "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000149315225014392/form8-k.htm",
+      "sha256": "bc270cda30abd052e2ddfddf5022c3065025eb38431878c68b719d39ba6cbf1f",
+      "bytes": 1757
+    },
+    {
+      "id": "bmnr-nyse-buyback-2026",
+      "path": "dist/research/bmnr-nyse-buyback-2026.md",
+      "sourceUrl": "https://www.prnewswire.com/news-releases/bitmine-immersion-technologies-nyse-bmnr-announces-uplisting-to-new-york-stock-exchange-and-expansion-of-share-repurchase-program-to-4-billion-302737742.html",
+      "sha256": "97f88265cd1ed1ce90743ac77f679991ba24e72d4a6fdb844ca9bfed8183b1d5",
+      "bytes": 1879
+    },
+    {
+      "id": "bmnr-2026-q3-10q",
+      "path": "dist/research/bmnr-2026-q3-10q.md",
+      "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000162828026048157/bmnr-20260531.htm",
+      "sha256": "e2e6aabf9073f24c069a36147bed39f61b52225b8be51e2f170c56eeebe02e95",
+      "bytes": 2097
+    },
+    {
+      "id": "bmnr-preferred-2026",
+      "path": "dist/research/bmnr-preferred-2026.md",
+      "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000149315226027521/form424b5.htm",
+      "sha256": "2e8399eae566f14cd1e347eef2823e9a6cbaecd9e51b288eb58632827f0161a0",
+      "bytes": 2071
+    },
+    {
+      "id": "bmnr-staking-fee-reset-2026",
+      "path": "dist/research/bmnr-staking-fee-reset-2026.md",
+      "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000149315226041713/form8-k.htm",
+      "sha256": "e247ac232001b3ef007290bc5454018d8db55b4e0e30c3c5f660b2f6abbda820",
+      "bytes": 1985
+    },
+    {
+      "id": "mstr-shares",
+      "path": "dist/research/mstr-shares.md",
+      "sourceUrl": "https://www.strategy.com/shares",
+      "sha256": "de74b490a845526b3a8c2fe86c0cdd0c805d4191de937e29d9ba1857542c1c72",
+      "bytes": 1767
+    },
+    {
+      "id": "mstr-ledger",
+      "path": "dist/research/mstr-ledger.md",
+      "sourceUrl": "https://www.strategy.com/ledger",
+      "sha256": "e6966f21b3acd3fd1611e75d3dafb04f9652e8b78fe0493d0931417897235325",
+      "bytes": 1676
+    },
+    {
+      "id": "mstr-nasdaq100",
+      "path": "dist/research/mstr-nasdaq100.md",
+      "sourceUrl": "https://www.nasdaq.com/press-release/annual-changes-nasdaq-100-indexr-2024-12-13",
+      "sha256": "61bf19d48b62387356fe0ad8be33fa896baf888e29e9467eb3c6e1d528c26ed5",
+      "bytes": 1376
+    },
+    {
+      "id": "bmnr-million-eth-2025",
+      "path": "dist/research/bmnr-million-eth-2025.md",
+      "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000149315225011799/ex99-1.htm",
+      "sha256": "a6f366358f92bd737ca404c3c3c6286c768f74a32dace7c44416019b69181f58",
+      "bytes": 1658
+    },
+    {
+      "id": "bmnr-mavan-launch-2026",
+      "path": "dist/research/bmnr-mavan-launch-2026.md",
+      "sourceUrl": "https://www.prnewswire.com/news-releases/bitmine-immersion-technologies-bmnr-announces-launch-of-mavan-made-in-america-validator-network-the-companys-proprietary-staking-solution-302724419.html",
+      "sha256": "a1b0d28d343e3b6ff24dc834c857a920792038437d5b09a967416714257490de",
+      "bytes": 2081
+    },
+    {
+      "id": "bmnr-preferred-close-2026",
+      "path": "dist/research/bmnr-preferred-close-2026.md",
+      "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000149315226028622/ex99-1.htm",
+      "sha256": "5b3634999788d80a89cf636a0406bec6e856013bd3d732a49e0639ef06be2665",
+      "bytes": 1698
+    },
+    {
+      "id": "bmnr-buyback-aug-2026",
+      "path": "dist/research/bmnr-buyback-aug-2026.md",
+      "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000149315226038652/ex99-1.htm",
+      "sha256": "0a4d69552f50ea087f9960ae18da7fc304975ca65b795fe81706e2af383ad5d0",
+      "bytes": 2008
+    },
+    {
+      "id": "bmnr-six-million-2026",
+      "path": "dist/research/bmnr-six-million-2026.md",
+      "sourceUrl": "https://www.prnewswire.com/news-releases/bitmine-immersion-technologies-bmnr-announces-eth-holdings-reach-over-6-million-tokens-with-total-crypto-cash--marketable-securities-holdings-of-17-2-billion-302891056.html",
+      "sha256": "21ad92610aba3296c5121cf0b743fea3fc8c0f759e33b958f55d4a327b467898",
+      "bytes": 2067
+    },
+    {
+      "id": "bmnr-latest-holdings-2026",
+      "path": "dist/research/bmnr-latest-holdings-2026.md",
+      "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000149315226047517/ex99-1.htm",
+      "sha256": "cb2368e7a705e19ba0ce8e39668a6a0280e58d66966c2f2efdb2df95050c7990",
+      "bytes": 2354
+    },
+    {
+      "id": "mstr-notes",
+      "path": "dist/research/mstr-notes.md",
+      "sourceUrl": "https://www.strategy.com/notes",
+      "sha256": "c0e6699eceb384f6a4238dd13c70808c84bfae63804af4e2a0307474845f4d1c",
+      "bytes": 1942
+    },
+    {
+      "id": "mstr-research-comovement",
+      "path": "dist/research/mstr-research-comovement.md",
+      "sourceUrl": "https://arxiv.org/abs/2505.14655",
+      "sha256": "bbc0f10a2628b6683727ee6818f96061d721e0c204f7ff41b1178e225f702235",
+      "bytes": 1966
+    },
+    {
+      "id": "bmnr-staking-protocol",
+      "path": "dist/research/bmnr-staking-protocol.md",
+      "sourceUrl": "https://ethereum.org/developers/docs/consensus-mechanisms/pos/rewards-and-penalties/",
+      "sha256": "7a71c365b296625ebb0da55fa48ab379646f9671ad1acc48868f781b46656f50",
+      "bytes": 1743
+    },
+    {
+      "id": "mstr-saylor-bitcoin24",
+      "path": "dist/research/mstr-saylor-bitcoin24.md",
+      "sourceUrl": "https://github.com/bitcoin-model/bitcoin_model",
+      "sha256": "e6c8ff86c9c5a94934cc0b521140a2732bf700b25e2902891bb9e5157ddee322",
+      "bytes": 2035
+    },
+    {
+      "id": "mstr-saylor-nashville-2024",
+      "path": "dist/research/mstr-saylor-nashville-2024.md",
+      "sourceUrl": "https://assets.contentstack.io/v3/assets/bltdef7a3f3c28ddd84/blt8053254ac26aa0a4/66a7a137cfbd232be87d6bbc/Bitcoin_Nashville_24_Saylor_Presentation.pdf",
+      "sha256": "d06d713b238bcac2f056b4b46ee8eaa614f8da8ebf9f933186b15add3cfb5701",
+      "bytes": 2122
+    },
+    {
+      "id": "mstr-saylor-prague-2025",
+      "path": "dist/research/mstr-saylor-prague-2025.md",
+      "sourceUrl": "https://assets.contentstack.io/v3/assets/bltdef7a3f3c28ddd84/blt32a376ef7e228b72/68597f38cbfa9d7c860d952d/Bitcoin_Prague_25_Saylor_Presentation.pdf",
+      "sha256": "d2e79287e23ca9f64c8b04cc8bd532fc8dbcc26e2912f6151bfdda46ef9d1fc5",
+      "bytes": 2566
+    },
+    {
+      "id": "mstr-saylor-wainwright-2025",
+      "path": "dist/research/mstr-saylor-wainwright-2025.md",
+      "sourceUrl": "https://assets.contentstack.io/v3/assets/bltdef7a3f3c28ddd84/blte8688f031b1b4e30/68f65a5a98fba75a9dee1054/HC_Wainwright_25.pdf",
+      "sha256": "ad3055760c4bba10eb22d5c5c9982baed29cc897392b305d4821fc81f357143e",
+      "bytes": 2155
+    },
+    {
+      "id": "mstr-saylor-x-20260921",
+      "path": "dist/research/mstr-saylor-x-20260921.md",
+      "sourceUrl": "https://x.com/saylor/status/2102005566973301018",
+      "sha256": "4bcfa713159e0fc9406ab6af4455c50bd9d4106ebd3bcd6d3be3a30fb4ccc465",
+      "bytes": 1762
+    },
+    {
+      "id": "bmnr-treasury-pivot-2025",
+      "path": "dist/research/bmnr-treasury-pivot-2025.md",
+      "sourceUrl": "https://www.prnewswire.com/news-releases/bitmine-immersion-technologies-announces-250-million-private-placement-to-initiate-ethereum-treasury-strategy-expected-to-become-one-of-the-largest-publicly-traded-eth-holders-302494355.html",
+      "sha256": "f68c8a75a90d7bc0deb21adddb176cc0b23804c3daf566f6eb03da67d22e4991",
+      "bytes": 1872
+    },
+    {
+      "id": "bmnr-july-deck-2026",
+      "path": "dist/research/bmnr-july-deck-2026.md",
+      "sourceUrl": "https://ap-south-1.graphassets.com/cmcvvg9jt0fra07o6drxw4i5b/cmrp5wawr1tsg08o847650045",
+      "sha256": "5f04bb1f115fd5715863045ce7ff7f0dbc12ddcaabff3f0b32ac5ec40f2bdeed",
+      "bytes": 1859
+    },
+    {
+      "id": "bmnr-october-message-2026",
+      "path": "dist/research/bmnr-october-message-2026.md",
+      "sourceUrl": "https://www.bitminetech.io/chairmans-message",
+      "sha256": "04f4ff92ff15eabf977d1736cece3030cfb6a2657695d46222a9786ae88a98cb",
+      "bytes": 2653
+    },
+    {
+      "id": "bmnr-october-deck-2026",
+      "path": "dist/research/bmnr-october-deck-2026.md",
+      "sourceUrl": "https://ap-south-1.graphassets.com/cmcvvg9jt0fra07o6drxw4i5b/cmuy4g9kq1ruy06pie07m4se0",
+      "sha256": "cf7a06712d6069032a7dd825883458dbcc19f79f29721fafa638b4270d32073b",
+      "bytes": 1820
+    },
+    {
+      "id": "bmnr-tom-lee-x",
+      "path": "dist/research/bmnr-tom-lee-x.md",
+      "sourceUrl": "https://x.com/fundstrat",
+      "sha256": "8a7a7d30a13954e166942f8426aa0a7517f802245c62b86aea9cac257884ee26",
+      "bytes": 1394
+    },
+    {
+      "id": "mstr-vaneck-capital",
+      "path": "dist/research/mstr-vaneck-capital.md",
+      "sourceUrl": "https://www.vaneck.com/us/en/blogs/digital-assets/matthew-sigel-deconstructing-strategy-mstr-premium-leverage-and-capital-structure/",
+      "sha256": "2a9ebbc803977548f7e76ef7938d5488908650f85d30fb75873566e5fb6cce00",
+      "bytes": 2074
+    },
+    {
+      "id": "mstr-sec-2000",
+      "path": "dist/research/mstr-sec-2000.md",
+      "sourceUrl": "https://www.sec.gov/newsroom/press-releases/2000-186-sec-brings-civil-charges-against-microstrategy-three-executive-officers-accounting-violations",
+      "sha256": "7ea0b787b3750a1cc06d9d8ed1585708437716e47da63942c9385324d4a293f0",
+      "bytes": 1557
+    },
+    {
+      "id": "mstr-spot-etp-2024",
+      "path": "dist/research/mstr-spot-etp-2024.md",
+      "sourceUrl": "https://www.sec.gov/newsroom/speeches-statements/gensler-statement-spot-bitcoin-011023",
+      "sha256": "79006c263a719f6a6c0a6260f82b1e56dcd1b378a8b4509e4c8ab0b0a9fbd2cb",
+      "bytes": 1428
+    },
+    {
+      "id": "mstr-us-reserve-order",
+      "path": "dist/research/mstr-us-reserve-order.md",
+      "sourceUrl": "https://www.whitehouse.gov/presidential-actions/2025/03/establishment-of-the-strategic-bitcoin-reserve-and-united-states-digital-asset-stockpile/",
+      "sha256": "c3ca668c49901188afcb9f9817d5725ddf6b755884efe462d5d141e281d8c95f",
+      "bytes": 1520
+    },
+    {
+      "id": "mstr-tariffs-2025",
+      "path": "dist/research/mstr-tariffs-2025.md",
+      "sourceUrl": "https://www.whitehouse.gov/presidential-actions/2025/04/regulating-imports-with-a-reciprocal-tariff-to-rectify-trade-practices-that-contribute-to-large-and-persistent-annual-united-states-goods-trade-deficits/",
+      "sha256": "0db7918f3b37513a9a84b34d9d944181dcb12d343ce58c86ff4855b44639bd81",
+      "bytes": 1567
+    },
+    {
+      "id": "bmnr-advisor-agreement-2025",
+      "path": "dist/research/bmnr-advisor-agreement-2025.md",
+      "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1829311/000164117225018421/form8-k.htm",
+      "sha256": "8880bc1c0effe0c066c5f59a5de710828818812621cd4ff14a5b3dbb0ec4a373",
+      "bytes": 1755
+    },
+    {
+      "id": "bmnr-dencun-value-capture",
+      "path": "dist/research/bmnr-dencun-value-capture.md",
+      "sourceUrl": "https://ethereum.org/roadmap/dencun/",
+      "sha256": "74a2c5b779b12d1dfb0c292129d700e80cf9f1a0df250f4073b6402df198f48c",
+      "bytes": 1746
+    },
+    {
+      "id": "cm-price-data",
+      "path": "dist/research/cm-price-data.md",
+      "sourceUrl": "https://community-api.coinmetrics.io/v4/timeseries/asset-metrics?assets=btc&metrics=PriceUSD&frequency=1d&start_time=2010-07-18&end_time=2026-10-21&page_size=10000",
+      "sha256": "5e97d3f2f020203829c4f91fe84c277e7eaf326d9e85238cc6b35ecb2ed7c746",
+      "bytes": 2098
+    },
+    {
+      "id": "cm-price-definition",
+      "path": "dist/research/cm-price-definition.md",
+      "sourceUrl": "https://github.com/coinmetrics/docs-website/blob/master/asset-metrics/market/priceusd.md",
+      "sha256": "868e8d876e1fb67e4ea03059aece68d5e750ceba30cad0a5d4938e5bed4cfd9e",
+      "bytes": 1738
+    },
+    {
+      "id": "coinbase-candle-data",
+      "path": "dist/research/coinbase-candle-data.md",
+      "sourceUrl": "https://api.exchange.coinbase.com/products/BTC-USD/candles?start=2025-07-01T00%3A00%3A00Z&end=2026-01-01T00%3A00%3A00Z&granularity=86400",
+      "sha256": "f50a4089b2ba2a25c502ea76beddf92f6ac8de6b16872a57aede956d2563b82d",
+      "bytes": 2330
+    },
+    {
+      "id": "coinbase-candle-definition",
+      "path": "dist/research/coinbase-candle-definition.md",
+      "sourceUrl": "https://docs.cdp.coinbase.com/api-reference/exchange-api/rest-api/products/get-product-candles",
+      "sha256": "9831ad4f28403d6a35e651939ec73468f2f718d5d61c0641d2167c4075378fae",
+      "bytes": 1608
+    },
+    {
+      "id": "structure-bitcoin-consensus",
+      "path": "dist/research/structure-bitcoin-consensus.md",
+      "sourceUrl": "https://github.com/bitcoin/bitcoin/blob/master/src/kernel/chainparams.cpp",
+      "sha256": "bf4abc048a43eeedbc1cf3559c491a6b5263d02666b7c48fbf7a0614fada14cb",
+      "bytes": 1704
+    },
+    {
+      "id": "bitcoin-halving-history",
+      "path": "dist/research/bitcoin-halving-history.md",
+      "sourceUrl": "https://bitcoin.org/en/halving",
+      "sha256": "d2d6eefe533751002bbe5e91e675a28bf894f6996e31c2551ccbba36e0d2d4d3",
+      "bytes": 1520
+    },
+    {
+      "id": "cm-community-scope",
+      "path": "dist/research/cm-community-scope.md",
+      "sourceUrl": "https://gitbook-docs.coinmetrics.io/packages/coin-metrics-community-data",
+      "sha256": "17fa73179ada1ce47d825b3e59057e24dfbffb495a17d143684a931768ef86be",
+      "bytes": 1921
+    },
+    {
+      "id": "long-wisdomtree-2030",
+      "path": "dist/research/long-wisdomtree-2030.md",
+      "sourceUrl": "https://www.wisdomtree.com/us/insights/blog/hard-money-forecasts-bitcoin-and-gold-in-2030-and-beyond",
+      "sha256": "a79edc2ad54d7c21a29b9acb6a81223b460714691283b1058fa6dc3272161fed",
+      "bytes": 2224
+    },
+    {
+      "id": "long-wisdomtree-2050",
+      "path": "dist/research/long-wisdomtree-2050.md",
+      "sourceUrl": "https://cdn.sanity.io/files/f8796olh/global-dev/22f530dcb7cbfd8a59aa98b5eafb5bb4946e1fc6.pdf",
+      "sha256": "015d16ca3f1e8c7f53db552db97b432132c0eaa8d32d96fd583944d1812be0ae",
+      "bytes": 1936
+    },
+    {
+      "id": "long-ark-2030-2025-vintage",
+      "path": "dist/research/long-ark-2030-2025-vintage.md",
+      "sourceUrl": "https://www.ark-invest.com/articles/valuation-models/arks-bitcoin-price-target-2030",
+      "sha256": "5df21d249efdd33a1376aa8bad11253aba055ae6343f4ed0ad0865c552396c37",
+      "bytes": 2140
+    },
+    {
+      "id": "long-ark-2030-2026-assumptions",
+      "path": "dist/research/long-ark-2030-2026-assumptions.md",
+      "sourceUrl": "https://www.ark-invest.com/big-ideas-2026",
+      "sha256": "defcf65dcfba1d9854995734d8f68ef7af962605df718e299ede489294234092",
+      "bytes": 2208
+    },
+    {
+      "id": "long-bitwise-2035",
+      "path": "dist/research/long-bitwise-2035.md",
+      "sourceUrl": "https://static.bitwiseinvestments.com/Research/Bitwise-Bitcoin-Long-Term-Capital-Market-Assumptions-2025.pdf",
+      "sha256": "04eb254697b009a8a0635866e5848e9bd94d9616852028944a8a1ce0aaaf9706",
+      "bytes": 2070
+    },
+    {
+      "id": "long-vaneck-2050",
+      "path": "dist/research/long-vaneck-2050.md",
+      "sourceUrl": "https://www.vaneck.com/us/en/blogs/digital-assets/matthew-sigel-vaneck-bitcoin-long-term-capital-market-assumptions/",
+      "sha256": "d17d86a3b0dcd8acb2989c44438937234edeb688d8cb662155a0024e0a75879a",
+      "bytes": 2155
+    },
+    {
+      "id": "long-fidelity-volatility-2024",
+      "path": "dist/research/long-fidelity-volatility-2024.md",
+      "sourceUrl": "https://www.fidelitydigitalassets.com/research-and-insights/closer-look-bitcoins-volatility",
+      "sha256": "b28f661188911d933642c8834eb60d16e0131a19cbff6ef9d7376d48a2e90c22",
+      "bytes": 1996
+    },
+    {
+      "id": "long-blackrock-2026-drawdown",
+      "path": "dist/research/long-blackrock-2026-drawdown.md",
+      "sourceUrl": "https://www.blackrock.com/us/financial-professionals/insights/re-underwriting-bitcoin",
+      "sha256": "3eaaef64b603574ada4fd3e31fe5b78cdb47d2af882a577d6ebd8bc3f1202be5",
+      "bytes": 1959
+    },
+    {
+      "id": "long-gold-volatility-2026",
+      "path": "dist/research/long-gold-volatility-2026.md",
+      "sourceUrl": "https://www.gold.org/goldhub/gold-focus/2026/04/you-asked-we-answered-has-golds-performance-structurally-changed",
+      "sha256": "94f05cfa7f775971a60caedf36e395eac96b0feac2984b5dc1245b21d3a07aa5",
+      "bytes": 1926
+    },
+    {
+      "id": "long-bitwise-cycle-2026",
+      "path": "dist/research/long-bitwise-cycle-2026.md",
+      "sourceUrl": "https://static.bitwiseinvestments.com/Research/Bitwise-The-Year-Ahead-10-Crypto-Predictions-for-2026.pdf",
+      "sha256": "59dc311ab4ff2fad5edac9ece539b4356be069cd8e2741f580bd68c122704ca3",
+      "bytes": 2001
+    },
+    {
+      "id": "long-ark-quarterly-q3-2026",
+      "path": "dist/research/long-ark-quarterly-q3-2026.md",
+      "sourceUrl": "https://www.ark-invest.com/crypto-reports/bitcoin-quarterly-q3-2026",
+      "sha256": "5d103560e85483d2c5dc863fa3531c19b7833cfe132e442c66883249e9f46d47",
+      "bytes": 2135
+    },
+    {
+      "id": "long-harvey-gold-2026",
+      "path": "dist/research/long-harvey-gold-2026.md",
+      "sourceUrl": "https://people.duke.edu/~charvey/Teaching/656_2026/Public_Presentations_656/656_US_Strategy_2026.pdf",
+      "sha256": "d10d08ad6006117c04f6a0d4dd519d94c6755bed40625582384e27c8e592ed4f",
+      "bytes": 2013
+    },
+    {
+      "id": "long-taleb-fragility-2021",
+      "path": "dist/research/long-taleb-fragility-2021.md",
+      "sourceUrl": "https://arxiv.org/abs/2106.14204",
+      "sha256": "346a4b147ad6651089f5115252faf136cdd09176de910518e08937b5175a3bce",
+      "bytes": 2025
+    },
+    {
+      "id": "fpp-forecast-methods",
+      "path": "dist/research/fpp-forecast-methods.md",
+      "sourceUrl": "https://otexts.com/fpp3/toolbox.html",
+      "sha256": "668b30de4c5f8a6cf7d9923e71273379d036c3eee529f35afa45cff75255fb50",
+      "bytes": 1843
+    },
+    {
+      "id": "structure-directional-change",
+      "path": "dist/research/structure-directional-change.md",
+      "sourceUrl": "https://arxiv.org/pdf/0809.1040",
+      "sha256": "f3a5bb9831251fefe4dc76a6b8f01946ef9f3ff47e16a1ba99b80b236c85ce87",
+      "bytes": 1765
+    },
+    {
+      "id": "structure-stylized-facts",
+      "path": "dist/research/structure-stylized-facts.md",
+      "sourceUrl": "https://finance.martinsewell.com/stylized-facts/dependence/Cont2001.pdf",
+      "sha256": "05021f18dc3e5c91ddfa85b307b927dcfcd8b164ac1085eab7c2a8574d7983f3",
+      "bytes": 1787
+    },
+    {
+      "id": "cryptocon-audit-report",
+      "path": "dist/research/cryptocon-audit-report.md",
+      "sourceUrl": "https://github.com/twoimo/bitcoin-cycle-atlas/blob/main/docs/CRYPTOCON_AUDIT.md",
+      "sha256": "57cdf51a2d0e6e5dc7d175b9f1a262aa134d4297fb0b02aad6dd8f340824821a",
+      "bytes": 1865
+    },
+    {
+      "id": "structure-fibonacci-null-paper",
+      "path": "dist/research/structure-fibonacci-null-paper.md",
+      "sourceUrl": "https://openaccess.city.ac.uk/id/eprint/16276/",
+      "sha256": "62669339f94b7d64267823e427cf2340e2b46d706a792df4edf6b14c52d34579",
+      "bytes": 1963
+    },
+    {
+      "id": "structure-white-reality-check",
+      "path": "dist/research/structure-white-reality-check.md",
+      "sourceUrl": "https://users.ssc.wisc.edu/~behansen/718/White2000.pdf",
+      "sha256": "5721ffef3e1df0d7ffabb753fced1e081fc1c3cd7b53e24c3645b4356b9ddd95",
+      "bytes": 1800
+    },
+    {
+      "id": "structure-lo-chart-patterns",
+      "path": "dist/research/structure-lo-chart-patterns.md",
+      "sourceUrl": "https://web.mit.edu/wangj/www/pap/LoMamayskyWang00.pdf",
+      "sha256": "4624bb94ee380f9cd64251dc7f551cd0bf7179e55b2c1deaa822f3bd0cda10ab",
+      "bytes": 1923
+    },
+    {
+      "id": "structure-ilay-halving-v3",
+      "path": "dist/research/structure-ilay-halving-v3.md",
+      "sourceUrl": "https://x.com/ilay_vp/status/1820906371669168600",
+      "sha256": "c57a4b27372fa72321ef254aa1e34672348d685053c41fe1f4bdfec47e0bc51e",
+      "bytes": 1959
+    },
+    {
+      "id": "structure-ilay-2024-repost",
+      "path": "dist/research/structure-ilay-2024-repost.md",
+      "sourceUrl": "https://gathering.tweakers.net/forum/list_messages/2275282/11",
+      "sha256": "0cf0e6194d46082c2a99c0ce9d06290c3410898aa2257f29179711f132421adf",
+      "bytes": 1818
+    },
+    {
+      "id": "cryptocon-theories-collide",
+      "path": "dist/research/cryptocon-theories-collide.md",
+      "sourceUrl": "https://www.bitcoindatanewsletter.com/p/theories-collide",
+      "sha256": "ebda9550858cabb61dc703f731aafe766d1a9592b238c6015750891d02763c8a",
+      "bytes": 1596
+    },
+    {
+      "id": "cryptocon-slowest-2025",
+      "path": "dist/research/cryptocon-slowest-2025.md",
+      "sourceUrl": "https://www.bitcoindatanewsletter.com/p/the-slowest-cycle-yet",
+      "sha256": "26cf4a61222035fd27153057b089ba34a90cd2f4a68d0302fe4af4a3f2e86545",
+      "bytes": 1641
+    },
+    {
+      "id": "cryptocon-revision-2026",
+      "path": "dist/research/cryptocon-revision-2026.md",
+      "sourceUrl": "https://www.bitcoindatanewsletter.com/p/cryptocon-gets-it-wrong",
+      "sha256": "f88e49a243c18bbb9895e5ecb0a52df9223d002f3c75ce3c5202b837d93a25d4",
+      "bytes": 1635
+    },
+    {
+      "id": "cryptocon-unfinished",
+      "path": "dist/research/cryptocon-unfinished.md",
+      "sourceUrl": "https://www.bitcoindatanewsletter.com/p/unfinished-business",
+      "sha256": "108ac3d7d48516c13070e5c6b0c6e22168df5b7f3ffc4986c8a16b5fedf0f31c",
+      "bytes": 1679
+    },
+    {
+      "id": "cryptocon-sale-alert",
+      "path": "dist/research/cryptocon-sale-alert.md",
+      "sourceUrl": "https://www.bitcoindatanewsletter.com/p/cycle-top-urgent-alert-cryptocon",
+      "sha256": "327eeb4b1486237f94bdeb444d3e31d609755d16403ca73f75adb0583a99009e",
+      "bytes": 1645
+    },
+    {
+      "id": "cryptocon-pseudo-bottom",
+      "path": "dist/research/cryptocon-pseudo-bottom.md",
+      "sourceUrl": "https://www.bitcoindatanewsletter.com/p/pseudo-double-bottom",
+      "sha256": "5395e8da027e90beb40d740ab4b3190deac36c99f1639c7af6246a70c16426da",
+      "bytes": 1623
+    },
+    {
+      "id": "cryptocon-limbo",
+      "path": "dist/research/cryptocon-limbo.md",
+      "sourceUrl": "https://www.bitcoindatanewsletter.com/p/trapped-in-limbo",
+      "sha256": "d1e72075280a353bacf7e68f46d0d4f8f9fe8adb57def274cb3f131778ac625d",
+      "bytes": 1611
+    },
+    {
+      "id": "galaxy-cycle-duration",
+      "path": "dist/research/galaxy-cycle-duration.md",
+      "sourceUrl": "https://www.galaxy.com/insights/research/bitcoin-four-year-cycle-where-is-the-bottom",
+      "sha256": "3b19a8937442214ca78e6be5b40e7698959edf0147c21ea8b63c22ee6eb37db4",
+      "bytes": 1795
+    },
+    {
+      "id": "bitwise-march-early-bottom",
+      "path": "dist/research/bitwise-march-early-bottom.md",
+      "sourceUrl": "https://bitwiseinvestments.eu/blog/regular-updates/from_peak_liquidity_to_recovery_setup-03-2026/",
+      "sha256": "6c771a12700e07faafd5349810c3b2aa5b18fd2f55d918226474de743d4afa70",
+      "bytes": 1793
+    },
+    {
+      "id": "structure-rekt-june2026",
+      "path": "dist/research/structure-rekt-june2026.md",
+      "sourceUrl": "https://newsletter.rektcapital.co.uk/bitcoin-preparing-for-q3/",
+      "sha256": "e855e8c4d94e31dfad708ebec00862ab4fc25d35147a9b923e5e7a5adaff787e",
+      "bytes": 1802
+    },
+    {
+      "id": "glassnode-july-discovery",
+      "path": "dist/research/glassnode-july-discovery.md",
+      "sourceUrl": "https://research.glassnode.com/the-week-onchain-week-28-2025/",
+      "sha256": "3847c3877cbc2e818510b7a9d5d5b2911377dee956512be9c12328963c8503d6",
+      "bytes": 1595
+    },
+    {
+      "id": "cm-july-flows",
+      "path": "dist/research/cm-july-flows.md",
+      "sourceUrl": "https://coinmetrics.substack.com/p/state-of-the-network-issue-322",
+      "sha256": "b762bae06391bfbcf73fbc6679c353bf8abcae9d6d6d09a78b8f7f7d1a3d5387",
+      "bytes": 1679
+    },
+    {
+      "id": "reuters-september-sideways",
+      "path": "dist/research/reuters-september-sideways.md",
+      "sourceUrl": "https://www.reuters.com/business/global-markets-trading-day-graphic-2025-09-25/",
+      "sha256": "5de383973256fb429a757ad43360e7ff37a7f0a69797c0167a387eedc6ecf756",
+      "bytes": 1658
+    },
+    {
+      "id": "cm-q3-wrap",
+      "path": "dist/research/cm-q3-wrap.md",
+      "sourceUrl": "https://coinmetrics.substack.com/p/state-of-the-network-issue-331",
+      "sha256": "5cf999857fe14a6e1b6f51ab12d2b1729465fb858c2e66a327413c464ad69ac8",
+      "bytes": 1705
+    },
+    {
+      "id": "structure-imf-crypto-cycle",
+      "path": "dist/research/structure-imf-crypto-cycle.md",
+      "sourceUrl": "https://www.imf.org/en/publications/wp/issues/2023/08/04/the-crypto-cycle-and-us-monetary-policy-534834",
+      "sha256": "43ba9879567d61c273df7a8dba5a1f4a27571b91b90b9a2afc0da4ddb25ae5f5",
+      "bytes": 1856
+    },
+    {
+      "id": "structure-nyfed-disconnect",
+      "path": "dist/research/structure-nyfed-disconnect.md",
+      "sourceUrl": "https://www.newyorkfed.org/research/staff_reports/sr1052",
+      "sha256": "417102c818ffb8e41c8608ba07baf84b85c6ae46bbcb3564b7b73ca112242fa0",
+      "bytes": 1754
+    },
+    {
+      "id": "structure-china-2013",
+      "path": "dist/research/structure-china-2013.md",
+      "sourceUrl": "https://www.pbc.gov.cn/chubanwu/114566/114579/114616/2808348/index.html",
+      "sha256": "683a70bd759c96b94e700a390ffa30957abb5d8dc53afd4fb201e9a24a188dfc",
+      "bytes": 1890
+    },
+    {
+      "id": "structure-cme-launch",
+      "path": "dist/research/structure-cme-launch.md",
+      "sourceUrl": "https://www.cmegroup.com/media-room/press-releases/2017/12/01/cme_group_self-certifiesbitcoinfuturestolaunchdec18.html",
+      "sha256": "f6bb531b158283fcdeda97f0775cf167e41163f6a9297218757346467631f358",
+      "bytes": 1755
+    },
+    {
+      "id": "structure-frbsf-futures",
+      "path": "dist/research/structure-frbsf-futures.md",
+      "sourceUrl": "https://www.frbsf.org/research-and-insights/publications/economic-letter/2018/05/how-futures-trading-changed-bitcoin-prices/",
+      "sha256": "2d8fc8ee2ecda0d7b0084735aa2bac7632c56d62bd2b458c2ec0925caf24d6b5",
+      "bytes": 1782
+    },
+    {
+      "id": "structure-fed-covid",
+      "path": "dist/research/structure-fed-covid.md",
+      "sourceUrl": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20200315a.htm",
+      "sha256": "7642e47c826484829b297c7ebbc59aff1e1ef6f613c82e6a5d94466dc98edfd3",
+      "bytes": 1612
+    },
+    {
+      "id": "structure-fed-tightening",
+      "path": "dist/research/structure-fed-tightening.md",
+      "sourceUrl": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20220316a.htm",
+      "sha256": "e7625152a709721ee0139ead5fd278a00a93aa8e51d5903dd5169489da36ec9b",
+      "bytes": 1644
+    },
+    {
+      "id": "structure-ftx-complaint",
+      "path": "dist/research/structure-ftx-complaint.md",
+      "sourceUrl": "https://www.sec.gov/files/litigation/complaints/2022/comp-pr2022-219.pdf",
+      "sha256": "f5f362475d3f133ed3d51b3f3da492fa6b486d1482b4cf1a75d74df3419926c9",
+      "bytes": 1791
+    },
+    {
+      "id": "dave-cointelegraph",
+      "path": "dist/research/dave-cointelegraph.md",
+      "sourceUrl": "https://cointelegraph.com/markets/bitcoin-technical-indicator-predicts-btc-top-summer-2025",
+      "sha256": "cd70c5da89abe37db5b0f8b5479fb6f9b81c14805c0536479d2268fc4ad62bab",
+      "bytes": 1925
+    },
+    {
+      "id": "dave-x-original",
+      "path": "dist/research/dave-x-original.md",
+      "sourceUrl": "https://x.com/davthewave/status/1878605027692130499",
+      "sha256": "0c34f96adb89b72d32c1b7d351851d2181f4b8525c80a0f82e47e0e1f84deead",
+      "bytes": 1684
+    },
+    {
+      "id": "rekt-dailyhodl",
+      "path": "dist/research/rekt-dailyhodl.md",
+      "sourceUrl": "https://dailyhodl.com/2025/02/01/heres-how-long-the-bitcoin-bull-market-could-last-if-history-repeats-itself-according-to-crypto-analyst/",
+      "sha256": "a722318da8f8971f4acf1500df0aeb92d72fa3b266d7c13746c5f1866a124859",
+      "bytes": 1837
+    },
+    {
+      "id": "rekt-video-original",
+      "path": "dist/research/rekt-video-original.md",
+      "sourceUrl": "https://www.youtube.com/watch?v=yJ2ylDKlJ5A",
+      "sha256": "992e70264d26afe0efc3b3481c1074db77f967854d3360571e8b1a03a0f88064",
+      "bytes": 1651
+    },
+    {
+      "id": "structure-rekt-july2025",
+      "path": "dist/research/structure-rekt-july2025.md",
+      "sourceUrl": "https://x.com/rektcapital/status/1942703540671070318",
+      "sha256": "64e234010f01c1d6fb7c04cd19722188b510f50ba6b7536ab0d9b7aff3a975ee",
+      "bytes": 1797
+    },
+    {
+      "id": "structure-cryptobirb-countdown",
+      "path": "dist/research/structure-cryptobirb-countdown.md",
+      "sourceUrl": "https://x.com/crypto_birb/status/1956022795403411875",
+      "sha256": "c0f29670a4c8fda8f8e9b6cfc08cb4594a46daa1ae6de9aad3b504a2afb4d182",
+      "bytes": 1984
+    },
+    {
+      "id": "cowen-forklog",
+      "path": "dist/research/cowen-forklog.md",
+      "sourceUrl": "https://forklog.com/en/analyst-identifies-bitcoin-price-pattern-resembling-2021/",
+      "sha256": "239dc552080640320f464d9b8c6629da684135bfcec7fc6f01844ccb093eb60d",
+      "bytes": 1671
+    },
+    {
+      "id": "cowen-x-original",
+      "path": "dist/research/cowen-x-original.md",
+      "sourceUrl": "https://x.com/benjamincowen/status/1954742029696524339",
+      "sha256": "95cf490c5c84952e86a8e37d41b71e62e6e55b6ea12bbe4828f26873ec1a711b",
+      "bytes": 1677
+    },
+    {
+      "id": "ki-may-retraction",
+      "path": "dist/research/ki-may-retraction.md",
+      "sourceUrl": "https://crypto.news/cryptoquant-ceo-admits-he-was-wrong-about-bitcoin-bull-cycle/",
+      "sha256": "c3f8660dc38793e2a40301724a09bf5b947a9c435f00b8a7490e396ee00dd548",
+      "bytes": 1890
+    },
+    {
+      "id": "ki-july-context",
+      "path": "dist/research/ki-july-context.md",
+      "sourceUrl": "https://beincrypto.com/why-ki-young-ju-say-bitcoin-cycle-theory-is-dead/",
+      "sha256": "28e6554d7d7646c7a2a7365c167b1a1cdaef5a2cc1c5ef9bed3d937d3a46732e",
+      "bytes": 1693
+    },
+    {
+      "id": "ki-july-x-original",
+      "path": "dist/research/ki-july-x-original.md",
+      "sourceUrl": "https://x.com/ki_young_ju/status/1948512682157519266",
+      "sha256": "2aa693c38e043a00a0f689c794ec56f78ba2e9db406ac8d22fd88d2716f3ebdc",
+      "bytes": 1555
+    },
+    {
+      "id": "bitwise-january-forecast",
+      "path": "dist/research/bitwise-january-forecast.md",
+      "sourceUrl": "https://experts.bitwiseinvestments.com/cio-memos/trumps-executive-order-can-it-break-cryptos-four-year-cycle",
+      "sha256": "bc88ef45a9585aea7de720500a6a8db201b83306f2806ae1903c762d184ac68a",
+      "bytes": 1788
+    },
+    {
+      "id": "coinbase-october-outlook",
+      "path": "dist/research/coinbase-october-outlook.md",
+      "sourceUrl": "https://www.coinbase.com/institutional/research-insights/research/monthly-outlook/monthly-outlook-oct-2025",
+      "sha256": "f263624ee2a062c765f01c598c8f11ee71c8f06002705378899df7fe34043ddc",
+      "bytes": 1722
+    },
+    {
+      "id": "k33-year-review",
+      "path": "dist/research/k33-year-review.md",
+      "sourceUrl": "https://k33.com/research/articles/2025-year-in-review",
+      "sha256": "02690b900030922224744f0c2831770352ca6c2560c959224ddc52c48e4126b1",
+      "bytes": 1583
+    },
+    {
+      "id": "glassnode-october-distribution",
+      "path": "dist/research/glassnode-october-distribution.md",
+      "sourceUrl": "https://research.glassnode.com/the-week-onchain-week-41-2025/",
+      "sha256": "ede0370668d55a33f7c51851d82b2dd3f1dfae5b0292aa4dbf0d9faf9dcbac6d",
+      "bytes": 1590
+    },
+    {
+      "id": "glassnode-october-hedged",
+      "path": "dist/research/glassnode-october-hedged.md",
+      "sourceUrl": "https://research.glassnode.com/the-week-onchain-week-42-2025/",
+      "sha256": "fd185c35a7178ef9777f0dca299db6cea9e3765fd44d59826d48d9fbb08be57b",
+      "bytes": 1592
+    },
+    {
+      "id": "bitwise-cf-bottom-model",
+      "path": "dist/research/bitwise-cf-bottom-model.md",
+      "sourceUrl": "https://bitwiseinvestments.eu/blog/crypto-research/the-bitcoin-bottom-explained/",
+      "sha256": "3d5c642e347b49870df43260f13dc39f2e7d454fb1b727e115d829302b0d2bb4",
+      "bytes": 1697
+    },
+    {
+      "id": "bitwise-september-compass",
+      "path": "dist/research/bitwise-september-compass.md",
+      "sourceUrl": "https://bitwiseinvestments.eu/blog/regular-updates/Bitwise_Crypto_Market_Compass_2026_40/",
+      "sha256": "75e2b8dde7a1eff2e4dde97524bdd42089f0b04b3aea708d61cf6c8873d05619",
+      "bytes": 1740
+    },
+    {
+      "id": "glassnode-october-2026",
+      "path": "dist/research/glassnode-october-2026.md",
+      "sourceUrl": "https://research.glassnode.com/the-week-onchain-week-41-2026/",
+      "sha256": "d9dc483a5ef246089492d319ca7a02af9c10fba67a297b3f6dafda820095af86",
+      "bytes": 1540
+    },
+    {
+      "id": "blackrock-pullback-paper",
+      "path": "dist/research/blackrock-pullback-paper.md",
+      "sourceUrl": "https://www.blackrock.com/us/individual/literature/whitepaper/re-underwriting-bitcoin.pdf",
+      "sha256": "dc27f992355bc8ec5fab25f3210c426b864221f376a16546fe67ffef2cb11e49",
+      "bytes": 1714
+    },
+    {
+      "id": "structure-reddit-fib-deadline",
+      "path": "dist/research/structure-reddit-fib-deadline.md",
+      "sourceUrl": "https://www.reddit.com/r/BitcoinMarkets/comments/1qy4tvy/comment/o42j5n5/",
+      "sha256": "963afc3f922dd29ba29d474a10f3bdc9bf0e1f52ab3b84c5480c497a0144fde2",
+      "bytes": 2393
+    },
+    {
+      "id": "reddit-merkle-prediction",
+      "path": "dist/research/reddit-merkle-prediction.md",
+      "sourceUrl": "https://www.reddit.com/r/CryptoCurrency/comments/1ozhku2/four_year_cycle_update_predicting_the_bottom/",
+      "sha256": "e78cd36301fbb769863ba613c81b3bbb7e3c25a44f9e16bf521a52607c5a29c5",
+      "bytes": 1784
+    },
+    {
+      "id": "reddit-merkle-followup",
+      "path": "dist/research/reddit-merkle-followup.md",
+      "sourceUrl": "https://www.reddit.com/r/CryptoCurrency/comments/1x0p9kc/four_year_cycle_update_uncharted_territory/",
+      "sha256": "4e9d03c08f9d2ed5bf5f8298060bea003fc1a78fb057d95b7bfde31dac32bb5b",
+      "bytes": 1723
+    },
+    {
+      "id": "reddit-consistent-cycle",
+      "path": "dist/research/reddit-consistent-cycle.md",
+      "sourceUrl": "https://www.reddit.com/r/Bitcoin/comments/1p18dcc/freakishly_consistent_cycle/",
+      "sha256": "49494efd13e06914d5dd4f1f4c0605e5172662515d2f062d8dcc4ae867fb4bf8",
+      "bytes": 1670
+    },
+    {
+      "id": "dlnews-bitwise-retelling",
+      "path": "dist/research/dlnews-bitwise-retelling.md",
+      "sourceUrl": "https://www.dlnews.com/articles/markets/bitcoin-price-bottom-coming-sooner-than-expected/",
+      "sha256": "e098d240d84d9886be8c7af9c28f890dba2b300f8cb75e216385b9dff030e396",
+      "bytes": 1629
+    },
+    {
+      "id": "pintu-dave-retelling",
+      "path": "dist/research/pintu-dave-retelling.md",
+      "sourceUrl": "https://pintu.co.id/news/123892-para-analis-crypto-prediksi-bitcoin-capai-puncak-juli-2025",
+      "sha256": "6bde34f40e055e595c962e9a89d36a2bbcfb5ee976511eca11d77e3473828aee",
+      "bytes": 1742
+    },
+    {
+      "id": "reddit-dave-share",
+      "path": "dist/research/reddit-dave-share.md",
+      "sourceUrl": "https://www.reddit.com/r/CryptoCurrency/comments/1i0dm2o/bitcoin_technical_indicator_predicts_btc_price/",
+      "sha256": "952a6a953d865ca584b9042741c9893a219ea9e68a3bc61b464c3819320c55bf",
+      "bytes": 1800
+    },
+    {
+      "id": "reddit-july-halving-calendar",
+      "path": "dist/research/reddit-july-halving-calendar.md",
+      "sourceUrl": "https://www.reddit.com/r/CryptoCurrency/comments/1luqv5x/comment/n247wnf/",
+      "sha256": "222bf3ead2275e77e9181e373e464673e92a913eec9f25478877791303c3fb8e",
+      "bytes": 1934
+    },
+    {
+      "id": "reddit-front-running",
+      "path": "dist/research/reddit-front-running.md",
+      "sourceUrl": "https://www.reddit.com/r/CryptoCurrency/comments/1oo38yo/my_takeaway_from_being_in_crypto_for_8_years/",
+      "sha256": "8507dc85c23d2d5de411db7a7e80243073350ddf46fd0c33fe0f57b477827a36",
+      "bytes": 1710
+    },
+    {
+      "id": "reddit-july-maturation",
+      "path": "dist/research/reddit-july-maturation.md",
+      "sourceUrl": "https://www.reddit.com/r/CryptoCurrency/comments/1m95kae/bitcoins_fouryear_cycle_loses_grip_as_maturing/",
+      "sha256": "8f8395eb6070ab9728d21fede13dfc6c133310e7c584532a7d53b6035c52d5ae",
+      "bytes": 1827
+    },
+    {
+      "id": "reddit-july-sideways-thread",
+      "path": "dist/research/reddit-july-sideways-thread.md",
+      "sourceUrl": "https://www.reddit.com/r/BitcoinMarkets/comments/1mact5u/daily_discussion_sunday_july_27_2025/",
+      "sha256": "880e925967d1cb556c18d09e4b9270ff96f082b8561dcc799e5ca6624e15d8ea",
+      "bytes": 2134
+    },
+    {
+      "id": "reddit-august-top-question",
+      "path": "dist/research/reddit-august-top-question.md",
+      "sourceUrl": "https://www.reddit.com/r/btc/comments/1mwmidj/are_we_looking_at_a_bitcoin_cycle_top_in_the_next/",
+      "sha256": "bdb48329ad6e01bfdfe6fb0adca957b632f19af84988c8eb72b45367d5e97847",
+      "bytes": 1712
+    },
+    {
+      "id": "reddit-september-is-over",
+      "path": "dist/research/reddit-september-is-over.md",
+      "sourceUrl": "https://www.reddit.com/r/CryptoCurrency/comments/1nn6k91/is_it_overalmost_over/",
+      "sha256": "72e945b4448ad7330c2a9e205e35141bc4252e6871e21b737065e8aba647a780",
+      "bytes": 1684
+    },
+    {
+      "id": "reddit-september-volatility",
+      "path": "dist/research/reddit-september-volatility.md",
+      "sourceUrl": "https://www.reddit.com/r/Bitcoin/comments/1n9t5z5/where_is_the_real_volatility/",
+      "sha256": "6641df019b187c432718c7bdc670ba8e32af4cf426cac11edaba14fcab194674",
+      "bytes": 1583
+    },
+    {
+      "id": "glassnode-x-distribution",
+      "path": "dist/research/glassnode-x-distribution.md",
+      "sourceUrl": "https://x.com/glassnode/status/1980645562694389891",
+      "sha256": "2f67f9f349c33cd4ec829ea26c6e4bb77e61cab5658c89c5ec37a2b2d9e73e9c",
+      "bytes": 1697
+    },
+    {
+      "id": "reddit-deleted-extension",
+      "path": "dist/research/reddit-deleted-extension.md",
+      "sourceUrl": "https://www.reddit.com/r/CryptoMarkets/comments/1o65wdz/which_side_are_you_on_bull_run_ends_in_q4_2025_or/",
+      "sha256": "b2544a89328d6e7210dbd50abf6f3afa0521c31c7c62060b28ba3b20216bfc6e",
+      "bytes": 1759
+    },
+    {
+      "id": "original-bitcointalk-record",
+      "path": "dist/research/original-bitcointalk-record.md",
+      "sourceUrl": "https://bitcointalk.org/index.php?topic=5512441.msg64612416",
+      "sha256": "86d3a1aa28feb37c444c257d307e8e748a072e6870c8ec5cf6e7c3cf237a958e",
+      "bytes": 1998
+    },
+    {
+      "id": "original-wayback-2024",
+      "path": "dist/research/original-wayback-2024.md",
+      "sourceUrl": "https://web.archive.org/web/20240321184519/https://www.bitcoincyclescomparison.com/",
+      "sha256": "9e12d3678917f0c8b4ed52d1b5fcdf92b830648ba935802b0e2522ab82b1aa51",
+      "bytes": 1687
+    },
+    {
+      "id": "original-site-url",
+      "path": "dist/research/original-site-url.md",
+      "sourceUrl": "https://www.bitcoincyclescomparison.com/",
+      "sha256": "20baece143eb93ea4a541b3c004b09c4bd64f13de8d386bc7488178efdbd2b6a",
+      "bytes": 1603
+    },
+    {
+      "id": "original-wayback-2025",
+      "path": "dist/research/original-wayback-2025.md",
+      "sourceUrl": "https://web.archive.org/web/20251014000000/https://www.bitcoincyclescomparison.com/",
+      "sha256": "e6a713d35691b61fdf87a087456407c6731e3733138ee52b1f276369c92508de",
+      "bytes": 1729
+    },
+    {
+      "id": "cryptocon-timing-2024",
+      "path": "dist/research/cryptocon-timing-2024.md",
+      "sourceUrl": "https://www.bitcoindatanewsletter.com/p/the-all-new-cycle-timing",
+      "sha256": "f222bc418409411df81edfdd3565a62f3aadd3dc05660fc9937202c031805b2b",
+      "bytes": 1619
+    },
+    {
+      "id": "cryptocon-return-2024",
+      "path": "dist/research/cryptocon-return-2024.md",
+      "sourceUrl": "https://www.bitcoindatanewsletter.com/p/return-of-the-halving-cycles",
+      "sha256": "7f92388532d692ab06877fc46e11928e7c54e6882144addad90d5277a9631042",
+      "bytes": 1610
+    },
+    {
+      "id": "cryptocon-2021-bigupdate",
+      "path": "dist/research/cryptocon-2021-bigupdate.md",
+      "sourceUrl": "https://www.bitcoindatanewsletter.com/p/bitcoin-data-newsletter",
+      "sha256": "c68cd547947f1b77e9c645dd83138f3adff3a837e6717db5e185ce84085459b7",
+      "bytes": 1680
+    },
+    {
+      "id": "cryptocon-2022-review",
+      "path": "dist/research/cryptocon-2022-review.md",
+      "sourceUrl": "https://www.bitcoindatanewsletter.com/p/what-happened-to-bitcoin",
+      "sha256": "b30dc8ee030c34edcf912ba7eaa9876902c257a07715ff9a82057d287641d9a1",
+      "bytes": 1618
+    },
+    {
+      "id": "cryptocon-nov28-original",
+      "path": "dist/research/cryptocon-nov28-original.md",
+      "sourceUrl": "https://x.com/CryptoCon_/status/1862142528939532706",
+      "sha256": "4ec99b8b3a04118765658686b1aaa805a91ae5041aa9f3a5c1bb3530629ac730",
+      "bytes": 1693
+    },
+    {
+      "id": "cryptocon-june-october",
+      "path": "dist/research/cryptocon-june-october.md",
+      "sourceUrl": "https://x.com/CryptoCon_/status/1933580045546651799",
+      "sha256": "057131c56105d85133a221bb7029c8a0eca3641b97851e5a297f4a6e4792f7d9",
+      "bytes": 1652
+    },
+    {
+      "id": "cryptocon-fib-deadline",
+      "path": "dist/research/cryptocon-fib-deadline.md",
+      "sourceUrl": "https://www.newsbtc.com/es/news/bitcoin/bitcoin-52-increase-to-166000/",
+      "sha256": "ce104429770835ef139f6cb8893fed1684efd263a91d63a36ad1ee69e7248344",
+      "bytes": 1769
+    },
+    {
+      "id": "cryptocon-hive",
+      "path": "dist/research/cryptocon-hive.md",
+      "sourceUrl": "https://www.bitcoindatanewsletter.com/p/the-hive",
+      "sha256": "bd6ee523c8a63947053c44223e25aece44ef31f98b23a1f4eec553bd95de9436",
+      "bytes": 1737
+    },
+    {
+      "id": "eth-source-f8e9790e013f",
+      "path": "dist/research/eth-source-f8e9790e013f.md",
+      "sourceUrl": "https://blog.ethereum.org/2014/07/22/launching-the-ether-sale",
+      "sha256": "0753437b4cf5caf023310c682b5962ef438b07136afa50e03b5507aa1c5e61b5",
+      "bytes": 1723
+    },
+    {
+      "id": "eth-source-5ae9f6ca6e04",
+      "path": "dist/research/eth-source-5ae9f6ca6e04.md",
+      "sourceUrl": "https://blog.ethereum.org/2014/08/08/ether-sale-a-statistical-overview",
+      "sha256": "5d9c76d096ea638697b03745d2bade1fb81ab5427b3ed5c5376162c1b282fe00",
+      "bytes": 1810
+    },
+    {
+      "id": "eth-source-364a92522687",
+      "path": "dist/research/eth-source-364a92522687.md",
+      "sourceUrl": "https://github.com/ethereum/homestead-guide/blob/master/source/introduction/history-of-ethereum.rst",
+      "sha256": "c9dfa194cbf1fbc1336e90d1b42021391ee92650a80cf4c570e20b8052bf8902",
+      "bytes": 1820
+    },
+    {
+      "id": "eth-source-85adec029c74",
+      "path": "dist/research/eth-source-85adec029c74.md",
+      "sourceUrl": "https://blog.ethereum.org/2015/07/30/ethereum-launches",
+      "sha256": "436f92edbf0c5c5728745b74924e41c72c1715b32478df71ef713dd86525d55c",
+      "bytes": 1764
+    },
+    {
+      "id": "eth-source-f39e65b6d5f5",
+      "path": "dist/research/eth-source-f39e65b6d5f5.md",
+      "sourceUrl": "https://ethereum.org/ethereum-forks/",
+      "sha256": "d2eba29c59e041543463295970325f15628990e8fb621fcd04677f54c092522b",
+      "bytes": 1820
+    },
+    {
+      "id": "eth-source-32c74d6f994b",
+      "path": "dist/research/eth-source-32c74d6f994b.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/0",
+      "sha256": "c7e6597b1fbc42a913e0cde5abbdf6b5e084c894ca5d828b44b8a50d79d2adb8",
+      "bytes": 1922
+    },
+    {
+      "id": "eth-source-9b9303469939",
+      "path": "dist/research/eth-source-9b9303469939.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/1",
+      "sha256": "4b3d723db29501acf4d14ebf6a6abecf56c4f94317b5ab12fccf9d5577da0998",
+      "bytes": 1922
+    },
+    {
+      "id": "eth-source-47107a7ef048",
+      "path": "dist/research/eth-source-47107a7ef048.md",
+      "sourceUrl": "https://blog.ethereum.org/2015/08/04/ethereum-protocol-update-1",
+      "sha256": "fb5f7a3d2eaa347869bef36dab7d770dc42c5ffe807b5236803ab88ce19ae054",
+      "bytes": 1955
+    },
+    {
+      "id": "eth-source-f62895003670",
+      "path": "dist/research/eth-source-f62895003670.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/200000",
+      "sha256": "f570d22bfbb6e09247699275d2bbb1344c4cf1f1943d0c78296f4b7425be24f0",
+      "bytes": 1883
+    },
+    {
+      "id": "eth-source-4bb589ccd509",
+      "path": "dist/research/eth-source-4bb589ccd509.md",
+      "sourceUrl": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20151216a.htm",
+      "sha256": "dae2932cbe1617ac6ecca5f0a3130737ace2407555cc2976bd34dd63795a214e",
+      "bytes": 1591
+    },
+    {
+      "id": "eth-source-a308e2004eb5",
+      "path": "dist/research/eth-source-a308e2004eb5.md",
+      "sourceUrl": "https://www.reuters.com/article/business/economists-see-next-fed-rate-increase-in-first-quarter-of-2016-reuters-poll-idUSKBN0TZ31O/",
+      "sha256": "9682dbd7f43821e9617aa3d9499c0d5714d20cf813f93f5e0e8591c27ee160a4",
+      "bytes": 1792
+    },
+    {
+      "id": "eth-source-87ef63a9a628",
+      "path": "dist/research/eth-source-87ef63a9a628.md",
+      "sourceUrl": "https://blog.ethereum.org/2016/02/29/homestead-release",
+      "sha256": "a13de166ec93cf3c441c55cdc6caed65a5a42ac6595d5a40a34ba5b8e4998f98",
+      "bytes": 1812
+    },
+    {
+      "id": "eth-source-09c906356816",
+      "path": "dist/research/eth-source-09c906356816.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/1150000",
+      "sha256": "4068573ed362c6b41184627582520020bfb29192482176f0fa1942fb36c675c4",
+      "bytes": 1982
+    },
+    {
+      "id": "eth-source-63e01e12fc1a",
+      "path": "dist/research/eth-source-63e01e12fc1a.md",
+      "sourceUrl": "https://blog.ethereum.org/2016/06/17/critical-update-re-dao-vulnerability",
+      "sha256": "eae74379d33bf4a3fca3ee0bf3f4eede8aa22caaa9202b238742e7925a1c2e73",
+      "bytes": 1836
+    },
+    {
+      "id": "eth-source-395352877827",
+      "path": "dist/research/eth-source-395352877827.md",
+      "sourceUrl": "https://www.sec.gov/files/litigation/investreport/34-81207.pdf",
+      "sha256": "044688ef2a99ade55010bb96ee3fe5770b076663488ab61688829ac4de7c0a92",
+      "bytes": 2020
+    },
+    {
+      "id": "eth-source-ed06cf338b31",
+      "path": "dist/research/eth-source-ed06cf338b31.md",
+      "sourceUrl": "https://blog.ethereum.org/2016/07/20/hard-fork-completed",
+      "sha256": "b130ab483ecb5d19c5d3a7908c618f0ca8f7cff8b466a0e5758e1e5c57d5e5ec",
+      "bytes": 1800
+    },
+    {
+      "id": "eth-source-2043a601a39b",
+      "path": "dist/research/eth-source-2043a601a39b.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/1920000",
+      "sha256": "e67cc84be9c3fab16822009dabd335c876861dde2361a43b0dfcc97edbbf7339",
+      "bytes": 1982
+    },
+    {
+      "id": "eth-source-517ff741f5d2",
+      "path": "dist/research/eth-source-517ff741f5d2.md",
+      "sourceUrl": "https://blog.ethereum.org/2016/09/22/ethereum-network-currently-undergoing-dos-attack",
+      "sha256": "cfae7ca882a3e5348cf4cab750359097b784e220301c5beea8e336360ef42954",
+      "bytes": 1810
+    },
+    {
+      "id": "eth-source-a77cb26e4005",
+      "path": "dist/research/eth-source-a77cb26e4005.md",
+      "sourceUrl": "https://blog.ethereum.org/en/2016/09/22/transaction-spam-attack-next-steps",
+      "sha256": "75ac268bdf72c6ffeb61f1a47d79ab2846558ccc6a6456dc7a9364957350bf88",
+      "bytes": 1760
+    },
+    {
+      "id": "eth-source-86b1974a250d",
+      "path": "dist/research/eth-source-86b1974a250d.md",
+      "sourceUrl": "https://blog.ethereum.org/2016/10/18/faq-upcoming-ethereum-hard-fork",
+      "sha256": "a85b911563cd98ff7ac3b3216637b702e4d5c28521495e97fa22ac0e75319323",
+      "bytes": 1760
+    },
+    {
+      "id": "eth-source-bcf6a803339e",
+      "path": "dist/research/eth-source-bcf6a803339e.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/2463000",
+      "sha256": "bcaabe2ae363faed69fa994e7b01178399603996b0464e7933aab05131988816",
+      "bytes": 1643
+    },
+    {
+      "id": "eth-source-e44ec9779371",
+      "path": "dist/research/eth-source-e44ec9779371.md",
+      "sourceUrl": "https://eips.ethereum.org/EIPS/eip-608",
+      "sha256": "edebef453670f28b21ed7ef0a5a8110d842620fe1fb60b7334c82e1bb542a7cb",
+      "bytes": 1717
+    },
+    {
+      "id": "eth-source-2233675d888e",
+      "path": "dist/research/eth-source-2233675d888e.md",
+      "sourceUrl": "https://blog.ethereum.org/2016/11/18/hard-fork-no-4-spurious-dragon",
+      "sha256": "5abc575e35e5f9cdae05acdd1506ddd7c9f2d808f1ddccd0da6028ac72591c4b",
+      "bytes": 1721
+    },
+    {
+      "id": "eth-source-5a88004cfaaf",
+      "path": "dist/research/eth-source-5a88004cfaaf.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/2675000",
+      "sha256": "a9a11021b80e3c209a1e62e601b9b38c5cfa657d80229662143e86f19752f26f",
+      "bytes": 1643
+    },
+    {
+      "id": "eth-source-31ed23b35be8",
+      "path": "dist/research/eth-source-31ed23b35be8.md",
+      "sourceUrl": "https://eips.ethereum.org/EIPS/eip-607",
+      "sha256": "ffbc167a40ffda1f8470f07c852510b3a917559d35c13d8b000d9f2b0362f573",
+      "bytes": 1713
+    },
+    {
+      "id": "eth-source-0661244205f1",
+      "path": "dist/research/eth-source-0661244205f1.md",
+      "sourceUrl": "https://medium.com/@AdamLWhite/eth-usd-trading-update-2-216a3b946ef6",
+      "sha256": "22f84b8b46d6cc27a169d0a046edc71a6a3f68cf33f136cbf8a57a2e274f259b",
+      "bytes": 1698
+    },
+    {
+      "id": "eth-source-1c840e461ea0",
+      "path": "dist/research/eth-source-1c840e461ea0.md",
+      "sourceUrl": "https://www.financemagnates.com/cryptocurrency/trading/ethereum-flash-crash-causes-eth-temporarily-trade-low-0-10/",
+      "sha256": "c363f7e93648b9c7789aeb370209086c15cb30b7b90ac1bede91c6eb72afa2fc",
+      "bytes": 1797
+    },
+    {
+      "id": "eth-source-77d32a8ead4c",
+      "path": "dist/research/eth-source-77d32a8ead4c.md",
+      "sourceUrl": "https://www.openzeppelin.com/news/on-the-parity-wallet-multisig-hack-405a8c12e8f7",
+      "sha256": "28c279030eed6651882320cf8b589226a593a31cf85f808685c0f465586cd075",
+      "bytes": 1797
+    },
+    {
+      "id": "eth-source-d647800e5000",
+      "path": "dist/research/eth-source-d647800e5000.md",
+      "sourceUrl": "https://medium.com/paritytech/a-postmortem-on-the-parity-multi-sig-library-self-destruct-63daca3a4cf7",
+      "sha256": "a21540cea85a39ddd3fdd7c37840e76b70e496b77bebe8aa1e8274914262e370",
+      "bytes": 1857
+    },
+    {
+      "id": "eth-source-5f699a160bdd",
+      "path": "dist/research/eth-source-5f699a160bdd.md",
+      "sourceUrl": "https://www.reuters.com/article/business/wall-street-regulator-sets-sights-on-digital-coin-offerings-idUSKBN1AA2OK/",
+      "sha256": "d4020f5e087d016249df8125bf50417c473aafce35e2c145fc6a881db6c0d1eb",
+      "bytes": 1811
+    },
+    {
+      "id": "eth-source-dafb0a062838",
+      "path": "dist/research/eth-source-dafb0a062838.md",
+      "sourceUrl": "https://www.cac.gov.cn/2017-09/04/c_1121603512.htm",
+      "sha256": "f26cca0a74cec012bc004984a774acd427bc2d9d9028a7ea79e9c461cfea5136",
+      "bytes": 1916
+    },
+    {
+      "id": "eth-source-460ed37181a5",
+      "path": "dist/research/eth-source-460ed37181a5.md",
+      "sourceUrl": "https://www.reuters.com/jp/article/chinas-virtual-coin-fundraising-ban-just-the-start-of-tighter-regulations-yic-idUSL4N1LM186/",
+      "sha256": "ef2f62453a8345afd8efcb868ba301d176d8b0a9a5375eee8bba6679815eb103",
+      "bytes": 1871
+    },
+    {
+      "id": "eth-source-7688a2966fe6",
+      "path": "dist/research/eth-source-7688a2966fe6.md",
+      "sourceUrl": "https://blog.ethereum.org/2017/10/12/byzantium-hf-announcement",
+      "sha256": "5be59b3e176c1193b2941497a6549a6be6c85bb36a6da9a218d983077f82241b",
+      "bytes": 1819
+    },
+    {
+      "id": "eth-source-3c487b94a257",
+      "path": "dist/research/eth-source-3c487b94a257.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/4370000",
+      "sha256": "8ee5bdd31f330fe2de7dab04315c8f0e8f4799df82f7aa4cd2f446b666decaa6",
+      "bytes": 1982
+    },
+    {
+      "id": "eth-source-5d3e6c80984d",
+      "path": "dist/research/eth-source-5d3e6c80984d.md",
+      "sourceUrl": "https://www.openzeppelin.com/news/parity-wallet-hack-reloaded",
+      "sha256": "d0ee61361dc8293c789d70706a321e340cd28d3ffefafbc3946e97f859b0c42b",
+      "bytes": 1844
+    },
+    {
+      "id": "eth-source-d398c8b26b04",
+      "path": "dist/research/eth-source-d398c8b26b04.md",
+      "sourceUrl": "https://www.newswire.ca/news-releases/cryptokitties-the-worlds-first-ethereum-game-launches-today-660494073.html",
+      "sha256": "d92179c174645ba87ed4763590e3628e09d1e927eba47bba9881f69a6c025788",
+      "bytes": 1837
+    },
+    {
+      "id": "eth-source-8d4eddfead85",
+      "path": "dist/research/eth-source-8d4eddfead85.md",
+      "sourceUrl": "https://spectrum.ieee.org/cryptokitties",
+      "sha256": "4e9d0cf87f9e2844eb3bc61e13f00497c3608370b1f238d27afa4811d862a0ab",
+      "bytes": 1760
+    },
+    {
+      "id": "eth-source-d6c0d3f8db18",
+      "path": "dist/research/eth-source-d6c0d3f8db18.md",
+      "sourceUrl": "https://www.fsc.go.kr/eng/pr010101/22173",
+      "sha256": "3df4c0c8274fe089d884cddde24aaaace2f5df048e63d38fc75dca7c307ad5fe",
+      "bytes": 1869
+    },
+    {
+      "id": "eth-source-ed2e8fce665d",
+      "path": "dist/research/eth-source-ed2e8fce665d.md",
+      "sourceUrl": "https://www.reuters.com/article/technology/south-korea-to-ban-cryptocurrency-traders-from-using-anonymous-bank-accounts-idUSKBN1FC069/",
+      "sha256": "9429d40ccb2cd57e6d7dce01a967f52dcbe36b5eaff6f29634398cc71b9b93a2",
+      "bytes": 1866
+    },
+    {
+      "id": "eth-source-19a084c02826",
+      "path": "dist/research/eth-source-19a084c02826.md",
+      "sourceUrl": "https://trumpwhitehouse.archives.gov/briefings-statements/remarks-president-trump-listening-session-representatives-steel-aluminum-industry/",
+      "sha256": "88f3bc671dc620c2c712152f047072d415d0b442a704b2f6a0910af5bcadf803",
+      "bytes": 1937
+    },
+    {
+      "id": "eth-source-f661e25d39ad",
+      "path": "dist/research/eth-source-f661e25d39ad.md",
+      "sourceUrl": "https://in.investing.com/news/stock-market-news/global-marketsstocks-tumble-dollar-gains-on-trump-tariff-comments-1046160",
+      "sha256": "7420b37d93c192e465dd77aa4030aaf64bb4194b869aeddfad7f3a716b9b9920",
+      "bytes": 1874
+    },
+    {
+      "id": "eth-source-ed0431ae0d4a",
+      "path": "dist/research/eth-source-ed0431ae0d4a.md",
+      "sourceUrl": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/1ed564e",
+      "sha256": "054416adf09404772c64051efcaa79ab4e5cce52ad69ec41903ef4ba2778c610",
+      "bytes": 1870
+    },
+    {
+      "id": "eth-source-d2cd08d8dbf1",
+      "path": "dist/research/eth-source-d2cd08d8dbf1.md",
+      "sourceUrl": "https://trumpwhitehouse.archives.gov/presidential-actions/presidential-memorandum-actions-united-states-related-section-301-investigation/",
+      "sha256": "146a85cd6792ba1eabcefd8787f67a3fe574ce42698c364986c720e4518854f0",
+      "bytes": 1935
+    },
+    {
+      "id": "eth-source-84c6de9f5a3d",
+      "path": "dist/research/eth-source-84c6de9f5a3d.md",
+      "sourceUrl": "https://www.investing.com/news/stock-market-news/futures-back-off-on-trade-war-fears-tech-woes-persist-1354165?ampMode=1",
+      "sha256": "40af0ae4f62491c2c87ebf379075b945eb0358950e89f5d766c731e08c496708",
+      "bytes": 1856
+    },
+    {
+      "id": "eth-source-ae0abc0d2c0b",
+      "path": "dist/research/eth-source-ae0abc0d2c0b.md",
+      "sourceUrl": "https://ustr.gov/about-us/policy-offices/press-office/press-releases/2018/june/ustr-issues-tariffs-chinese-products",
+      "sha256": "a3c21ed95088b63dfd0914d15e78c2f92a76503eac2f2bcb93736639dce8b502",
+      "bytes": 1896
+    },
+    {
+      "id": "eth-source-a50cf1093609",
+      "path": "dist/research/eth-source-a50cf1093609.md",
+      "sourceUrl": "https://www.sec.gov/newsroom/speeches-statements/speech-hinman-061418",
+      "sha256": "86514034b744e1ddbb19bc5203f55e03b83b1c3a28c5420d43d50336fc32ff73",
+      "bytes": 1920
+    },
+    {
+      "id": "eth-source-469654f5a962",
+      "path": "dist/research/eth-source-469654f5a962.md",
+      "sourceUrl": "https://www.reuters.com/article/technology/us-sec-official-says-ether-not-a-security-price-surges-idUSKBN1JA30P/",
+      "sha256": "a7a536b448b93bdd46f3912d0fe8adf847771be32a7cd9411691946c7ebe8161",
+      "bytes": 1807
+    },
+    {
+      "id": "eth-source-b5dbba7892fb",
+      "path": "dist/research/eth-source-b5dbba7892fb.md",
+      "sourceUrl": "https://ustr.gov/about-us/policy-offices/press-office/press-releases/2018/august/ustr-finalizes-second-tranche",
+      "sha256": "1f32bff6cf45011d395de114a18e64e7b21baea3f6e85e29324bc068b95f0ad4",
+      "bytes": 1948
+    },
+    {
+      "id": "eth-source-36c741b8982d",
+      "path": "dist/research/eth-source-36c741b8982d.md",
+      "sourceUrl": "https://ca.investing.com/news/stock-market-news/global-marketsstocks-euro-survive-first-battle-of-uschina-trade-war-1197532",
+      "sha256": "68805b01d2cd2d2b9e37b9cce5d29f0c4fe6a46197cbd6822abbb562889c4e57",
+      "bytes": 1861
+    },
+    {
+      "id": "eth-source-8f7f87c8373e",
+      "path": "dist/research/eth-source-8f7f87c8373e.md",
+      "sourceUrl": "https://trumpwhitehouse.archives.gov/briefings-statements/statement-from-the-president-4/",
+      "sha256": "2a611a3b3c58122d9e37b13c41a9545c649caa7a563d5529c167d886a3c8b3ad",
+      "bytes": 1851
+    },
+    {
+      "id": "eth-source-bac90c84ecd2",
+      "path": "dist/research/eth-source-bac90c84ecd2.md",
+      "sourceUrl": "https://www.business-standard.com/article/reuters/wall-street-rallies-as-blow-from-fresh-tariffs-less-than-feared-118091801480_1.html",
+      "sha256": "fb2ac617ca4b0c9844ffe584d9a9395f9e72fdeaf113e337f64bea9ef1670ed7",
+      "bytes": 1838
+    },
+    {
+      "id": "eth-source-2271dee0ccea",
+      "path": "dist/research/eth-source-2271dee0ccea.md",
+      "sourceUrl": "https://trumpwhitehouse.archives.gov/briefings-statements/statement-press-secretary-regarding-presidents-working-dinner-china/",
+      "sha256": "398d83f53fbc4ecbba66b38ae29b2b6a1807ad2f28eb092a0975948c85d325b2",
+      "bytes": 1842
+    },
+    {
+      "id": "eth-source-7a080225118e",
+      "path": "dist/research/eth-source-7a080225118e.md",
+      "sourceUrl": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/24419b4",
+      "sha256": "16875456957debbadb49a764109d4bf4ef8591269b342de8df08219570af4a6d",
+      "bytes": 1774
+    },
+    {
+      "id": "eth-source-bc0cb96a578f",
+      "path": "dist/research/eth-source-bc0cb96a578f.md",
+      "sourceUrl": "https://blog.uniswap.org/uniswap-history",
+      "sha256": "ce19aaa67775391306f0be80abf45c801116279d19398a0c83973ac36c44ef19",
+      "bytes": 1758
+    },
+    {
+      "id": "eth-source-f5705afc8164",
+      "path": "dist/research/eth-source-f5705afc8164.md",
+      "sourceUrl": "https://blog.uniswap.org/uniswap-v3",
+      "sha256": "ba45ebebfd430a33e361072317460402d2ea212b480f33c169b24b740ec07041",
+      "bytes": 1779
+    },
+    {
+      "id": "eth-source-5b0f0e181ddf",
+      "path": "dist/research/eth-source-5b0f0e181ddf.md",
+      "sourceUrl": "https://www.investing.com/news/stock-market-news/uschina-trade-truce-boosts-wall-street-1708279",
+      "sha256": "cd879ca90e24df28153f7e79b2c5e93c53e6fb0a36fa863bacd53d9036748029",
+      "bytes": 1730
+    },
+    {
+      "id": "eth-source-155382af6811",
+      "path": "dist/research/eth-source-155382af6811.md",
+      "sourceUrl": "https://www.govinfo.gov/content/pkg/FR-2019-05-09/pdf/2019-09681.pdf",
+      "sha256": "6757abc91a498793bef6f15d36a166991286220a6edf3de1826d57c39b33b623",
+      "bytes": 1791
+    },
+    {
+      "id": "eth-source-41488b912af6",
+      "path": "dist/research/eth-source-41488b912af6.md",
+      "sourceUrl": "https://blog.ethereum.org/2019/01/15/security-alert-ethereum-constantinople-postponement",
+      "sha256": "d33f4e80c02c4c16b4ad0c91cd90b5ed50bf885fdbfeedd6c6b4ea4ba676364b",
+      "bytes": 1835
+    },
+    {
+      "id": "eth-source-dc730a222613",
+      "path": "dist/research/eth-source-dc730a222613.md",
+      "sourceUrl": "https://www.chainsecurity.com/blog/constantinople-enables-new-reentrancy-attack/index.html",
+      "sha256": "cb798a51587852018404e9388264ca008b8c2bcad93d72547acf705db0751568",
+      "bytes": 1767
+    },
+    {
+      "id": "eth-source-e5fb5199a141",
+      "path": "dist/research/eth-source-e5fb5199a141.md",
+      "sourceUrl": "https://github.com/ethereum/go-ethereum/releases/tag/v1.8.21",
+      "sha256": "2e4844d33947fa9569546e3a14fed9a96e17f67bc61ec9bd6b3568e640755027",
+      "bytes": 1716
+    },
+    {
+      "id": "eth-source-97649565ecc3",
+      "path": "dist/research/eth-source-97649565ecc3.md",
+      "sourceUrl": "https://blog.ethereum.org/2019/02/22/ethereum-constantinople-st-petersburg-upgrade-announcement",
+      "sha256": "56a308188388f093965ef0327360549e1653962f9a6becb4ed39328858a05c75",
+      "bytes": 1954
+    },
+    {
+      "id": "eth-source-911ebd696078",
+      "path": "dist/research/eth-source-911ebd696078.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/7280000",
+      "sha256": "fc90816d92bdcd6b3bd8c3e98075bdbdd210e9772273f76ec1a103b4a957835d",
+      "bytes": 1982
+    },
+    {
+      "id": "eth-source-0a236ffb335d",
+      "path": "dist/research/eth-source-0a236ffb335d.md",
+      "sourceUrl": "https://www.presidency.ucsb.edu/documents/tweets-may-5-2019",
+      "sha256": "228dc816e5d35e2525d503c44ea1941cd9658e932a1d6e4433263167b6a2ce68",
+      "bytes": 1757
+    },
+    {
+      "id": "eth-source-9aaf889484a7",
+      "path": "dist/research/eth-source-9aaf889484a7.md",
+      "sourceUrl": "https://www.reuters.com/article/world/china-stocks-fall-most-in-over-3-years-on-tariff-threats-yuan-tumbles-idUSKCN1SC0MK/",
+      "sha256": "13363db76f3d356963ccaa314a53821e216f6a514f35990608ed214ea4751493",
+      "bytes": 1830
+    },
+    {
+      "id": "eth-source-5dd4ff8c20d1",
+      "path": "dist/research/eth-source-5dd4ff8c20d1.md",
+      "sourceUrl": "https://trumpwhitehouse.archives.gov/briefings-statements/remarks-president-trump-press-conference-osaka-japan/",
+      "sha256": "4c025a1c096ea618737fd81f18d45263ef3482ec6b1f1a375fe2419310c6ea30",
+      "bytes": 1815
+    },
+    {
+      "id": "eth-source-8da2866e73a0",
+      "path": "dist/research/eth-source-8da2866e73a0.md",
+      "sourceUrl": "https://www.brecorder.com/news/506696/wall-street-rallies-as-trade-optimism-lifts-tech-stocks",
+      "sha256": "51a48cb31d71eaaa3f0393bb62f02154b6126854450d7380eb0251bfa3a83b0a",
+      "bytes": 1799
+    },
+    {
+      "id": "eth-source-27a43283e8a6",
+      "path": "dist/research/eth-source-27a43283e8a6.md",
+      "sourceUrl": "https://www.presidency.ucsb.edu/documents/tweets-august-1-2019",
+      "sha256": "b031c591e3f41e13d206570acf728b788297e481834ba122f8767b9916fbe7de",
+      "bytes": 1746
+    },
+    {
+      "id": "eth-source-bc10e785207d",
+      "path": "dist/research/eth-source-bc10e785207d.md",
+      "sourceUrl": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20190731a.htm",
+      "sha256": "d955d03b464f5faa8a62945294fa27f96ae180fe2de0d270431f11cd577ccf88",
+      "bytes": 1620
+    },
+    {
+      "id": "eth-source-64f2dd5a5860",
+      "path": "dist/research/eth-source-64f2dd5a5860.md",
+      "sourceUrl": "https://www.reuters.com/article/business/fed-cuts-interest-rates-signals-it-may-not-need-to-do-more-idUSKCN1UQ0DS/",
+      "sha256": "e8a750b39cea087114021cedac9759964fce218add679f4d1be8a04ef5b33a55",
+      "bytes": 1687
+    },
+    {
+      "id": "eth-source-ae82cb2d4b5b",
+      "path": "dist/research/eth-source-ae82cb2d4b5b.md",
+      "sourceUrl": "https://www.moneyweb.co.za/news-fast-news/wall-st-dragged-down-by-trump-trade-tweet/",
+      "sha256": "40e0a2e10238ceabfb12652aa3d703f3892c8a3351f0b50ff57f5146882c6b53",
+      "bytes": 1781
+    },
+    {
+      "id": "eth-source-9ff60823266a",
+      "path": "dist/research/eth-source-9ff60823266a.md",
+      "sourceUrl": "https://www.ustr.gov/about-us/policy-offices/press-office/press-releases/2019/august/ustr-announces-next-steps-proposed",
+      "sha256": "13d4d5717f7a637f01ab906902a94ed0fe8e85efa75a13c0d14932d9f2e40cbf",
+      "bytes": 1903
+    },
+    {
+      "id": "eth-source-a57c645184f0",
+      "path": "dist/research/eth-source-a57c645184f0.md",
+      "sourceUrl": "https://www.ustr.gov/about-us/policy-offices/press-office/press-releases/2019/august/ustr-statement-section-301-tariff",
+      "sha256": "361158e644bcf3e581ac25828d015bf24203d9447d709e7bd090a079e58a56d5",
+      "bytes": 1868
+    },
+    {
+      "id": "eth-source-2dfeb312672c",
+      "path": "dist/research/eth-source-2dfeb312672c.md",
+      "sourceUrl": "https://home.treasury.gov/news/press-releases/sm751",
+      "sha256": "4bc66bf314bfeeb2dde5923cbbd9fa3136807d2d58e2774a9e5f3f4b977cd9fa",
+      "bytes": 1771
+    },
+    {
+      "id": "eth-source-40e2936be839",
+      "path": "dist/research/eth-source-40e2936be839.md",
+      "sourceUrl": "https://www.reuters.com/article/business/sp-500-futures-fall-after-us-treasury-calls-china-currency-manipulator-idUSKCN1UV2D7/",
+      "sha256": "72c7c224dcf7b3b99cfc8d46ab977275b61c765159f131bf75c61d7251974fba",
+      "bytes": 1842
+    },
+    {
+      "id": "eth-source-a4b903f8eb17",
+      "path": "dist/research/eth-source-a4b903f8eb17.md",
+      "sourceUrl": "https://www.reuters.com/article/us-china-markets/u-s-designates-china-a-currency-manipulator-escalating-trade-war-idUSKCN1UV061/",
+      "sha256": "e7d73c3e64e05eafb727b0cfc12fb41ce93c45f253844d5ca2cf05048ba4ccd9",
+      "bytes": 1835
+    },
+    {
+      "id": "eth-source-e12e74a7b372",
+      "path": "dist/research/eth-source-e12e74a7b372.md",
+      "sourceUrl": "https://home.treasury.gov/news/press-releases/sm873",
+      "sha256": "8ed5ccc78bbdf22c07c2259a4026119b65e7dcd40d8bbd30f283ce7411e66a5e",
+      "bytes": 1917
+    },
+    {
+      "id": "eth-source-3226262b9494",
+      "path": "dist/research/eth-source-3226262b9494.md",
+      "sourceUrl": "https://www.investing.com/news/stock-market-news/futures-slide-amid-geopolitical-tensions-trade-worries-1953540",
+      "sha256": "b83c3f597265cab58d6d9d3c7e3e4ac7759836aa14a8821d1e9f59d008dbc6aa",
+      "bytes": 1786
+    },
+    {
+      "id": "eth-source-4c885ee43431",
+      "path": "dist/research/eth-source-4c885ee43431.md",
+      "sourceUrl": "https://s3.amazonaws.com/public-inspection.federalregister.gov/2019-27306.pdf",
+      "sha256": "a8b0df7995d4a0f1cf35adf3756c31b13c254fddd2f44bb9c166d171d05990d3",
+      "bytes": 1887
+    },
+    {
+      "id": "eth-source-cc1b07fb4926",
+      "path": "dist/research/eth-source-cc1b07fb4926.md",
+      "sourceUrl": "https://www.reuters.com/article/world/trump-heaps-another-5-tariff-on-chinese-goods-in-latest-tit-for-tat-escalation-idUSKCN1VD21E/",
+      "sha256": "e6574529ce81701f4361eb4130338852ae8c59b0de4d8596e4f72ef0294b1a69",
+      "bytes": 1873
+    },
+    {
+      "id": "eth-source-446dd4f09c0f",
+      "path": "dist/research/eth-source-446dd4f09c0f.md",
+      "sourceUrl": "https://trumpwhitehouse.archives.gov/briefings-statements/remarks-president-trump-vice-premier-liu-peoples-republic-china-meeting/",
+      "sha256": "822c6be46ca32cbfcfdf2abb5d4d329af19255d03e7d7b05d4b86e026679a529",
+      "bytes": 1944
+    },
+    {
+      "id": "eth-source-a33ca74d27d9",
+      "path": "dist/research/eth-source-a33ca74d27d9.md",
+      "sourceUrl": "https://www.streetinsider.com/ETFs/U.S.%2Boutlines%2BPhase%2B1%2Btrade%2Bdeal%2Bwith%2BChina,%2Bsuspends%2BOctober%2Btariff%2Bhike/16002465.html",
+      "sha256": "3218126c54468deb9b49f75c3b09b4d94b0f8fa8204df0b118be5439b2a5ae22",
+      "bytes": 1913
+    },
+    {
+      "id": "eth-source-61b37ea40aee",
+      "path": "dist/research/eth-source-61b37ea40aee.md",
+      "sourceUrl": "https://ustr.gov/about-us/policy-offices/press-office/press-releases/2019/december/united-states-and-china-reach",
+      "sha256": "23546bf83d7b1d7fd69f3ba5f686154b4d45fc092bb7b94ad539232778a3d05c",
+      "bytes": 1831
+    },
+    {
+      "id": "eth-source-f81f70d1719b",
+      "path": "dist/research/eth-source-f81f70d1719b.md",
+      "sourceUrl": "https://www.ustr.gov/about-us/policy-offices/press-office/press-releases/2020/february/ustr-announces-formation-bilateral-evaluation-and-dispute-resolution-office-pursuant-us-china-phase",
+      "sha256": "61ac4eeb6a9c7ed6582a389913f66d7ce4a335c41d9eb7659986414d36ebece8",
+      "bytes": 2055
+    },
+    {
+      "id": "eth-source-d331d4bb56e1",
+      "path": "dist/research/eth-source-d331d4bb56e1.md",
+      "sourceUrl": "https://blog.ethereum.org/2019/11/20/ethereum-istanbul-upgrade-announcement",
+      "sha256": "d4c458fd9590fdb94de3d746c434e615aac51c753c61a80e34634cde7368d654",
+      "bytes": 1871
+    },
+    {
+      "id": "eth-source-8c2ba8d07667",
+      "path": "dist/research/eth-source-8c2ba8d07667.md",
+      "sourceUrl": "https://eips.ethereum.org/EIPS/eip-1679",
+      "sha256": "46585ee10adf603aa01ed17e7d84d0aba522341cdbb2de1473306dfce225016d",
+      "bytes": 1826
+    },
+    {
+      "id": "eth-source-956e3f08131e",
+      "path": "dist/research/eth-source-956e3f08131e.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/9069000",
+      "sha256": "9bbc3a0d56b9350b031f1b11e84b67da99e42469fdf851beb520a6c988374d82",
+      "bytes": 1982
+    },
+    {
+      "id": "eth-source-a2e91909db83",
+      "path": "dist/research/eth-source-a2e91909db83.md",
+      "sourceUrl": "https://www.clickorlando.com/business/2019/12/13/us-stocks-open-lower-as-traders-await-clarity-on-trade-deal/",
+      "sha256": "3a6df34a81754716641106eeafda322601153cc6b690c6fe18e9e146b7ce9e47",
+      "bytes": 1887
+    },
+    {
+      "id": "eth-source-4b1f76068cc9",
+      "path": "dist/research/eth-source-4b1f76068cc9.md",
+      "sourceUrl": "https://ustr.gov/sites/default/files/enforcement/301Investigations/Notice_of_Modification-January_2020.pdf",
+      "sha256": "f55c40a7a4f07cddf67a1b5332d6efbe919cbfd1c9dbc9a8dda46cfc6f98d9e1",
+      "bytes": 1913
+    },
+    {
+      "id": "eth-source-5d288a25887d",
+      "path": "dist/research/eth-source-5d288a25887d.md",
+      "sourceUrl": "https://blog.ethereum.org/2019/12/23/ethereum-muir-glacier-upgrade-announcement",
+      "sha256": "660769cd20d776e89e12d0199ba694e25abcf218a65236985be80e0670f9eb90",
+      "bytes": 1763
+    },
+    {
+      "id": "eth-source-2625f3c9e688",
+      "path": "dist/research/eth-source-2625f3c9e688.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/9200000",
+      "sha256": "88406a100ecd683945a4887a077429cb04bce6fc8db5043d3c05f389f59b8785",
+      "bytes": 1643
+    },
+    {
+      "id": "eth-source-dd0ef8e1a345",
+      "path": "dist/research/eth-source-dd0ef8e1a345.md",
+      "sourceUrl": "https://eips.ethereum.org/EIPS/eip-2384",
+      "sha256": "a6386aa47ecae8e4bee2b2ad1e0d0bbb9a4a86ea72258d9b1be2dcf62035e4e0",
+      "bytes": 1724
+    },
+    {
+      "id": "eth-source-a4ea3423205f",
+      "path": "dist/research/eth-source-a4ea3423205f.md",
+      "sourceUrl": "https://trumpwhitehouse.archives.gov/briefings-statements/president-donald-j-trump-signing-landmark-phase-one-trade-agreement-china/",
+      "sha256": "74bfee7a9e5d5936bd0e0fedc76139ec2df6df774354fe21fb48b18453c3b26c",
+      "bytes": 1901
+    },
+    {
+      "id": "eth-source-e2b0660ba17e",
+      "path": "dist/research/eth-source-e2b0660ba17e.md",
+      "sourceUrl": "https://gcaptain.com/china-signs-phase-1-trade-deal-with-united-states/",
+      "sha256": "d36b9c7865e48e9dce4fd42f570ac3a35060d9032403b76172cce62c14cb3b4a",
+      "bytes": 1783
+    },
+    {
+      "id": "eth-source-bde509102106",
+      "path": "dist/research/eth-source-bde509102106.md",
+      "sourceUrl": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20200303a.htm",
+      "sha256": "13db0f1bc182b9e3017c11c741c23a02f970b13aa66f44933c23557c1a0a5b02",
+      "bytes": 1593
+    },
+    {
+      "id": "eth-source-f8505e2ac8e5",
+      "path": "dist/research/eth-source-f8505e2ac8e5.md",
+      "sourceUrl": "https://www.reuters.com/article/business/fed-cuts-rates-to-blunt-coronavirus-impact-markets-drop-idUSKBN20Q22A/",
+      "sha256": "e60196cbfe957d561354b4fdc3ed018b7f5e87bb365c813df7ee53bcb9bc4231",
+      "bytes": 1663
+    },
+    {
+      "id": "eth-source-6a3ea520477a",
+      "path": "dist/research/eth-source-6a3ea520477a.md",
+      "sourceUrl": "https://www.who.int/news-room/speeches/item/who-director-general-s-opening-remarks-at-the-media-briefing-on-covid-19---11-march-2020",
+      "sha256": "5b23022718dbb5e2b68c60a0cc89d662cd03e194233b859692b32c6cec911dae",
+      "bytes": 1890
+    },
+    {
+      "id": "eth-source-a4f6f4b39009",
+      "path": "dist/research/eth-source-a4f6f4b39009.md",
+      "sourceUrl": "https://archive.cyprus-mail.com/2020/03/11/who-describes-coronavirus-outbreak-as-pandemic/",
+      "sha256": "8eaccebf3bcc91bddd0f7735eb702298dc4cdaf956b1cd80400fb713d1fcfe07",
+      "bytes": 1782
+    },
+    {
+      "id": "eth-source-d0d8fef05176",
+      "path": "dist/research/eth-source-d0d8fef05176.md",
+      "sourceUrl": "https://vote.makerdao.com/polling/QmZKAqzN",
+      "sha256": "dd2d1861d078f61030c90a1584cc075a4e43c512e8875a9118e0e8914e981a44",
+      "bytes": 1803
+    },
+    {
+      "id": "eth-source-d14f2d4d7cdd",
+      "path": "dist/research/eth-source-d14f2d4d7cdd.md",
+      "sourceUrl": "https://www.coindesk.com/tech/2020/03/12/defi-leader-makerdao-weighs-emergency-shutdown-following-eth-price-drop",
+      "sha256": "87cc1f099fa3c89dfdcb49fd1484af5b79beb8701de47ff26c15151a4a35ccf0",
+      "bytes": 1875
+    },
+    {
+      "id": "eth-source-4ff81165fee9",
+      "path": "dist/research/eth-source-4ff81165fee9.md",
+      "sourceUrl": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20200315a1.htm",
+      "sha256": "58a087f0b5ed905362c090c8c2b16e9e2e560ce3529d0ca39f58dff40219be66",
+      "bytes": 1805
+    },
+    {
+      "id": "eth-source-d68fb4dfb504",
+      "path": "dist/research/eth-source-d68fb4dfb504.md",
+      "sourceUrl": "https://www.reuters.com/article/economy/fed-slashes-rates-global-central-banks-coordinate-to-cushion-coronavirus-blow-idUSKBN21219J/",
+      "sha256": "92b7af597faf3e8ed437547bdcfe052b01620ca60230c8c6f3255f425273e5e8",
+      "bytes": 1857
+    },
+    {
+      "id": "eth-source-e7517f70dc89",
+      "path": "dist/research/eth-source-e7517f70dc89.md",
+      "sourceUrl": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20200323b.htm",
+      "sha256": "2d440b8e4ed1ed6386c6773df27038733b290b15be96f5eb4bb24f7642c5013f",
+      "bytes": 1793
+    },
+    {
+      "id": "eth-source-046b5bf6d5e6",
+      "path": "dist/research/eth-source-046b5bf6d5e6.md",
+      "sourceUrl": "https://www.reuters.com/article/business/factbox-global-economic-policy-response-to-coronavirus-crisis-idUSKCN21W2A9/",
+      "sha256": "922bc869d49468667843afc4e32bfecdaf203e5add03ec543ecfa351b0a18673",
+      "bytes": 1778
+    },
+    {
+      "id": "eth-source-4db191adaeb8",
+      "path": "dist/research/eth-source-4db191adaeb8.md",
+      "sourceUrl": "https://blog.uniswap.org/launch-uniswap-v2",
+      "sha256": "4141318c71c0c49edfe3a8f44af9e50fb3ac757a9301beb6a6b4d27dc5272550",
+      "bytes": 1775
+    },
+    {
+      "id": "eth-source-6b8c173742d8",
+      "path": "dist/research/eth-source-6b8c173742d8.md",
+      "sourceUrl": "https://compound.substack.com/p/comp-distribution-key-delegates-new",
+      "sha256": "41749a9e6d6c90b76e13161dad3f473bf67632cfc6808e6a8447f34279c1b0e2",
+      "bytes": 1768
+    },
+    {
+      "id": "eth-source-f6a01c525d60",
+      "path": "dist/research/eth-source-f6a01c525d60.md",
+      "sourceUrl": "https://www.theblock.co/news/defi/2020-06-15-compound-governance-tokens-begin-its-first-day-of-trading-68369",
+      "sha256": "2c401573e46dd53d5ad492c8705d37a37d0afa4325f93c31cc406090f05edd06",
+      "bytes": 1775
+    },
+    {
+      "id": "eth-source-d9257f8d46e7",
+      "path": "dist/research/eth-source-d9257f8d46e7.md",
+      "sourceUrl": "https://blog.ethereum.org/en/2020/11/04/eth2-quick-update-no-19",
+      "sha256": "5db515c61a6c58c8c9aff860519fd885ef95986dc373b2bb5e1da6c1b977ed6d",
+      "bytes": 1726
+    },
+    {
+      "id": "eth-source-4cb2b677ca1c",
+      "path": "dist/research/eth-source-4cb2b677ca1c.md",
+      "sourceUrl": "https://status.app/blog/status-supports-the-eth-2-0-deposit-contract",
+      "sha256": "d6502cb4a6b6167a70cc4e05eb4b03ff3cafa49e72a8bd773b037cbbf472539e",
+      "bytes": 1798
+    },
+    {
+      "id": "eth-source-323c3ff4145d",
+      "path": "dist/research/eth-source-323c3ff4145d.md",
+      "sourceUrl": "https://blog.ethereum.org/2020/11/27/eth2-quick-update-no-21",
+      "sha256": "808a9aa8ad659380a9498cc39d42141decc69ca9447562dfb7a5c12a7d5b7d8b",
+      "bytes": 1764
+    },
+    {
+      "id": "eth-source-940b157a8aa5",
+      "path": "dist/research/eth-source-940b157a8aa5.md",
+      "sourceUrl": "https://blog.ethereum.org/2020/12/09/ef-supported-teams-research-and-development-update-2020-pt-2",
+      "sha256": "8a4ae84bad13e81cb488cd50997bff37bddcae01b19b8195987d486de85f9e11",
+      "bytes": 1870
+    },
+    {
+      "id": "eth-source-d4099cea8f62",
+      "path": "dist/research/eth-source-d4099cea8f62.md",
+      "sourceUrl": "https://press.christies.com/results-beeples-purely-digital-nft-based-work-of-art-achieves-693-million-at-christies-1/",
+      "sha256": "8505bf86be8177a3cfeae69c53f7b51c04a51313f38750964f6eddcacc4be02f",
+      "bytes": 1834
+    },
+    {
+      "id": "eth-source-facc2a1c0a49",
+      "path": "dist/research/eth-source-facc2a1c0a49.md",
+      "sourceUrl": "https://onlineonly.christies.com/s/beeple-first-5000-days/beeple-b-1981-1/112924",
+      "sha256": "cb6c4bdef7dc7ec70072baee15a5e86a30a68119ceed7499bcced554aec51113",
+      "bytes": 1744
+    },
+    {
+      "id": "eth-source-58d3f4cc0f62",
+      "path": "dist/research/eth-source-58d3f4cc0f62.md",
+      "sourceUrl": "https://www.theblock.co/news/web3/2021-03-11-christies-beeple-auction-ends-digital-art-98047",
+      "sha256": "0d6b01dbe78c7abcd3e4e0eaeed5ea1fdab0d3d325e74eb90eae79725bd2c1eb",
+      "bytes": 1805
+    },
+    {
+      "id": "eth-source-c6fc9d474358",
+      "path": "dist/research/eth-source-c6fc9d474358.md",
+      "sourceUrl": "https://blog.ethereum.org/2021/03/08/ethereum-berlin-upgrade-announcement",
+      "sha256": "be6a1a876b1d338caa3ce620467cea275d331f91f241e981b551268ece162025",
+      "bytes": 1839
+    },
+    {
+      "id": "eth-source-e2ba79b8443c",
+      "path": "dist/research/eth-source-e2ba79b8443c.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/12244000",
+      "sha256": "879a927358bab8db1b705df70421d0e4e35335432cea04f5a65b024a8b16342e",
+      "bytes": 1986
+    },
+    {
+      "id": "eth-source-f1d6b3923b8d",
+      "path": "dist/research/eth-source-f1d6b3923b8d.md",
+      "sourceUrl": "https://blog.uniswap.org/launch-uniswap-v3",
+      "sha256": "47837a6842a9e7b5d0b553815c3efdfc159cfd49d9695bfaf35dabfd29c2e0f1",
+      "bytes": 1699
+    },
+    {
+      "id": "eth-source-d2ba37fc5403",
+      "path": "dist/research/eth-source-d2ba37fc5403.md",
+      "sourceUrl": "https://blog.uniswap.org/jit-liquidity",
+      "sha256": "1f38e8e3779e517b8e4becae96b1efb592e3dca96732c65afca6917adb8fb3fe",
+      "bytes": 1717
+    },
+    {
+      "id": "eth-source-131dea1b66e4",
+      "path": "dist/research/eth-source-131dea1b66e4.md",
+      "sourceUrl": "https://jrj.sh.gov.cn/ZXYW178/20210524/d99780f9cc2144be9b54f90abb764a99.html",
+      "sha256": "0e725a2a9b66ca33dc290261c513e13e2da5420db5d8bbaea33af0b51f6908c6",
+      "bytes": 1972
+    },
+    {
+      "id": "eth-source-90c498098dd7",
+      "path": "dist/research/eth-source-90c498098dd7.md",
+      "sourceUrl": "https://www.reuters.com/technology/china-says-it-will-crack-down-bitcoin-mining-trading-activities-2021-05-21/",
+      "sha256": "10252465574bee04fd51bcfdddf7096e8d92ed2a340f437d3156b16c00528e89",
+      "bytes": 1784
+    },
+    {
+      "id": "eth-source-357d13ebcedc",
+      "path": "dist/research/eth-source-357d13ebcedc.md",
+      "sourceUrl": "https://www.reuters.com/technology/bitcoin-under-pressure-comeback-fades-2021-05-21/",
+      "sha256": "18227ee5736473912d693e98b5a0c97fed820e3d34f74f5e5ed1f3a8eb5ca677",
+      "bytes": 1856
+    },
+    {
+      "id": "eth-source-9f72a40c3f2c",
+      "path": "dist/research/eth-source-9f72a40c3f2c.md",
+      "sourceUrl": "https://blog.ethereum.org/2021/07/15/london-mainnet-announcement",
+      "sha256": "8b49881d0e63069b2b44a429e46a4725e3640b6d4432a960011db77a2614d5f7",
+      "bytes": 1823
+    },
+    {
+      "id": "eth-source-2be2a692f09f",
+      "path": "dist/research/eth-source-2be2a692f09f.md",
+      "sourceUrl": "https://eips.ethereum.org/EIPS/eip-1559",
+      "sha256": "5997de6d0138648f5ab634ccfca1c1281aa92303bcb7536548a9e620375b81e8",
+      "bytes": 1872
+    },
+    {
+      "id": "eth-source-d0ad40887117",
+      "path": "dist/research/eth-source-d0ad40887117.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/12965000",
+      "sha256": "d4a13cf4f4304650fc55164ebae8ab3c18659ce473af38e42938b7e3840b6515",
+      "bytes": 1986
+    },
+    {
+      "id": "eth-source-5589fa585b73",
+      "path": "dist/research/eth-source-5589fa585b73.md",
+      "sourceUrl": "https://github.com/ethereum/go-ethereum/security/advisories/GHSA-9856-9gg9-qcmq",
+      "sha256": "a391736eef19914baf1049ade529ef85a14f81d004ddf982f206a011fd4de47d",
+      "bytes": 1811
+    },
+    {
+      "id": "eth-source-9b51749af58f",
+      "path": "dist/research/eth-source-9b51749af58f.md",
+      "sourceUrl": "https://github.com/ethereum/go-ethereum/blob/master/docs/postmortems/2021-08-22-split-postmortem.md",
+      "sha256": "d6c203a20decd6d05b3b1700a13928f35ff51c468df32ee16b5782deb8a379f0",
+      "bytes": 1827
+    },
+    {
+      "id": "eth-source-249176941d99",
+      "path": "dist/research/eth-source-249176941d99.md",
+      "sourceUrl": "https://www.prnewswire.com/news-releases/offchain-labs-rolls-out-arbitrum-one-ethereum-scaling-solution-to-the-public-and-announces-120m-in-funding-301365642.html",
+      "sha256": "b27fca0b37ee8e8db598c86b9a33df15e5681d862e4ab1952e12595730ca7760",
+      "bytes": 1883
+    },
+    {
+      "id": "eth-source-ff549938cf92",
+      "path": "dist/research/eth-source-ff549938cf92.md",
+      "sourceUrl": "https://blog.uniswap.org/uniswap-arbitrum-alpha",
+      "sha256": "e0f9898f7786f428e727251059ffb5644a0bf77c5580c0ccb23cc690816df28e",
+      "bytes": 1680
+    },
+    {
+      "id": "eth-source-a945aadf6543",
+      "path": "dist/research/eth-source-a945aadf6543.md",
+      "sourceUrl": "https://www.theblock.co/news/deals/2021-08-31-ethereum-scaling-solution-arbitrum-launches-mainnet-raises-120-million-funding-116148",
+      "sha256": "307e6cf1ce0563803a31ab73f5b91bd0eeee4cb37f9d3a3f6b951a11cdbdb8e6",
+      "bytes": 1872
+    },
+    {
+      "id": "eth-source-feee761e69b1",
+      "path": "dist/research/eth-source-feee761e69b1.md",
+      "sourceUrl": "https://www.safe.gov.cn/safe/2021/0924/19911.html",
+      "sha256": "47e7423541a96cbe7b704a1b800895d14d8c134ead5b690f3e5fd988d85d1c8f",
+      "bytes": 1979
+    },
+    {
+      "id": "eth-source-cf143a876ccf",
+      "path": "dist/research/eth-source-cf143a876ccf.md",
+      "sourceUrl": "https://www.theguardian.com/world/2021/sep/24/china-declares-transactions-cryptocurrencies-illegal",
+      "sha256": "417a2220a201fcdd682df6ef416c7933c0fd0d791210c25fc3fce560f78f6374",
+      "bytes": 1756
+    },
+    {
+      "id": "eth-source-d0dfb7ef9ed9",
+      "path": "dist/research/eth-source-d0dfb7ef9ed9.md",
+      "sourceUrl": "https://www.csrc.gov.cn/csrc/c100028/c7614318/content.shtml",
+      "sha256": "031b587cd18e753a19ad74830729450df7dd84ce73f256804f05a7d2723de92f",
+      "bytes": 1940
+    },
+    {
+      "id": "eth-source-ed29d0b06940",
+      "path": "dist/research/eth-source-ed29d0b06940.md",
+      "sourceUrl": "https://blog.ethereum.org/2021/10/05/altair-announcement",
+      "sha256": "f4853724ab1e6d0641b84a6f3cd0e91b6c4296c9629a7d800d2900cccfb54228",
+      "bytes": 1819
+    },
+    {
+      "id": "eth-source-a47a559fa3e1",
+      "path": "dist/research/eth-source-a47a559fa3e1.md",
+      "sourceUrl": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20211103a.htm",
+      "sha256": "cad8e3dc92d6b804765c60533b4ec18a4f84fe23b48c38ea9b88a15026a490fa",
+      "bytes": 1715
+    },
+    {
+      "id": "eth-source-959dfc446d5f",
+      "path": "dist/research/eth-source-959dfc446d5f.md",
+      "sourceUrl": "https://www.reuters.com/business/federal-reserves-taper-how-does-it-work-2021-11-03/",
+      "sha256": "63f6ef0fc3cd1b9a27ace313af9dc4a0551c11f60724906f46ebc57807e6669e",
+      "bytes": 1734
+    },
+    {
+      "id": "eth-source-4e257e01f9e3",
+      "path": "dist/research/eth-source-4e257e01f9e3.md",
+      "sourceUrl": "https://blog.ethereum.org/2021/11/10/arrow-glacier-announcement",
+      "sha256": "854e188673ad38918d1103a590eda49f2a7eee863ee2a827fba87d354ce20d12",
+      "bytes": 1765
+    },
+    {
+      "id": "eth-source-6c119bc29392",
+      "path": "dist/research/eth-source-6c119bc29392.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/13773000",
+      "sha256": "b29ee8170d1850736a3dd30a51e60025a4eb97db5e375749fe0428b3931a30f9",
+      "bytes": 1646
+    },
+    {
+      "id": "eth-source-0726c91daaf3",
+      "path": "dist/research/eth-source-0726c91daaf3.md",
+      "sourceUrl": "https://eips.ethereum.org/EIPS/eip-4345",
+      "sha256": "07e158d84b7c13e6b711e8212336a6019c6ca769d673cbce3fed8694e8953407",
+      "bytes": 1724
+    },
+    {
+      "id": "eth-source-8e166557283e",
+      "path": "dist/research/eth-source-8e166557283e.md",
+      "sourceUrl": "https://www.chainalysis.com/blog/wormhole-hack-february-2022/",
+      "sha256": "a2d33782c67e1e5954f1cf472221ae7dc8aedd3755d990abb6c754f37c121aeb",
+      "bytes": 1708
+    },
+    {
+      "id": "eth-source-738c00ad6cf4",
+      "path": "dist/research/eth-source-738c00ad6cf4.md",
+      "sourceUrl": "https://www.reuters.com/technology/crypto-network-wormhole-hit-with-possible-320-mln-hack-2022-02-03/",
+      "sha256": "19afe20d233c2ea9970790a9be386aa88b5040e23d54ad80f7c5ccb76f4716d9",
+      "bytes": 1805
+    },
+    {
+      "id": "eth-source-2ad926bd98a6",
+      "path": "dist/research/eth-source-2ad926bd98a6.md",
+      "sourceUrl": "https://georgia.un.org/en/173303-statement-secretary-general-%E2%80%93-ukraine",
+      "sha256": "ed574a23d059d1775ce325bc47167f8fa4fc185ffbee21e5dbd69794e810f406",
+      "bytes": 1786
+    },
+    {
+      "id": "eth-source-e939451c48fe",
+      "path": "dist/research/eth-source-e939451c48fe.md",
+      "sourceUrl": "https://www.reuters.com/technology/stablecoins-gain-bitcoin-ether-fall-after-russia-invades-ukraine-2022-02-24/",
+      "sha256": "71ca572eed86a7db9ed79d9d6b994e2c551bb82b50b77d24a4df2f5f3278326c",
+      "bytes": 1788
+    },
+    {
+      "id": "eth-source-bae5e1221152",
+      "path": "dist/research/eth-source-bae5e1221152.md",
+      "sourceUrl": "https://www.govinfo.gov/content/pkg/FR-2022-03-14/html/2022-05471.htm",
+      "sha256": "092ee95a7781942396c2701fd88d75438a501ec0f2be83d8ed9b0cf77e3bc1d5",
+      "bytes": 1825
+    },
+    {
+      "id": "eth-source-f22e060d345e",
+      "path": "dist/research/eth-source-f22e060d345e.md",
+      "sourceUrl": "https://www.reuters.com/business/finance/biden-orders-government-study-digital-dollar-other-cryptocurrency-risks-2022-03-09/",
+      "sha256": "02c766c1fd2eab9227f6f0e3f6cd3e239f452301fb4c0b4f776f056c3093c25d",
+      "bytes": 1788
+    },
+    {
+      "id": "eth-source-40e4fb4ce600",
+      "path": "dist/research/eth-source-40e4fb4ce600.md",
+      "sourceUrl": "https://www.whitehouse.gov/presidential-actions/2025/01/strengthening-american-leadership-in-digital-financial-technology/",
+      "sha256": "26bd251d0d7379925ebf9c1abd9a0d91838fa11b055dd1e9ae21f4064864d547",
+      "bytes": 1835
+    },
+    {
+      "id": "eth-source-9a0b3feca659",
+      "path": "dist/research/eth-source-9a0b3feca659.md",
+      "sourceUrl": "https://www.reuters.com/business/futures-climb-ukraine-peace-talks-fed-decision-ahead-2022-03-16/",
+      "sha256": "bafe9a87ad6d9a69cac058d6e449085965ff7258d349b4da83b4b7ef1730b550",
+      "bytes": 1709
+    },
+    {
+      "id": "eth-source-f6c5f75b9baa",
+      "path": "dist/research/eth-source-f6c5f75b9baa.md",
+      "sourceUrl": "https://slowmist.medium.com/ronin-exploit-largest-crypto-hack-to-date-8b7c581e38fd",
+      "sha256": "a41a14128450869388fbd8de1d730b5a897e46eaad4ef71d4d49eb853a9d32b9",
+      "bytes": 1714
+    },
+    {
+      "id": "eth-source-50771cc3315d",
+      "path": "dist/research/eth-source-50771cc3315d.md",
+      "sourceUrl": "https://www.reuters.com/technology/blockchain-company-ronin-hit-by-615-million-crypto-heist-2022-03-29/",
+      "sha256": "b6e63ecc750147d86aad2dc31291a7721ebbaa8e13cf1bfb8531478ccfed106a",
+      "bytes": 1744
+    },
+    {
+      "id": "eth-source-0de24675719c",
+      "path": "dist/research/eth-source-0de24675719c.md",
+      "sourceUrl": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20220504a.htm",
+      "sha256": "7b4d5cb2b8f6aa1d38f74c8c6ecd259de3e42f5d711519508a16530ae571c0d4",
+      "bytes": 1678
+    },
+    {
+      "id": "eth-source-92102bdee948",
+      "path": "dist/research/eth-source-92102bdee948.md",
+      "sourceUrl": "https://www.reuters.com/business/global-markets-wrapup-1-2022-05-04/",
+      "sha256": "e4e4dbf28a7a08d9f66653547bc7ff994b6445e3188e425a4ccf693f3811a5bf",
+      "bytes": 1650
+    },
+    {
+      "id": "eth-source-717eb4a9bece",
+      "path": "dist/research/eth-source-717eb4a9bece.md",
+      "sourceUrl": "https://www.sec.gov/files/litigation/admin/2026/34-106168-pdp.pdf",
+      "sha256": "68193b4010c6285d4e51d33ed938bc2636766c18a0dabdc8bdd3f7dad24361c0",
+      "bytes": 1821
+    },
+    {
+      "id": "eth-source-3f3decfeac2e",
+      "path": "dist/research/eth-source-3f3decfeac2e.md",
+      "sourceUrl": "https://www.federalreserve.gov/econres/feds/files/2023044pap.pdf",
+      "sha256": "61298be603181d5f3d6566cdd31d726c6ff164b6c1bb6045a3747274a8f39268",
+      "bytes": 1913
+    },
+    {
+      "id": "eth-source-516c795a59ce",
+      "path": "dist/research/eth-source-516c795a59ce.md",
+      "sourceUrl": "https://www.reuters.com/technology/terrausd-developers-vote-create-new-blockchain-without-failed-stablecoin-2022-05-25/",
+      "sha256": "ba90c50944a5a7f8f105c1551052277657307b1c303d12c3442c12b3344ffbca",
+      "bytes": 1853
+    },
+    {
+      "id": "eth-source-5fe7a89f1993",
+      "path": "dist/research/eth-source-5fe7a89f1993.md",
+      "sourceUrl": "https://pacer-documents.s3.amazonaws.com/115/312902/126122257414.pdf",
+      "sha256": "e5fecb2f8fd03fb42825c3bd9edde7b65ad5e784cd91fd6d853b093c94622937",
+      "bytes": 1866
+    },
+    {
+      "id": "eth-source-41778ac98992",
+      "path": "dist/research/eth-source-41778ac98992.md",
+      "sourceUrl": "https://www.reuters.com/technology/crypto-firm-celsius-pauses-all-transfers-withdrawals-between-accounts-2022-06-13/",
+      "sha256": "2b0833c733dd80bc82237cc7ed842f13563cb5d0bd770efd3444ab4a091788fa",
+      "bytes": 1850
+    },
+    {
+      "id": "eth-source-6928012e1260",
+      "path": "dist/research/eth-source-6928012e1260.md",
+      "sourceUrl": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20220615a.htm",
+      "sha256": "e8f5f6d31a5234c2faf8148460be4cbf37e88a1aba978c3ebe929b10c0d95b9c",
+      "bytes": 1606
+    },
+    {
+      "id": "eth-source-f1f3c20a491e",
+      "path": "dist/research/eth-source-f1f3c20a491e.md",
+      "sourceUrl": "https://www.reuters.com/markets/europe/dollar-towers-over-peers-markets-bet-large-fed-rate-hike-2022-06-15/",
+      "sha256": "0e1b37aee2ecdfbb9a98f2fc60a58a10523c38e46a2a3fbd50d4ce3afe526bb9",
+      "bytes": 1661
+    },
+    {
+      "id": "eth-source-510e4bf31abe",
+      "path": "dist/research/eth-source-510e4bf31abe.md",
+      "sourceUrl": "https://3acliquidation.com/wp-content/uploads/2023/02/230222-Notice-3AC-Asset-Sales-Website.pdf",
+      "sha256": "f874b46d9b071115bb147519eb641d557fd3adc6aa237b4d1a71cfdeb44351f9",
+      "bytes": 1893
+    },
+    {
+      "id": "eth-source-42d53a5a8244",
+      "path": "dist/research/eth-source-42d53a5a8244.md",
+      "sourceUrl": "https://www.reuters.com/technology/crypto-hedge-fund-three-arrows-capital-has-entered-liquidation-source-says-2022-06-29/",
+      "sha256": "2a41bce698598c06cf731c7962c3d651b47bc1adbcd09bb0227a7ed30cf064b3",
+      "bytes": 1847
+    },
+    {
+      "id": "eth-source-28717193c088",
+      "path": "dist/research/eth-source-28717193c088.md",
+      "sourceUrl": "https://blog.ethereum.org/2022/06/16/gray-glacier-announcement",
+      "sha256": "82168891c54d65d88a5bf111420662d841a7c489134b5521e07efb4a6fca2c1c",
+      "bytes": 1758
+    },
+    {
+      "id": "eth-source-145e5a21396d",
+      "path": "dist/research/eth-source-145e5a21396d.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/15050000",
+      "sha256": "8b3a527a1126865f6e3190af3637ab731860c2f74aba2e3d8a1451d06e66db74",
+      "bytes": 1646
+    },
+    {
+      "id": "eth-source-00e328bcd156",
+      "path": "dist/research/eth-source-00e328bcd156.md",
+      "sourceUrl": "https://eips.ethereum.org/EIPS/eip-5133",
+      "sha256": "e845e056d972b2cbf3981f7688fa2714443b526821ef8223babad86ae5e97681",
+      "bytes": 1748
+    },
+    {
+      "id": "eth-source-caca08bf30e0",
+      "path": "dist/research/eth-source-caca08bf30e0.md",
+      "sourceUrl": "https://www.businesswire.com/news/home/20220713005911/en/Celsius-Network-Initiates-Financial-Restructuring-to-Stabilize-Business-and-Maximize-Value-for-All-Stakeholders",
+      "sha256": "267c64fb6945f75ef4ea11e2e94fd1ada2f915acc253f2c75c5613250a189e08",
+      "bytes": 1958
+    },
+    {
+      "id": "eth-source-8c044d8e32fa",
+      "path": "dist/research/eth-source-8c044d8e32fa.md",
+      "sourceUrl": "https://www.reuters.com/technology/crypto-lender-celsius-files-bankruptcy-2022-07-14/",
+      "sha256": "931b3e0965cf907b5db7a284447d3272cfdace9466a2901f6d01d7fc96d6bc40",
+      "bytes": 1711
+    },
+    {
+      "id": "eth-source-72c7ee79718d",
+      "path": "dist/research/eth-source-72c7ee79718d.md",
+      "sourceUrl": "https://home.treasury.gov/news/press-releases/jy0916",
+      "sha256": "6d50813cf4f257480fe7c81f418ef17a67afb71479115200576e4f8a00cb7efd",
+      "bytes": 1829
+    },
+    {
+      "id": "eth-source-622f37379bac",
+      "path": "dist/research/eth-source-622f37379bac.md",
+      "sourceUrl": "https://www.ca5.uscourts.gov/opinions/pub/23/23-50669-CV0.pdf",
+      "sha256": "713b583c293d77078e643d9e7045e705f3a39d6e2bf551d50a775b3f4885e3dc",
+      "bytes": 1861
+    },
+    {
+      "id": "eth-source-09ba188165e0",
+      "path": "dist/research/eth-source-09ba188165e0.md",
+      "sourceUrl": "https://home.treasury.gov/news/press-releases/sb0057",
+      "sha256": "7f05712d2d778afb09d5652326bfa47be22fabe6988bd67ca4bc5eac8c389371",
+      "bytes": 1694
+    },
+    {
+      "id": "eth-source-0e6cc95e4c84",
+      "path": "dist/research/eth-source-0e6cc95e4c84.md",
+      "sourceUrl": "https://blog.ethereum.org/2022/08/24/mainnet-merge-announcement",
+      "sha256": "19fee95478bab4cc3847322a16bc04018769685f081623c7c3743ed83fcdf669",
+      "bytes": 1703
+    },
+    {
+      "id": "eth-source-3fbdab827433",
+      "path": "dist/research/eth-source-3fbdab827433.md",
+      "sourceUrl": "https://www.coinbase.com/institutional/research-insights/research/weekly-market-commentary/weekly-market-commentary-september-9-2022",
+      "sha256": "3b7682e11e8d87c3b19955c2b629006f9a0804ad4fac5acf0c9018c9dc20823b",
+      "bytes": 1818
+    },
+    {
+      "id": "eth-source-467ba2a5d9e0",
+      "path": "dist/research/eth-source-467ba2a5d9e0.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/15537393",
+      "sha256": "1eff48567bfb2941efc98e41f7b9735f974dd674acc6b400d28693cff0057295",
+      "bytes": 1986
+    },
+    {
+      "id": "eth-source-6e6a16250483",
+      "path": "dist/research/eth-source-6e6a16250483.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/15537394",
+      "sha256": "163917017395896a3d3fe6837de2df65d25e2cdd316b4751bcf8c320fb484829",
+      "bytes": 1986
+    },
+    {
+      "id": "eth-source-05a10aa1e7e8",
+      "path": "dist/research/eth-source-05a10aa1e7e8.md",
+      "sourceUrl": "https://www.reuters.com/business/finance/crypto-exchange-ftx-saw-6-bln-withdrawals-72-hours-ceo-message-staff-2022-11-08/",
+      "sha256": "ea83d173fba5515504e363121469e43745ebef2f9ebe2df5f169410954dcab42",
+      "bytes": 1797
+    },
+    {
+      "id": "eth-source-bb10e00bb486",
+      "path": "dist/research/eth-source-bb10e00bb486.md",
+      "sourceUrl": "https://www.reuters.com/business/ftx-start-us-bankruptcy-proceedings-ceo-exit-2022-11-11/",
+      "sha256": "c81bea04127799a1918c7cde2c6ccfb99c96a8ed9f051eac036c6dc16f6382bf",
+      "bytes": 1742
+    },
+    {
+      "id": "eth-source-b9cf808ceb74",
+      "path": "dist/research/eth-source-b9cf808ceb74.md",
+      "sourceUrl": "https://www.genesiscap.co/update/genesis-global-capital-update-11-16-22",
+      "sha256": "96906154bb7f4992d439754bc903e19d960548207ad4f87f74994fb3b248d8ea",
+      "bytes": 1729
+    },
+    {
+      "id": "eth-source-7335141c50c2",
+      "path": "dist/research/eth-source-7335141c50c2.md",
+      "sourceUrl": "https://www.investing.com/news/stock-market-news/crypto-broker-genesis-to-suspend-redemptions-new-loan-originations--tweet-2945845",
+      "sha256": "cf41ec277f24e56788081b5fe67bfe942e9f9e0651233446ae250544e5387f1a",
+      "bytes": 1864
+    },
+    {
+      "id": "eth-source-60bb01826e7d",
+      "path": "dist/research/eth-source-60bb01826e7d.md",
+      "sourceUrl": "https://www.sec.gov/newsroom/press-releases/2023-25",
+      "sha256": "00a19b8b5afdcc9612d181c25d317fce00421aa9204a1ccf7984e2b75d9aee35",
+      "bytes": 1904
+    },
+    {
+      "id": "eth-source-ab31cb825aa9",
+      "path": "dist/research/eth-source-ab31cb825aa9.md",
+      "sourceUrl": "https://www.axios.com/2023/02/09/kraken-staking-sec-settlement",
+      "sha256": "081990ba3184de155359671c6a9767fdaf803e48a0a6be20ea9528221a58397f",
+      "bytes": 1719
+    },
+    {
+      "id": "eth-source-d6f99a2944e2",
+      "path": "dist/research/eth-source-d6f99a2944e2.md",
+      "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1312109/000131210923000058/ex991sipressrelease3x8x23.htm",
+      "sha256": "50a5dbaa9f6f5aa81f602847b37ac15a1a79edd1463f768cbf498d96aea8e630",
+      "bytes": 1917
+    },
+    {
+      "id": "eth-source-a12df4929475",
+      "path": "dist/research/eth-source-a12df4929475.md",
+      "sourceUrl": "https://www.investing.com/news/stock-market-news/cryptofocused-bank-silvergate-plans-to-wind-down-operations-3025518",
+      "sha256": "1fa98a845704aa22f5cd62ee4cda8ad85cd879724dea5be3bb134030dbc7c856",
+      "bytes": 1854
+    },
+    {
+      "id": "eth-source-4bc3e27c6a5a",
+      "path": "dist/research/eth-source-4bc3e27c6a5a.md",
+      "sourceUrl": "https://www.federalreserve.gov/publications/2023-April-SVB-Executive-Summary.htm",
+      "sha256": "7e335c60b3a1e866cf8a3afb8c42a898877df6cb35fa5383dc019639f209d0f4",
+      "bytes": 1875
+    },
+    {
+      "id": "eth-source-330afe8f7863",
+      "path": "dist/research/eth-source-330afe8f7863.md",
+      "sourceUrl": "https://www.investing.com/news/economy/california-regulator-shuts-silicon-valley-bank-3027821",
+      "sha256": "4e47383a9e70e519127dc9ca988aca315bd7065af2cdfba72c0aba8ad32df921",
+      "bytes": 1776
+    },
+    {
+      "id": "eth-source-063c331ff17c",
+      "path": "dist/research/eth-source-063c331ff17c.md",
+      "sourceUrl": "https://www.circle.com/pressroom/3-3-billion-of-usdc-reserve-risk-removed-dollar-de-peg-closes",
+      "sha256": "5d08a98762157ff91adf3a3be1da9259125c462b2a8cd703caeb73ebdc58e215",
+      "bytes": 1848
+    },
+    {
+      "id": "eth-source-83af90573478",
+      "path": "dist/research/eth-source-83af90573478.md",
+      "sourceUrl": "https://www.theblock.co/news/markets/2023-03-11-usdc-and-dai-remain-at-about-0-90-following-circles-disclosure-of-funds-at-svb-218993",
+      "sha256": "74f5df7200c2af52d096e16177cff16acb84ab22cbaa0bf3413ebee14d82e927",
+      "bytes": 1905
+    },
+    {
+      "id": "eth-source-77184a6ab46e",
+      "path": "dist/research/eth-source-77184a6ab46e.md",
+      "sourceUrl": "https://www.federalreserve.gov/econres/notes/feds-notes/in-the-shadow-of-bank-run-lessons-from-the-silicon-valley-bank-failure-and-its-impact-on-stablecoins-20251217.html",
+      "sha256": "2b8a7d956a96ed33f3934aa09784ab545ab227c5db2d222e2c55a494ac04c6e0",
+      "bytes": 2073
+    },
+    {
+      "id": "eth-source-b3c49ddc409b",
+      "path": "dist/research/eth-source-b3c49ddc409b.md",
+      "sourceUrl": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20230312b.htm",
+      "sha256": "a610a92c7d0e5119287411bb7fdc555e578b46b1f6f41d2b409814cd541992b1",
+      "bytes": 1886
+    },
+    {
+      "id": "eth-source-5b2c7b6613e6",
+      "path": "dist/research/eth-source-5b2c7b6613e6.md",
+      "sourceUrl": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20230312a.htm",
+      "sha256": "49c470d1fa715f86357f0e3315716599ecab9adc967081f529c74f077fdb9278",
+      "bytes": 1856
+    },
+    {
+      "id": "eth-source-539c38f62f10",
+      "path": "dist/research/eth-source-539c38f62f10.md",
+      "sourceUrl": "https://www.investing.com/news/stock-market-news/instant-view-us-intervenes-to-shore-up-svb-deposits-stem-financial-fallout-3028419",
+      "sha256": "374efca868d205c466d25c1de8105913d655edbfeaa385c4b500c0cb57a55cab",
+      "bytes": 1883
+    },
+    {
+      "id": "eth-source-3920ce488104",
+      "path": "dist/research/eth-source-3920ce488104.md",
+      "sourceUrl": "https://www.euler.finance/blog/war-peace-behind-the-scenes-of-eulers-240m-exploit-recovery",
+      "sha256": "5f453d33b7714fb14a4f7b8a5089db54950989b584e2656fb2bacad344c09a85",
+      "bytes": 1849
+    },
+    {
+      "id": "eth-source-e87c24962c69",
+      "path": "dist/research/eth-source-e87c24962c69.md",
+      "sourceUrl": "https://www.coinbase.com/blog/euler-compromise-investigation-part-1-the-exploit",
+      "sha256": "591f5b3c867a61c3a0b175e117201ea684cc27110cf948881509b509721a3cd1",
+      "bytes": 1815
+    },
+    {
+      "id": "eth-source-b73300542a08",
+      "path": "dist/research/eth-source-b73300542a08.md",
+      "sourceUrl": "https://blog.ethereum.org/2023/03/28/shapella-mainnet-announcement",
+      "sha256": "f99df0d1c78f18c764bca1c1c1217467d60bf6fe6121f9b90c5b4874494f3c3f",
+      "bytes": 1853
+    },
+    {
+      "id": "eth-source-63519bd612df",
+      "path": "dist/research/eth-source-63519bd612df.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/17034869",
+      "sha256": "733ff0e630a9bb4cfef8654e261661813596902b2b1b74ec5b192c492e93a214",
+      "bytes": 1986
+    },
+    {
+      "id": "eth-source-13d0e2b2f3be",
+      "path": "dist/research/eth-source-13d0e2b2f3be.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/17034870",
+      "sha256": "77ca90a1e15c7241f67c50ff711c89963af2a72fb29a94e1dfba4b2380a59b89",
+      "bytes": 1986
+    },
+    {
+      "id": "eth-source-8a6935f89b2a",
+      "path": "dist/research/eth-source-8a6935f89b2a.md",
+      "sourceUrl": "https://medium.com/offchainlabs/post-mortem-report-ethereum-mainnet-finality-05-11-2023-95e271dfd8b2",
+      "sha256": "6620ba13744295d09d4907477434d3c0ddae0ec27780a046e5b4ed3980684683",
+      "bytes": 1971
+    },
+    {
+      "id": "eth-source-5dc82b665935",
+      "path": "dist/research/eth-source-5dc82b665935.md",
+      "sourceUrl": "https://ethresear.ch/t/cascading-network-effects-on-ethereums-finality/15871",
+      "sha256": "88efa762f66660b909969e3458703e404a483d1a0f6669fba6a970677beb8ef0",
+      "bytes": 1934
+    },
+    {
+      "id": "eth-source-9b7416b71167",
+      "path": "dist/research/eth-source-9b7416b71167.md",
+      "sourceUrl": "https://www.consilium.europa.eu/en/press/press-releases/2023/05/16/digital-finance-council-adopts-new-rules-on-markets-in-crypto-assets-mica/",
+      "sha256": "2ccea93a0dcc69a15d5b4eea8790a14ddc87b70c2ba56ec62a038095fab6481f",
+      "bytes": 1879
+    },
+    {
+      "id": "eth-source-1b026ba6aba2",
+      "path": "dist/research/eth-source-1b026ba6aba2.md",
+      "sourceUrl": "https://www.reuters.com/technology/eu-council-adopts-first-legal-framework-regulate-crypto-sector-2023-05-16/",
+      "sha256": "6bcc87360f22a5809675ac2b6939e810a118d2d39e90137de36b2ce29a3d5e43",
+      "bytes": 1770
+    },
+    {
+      "id": "eth-source-6ab30e13fc77",
+      "path": "dist/research/eth-source-6ab30e13fc77.md",
+      "sourceUrl": "https://www.sec.gov/newsroom/press-releases/2023-102",
+      "sha256": "12f142fbc843ff52355950896d105f445662430b8cfbeae9a640c441021f075a",
+      "bytes": 1777
+    },
+    {
+      "id": "eth-source-d02774fb34ea",
+      "path": "dist/research/eth-source-d02774fb34ea.md",
+      "sourceUrl": "https://www.sec.gov/newsroom/press-releases/2025-47",
+      "sha256": "497cfe0b26881577fa105c3da4a9c5fe4b6427e53f8882cd7f87a5c4f8a46408",
+      "bytes": 1729
+    },
+    {
+      "id": "eth-source-00894ebeb9a1",
+      "path": "dist/research/eth-source-00894ebeb9a1.md",
+      "sourceUrl": "https://www.reuters.com/technology/us-sec-announces-dismissal-civil-enforcement-action-against-coinbase-2025-02-27/",
+      "sha256": "78b11c02aa266d0253e7f6d43f96f896f1adb74d98565f0f1c6783f6ad008a5b",
+      "bytes": 1756
+    },
+    {
+      "id": "eth-source-89165d785536",
+      "path": "dist/research/eth-source-89165d785536.md",
+      "sourceUrl": "https://blog.chainlight.io/curve-finance-analysis-and-post-mortem-ba55f2b26909",
+      "sha256": "ee9e296f9f7047761d8491a7e8be0e7ad0ccc9d29b0435b4e65e3c4109be042c",
+      "bytes": 1792
+    },
+    {
+      "id": "eth-source-edfe5e911baf",
+      "path": "dist/research/eth-source-edfe5e911baf.md",
+      "sourceUrl": "https://decrypt.co/150679/defi-contagion-curve-finance-exploit-ripples-across-industry",
+      "sha256": "4aa2efd0232d70538c33cd4495f698cb70a1a448512942341528ad1467d305f5",
+      "bytes": 1846
+    },
+    {
+      "id": "eth-source-aaff10b9645a",
+      "path": "dist/research/eth-source-aaff10b9645a.md",
+      "sourceUrl": "https://www.base.org/blog/base-is-open-for-everyone",
+      "sha256": "1ccc7966d4ef4313e028de0e5d55d4c84f3439bee62be5bc1e67dd1a981919fe",
+      "bytes": 1611
+    },
+    {
+      "id": "eth-source-3674c7cc8662",
+      "path": "dist/research/eth-source-3674c7cc8662.md",
+      "sourceUrl": "https://www.theblock.co/news/ecosystems/2023-08-09-base-mainnet-onchain-summer-243899",
+      "sha256": "ef69183c7292e82ebcf03ce7b412661f458409790467b86cade11874b9b3f6a9",
+      "bytes": 1689
+    },
+    {
+      "id": "eth-source-523723b8b149",
+      "path": "dist/research/eth-source-523723b8b149.md",
+      "sourceUrl": "https://india.un.org/en/248771-middle-east",
+      "sha256": "b318b98f4dbd75a5c528134c254f973470b3b5c4a6f9cd68e2f4245518c0c874",
+      "bytes": 1834
+    },
+    {
+      "id": "eth-source-7f97d0dea911",
+      "path": "dist/research/eth-source-7f97d0dea911.md",
+      "sourceUrl": "https://www.reuters.com/world/middle-east/how-hamas-attack-israel-unfolded-2023-10-07/",
+      "sha256": "b40982747eee3bb8848340cb2bc3edf7b3f2c807b2ba7023ebf4023d472f9cf6",
+      "bytes": 1686
+    },
+    {
+      "id": "eth-source-79e4ff25910b",
+      "path": "dist/research/eth-source-79e4ff25910b.md",
+      "sourceUrl": "https://blog.ethereum.org/2024/02/27/dencun-mainnet-announcement",
+      "sha256": "c442162ad2844a3f584966a78491a11242b4f260394c666f24fc365048207bcb",
+      "bytes": 1824
+    },
+    {
+      "id": "eth-source-9f8cf12971a3",
+      "path": "dist/research/eth-source-9f8cf12971a3.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/19426586",
+      "sha256": "94291f1ceba8b33861a1a78160d6c3c943d97ba447a3494af6702d643eefe4d6",
+      "bytes": 1986
+    },
+    {
+      "id": "eth-source-7ddb83f62115",
+      "path": "dist/research/eth-source-7ddb83f62115.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/19426587",
+      "sha256": "0fc23c7db0c8227be3df1f3f1a81cc28719fb27b0885d6cdd41baffca7f77549",
+      "bytes": 1986
+    },
+    {
+      "id": "eth-source-3dc2330d53ec",
+      "path": "dist/research/eth-source-3dc2330d53ec.md",
+      "sourceUrl": "https://www.boj.or.jp/en/mopo/mpmdeci/state_2024/k240319a.htm",
+      "sha256": "2561748834fc4744f1f4e5d866d4131f9ac116e43c48876ad4d9b8a0651d73ae",
+      "bytes": 1825
+    },
+    {
+      "id": "eth-source-0759d5c83d68",
+      "path": "dist/research/eth-source-0759d5c83d68.md",
+      "sourceUrl": "https://www.reuters.com/markets/asia/japan-poised-end-negative-rates-closing-era-radical-policy-2024-03-18/",
+      "sha256": "b2191b4ab6350d776ac3ad3e4b1b9e666b612b958d342ab63b66f52bd0974ac3",
+      "bytes": 1795
+    },
+    {
+      "id": "eth-source-5406e9c82d40",
+      "path": "dist/research/eth-source-5406e9c82d40.md",
+      "sourceUrl": "https://india.un.org/en/266257-secretary-general-we-have-shared-responsibility-work-peace",
+      "sha256": "e74aacd6d904d2bfd1214e049db65df4c8afd78e934e9b5d7c01ff3bb481c098",
+      "bytes": 1882
+    },
+    {
+      "id": "eth-source-753e9f43325b",
+      "path": "dist/research/eth-source-753e9f43325b.md",
+      "sourceUrl": "https://www.reuters.com/world/middle-east/reaction-irans-drone-missile-attack-israel-2024-04-13/",
+      "sha256": "75d8a4cf9830373579c4a0414a1f2915c4fe276e4b85cfa86f261122a25fe675",
+      "bytes": 1752
+    },
+    {
+      "id": "eth-source-1dbb2766acb0",
+      "path": "dist/research/eth-source-1dbb2766acb0.md",
+      "sourceUrl": "https://www.sec.gov/files/rules/sro/nysearca/2024/34-100224.pdf",
+      "sha256": "c8579b2fb597cf77131a118595c5280dcf7c18d9af8127b2ae273f88572b6d2c",
+      "bytes": 2068
+    },
+    {
+      "id": "eth-source-1fe5542c7a9e",
+      "path": "dist/research/eth-source-1fe5542c7a9e.md",
+      "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1725210/000095017025029411/ethe-20241231.htm",
+      "sha256": "77dd11681bc99c13b007029d5ced3da46d1ea639f5e546724ddf9c250b30ef42",
+      "bytes": 1952
+    },
+    {
+      "id": "eth-source-3c5a2127a134",
+      "path": "dist/research/eth-source-3c5a2127a134.md",
+      "sourceUrl": "https://www.fsc.go.kr/eng/pr010101/82683",
+      "sha256": "ba8b7587b0cf9673d7dda04c398d4294f18b044a40f670f3e79142eb55e85ca0",
+      "bytes": 1805
+    },
+    {
+      "id": "eth-source-e26c38421b64",
+      "path": "dist/research/eth-source-e26c38421b64.md",
+      "sourceUrl": "https://www.fsc.go.kr/eng/pr010101/84004",
+      "sha256": "c5992a0f660d4770f7c5e9063309abdf03b79b3a0dbb8d94f8a25b14aef7eea9",
+      "bytes": 1804
+    },
+    {
+      "id": "eth-source-7929d3acbf0f",
+      "path": "dist/research/eth-source-7929d3acbf0f.md",
+      "sourceUrl": "https://www.cboe.com/us/equities/listings/listed_products/symbols/QETH/",
+      "sha256": "cf56c3989fb3b5f850accbe83737b340268c5691a61ddd85ce45b33667cfa3c8",
+      "bytes": 1885
+    },
+    {
+      "id": "eth-source-82ab91554d45",
+      "path": "dist/research/eth-source-82ab91554d45.md",
+      "sourceUrl": "https://www.boj.or.jp/en/mopo/mpmdeci/mpr_2024/k240731a.pdf",
+      "sha256": "6cdaa8923abb1349eb0fa1d4d04e875b07a0073034d5f97eda735cf9bef0bd9b",
+      "bytes": 1952
+    },
+    {
+      "id": "eth-source-aba12abcbf05",
+      "path": "dist/research/eth-source-aba12abcbf05.md",
+      "sourceUrl": "https://www.reuters.com/markets/rates-bonds/bank-japan-outline-bond-taper-plan-debate-rate-hike-timing-2024-07-30/",
+      "sha256": "8ea7213a22276a3ec73769ad0d138aa603c36cb0630a2fab7b3e8004229142b9",
+      "bytes": 1789
+    },
+    {
+      "id": "eth-source-013762f63e2b",
+      "path": "dist/research/eth-source-013762f63e2b.md",
+      "sourceUrl": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20240918a.htm",
+      "sha256": "81e88b278d37c6188b419f5e18bd91e5b7d8e7f14f88b4b7d147b60bb68f3a0c",
+      "bytes": 1614
+    },
+    {
+      "id": "eth-source-f1d1ea12425c",
+      "path": "dist/research/eth-source-f1d1ea12425c.md",
+      "sourceUrl": "https://www.reuters.com/markets/us/view-fed-slashes-rates-50-bp-first-easing-since-pandemic-hit-2024-09-18/",
+      "sha256": "f55917524f6a9913dab2ef9bcb433802035161d0355dfccc8357945abc765a6b",
+      "bytes": 1704
+    },
+    {
+      "id": "eth-source-6cd27b07ef87",
+      "path": "dist/research/eth-source-6cd27b07ef87.md",
+      "sourceUrl": "https://apnews.com/article/trump-harris-wisconsin-president-race-call-winner-explain-d07049f884d25ceae0d1376157d07c35",
+      "sha256": "06ae30c661d20a9722907a478660f5fdfefc3d2fabc6c3014269d8e8bea7fe67",
+      "bytes": 1850
+    },
+    {
+      "id": "eth-source-f5abbfcba49b",
+      "path": "dist/research/eth-source-f5abbfcba49b.md",
+      "sourceUrl": "https://www.archives.gov/electoral-college/2024",
+      "sha256": "3d61beab1fea57dbcdf161a73f5ce87d1862433a59ed1ee54b213edbf475edd2",
+      "bytes": 1744
+    },
+    {
+      "id": "eth-source-06d7a6f9ee0d",
+      "path": "dist/research/eth-source-06d7a6f9ee0d.md",
+      "sourceUrl": "https://www.reuters.com/business/finance/us-scraps-sanctions-tornado-cash-crypto-mixer-accused-laundering-north-korea-2025-03-21/",
+      "sha256": "8b8f7e70ed6ce16e14846ef94203b3220e5bc9600a4ef429c198e332dbea0838",
+      "bytes": 1878
+    },
+    {
+      "id": "eth-source-be6cb5b670bc",
+      "path": "dist/research/eth-source-be6cb5b670bc.md",
+      "sourceUrl": "https://english.ccourt.go.kr/site/eng/ex/bbs/List.do?cbIdx=1143&searchBcIdx=4258448",
+      "sha256": "608cfc6e41084abc62859afe0732acdc02ca88c8b09cbb642f5b2f568ae28aeb",
+      "bytes": 1933
+    },
+    {
+      "id": "eth-source-d5fb3203432f",
+      "path": "dist/research/eth-source-d5fb3203432f.md",
+      "sourceUrl": "https://www.reuters.com/world/asia-pacific/south-korea-president-yoon-declares-martial-law-2024-12-03/",
+      "sha256": "6f386f84a6c4d502a1d5ba2ae9f8a6f0aa0b50821ac60aab66dc609d6bd8d471",
+      "bytes": 1857
+    },
+    {
+      "id": "eth-source-7f289030f060",
+      "path": "dist/research/eth-source-7f289030f060.md",
+      "sourceUrl": "https://www.yna.co.kr/view/AKR20241204019252001",
+      "sha256": "9ccf3f272cd0599a17b90af9047efeaf2312187f8b6df35bc44d4262f3b19d2d",
+      "bytes": 1789
+    },
+    {
+      "id": "eth-source-78280c61a519",
+      "path": "dist/research/eth-source-78280c61a519.md",
+      "sourceUrl": "https://www.yna.co.kr/view/AKR20241204097600002",
+      "sha256": "60a78eb96088f42b8260d73c2cbd3300a158a3b0cc4f12b85190c5057a69107b",
+      "bytes": 1794
+    },
+    {
+      "id": "eth-source-7daa605af737",
+      "path": "dist/research/eth-source-7daa605af737.md",
+      "sourceUrl": "https://www.esma.europa.eu/sites/default/files/2025-01/Newsletter_December_2024.pdf",
+      "sha256": "ac172ea4e60185978a49ffad6e168095395e6b1fa802b7be5ddec348a33c93b9",
+      "bytes": 1848
+    },
+    {
+      "id": "eth-source-e34c1310991d",
+      "path": "dist/research/eth-source-e34c1310991d.md",
+      "sourceUrl": "https://www.esma.europa.eu/sites/default/files/2025-12/ESMA75-113276571-1631_Statement_on_end_of_MiCA_transitional_periods.pdf",
+      "sha256": "38b487344aafab6992f7a907be591e64505de973af6a8f3fc2925a9060364bc0",
+      "bytes": 1866
+    },
+    {
+      "id": "eth-source-1de45133ea06",
+      "path": "dist/research/eth-source-1de45133ea06.md",
+      "sourceUrl": "https://www.sec.gov/rules-regulations/staff-guidance/staff-accounting-bulletins/staff-accounting-bulletin-122",
+      "sha256": "d0c5ab42d483f5256cb51261e54df4196a13aad09f7abca671070d6ee79c1397",
+      "bytes": 1767
+    },
+    {
+      "id": "eth-source-e6f8e5c70e9d",
+      "path": "dist/research/eth-source-e6f8e5c70e9d.md",
+      "sourceUrl": "https://dart.deloitte.com/USDART/home/publications/deloitte/heads-up/2025/sec-rescinds-sab-121-issues-sab-122-crypto-cryptocurrency",
+      "sha256": "cdbddbe3ddaff40a7a350b38ca5fbd5251bbe54773b7bca5ba2eee9d4e9098cc",
+      "bytes": 1788
+    },
+    {
+      "id": "eth-source-ccbbad567cdf",
+      "path": "dist/research/eth-source-ccbbad567cdf.md",
+      "sourceUrl": "https://www.reuters.com/business/finance/trump-signs-order-create-cryptocurrency-working-group-2025-01-23/",
+      "sha256": "a06bfafef8f0c046d643bd0512281e8b4b1592b62f8c9b2ba88b54441a63f39c",
+      "bytes": 1855
+    },
+    {
+      "id": "eth-source-2685b06b1891",
+      "path": "dist/research/eth-source-2685b06b1891.md",
+      "sourceUrl": "https://www.whitehouse.gov/fact-sheets/2025/02/fact-sheet-president-donald-j-trump-imposes-tariffs-on-imports-from-canada-mexico-and-china/",
+      "sha256": "49de22daf157b1ec2ccf01e9c3a74e6af0c3609c507e3391efa0b7f18d3edba1",
+      "bytes": 1903
+    },
+    {
+      "id": "eth-source-310f3660ca7d",
+      "path": "dist/research/eth-source-310f3660ca7d.md",
+      "sourceUrl": "https://www.reuters.com/markets/currencies/bitcoin-slides-below-100000-tariffs-rattle-markets-2025-02-02/",
+      "sha256": "e87b0e9e156dadccc0f5ded904f87d852532ec376d6143c4023dc6322fdd1808",
+      "bytes": 1781
+    },
+    {
+      "id": "eth-source-a93d133f411f",
+      "path": "dist/research/eth-source-a93d133f411f.md",
+      "sourceUrl": "https://www.whitehouse.gov/presidential-actions/2025/02/progress-on-the-situation-at-our-northern-border/",
+      "sha256": "ea58b2f1d33028e204ee656815c6a91a675e366b3a63bec2db8196dc38603695",
+      "bytes": 1766
+    },
+    {
+      "id": "eth-source-c20242d527ed",
+      "path": "dist/research/eth-source-c20242d527ed.md",
+      "sourceUrl": "https://www.whitehouse.gov/presidential-actions/2025/02/progress-on-the-situation-at-our-southern-border/",
+      "sha256": "decc480e995b92def58f38d677293c17e19b216cac34768f468abdcbd9a96528",
+      "bytes": 1766
+    },
+    {
+      "id": "eth-source-4a04bd86dc4d",
+      "path": "dist/research/eth-source-4a04bd86dc4d.md",
+      "sourceUrl": "https://www.reuters.com/markets/us/futures-tumble-trumps-tariffs-stoke-trade-war-risks-2025-02-03/",
+      "sha256": "2c718017ca29dc2edaef0eb1af2bec91308a2f9012fd5812af342ebc5cefb810",
+      "bytes": 1731
+    },
+    {
+      "id": "eth-source-d61c2c9bf8f9",
+      "path": "dist/research/eth-source-d61c2c9bf8f9.md",
+      "sourceUrl": "https://www.whitehouse.gov/fact-sheets/2025/03/fact-sheet-president-donald-j-trump-adjusts-tariffs-on-canada-and-mexico-to-minimize-disruption-to-the-automotive-industry/",
+      "sha256": "27305f81abd5707dd5260ccd5a0b39119b0f26fd8137a383366526657913d4df",
+      "bytes": 1910
+    },
+    {
+      "id": "eth-source-f2ceac0e89e6",
+      "path": "dist/research/eth-source-f2ceac0e89e6.md",
+      "sourceUrl": "https://www.ic3.gov/psa/2025/psa250226",
+      "sha256": "559d97576e4dca84c4efe3eb7e79eb4215ef5bf495a9d60605b764df02c83cb4",
+      "bytes": 1788
+    },
+    {
+      "id": "eth-source-282391f1b3c0",
+      "path": "dist/research/eth-source-282391f1b3c0.md",
+      "sourceUrl": "https://www.reuters.com/technology/crypto-exchange-bybit-says-ether-wallet-hacked-2025-02-21/",
+      "sha256": "fc43cec6d417c0d6fd8351e28ff633af2b6f9bf825473431b690f9ed742d15fd",
+      "bytes": 1813
+    },
+    {
+      "id": "eth-source-713e275e57d4",
+      "path": "dist/research/eth-source-713e275e57d4.md",
+      "sourceUrl": "https://www.theblock.co/news/markets/2025-03-04-bitcoin-ether-lose-over-10-as-trumps-tariffs-take-effect-344377",
+      "sha256": "d67414898598cb35140db0a84a9102c14ea9c31c2caa2d17ecb3d4445889d8fb",
+      "bytes": 1828
+    },
+    {
+      "id": "eth-source-0c11bf949a40",
+      "path": "dist/research/eth-source-0c11bf949a40.md",
+      "sourceUrl": "https://www.reuters.com/business/tariff-reprieve-likely-be-extended-all-usmca-compliant-goods-lutnick-says-2025-03-06/",
+      "sha256": "ed7767710dc007eae0f01aab604523759a5b569dbc40e3a4f41c648fff9938e1",
+      "bytes": 1836
+    },
+    {
+      "id": "eth-source-8e46e90fdf4c",
+      "path": "dist/research/eth-source-8e46e90fdf4c.md",
+      "sourceUrl": "https://www.reuters.com/technology/trump-signs-order-establish-strategic-bitcoin-reserve-white-house-crypto-czar-2025-03-07/",
+      "sha256": "420fee7bf9f0c6567c77620626f8db7ce5c86d4365101044b3f5c616f99c42c6",
+      "bytes": 1725
+    },
+    {
+      "id": "eth-source-ee33d66975bd",
+      "path": "dist/research/eth-source-ee33d66975bd.md",
+      "sourceUrl": "https://www.whitehouse.gov/fact-sheets/2025/04/fact-sheet-president-donald-j-trump-declares-national-emergency-to-increase-our-competitive-edge-protect-our-sovereignty-and-strengthen-our-national-and-economic-security/",
+      "sha256": "c64185992d3de060728702867f8eee96c892428fa60ce168d1a207e940d5df97",
+      "bytes": 2145
+    },
+    {
+      "id": "eth-source-8be6a799a86b",
+      "path": "dist/research/eth-source-8be6a799a86b.md",
+      "sourceUrl": "https://www.reuters.com/markets/us-crypto-stocks-slide-trumps-sweeping-tariffs-jolt-markets-2025-04-03/",
+      "sha256": "8a74d612a6963b50c19c4d0387ded0147fc863b2395cc01563c4c8609a63e206",
+      "bytes": 1828
+    },
+    {
+      "id": "eth-source-b5e2688c6e19",
+      "path": "dist/research/eth-source-b5e2688c6e19.md",
+      "sourceUrl": "https://gss.mof.gov.cn/gzdt/zhengcefabu/202504/t20250404_3961451.htm",
+      "sha256": "7d2b8c17144f4acf90baa0564d4b83125d59be0f62d876555d4ee212993035fe",
+      "bytes": 2032
+    },
+    {
+      "id": "eth-source-23a25a7c9a7a",
+      "path": "dist/research/eth-source-23a25a7c9a7a.md",
+      "sourceUrl": "https://www.whitehouse.gov/presidential-actions/2025/04/modifying-reciprocal-tariff-rates-to-reflect-trading-partner-retaliation-and-alignment/",
+      "sha256": "3eb7b608a288e9d35cd22f7fcdb6992ecf0d58a69650c557479eabfb5b8fbd3e",
+      "bytes": 1924
+    },
+    {
+      "id": "eth-source-e87356d3a47f",
+      "path": "dist/research/eth-source-e87356d3a47f.md",
+      "sourceUrl": "https://apnews.com/article/02cd23e913649f32985f075058e787c4",
+      "sha256": "3b8bbecf61cc699d1dfa3c83b0443a537a2de0db3fa74b1f382d2c53d2edc8af",
+      "bytes": 1781
+    },
+    {
+      "id": "eth-source-ab3805700e23",
+      "path": "dist/research/eth-source-ab3805700e23.md",
+      "sourceUrl": "https://www.whitehouse.gov/briefings-statements/2025/05/joint-statement-on-u-s-china-economic-and-trade-meeting-in-geneva/",
+      "sha256": "8384f14c0e4d28c05c66d3e72665bdf2159612d5f4fc0c18d6969f54c1c4631d",
+      "bytes": 1886
+    },
+    {
+      "id": "eth-source-13e99a595394",
+      "path": "dist/research/eth-source-13e99a595394.md",
+      "sourceUrl": "https://www.reuters.com/markets/global-markets-trading-day-graphics-2025-04-09/",
+      "sha256": "06ca3c307c2389cf2d0af5d05b5afc216e2b92669806ff0da5aac91238f6c3a6",
+      "bytes": 1844
+    },
+    {
+      "id": "eth-source-3aaef9e955a6",
+      "path": "dist/research/eth-source-3aaef9e955a6.md",
+      "sourceUrl": "https://www.govinfo.gov/content/pkg/PLAW-119publ5/html/PLAW-119publ5.htm",
+      "sha256": "dff252c7dffffce6412bdcff0fd32570457c3a11250c87bb02032f15451a4879",
+      "bytes": 1790
+    },
+    {
+      "id": "eth-source-6d716cf0e56f",
+      "path": "dist/research/eth-source-6d716cf0e56f.md",
+      "sourceUrl": "https://www.govinfo.gov/content/pkg/FR-2025-07-11/html/2025-12967.htm",
+      "sha256": "35482ae5e135522ac651e403777b8e63b8fbb7d411adf6d804b1796d7505c869",
+      "bytes": 2013
+    },
+    {
+      "id": "eth-source-616e475f30dd",
+      "path": "dist/research/eth-source-616e475f30dd.md",
+      "sourceUrl": "https://www.whitehouse.gov/presidential-actions/2025/04/clarification-of-exceptions-under-executive-order-14257-of-april-2-2025-as-amended/",
+      "sha256": "56e491d2b67ff5a1d2c5751aefcbeb671af3494b9c3f484aea1f1211f1934bca",
+      "bytes": 1912
+    },
+    {
+      "id": "eth-source-4e71a05e60b9",
+      "path": "dist/research/eth-source-4e71a05e60b9.md",
+      "sourceUrl": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/3db9e55",
+      "sha256": "6ca5add86815bbc3a6c9bfc87293f2832e65d4dccf373ae3d380066b25759215",
+      "bytes": 1965
+    },
+    {
+      "id": "eth-source-88d3eab9a893",
+      "path": "dist/research/eth-source-88d3eab9a893.md",
+      "sourceUrl": "https://www.wbur.org/news/2025/04/12/trump-administration-says-it-will-exclude-some-electronics-from-reciprocal-tariffs",
+      "sha256": "d7da6fe651806029398538093a6e910cff9f159d6ec2a14b7d07aace30aa6f64",
+      "bytes": 1956
+    },
+    {
+      "id": "eth-source-85800381249c",
+      "path": "dist/research/eth-source-85800381249c.md",
+      "sourceUrl": "https://blog.ethereum.org/2025/04/23/pectra-mainnet",
+      "sha256": "83b8de4c691813d67c2e77a7c17a8d7c6c90ef069a24e5215a1567ae0628e133",
+      "bytes": 1843
+    },
+    {
+      "id": "eth-source-ed713742b12a",
+      "path": "dist/research/eth-source-ed713742b12a.md",
+      "sourceUrl": "https://ethereum.org/roadmap/pectra/",
+      "sha256": "a5bad2f2974d6432de9d0a3b73e94aa2aa6bfc32d48ca85a0aa1d0fb94297036",
+      "bytes": 1766
+    },
+    {
+      "id": "eth-source-577683a0c136",
+      "path": "dist/research/eth-source-577683a0c136.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/22431083",
+      "sha256": "f7156d3b0b327c123168d5e72a36efb035bfcf8ae3a451d92c3ccac899e008d1",
+      "bytes": 1986
+    },
+    {
+      "id": "eth-source-c5a9b628cd78",
+      "path": "dist/research/eth-source-c5a9b628cd78.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/22431084",
+      "sha256": "a3de15fd810ab8def9a9a64b4a3ad42fbf12b47adc6fbf7e0729ad02e1d600f5",
+      "bytes": 1986
+    },
+    {
+      "id": "eth-source-7bb849bc36d7",
+      "path": "dist/research/eth-source-7bb849bc36d7.md",
+      "sourceUrl": "https://www.kitco.com/news/off-the-wire/2025-05-12/stocks-dollar-surge-us-and-china-agree-90-day-tariff-relief",
+      "sha256": "d251da0299027eb480778df5bb4c50a316661b0e3dffd8b0db182a22a7b3358a",
+      "bytes": 1858
+    },
+    {
+      "id": "eth-source-3b9aa47cf1bd",
+      "path": "dist/research/eth-source-3b9aa47cf1bd.md",
+      "sourceUrl": "https://www.whitehouse.gov/briefings-statements/2025/08/joint-statement-on-u-s-china-economic-and-trade-meeting-in-stockholm/",
+      "sha256": "d79fcb77b2c3124652e191b908419fd86f4c39c0c51f0bc85f3dcfaf495b76c2",
+      "bytes": 1900
+    },
+    {
+      "id": "eth-source-42699992d104",
+      "path": "dist/research/eth-source-42699992d104.md",
+      "sourceUrl": "https://www.cit.uscourts.gov/sites/cit/files/25-66.pdf",
+      "sha256": "ef9821bb17dfc152c653ca00185610f3250bf823e57001ecfb2c23934d9b4c04",
+      "bytes": 1859
+    },
+    {
+      "id": "eth-source-72510b71ba11",
+      "path": "dist/research/eth-source-72510b71ba11.md",
+      "sourceUrl": "https://www.cafc.uscourts.gov/opinions-orders/25-1812.OPINION.8-29-2025_2566151.pdf",
+      "sha256": "0b77b1eb84d5a23c9db7f503647e4ebe43d71db20eb73bfe546786a24e980df9",
+      "bytes": 1960
+    },
+    {
+      "id": "eth-source-8015cb5084d5",
+      "path": "dist/research/eth-source-8015cb5084d5.md",
+      "sourceUrl": "https://www.investing.com/news/stock-market-news/us-ruling-that-trump-tariffs-are-unlawful-stirs-relief-and-uncertainty-4069816",
+      "sha256": "b7690a39ad859085e8d0d6cc296cb1b906643780b78437e51c4b745631cefcdd",
+      "bytes": 1929
+    },
+    {
+      "id": "eth-source-52a764b58d45",
+      "path": "dist/research/eth-source-52a764b58d45.md",
+      "sourceUrl": "https://www.sec.gov/newsroom/speeches-statements/statement-certain-protocol-staking-activities-052925",
+      "sha256": "1b26f94f79dae0370c1e0e5134c3bcf3ed36bdcd7ed13f0e16f9098dae7d0637",
+      "bytes": 1933
+    },
+    {
+      "id": "eth-source-19d8e0c32dc5",
+      "path": "dist/research/eth-source-19d8e0c32dc5.md",
+      "sourceUrl": "https://www.dechert.com/knowledge/onpoint/2025/6/sec-staff-issues-statement-on-protocol-staking-activities.html",
+      "sha256": "5e668a82d8e73f58303d9ab6a65e80d46ff43f863333382ead85476e68fa336e",
+      "bytes": 1752
+    },
+    {
+      "id": "eth-source-be6b348c96ba",
+      "path": "dist/research/eth-source-be6b348c96ba.md",
+      "sourceUrl": "https://www.supremecourt.gov/opinions/25pdf/24-1287_4gcj.pdf",
+      "sha256": "4c052da3bd307b48c26d161733028f0fbd15a80292b4fc8ed10b94e5bcfbe0d2",
+      "bytes": 1832
+    },
+    {
+      "id": "eth-source-981db4ea3d90",
+      "path": "dist/research/eth-source-981db4ea3d90.md",
+      "sourceUrl": "https://buildingtrust.si/statement/statement-on-the-latest-developments-in-iran/",
+      "sha256": "e0e4e950104b92644717d681995e994ab495bbea8bfc9667e6264a95353e73f1",
+      "bytes": 1798
+    },
+    {
+      "id": "eth-source-fc4fe8c43a66",
+      "path": "dist/research/eth-source-fc4fe8c43a66.md",
+      "sourceUrl": "https://docs-library.unoda.org/Treaty_on_the_Non-Proliferation_of_Nuclear_Weapons_-EleventhReview_Conference_(2026)/NPT_CONF.2026_07_-_07._ADVANCE_IAEA_Non-Proliferation_.pdf",
+      "sha256": "5a21b53630e9022bb44b192e5a44aa78bba26dcbca959cab60f1e0ad888f3327",
+      "bytes": 1930
+    },
+    {
+      "id": "eth-source-b305ec08b599",
+      "path": "dist/research/eth-source-b305ec08b599.md",
+      "sourceUrl": "https://www.reuters.com/world/china/oil-prices-jump-more-than-4-after-israel-strikes-iran-2025-06-13/",
+      "sha256": "4572a5e2babc490c1c627414938587660a84106a5bb43630a4dd0950ebd2b88a",
+      "bytes": 1725
+    },
+    {
+      "id": "eth-source-329be9643a96",
+      "path": "dist/research/eth-source-329be9643a96.md",
+      "sourceUrl": "https://www.iaea.org/newscenter/statements/iaea-director-general-grossis-statement-to-unsc-on-situation-in-iran-22-june-2025",
+      "sha256": "0f561c116c42773d2f41bc40e87a131b40faeb9bf67e080362469bda6387382d",
+      "bytes": 1953
+    },
+    {
+      "id": "eth-source-05326cd0d4d7",
+      "path": "dist/research/eth-source-05326cd0d4d7.md",
+      "sourceUrl": "https://www.reuters.com/world/americas/world-leaders-react-us-attack-iran-2025-06-22/",
+      "sha256": "1cf2ea8aaa9d679255bc9da0168a6ab6109b70f0c51441d5d017563d9b09c3fe",
+      "bytes": 1797
+    },
+    {
+      "id": "eth-source-f28523091966",
+      "path": "dist/research/eth-source-f28523091966.md",
+      "sourceUrl": "https://www.govinfo.gov/content/pkg/PLAW-119publ27/html/PLAW-119publ27.htm",
+      "sha256": "cf157800a2a6faeb1cc884413e2d58ced6409c33715d9d66c52512aeb140166a",
+      "bytes": 1856
+    },
+    {
+      "id": "eth-source-31f79b7c465a",
+      "path": "dist/research/eth-source-31f79b7c465a.md",
+      "sourceUrl": "https://www.reuters.com/legal/government/trump-signs-stablecoin-law-crypto-industry-aims-mainstream-adoption-2025-07-18/",
+      "sha256": "dc12e530b20af905fe8ee09ba66071c58c7d59e5bca78de812635641071b9f10",
+      "bytes": 1890
+    },
+    {
+      "id": "eth-source-009c13c98e36",
+      "path": "dist/research/eth-source-009c13c98e36.md",
+      "sourceUrl": "https://www.whitehouse.gov/presidential-actions/2025/07/further-modifying-the-reciprocal-tariff-rates/",
+      "sha256": "7956bfc6bd041c210337e199e33d6440849a069363413e631521c7c31c212673",
+      "bytes": 1824
+    },
+    {
+      "id": "eth-source-c7678885cd14",
+      "path": "dist/research/eth-source-c7678885cd14.md",
+      "sourceUrl": "https://www.investing.com/news/economic-indicators/trump-hits-more-countries-with-steep-tariffs-markets-tumble-4165747",
+      "sha256": "0b2c43c2eb0b7dc85ce6f64095e28f01d5b5890d153143c157bdf3f3079c1c0e",
+      "bytes": 1880
+    },
+    {
+      "id": "eth-source-7a8d0833f2bf",
+      "path": "dist/research/eth-source-7a8d0833f2bf.md",
+      "sourceUrl": "https://www.sec.gov/newsroom/speeches-statements/corpfin-certain-liquid-staking-activities-080525",
+      "sha256": "1dcb53ff1c833e797e274497f54e2656a9a1c7b93442458578a0d7a12ed725d8",
+      "bytes": 1878
+    },
+    {
+      "id": "eth-source-7a6547e2f053",
+      "path": "dist/research/eth-source-7a6547e2f053.md",
+      "sourceUrl": "https://www.gibsondunn.com/digital-assets-recent-updates-august-2025/",
+      "sha256": "16bfac8180f161105b7a84c72fd228c37f17990b9a8f85b2c9970f99863578cc",
+      "bytes": 1715
+    },
+    {
+      "id": "eth-source-6ce1d7749576",
+      "path": "dist/research/eth-source-6ce1d7749576.md",
+      "sourceUrl": "https://www.whitehouse.gov/presidential-actions/2025/08/further-modifying-reciprocal-tariff-rates-to-reflect-ongoing-discussions-with-the-peoples-republic-of-china/",
+      "sha256": "68095feb92154c03069456c87ae0d82ebe1213af9d1ea6694bdad8f05c73e30a",
+      "bytes": 1927
+    },
+    {
+      "id": "eth-source-83c67e15e2b1",
+      "path": "dist/research/eth-source-83c67e15e2b1.md",
+      "sourceUrl": "https://www.investing.com/news/world-news/trump-says-well-see-what-happens-on-august-12-deadline-for-china-tariffs-4183460",
+      "sha256": "8a47db2b0fdb72d8c576b0e7172ccc6026207a7efec2eb3b658e20c820c89293",
+      "bytes": 1844
+    },
+    {
+      "id": "eth-source-aa4028925a92",
+      "path": "dist/research/eth-source-aa4028925a92.md",
+      "sourceUrl": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20250917a.htm",
+      "sha256": "c07876770a355cb8c3babbadfc12eea0bc7590b6c9ffef0cf4d6a8ab7c083974",
+      "bytes": 1611
+    },
+    {
+      "id": "eth-source-67f4a825a318",
+      "path": "dist/research/eth-source-67f4a825a318.md",
+      "sourceUrl": "https://www.reuters.com/business/fed-lowers-interest-rates-signals-more-cuts-ahead-miran-dissents-2025-09-17/",
+      "sha256": "6ffd92281a731cb53aabee4273adbe5db2b327ff88ae79ae70b9d53ca382e1b7",
+      "bytes": 1731
+    },
+    {
+      "id": "eth-source-1eb200ff6213",
+      "path": "dist/research/eth-source-1eb200ff6213.md",
+      "sourceUrl": "https://www.presidency.ucsb.edu/documents/truth-social-posts-october-10-2025",
+      "sha256": "43b2baf14545cd3803597843527fb676b2acf0506d171d669696b8b8cffe0d44",
+      "bytes": 1832
+    },
+    {
+      "id": "eth-source-68bb64d1f971",
+      "path": "dist/research/eth-source-68bb64d1f971.md",
+      "sourceUrl": "https://www.reuters.com/world/china/us-will-impose-additional-100-tariff-chinese-imports-november-trump-says-2025-10-10/",
+      "sha256": "08982349f444c6fd14112d3249827583dc0aa886754917429fdbb6e3e1bf8b4f",
+      "bytes": 1828
+    },
+    {
+      "id": "eth-source-ba2dbcc5a3fd",
+      "path": "dist/research/eth-source-ba2dbcc5a3fd.md",
+      "sourceUrl": "https://www.reuters.com/world/asia-pacific/after-record-crypto-crash-rush-hedge-against-another-freefall-2025-10-13/",
+      "sha256": "3804bf9bb7903af3af191a169e2bfd70b980fde34d5a11656d9440c6f6fe9694",
+      "bytes": 1811
+    },
+    {
+      "id": "eth-source-067aed2eeca5",
+      "path": "dist/research/eth-source-067aed2eeca5.md",
+      "sourceUrl": "https://www.whitehouse.gov/fact-sheets/2025/11/fact-sheet-president-donald-j-trump-strikes-deal-on-economic-and-trade-relations-with-china/",
+      "sha256": "b2cf7224e95cdc9eb02df0a8447fe7b7f3d0663158e3ce285ee548874703f0a9",
+      "bytes": 1862
+    },
+    {
+      "id": "eth-source-70bdfcef7645",
+      "path": "dist/research/eth-source-70bdfcef7645.md",
+      "sourceUrl": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20251029a.htm",
+      "sha256": "120ae81ba125eef65b688d988741d3962bd011b167c9e0cee6caf5f9e16ebeea",
+      "bytes": 1706
+    },
+    {
+      "id": "eth-source-9cc78fbf1794",
+      "path": "dist/research/eth-source-9cc78fbf1794.md",
+      "sourceUrl": "https://www.reuters.com/business/finance/fed-end-balance-sheet-reduction-december-1-2025-10-29/",
+      "sha256": "980d5fd467b7148c29203ef905d62460ead42df49b73a9d80b938fed1d27867e",
+      "bytes": 1782
+    },
+    {
+      "id": "eth-source-c598e6f8a0f5",
+      "path": "dist/research/eth-source-c598e6f8a0f5.md",
+      "sourceUrl": "https://www.reuters.com/world/china/looming-trump-xi-meeting-revives-hope-us-china-trade-truce-2025-10-29/",
+      "sha256": "ef62f5dc3367c5a2d86cf012d27f9a7e228fad781e8c9e6e188342e65170d4f1",
+      "bytes": 1790
+    },
+    {
+      "id": "eth-source-6ce4f78c5ab5",
+      "path": "dist/research/eth-source-6ce4f78c5ab5.md",
+      "sourceUrl": "https://www.whitehouse.gov/presidential-actions/2025/11/modifying-reciprocal-tariff-rates-consistent-with-the-economic-and-trade-arrangement-between-the-united-states-and-the-peoples-republic-of-china/",
+      "sha256": "2282fdf834030749beb321eea4a65ed46e26013e39695e351044d787b44ed659",
+      "bytes": 2044
+    },
+    {
+      "id": "eth-source-aedd0a16f712",
+      "path": "dist/research/eth-source-aedd0a16f712.md",
+      "sourceUrl": "https://blog.ethereum.org/2025/11/06/fusaka-mainnet-announcement",
+      "sha256": "713c2389f682f4bc37c51d0a9ea033788972337169966f488c23afa7bde13597",
+      "bytes": 1825
+    },
+    {
+      "id": "eth-source-653ae91a29fb",
+      "path": "dist/research/eth-source-653ae91a29fb.md",
+      "sourceUrl": "https://ethereum.org/roadmap/fusaka/",
+      "sha256": "92ce3fa6918e07577dac6f3979f08068eaf21c29ed1c46dc705f99c2a637bd91",
+      "bytes": 1729
+    },
+    {
+      "id": "eth-source-4348fed55419",
+      "path": "dist/research/eth-source-4348fed55419.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/23935693",
+      "sha256": "c40a9c0701715824af3687cc4da3d1492ca5db3c5e5772c803f6051d0a33bf99",
+      "bytes": 1986
+    },
+    {
+      "id": "eth-source-37aa52373629",
+      "path": "dist/research/eth-source-37aa52373629.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/23935694",
+      "sha256": "35d3bd9402852da9582824ebb093e42945096fdd8e6c5aea2ec937ee90df75d7",
+      "bytes": 1986
+    },
+    {
+      "id": "eth-source-c7f42fd321b3",
+      "path": "dist/research/eth-source-c7f42fd321b3.md",
+      "sourceUrl": "https://prysm.offchainlabs.com/docs/misc/mainnet-postmortems/",
+      "sha256": "e0e147fe686386ccff304f03ec6645e6aafb8f4258f3ac487fcf395ba7f24b27",
+      "bytes": 1881
+    },
+    {
+      "id": "eth-source-6b9140d6fbc5",
+      "path": "dist/research/eth-source-6b9140d6fbc5.md",
+      "sourceUrl": "https://www.potuz.net/posts/fulu-bug/",
+      "sha256": "147daa5f3000ddf2641f87855695bcfb896861396336be5a3caec9d7a93828c1",
+      "bytes": 1757
+    },
+    {
+      "id": "eth-source-b88411c12de7",
+      "path": "dist/research/eth-source-b88411c12de7.md",
+      "sourceUrl": "https://blog.ethereum.org/2026/01/20/checkpoint-8",
+      "sha256": "2c9adfedb3b3de989c847c85e6275ef599eaa6ff347124d3ea257abfc7ea585e",
+      "bytes": 1849
+    },
+    {
+      "id": "eth-source-3bdcf7a33ced",
+      "path": "dist/research/eth-source-3bdcf7a33ced.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/23975777",
+      "sha256": "7bdbccaf802baebd5286f22df3037c394c43939f0aab5bc399308f2fc9a4ea8f",
+      "bytes": 1986
+    },
+    {
+      "id": "eth-source-3d373b409d7d",
+      "path": "dist/research/eth-source-3d373b409d7d.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/23975778",
+      "sha256": "29ae35a567999463680a2e4015251f0e6f1e7cecd140c1847780af22777c98cd",
+      "bytes": 1986
+    },
+    {
+      "id": "eth-source-022388e73189",
+      "path": "dist/research/eth-source-022388e73189.md",
+      "sourceUrl": "https://caribbean.un.org/en/307990-un-chief-deeply-concerned-over-%E2%80%98possible-intensification-instability%E2%80%99-venezuela",
+      "sha256": "a0f995f5b1d317adcd75f84927c04fd480f2a4ced05297523ed855a59d85fdc9",
+      "bytes": 1926
+    },
+    {
+      "id": "eth-source-5d887f95d4ac",
+      "path": "dist/research/eth-source-5d887f95d4ac.md",
+      "sourceUrl": "https://www.reuters.com/world/americas/loud-noises-heard-venezuela-capital-southern-area-without-electricity-2026-01-03/",
+      "sha256": "d2804f89463d595551c187b3786dc2c0ba24acbd3febe4861e7577314a595446",
+      "bytes": 1826
+    },
+    {
+      "id": "eth-source-ffdcd51d3c5d",
+      "path": "dist/research/eth-source-ffdcd51d3c5d.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/24179382",
+      "sha256": "88df83f2660dad8afb214851dd4d11a659010f8ae98c585ba3f1c019db126857",
+      "bytes": 1986
+    },
+    {
+      "id": "eth-source-173d8bdf5045",
+      "path": "dist/research/eth-source-173d8bdf5045.md",
+      "sourceUrl": "https://eth.blockscout.com/api/v2/blocks/24179383",
+      "sha256": "61a593e21c8260efebbf3c99ce5ab2cc31b534048938b17f272e13a95da1d23a",
+      "bytes": 1986
+    },
+    {
+      "id": "eth-source-8fe86917ce04",
+      "path": "dist/research/eth-source-8fe86917ce04.md",
+      "sourceUrl": "https://www.presidency.ucsb.edu/documents/truth-social-posts-january-17-2026",
+      "sha256": "e0912570b299b417cb1be8480d10bb28f486b54f518eb44d28efc8fa1056cf52",
+      "bytes": 1798
+    },
+    {
+      "id": "eth-source-f6806dab8e2d",
+      "path": "dist/research/eth-source-f6806dab8e2d.md",
+      "sourceUrl": "https://www.reuters.com/world/europe/trump-vows-tariffs-eight-european-nations-over-greenland-2026-01-17/",
+      "sha256": "a84aa30647ca1a2bcee0afea6046faf5383d654b5377d9b98d2534440446c158",
+      "bytes": 1740
+    },
+    {
+      "id": "eth-source-64020aef30d5",
+      "path": "dist/research/eth-source-64020aef30d5.md",
+      "sourceUrl": "https://www.presidency.ucsb.edu/documents/truth-social-posts-january-21-2026",
+      "sha256": "5c48e908c5530ff668438e7c6e6ef442169baaa0be6fb643767d01e4674bd997",
+      "bytes": 1793
+    },
+    {
+      "id": "eth-source-0a0d52e6ec9a",
+      "path": "dist/research/eth-source-0a0d52e6ec9a.md",
+      "sourceUrl": "https://www.reuters.com/world/china/global-markets-wrapup-1-pix-2026-01-21/",
+      "sha256": "485d51a77bf35b23e01799ce3cc5909cde6ec8bb5dfac80c38d9c6f9462669f7",
+      "bytes": 1770
+    },
+    {
+      "id": "eth-source-fbf971a8f956",
+      "path": "dist/research/eth-source-fbf971a8f956.md",
+      "sourceUrl": "https://www.reuters.com/world/asia-pacific/china-vows-tighten-virtual-currency-restrictions-2026-02-06/",
+      "sha256": "687b754bb07dee29a8da0c610d5873a61958fb9d2d02219a3e1b22b8342918f7",
+      "bytes": 1778
+    },
+    {
+      "id": "eth-source-a44c91744460",
+      "path": "dist/research/eth-source-a44c91744460.md",
+      "sourceUrl": "https://www.whitehouse.gov/presidential-actions/2026/02/ending-certain-tariff-actions/",
+      "sha256": "9eb68ded6e7d2b063aa0f9572909e5270c46e744933d9c9e7ddd4a6b42b32d64",
+      "bytes": 1799
+    },
+    {
+      "id": "eth-source-47ffa25a9339",
+      "path": "dist/research/eth-source-47ffa25a9339.md",
+      "sourceUrl": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b11c9",
+      "sha256": "a6c91b6cc9e8cd898e5017c60f0d2977d9ef1ca14eee4085c1443ee21c836bf0",
+      "bytes": 1885
+    },
+    {
+      "id": "eth-source-c8dd8317c2e8",
+      "path": "dist/research/eth-source-c8dd8317c2e8.md",
+      "sourceUrl": "https://www.reuters.com/world/china/global-markets-global-markets-2026-02-20/",
+      "sha256": "bde5c9172136205cdf2d799b2862b89a06730726cd8a5482f1612f5b7c681ddb",
+      "bytes": 1846
+    },
+    {
+      "id": "eth-source-26a979188f13",
+      "path": "dist/research/eth-source-26a979188f13.md",
+      "sourceUrl": "https://www.whitehouse.gov/presidential-actions/2026/02/imposing-a-temporary-import-surcharge-to-address-fundamental-international-payments-problems/",
+      "sha256": "c73b60f756b4ab0b8d0a15bc2f095306c03d0f3ac8660cff0aeae9221fd6dbf0",
+      "bytes": 1963
+    },
+    {
+      "id": "eth-source-e8fe47b69c09",
+      "path": "dist/research/eth-source-e8fe47b69c09.md",
+      "sourceUrl": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/40b3b7b",
+      "sha256": "d7d50b9d798525208c0308b5314f21729b7aaaff4b634d15a3bad9aac0b8bdc9",
+      "bytes": 1821
+    },
+    {
+      "id": "eth-source-baa84e94bceb",
+      "path": "dist/research/eth-source-baa84e94bceb.md",
+      "sourceUrl": "https://ustr.gov/about/policy-offices/press-office/press-releases/2026/july/ustr-takes-action-forced-labor-section-301-investigations",
+      "sha256": "570973beca9b26c812871a70b5e991a8d4b47ea7bbe2e270c695df87689903f1",
+      "bytes": 1908
+    },
+    {
+      "id": "eth-source-276f7670b116",
+      "path": "dist/research/eth-source-276f7670b116.md",
+      "sourceUrl": "https://iran.un.org/en/313396-islamic-republic-iran-humanitarian-update-no-01-17-march-2026",
+      "sha256": "512f838cb26084e78ae6af7dc44d910f09d05e5c7b1be82cff0ac592363dfa7c",
+      "bytes": 1810
+    },
+    {
+      "id": "eth-source-89687cc7edc8",
+      "path": "dist/research/eth-source-89687cc7edc8.md",
+      "sourceUrl": "https://www.reuters.com/business/aerospace-defense/israel-us-launch-strikes-iran-2026-02-28/",
+      "sha256": "d7c9cd94f2206bb9692c7d9f13817cc801bca74917e19cf6f0e8a209850d1ecf",
+      "bytes": 1785
+    },
+    {
+      "id": "eth-source-90351e63c58e",
+      "path": "dist/research/eth-source-90351e63c58e.md",
+      "sourceUrl": "https://www.sec.gov/files/rules/interp/2026/33-11412.pdf",
+      "sha256": "5ee2deed00b91ddd08564b798a127dfe1dbbd978336dd1e314dc146e54bca2e6",
+      "bytes": 1956
+    },
+    {
+      "id": "eth-source-993eb3ce9bf2",
+      "path": "dist/research/eth-source-993eb3ce9bf2.md",
+      "sourceUrl": "https://www.cftc.gov/PressRoom/PressReleases/9198-26",
+      "sha256": "80a33b4bb84247709fae27da6d8cd023c7e3e1a79cfbd5bc50116bca39648098",
+      "bytes": 1862
+    },
+    {
+      "id": "eth-source-5110ffbba4ab",
+      "path": "dist/research/eth-source-5110ffbba4ab.md",
+      "sourceUrl": "https://layerzero.network/blog/layerzero-labs-kelpdao-incident-report",
+      "sha256": "fd2cdeb63c57f7c1d6ca8a98d5a9e00eb93303ff17ea827d9911e209957fb450",
+      "bytes": 1768
+    },
+    {
+      "id": "eth-source-6d3d330ceda3",
+      "path": "dist/research/eth-source-6d3d330ceda3.md",
+      "sourceUrl": "https://www.chainalysis.com/blog/kelpdao-bridge-exploit-april-2026/",
+      "sha256": "9e1f358fed4f469c5c80fc1b6371fe451390c020adc24d2ec0397247c91b2060",
+      "bytes": 1721
+    },
+    {
+      "id": "eth-source-e59b24f7af32",
+      "path": "dist/research/eth-source-e59b24f7af32.md",
+      "sourceUrl": "https://www.federalregister.gov/documents/2026/07/28/2026-15181/notice-of-actions-in-section-301-investigations-of-acts-policies-and-practices-of-various-economies",
+      "sha256": "e79cda2fe53f146c823529599124fb96867d2a1f109ed5eeadc30cc711849e6d",
+      "bytes": 2317
+    },
+    {
+      "id": "eth-source-d58645a00b3d",
+      "path": "dist/research/eth-source-d58645a00b3d.md",
+      "sourceUrl": "https://www.investing.com/news/economic-indicators/trump-to-impose-forced-labor-duties-on-friday-as-temporary-10-us-tariffs-expire-4810104",
+      "sha256": "213de078ff043b43f491bd9f1408157e44c15219b2af27a4d8a94fb52898068f",
+      "bytes": 1917
+    },
+    {
+      "id": "eth-source-7e5c95757102",
+      "path": "dist/research/eth-source-7e5c95757102.md",
+      "sourceUrl": "https://www.sec.gov/newsroom/press-releases/2026-76-sec-proposes-new-regulation-crypto-assets",
+      "sha256": "fad35dc4794cd870c761df91569a8c7a06a1ec8d66659f8a1a76469c31b862ad",
+      "bytes": 1720
+    },
+    {
+      "id": "eth-source-250a56f7e330",
+      "path": "dist/research/eth-source-250a56f7e330.md",
+      "sourceUrl": "https://www.govinfo.gov/content/pkg/FR-2026-08-21/html/2026-17183.htm",
+      "sha256": "c9d8ada5ebae4c4a634a8bb3fb8a07d801d7d495712cf2f22de69fe9dd82b527",
+      "bytes": 1746
+    },
+    {
+      "id": "eth-source-5ac372d559fe",
+      "path": "dist/research/eth-source-5ac372d559fe.md",
+      "sourceUrl": "https://www.sec.gov/comments/S7-2026-27/s7202627-1102200-3881828.pdf",
+      "sha256": "df1fc1ca4e724c82ef066d4d8123f2ca02ee27be2290db1b5e6cd6c2dca6f15a",
+      "bytes": 1804
+    },
+    {
+      "id": "eth-source-da3bcbb85f45",
+      "path": "dist/research/eth-source-da3bcbb85f45.md",
+      "sourceUrl": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm",
+      "sha256": "3671c5ad79593cfa5e69061fd2c87656c8f6affef047edd686793ab9cefb17af",
+      "bytes": 1703
+    },
+    {
+      "id": "eth-source-b8db16bcd384",
+      "path": "dist/research/eth-source-b8db16bcd384.md",
+      "sourceUrl": "https://www.reuters.com/business/fed-policymakers-divided-over-rate-hike-logic-september-minutes-show-2026-10-07/",
+      "sha256": "298a4964c551fb8266131f42731b58799d875d836075465a9721de8603f343cc",
+      "bytes": 1895
+    }
+  ]
+}

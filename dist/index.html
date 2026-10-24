@@ -93,8 +93,10 @@
   <link rel="stylesheet" href="./cycle-milestones.css?v=1.14.1-axis-legend.1">
   <link rel="stylesheet" href="./compact-chart-layout.css?v=1.14.1-ime.1">
   <link rel="stylesheet" href="./chart-bottom-bar.css?v=1.14.0-mobile.1">
-  <link rel="stylesheet" href="./symbol-selector.css?v=1.15.0-eth.1">
+  <link rel="stylesheet" href="./symbol-selector.css?v=1.18.0">
   <link rel="stylesheet" href="./eth-view.css?v=1.15.0-eth.1">
+  <link rel="stylesheet" href="./equity-view.css?v=1.18.0">
+  <link rel="stylesheet" href="./research-reader.css?v=1.18.0">
   <link rel="stylesheet" href="./ethereum-history.css?v=1.17.0-context.1">
 </head>
 <body>
@@ -220,7 +222,7 @@
         <p id="lab-error" class="lab-error" role="alert" hidden></p>
       </section>
       <section id="evidence-view" aria-label="리서치 우선순위" hidden>
-        <div class="evidence-table-shell"><table class="evidence-table"><caption>리서치 읽기 순서 <span id="evidence-total"></span><span>원자료 → 검증 방법 → 지정 차트 → 교차 검증 → 소셜</span></caption><colgroup><col class="evidence-rank-col" style="width:52px"><col><col class="evidence-publisher-col" style="width:140px"><col class="evidence-date-col" style="width:108px"><col class="evidence-role-col" style="width:125px"><col class="evidence-grade-col" style="width:68px"></colgroup><thead><tr><th scope="col">순서</th><th scope="col">자료 제목</th><th class="evidence-publisher" scope="col">출처</th><th class="evidence-date" scope="col">발행일</th><th class="evidence-role" scope="col">읽는 목적</th><th scope="col">근거</th></tr></thead><tbody id="evidence-body"></tbody><tfoot><tr id="evidence-sentinel"><td colspan="6"><button id="evidence-more">다음 자료 더 보기</button><span id="evidence-progress" role="status" aria-live="polite"></span><span id="evidence-end" hidden></span></td></tr></tfoot></table></div>
+        <div class="evidence-table-shell"><table class="evidence-table"><caption>리서치 읽기 순서 <span id="evidence-total"></span><span>공시·원자료 → 모델 → 주장·반론 → 출처 보존</span></caption><colgroup><col class="evidence-rank-col" style="width:52px"><col><col class="evidence-publisher-col" style="width:140px"><col class="evidence-date-col" style="width:108px"><col class="evidence-role-col" style="width:125px"><col class="evidence-grade-col" style="width:68px"></colgroup><thead><tr><th scope="col">순서</th><th scope="col">자료 제목</th><th class="evidence-publisher" scope="col">출처</th><th class="evidence-date" scope="col">발행일</th><th class="evidence-role" scope="col">읽는 목적</th><th scope="col">근거</th></tr></thead><tbody id="evidence-body"></tbody><tfoot><tr id="evidence-sentinel"><td colspan="6"><button id="evidence-more">다음 자료 더 보기</button><span id="evidence-progress" role="status" aria-live="polite"></span><span id="evidence-end" hidden></span></td></tr></tfoot></table></div>
       </section>
       <section id="compare-view" class="lab-page" hidden>
         <header class="lab-heading"><div><span class="lab-eyebrow">2010 — PRESENT / MULTISCALE</span><h1>사이클 내부의 구조</h1></div><div class="lab-date" id="structure-range">일 · 주 · 월 · 분기<small>완료되지 않은 기간은 별도 표시</small></div></header>
@@ -302,6 +304,6 @@
   <dialog id="method-dialog" aria-labelledby="method-title"><div class="dialog-top"><span class="eyebrow">DATA & METHODOLOGY</span><button id="close-method" class="icon-button" aria-label="방법론 닫기"><span data-icon="close"></span></button></div><h2 id="method-title">방법론과 출처</h2><p class="dialog-lead">차트의 출발점부터 가격의 정의까지, 비교에 사용한 기준입니다.</p><div id="method-content"></div><button id="method-done" class="primary-button">확인했습니다</button></dialog>
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
   <dialog id="evidence-dialog" aria-labelledby="evidence-detail-title"><div class="dialog-top"><span class="eyebrow">EVIDENCE & LIMITS</span><button id="evidence-close" class="icon-button" aria-label="자료 상세 닫기"><span data-icon="close"></span></button></div><h2 id="evidence-detail-title"></h2><div id="evidence-detail-body"></div></dialog>
-  <script type="module" src="./site-entry.js?v=1.17.0-context.1"></script>
+  <script type="module" src="./site-entry.js?v=1.18.0"></script>
 </body>
 </html>

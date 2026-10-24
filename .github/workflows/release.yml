@@ -3,6 +3,8 @@ name: Release
 on:
   push:
     tags: ['v*']
+    branches: [main]
+    paths: ['package.json']
   release:
     types: [published]
 
@@ -15,7 +17,7 @@ concurrency:
 
 jobs:
   release:
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -28,13 +30,25 @@ jobs:
         with:
           node-version: '24'
           package-manager-cache: false
+      - name: Resolve the release version from this exact source
+        id: version
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFile,appendFile} from 'node:fs/promises';
+          const {version}=JSON.parse(await readFile('package.json','utf8'));
+          const tag=`v${version}`;
+          if(process.env.GITHUB_REF.startsWith('refs/tags/') && process.env.GITHUB_REF_NAME!==tag)throw new Error('Tag/version mismatch');
+          await appendFile(process.env.GITHUB_OUTPUT,`tag=${tag}\n`);
+          NODE
       - name: Test release source
         run: npm test
+      - name: Verify research catalog and preserved Markdown
+        run: npm run verify:research
       - name: Verify bounded request ownership and negative controls
         run: npm run verify:formal
       - name: Verify and package release assets
         env:
-          RELEASE_TAG: ${{ github.ref_name }}
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
         run: |
           node scripts/verify-static.mjs
           node scripts/package-release.mjs --tag "$RELEASE_TAG"
@@ -43,10 +57,25 @@ jobs:
       - name: Publish or resume this release
         env:
           GH_TOKEN: ${{ github.token }}
-          RELEASE_TAG: ${{ github.ref_name }}
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
         shell: bash
         run: |
           set -euo pipefail
+          # A release and every asset must name this exact tested commit.
+          # Resolve annotated tags to their peeled commit and never retag.
+          tag_refs="$(git ls-remote --tags origin "refs/tags/$RELEASE_TAG" "refs/tags/$RELEASE_TAG^{}")"
+          tag_sha=""
+          while read -r oid ref; do
+            if [[ "$ref" == "refs/tags/$RELEASE_TAG^{}" ]]; then tag_sha="$oid"; break; fi
+            tag_sha="$oid"
+          done <<< "$tag_refs"
+          if [[ -n "$tag_sha" && "$tag_sha" != "$GITHUB_SHA" ]]; then
+            echo "Release tag names a different source commit; publish a new version." >&2
+            exit 1
+          fi
+          if [[ -z "$tag_sha" ]]; then
+            gh api --method POST "repos/$GITHUB_REPOSITORY/git/refs" -f "ref=refs/tags/$RELEASE_TAG" -f "sha=$GITHUB_SHA" >/dev/null
+          fi
           mapfile -t assets < release/ASSETS.txt
           if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
             # A rerun never creates a second release. Identical assets are

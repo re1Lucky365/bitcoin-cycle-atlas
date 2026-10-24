@@ -21,7 +21,7 @@ async function inlineModule(file) {
   return url;
 }
 let html = await readFile(resolve(dist, 'index.html'), 'utf8');
-for (const file of ['styles.css', 'compact.css', 'outlook.css', 'lab.css', 'atlas.css', 'viewport.css', 'chart-details-panel.css', 'analysis-dock.css', 'chart-magnet.css', 'mobile-workspace.css', 'workspace-tools.css', 'chart-workspace-controls.css', 'research-annotations.css', 'chart-export-workbench.css', 'cycle-milestones.css', 'compact-chart-layout.css', 'chart-bottom-bar.css', 'symbol-selector.css', 'eth-view.css', 'ethereum-history.css']) {
+for (const file of ['styles.css', 'compact.css', 'outlook.css', 'lab.css', 'atlas.css', 'viewport.css', 'chart-details-panel.css', 'analysis-dock.css', 'chart-magnet.css', 'mobile-workspace.css', 'workspace-tools.css', 'chart-workspace-controls.css', 'research-annotations.css', 'chart-export-workbench.css', 'cycle-milestones.css', 'compact-chart-layout.css', 'chart-bottom-bar.css', 'symbol-selector.css', 'eth-view.css', 'ethereum-history.css', 'equity-view.css', 'research-reader.css']) {
   // Font URLs contain semicolons in their weight lists. Consume the complete
   // url(...) before its terminating semicolon so :root stays valid CSS.
   const css = (await readFile(resolve(dist, file), 'utf8')).replace(/@import\s+url\(\s*(?:"[^"]*"|'[^']*'|[^)]*)\s*\)\s*;/g, '');
@@ -34,9 +34,10 @@ const data = (await readFile(resolve(dist, 'data/btc-daily.json'), 'utf8')).repl
 const ohlc = (await readFile(resolve(dist, 'data/btc-ohlc.json'), 'utf8')).replaceAll('<', '\\u003c');
 const volume = (await readFile(resolve(dist, 'data/btc-volume.json'), 'utf8')).replaceAll('<', '\\u003c');
 const eth = (await readFile(resolve(dist, 'data/eth-ohlc.json'), 'utf8')).replaceAll('<', '\\u003c');
+const equities=await Promise.all(['mstr','bmnr'].map(async symbol=>`<script id="embedded-${symbol}-data" type="application/json">${(await readFile(resolve(dist, `data/${symbol}-ohlc.json`),'utf8')).replaceAll('<','\\u003c')}</script>`));
 const app = await inlineModule(resolve(dist, 'site-entry.js'));
 html = html.replace(/<script type="module" src="\.\/site-entry\.js(?:\?[^"\s]*)?"><\/script>/,
-  `<script id="embedded-btc-data" type="application/json">${data}</script>\n  <script id="embedded-ohlc-data" type="application/json">${ohlc}</script>\n  <script id="embedded-volume-data" type="application/json">${volume}</script>\n  <script id="embedded-eth-data" type="application/json">${eth}</script>\n  <script type="module" src="${app}"></script>`);
+  `<script id="embedded-btc-data" type="application/json">${data}</script>\n  <script id="embedded-ohlc-data" type="application/json">${ohlc}</script>\n  <script id="embedded-volume-data" type="application/json">${volume}</script>\n  <script id="embedded-eth-data" type="application/json">${eth}</script>\n  ${equities.join('\n')}\n  <script type="module" src="${app}"></script>`);
 if (/\b(?:src|href)=["']\.\//.test(html)) throw new Error('Unresolved local resource');
 await mkdir(dirname(output), { recursive: true });
 await writeFile(output, html);

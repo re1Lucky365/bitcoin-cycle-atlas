@@ -1,0 +1,1332 @@
+{
+  "symbol": "MSTR",
+  "reviewDate": "2026-10-24",
+  "sources": [
+    {
+      "id": "mstr-10q-2026q2",
+      "title": "MSTR 재무모델의 기준 공시: 2026년 2분기",
+      "originalTitle": "Strategy Inc Form 10-Q, quarter ended June 30, 2026",
+      "author": "Strategy Inc",
+      "publisher": "SEC EDGAR",
+      "publishedAt": "2026-07-30",
+      "url": "https://www.sec.gov/Archives/edgar/data/1050446/000105044626000044/mstr-20260630.htm",
+      "category": "filing",
+      "access": "verified-primary",
+      "summary": "동일한 6월 말의 보유량·현금·채무 원금·우선주 청산우선권·기말 보통주를 재무모델 기준으로 사용합니다. 전환을 가정하지 않은 보통주 기준이므로 전환사채 원금과 우선권을 차감합니다.",
+      "claims": [
+        {
+          "claim": "회사가 공시한 BTC 보유량과 금융조달 구조는 확인할 수 있다.",
+          "assessment": "공시 내 표를 사용했으며 미래 자산가치나 자금조달 성공을 보증하지 않습니다.",
+          "status": "fact",
+          "crossCheckIds": [
+            "mstr-q2-results-2026"
+          ]
+        }
+      ],
+      "limitations": [
+        "회계 장부가액을 채권 원금·우선주 청산우선권으로 대체했습니다. 미래 세금과 소프트웨어 사업가치는 동적 평가하지 않습니다.",
+        "회사 공시와 회사 보도자료의 대조는 동일 발행사의 보고 일관성 확인입니다. 별도 수탁기관의 잔고 감사나 미래 예측의 독립 검증을 뜻하지 않습니다."
+      ],
+      "media": [],
+      "footer": {
+        "copyright": "원저작권자에게 권리가 있습니다. 이 보관본은 독자 작성 요약과 출처 메타데이터이며 원문 복제본이 아닙니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata",
+      "evidenceAnchor": "Part I Item 1 balance sheet; Note 5; Note 10; liquidity table; basic-shares KPI table"
+    },
+    {
+      "id": "mstr-q2-results-2026",
+      "title": "2026년 2분기 실적과 매각·자사주 정책",
+      "originalTitle": "Strategy Announces Second Quarter 2026 Financial Results",
+      "author": "Phong Le, Andrew Kang, Michael Saylor / Strategy Inc",
+      "publisher": "Strategy",
+      "publishedAt": "2026-07-30",
+      "url": "https://www.strategy.com/press/strategy-announces-second-quarter-2026-financial-results_07-30-2026",
+      "category": "filing",
+      "access": "verified-primary",
+      "summary": "2분기 순손실과 BTC 평가손실, 7월의 BTC 매각 및 STRC 환매를 함께 공개했습니다. 7월 26일 보유량은 분기 말 수치와 다르므로 별도 시점으로 봅니다.",
+      "claims": [
+        {
+          "claim": "BTC를 영구히 한 번도 팔지 않는다는 전제로 모델링해도 된다.",
+          "assessment": "회사가 BTC 매각 실적과 현금 관리 정책을 발표했으므로 무조건적인 무매각 전제는 배제합니다.",
+          "status": "contradicted",
+          "crossCheckIds": [
+            "mstr-capital-framework-2026",
+            "mstr-10q-2026q2"
+          ]
+        }
+      ],
+      "limitations": [
+        "공시된 BTC Yield와 주가 수익률은 동일하지 않습니다."
+      ],
+      "media": [
+        {
+          "type": "video",
+          "url": "https://x.com/i/broadcasts/1kJzDDXjAVeKv",
+          "title": "Q2 2026 earnings call — official X broadcast",
+          "archiveStatus": "link-only"
+        },
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/@strategy/streams",
+          "title": "Strategy official earnings replay channel",
+          "archiveStatus": "link-only"
+        }
+      ],
+      "footer": {
+        "copyright": "원저작권자에게 권리가 있습니다. 이 보관본은 독자 작성 요약과 출처 메타데이터이며 원문 복제본이 아닙니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata"
+    },
+    {
+      "id": "mstr-notes",
+      "title": "BTC Yield·순 BTC/주·mNAV 정의 변경",
+      "originalTitle": "Strategy dashboard notes and metric definitions",
+      "author": "Strategy Inc",
+      "publisher": "Strategy",
+      "publishedAt": null,
+      "url": "https://www.strategy.com/notes",
+      "category": "method",
+      "access": "verified-primary",
+      "summary": "BTC Yield는 총 BTC/가정희석주식의 변화를 뜻하며 투자자의 현금수익률이 아닙니다. 2026년 7월 23일부터 mNAV 정의가 바뀌었으므로 과거 배수와 직접 이어 붙일 수 없습니다.",
+      "claims": [
+        {
+          "claim": "프리미엄 발행으로 주당 순자산을 높일 수 있다.",
+          "assessment": "수수료·선순위 청구권·전환·희석과 발행가격 조건에 달려 있으며 총 BTC/주 증가만으로 증명되지 않습니다.",
+          "status": "conditional",
+          "crossCheckIds": [
+            "mstr-10q-2026q2",
+            "mstr-vaneck-capital"
+          ]
+        }
+      ],
+      "limitations": [
+        "공식 노트도 일부 세금·리스 등 부채와 실제 청산우선권을 완전히 반영하지 않는다고 설명합니다. FDSO와 ADSO를 혼용하지 않습니다."
+      ],
+      "media": [],
+      "footer": {
+        "copyright": "원저작권자에게 권리가 있습니다. 이 보관본은 독자 작성 요약과 출처 메타데이터이며 원문 복제본이 아닙니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata",
+      "evidenceAnchor": "Important Information about mNAV, Net BTC, Net BPS; definitions updated July 23, 2026"
+    },
+    {
+      "id": "mstr-shares",
+      "title": "기말 보통주·가정희석주·실제 전환조건 구분",
+      "originalTitle": "Strategy Shares — ADSO / FDSO",
+      "author": "Strategy Inc",
+      "publisher": "Strategy",
+      "publishedAt": null,
+      "url": "https://www.strategy.com/shares",
+      "category": "data",
+      "access": "verified-primary",
+      "summary": "10월 18일 기본주식은 약 4억 2,235만 주이며 전환을 모두 가정한 ADSO는 약 4억 5,193만 주입니다. EPS용 가중평균 주식 수와 다릅니다.",
+      "claims": [
+        {
+          "claim": "주식 수는 하나의 숫자로 언제나 비교할 수 있다.",
+          "assessment": "기본주·모든 전환 가정·현재 가격에서 전환 가능한 주식 수는 서로 다른 분모입니다.",
+          "status": "contradicted",
+          "crossCheckIds": [
+            "mstr-10q-2026q2",
+            "mstr-notes"
+          ]
+        }
+      ],
+      "limitations": [
+        "라이브 표와 고정 공시 사이에 반올림 차이가 있습니다. 모델은 고정된 6월 말 공시 수치를 사용합니다."
+      ],
+      "media": [],
+      "footer": {
+        "copyright": "원저작권자에게 권리가 있습니다. 이 보관본은 독자 작성 요약과 출처 메타데이터이며 원문 복제본이 아닙니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata"
+    },
+    {
+      "id": "mstr-ledger",
+      "title": "BTC 매입·매각의 공식 원장",
+      "originalTitle": "Strategy Bitcoin Ledger",
+      "author": "Strategy Inc",
+      "publisher": "Strategy",
+      "publishedAt": null,
+      "url": "https://www.strategy.com/ledger",
+      "category": "data",
+      "access": "verified-primary",
+      "summary": "10월 19일 보고된 BTC 총량은 848,517개입니다. 원장은 2026년 매각 행도 포함하고 있어 총량 증가를 매주 일정한 수익률로 외삽해서는 안 됩니다.",
+      "claims": [
+        {
+          "claim": "공식 보유량 업데이트는 공시와 일치한다.",
+          "assessment": "10월 19일 8-K의 10월 18일 잔액과 교차 확인했습니다.",
+          "status": "fact",
+          "crossCheckIds": [
+            "mstr-8k-20261019"
+          ]
+        }
+      ],
+      "limitations": [
+        "보고일과 거래기간 종료일을 구분합니다. 라이브 KPI의 과거 값은 방법론 수정으로 고정 실적발표와 다를 수 있습니다."
+      ],
+      "media": [],
+      "footer": {
+        "copyright": "원저작권자에게 권리가 있습니다. 이 보관본은 독자 작성 요약과 출처 메타데이터이며 원문 복제본이 아닙니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata"
+    },
+    {
+      "id": "mstr-8k-20261019",
+      "title": "최신 확인: BTC 매입과 STRC 환매",
+      "originalTitle": "Strategy Form 8-K, October 19, 2026",
+      "author": "Strategy Inc",
+      "publisher": "SEC EDGAR",
+      "publishedAt": "2026-10-19",
+      "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526424688/mstr-20261019.htm",
+      "category": "filing",
+      "access": "verified-primary",
+      "summary": "10월 18일 BTC 848,517개, USD Reserve 약 48.3억 달러와 USD Cash 4.473억 달러를 보고했습니다. 해당 주의 267 BTC 매입과 STRC 환매가 함께 이루어졌습니다.",
+      "claims": [
+        {
+          "claim": "추가 자금은 모두 BTC 매입에 투입된다.",
+          "assessment": "현금 준비금·배당·우선주 환매에도 배분됩니다. 자금조달액 전체를 BTC 증가로 놓으면 과대평가됩니다.",
+          "status": "contradicted",
+          "crossCheckIds": [
+            "mstr-capital-framework-2026"
+          ]
+        }
+      ],
+      "limitations": [
+        "이 공시만으로 모든 우선주의 같은 날짜 청산우선권을 재구성할 수 없어 최신 보유량을 과거 자본구조에 섞지 않습니다."
+      ],
+      "media": [],
+      "footer": {
+        "copyright": "원저작권자에게 권리가 있습니다. 이 보관본은 독자 작성 요약과 출처 메타데이터이며 원문 복제본이 아닙니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata",
+      "evidenceAnchor": "Item 8.01: ATM, BTC, repurchase, USD Reserve and USD Cash updates"
+    },
+    {
+      "id": "mstr-capital-framework-2026",
+      "title": "현금 준비금과 BTC 매각을 포함한 새 자본정책",
+      "originalTitle": "Strategy Announces Digital Credit Capital Framework, USD Reserve Policy, STRC Dividend Policy, Digital Credit and MSTR Repurchase Authorizations, and BTC Monetization Program",
+      "author": "Strategy Inc / Michael Saylor",
+      "publisher": "Strategy",
+      "publishedAt": "2026-06-29",
+      "url": "https://www.strategy.com/press/strategy-announces-digital-credit-capital-framework_06-29-2026",
+      "category": "filing",
+      "access": "verified-primary",
+      "summary": "현금 준비금, 우선주 배당 정책, 우선주·보통주 환매 및 BTC 현금화 프로그램을 함께 제시했습니다. 환매 한도는 실행 의무가 아니며 자산 매각은 보통주가 받는 BTC 노출을 줄일 수 있습니다.",
+      "claims": [
+        {
+          "claim": "디지털 신용은 시장 상황과 관계없이 자가 증식한다.",
+          "assessment": "현금·배당·재조달을 관리해야 하는 조건부 사업 구조입니다. 공식 정책이 BTC 매각을 허용합니다.",
+          "status": "contradicted",
+          "crossCheckIds": [
+            "mstr-8k-20261019",
+            "mstr-10q-2026q2"
+          ]
+        }
+      ],
+      "limitations": [],
+      "media": [],
+      "footer": {
+        "copyright": "원저작권자에게 권리가 있습니다. 이 보관본은 독자 작성 요약과 출처 메타데이터이며 원문 복제본이 아닙니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata"
+    },
+    {
+      "id": "mstr-saylor-bitcoin24",
+      "title": "세일러의 Bitcoin24: 시나리오와 예측의 차이",
+      "originalTitle": "Bitcoin24 — 21-year macro forecast with micro models for bitcoin strategies",
+      "author": "Michael J. Saylor, Shirish Jajodia, Chaitanya Jain",
+      "publisher": "bitcoin-model",
+      "publishedAt": null,
+      "url": "https://github.com/bitcoin-model/bitcoin_model",
+      "category": "leadership",
+      "access": "verified-primary",
+      "summary": "원 제작자가 공개한 21년 시나리오 도구입니다. 사용자가 가정을 바꿀 수 있으며 README는 BTC 변동성을 모델링하지 않는다고 명시합니다. 점 추정치를 확률구간이나 과거 검증된 수익률로 읽으면 안 됩니다.",
+      "claims": [
+        {
+          "claim": "Bitcoin24 결과는 BTC의 미래 수익률을 증명한다.",
+          "assessment": "가정에 따른 산술 결과이며 변동성·경로위험·예측력의 검증은 별도로 필요합니다.",
+          "status": "unverified",
+          "crossCheckIds": [
+            "mstr-saylor-wainwright-2025",
+            "mstr-vaneck-capital"
+          ]
+        }
+      ],
+      "limitations": [
+        "원본 XLSM 매크로를 실행하지 않았습니다. 저장소 README와 공식 사이트의 연결 관계를 확인했습니다."
+      ],
+      "media": [],
+      "footer": {
+        "copyright": "원저작권자에게 권리가 있습니다. 이 보관본은 독자 작성 요약과 출처 메타데이터이며 원문 복제본이 아닙니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata",
+      "evidenceAnchor": "README: 21-Year Forecasting; Original Contributors; volatility limitation"
+    },
+    {
+      "id": "mstr-saylor-nashville-2024",
+      "title": "2045년 1,300만 달러 BTC 전망의 가정",
+      "originalTitle": "The Bitcoin Revolution: Rebuilding our Global Economy with Digital Capital",
+      "author": "Michael J. Saylor",
+      "publisher": "Michael.com",
+      "publishedAt": "2024-08-02",
+      "url": "https://assets.contentstack.io/v3/assets/bltdef7a3f3c28ddd84/blt8053254ac26aa0a4/66a7a137cfbd232be87d6bbc/Bitcoin_Nashville_24_Saylor_Presentation.pdf",
+      "category": "leadership",
+      "access": "verified-excerpt",
+      "summary": "공식 발표 슬라이드의 검색 가능한 부분은 2024년 6.5만 달러, 2045년 기본 시나리오 1,300만 달러와 연 29% 가정을 제시합니다. 21년 복리의 입력 가정이며 MSTR 주당 목표가가 아닙니다.",
+      "claims": [
+        {
+          "claim": "BTC가 2045년 1,300만 달러에 도달한다.",
+          "assessment": "장기 강세 가정입니다. 65,000달러에서 13,000,000달러까지 21년의 요구 CAGR은 약 28.7%로 산술상 맞지만 실현 가능성은 증명되지 않았습니다.",
+          "status": "conditional",
+          "crossCheckIds": [
+            "mstr-saylor-bitcoin24"
+          ]
+        }
+      ],
+      "limitations": [
+        "원본 PDF는 제공 도구의 크기 제한으로 전체 읽기 불가. 공식 사이트 링크·게시 메타데이터와 검색에 노출된 가격전망 슬라이드만 확인했습니다."
+      ],
+      "media": [],
+      "footer": {
+        "copyright": "원저작권자에게 권리가 있습니다. 이 보관본은 독자 작성 요약과 출처 메타데이터이며 원문 복제본이 아닙니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata",
+      "evidenceAnchor": "Indexed slide 63; original presentation index https://www.michael.com/presentations"
+    },
+    {
+      "id": "mstr-saylor-prague-2025",
+      "title": "21년 후 2,100만 달러 BTC 주장",
+      "originalTitle": "Bitcoin, Time, and the Engineering of Generational Wealth — The Power of 21",
+      "author": "Michael J. Saylor",
+      "publisher": "Michael.com",
+      "publishedAt": "2025-06-23",
+      "url": "https://assets.contentstack.io/v3/assets/bltdef7a3f3c28ddd84/blt32a376ef7e228b72/68597f38cbfa9d7c860d952d/Bitcoin_Prague_25_Saylor_Presentation.pdf",
+      "category": "leadership",
+      "access": "verified-excerpt",
+      "summary": "공식 슬라이드의 검색 가능한 부분은 21년 뒤 BTC 2,100만 달러와 변동적인 경로를 제시합니다. 2025년에 21년을 더한 2046년은 날짜 산술이며 확정된 시세가 아닙니다.",
+      "claims": [
+        {
+          "claim": "2025년 발표에서 제시한 21년 후 BTC 2,100만 달러 목표.",
+          "assessment": "원 사이트 발표 일자와 공식 PDF의 검색 가능한 문구를 확인했습니다. 2046년은 2025+21의 환산이며, 달성시점의 일·월과 성공확률은 제시하지 않습니다.",
+          "status": "conditional",
+          "crossCheckIds": [
+            "mstr-saylor-bitcoin24",
+            "mstr-saylor-nashville-2024"
+          ]
+        },
+        {
+          "claim": "BTC 2,100만 달러가 MSTR의 미래 가격도 결정한다.",
+          "assessment": "MSTR은 보유량·주식 수·우선권·현금흐름·시장 프리미엄을 추가로 알아야 합니다. BTC 목표만으로 주가를 정할 수 없습니다.",
+          "status": "unverified",
+          "crossCheckIds": [
+            "mstr-notes",
+            "mstr-10q-2026q2"
+          ]
+        }
+      ],
+      "limitations": [
+        "원본 PDF 전체는 크기 제한으로 읽지 못했습니다. 원 사이트의 발표 링크·일자와 검색 인덱스의 목표가 문구만 확인했습니다."
+      ],
+      "media": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/playlist?list=PLzzgcGPTEzHtDb01fl2J-6cEP8NcS50N7",
+          "title": "BTC Prague — Michael Saylor keynote playlist",
+          "archiveStatus": "link-only"
+        }
+      ],
+      "footer": {
+        "copyright": "원저작권자에게 권리가 있습니다. 이 보관본은 독자 작성 요약과 출처 메타데이터이며 원문 복제본이 아닙니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata"
+    },
+    {
+      "id": "mstr-saylor-wainwright-2025",
+      "title": "세일러의 레버리지·배당률 민감도 표",
+      "originalTitle": "H.C. Wainwright & Co. Annual Global Investment Conference",
+      "author": "Michael Saylor",
+      "publisher": "Strategy / Michael.com",
+      "publishedAt": "2025-09-09",
+      "url": "https://assets.contentstack.io/v3/assets/bltdef7a3f3c28ddd84/blte8688f031b1b4e30/68f65a5a98fba75a9dee1054/HC_Wainwright_25.pdf",
+      "category": "leadership",
+      "access": "verified-primary",
+      "summary": "발표 자료는 BTC 연 수익률·레버리지·배당비용에 따라 주당 BTC가 달라지는 예시를 보여줍니다. 예컨대 30% BTC ARR, 8% 배당률, 10년은 시뮬레이션 입력이며 현재 확정 수익이 아닙니다.",
+      "claims": [
+        {
+          "claim": "30% BTC 성장과 낮은 조달비용이면 주당 BTC 증가를 증폭할 수 있다.",
+          "assessment": "스프레드가 양수이고 재조달·시장 접근이 유지된다는 조건이 필요합니다. 원가 상승·프리미엄 축소·BTC 하락을 별도 스트레스로 시험해야 합니다.",
+          "status": "conditional",
+          "crossCheckIds": [
+            "mstr-capital-framework-2026",
+            "mstr-vaneck-capital"
+          ]
+        }
+      ],
+      "limitations": [
+        "저작권 보유 슬라이드의 이미지 전체를 재게시하지 않습니다. 원본 링크와 독자 요약을 제공합니다."
+      ],
+      "media": [],
+      "footer": {
+        "copyright": "원저작권자에게 권리가 있습니다. 이 보관본은 독자 작성 요약과 출처 메타데이터이며 원문 복제본이 아닙니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata",
+      "evidenceAnchor": "Slides 59–63: BTC Factor assumptions; credit slides: lognormal endpoint risk"
+    },
+    {
+      "id": "mstr-saylor-x-20260921",
+      "title": "세일러 X 발언과 회사 원장의 대조",
+      "originalTitle": "Strategy has acquired 950 BTC and repurchased $174M of STRC",
+      "author": "Michael Saylor (@saylor)",
+      "publisher": "X",
+      "publishedAt": "2026-09-21",
+      "url": "https://x.com/saylor/status/2102005566973301018",
+      "category": "leadership",
+      "access": "verified-excerpt",
+      "summary": "공식 계정 검색에 노출된 업데이트는 BTC 매입과 STRC 환매를 동시에 언급합니다. 950 BTC·총량 846,000 BTC는 회사 원장과 대조됩니다.",
+      "claims": [
+        {
+          "claim": "세일러의 보유량 공지를 재무공시와 대조할 수 있다.",
+          "assessment": "숫자가 일치하는 범위만 확인했으며 게시물 전체·첨부 미디어는 열람되지 않았습니다.",
+          "status": "fact",
+          "crossCheckIds": [
+            "mstr-ledger"
+          ]
+        }
+      ],
+      "limitations": [
+        "X 원문 본문은 브라우징 도구에서 제공되지 않았습니다. 검색 인덱스의 발췌만 검증했습니다."
+      ],
+      "media": [],
+      "footer": {
+        "copyright": "원저작권자에게 권리가 있습니다. 이 보관본은 독자 작성 요약과 출처 메타데이터이며 원문 복제본이 아닙니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata"
+    },
+    {
+      "id": "mstr-vaneck-capital",
+      "title": "외부 교차검증: 프리미엄·레버리지·자본구조",
+      "originalTitle": "Deconstructing Strategy (MSTR): Premium, Leverage, and Capital Structure",
+      "author": "Patrick Bush; Matthew Sigel",
+      "publisher": "VanEck",
+      "publishedAt": "2025-05-22",
+      "url": "https://www.vaneck.com/us/en/blogs/digital-assets/matthew-sigel-deconstructing-strategy-mstr-premium-leverage-and-capital-structure/",
+      "category": "risk",
+      "access": "verified-primary",
+      "summary": "발행사 외부 자산운용사의 분석은 BTC 노출뿐 아니라 시장 프리미엄과 자금조달의 자기강화 관계를 다룹니다. 보고서 당시 저자 소속사는 BTC·MSTR·STRK·STRF 보유를 공시했습니다.",
+      "claims": [
+        {
+          "claim": "프리미엄이 계속 유지되어 조달과 BTC 축적이 순환할 수 있다.",
+          "assessment": "성립 가능성은 있으나 시장 프리미엄 축소 시 역방향 효과가 큽니다. 2025년 관측값을 2026년의 고정 상수로 사용하지 않습니다.",
+          "status": "conditional",
+          "crossCheckIds": [
+            "mstr-notes",
+            "mstr-capital-framework-2026"
+          ]
+        }
+      ],
+      "limitations": [
+        "이해관계가 없는 평가기관의 보증이 아닙니다. 현재 변경된 mNAV 정의와 과거 NAV 분석을 구분합니다."
+      ],
+      "media": [],
+      "footer": {
+        "copyright": "원저작권자에게 권리가 있습니다. 이 보관본은 독자 작성 요약과 출처 메타데이터이며 원문 복제본이 아닙니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata"
+    },
+    {
+      "id": "mstr-research-comovement",
+      "title": "학술 교차검증: BTC와 주식의 시간변화 관계",
+      "originalTitle": "Cryptocurrencies in the Balance Sheet: Insights from (Micro)Strategy — Bitcoin Interactions",
+      "author": "Sabrina Aufiero; Antonio Briola; Tesfaye Salarin; Fabio Caccioli; Silvia Bartolucci; Tomaso Aste",
+      "publisher": "arXiv",
+      "publishedAt": "2025-05-20",
+      "url": "https://arxiv.org/abs/2505.14655",
+      "category": "method",
+      "access": "verified-excerpt",
+      "summary": "39개 BTC 보유기업을 분석한 프리프린트는 BTC와 주식의 동조 및 시간에 따라 변하는 정보흐름을 보고합니다. 고정 2배 레버리지나 미래 인과법칙을 입증한 연구로 읽지 않습니다.",
+      "claims": [
+        {
+          "claim": "MSTR의 BTC 민감도는 고정된 배수다.",
+          "assessment": "연구의 시간변화 결과와 자본구조 변화를 고려하면 고정 배수 가정은 제한적입니다.",
+          "status": "unverified",
+          "crossCheckIds": [
+            "mstr-vaneck-capital"
+          ]
+        }
+      ],
+      "limitations": [
+        "검증 범위는 논문의 초록과 연구 범위입니다. 동료심사 완료 여부를 확인하지 않았으며 예측 모델 외부검증으로 간주하지 않습니다."
+      ],
+      "media": [],
+      "footer": {
+        "copyright": "원저작권자에게 권리가 있습니다. 이 보관본은 독자 작성 요약과 출처 메타데이터이며 원문 복제본이 아닙니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata"
+    },
+    {
+      "id": "mstr-first-btc-2020",
+      "title": "2020년 BTC 재무전략 시작",
+      "originalTitle": "MicroStrategy Adopts Bitcoin as Primary Treasury Reserve Asset",
+      "author": "MicroStrategy Incorporated / Michael Saylor",
+      "publisher": "SEC EDGAR",
+      "publishedAt": "2020-08-11",
+      "url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312520215604/d921849dex991.htm",
+      "category": "filing",
+      "access": "verified-primary",
+      "summary": "21,454 BTC를 약 2.5억 달러에 매입하면서 BTC를 핵심 재무준비자산으로 채택했습니다. 통화가치 보존은 경영진의 투자 판단이며 모든 기간의 인플레이션 헤지 성과를 보장하지 않습니다.",
+      "claims": [],
+      "limitations": [],
+      "media": [],
+      "footer": {
+        "copyright": "원저작권자에게 권리가 있습니다. 이 보관본은 독자 작성 요약과 출처 메타데이터이며 원문 복제본이 아닙니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata"
+    },
+    {
+      "id": "mstr-convert-2020",
+      "title": "첫 대규모 전환사채로 BTC 매입 확대",
+      "originalTitle": "MicroStrategy Completes $650 Million Offering of 0.750% Convertible Senior Notes Due 2025",
+      "author": "MicroStrategy Incorporated",
+      "publisher": "Strategy",
+      "publishedAt": "2020-12-11",
+      "url": "https://www.strategy.com/press/microstrategy-completes-650m-offering-of-convertible-senior-notes-due-2025",
+      "category": "filing",
+      "access": "verified-primary",
+      "summary": "6.5억 달러 전환사채 발행 완료를 공시했습니다. 낮은 명목 이자율에도 원금상환·전환희석·권리조건이 남습니다.",
+      "claims": [],
+      "limitations": [],
+      "media": [],
+      "footer": {
+        "copyright": "원저작권자에게 권리가 있습니다. 이 보관본은 독자 작성 요약과 출처 메타데이터이며 원문 복제본이 아닙니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata"
+    },
+    {
+      "id": "mstr-silvergate-loan",
+      "title": "BTC 담보부 대출의 도입",
+      "originalTitle": "MacroStrategy Closes $205 Million Bitcoin-Collateralized Loan with Silvergate Bank",
+      "author": "Silvergate Bank; MicroStrategy Incorporated",
+      "publisher": "Strategy",
+      "publishedAt": "2022-03-29",
+      "url": "https://www.strategy.com/press/silvergate-bank-issues-205-m-loan-to-macrostrategy-collateralized-by-bitcoin_03-29-2022",
+      "category": "filing",
+      "access": "verified-primary",
+      "summary": "BTC를 담보로 한 2.05억 달러 대출을 발표했습니다. 이 시기 담보 구조는 이후의 무담보 전환사채 중심 구조와 다릅니다.",
+      "claims": [],
+      "limitations": [],
+      "media": [],
+      "footer": {
+        "copyright": "원저작권자에게 권리가 있습니다. 이 보관본은 독자 작성 요약과 출처 메타데이터이며 원문 복제본이 아닙니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata"
+    },
+    {
+      "id": "mstr-silvergate-repay",
+      "title": "Silvergate 대출 조기상환과 담보 해제",
+      "originalTitle": "MicroStrategy Repays $205M Bitcoin-Collateralized Loan in Full at 22% Discount for $160M",
+      "author": "MicroStrategy Incorporated",
+      "publisher": "Strategy",
+      "publishedAt": "2023-03-27",
+      "url": "https://www.strategy.com/press/microstrategy-repaid-silvergate-loan-and-increased-bitcoin-holdings-by-6455-and-now-holds-138955-btc_3-27-2023",
+      "category": "filing",
+      "access": "verified-excerpt",
+      "summary": "공식 8-K 안내는 1.6억 달러에 대출을 상환했다고 기록합니다. 2022년의 담보 가격 기준을 이후 연도에 그대로 적용하지 않습니다.",
+      "claims": [],
+      "limitations": [
+        "공식 안내의 제목·날짜를 확인했습니다. 세부 상환일·조건의 PDF 전체는 이 기록에서 검증하지 않았습니다."
+      ],
+      "media": [],
+      "footer": {
+        "copyright": "원저작권자에게 권리가 있습니다. 이 보관본은 독자 작성 요약과 출처 메타데이터이며 원문 복제본이 아닙니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata"
+    },
+    {
+      "id": "mstr-management-2022",
+      "title": "회장·CEO 분리",
+      "originalTitle": "MicroStrategy Announces Separation of Chairman and CEO Roles and Second Quarter 2022 Financial Results",
+      "author": "MicroStrategy Incorporated",
+      "publisher": "Strategy",
+      "publishedAt": "2022-08-02",
+      "url": "https://www.strategy.com/press/microstrategy-announces-separation-of-chairman-and-ceo-roles-and-second-quarter-2022-financial-results",
+      "category": "filing",
+      "access": "verified-primary",
+      "summary": "8월 8일부터 Saylor는 Executive Chairman, Phong Le는 CEO를 맡는다고 발표했습니다. 개인 발언·경영진 공동정책·회사 공시는 구분해 읽습니다.",
+      "claims": [],
+      "limitations": [],
+      "media": [],
+      "footer": {
+        "copyright": "원저작권자에게 권리가 있습니다. 이 보관본은 독자 작성 요약과 출처 메타데이터이며 원문 복제본이 아닙니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata"
+    },
+    {
+      "id": "mstr-split-2024",
+      "title": "10대1 액면분할: 가격 단위의 변화",
+      "originalTitle": "MicroStrategy Announces 10-for-1 Stock Split",
+      "author": "MicroStrategy Incorporated",
+      "publisher": "Strategy",
+      "publishedAt": "2024-07-11",
+      "url": "https://www.strategy.com/press/microstrategy-announces-10-for-1-stock-split_07-11-2024",
+      "category": "filing",
+      "access": "verified-primary",
+      "summary": "2024년 8월 8일부터 분할 조정 가격으로 거래한다고 발표했습니다. 과거 시세·목표가·주식 수는 같은 분할 기준으로 비교해야 하며 분할 자체는 기업가치를 늘리지 않습니다.",
+      "claims": [],
+      "limitations": [],
+      "media": [],
+      "footer": {
+        "copyright": "원저작권자에게 권리가 있습니다. 이 보관본은 독자 작성 요약과 출처 메타데이터이며 원문 복제본이 아닙니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata"
+    },
+    {
+      "id": "mstr-plan-2121",
+      "title": "21/21 자본조달 계획",
+      "originalTitle": "MicroStrategy Announces Third Quarter 2024 Financial Results and Announces $42 Billion Capital Plan",
+      "author": "MicroStrategy Incorporated / Phong Le",
+      "publisher": "Strategy",
+      "publishedAt": "2024-10-30",
+      "url": "https://www.strategy.com/press/microstrategy-announces-third-quarter-2024-financial-results-and-announces-42-billion-capital-plan_10-30-2024",
+      "category": "filing",
+      "access": "verified-primary",
+      "summary": "3년에 걸쳐 보통주 210억 달러와 고정수익증권 210억 달러를 조달하려는 계획을 제시했습니다. 계획 한도와 실제 조달액은 다릅니다.",
+      "claims": [],
+      "limitations": [],
+      "media": [],
+      "footer": {
+        "copyright": "원저작권자에게 권리가 있습니다. 이 보관본은 독자 작성 요약과 출처 메타데이터이며 원문 복제본이 아닙니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata"
+    },
+    {
+      "id": "mstr-nasdaq100",
+      "title": "나스닥100 편입",
+      "originalTitle": "Annual Changes to the Nasdaq-100 Index",
+      "author": "Nasdaq Inc",
+      "publisher": "Nasdaq",
+      "publishedAt": "2024-12-13",
+      "url": "https://www.nasdaq.com/press-release/annual-changes-nasdaq-100-indexr-2024-12-13",
+      "category": "data",
+      "access": "verified-primary",
+      "summary": "나스닥은 MSTR을 2024년 12월 23일 개장 전 지수에 편입한다고 발표했습니다. 지수 편입은 수급 경로이며 미래 수익률 보증이 아닙니다.",
+      "claims": [],
+      "limitations": [],
+      "media": [],
+      "footer": {
+        "copyright": "원저작권자에게 권리가 있습니다. 이 보관본은 독자 작성 요약과 출처 메타데이터이며 원문 복제본이 아닙니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata"
+    },
+    {
+      "id": "mstr-rebrand",
+      "title": "Strategy 브랜드 전환",
+      "originalTitle": "MicroStrategy is Now Strategy",
+      "author": "Strategy",
+      "publisher": "Strategy",
+      "publishedAt": "2025-02-05",
+      "url": "https://www.strategy.com/press/microstrategy-is-now-strategy_02-05-2025",
+      "category": "filing",
+      "access": "verified-primary",
+      "summary": "BTC 재무전략을 강조하는 Strategy 브랜드를 발표했습니다. 브랜드 변경일과 법적 상호 변경일을 구분합니다.",
+      "claims": [],
+      "limitations": [],
+      "media": [],
+      "footer": {
+        "copyright": "원저작권자에게 권리가 있습니다. 이 보관본은 독자 작성 요약과 출처 메타데이터이며 원문 복제본이 아닙니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata"
+    },
+    {
+      "id": "mstr-strk-2025",
+      "title": "전환 우선주 STRK: 발행가와 청산권의 차이",
+      "originalTitle": "MicroStrategy Announces Pricing of Strike Preferred Stock Offering (STRK)",
+      "author": "MicroStrategy Incorporated",
+      "publisher": "Strategy",
+      "publishedAt": "2025-01-31",
+      "url": "https://www.strategy.com/press/microstrategy-announces-pricing-of-strike-preferred-stock-offering-strk_01-31-2025",
+      "category": "filing",
+      "access": "verified-primary",
+      "summary": "공모가격 80달러와 초기 청산우선권 100달러는 다릅니다. 우선주 조달금 전액을 보통주 순자산 증가로 계산할 수 없음을 보여주는 실제 사례입니다.",
+      "claims": [
+        {
+          "claim": "우선주로 BTC를 사면 보통주 순자산이 조달금만큼 늘어난다.",
+          "assessment": "현금 유입과 함께 선순위 청구권이 생기며 할인 발행·비용 때문에 즉시 순자산이 줄 수도 있습니다.",
+          "status": "contradicted",
+          "crossCheckIds": [
+            "mstr-notes"
+          ]
+        }
+      ],
+      "limitations": [],
+      "media": [],
+      "footer": {
+        "copyright": "원저작권자에게 권리가 있습니다. 이 보관본은 독자 작성 요약과 출처 메타데이터이며 원문 복제본이 아닙니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata"
+    },
+    {
+      "id": "mstr-strc-2025",
+      "title": "변동배당 우선주 STRC 발행",
+      "originalTitle": "Strategy Announces Closing of $2.521 Billion STRC Stock Initial Public Offering",
+      "author": "Strategy Inc",
+      "publisher": "Strategy",
+      "publishedAt": "2025-07-29",
+      "url": "https://www.strategy.com/press/strategy-announces-closing-of-2-point-521-billion-STRC-stock-initial-public-offering_07-29-2025",
+      "category": "filing",
+      "access": "verified-primary",
+      "summary": "STRC 공모 완료와 순조달금으로 21,021 BTC를 매입한 사실을 공개했습니다. 변동 배당비용과 우선권은 보통주 평가에서 함께 반영해야 합니다.",
+      "claims": [],
+      "limitations": [],
+      "media": [],
+      "footer": {
+        "copyright": "원저작권자에게 권리가 있습니다. 이 보관본은 독자 작성 요약과 출처 메타데이터이며 원문 복제본이 아닙니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata"
+    },
+    {
+      "id": "mstr-reserve-2025",
+      "title": "현금 준비금 신설과 낙관 가정 수정",
+      "originalTitle": "Strategy Announces Establishment of $1.44 Billion USD Reserve and Updates FY 2025 Guidance",
+      "author": "Strategy Inc",
+      "publisher": "Strategy",
+      "publishedAt": "2025-12-01",
+      "url": "https://www.strategy.com/press/strategy-announces-establishment-of-1-44-billion-usd-reserve-and-updates-fy-2025-guidance_12-1-2025",
+      "category": "filing",
+      "access": "verified-primary",
+      "summary": "주식 발행으로 14.4억 달러 준비금을 마련했습니다. 종전 연말 BTC 15만 달러 가정은 8.5만~11만 달러 범위로 수정되었습니다. 경영진 시나리오도 재평가될 수 있음을 보여줍니다.",
+      "claims": [],
+      "limitations": [],
+      "media": [],
+      "footer": {
+        "copyright": "원저작권자에게 권리가 있습니다. 이 보관본은 독자 작성 요약과 출처 메타데이터이며 원문 복제본이 아닙니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata"
+    },
+    {
+      "id": "mstr-debt-buyback-2026",
+      "title": "전환사채 환매와 보유 BTC 증가",
+      "originalTitle": "Strategy Completes $1.5 Billion Debt Repurchase and achieves BTC Yield of 13.3% YTD",
+      "author": "Strategy Inc",
+      "publisher": "Strategy",
+      "publishedAt": "2026-05-26",
+      "url": "https://www.strategy.com/press/strategy-completes-1-5-billion-debt-repurchase-and-achieves-btc-yield-of-13-3-ytd-now-holds-843738-btc_05-26-2026",
+      "category": "filing",
+      "access": "verified-primary",
+      "summary": "원금 15억 달러의 전환사채를 약 13.8억 달러에 환매했습니다. 채무 감소와 주식 전환가정의 감소가 KPI에 영향을 주므로 KPI 상승을 실제 BTC 매입량과 혼동하지 않습니다.",
+      "claims": [],
+      "limitations": [],
+      "media": [],
+      "footer": {
+        "copyright": "원저작권자에게 권리가 있습니다. 이 보관본은 독자 작성 요약과 출처 메타데이터이며 원문 복제본이 아닙니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata"
+    },
+    {
+      "id": "mstr-sec-2000",
+      "title": "2000년 회계 정정과 SEC 합의",
+      "originalTitle": "SEC Brings Civil Charges Against MicroStrategy and Three Executive Officers for Accounting Violations",
+      "author": "U.S. Securities and Exchange Commission",
+      "publisher": "SEC",
+      "publishedAt": "2000-12-14",
+      "url": "https://www.sec.gov/newsroom/press-releases/2000-186-sec-brings-civil-charges-against-microstrategy-three-executive-officers-accounting-violations",
+      "category": "risk",
+      "access": "verified-primary",
+      "summary": "SEC는 2000년 3월 회계 정정 발표와 주가 급락, 12월 회사·임원의 합의를 기록했습니다. 임원들은 혐의의 인정·부인 없이 합의했습니다. 현재의 법적 위반을 추정하는 근거로 확장하지 않습니다.",
+      "claims": [],
+      "limitations": [],
+      "media": [],
+      "footer": {
+        "copyright": "미국 정부 작성 원문; 제3자 편입 자료의 권리는 별도입니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata"
+    },
+    {
+      "id": "mstr-spot-etp-2024",
+      "title": "현물 BTC ETP 승인과 대체 투자수단",
+      "originalTitle": "Statement on the Approval of Spot Bitcoin Exchange-Traded Products",
+      "author": "Gary Gensler",
+      "publisher": "SEC",
+      "publishedAt": "2024-01-10",
+      "url": "https://www.sec.gov/newsroom/speeches-statements/gensler-statement-spot-bitcoin-011023",
+      "category": "risk",
+      "access": "verified-primary",
+      "summary": "현물 BTC ETP 승인으로 주식계좌에서 직접 BTC 노출을 얻는 대체 경로가 늘었습니다. 승인은 BTC 가격 전망에 대한 규제기관의 보증이 아닙니다.",
+      "claims": [],
+      "limitations": [
+        "MSTR 프리미엄에 미친 순수 인과효과를 이 사건 하나로 추정하지 않습니다."
+      ],
+      "media": [],
+      "footer": {
+        "copyright": "미국 정부 작성 원문; 제3자 편입 자료의 권리는 별도입니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata"
+    },
+    {
+      "id": "mstr-us-reserve-order",
+      "title": "미국 전략 BTC 준비금 행정명령",
+      "originalTitle": "Establishment of the Strategic Bitcoin Reserve and United States Digital Asset Stockpile",
+      "author": "The White House / Donald J. Trump",
+      "publisher": "The White House",
+      "publishedAt": "2025-03-06",
+      "url": "https://www.whitehouse.gov/presidential-actions/2025/03/establishment-of-the-strategic-bitcoin-reserve-and-united-states-digital-asset-stockpile/",
+      "category": "risk",
+      "access": "verified-primary",
+      "summary": "정부가 보유한 몰수 BTC 중심의 준비금과 다른 디지털자산 비축을 구분합니다. 추가 BTC 확보에는 예산 중립 조건이 있어 무제한 시장 매입을 가정하지 않습니다.",
+      "claims": [],
+      "limitations": [],
+      "media": [],
+      "footer": {
+        "copyright": "미국 정부 작성 원문; 제3자 편입 자료의 권리는 별도입니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata"
+    },
+    {
+      "id": "mstr-tariffs-2025",
+      "title": "상호관세 발표: BTC·주식 공통 거시 위험",
+      "originalTitle": "Regulating Imports with a Reciprocal Tariff to Rectify Trade Practices",
+      "author": "The White House / Donald J. Trump",
+      "publisher": "The White House",
+      "publishedAt": "2025-04-02",
+      "url": "https://www.whitehouse.gov/presidential-actions/2025/04/regulating-imports-with-a-reciprocal-tariff-to-rectify-trade-practices-that-contribute-to-large-and-persistent-annual-united-states-goods-trade-deficits/",
+      "category": "risk",
+      "access": "verified-primary",
+      "summary": "상호관세 행정명령은 위험선호·금리·유동성에 영향을 줄 수 있는 거시 사건입니다. MSTR이나 BTC 하락의 유일한 원인이라는 식의 인과 단정은 하지 않습니다.",
+      "claims": [],
+      "limitations": [],
+      "media": [],
+      "footer": {
+        "copyright": "미국 정부 작성 원문; 제3자 편입 자료의 권리는 별도입니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata"
+    },
+    {
+      "id": "mstr-q3-date-2026",
+      "title": "다음 확인 관문: 2026년 3분기 실적",
+      "originalTitle": "Strategy Announces Earnings Release Date and Live Video Webinar for Third Quarter 2026 Financial Results",
+      "author": "Strategy Inc",
+      "publisher": "Strategy",
+      "publishedAt": "2026-10-08",
+      "url": "https://www.strategy.com/press/strategy-announces-earnings-release-date-and-live-video-webinar-for-third-quarter-2026-financial-results_10-08-2026",
+      "category": "filing",
+      "access": "verified-primary",
+      "summary": "3분기 실적발표는 10월 29일 미국 장 마감 후로 공지됐습니다. 현재 모델 기준일에 아직 발표되지 않은 실적을 알고 있는 데이터처럼 쓰지 않습니다.",
+      "claims": [],
+      "limitations": [],
+      "media": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/@strategy/streams",
+          "title": "Strategy official earnings channel",
+          "archiveStatus": "link-only"
+        }
+      ],
+      "footer": {
+        "copyright": "원저작권자에게 권리가 있습니다. 이 보관본은 독자 작성 요약과 출처 메타데이터이며 원문 복제본이 아닙니다.",
+        "availability": "2026-10-24 확인. 원문·미디어의 향후 제공 여부는 원 게시자가 결정합니다."
+      },
+      "retrievedAt": "2026-10-24",
+      "archiveMode": "original-summary-and-metadata"
+    }
+  ],
+  "events": [
+    {
+      "id": "mstr-accounting-restatement",
+      "symbol": "MSTR",
+      "date": "2000-03-20",
+      "title": "회계 정정 발표",
+      "description": "SEC가 기록한 회계 정정 발표와 급락. BTC 전략 도입 이전의 기업 위험입니다.",
+      "category": "governance",
+      "sourceIds": [
+        "mstr-sec-2000"
+      ]
+    },
+    {
+      "id": "mstr-sec-settlement",
+      "symbol": "MSTR",
+      "date": "2000-12-14",
+      "title": "SEC 회계 사건 합의",
+      "description": "회사·임원이 합의. 혐의 인정 없이 합의한 절차와 현재 상태를 구분합니다.",
+      "category": "governance",
+      "sourceIds": [
+        "mstr-sec-2000"
+      ]
+    },
+    {
+      "id": "mstr-treasury-launch",
+      "symbol": "MSTR",
+      "date": "2020-08-11",
+      "title": "BTC 재무전략 시작",
+      "description": "21,454 BTC·약 2.5억 달러 첫 매입 공시.",
+      "category": "treasury",
+      "sourceIds": [
+        "mstr-first-btc-2020"
+      ]
+    },
+    {
+      "id": "mstr-first-convert",
+      "symbol": "MSTR",
+      "date": "2020-12-11",
+      "title": "6.5억 달러 전환사채",
+      "description": "BTC 축적을 위한 자본시장 조달의 확대.",
+      "category": "financing",
+      "sourceIds": [
+        "mstr-convert-2020"
+      ]
+    },
+    {
+      "id": "mstr-collateral-loan",
+      "symbol": "MSTR",
+      "date": "2022-03-29",
+      "title": "Silvergate 담보 대출",
+      "description": "BTC 담보 2.05억 달러 대출 발표.",
+      "category": "financing",
+      "sourceIds": [
+        "mstr-silvergate-loan"
+      ]
+    },
+    {
+      "id": "mstr-chair-ceo-separation",
+      "symbol": "MSTR",
+      "date": "2022-08-08",
+      "title": "Saylor 회장·Phong Le CEO",
+      "description": "8월 2일 발표한 경영진 역할 분리의 효력일.",
+      "category": "governance",
+      "sourceIds": [
+        "mstr-management-2022"
+      ]
+    },
+    {
+      "id": "mstr-silvergate-repayment",
+      "symbol": "MSTR",
+      "date": "2023-03-27",
+      "title": "Silvergate 대출 상환 공시",
+      "description": "공시일 기준 표시. 과거 담보조건을 현재 청산가격으로 사용하지 않습니다.",
+      "category": "financing",
+      "sourceIds": [
+        "mstr-silvergate-repay"
+      ]
+    },
+    {
+      "id": "mstr-spot-etps",
+      "symbol": "MSTR",
+      "date": "2024-01-10",
+      "title": "현물 BTC ETP 승인",
+      "description": "BTC 직접 노출의 대체 투자수단 확대. MSTR 프리미엄에 대한 영향은 조건부입니다.",
+      "category": "policy",
+      "sourceIds": [
+        "mstr-spot-etp-2024"
+      ]
+    },
+    {
+      "id": "mstr-stock-split",
+      "symbol": "MSTR",
+      "date": "2024-08-08",
+      "title": "10대1 분할 조정 거래",
+      "description": "단위 변경이며 기업가치 상승 사건으로 해석하지 않습니다.",
+      "category": "governance",
+      "sourceIds": [
+        "mstr-split-2024"
+      ]
+    },
+    {
+      "id": "mstr-2121-capital-plan",
+      "symbol": "MSTR",
+      "date": "2024-10-30",
+      "title": "21/21 계획 발표",
+      "description": "3년 자본조달 목표 420억 달러. 실행과 계획을 구분합니다.",
+      "category": "financing",
+      "sourceIds": [
+        "mstr-plan-2121"
+      ]
+    },
+    {
+      "id": "mstr-nasdaq100-entry",
+      "symbol": "MSTR",
+      "date": "2024-12-23",
+      "title": "나스닥100 편입 효력",
+      "description": "12월 13일 발표한 편입의 효력일.",
+      "category": "market",
+      "sourceIds": [
+        "mstr-nasdaq100"
+      ]
+    },
+    {
+      "id": "mstr-strk-pricing",
+      "symbol": "MSTR",
+      "date": "2025-01-30",
+      "title": "STRK 전환 우선주 가격결정",
+      "description": "1월 31일 공시가 기록한 가격결정일. 발행가 80달러·초기 청산권100달러.",
+      "category": "financing",
+      "sourceIds": [
+        "mstr-strk-2025"
+      ]
+    },
+    {
+      "id": "mstr-brand-change",
+      "symbol": "MSTR",
+      "date": "2025-02-05",
+      "title": "Strategy 브랜드 전환",
+      "description": "BTC 재무회사 정체성을 강조. 법적 상호변경과 구분합니다.",
+      "category": "governance",
+      "sourceIds": [
+        "mstr-rebrand"
+      ]
+    },
+    {
+      "id": "mstr-us-btc-reserve",
+      "symbol": "MSTR",
+      "date": "2025-03-06",
+      "title": "미국 전략 BTC 준비금",
+      "description": "몰수 BTC 중심의 행정명령. 무제한 신규 매수 약속으로 해석하지 않습니다.",
+      "category": "policy",
+      "sourceIds": [
+        "mstr-us-reserve-order"
+      ]
+    },
+    {
+      "id": "mstr-reciprocal-tariffs",
+      "symbol": "MSTR",
+      "date": "2025-04-02",
+      "title": "미국 상호관세 발표",
+      "description": "거시 위험 사건. 차트 동시 변동을 단일 원인으로 확정하지 않습니다.",
+      "category": "policy",
+      "sourceIds": [
+        "mstr-tariffs-2025"
+      ]
+    },
+    {
+      "id": "mstr-strc-ipo",
+      "symbol": "MSTR",
+      "date": "2025-07-29",
+      "title": "STRC 공모 완료",
+      "description": "변동배당 우선주와 BTC 매입을 연결한 자본구조 확대.",
+      "category": "financing",
+      "sourceIds": [
+        "mstr-strc-2025"
+      ]
+    },
+    {
+      "id": "mstr-usd-reserve-established",
+      "symbol": "MSTR",
+      "date": "2025-12-01",
+      "title": "USD Reserve 신설",
+      "description": "현금성 배당·이자 준비금과 연말 가정 수정.",
+      "category": "financing",
+      "sourceIds": [
+        "mstr-reserve-2025"
+      ]
+    },
+    {
+      "id": "mstr-debt-repurchase",
+      "symbol": "MSTR",
+      "date": "2026-05-19",
+      "title": "전환사채 15억 달러 환매",
+      "description": "6월 말 공시가 확인한 환매일. 원금 감소와 전환 가정 감소를 함께 봅니다.",
+      "category": "financing",
+      "sourceIds": [
+        "mstr-debt-buyback-2026",
+        "mstr-10q-2026q2"
+      ]
+    },
+    {
+      "id": "mstr-capital-framework",
+      "symbol": "MSTR",
+      "date": "2026-06-29",
+      "title": "BTC 현금화·환매 정책",
+      "description": "무조건 매입·보유 가정을 바꾸는 자본관리 체계.",
+      "category": "treasury",
+      "sourceIds": [
+        "mstr-capital-framework-2026"
+      ]
+    },
+    {
+      "id": "mstr-mnav-definition-change",
+      "symbol": "MSTR",
+      "date": "2026-07-23",
+      "title": "mNAV 정의 변경",
+      "description": "이전 mNAV와 이후 순 BTC/주 기반 mNAV는 직접 비교 불가.",
+      "category": "governance",
+      "sourceIds": [
+        "mstr-notes"
+      ]
+    },
+    {
+      "id": "mstr-q2-report",
+      "symbol": "MSTR",
+      "date": "2026-07-30",
+      "title": "2분기 손실·BTC 매각 공개",
+      "description": "평가손익과 주당 BTC KPI·현금흐름을 분리해 확인합니다.",
+      "category": "treasury",
+      "sourceIds": [
+        "mstr-q2-results-2026"
+      ]
+    },
+    {
+      "id": "mstr-october-capital-update",
+      "symbol": "MSTR",
+      "date": "2026-10-19",
+      "title": "BTC 848,517개·환매한도 확대",
+      "description": "10월 18일 잔액 및 우선주 환매를 공시했습니다.",
+      "category": "treasury",
+      "sourceIds": [
+        "mstr-8k-20261019"
+      ]
+    }
+  ],
+  "snapshot": {
+    "asOf": "2026-06-30",
+    "sourceIds": [
+      "mstr-10q-2026q2"
+    ],
+    "coin": "BTC",
+    "coinUnits": 846000,
+    "cashUsd": 1711837000,
+    "otherAssetsUsd": 736145000,
+    "debtUsd": 6713659000,
+    "preferredUsd": 15462056000,
+    "otherLiabilitiesUsd": 565495000,
+    "shares": 371603000,
+    "shareBasis": "period-end-basic-no-conversion",
+    "annualExpensesUsd": 1760000000,
+    "notes": [
+      "동일 2026-06-30 공시 기준. 현재 NAV가 아닌 과거 자본구조를 고정한 민감도입니다.",
+      "전환사채를 전환하지 않은 기말 A+B 보통주입니다. 채무 원금·우선주 청산우선권을 차감하고 전환주를 중복 가산하지 않습니다.",
+      "otherAssetsUsd는 단기투자자산만 포함; 현금에 USD Reserve를 재가산하지 않습니다. 소프트웨어 및 기타자산 가치는 제외합니다.",
+      "otherLiabilitiesUsd는 총부채에서 채무 장부가를 제외한 금액입니다. 채무는 원금으로 별도 대체했습니다.",
+      "annualExpensesUsd는 당시 예상 연간 우선배당+이자 17.6억 달러의 대용치입니다. 영업비용 전체도 아니고 모두 확정 지급의무인 배당도 아닙니다.",
+      "현재까지의 자금조달·환매·보유량 변화, 향후 세금·전환·비용은 별도 시나리오가 필요합니다."
+    ]
+  },
+  "recentUpdates": [
+    {
+      "asOf": "2026-10-18",
+      "publishedAt": "2026-10-19",
+      "coinUnits": 848517,
+      "cashUsd": 447300000,
+      "usdReserveUsd": 4830000000,
+      "basicShares": 422353000,
+      "sourceIds": [
+        "mstr-8k-20261019",
+        "mstr-shares"
+      ],
+      "modelUse": "context-only; not mixed into the June aligned snapshot"
+    }
+  ],
+  "debtSchedule": [
+    {
+      "date": "2027-09-15",
+      "principalUsd": 1010000000,
+      "kind": "holder-put",
+      "sourceIds": [
+        "mstr-10q-2026q2"
+      ],
+      "description": "2028 notes 보유자의 현금상환 청구 가능일. 실제 청구·차환·전환은 미정."
+    },
+    {
+      "date": "2028-03-01",
+      "principalUsd": 2000000000,
+      "kind": "holder-put",
+      "sourceIds": [
+        "mstr-10q-2026q2"
+      ],
+      "description": "2030B notes 보유자의 현금상환 청구 가능일. 실제 청구·차환·전환은 미정."
+    },
+    {
+      "date": "2028-06-01",
+      "principalUsd": 1500000000,
+      "kind": "holder-put",
+      "sourceIds": [
+        "mstr-10q-2026q2"
+      ],
+      "description": "2029 notes 보유자의 현금상환 청구 가능일. 실제 청구·차환·전환은 미정."
+    },
+    {
+      "date": "2028-09-15",
+      "principalUsd": 1403659000,
+      "kind": "holder-put",
+      "sourceIds": [
+        "mstr-10q-2026q2"
+      ],
+      "description": "2030A + 2031 notes 보유자의 현금상환 청구 가능일. 실제 청구·차환·전환은 미정."
+    },
+    {
+      "date": "2029-06-15",
+      "principalUsd": 800000000,
+      "kind": "holder-put",
+      "sourceIds": [
+        "mstr-10q-2026q2"
+      ],
+      "description": "2032 notes 보유자의 현금상환 청구 가능일. 실제 청구·차환·전환은 미정."
+    }
+  ],
+  "futureEvents": [
+    {
+      "id": "mstr-q3-earnings-future",
+      "symbol": "MSTR",
+      "date": "2026-10-29",
+      "title": "3분기 실적 예정",
+      "description": "회사 공지 기준 예정일. 발표 내용은 아직 미확인. 미국 장 마감 후, 웹캐스트17:00 ET.",
+      "category": "treasury",
+      "sourceIds": [
+        "mstr-q3-date-2026"
+      ],
+      "status": "scheduled"
+    },
+    {
+      "id": "mstr-put-2027-09-15",
+      "symbol": "MSTR",
+      "date": "2027-09-15",
+      "title": "2028 notes 현금풋",
+      "description": "원금 $1,010,000,000의 현금상환 청구 가능일. 채권자가 청구하는지·차환 가능한지는 미정입니다.",
+      "category": "financing",
+      "sourceIds": [
+        "mstr-10q-2026q2"
+      ],
+      "status": "conditional"
+    },
+    {
+      "id": "mstr-put-2028-03-01",
+      "symbol": "MSTR",
+      "date": "2028-03-01",
+      "title": "2030B notes 현금풋",
+      "description": "원금 $2,000,000,000의 현금상환 청구 가능일. 채권자가 청구하는지·차환 가능한지는 미정입니다.",
+      "category": "financing",
+      "sourceIds": [
+        "mstr-10q-2026q2"
+      ],
+      "status": "conditional"
+    },
+    {
+      "id": "mstr-put-2028-06-01",
+      "symbol": "MSTR",
+      "date": "2028-06-01",
+      "title": "2029 notes 현금풋",
+      "description": "원금 $1,500,000,000의 현금상환 청구 가능일. 채권자가 청구하는지·차환 가능한지는 미정입니다.",
+      "category": "financing",
+      "sourceIds": [
+        "mstr-10q-2026q2"
+      ],
+      "status": "conditional"
+    },
+    {
+      "id": "mstr-put-2028-09-15",
+      "symbol": "MSTR",
+      "date": "2028-09-15",
+      "title": "2030A + 2031 notes 현금풋",
+      "description": "원금 $1,403,659,000의 현금상환 청구 가능일. 채권자가 청구하는지·차환 가능한지는 미정입니다.",
+      "category": "financing",
+      "sourceIds": [
+        "mstr-10q-2026q2"
+      ],
+      "status": "conditional"
+    },
+    {
+      "id": "mstr-put-2029-06-15",
+      "symbol": "MSTR",
+      "date": "2029-06-15",
+      "title": "2032 notes 현금풋",
+      "description": "원금 $800,000,000의 현금상환 청구 가능일. 채권자가 청구하는지·차환 가능한지는 미정입니다.",
+      "category": "financing",
+      "sourceIds": [
+        "mstr-10q-2026q2"
+      ],
+      "status": "conditional"
+    }
+  ],
+  "leadershipTargets": [
+    {
+      "id": "saylor-btc-2045",
+      "date": "2024-08-02",
+      "targetYear": 2045,
+      "price": 13000000,
+      "asset": "BTC",
+      "sourceIds": [
+        "mstr-saylor-nashville-2024",
+        "mstr-saylor-bitcoin24"
+      ],
+      "status": "conditional",
+      "description": "세일러의 장기 BTC 가정. 공식 슬라이드 검색 발췌로 확인; 전체 PDF 미열람. MSTR 목표가 또는 예측확률이 아닙니다."
+    },
+    {
+      "id": "saylor-btc-2046",
+      "date": "2025-06-23",
+      "targetYear": 2046,
+      "price": 21000000,
+      "asset": "BTC",
+      "sourceIds": [
+        "mstr-saylor-prague-2025"
+      ],
+      "status": "conditional",
+      "description": "21년 후 목표를 2025+21=2046으로 환산한 장기 BTC 주장. 전체 PDF 미열람; 확률구간/보장 아님."
+    }
+  ],
+  "coverage": {
+    "status": "bounded-review",
+    "statement": "공시·발표·정책·외부 연구의 선별 검토입니다. 모든 YouTube·X 발언을 수집했다고 주장하지 않습니다.",
+    "videoTranscriptStatus": "not-transcribed; original links only",
+    "archivePolicy": "독자 작성 요약·메타데이터·짧은 발췌 및 미디어 링크. 저작권 허가가 없는 원문·이미지·영상 파일은 재배포하지 않습니다."
+  }
+}
