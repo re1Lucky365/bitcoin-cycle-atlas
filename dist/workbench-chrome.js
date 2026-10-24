@@ -1,8 +1,8 @@
 import { CHART_INTERVALS,isIntradayInterval } from './ohlc-data.js?v=1.11.0';
 import { MAGNET_MODES, MAGNET_LABELS, normalizeMagnetMode } from './chart-magnet.js?v=1.11.0';
-import { mountChartGoTo } from './chart-go-to.js?v=1.14.0-mobile.1';
+import { mountChartGoTo } from './chart-go-to.js?v=1.19.0';
 import { isStartPriceUnit } from './price-display.js?v=1.13.0-research.1';
-import { mountWorkspaceTools } from './workspace-tools.js?v=1.14.0-mobile.1';
+import { mountWorkspaceTools } from './workspace-tools.js?v=1.19.0';
 import { mountChartBottomBar } from './chart-bottom-bar.js?v=1.14.0-mobile.1';
 import { mountSymbolSelector } from './symbol-selector.js?v=1.18.0';
 const $ = selector => document.querySelector(selector);

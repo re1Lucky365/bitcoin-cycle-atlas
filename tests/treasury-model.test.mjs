@@ -191,6 +191,16 @@ test('known preferred issuance adds cash AND senior claim without pretending to 
   assert.equal(result.diagnostics.currentNavClaim, false);
 });
 
+test('a known cost reduction may reach zero but cannot create a negative financing expense', () => {
+  const withReduction = annualExpensesUsd => input({snapshot:snapshot({
+    annualExpensesUsd:1_000_000,
+    modelAdjustments:[{date:'2026-06-10',publishedAt:'2026-06-15',annualExpensesUsd}],
+  })});
+  const zero=buildTreasuryForecast(withReduction(-1_000_000));
+  near(zero.assumptions.financingCarryUsd,0);
+  assert.throws(() => buildTreasuryForecast(withReduction(-2_000_000)),/annualExpensesUsd|financing/i);
+});
+
 test('scenario endpoints and envelopes contain every scenario at each shared date', () => {
   const outputs = ['base','stress','bull'].map(scenario => buildTreasuryForecast(input({symbol:'MSTR', snapshot:snapshot({coin:'BTC'}),coinAnchor:{date:'2026-10-23',price:80_000},scenario,endYear:2050})));
   const grid = outputs[0].path.map(p => p.date);
@@ -232,4 +242,75 @@ test('invalid horizons, symbols and calendar dates fail clearly', () => {
   assert.throws(()=>buildTreasuryForecast(input({endYear:2051})),/Horizon/i);
   assert.throws(()=>buildTreasuryForecast(input({asOf:'2026-02-30'})),/calendar date/i);
   assert.throws(()=>buildTreasuryForecast(input({history:[]})),/history/i);
+});
+
+
+test('latest eligible observation is chosen by date without mutating source order', () => {
+  const history = [{date:'2026-10-24', close:24}, {date:'2026-10-23', close:22}];
+  const original = structuredClone(history);
+  const result = buildTreasuryForecast(input({history,asOf:'2026-10-24'}));
+  assert.equal(result.asOf,'2026-10-24');
+  near(result.path[0].price,24);
+  assert.deepEqual(history,original);
+});
+
+test('ambiguous duplicate sessions and malformed calendar fields are rejected at the boundary', () => {
+  assert.throws(() => buildTreasuryForecast(input({history:[{date:'2026-10-23',close:22},{date:'2026-10-23',close:23}]})),RangeError);
+  for (const bad of ['2026-10-23x','2026-10-32',null,20261023]) {
+    assert.throws(() => buildTreasuryForecast(input({coinAnchor:{date:bad,price:2000}})),/date/i);
+    assert.throws(() => buildTreasuryForecast(input({snapshot:snapshot({publishedAt:bad})})),/date/i);
+  }
+  assert.throws(() => buildTreasuryForecast(input({history:[{date:'2026-10-23garbage',close:22}]})),/date/i);
+});
+
+test('asset and disclosure timing cannot be reinterpreted by the treasury model', () => {
+  assert.throws(() => buildTreasuryForecast(input({snapshot:snapshot({coin:'BTC'})})),/coin|asset/i);
+  assert.throws(() => buildTreasuryForecast(input({snapshot:snapshot({publishedAt:'2026-05-30'})})),/publication|date/i);
+});
+
+test('finite operands that overflow financial arithmetic fail without returning nonfinite money', () => {
+  assert.throws(() => treasuryResidual(state({coinUnits:1e308}),1e308),RangeError);
+  assert.throws(() => issueCommon(state(),{newShares:1e308,offerPrice:1e308,coinPrice:100}),RangeError);
+  assert.throws(() => issueCommon(state(),{newShares:1,offerPrice:10,coinPrice:100,feeRate:'0.02'}),RangeError);
+  assert.throws(() => fundCashOutflow(state(),10,100,'0.005'),RangeError);
+});
+
+test('capacity-limited issuance buys only remaining units and conserves net funding', () => {
+  const initial=state();
+  const issued=issueCommon(initial,{newShares:100,offerPrice:10,coinPrice:100,feeRate:0.02,investmentFraction:0.9,maxCoinUnits:14});
+  const sharesAdded=issued.shares-initial.shares;
+  near(issued.coinUnits,14);
+  near(sharesAdded,400/(10*0.98*0.9));
+  near(issued.cashUsd,400/9);
+  near((issued.coinUnits-initial.coinUnits)*100+issued.cashUsd-initial.cashUsd,sharesAdded*10*0.98);
+  assert.ok(sharesAdded<100);
+  const full=issueCommon(issued,{newShares:100,offerPrice:10,coinPrice:100,feeRate:0.02,investmentFraction:0.9,maxCoinUnits:14});
+  assert.deepEqual(full,issued,'a full treasury must not dilute shareholders to fund nonexistent purchases');
+});
+
+test('long-horizon default paths remain within the stated supply or strategy limit', () => {
+  for(const symbol of ['MSTR','BMNR']){
+    const result=buildTreasuryForecast({symbol,history:[{date:'2026-10-23',close:symbol==='MSTR'?146.01:22.40}],scenario:'bull',endYear:2050});
+    const cap=symbol==='MSTR'?21_000_000:6_105_000;
+    assert.equal(result.assumptions.holdingPolicy.maxCoinUnits,cap);
+    assert.ok(result.diagnostics.capacityReachedAt);
+    for(const point of result.path)assert.ok(point.components.coinUnits<=cap,`${symbol} exceeds capacity on ${point.date}`);
+  }
+});
+
+test('staking rewards above the strategy cap are realized as cash after explicit sale costs', () => {
+  const initial=snapshot({coinUnits:6_105_000,cashUsd:1_000_000_000_000});
+  const result=buildTreasuryForecast(input({snapshot:initial,scenario:'base',endYear:2035}));
+  const last=result.path.at(-1),c=last.components;
+  const years=(Date.parse(last.date)-Date.parse(result.asOf))/86400000/365.25;
+  assert.ok(c.rewardsSold>0);
+  near(c.coinUnits,6_105_000);
+  near(c.capitalRaised,0);
+  near(c.rewardSaleProceeds,c.rewardsSold*2000*0.995);
+  near(c.cashUsd,initial.cashUsd+c.rewardSaleProceeds-50_000_000*years);
+  near(c.coinsSold,c.rewardsSold);
+});
+
+test('an already impossible holding balance is rejected instead of normalized to a plausible share price', () => {
+  assert.throws(()=>buildTreasuryForecast(input({snapshot:snapshot({coinUnits:6_105_001})})),/capacity/i);
 });

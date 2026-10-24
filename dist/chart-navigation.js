@@ -1,4 +1,4 @@
-import { utcDay, dateFromDay } from './cycle-engine.js?v=1.11.0';
+import { utcDay, dateFromDay } from './cycle-engine.js?v=1.19.0';
 import { normalizePriceDomain, scalePriceDomain, panPriceDomain } from './price-axis.js?v=1.14.0-mobile.1';
 
 const MIN_DAYS = 30;

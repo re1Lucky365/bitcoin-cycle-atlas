@@ -1,4 +1,4 @@
-import { utcDay } from './cycle-engine.js?v=1.11.0';
+import { utcDay } from './cycle-engine.js?v=1.19.0';
 import { normalizePriceDomain } from './price-axis.js?v=1.14.0-mobile.1';
 
 /** All coordinates use original prices; factor affects only the choice of ticks. */

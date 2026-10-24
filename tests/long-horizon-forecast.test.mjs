@@ -107,6 +107,14 @@ test('fixed observation cutoff excludes appended or altered future prices and pr
   assert.equal(previousEnd, base.displayEnd);
 });
 
+test('invalid date labels and sparse rows cannot disappear through the asOf filter', () => {
+  const sparse = [...data.prices];
+  sparse.length++;
+  for (const input of [[...data.prices, ['not-a-date', 1]], [...data.prices, { price: 1 }], sparse]) {
+    assert.throws(() => buildLongHorizonForecast(input, { ...fast, asOf: '2026-10-20' }), TypeError);
+  }
+});
+
 test('seeded outputs are reproducible without mutating history and changed seeds change the representative path', () => {
   const before = JSON.stringify(data);
   assert.deepEqual(buildLongHorizonForecast(data, fast), base);

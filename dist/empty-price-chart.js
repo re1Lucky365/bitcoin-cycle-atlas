@@ -1,9 +1,9 @@
-import { createPriceScale } from './chart-math.js?v=1.14.0-mobile.1';
+import { createPriceScale } from './chart-math.js?v=1.19.0';
 import { normalizePriceDomain, priceAxisMarkup, timeAxisMarkup, createPriceAxisLayout, createPriceAxisFormatter } from './price-axis.js?v=1.14.0-mobile.1';
 import { createPriceDisplay } from './price-display.js?v=1.13.0-research.1';
 import { clearChartHover } from './chart-hover.js?v=1.12.1-cursor-hud.1';
 import { researchAnnotationsMarkup } from './research-annotations.js?v=1.13.0-research.1';
-import { utcDay } from './cycle-engine.js?v=1.11.0';
+import { utcDay } from './cycle-engine.js?v=1.19.0';
 
 const previousAxes = new WeakMap();
 const esc=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));

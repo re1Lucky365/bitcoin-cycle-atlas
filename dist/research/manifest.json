@@ -60,6 +60,20 @@
       "bytes": 2247
     },
     {
+      "id": "eth-source-2be2a692f09f",
+      "path": "dist/research/eth-source-2be2a692f09f.md",
+      "sourceUrl": "https://eips.ethereum.org/EIPS/eip-1559",
+      "sha256": "0caefa45cf970bf315ada6bbbb15d331d3aa3f534bdfac1459ee80a49071b4ec",
+      "bytes": 3392
+    },
+    {
+      "id": "eth-merge-eip-3675",
+      "path": "dist/research/eth-merge-eip-3675.md",
+      "sourceUrl": "https://eips.ethereum.org/EIPS/eip-3675",
+      "sha256": "0c06c22dfceb47a3cb427dd3d240cb06327fb5c571d18c2260ced5b9e2607d8e",
+      "bytes": 3434
+    },
+    {
       "id": "mstr-10q-2026q2",
       "path": "dist/research/mstr-10q-2026q2.md",
       "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1050446/000105044626000044/mstr-20260630.htm",
@@ -312,6 +326,13 @@
       "bytes": 1966
     },
     {
+      "id": "mstr-bitcoin-supply-limit",
+      "path": "dist/research/mstr-bitcoin-supply-limit.md",
+      "sourceUrl": "https://bitcoin.org/en/faq#how-are-bitcoins-created",
+      "sha256": "2f9a1822fcd542095af79fe1731b1fc5a501b79b1ea13e86ace2a60676034dc8",
+      "bytes": 2110
+    },
+    {
       "id": "bmnr-staking-protocol",
       "path": "dist/research/bmnr-staking-protocol.md",
       "sourceUrl": "https://ethereum.org/developers/docs/consensus-mechanisms/pos/rewards-and-penalties/",
@@ -371,8 +392,8 @@
       "id": "bmnr-october-message-2026",
       "path": "dist/research/bmnr-october-message-2026.md",
       "sourceUrl": "https://www.bitminetech.io/chairmans-message",
-      "sha256": "04f4ff92ff15eabf977d1736cece3030cfb6a2657695d46222a9786ae88a98cb",
-      "bytes": 2653
+      "sha256": "ed737a887142c7ce4b8c50af40fee36134a4d34dadae726234f41326e0cfdf6a",
+      "bytes": 3637
     },
     {
       "id": "bmnr-october-deck-2026",
@@ -1976,13 +1997,6 @@
       "sourceUrl": "https://blog.ethereum.org/2021/07/15/london-mainnet-announcement",
       "sha256": "8b49881d0e63069b2b44a429e46a4725e3640b6d4432a960011db77a2614d5f7",
       "bytes": 1823
-    },
-    {
-      "id": "eth-source-2be2a692f09f",
-      "path": "dist/research/eth-source-2be2a692f09f.md",
-      "sourceUrl": "https://eips.ethereum.org/EIPS/eip-1559",
-      "sha256": "5997de6d0138648f5ab634ccfca1c1281aa92303bcb7536548a9e620375b81e8",
-      "bytes": 1872
     },
     {
       "id": "eth-source-d0ad40887117",

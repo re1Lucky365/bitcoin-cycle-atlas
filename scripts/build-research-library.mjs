@@ -7,6 +7,8 @@ import {RESEARCH_EVIDENCE,RESEARCH_SUPPLEMENTS} from '../dist/evidence-index.js'
 import {ETHEREUM_EVENTS} from '../dist/ethereum-events.js';
 import {TREASURY_SOURCES} from '../dist/treasury-research.js';
 import {MODEL_RESEARCH} from '../dist/research-methods.js';
+import {PERMITTED_SOURCE_RESEARCH} from '../dist/research-source-records.js';
+import {RESEARCH_SOURCES} from '../dist/research-source-data.js';
 import {serializeResearchArticleMarkdown} from '../dist/research-format.js';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),check=process.argv.includes('--check');
 const records=[],byUrl=new Map(),aliases={};
@@ -20,10 +22,12 @@ function add(input){
 }
 // Own methods and primary filings precede persuasive narratives.
 for(const record of MODEL_RESEARCH)add(record);
+for(const record of PERMITTED_SOURCE_RESEARCH)add(record);
 for(const record of [...TREASURY_SOURCES].sort((a,b)=>['filing','data','method','leadership','risk'].indexOf(a.category)-['filing','data','method','leadership','risk'].indexOf(b.category)))add(record);
 for(const row of RESEARCH_EVIDENCE)add({id:row.id,title:row.title,originalTitle:row.originalTitle,author:row.publisher||'저자 미확인',publisher:row.publisher,publishedAt:row.date,url:row.url,symbol:'BTCUSD',category:row.type?.includes('데이터')?'data':row.scope==='long-horizon'?'leadership':'method',access:row.access,summary:row.reason,claims:[],limitations:[row.limitation],sourceAnchor:row.originalTitle,legacy:{rank:row.rank,scope:row.scope,family:row.family,tier:row.tier,access:row.access},relatedLinks:RESEARCH_SUPPLEMENTS.filter(item=>item.parentId===row.id).map(item=>({title:item.title,url:item.url})),reviewedAt:'2026-10-22',reviewNote:'기존 BTC 리서치의 검토 기록을 보존했습니다. 모든 원문을 이번 변경에서 다시 열람했다는 뜻은 아닙니다.'});
 for(const event of ETHEREUM_EVENTS)for(const source of event.sources)add({id:`eth-source-${createHash('sha256').update(source.url).digest('hex').slice(0,12)}`,title:source.title,originalTitle:source.title,author:source.publisher||'저자 미확인',publisher:source.publisher||'발행자 미확인',publishedAt:source.publishedAt,url:source.url,symbol:'ETHUSD',category:event.category==='protocol'?'method':event.category==='market'?'data':'risk',access:source.type==='primary'?'prior-primary-review':'prior-secondary-review',summary:source.claim||event.description,limitations:event.limitations?.slice(0,2)||[],reviewedAt:source.accessedAt||'2026-10-24',reviewNote:'기존 이더리움 역사 사건 카탈로그의 출처 기록을 보존했습니다. 이 자료의 모든 문단·미디어를 새로 복제하거나 검토한 것은 아닙니다.'});
 for(const record of records){if(['long-wisdomtree-2030','long-wisdomtree-2050'].includes(record.id))record.symbols=[...new Set([...record.symbols,'MSTR'])];if(record.id.includes('saylor'))record.symbols=[...new Set([...record.symbols,'BTCUSD'])];}
+for(const record of records){const source=RESEARCH_SOURCES.find(item=>item.sourceUrl===record.url);if(source)record.sourceArchive={id:source.id,license:source.license,sha256:source.sha256,bytes:source.bytes};}
 for(const [i,record] of records.entries())record.rank=i+1;
 await mkdir(path.join(root,'dist/research'),{recursive:true});
 const manifest={version:1,reviewedAt:'2026-10-24',archiveScope:'original summaries and metadata; not complete copyrighted sources or media',articles:[]};

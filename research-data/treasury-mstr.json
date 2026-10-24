@@ -889,6 +889,38 @@
       },
       "retrievedAt": "2026-10-24",
       "archiveMode": "original-summary-and-metadata"
+    },
+    {
+      "id": "mstr-bitcoin-supply-limit",
+      "title": "발행으로 총 BTC 공급을 초과할 수는 없다",
+      "originalTitle": "Bitcoin FAQ — How are bitcoins created?",
+      "author": "Bitcoin.org contributors",
+      "publisher": "Bitcoin.org",
+      "publishedAt": null,
+      "url": "https://bitcoin.org/en/faq#how-are-bitcoins-created",
+      "category": "method",
+      "access": "verified-primary",
+      "summary": "Bitcoin의 최종 발행량 상한은 2,100만 BTC다. 금융조달을 계속 재투자하는 MSTR 모형도 이 상한을 넘어 보유량을 만들 수 없다. 이 상한은 현재 거래 가능한 수량을 뜻하지 않는다.",
+      "claims": [
+        {
+          "claim": "MSTR 장기 시나리오의 보유 BTC는 프로토콜 최종 공급 2,100만 개를 넘을 수 없다.",
+          "assessment": "복구 전 2050 확대 사례가 약 3,225만 BTC를 산출한 반례를 확인했다. 상한까지 부분 발행하고 이후 매입 목적 발행을 중단하도록 수정했다.",
+          "status": "fact",
+          "crossCheckIds": []
+        }
+      ],
+      "limitations": [
+        "최종 공급은 현재 발행량보다 크다. 이 느슨한 상한만으로 현재 유통량·호가·매도 의사·시장충격·조달 가능성을 검증하지 못한다.",
+        "MSTR이 총 공급의 전부를 실제로 매입할 수 있다는 전망으로 읽지 않는다."
+      ],
+      "media": [],
+      "footer": {
+        "copyright": "원문의 권리는 발행자에게 있다. 이 자료는 Atlas가 작성한 요약과 수학적 검토이며 원문 전체 복제본이 아니다.",
+        "availability": "2026-10-24 직접 확인. 발행자의 이후 변경과 링크 접근은 보장하지 않는다."
+      },
+      "reviewedAt": "2026-10-24",
+      "archivedContentKind": "original-summary",
+      "sourceAnchor": "Economy / How are bitcoins created?; What if someone bought up all the existing bitcoins?"
     }
   ],
   "events": [

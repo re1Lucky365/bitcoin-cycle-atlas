@@ -1,5 +1,5 @@
-import { HALVINGS, utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.11.0';
-import { shiftCalendarMonths } from './cycle-timing.js?v=1.11.0';
+import { HALVINGS, utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.19.0';
+import { shiftCalendarMonths } from './cycle-timing.js?v=1.19.0';
 
 /**
  * A conditional calendar-and-shape model, not a daily-return forecast.

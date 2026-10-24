@@ -44,6 +44,14 @@ test('future appended or altered observations cannot alter a fixed-asOf result',
   assert.deepEqual(buildDetailedForecast(future, { ...fast, asOf: '2026-10-20', referenceDate: '2026-10-22' }), base);
 });
 
+test('invalid date labels and sparse rows cannot disappear through the asOf filter', () => {
+  const sparse = [...data.prices];
+  sparse.length++;
+  for (const input of [[...data.prices, ['not-a-date', 1]], [...data.prices, { price: 1 }], sparse]) {
+    assert.throws(() => buildDetailedForecast(input, { ...fast, asOf: '2026-10-20' }), TypeError);
+  }
+});
+
 test('every replay block is wholly past and keeps its source ordering and provenance', () => {
   assert.equal(base.training.stateLabelsAreCausal, true);
   assert.ok(base.training.eligibleBlockStarts > 5000);

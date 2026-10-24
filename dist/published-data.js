@@ -1,4 +1,4 @@
-import { validateFullSeries, COMMUNITY_ENDPOINT } from './data-source.js?v=1.11.0';
+import { validateFullSeries, COMMUNITY_ENDPOINT } from './data-source.js?v=1.19.0';
 
 export const PUBLISHED_REFRESH_INTERVAL_MS = 6 * 60 * 60 * 1000;
 

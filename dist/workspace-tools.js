@@ -1,6 +1,6 @@
 import { CHART_INTERVALS } from './ohlc-data.js?v=1.11.0';
 import { mountDialogViewport } from './dialog-viewport.js?v=1.14.0-mobile.1';
-import { readWorkspaces, saveWorkspace, writeWorkspaces, cleanWorkspaceQuery, workspaceQuery, readWorkspaceViewport, readWorkspacePriceDomain, searchWorkspaceCommands } from './workspace-state.js?v=1.14.0-mobile.1';
+import { readWorkspaces, saveWorkspace, writeWorkspaces, cleanWorkspaceQuery, workspaceQuery, readWorkspaceViewport, readWorkspacePriceDomain, searchWorkspaceCommands } from './workspace-state.js?v=1.19.0';
 
 /** All actions delegate to the live chart, so the palette is another entrance to the same state. */
 export function mountWorkspaceTools({trigger, plot, openReader, closeReader}) {

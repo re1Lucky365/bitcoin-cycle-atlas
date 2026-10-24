@@ -1,4 +1,4 @@
-import {RESEARCH_ARTICLES, RESEARCH_CATEGORIES, openResearchArticle} from './research-reader.js?v=1.18.0';
+import {RESEARCH_ARTICLES, RESEARCH_CATEGORIES, openResearchArticle} from './research-reader.js?v=1.19.0';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const normalize=v=>String(v??'').normalize('NFKC').toLocaleLowerCase();
 const rows=RESEARCH_ARTICLES;

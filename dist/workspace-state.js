@@ -1,4 +1,4 @@
-import { utcDay } from './cycle-engine.js?v=1.11.0';
+import { utcDay } from './cycle-engine.js?v=1.19.0';
 import { CHART_INTERVALS, isIntradayInterval } from './ohlc-data.js?v=1.11.0';
 import { INTRADAY_MAX_VISIBLE_BARS } from './intraday-history.js?v=1.11.0';
 import { normalizePriceDomain } from './price-axis.js?v=1.14.0-mobile.1';

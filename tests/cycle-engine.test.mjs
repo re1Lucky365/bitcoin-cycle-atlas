@@ -33,6 +33,14 @@ check('Invalid prices, duplicate dates, and reversed dates are rejected', () => 
   assert.throws(() => dateFromDay(1.5));
 });
 
+check('UTC day conversion stays inside the four-digit calendar-label domain', () => {
+  for (const date of ['0000-01-01', '0099-12-31', '0100-01-01', '9999-12-31']) {
+    assert.equal(dateFromDay(utcDay(date)), date);
+  }
+  assert.throws(() => dateFromDay(utcDay('0000-01-01') - 1), RangeError);
+  assert.throws(() => dateFromDay(utcDay('9999-12-31') + 1), RangeError);
+});
+
 check('Extreme but individually finite input prices cannot silently overflow the chart', () => {
   assert.throws(() => buildComparison({ prices: [['2012-11-28', Number.MIN_VALUE], ['2012-11-29', Number.MAX_VALUE]] }), /overflow/);
   assert.throws(() => buildComparison({ prices: [['2012-11-28', 1], ['2012-11-29', Number.MAX_VALUE]] }), /overflow/);

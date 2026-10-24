@@ -1,4 +1,4 @@
-import { utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.11.0';
+import { utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.19.0';
 
 const $ = (id) => document.getElementById(id);
 const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));

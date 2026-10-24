@@ -1,14 +1,14 @@
-import {createPriceScale,barPriceChange} from './chart-math.js?v=1.14.0-mobile.1';
+import {createPriceScale,barPriceChange} from './chart-math.js?v=1.19.0';
 import { priceAxisMarkup, timeAxisMarkup, createPriceAxisLayout, createPriceAxisFormatter } from './price-axis.js?v=1.14.0-mobile.1';
 import { createPriceDisplay, formatDisplayPrice } from './price-display.js?v=1.13.0-research.1';
-import { retainPriceViewport, renderEmptyPriceViewport } from './empty-price-chart.js?v=1.14.0-mobile.1';
+import { retainPriceViewport, renderEmptyPriceViewport } from './empty-price-chart.js?v=1.19.0';
 import { researchAnnotationsMarkup } from './research-annotations.js?v=1.13.0-research.1';
 import {chartInterval} from './ohlc-data.js?v=1.11.0';
 import {chartPaneLayout,volumePaneMarkup,historicalMarkersMarkup} from './chart-overlays.js?v=1.16.0-history.1';
 import { resolveMagnetPoint, advanceMeasurement, measurePriceAnchors, measurementOverlayMarkup, createMeasurementOverlay } from './chart-magnet.js?v=1.11.0';
 import { clearChartHover, clearChartHoverPointer, getChartHoverPointer, rememberChartHoverPointer, coalescedChartHover, paintPriceCursor } from './chart-hover.js?v=1.12.1-cursor-hud.1';
 import { dateWindow, pixelExtrema } from './chart-window.js?v=1.11.0';
-import { equityForecastRows, equityForecastMarkup } from './equity-forecast-chart.js?v=1.18.0';
+import { equityForecastAnchor, equityForecastRows, equityForecastWindowRows, equityForecastLogGaps, equityForecastMarkup } from './equity-forecast-chart.js?v=1.19.0';
 
 const numberFormats=new Map();
 const number=(value,digits=2)=>{if(!numberFormats.has(digits))numberFormats.set(digits,new Intl.NumberFormat('en-US',{maximumFractionDigits:digits}));return numberFormats.get(digits).format(value);};
@@ -33,17 +33,19 @@ export function drawIntradayChart({svg,series,chartType='candles',scale='log',pr
   const {left:L,right:R,top:T,axisY,bottom,priceBottom:B,volumeTop,volumeBottom}=layout;
   const minTime=range?.start??allRows[0].time-interval.seconds,maxTime=range?.end??allRows.at(-1).time+interval.seconds;
   let rows=dateWindow(allRows,minTime,maxTime,row=>row.time);
-  const futureRows=equityForecastRows(forecast,allRows.at(-1)?.time??Infinity),visibleFuture=dateWindow(futureRows,minTime,maxTime,row=>row.time);
+  const forecastAnchor=equityForecastAnchor(forecast,allRows.at(-1));
+  const futureRows=equityForecastRows(forecast,forecastAnchor?.time??Infinity),visibleFuture=equityForecastWindowRows(futureRows,forecastAnchor,minTime,maxTime,scale);
   const scaleRows=[...rows,...visibleFuture];
+  const forecastLogGaps=scale==='log'?equityForecastLogGaps(futureRows,forecastAnchor,minTime,maxTime):[];
   const x=time=>L+(time-minTime)/Math.max(1,maxTime-minTime)*(W-L-R);
   svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
   Object.assign(svg.dataset,{plotLeft:String(L),plotRight:String(W-R),plotTop:String(T),plotBottom:String(bottom),priceBottom:String(B),scale,chartType,interval:series.interval,product,historyLabelCount:'0',historyEventCount:'0',historyHiddenLabelCount:'0',historyLabelMode:'off'});
   svg.parentElement?.style.setProperty('--plot-bottom-gap',`${H-bottom+6}px`);svg.parentElement?.style.setProperty('--plot-right-gap',`${R+7}px`);
-  Object.assign(svg.dataset,{visiblePointCount:String(rows.length),observedCandleCount:String(rows.length),candleRendering:'none'});
-  if(!scaleRows.length)return renderEmptyPriceViewport({svg,layout,axisText,width:W,height:H,start:minTime,end:maxTime,seconds:true,scale,priceDomain,unit,denominator:allRows.at(-1)?.close,denominatorDate:allRows.at(-1)?.date,fallbackPrice:allRows.at(-1)?.close,invertScale,tool,message:historyStatus==='loading'?'이 구간의 과거 봉을 불러오고 있습니다.':historyStatus==='error'?'과거 자료 조회에 실패했습니다.':'이 구간에는 완료된 거래 봉이 없습니다.',onHover:detail=>onHover({...detail,product,volumeUnit:baseAsset}),source:series.source,frequency:series.interval,researchAnnotations,activeResearchAnnotationId:selectedAnnotation,onResearchAnnotation:activateAnnotation,scenarioId});
+  Object.assign(svg.dataset,{visiblePointCount:String(rows.length),observedCandleCount:String(rows.length),candleRendering:'none',forecastPointCount:'0',forecastInterpolationCount:'0',forecastEvidenceCount:'0',forecastLogGapCount:String(forecastLogGaps.length)});
+  if(!scaleRows.length)return renderEmptyPriceViewport({svg,layout,axisText,width:W,height:H,start:minTime,end:maxTime,seconds:true,scale,priceDomain,unit,denominator:allRows.at(-1)?.close,denominatorDate:allRows.at(-1)?.date,fallbackPrice:allRows.at(-1)?.close,invertScale,tool,message:forecastLogGaps.length?'0 경계 · 로그 연결 불가 · 선형축에서 확인':historyStatus==='loading'?'이 구간의 과거 봉을 불러오고 있습니다.':historyStatus==='error'?'과거 자료 조회에 실패했습니다.':'이 구간에는 완료된 거래 봉이 없습니다.',onHover:detail=>onHover({...detail,product,volumeUnit:baseAsset}),source:series.source,frequency:series.interval,researchAnnotations,activeResearchAnnotationId:selectedAnnotation,onResearchAnnotation:activateAnnotation,scenarioId});
   const display=createPriceDisplay({unit,rows:scaleRows,denominator:allRows.at(-1).close,denominatorDate:allRows.at(-1).date,scale}),{factor,offset,effectiveScale}=display;
   const observedPrices=rows.flatMap(row=>chartType==='candles'?[row.low,row.high]:[row.close]);
-  const scenarioPrices=visibleFuture.flatMap(row=>showForecastBand?[row.low,row.price,row.high]:[row.price]).filter(value=>effectiveScale!=='log'||value>0);
+  const scenarioPrices=visibleFuture.flatMap(row=>showForecastBand?[row.low,row.price,row.high]:[row.price]).filter(value=>Number.isFinite(value)&&(effectiveScale!=='log'||value>0));
   const valuesForAxis=[...observedPrices,...scenarioPrices];if(!valuesForAxis.some(value=>value>0))valuesForAxis.push(allRows.at(-1).close);
   const zeroDomain=effectiveScale==='linear'&&visibleFuture.some(row=>row.low===0)?{min:0,max:Math.max(...valuesForAxis)*1.12}:null;
   const axis=createPriceScale(valuesForAxis,{scale:effectiveScale,top:T,bottom:B,tickCount:Math.max(2,Math.min(7,Math.floor((B-T)/45))),factor,offset,inverted:invertScale,paddingRatio:.12,domain:priceDomain||zeroDomain});
@@ -80,8 +82,8 @@ export function drawIntradayChart({svg,series,chartType='candles',scale='log',pr
     s+=`<path class="market-close-line" d="${path}" fill="none" stroke="#dce7f2" stroke-width="1.7"/>`;
   }
   s+='</g>';
-  const projection=equityForecastMarkup({forecast,points:futureRows,lastObserved:allRows.at(-1),x,y,left:L,right:W-R,top:T,bottom:B,clipId:clip,minTime,maxTime,showBand:showForecastBand,scale:effectiveScale});
-  s+=projection.markup;svg.dataset.forecastPointCount=String(visibleFuture.length);svg.dataset.forecastEvidenceCount=String(projection.markerIds.size);
+  const projection=equityForecastMarkup({forecast,points:futureRows,lastObserved:forecastAnchor,visibleRows:visibleFuture,x,y,left:L,right:W-R,top:T,bottom:B,clipId:clip,minTime,maxTime,showBand:showForecastBand,scale:effectiveScale});
+  s+=projection.markup;svg.dataset.forecastPointCount=String(visibleFuture.filter(row=>!row.interpolated).length);svg.dataset.forecastInterpolationCount=String(visibleFuture.filter(row=>row.interpolated).length);svg.dataset.forecastEvidenceCount=String(projection.markerIds.size);
   if(showVolume)s+=volumePaneMarkup({bars:rows,x:bar=>x(bar.time),left:L,right:W-R,top:volumeTop,bottom:volumeBottom,titleY:layout.volumeTitleY,titleFontSize:layout.volumeTitleFontSize,separatorY:layout.volumeSeparatorY,barWidth:width,source:series.source,clipId:`${svg.id}-volume-clip`}).markup;
   const last=allRows.at(-1);
   if(last.time<=maxTime&&last.time>=minTime&&last.close>=axis.min&&last.close<=axis.max){
@@ -137,7 +139,7 @@ export function drawIntradayChart({svg,series,chartType='candles',scale='log',pr
     if(!Number.isFinite(pointerY)&&((anchor?.price??row.close)<axis.min||(anchor?.price??row.close)>axis.max))for(const node of [horizontal,dot,priceTag])node.setAttribute('visibility','hidden');
     dateTag.querySelector('rect').setAttribute('x',tx);dateTag.querySelector('rect').setAttribute('y',axisY-12);dateTag.querySelector('text').setAttribute('x',tx+62);dateTag.querySelector('text').setAttribute('y',axisY+1);dateTag.querySelector('text').textContent=timestamp(row.time);if(notify)onHover({...hover(index),hovered});
   }
-  function inspection(index){const row=rows[index];if(row.kind==='forecast')return {label:`${row.date.slice(0,10)} · 조건부 미래 가정`,date:row.date,product,kind:'forecast',fields:[{label:'시나리오 가격',value:money(row.price)},{label:'가정 범위',value:`${money(row.low)} – ${money(row.high)}`}],note:'가격 목표·신뢰구간이 아닌 명시한 입력의 조건부 계산입니다.',sourceIds:row.sourceIds||[]};const snapshot=row.snapshot??series.snapshot,retrievedAt=row.retrievedAt||series.retrievedAt;return {label:`${equity?row.date.slice(0,10)+' 뉴욕 세션':timestamp(row.time)+' UTC'} · ${interval.label} 완료 봉`,date:row.date,product,kind:'observed',fields:[...(unit==='usd'?[]:[{label:display.label,value:price(row.close)},{label:'표시 기준 · UTC',value:`${display.baseDate} · ${money(display.basePrice)}`}]),{label:'시가 O',value:money(row.open)},{label:'고가 H',value:money(row.high)},{label:'저가 L',value:money(row.low)},{label:'종가 C',value:money(row.close)},{label:`거래량 · ${baseAsset}`,value:number(row.volume,6)},{label:'출처',value:`${series.source} · ${product}`}],note:`${snapshot?'저장 자료':'조회 자료'} · 수집 ${retrievedAt.replace('T',' ').slice(0,19)} UTC. ${equity?'뉴욕 거래 세션일 · 주식분할 조정 OHLC · 주 단위 거래량입니다.':'봉 시작 시각 기준이며 이 거래소 현물쌍의 물량입니다.'} ${series.gapCount?`${series.gapCount}개 빈 구간은 채우지 않았습니다.`:'완료된 실제 거래 봉만 표시합니다.'}`};}
+  function inspection(index){const row=rows[index];if(row.kind==='forecast')return {label:`${row.date.slice(0,10)} · 조건부 미래 가정`,date:row.date,product,kind:'forecast',fields:[{label:'시나리오 가격',value:money(row.price)},{label:'가정 범위',value:row.interpolation?.unavailableBounds?.length?'로그축 0 경계 · 선형축에서 확인':`${money(row.low)} – ${money(row.high)}`}],note:row.interpolated?'계산일 사이를 표시 축에 맞춰 보간한 값입니다. 실제 체결·OHLC·새 재무 계산이 아닙니다.':'가격 목표·신뢰구간이 아닌 명시한 입력의 조건부 계산입니다.',sourceIds:row.sourceIds||[]};const snapshot=row.snapshot??series.snapshot,retrievedAt=row.retrievedAt||series.retrievedAt;return {label:`${equity?row.date.slice(0,10)+' 뉴욕 세션':timestamp(row.time)+' UTC'} · ${interval.label} 완료 봉`,date:row.date,product,kind:'observed',fields:[...(unit==='usd'?[]:[{label:display.label,value:price(row.close)},{label:'표시 기준 · UTC',value:`${display.baseDate} · ${money(display.basePrice)}`}]),{label:'시가 O',value:money(row.open)},{label:'고가 H',value:money(row.high)},{label:'저가 L',value:money(row.low)},{label:'종가 C',value:money(row.close)},{label:`거래량 · ${baseAsset}`,value:number(row.volume,6)},{label:'출처',value:`${series.source} · ${product}`}],note:`${snapshot?'저장 자료':'조회 자료'} · 수집 ${retrievedAt.replace('T',' ').slice(0,19)} UTC. ${equity?'뉴욕 거래 세션일 · 주식분할 조정 OHLC · 주 단위 거래량입니다.':'봉 시작 시각 기준이며 이 거래소 현물쌍의 물량입니다.'} ${series.gapCount?`${series.gapCount}개 빈 구간은 채우지 않았습니다.`:'완료된 실제 거래 봉만 표시합니다.'}`};}
   const measurementOverlay=createMeasurementOverlay(svg,{x:value=>x(Date.parse(value)/1000),y,left:L,right:W-R,top:T,bottom:B,small,formatPrice:money,formatDate:value=>timestamp(Date.parse(value)/1000).slice(5),formatChange:value=>`${value>0?'+':value<0?'−':''}${number(Math.abs(value),2)}%`,formatDuration:result=>{const minutes=result.deltaSeconds/60;return `${minutes>0?'+':''}${number(minutes,1)}분 · ${number(result.deltaSeconds/interval.seconds,1)}봉 간격`;}});
   const lookupMeasurement=value=>{const time=Date.parse(value)/1000,row=allRows[nearestIn(allRows,time)];return row.time===time?row:{date:value,price:NaN};};
   function renderMeasurement(preview=null){measurementOverlay.paint(measurePriceAnchors(measurementState,{lookup:lookupMeasurement,preview}),Boolean(measurementState&&!measurementState.endDate));}

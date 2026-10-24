@@ -3,8 +3,8 @@
  * A threshold based on an annual/eventual observed maximum is not knowable
  * at its first historical crossing. Persistence does not remove that bias.
  */
-import { utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.11.0';
-import { analyzeCycleTiming, shiftCalendarMonths } from './cycle-timing.js?v=1.11.0';
+import { utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.19.0';
+import { analyzeCycleTiming, shiftCalendarMonths } from './cycle-timing.js?v=1.19.0';
 
 const MONTH_DAYS = 365.2425 / 12;
 const BASELINES = Object.freeze({ previous: [2020], recent2: [2016, 2020], all3: [2012, 2016, 2020] });

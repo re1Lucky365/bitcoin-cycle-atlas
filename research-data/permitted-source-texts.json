@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "retrievedAt": "2026-10-24T10:47:56Z",
+  "selectionNote": "Selected and verified during this recovery. The identity of the two texts in the failed prior session could not be recovered.",
+  "scope": "Complete UTF-8 Markdown source files at pinned upstream revisions; external pages, linked documents, images, videos and discussions are not included.",
+  "license": {
+    "id": "CC0-1.0",
+    "name": "CC0 1.0 Universal",
+    "url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "path": "dist/research-sources/LICENSE-CC0.md",
+    "gitBlobSha": "0e259d42c996742e9e3cba14c677129b2c1b6311",
+    "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+    "bytes": 7048
+  },
+  "sources": [
+    {
+      "id": "eip-1559",
+      "title": "EIP-1559: Fee market change for ETH 1.0 chain",
+      "sourceUrl": "https://eips.ethereum.org/EIPS/eip-1559",
+      "sourceRevision": "ba6c342c23164072adb500c3136e3ae6eabff306",
+      "sourcePath": "EIPS/eip-1559.md",
+      "versionedUrl": "https://github.com/ethereum/EIPs/blob/ba6c342c23164072adb500c3136e3ae6eabff306/EIPS/eip-1559.md",
+      "rawUrl": "https://raw.githubusercontent.com/ethereum/EIPs/ba6c342c23164072adb500c3136e3ae6eabff306/EIPS/eip-1559.md",
+      "licenseUrl": "https://github.com/ethereum/EIPs/blob/ba6c342c23164072adb500c3136e3ae6eabff306/LICENSE.md",
+      "licenseAnchor": "Copyright section: Copyright and related rights waived via CC0 (../LICENSE.md).",
+      "language": "en",
+      "createdAt": "2019-04-13",
+      "sourceLastChangedAt": "2023-10-04T14:19:21Z",
+      "path": "dist/research-sources/eip-1559.md",
+      "gitBlobSha": "26a5b739e1661fc7599d4d3a4c35e004a72886e1",
+      "sha256": "4460ad966a22d8501e12d75165c2c784c61748d8128229f115ebac1bfccac59f",
+      "bytes": 21053
+    },
+    {
+      "id": "eip-3675",
+      "title": "EIP-3675: Upgrade consensus to Proof-of-Stake",
+      "sourceUrl": "https://eips.ethereum.org/EIPS/eip-3675",
+      "sourceRevision": "49cc275d76512ccf8554148a02d9077f413d80b2",
+      "sourcePath": "EIPS/eip-3675.md",
+      "versionedUrl": "https://github.com/ethereum/EIPs/blob/49cc275d76512ccf8554148a02d9077f413d80b2/EIPS/eip-3675.md",
+      "rawUrl": "https://raw.githubusercontent.com/ethereum/EIPs/49cc275d76512ccf8554148a02d9077f413d80b2/EIPS/eip-3675.md",
+      "licenseUrl": "https://github.com/ethereum/EIPs/blob/49cc275d76512ccf8554148a02d9077f413d80b2/LICENSE.md",
+      "licenseAnchor": "Copyright section: Copyright and related rights waived via CC0 (../LICENSE.md).",
+      "language": "en",
+      "createdAt": "2021-07-22",
+      "sourceLastChangedAt": "2022-09-20T15:09:25Z",
+      "path": "dist/research-sources/eip-3675.md",
+      "gitBlobSha": "efa51f543490bd6643fa943fb963d762312bda2a",
+      "sha256": "7345c394b8726383a667b3e5114fa0916410c95de3c1a031663a8e07cbe40e03",
+      "bytes": 22848
+    }
+  ]
+}

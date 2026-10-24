@@ -21,6 +21,8 @@ export function serializeResearchArticleMarkdown(r,aliases={}){
   text+=`\n## 한계와 반대 조건\n\n${r.limitations.map(s=>`- ${t(s)}`).join('\n')||'- 원문 확인과 예측 적중 검증은 다릅니다.'}\n`;
   text+=`\n## 이미지·동영상 기록\n\n${r.media.length?r.media.map(m=>`- ${t(m.type)}: ${externalLink(m.title||m.url,m.url)} · 링크와 메타데이터 보존 · 파일 원본 미보관`).join('\n'):'별도 미디어 URL을 확보하지 않았습니다. 미디어가 없다는 의미는 아닙니다.'}\n`;
   if(r.relatedLinks?.length)text+=`\n## 관련 링크\n\n${r.relatedLinks.map(link=>`- ${externalLink(link.title,link.url)}`).join('\n')}\n`;
-  text+=`\n## 푸터 · 보존 범위\n\n${t(r.footer.copyright)}\n\n${t(r.footer.availability)}\n\n원문 전체: 미보관. 이미지·영상 파일: 미보관. 보존 대상: 제목·글쓴이·날짜·출처·직접 작성한 본문·판정·미디어 링크·이 보존 고지.\n`;
+  const original=r.sourceArchive&&/^eip-[1-9][0-9]*$/.test(r.sourceArchive.id)?`허용 원문은 별도 [${t(r.sourceArchive.id)}](../research-sources/${r.sourceArchive.id}.md) 파일로 보관합니다. 라이선스 ${t(r.sourceArchive.license)} · SHA-256 ${t(r.sourceArchive.sha256)}. 이 파일은 자체 요약입니다.`:t(r.footer.availability);
+  const scope=r.sourceArchive?'이 요약 파일에는 원문 전체와 이미지·영상 파일을 포함하지 않습니다.':'원문 전체: 미보관. 이미지·영상 파일: 미보관.';
+  text+=`\n## 푸터 · 보존 범위\n\n${t(r.footer.copyright)}\n\n${original}\n\n${scope} 보존 대상: 제목·글쓴이·날짜·출처·직접 작성한 본문·판정·미디어 링크·이 보존 고지.\n`;
   return text;
 }

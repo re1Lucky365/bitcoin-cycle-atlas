@@ -1,4 +1,4 @@
-import { utcDay, dateFromDay } from './cycle-engine.js?v=1.11.0';
+import { utcDay, dateFromDay } from './cycle-engine.js?v=1.19.0';
 
 /** Resolve against the current model on every redraw. A scenario replacement
  * must never retain endpoint IDs, prices, or dates from its previous path. */

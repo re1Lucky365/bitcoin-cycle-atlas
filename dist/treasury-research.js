@@ -1,4 +1,4 @@
-import { TREASURY_DATA, MARKET_ANCHORS } from './treasury-catalog.js?v=1.18.0';
+import { TREASURY_DATA, MARKET_ANCHORS } from './treasury-catalog.js?v=1.19.0';
 
 export const TREASURY_SOURCES=Object.values(TREASURY_DATA).flatMap(data=>data.sources.map(source=>({...source,symbol:data.symbol})));
 export const TREASURY_EVENTS=Object.values(TREASURY_DATA).flatMap(data=>data.events).sort((a,b)=>a.date.localeCompare(b.date)||a.id.localeCompare(b.id));

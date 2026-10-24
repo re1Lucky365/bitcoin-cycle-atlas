@@ -193,3 +193,30 @@ test('a customized analogue replay discloses actual included current-cycle outco
   assert.equal(priorOnly.currentCycleIncluded, false);
   assert.throws(() => backtestAnalogueForecast(data, { horizons: [90, 90] }), /distinct|duplicate/i);
 });
+
+test('an unavailable longer analogue horizon cannot remove an evaluable short horizon', () => {
+  const cutoffs = ['2019-03-31'];
+  const short = backtestAnalogueForecast(data, { cutoffs, horizons: [90] });
+  const mixed = backtestAnalogueForecast(data, { cutoffs, horizons: [90, 1461] });
+  assert.equal(short.summary[0].n, 1);
+  assert.deepEqual(mixed.summary[0], short.summary[0]);
+  assert.deepEqual(mixed.samples[0].results[0], short.samples[0].results[0]);
+  assert.equal(mixed.summary[1].n, 0);
+  assert.ok(mixed.excluded.some(item => item.cutoff === cutoffs[0] && item.horizonDays === 1461));
+});
+
+test('each analogue replay horizon reports only the historical references actually scored', () => {
+  const cutoffs = ['2023-03-31'];
+  const validationEnd = '2027-03-31';
+  const withOutcome = [...data.prices, [validationEnd, 50000]];
+  const single = backtestAnalogueForecast(withOutcome, { cutoffs, validationEnd, horizons: [90] });
+  const mixed = backtestAnalogueForecast(withOutcome, { cutoffs, validationEnd, horizons: [90, 1461] });
+  assert.deepEqual(mixed.summary[0], single.summary[0]);
+  assert.deepEqual(mixed.samples[0].results[0], single.samples[0].results[0]);
+  assert.equal(mixed.summary[1].n, 1);
+  const [short, long] = mixed.samples[0].results;
+  assert.deepEqual(short.referenceYears, [2012, 2016]);
+  assert.deepEqual(long.referenceYears, [2012]);
+  assert.ok(short.maxReferenceSourceDate <= cutoffs[0]);
+  assert.ok(long.maxReferenceSourceDate <= cutoffs[0]);
+});

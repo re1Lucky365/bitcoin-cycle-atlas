@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {drawIntradayChart} from '../dist/intraday-chart.js';
-import {equityForecastRows} from '../dist/equity-forecast-chart.js';
+import {equityForecastRows,equityForecastWindowRows} from '../dist/equity-forecast-chart.js';
 const time=value=>Date.parse(`${value}T00:00:00Z`)/1000;
 class SvgNode{constructor(){this.attrs=new Map();this.nodes=new Map();this.dataset={};this.textContent='';}setAttribute(k,v){this.attrs.set(k,String(v));}removeAttribute(k){this.attrs.delete(k);}getAttribute(k){return this.attrs.get(k);}querySelector(k){if(!this.nodes.has(k))this.nodes.set(k,new SvgNode());return this.nodes.get(k);}querySelectorAll(){return [];}focus(){}}
 const svgFixture=(width=1100)=>{const svg=new SvgNode();Object.assign(svg,{id:'equity-test',clientWidth:width,clientHeight:520,innerHTML:'',parentElement:{style:{setProperty(){}}}});svg.getBoundingClientRect=()=>({left:0,top:0,width,height:520});return svg;};
@@ -39,6 +39,31 @@ test('equity line connects actual Friday to Monday observations without inventin
 test('malformed scenario intervals cannot silently enter the chart',()=>{
   assert.throws(()=>equityForecastRows({path:[{date:'2027-01-01',price:100,low:110,high:130}]},time('2026-10-23')),/Invalid equity forecast/);
   assert.throws(()=>equityForecastRows({path:[...forecast.path].reverse()},time('2026-10-23')),/Invalid equity forecast/);
+  for(const date of ['2027-02-30','2027-01-01extra','not-a-date'])assert.throws(()=>equityForecastRows({path:[{date,price:100,low:90,high:110}]},time('2026-10-23')),/Invalid equity forecast/);
+});
+
+test('zooming between monthly scenario calculations preserves the future line and labelled interpolation',()=>{
+  for(const scale of ['linear','log']){
+    const svg=svgFixture(390);let hovered;
+    const controller=drawIntradayChart({svg,series,scale,chartType:'candles',showVolume:false,forecast,range:{start:time('2026-11-28'),end:time('2026-12-08')},onHover:value=>{hovered=value;}});
+    assert.match(svg.innerHTML,/class="equity-forecast-line"/);
+    assert.doesNotMatch(svg.innerHTML,/class="market-candle"|NaN|Infinity/);
+    assert.equal(svg.dataset.observedCandleCount,'0');
+    controller.selectDate('2026-11-28');
+    const expected=scale==='log'?Math.exp(Math.log(120)+(Math.log(130)-Math.log(120))/6):120+10/6;
+    assert.ok(Math.abs(hovered.price-expected)<1e-9);
+    assert.equal(hovered.kind,'forecast');assert.equal(hovered.interpolated,true);
+    assert.equal(hovered.open,undefined);assert.equal(hovered.volume,undefined);
+    assert.match(controller.getSelection().copyText,/보간/);
+  }
+});
+
+test('a weekly candle start never relabels the observed forecast anchor as a future point',()=>{
+  const anchored={...forecast,asOf:'2026-10-23',path:[{date:'2026-10-23',price:105,low:105,high:105},...forecast.path]};
+  const svg=svgFixture();let hovered;
+  const weekly={...series,interval:'weekly',candles:[{...series.candles.at(-1),time:time('2026-10-19'),date:'2026-10-19T00:00:00Z'}]};
+  drawIntradayChart({svg,series:weekly,chartType:'candles',showVolume:false,forecast:anchored,range:{start:time('2026-10-01'),end:time('2026-10-23')},onHover:value=>{hovered=value;}});
+  assert.equal(hovered.kind,'observed');assert.equal(svg.dataset.forecastPointCount,'0');
 });
 
 test('zero residuals stay zero in readouts and never become positive log-axis prices',()=>{
@@ -50,4 +75,47 @@ test('zero residuals stay zero in readouts and never become positive log-axis pr
     if(scale==='log')assert.equal(svg.querySelector('[id$="-cross"]').querySelector('circle').getAttribute('visibility'),'hidden');
     else assert.equal(controller.getPriceScale().min,0);
   }
+});
+
+test('a viewport between zero-valued calculation dates preserves the zero warning',()=>{
+  const zeroForecast={...forecast,path:forecast.path.map(row=>({...row,price:0,low:0}))};
+  const svg=svgFixture(390);let hovered;
+  drawIntradayChart({svg,series,scale:'log',showVolume:false,forecast:zeroForecast,range:{start:time('2026-11-28'),end:time('2026-12-08')},onHover:value=>{hovered=value;}});
+  assert.equal(hovered.price,0);assert.equal(hovered.interpolated,true);
+  assert.match(svg.innerHTML,/data-zero-bound="true"/);assert.match(svg.innerHTML,/가정 가격 0 · 잔여가치 소진/);
+  assert.doesNotMatch(svg.innerHTML,/NaN|Infinity/);
+});
+
+test('a positive-to-zero price transition explains log unavailability and stays available on a linear axis',()=>{
+  const boundaryForecast={...forecast,path:[forecast.path[0],{...forecast.path[1],price:0,low:0}]};
+  for(const scale of ['log','linear']){
+    const svg=svgFixture(390);let hovered;
+    drawIntradayChart({svg,series,scale,showVolume:false,forecast:boundaryForecast,range:{start:time('2026-11-28'),end:time('2026-12-08')},onHover:value=>{hovered=value;}});
+    if(scale==='log'){
+      assert.equal(hovered.kind,'unavailable');assert.equal(svg.dataset.forecastLogGapCount,'1');
+      assert.match(svg.innerHTML,/로그 연결 불가/);assert.match(svg.innerHTML,/선형축에서 확인/);
+      assert.doesNotMatch(svg.innerHTML,/완료된 거래 봉이 없습니다/);
+    }else{
+      assert.equal(hovered.kind,'forecast');assert.ok(hovered.price>0&&hovered.price<120);assert.equal(svg.dataset.forecastLogGapCount,'0');
+    }
+    assert.doesNotMatch(svg.innerHTML,/NaN|Infinity/);
+  }
+});
+
+test('a zero-crossing lower bound is not shown as early depletion or fabricated logarithmic interpolation',()=>{
+  const boundaryForecast={...forecast,path:[forecast.path[0],{...forecast.path[1],low:0}]};
+  const svg=svgFixture(390);let hovered;
+  const controller=drawIntradayChart({svg,series,scale:'log',showVolume:false,forecast:boundaryForecast,range:{start:time('2026-11-28'),end:time('2026-12-08')},onHover:value=>{hovered=value;}});
+  controller.selectDate('2026-11-28');
+  assert.ok(hovered.price>120&&hovered.price<130);assert.equal(hovered.low,null);assert.deepEqual(hovered.interpolation.unavailableBounds,['low']);
+  assert.match(svg.innerHTML,/equity-forecast-line/);assert.match(svg.innerHTML,/0 경계 구간 · 로그 연결 생략/);
+  assert.doesNotMatch(svg.innerHTML,/equity-forecast-band|잔여가치 소진/);
+  assert.match(controller.getSelection().copyText,/로그축 0 경계 · 선형축에서 확인/);
+  assert.doesNotMatch(controller.getSelection().copyText,/\$0/);
+});
+
+test('display interpolation never extrapolates before the observed anchor or beyond the forecast path',()=>{
+  const anchor=series.candles.at(-1),points=equityForecastRows(forecast,anchor.time);
+  assert.deepEqual(equityForecastWindowRows(points,anchor,time('2026-10-01'),time('2026-10-22')),[]);
+  assert.deepEqual(equityForecastWindowRows(points,anchor,time('2027-01-01'),time('2027-01-15')),[]);
 });

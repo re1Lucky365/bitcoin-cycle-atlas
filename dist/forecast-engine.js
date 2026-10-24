@@ -1,5 +1,5 @@
-import { HALVINGS, utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.11.0';
-import { shiftCalendarMonths } from './cycle-timing.js?v=1.11.0';
+import { HALVINGS, utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.19.0';
+import { shiftCalendarMonths } from './cycle-timing.js?v=1.19.0';
 
 /**
  * Conditional scenarios, not a fitted market-price forecasting model.
@@ -411,24 +411,28 @@ export function backtestAnalogueForecast(input, {
     const allowedHorizons = horizons.filter((horizon) => addDays(cutoff, horizon) <= outcomeLimit && outcomes.has(addDays(cutoff, horizon)));
     if (!allowedHorizons.length) { excluded.push({ cutoff, reason: 'No outcome exists before the validation ceiling.' }); continue; }
     const state = stateAt(prefix, highZoneFraction);
-    const projection = analoguePaths(prefix, state, { horizonDays: Math.max(...allowedHorizons), reversalPct });
-    if (!projection.scenarios.length) { excluded.push({ cutoff, reason: projection.reason }); continue; }
-    const results = allowedHorizons.map((horizonDays) => {
+    const results = [];
+    for (const horizonDays of allowedHorizons) {
+      const projection = analoguePaths(prefix, state, { horizonDays, reversalPct });
+      if (!projection.scenarios.length) { excluded.push({ cutoff, horizonDays, reason: projection.reason }); continue; }
       const outcomeDate = addDays(cutoff, horizonDays), actual = outcomes.get(outcomeDate).price;
       const values = projection.scenarios.map((scenario) => scenario.path[horizonDays].price);
       const prediction = geometricMean(values), naive = state.current.price;
       const error = (value) => ({ absoluteLogError: Math.abs(Math.log(value / actual)), absolutePercentageErrorPct: Math.abs(value / actual - 1) * 100 });
-      return {
+      results.push({
         horizonDays, outcomeDate, actualPrice: actual,
+        referenceYears: projection.scenarios.map((scenario) => scenario.referenceYear),
+        maxReferenceSourceDate: projection.scenarios.map((scenario) => scenario.sourceEndDate).sort().at(-1),
         analogueGeometricMean: prediction, flatPriceBaseline: naive,
         analogueRange: { min: Math.min(...values), max: Math.max(...values), n: values.length, probability: null },
         analogueError: error(prediction), flatError: error(naive),
-      };
-    });
+      });
+    }
+    if (!results.length) continue;
     samples.push({
       cutoff, priceAtCutoff: state.current.price, lowCandidateAtCutoff: state.current.troughCandidate,
-      phaseDays: state.current.phaseDays, referenceYears: projection.scenarios.map((scenario) => scenario.referenceYear),
-      maxReferenceSourceDate: projection.scenarios.map((scenario) => scenario.sourceEndDate).sort().at(-1),
+      phaseDays: state.current.phaseDays, referenceYears: [...new Set(results.flatMap(result => result.referenceYears))].sort((a, b) => a - b),
+      maxReferenceSourceDate: results.map(result => result.maxReferenceSourceDate).sort().at(-1),
       predictionInformationThrough: cutoff, results,
     });
   }

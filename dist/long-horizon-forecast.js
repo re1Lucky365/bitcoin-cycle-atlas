@@ -1,8 +1,8 @@
-import { HALVINGS, utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.11.0';
-import { buildDetailedForecast } from './detailed-forecast.js?v=1.11.0';
-import { computeRollingStates, detectDirectionalChanges } from './market-structure.js?v=1.11.0';
+import { HALVINGS, utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.19.0';
+import { buildDetailedForecast } from './detailed-forecast.js?v=1.19.0';
+import { computeRollingStates, detectDirectionalChanges } from './market-structure.js?v=1.19.0';
 import { LONG_HORIZON_CLAIMS, LONG_HORIZON_REVIEW_DATE } from './long-horizon-evidence.js?v=1.11.0';
-import { calibrateCycleTiming } from './cycle-calibration.js?v=1.11.0';
+import { calibrateCycleTiming } from './cycle-calibration.js?v=1.19.0';
 
 const DAYS_PER_YEAR = 365.25;
 const BLOCKS_PER_DAY = 144;
@@ -100,7 +100,13 @@ function validatedPrefix(input, asOf) {
   if (!Array.isArray(raw) || !raw.length) throw new TypeError('A nonempty daily price series is required');
   const cutoff = asOf ?? (Array.isArray(raw.at(-1)) ? raw.at(-1)[0] : raw.at(-1).date);
   utcDay(cutoff);
-  const rows = validateDataset(raw.filter(row => (Array.isArray(row) ? row[0] : row.date) <= cutoff));
+  const included = [];
+  for (const row of raw) {
+    const date = Array.isArray(row) ? row[0] : row?.date;
+    utcDay(date);
+    if (date <= cutoff) included.push(row);
+  }
+  const rows = validateDataset(included);
   if (rows.length < 366) throw new RangeError('At least 366 completed daily observations are required');
   for (let i = 1; i < rows.length; i++) {
     if (rows[i].epochDay !== rows[i - 1].epochDay + 1) throw new RangeError('Historical return blocks require consecutive daily observations; gaps are not interpolated');

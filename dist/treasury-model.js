@@ -1,4 +1,4 @@
-import { TREASURY_SNAPSHOTS, TREASURY_MARKET_ANCHORS, TREASURY_FUTURE_EVENTS, TREASURY_TARGETS } from './treasury-research.js?v=1.18.0';
+import { TREASURY_SNAPSHOTS, TREASURY_MARKET_ANCHORS, TREASURY_FUTURE_EVENTS, TREASURY_TARGETS } from './treasury-research.js?v=1.19.0';
 
 const DAY = 86400000, YEAR = 365.25;
 const day = value => {
@@ -10,6 +10,11 @@ const day = value => {
 const date = value => new Date(value * DAY).toISOString().slice(0,10);
 const nonnegative = (value, name) => { if (!Number.isFinite(value) || value < 0) throw new RangeError(`${name} must be finite and nonnegative`); return value; };
 const positive = (value, name) => { nonnegative(value,name); if (!value) throw new RangeError(`${name} must be positive`); return value; };
+const BALANCES = ['coinUnits','cashUsd','otherAssetsUsd','debtUsd','preferredUsd','otherLiabilitiesUsd','nonControllingInterestUsd'];
+const HOLDING_POLICIES = Object.freeze({
+  MSTR: {maxCoinUnits:21_000_000,kind:'protocol-terminal-supply-ceiling',sourceIds:['mstr-bitcoin-supply-limit'],label:'BTC 2,100만 개는 프로토콜의 최종 공급 상한입니다. 현재 매수 가능한 유통량·시장 흡수력을 뜻하지 않습니다.'},
+  BMNR: {maxCoinUnits:6_105_000,kind:'management-target-fixed-supply-assumption',referenceSupply:122_100_000,referenceSupplyAsOf:'2026-10-18',fraction:0.05,sourceIds:['bmnr-october-message-2026','bmnr-latest-holdings-2026'],label:'ETH 6,105,000개 상한은 회사 보고 공급 122.1m × 경영진의 5% 전략입니다. 공급분모를 고정한 모델 가정이며 Ethereum 프로토콜 한계·미래 총공급 예측이 아닙니다.'},
+});
 
 export const TREASURY_SCENARIOS = Object.freeze([
   {id:'stress',label:'스트레스',description:'자산 하락 · 프리미엄 축소 · 자금 조달 중단'},
@@ -22,22 +27,35 @@ export const TREASURY_SCENARIOS = Object.freeze([
  * conversion shares while retaining the same convertible principal here. */
 export function treasuryResidual(state, coinPrice) {
   positive(coinPrice,'coinPrice'); positive(state.shares,'shares');
-  for (const key of ['coinUnits','cashUsd','otherAssetsUsd','debtUsd','preferredUsd','otherLiabilitiesUsd','nonControllingInterestUsd']) nonnegative(state[key] ?? 0,key);
+  for (const key of BALANCES) nonnegative(state[key] ?? 0,key);
   const grossAssets = (state.coinUnits||0) * coinPrice + (state.cashUsd||0) + (state.otherAssetsUsd || 0);
   const seniorClaims = (state.debtUsd||0) + (state.preferredUsd||0) + (state.otherLiabilitiesUsd || 0) + (state.nonControllingInterestUsd || 0);
+  nonnegative(grossAssets,'grossAssets'); nonnegative(seniorClaims,'seniorClaims');
   const residualUsd = grossAssets - seniorClaims;
-  return {grossAssets,seniorClaims,residualUsd,navPerShare:Math.max(0,residualUsd)/state.shares,insolvent:residualUsd<=0};
+  const navPerShare = nonnegative(Math.max(0,residualUsd)/state.shares,'navPerShare');
+  return {grossAssets,seniorClaims,residualUsd,navPerShare,insolvent:residualUsd<=0};
 }
 
 /** Common-NAV accretion requires a NET offer premium above one. Coin/share
  * accretion has a different threshold when cash and senior claims are present.
  * All new shares enter the denominator; only net proceeds buy coins. */
-export function issueCommon(state, {newShares,offerPrice,coinPrice,feeRate=0,investmentFraction=1}) {
+export function issueCommon(state, {newShares,offerPrice,coinPrice,feeRate=0,investmentFraction=1,maxCoinUnits}) {
   treasuryResidual(state,coinPrice);
   nonnegative(newShares,'newShares');nonnegative(offerPrice,'offerPrice');positive(coinPrice,'coinPrice');
-  if (!(feeRate>=0&&feeRate<1&&investmentFraction>=0&&investmentFraction<=1)) throw new RangeError('Invalid financing fractions');
-  const proceeds=newShares*offerPrice*(1-feeRate);
-  return {...state,shares:state.shares+newShares,coinUnits:(state.coinUnits||0)+proceeds*investmentFraction/coinPrice,cashUsd:(state.cashUsd||0)+proceeds*(1-investmentFraction)};
+  if (!(Number.isFinite(feeRate)&&feeRate>=0&&feeRate<1&&Number.isFinite(investmentFraction)&&investmentFraction>=0&&investmentFraction<=1)) throw new RangeError('Invalid financing fractions');
+  let room=Infinity;
+  if(maxCoinUnits!==undefined){
+    nonnegative(maxCoinUnits,'maxCoinUnits');
+    room=maxCoinUnits-(state.coinUnits||0);
+    if(room<0)throw new RangeError('Existing holdings exceed the declared capacity');
+    const coinPerShare=offerPrice*(1-feeRate)*investmentFraction/coinPrice;
+    if(coinPerShare>0)newShares=Math.min(newShares,room/coinPerShare);
+  }
+  const proceeds=nonnegative(newShares*offerPrice*(1-feeRate),'issue proceeds');
+  const coinBudget=proceeds*investmentFraction,coinsBought=Math.min(room,coinBudget/coinPrice);
+  const result={...state,shares:state.shares+newShares,coinUnits:(state.coinUnits||0)+coinsBought,cashUsd:(state.cashUsd||0)+proceeds*(1-investmentFraction)+Math.max(0,coinBudget-coinsBought*coinPrice)};
+  treasuryResidual(result,coinPrice);
+  return result;
 }
 
 /** Cash first, then coins. Unpaid outflows become liabilities rather than
@@ -45,11 +63,13 @@ export function issueCommon(state, {newShares,offerPrice,coinPrice,feeRate=0,inv
 export function fundCashOutflow(state, amount, coinPrice, saleFee=0) {
   treasuryResidual(state,coinPrice);
   nonnegative(amount,'amount');positive(coinPrice,'coinPrice');
-  if (!(saleFee>=0&&saleFee<1)) throw new RangeError('Invalid sale fee');
+  if (!(Number.isFinite(saleFee)&&saleFee>=0&&saleFee<1)) throw new RangeError('Invalid sale fee');
   const cashUsed=Math.min(amount,state.cashUsd||0),needed=amount-cashUsed;
   const coinsSold=Math.min(state.coinUnits||0,needed/(coinPrice*(1-saleFee)));
   const shortfall=Math.max(0,needed-coinsSold*coinPrice*(1-saleFee));
-  return {state:{...state,cashUsd:(state.cashUsd||0)-cashUsed,coinUnits:(state.coinUnits||0)-coinsSold,otherLiabilitiesUsd:(state.otherLiabilitiesUsd||0)+shortfall},cashUsed,coinsSold,shortfall};
+  const result={...state,cashUsd:(state.cashUsd||0)-cashUsed,coinUnits:(state.coinUnits||0)-coinsSold,otherLiabilitiesUsd:(state.otherLiabilitiesUsd||0)+shortfall};
+  treasuryResidual(result,coinPrice);
+  return {state:result,cashUsed,coinsSold,shortfall};
 }
 
 export function repayPrincipal(state, principal, coinPrice, saleFee=0) {
@@ -89,7 +109,7 @@ function assumptionsFor(symbol,scenario,snapshot,coinAnchor,endYear) {
     // analyst assumption; $360 is the publication's adverse 2030 case.
     anchors=[{date:'2030-12-31',price:scenario==='bull'?22000:scenario==='stress'?360:coinAnchor.price}];
   }
-  return {...config,anchors,sourceIds,otherAssetHaircut:symbol==='BMNR'?(scenario==='stress'?0.75:scenario==='base'?0.25:0):0,stakingFraction:symbol==='BMNR'?0.8:0,stakingAdvisoryFee:symbol==='BMNR'?0.015:0,stakingOtherFee:symbol==='BMNR'?0.10:0,endYear,
+  return {...config,anchors,sourceIds:[...sourceIds,...HOLDING_POLICIES[symbol].sourceIds],holdingPolicy:HOLDING_POLICIES[symbol],otherAssetHaircut:symbol==='BMNR'?(scenario==='stress'?0.75:scenario==='base'?0.25:0):0,stakingFraction:symbol==='BMNR'?0.8:0,stakingAdvisoryFee:symbol==='BMNR'?0.015:0,stakingOtherFee:symbol==='BMNR'?0.10:0,endYear,
     assumptionsStatus:'analyst-sensitivity-not-estimated',assetPathMethod:'log interpolation of declared conditions; flat after final anchor',
     labels:[
       `발행 연율 ${(config.issuanceAnnual*100).toFixed(0)}% 상한 · 순발행가가 잔여가치보다 높을 때만 실행`,
@@ -98,6 +118,8 @@ function assumptionsFor(symbol,scenario,snapshot,coinAnchor,endYear) {
       '연 운영비 $50m 추가 · 세금·파생상품·영업가치는 단순화',
       symbol==='BMNR'?`기타 자산을 첫 1년 동안 ${scenario==='stress'?'75':scenario==='base'?'25':'0'}% 할인 · 회수 가능성 민감도 가정`:'단기 투자자산은 공시 금액 고정 · 미래 수익·손실을 추정하지 않음',
       symbol==='BMNR'?'80% 스테이킹 · 공시 7일 연율을 출발점으로 보상 수수료 1.5%와 추가 10% 차감 가정. 보고 수익률의 비용 포함 범위가 불명확해 비용이 중복될 수 있음':'공시된 연 금융비용 유지 · 상환 후에도 비용 감소를 가정하지 않는 보수적 단순화',
+      HOLDING_POLICIES[symbol].label,
+      '보유 상한까지 부분 발행하고 상한에 있는 동안 코인 매입 목적의 추가 발행을 중단합니다. 상한 초과 스테이킹 보상은 매도비용 0.5%를 차감해 현금으로 보유하는 앱 가정입니다.',
       '미래 가격·날짜는 조건이며 확률 또는 실적 예측의 검증 결과가 아님',
     ]};
 }
@@ -110,6 +132,7 @@ function applyKnownAdjustments(snapshot,asOf) {
     for(const key of ['cashUsd','preferredUsd','debtUsd','shares','coinUnits','annualExpensesUsd'])if(Number.isFinite(item[key]))state[key]=(state[key]||0)+item[key];
     applied.push(item);
   }
+  for(const key of ['annualExpensesUsd','annualPreferredDividendUsd'])if(state[key]!==undefined)nonnegative(state[key],`adjusted ${key}`);
   return {state,applied};
 }
 
@@ -117,6 +140,7 @@ function simulate(symbol,snapshot,coinAnchor,latest,scenario,endYear) {
   const adjusted=applyKnownAdjustments(snapshot,latest.date),settings=assumptionsFor(symbol,scenario,adjusted.state,coinAnchor,endYear);
   let state={...adjusted.state};
   const initial=treasuryResidual(state,coinAnchor.price);
+  if(state.coinUnits>settings.holdingPolicy.maxCoinUnits)throw new RangeError('Initial holdings exceed the declared capacity');
   if(initial.insolvent)throw new RangeError('Cannot normalize a nonpositive initial treasury residual');
   const initialPremium=latest.price/initial.navPerShare;
   const startDay=day(latest.date),endDay=day(`${endYear}-12-31`),dates=new Set([latest.date,date(endDay)]);
@@ -125,7 +149,7 @@ function simulate(symbol,snapshot,coinAnchor,latest,scenario,endYear) {
   for(let year=Number(latest.date.slice(0,4));year<=endYear;year++)if(`${year}-12-31`>latest.date)dates.add(`${year}-12-31`);
   for(const item of snapshot.debtSchedule||[])if(item.date>latest.date&&day(item.date)<=endDay)dates.add(item.date);
   for(const item of settings.anchors)if(item.date>latest.date&&day(item.date)<=endDay)dates.add(item.date);
-  const sorted=[...dates].sort(),path=[];let prior=latest.date,totalSold=0,capitalRaised=0,insolventAt=null,shockApplied=false;
+  const sorted=[...dates].sort(),path=[];let prior=latest.date,totalSold=0,capitalRaised=0,insolventAt=null,shockApplied=false,capacityReachedAt=null,rewardsSold=0,rewardSaleProceeds=0;
   const sourceIds=[...new Set([...(snapshot.sourceIds||[]),...adjusted.applied.flatMap(item=>item.sourceIds||[]),...settings.sourceIds,`${symbol.toLowerCase()}-model-method`])];
   for(const at of sorted){
     const years=(day(at)-startDay)/YEAR,dt=(day(at)-day(prior))/YEAR,coinPrice=interpolatePrice({date:latest.date,price:coinAnchor.price},settings.anchors,at);
@@ -135,6 +159,14 @@ function simulate(symbol,snapshot,coinAnchor,latest,scenario,endYear) {
       state.otherAssetsUsd*=Math.pow(1-settings.otherAssetHaircut,Math.max(0,haircutStep));
       const netStake=settings.stakingFraction*settings.stakingGross*(1-settings.stakingAdvisoryFee)*(1-settings.stakingOtherFee);
       state.coinUnits*=Math.exp(Math.log1p(netStake)*dt);
+      if(state.coinUnits>settings.holdingPolicy.maxCoinUnits){
+        const excess=state.coinUnits-settings.holdingPolicy.maxCoinUnits;
+        const proceeds=excess*coinPrice*(1-settings.saleFee);
+        state.coinUnits=settings.holdingPolicy.maxCoinUnits;
+        state.cashUsd+=proceeds;
+        rewardsSold+=excess;rewardSaleProceeds+=proceeds;totalSold+=excess;
+        capacityReachedAt??=at;
+      }
       if(settings.slashingLoss&&!shockApplied&&years>=1){state.coinUnits*=1-settings.slashingLoss;shockApplied=true;}
       const paid=fundCashOutflow(state,(settings.financingCarryUsd+settings.operatingExpenseUsd)*dt,coinPrice,settings.saleFee);state=paid.state;totalSold+=paid.coinsSold;
       for(const payment of snapshot.debtSchedule||[])if(payment.date>prior&&payment.date<=at&&settings.repayAtPut){
@@ -144,17 +176,19 @@ function simulate(symbol,snapshot,coinAnchor,latest,scenario,endYear) {
       const nav=treasuryResidual(state,coinPrice),offer=nav.navPerShare*premium;
       if(!nav.insolvent&&premium*(1-settings.feeRate)>1&&settings.issuanceAnnual>0){
         const newShares=state.shares*(Math.exp(Math.log1p(settings.issuanceAnnual)*dt)-1);
-        capitalRaised+=newShares*offer*(1-settings.feeRate);
-        state=issueCommon(state,{newShares,offerPrice:offer,coinPrice,...settings});
+        const issued=issueCommon(state,{newShares,offerPrice:offer,coinPrice,...settings,maxCoinUnits:settings.holdingPolicy.maxCoinUnits});
+        capitalRaised+=(issued.shares-state.shares)*offer*(1-settings.feeRate);
+        state=issued;
+        if(state.coinUnits>=settings.holdingPolicy.maxCoinUnits)capacityReachedAt??=at;
       }
     }
     const components=treasuryResidual(state,coinPrice);
     if(components.insolvent&&!insolventAt)insolventAt=at;
-    const price=insolventAt?0:components.navPerShare*premium;
-    path.push({date:at,price,kind:at===latest.date?'anchor':'forecast',sourceIds,components:{...components,coinPrice,coinUnits:state.coinUnits,cashUsd:state.cashUsd,debtUsd:state.debtUsd,preferredUsd:state.preferredUsd,shares:state.shares,premium,coinsSold:totalSold,capitalRaised},financialAsOf:snapshot.asOf,probability:null});
+    const price=nonnegative(insolventAt?0:components.navPerShare*premium,'scenario price');
+    path.push({date:at,price,kind:at===latest.date?'anchor':'forecast',sourceIds,components:{...components,coinPrice,coinUnits:state.coinUnits,cashUsd:state.cashUsd,debtUsd:state.debtUsd,preferredUsd:state.preferredUsd,shares:state.shares,premium,coinsSold:totalSold,capitalRaised,rewardsSold,rewardSaleProceeds,holdingCap:settings.holdingPolicy.maxCoinUnits},financialAsOf:snapshot.asOf,probability:null});
     prior=at;
   }
-  return {path,settings,initialPremium,insolventAt,adjustments:adjusted.applied};
+  return {path,settings,initialPremium,insolventAt,capacityReachedAt,adjustments:adjusted.applied};
 }
 
 /** This is a current-price-normalized sensitivity of a disclosed historical
@@ -165,18 +199,35 @@ export function buildTreasuryForecast({symbol,history,scenario='base',asOf,endYe
   if(!['MSTR','BMNR'].includes(symbol)||!TREASURY_SCENARIOS.some(s=>s.id===scenario))throw new RangeError('Invalid instrument or scenario');
   if(!snapshot||!coinAnchor)throw new TypeError('Missing verified treasury snapshot or crypto anchor');
   if(!Number.isSafeInteger(endYear)||endYear<2027||endYear>2050)throw new RangeError('Horizon must be 2027–2050');
-  const candles=Array.isArray(history)?history:history?.candles;
-  if(!candles?.length)throw new RangeError('Observed equity history is required');
-  const cutoff=asOf||String(candles.at(-1).date).slice(0,10);day(cutoff);
-  // Current research contains October disclosures. This API does not backtest
-  // its present assumptions at an earlier information set.
+  const rawCandles=Array.isArray(history)?history:history?.candles;
+  if(!Array.isArray(rawCandles)||!rawCandles.length)throw new RangeError('Observed equity history is required');
+  const seen=new Set(),candles=rawCandles.map(row=>{
+    if(typeof row?.date!=='string'||!/^\d{4}-\d{2}-\d{2}(?:T00:00:00(?:\.000)?Z)?$/.test(row.date))throw new TypeError('Observed session date must be an ISO day or UTC midnight');
+    const sessionDate=row.date.slice(0,10);day(sessionDate);
+    if(row.sessionDate!==undefined&&row.sessionDate!==sessionDate)throw new RangeError('Conflicting equity session date');
+    if(seen.has(sessionDate))throw new RangeError('Duplicate equity session date');
+    seen.add(sessionDate);
+    return {date:sessionDate,price:positive(row.close,'observed equity price')};
+  }).sort((a,b)=>a.date.localeCompare(b.date));
+  const cutoff=asOf===undefined?candles.at(-1).date:asOf;day(cutoff);
   if(cutoff<'2026-10-23')throw new RangeError('Historical cutoffs precede the research knowledge date; this is not a backtest');
-  const last=candles.filter(row=>String(row.date).slice(0,10)<=cutoff).at(-1);
-  if(!last)throw new RangeError('No observed price at cutoff');
-  const latest={date:String(last.date).slice(0,10),price:last.close};positive(latest.price,'observed equity price');
+  const latest=candles.filter(row=>row.date<=cutoff).at(-1);
+  if(!latest)throw new RangeError('No observed price at cutoff');
+  day(snapshot.asOf);day(snapshot.publishedAt);day(coinAnchor.date);positive(coinAnchor.price,'coin anchor price');
+  if(snapshot.publishedAt<snapshot.asOf)throw new RangeError('Publication date precedes the financial date');
+  if(snapshot.coin!==(symbol==='MSTR'?'BTC':'ETH'))throw new RangeError('Treasury coin does not match the equity asset');
+  for(const key of ['annualExpensesUsd','annualPreferredDividendUsd'])if(snapshot[key]!==undefined)nonnegative(snapshot[key],key);
+  for(const item of snapshot.debtSchedule||[]){day(item.date);nonnegative(item.principalUsd??item.amountUsd,'debt principal');}
+  for(const item of snapshot.modelAdjustments||[]){
+    day(item.date);day(item.publishedAt);
+    if(item.publishedAt<item.date)throw new RangeError('Adjustment publication date precedes its effective date');
+    for(const key of ['cashUsd','preferredUsd','debtUsd','shares','coinUnits','annualExpensesUsd'])if(item[key]!==undefined&&!Number.isFinite(item[key]))throw new RangeError(`Adjustment ${key} must be finite`);
+  }
+  snapshot={...snapshot,...Object.fromEntries(BALANCES.map(key=>[key,snapshot[key]??0]))};
+  treasuryResidual(snapshot,coinAnchor.price);
   if(latest.date<'2026-10-23'||coinAnchor.date<'2026-10-23')throw new RangeError('Effective market anchors precede the research knowledge date');
   if(day(latest.date)>=day(`${endYear}-12-31`))throw new RangeError('Expired horizon');
-  if(snapshot.asOf>latest.date||(snapshot.publishedAt&&snapshot.publishedAt>latest.date)||coinAnchor.date>latest.date)throw new RangeError('Future information is not permitted at the price cutoff');
+  if(snapshot.asOf>latest.date||snapshot.publishedAt>latest.date||coinAnchor.date>latest.date)throw new RangeError('Future information is not permitted at the price cutoff');
   const simulations=Object.fromEntries(TREASURY_SCENARIOS.map(item=>[item.id,simulate(symbol,snapshot,coinAnchor,latest,item.id,endYear)]));
   const selected=simulations[scenario],maps=Object.values(simulations).map(item=>new Map(item.path.map(p=>[p.date,p])));
   const path=selected.path.map(point=>{
@@ -196,6 +247,7 @@ export function buildTreasuryForecast({symbol,history,scenario='base',asOf,endYe
       '범위는 세 조건의 최소·최대입니다. 신뢰구간·발생 확률·상하한 보장이 아닙니다.',
       '잔여가치가 0 이하이면 이 모델은 청산 스트레스로 가격 0을 유지합니다. 법적 파산 판정이나 실제 주가 0의 예언은 아닙니다.',
       '주식과 코인 관측은 서로 다른 마감 시각입니다. 분 단위 동시 시세 또는 정확한 현물 프리미엄이 아닙니다.',
+      `${selected.settings.holdingPolicy.label} 상한 전에도 조달 접근성·호가·거래량·가격 충격은 검증하지 않았습니다.`,
       ...(snapshot.notes||[])],
-    diagnostics:{method:'historical-capital-structure-sensitivity',financialAgeDays:age,currentNavClaim:false,initialImpliedVintagePremium:selected.initialPremium,adjustments:selected.adjustments,predictiveValidation:'not-established',probabilities:null,insolventAt:selected.insolventAt,scenarioInsolvency:Object.fromEntries(Object.entries(simulations).map(([id,value])=>[id,value.insolventAt]))}};
+    diagnostics:{method:'historical-capital-structure-sensitivity',financialAgeDays:age,currentNavClaim:false,initialImpliedVintagePremium:selected.initialPremium,adjustments:selected.adjustments,predictiveValidation:'not-established',probabilities:null,insolventAt:selected.insolventAt,capacityReachedAt:selected.capacityReachedAt,scenarioCapacityReachedAt:Object.fromEntries(Object.entries(simulations).map(([id,value])=>[id,value.capacityReachedAt])),scenarioInsolvency:Object.fromEntries(Object.entries(simulations).map(([id,value])=>[id,value.insolventAt]))}};
 }

@@ -43,7 +43,10 @@ export function utcDay(date) {
 
 export function dateFromDay(day) {
   if (!Number.isSafeInteger(day)) throw new TypeError('UTC day must be a safe integer');
-  return new Date(day * DAY_MS).toISOString().slice(0, 10);
+  const date = new Date(day * DAY_MS);
+  const year = date.getUTCFullYear();
+  if (!(year >= 0 && year <= 9999)) throw new RangeError('UTC day must produce a date in years 0000 through 9999');
+  return date.toISOString().slice(0, 10);
 }
 
 /** Validate without filling gaps. Accept raw { prices: [[date, price], ...] } or rows. */

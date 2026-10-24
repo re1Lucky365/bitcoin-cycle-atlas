@@ -1,0 +1,94 @@
+{
+  "status": "PASS",
+  "node": "v24.22.1",
+  "scope": "Current source and stored observations; independent algebraic flow reconstruction, not predictive validation",
+  "sourceHashes": {
+    "dist/treasury-model.js": "df9484e0f2135da2dba72049ad1b78cd85359f072458b2afdf8ccad5078eac34",
+    "dist/treasury-research.js": "ad9f947f8832a8a0f7cedd187e51243eb00453d2476fb5d4154cc645dce0bddb",
+    "dist/treasury-catalog.js": "4195bccf59f85a91298e966c954db727021fd54958fb4797c1be052f23ed56b6"
+  },
+  "inputHashes": {
+    "dist/data/mstr-ohlc.json": "4ae3d0e84624f421adf0b9c48f77089cfbd6bfe1cf92fd1ff3e315b7072979bc",
+    "dist/data/bmnr-ohlc.json": "5e832682f7ae2c2f1ac01f047823ce28e313819ee83849de0694dec5e6f52363",
+    "research-data/treasury-mstr.json": "cac107e363aba4ceb95db085ac351911a3771ba1c1c7818c8adebbfaa7414de1",
+    "research-data/treasury-bmnr.json": "08724dc7eee6b00c303445ef9da9aff266c1f5bb0c0ec863e87846a282041105"
+  },
+  "tolerance": "1e-7 + 64 * Number.EPSILON * arithmetic scale, including cumulative balances used in subtraction",
+  "steps": 1694,
+  "financingSteps": 410,
+  "rewardSaleSteps": 532,
+  "maxAbsoluteErrors": {
+    "cashUsd": 0.0078125,
+    "coinUnits": 3.725290298461914e-9,
+    "rewardCashUsd": 0.0000036954879760742188,
+    "issuanceUsd": 0.079345703125
+  },
+  "scenarios": [
+    {
+      "symbol": "MSTR",
+      "scenario": "stress",
+      "asOf": "2026-10-23",
+      "financialAsOf": "2026-06-30",
+      "pathPoints": 324,
+      "cap": 21000000,
+      "capacityReachedAt": null,
+      "endUnits": 487135.6580779528,
+      "rewardSaleProceeds": 0
+    },
+    {
+      "symbol": "MSTR",
+      "scenario": "base",
+      "asOf": "2026-10-23",
+      "financialAsOf": "2026-06-30",
+      "pathPoints": 324,
+      "cap": 21000000,
+      "capacityReachedAt": null,
+      "endUnits": 857541.7687447439,
+      "rewardSaleProceeds": 0
+    },
+    {
+      "symbol": "MSTR",
+      "scenario": "bull",
+      "asOf": "2026-10-23",
+      "financialAsOf": "2026-06-30",
+      "pathPoints": 324,
+      "cap": 21000000,
+      "capacityReachedAt": "2048-06-29",
+      "endUnits": 21000000,
+      "rewardSaleProceeds": 0
+    },
+    {
+      "symbol": "BMNR",
+      "scenario": "stress",
+      "asOf": "2026-10-23",
+      "financialAsOf": "2026-05-31",
+      "pathPoints": 319,
+      "cap": 6105000,
+      "capacityReachedAt": null,
+      "endUnits": 1238677.595382529,
+      "rewardSaleProceeds": 0
+    },
+    {
+      "symbol": "BMNR",
+      "scenario": "base",
+      "asOf": "2026-10-23",
+      "financialAsOf": "2026-05-31",
+      "pathPoints": 319,
+      "cap": 6105000,
+      "capacityReachedAt": "2033-06-18",
+      "endUnits": 6105000,
+      "rewardSaleProceeds": 4623935227.6467
+    },
+    {
+      "symbol": "BMNR",
+      "scenario": "bull",
+      "asOf": "2026-10-23",
+      "financialAsOf": "2026-05-31",
+      "pathPoints": 319,
+      "cap": 6105000,
+      "capacityReachedAt": "2028-02-15",
+      "endUnits": 6105000,
+      "rewardSaleProceeds": 60559196167.82474
+    }
+  ]
+}
