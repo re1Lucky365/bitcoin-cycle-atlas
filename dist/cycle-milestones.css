@@ -18,8 +18,8 @@
 /* A compact legend at the upper right; it never changes the SVG height. */
 .atlas-plot{container-type:inline-size;container-name:price-plot;--chart-hud-width:430px;--chart-hud-top:8px;--chart-hud-countdown-height:0px;--chart-hud-legend-height:0px;--chart-hud-gap:0px}
 .atlas-plot:has(>.lab-chart-foot:not([hidden])){--chart-hud-legend-height:var(--chart-legend-height,52px);--chart-hud-gap:7px}
-/* The legend follows the canvas edge, not the variable price-axis gutter. */
-.atlas-plot>.lab-chart-foot{inset:max(var(--indicator-top,75px),var(--chart-hud-top)) 8px auto auto;width:max-content;max-width:calc(100% - 16px);max-height:none;margin:0;padding:4px 8px;box-sizing:border-box;pointer-events:auto;background:#111c2aee;border:1px solid #304155;border-radius:5px;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scrollbar-width:thin;z-index:7}
+/* --plot-right-gap includes the measured price-axis width plus 7px. */
+.atlas-plot>.lab-chart-foot{inset:max(var(--indicator-top,75px),var(--chart-hud-top)) calc(var(--plot-right-gap,80px) + 1px) auto auto;width:max-content;max-width:calc(100% - var(--plot-right-gap,80px) - 9px);max-height:none;margin:0;padding:4px 8px;box-sizing:border-box;pointer-events:auto;background:#111c2aee;border:1px solid #304155;border-radius:5px;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scrollbar-width:thin;z-index:7}
 /* Already-open chart modules may still emit the removed date badge. */
 .atlas-plot .observed-split-badge{display:none}
 .atlas-plot[data-legend-dock=top]>.lab-chart-foot{top:8px}
