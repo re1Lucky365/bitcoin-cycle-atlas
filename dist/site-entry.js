@@ -12,7 +12,7 @@ try {
     const { initEquityView } = await import("./equity-view.js?v=1.23.0");
     await initEquityView({symbol});
   } else {
-    await import("./app.js?v=1.25.1");
+    await import("./app.js?v=1.26.0");
   }
 } catch (error) {
   console.error('Chart initialization failed', error);

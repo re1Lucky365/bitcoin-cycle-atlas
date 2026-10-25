@@ -49,3 +49,8 @@ final result: passed
 ## 범위와 한계
 
 실제 Chrome 브라우저와 사이트의 반응형 iframe 미리보기를 사용했다. 실제 휴대전화 하드웨어 성능 측정이나 모든 브라우저의 호환성 검증을 뜻하지 않는다. 과거 이미지와 다른 최신 가격·평균값은 [자료 대조 문서](docs/ASSET_COMPARISON_DATA.md)에 이유와 계산 근거를 남겼다. 계산과 표시의 일관성이 투자 수익성을 증명하지는 않는다.
+
+
+## v1.26.0 · airport board follow-up
+
+Actual local browser checks and known local Java limitation are recorded in [AIRPORT_BOARD_QA.md](docs/AIRPORT_BOARD_QA.md). Existing historical reports above retain their original scope. Public deployment acceptance remains a separate check.

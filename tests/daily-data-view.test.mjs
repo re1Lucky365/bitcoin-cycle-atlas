@@ -19,7 +19,7 @@ test('percentage formatting distinguishes missing, zero, signed values and sub-c
   assert.equal(formatDailyPercent(-12.5, 1), '−12.5%');
 });
 
-test('opening the view creates exactly one grouped comparison table with all 17 assets', async () => {
+test('opening the view creates exactly one grouped comparison table with all 18 assets', async () => {
   const { view, ui } = setup(); await view.render();
   assert.equal(view.state.status, 'ready');
   assert.equal((ui.root.innerHTML.match(/<table\b/g) || []).length, 1);
@@ -29,9 +29,9 @@ test('opening the view creates exactly one grouped comparison table with all 17 
   assert.doesNotMatch(ui.root.innerHTML, /SMA|RSI|사이클 판단표|일별 원자료|cycle-scope|<select/);
   const table = ui.node('data-body').innerHTML;
   assert.deepEqual(symbols(table), COMPARISON_SYMBOLS);
-  assert.deepEqual([...table.matchAll(/rowspan="(\d+)"/g)].map(match => Number(match[1])), [12, 4, 1]);
+  assert.deepEqual([...table.matchAll(/rowspan="(\d+)"/g)].map(match => Number(match[1])), [13, 4, 1]);
   assert.match(table, /asset-return-gain/); assert.match(table, /asset-return-loss/);
-  assert.match(ui.node('asset-row-count').textContent, /17개 자산 전체/);
+  assert.match(ui.node('asset-row-count').textContent, /18개 자산 전체/);
   assert.doesNotMatch(table, /data-cycle|data-evidence|M7/);
   view.destroy();
 });
@@ -43,7 +43,7 @@ test('each final cell uses an exact five-stage label and opens the relevant expl
   ui.click('', { assetReason: 'QQQ' });
   assert.equal(ui.node('daily-method-dialog').open, true);
   assert.match(ui.node('daily-method-content').innerHTML, /NASDAQ100 \(QQQ\) · 분할 매수/);
-  assert.match(ui.node('daily-method-content').innerHTML, new RegExp(model.rows[1].judgment.reason));
+  assert.match(ui.node('daily-method-content').innerHTML, new RegExp(model.rows.find(row => row.symbol === 'QQQ').judgment.reason));
   assert.match(ui.node('daily-method-content').innerHTML, /−10\.00% 이하/);
   assert.match(ui.node('daily-method-content').innerHTML, /−5\.00% 초과, \+10\.00% 미만/);
   assert.match(ui.node('daily-method-content').innerHTML, /\+20\.00% 이상/);
@@ -195,13 +195,13 @@ test('unavailable samples never become neutral; individual observed prices remai
   view.destroy();
 });
 
-test('CSV contains the same 17 rows, unrounded metrics, provenance, boundaries and price dates', async () => {
+test('CSV contains the same 18 rows, unrounded metrics, provenance, boundaries and price dates', async () => {
   const downloads = [], model = comparisonViewModel(); model.rows[0].meanRisePct = 20.123456789;
   const { view, ui } = setup({ model, download: (name, blob) => downloads.push({ name, blob }) }); await view.render();
   ui.click('export-raw'); assert.equal(downloads.length, 1);
   assert.equal(downloads[0].name, 'asset-comparison-2026-10-25.csv');
   const csv = await downloads[0].blob.text();
-  assert.equal(csv.trimEnd().split('\r\n').length, 18);
+  assert.equal(csv.trimEnd().split('\r\n').length, 19);
   assert.match(csv, /mean_annual_fall_pct_not_mdd/); assert.match(csv, /20\.123456789/);
   assert.match(csv, /2026-01-02,100,2026-10-23,85,-15,적극 매수/);
   assert.match(csv, /current year excluded/); assert.match(csv, /https:\/\/example\.test\/prices\/SPY/);
@@ -216,7 +216,7 @@ test('method explains MDD distinction, operational boundaries, sample years and 
   assert.match(content, /100 → 150 → 120/); assert.match(content, /MDD는 −20%/);
   assert.match(content, /D &lt; r ≤ D ÷ 2/); assert.match(content, /U ÷ 2 ≤ r &lt; U/);
   assert.match(content, /상장 첫해 일부 기간/); assert.match(content, /5개 연도 미만/);
-  assert.match(content, /종목별 출처·표본 범위 \(17개\)/);
+  assert.match(content, /종목별 출처·표본 범위 \(18개\)/);
   assert.match(content, /총수익률/); assert.doesNotMatch(content, /<table\b|SMA|RSI/);
   view.destroy();
 });
@@ -261,4 +261,26 @@ test('invalid comparison dates fail visibly before any source request', async ()
     assert.equal(await view.render(), null); assert.equal(reads, 0); assert.equal(view.state.status, 'error');
     assert.deepEqual(symbols(ui.node('data-body').innerHTML), []); view.destroy();
   }
+});
+
+test('airport board keeps navigation and all actions in one heading without a white theme', () => {
+  const {view, ui} = setup();
+  assert.match(ui.root.innerHTML, /class="daily-heading"><button[^>]*class="daily-back"/);
+  assert.match(ui.root.innerHTML, /MARKET BOARD/);
+  assert.match(ui.root.innerHTML, /aria-label="통합 차트로 돌아가기"/);
+  assert.match(ui.root.innerHTML, /aria-label="18개 자산 CSV 내려받기"/);
+  const css = readFileSync(new URL('../dist/daily-data.css', import.meta.url), 'utf8');
+  assert.match(css, /--asset-paper: var\(--surface, #12161d\)/);
+  assert.match(css, /--asset-sign: #f4cb50/);
+  assert.doesNotMatch(css, /background:\s*(?:#fff(?:fff)?\b|white\b|#d9dcda|#f7d0d5|#c9eed0)/i);
+  assert.doesNotMatch(css, /\.daily-back\s*\{\s*display:\s*none/);
+  assert.match(css, /prefers-reduced-motion: reduce/);
+  view.destroy();
+});
+
+
+test('mobile comparison owns its return control without the global fallback or reserved row', () => {
+ const css = readFileSync(new URL('../dist/mobile-workspace.css', import.meta.url), 'utf8');
+ assert.match(css, /body:not\(\[data-page=outlook\]\):not\(\[data-page=data\]\) \.mobile-chart-home/);
+ assert.match(css, /body:not\(\[data-page=outlook\]\):not\(\[data-page=data\]\) \.workspace\.atlas-details-layout>#main/);
 });

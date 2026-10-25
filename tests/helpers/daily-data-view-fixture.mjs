@@ -48,8 +48,8 @@ export function dailyViewSurface({ hidden = false } = {}) {
   };
 }
 
-export const COMPARISON_SYMBOLS = ['SPY', 'QQQ', 'NVDA', 'AAPL', 'GOOG', 'MSFT', 'AMZN', 'META', 'AVGO', 'PLTR', 'TSLA', 'HOOD', 'TLT', 'IEF', 'GLD', 'SLV', 'PDBC'];
-const NAMES = ['S&P500', 'NASDAQ100', '엔비디아', '애플', '구글', '마이크로소프트', '아마존', '메타', '브로드컴', '팔란티어', '테슬라', '로빈후드', '미국장기채권', '미국중기채권', '금', '은', '원자재'];
+export const COMPARISON_SYMBOLS = ['BTC', 'SPY', 'QQQ', 'NVDA', 'AAPL', 'GOOG', 'MSFT', 'AMZN', 'META', 'AVGO', 'PLTR', 'TSLA', 'HOOD', 'TLT', 'IEF', 'GLD', 'SLV', 'PDBC'];
+const NAMES = ['비트코인', 'S&P500', 'NASDAQ100', '엔비디아', '애플', '구글', '마이크로소프트', '아마존', '메타', '브로드컴', '팔란티어', '테슬라', '로빈후드', '미국장기채권', '미국중기채권', '금', '은', '원자재'];
 const DECISIONS = [['strong-buy', '적극 매수', -15], ['buy', '분할 매수', -7], ['neutral', '중립', 0], ['sell', '분할 매도', 15], ['strong-sell', '적극 매도', 25]];
 
 /** Synthetic engine output for view behavior only; numerical semantics have independent engine tests. */
@@ -57,10 +57,11 @@ export function comparisonViewModel({ asOf = '2026-10-25', offset = 0 } = {}) {
   const year = Number(asOf.slice(0, 4));
   return {
     version: 1, asOf, year, methodology: {},
-    rows: COMPARISON_SYMBOLS.map((symbol, index) => {
-      const [id, label, ytdPct] = DECISIONS[index % DECISIONS.length];
+    rows: COMPARISON_SYMBOLS.map((symbol, position) => {
+      const index = position - 1;
+      const [id, label, ytdPct] = DECISIONS[index < 0 ? 2 : index % DECISIONS.length];
       return {
-        symbol, name: NAMES[index], group: index < 12 ? '위험 자산' : index < 16 ? '안전 자산' : '대체자산', category: index < 2 ? 'Index ETF' : index < 9 ? '대형 기술주' : index < 12 ? '개별주' : index < 14 ? '채권' : index === 14 ? '금' : index === 15 ? '은' : '원자재', currency: 'USD',
+        symbol, name: NAMES[position], group: index < 12 ? '위험 자산' : index < 16 ? '안전 자산' : '대체자산', category: index < 2 ? 'Index ETF' : index < 9 ? '대형 기술주' : index < 12 ? '개별주' : index < 14 ? '채권' : index === 14 ? '금' : index === 15 ? '은' : '원자재', currency: 'USD',
         sampleYears: 10, sampleStartYear: year - 10, sampleEndYear: year - 1, samplePartialFirstYear: index % 2 === 0, firstPartialStartDate: index % 2 === 0 ? `${year - 10}-03-02` : null,
         meanRisePct: 20, meanFallPct: -10, meanMddPct: -25,
         yearStartDate: `${year}-01-02`, yearStartPrice: 100 + offset,

@@ -16,7 +16,7 @@ export const ASSET_COMPARISON_METHODOLOGY = Object.freeze({
   priceBasis: '분할을 반영한 종가의 가격 변화이며 배당 재투자 총수익률이 아닙니다.',
   judgment: '평균 상승을 U, 평균 낙폭을 D, 올해 첫 종가 대비 변화를 r이라 할 때 D, D/2, U/2, U를 경계로 다섯 단계를 구분합니다.',
   interpretation: '과거 평균 범위에 대한 현재 가격의 위치를 표시하는 운영 규칙입니다. 반등·하락 확률, 최적 주문 비중 또는 거래 수익성이 검증된 신호가 아닙니다.',
-  coverage: '확인된 결측·비어 있는 연도·7일을 넘는 관측 간격이 있으면 판단을 보류합니다. 주말·공휴일을 임의의 가격으로 채우지 않습니다.',
+  coverage: '확인된 결측·비어 있는 연도·자료 달력에 맞지 않는 관측 간격이 있으면 판단을 보류합니다. 거래소 휴장일·UTC 달력일을 서로 혼동하거나 임의로 채우지 않습니다.',
   freshness: '기준일까지의 관측만 사용합니다. 올해 기준가가 없거나 최근 종가가 기준일보다 7일 넘게 오래되면 판단을 보류합니다.',
   minimumSamples: MIN_SAMPLE_YEARS,
 });
@@ -116,18 +116,23 @@ function coverageFor(prices, metadata, periods, year, asOfDay) {
     if (observed.has(date)) throw new TypeError('Asset comparison date is both observed and missing');
     if (first && day >= first.epochDay && day <= asOfDay) missingDates.push(date);
   }
+  const calendar = metadata.calendar ?? 'sessions';
+  if (!['sessions', 'calendar-days'].includes(calendar)) throw new TypeError('Unsupported asset comparison calendar');
   let gapCount = 0;
-  for (let index = 1; index < prices.length; index++) if (prices[index].epochDay - prices[index - 1].epochDay > 7) gapCount++;
+  for (let index = 1; index < prices.length; index++) {
+    const intervalDays = prices[index].epochDay - prices[index - 1].epochDay;
+    if (calendar === 'calendar-days' ? intervalDays !== 1 : intervalDays > 7) gapCount++;
+  }
   const presentYears = new Set(periods.map(period => period.year)), missingYears = [];
   if (first) for (let historicalYear = yearOf(first.date); historicalYear < year; historicalYear++) if (!presentYears.has(historicalYear)) missingYears.push(historicalYear);
-  const firstYearPartial = Boolean(first && first.date.slice(5) > '01-07');
+  const firstYearPartial = Boolean(first && (calendar === 'calendar-days' ? first.date.slice(5) !== '01-01' : first.date.slice(5) > '01-07'));
   const issues = [];
   if (!first) issues.push('기준일까지의 관측 없음');
   if (missingDates.length) issues.push(`확인된 결측 ${missingDates.length}개 날짜`);
   if (missingYears.length) issues.push(`관측 없는 과거 연도 ${missingYears.join(', ')}`);
-  if (gapCount) issues.push(`7일을 넘는 관측 간격 ${gapCount}개`);
+  if (gapCount) issues.push(calendar === 'calendar-days' ? `하루를 넘는 UTC 달력일 관측 간격 ${gapCount}개` : `7일을 넘는 거래 세션 관측 간격 ${gapCount}개`);
   const current = periods.find(period => period.year === year);
-  if (current && current.startDate.slice(5) > '01-07') issues.push('올해 첫 주의 기준 종가 없음');
+  if (current && (calendar === 'calendar-days' ? current.startDate.slice(5) !== '01-01' : current.startDate.slice(5) > '01-07')) issues.push(calendar === 'calendar-days' ? '올해 UTC 첫 달력일 기준 종가 없음' : '올해 첫 주의 기준 종가 없음');
   return { status: !first ? 'unavailable' : issues.length ? 'incomplete' : 'observed', complete: Boolean(first) && issues.length === 0, issues, missingYears, missingDates: missingDates.sort(), gapCount, firstYearPartial, firstPartialStartDate: firstYearPartial ? first.date : null };
 }
 
@@ -144,9 +149,9 @@ export function buildAssetComparison(bundle, { asOfDate } = {}) {
     if (asset.currency !== 'USD') throw new TypeError('Asset comparison requires consistently USD-denominated prices');
     const meta = asset.meta ?? {};
     if (typeof meta !== 'object' || Array.isArray(meta)) throw new TypeError('Asset comparison metadata must be an object');
-    if (meta.calendar !== undefined && meta.calendar !== 'sessions') throw new TypeError('Asset comparison expects exchange sessions');
+    if (meta.calendar !== undefined && !['sessions', 'calendar-days'].includes(meta.calendar)) throw new TypeError('Asset comparison expects exchange sessions or UTC calendar days');
     for (const granularity of [meta.dataGranularity, meta.granularity]) if (granularity !== undefined && granularity !== '1d') throw new TypeError('Asset comparison requires daily source observations');
-    if (meta.adjustment !== undefined && meta.adjustment !== 'split-adjusted-close') throw new TypeError('Asset comparison requires split-adjusted price-only closes');
+    if (meta.adjustment !== undefined && meta.adjustment !== 'split-adjusted-close' && !(meta.calendar === 'calendar-days' && meta.adjustment === 'none')) throw new TypeError('Asset comparison requires split-adjusted price-only closes or UTC daily prices');
     const all = validateDataset(asset.prices), prices = all.filter(point => point.epochDay <= asOfDay);
     const latest = prices.at(-1) ?? null, first = prices[0] ?? null, periods = annualPeriods(prices);
     const samples = periods.filter(period => period.year < year);
@@ -168,7 +173,7 @@ export function buildAssetComparison(bundle, { asOfDate } = {}) {
       latestDate: latest?.date ?? null, latestPrice: latest?.price ?? null, ytdPct,
       firstDate: first?.date ?? null, lastDate: latest?.date ?? null, observationCount: prices.length,
       judgment, coverage, samples,
-      source: { name: meta.sourceName ?? '', url: meta.sourceUrl ?? '', priceDefinition: meta.priceDefinition ?? '', currency: asset.currency, retrievedAt: meta.retrievedAt ?? bundle.retrievedAt ?? null, firstDate: meta.firstDate ?? all[0].date, lastDate: meta.lastDate ?? all.at(-1).date, count: meta.count ?? all.length, responseSha256: meta.responseSha256 ?? null },
+      source: { name: meta.sourceName ?? '', url: meta.sourceUrl ?? meta.source ?? '', priceDefinition: meta.priceDefinition ?? '', currency: asset.currency, retrievedAt: meta.retrievedAt ?? bundle.retrievedAt ?? null, firstDate: meta.firstDate ?? all[0].date, lastDate: meta.lastDate ?? all.at(-1).date, count: meta.count ?? all.length, responseSha256: meta.responseSha256 ?? meta.rawSha256 ?? null },
       meta: { ...meta },
     };
   });

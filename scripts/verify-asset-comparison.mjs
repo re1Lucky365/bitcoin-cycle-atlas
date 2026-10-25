@@ -44,9 +44,9 @@ function referencePrerequisites(asset, expected, asOf) {
   const year = Number(asOf.slice(0, 4)), first = expected.prefix[0], day = date => Date.parse(`${date}T00:00:00Z`) / 86400000;
   const years = new Set(expected.samples.map(sample => sample.year));
   const noAbsentYears = !first || Array.from({ length: Math.max(0, year - Number(first[0].slice(0, 4))) }, (_, index) => Number(first[0].slice(0, 4)) + index).every(value => years.has(value));
-  const noLargeGaps = expected.prefix.every(([date], index, observations) => index === 0 || day(date) - day(observations[index - 1][0]) <= 7);
+  const noLargeGaps = expected.prefix.every(([date], index, observations) => index === 0 || day(date) - day(observations[index - 1][0]) <= (asset.meta?.calendar === 'calendar-days' ? 1 : 7));
   const noKnownMissing = !(asset.meta?.missingDates ?? []).some(date => first && date >= first[0] && date <= asOf);
-  const currentStartsInFirstWeek = !expected.first || expected.first[0] <= `${year}-01-07`;
+  const currentStartsInFirstWeek = !expected.first || (asset.meta?.calendar === 'calendar-days' ? expected.first[0] === `${year}-01-01` : expected.first[0] <= `${year}-01-07`);
   const complete = Boolean(first && noAbsentYears && noLargeGaps && noKnownMissing && currentStartsInFirstWeek);
   const available = Boolean(
     complete && expected.first && expected.latest && Number(expected.latest[0].slice(0, 4)) === year &&
@@ -290,16 +290,16 @@ for (const control of negativeControls) {
 
 const requestedAsOf = process.argv.find(argument => argument.startsWith('--as-of='))?.slice('--as-of='.length);
 const asOf = requestedAsOf ?? new Date(published.retrievedAt).toISOString().slice(0, 10);
-const order = ['SPY', 'QQQ', 'NVDA', 'AAPL', 'GOOG', 'MSFT', 'AMZN', 'META', 'AVGO', 'PLTR', 'TSLA', 'HOOD', 'TLT', 'IEF', 'GLD', 'SLV', 'PDBC'];
+const order = ['BTC', 'SPY', 'QQQ', 'NVDA', 'AAPL', 'GOOG', 'MSFT', 'AMZN', 'META', 'AVGO', 'PLTR', 'TSLA', 'HOOD', 'TLT', 'IEF', 'GLD', 'SLV', 'PDBC'];
 const model = compareReference(published, asOf);
 assert.deepEqual(model.rows.map(asset => asset.symbol), order);
 for (const asset of model.rows) {
   assert.ok(asset.samples.every(sample => sample.year < model.year));
-  const firstYearPartial = Boolean(asset.sampleYears && asset.firstDate.slice(5) > '01-07');
+  const firstYearPartial = Boolean(asset.sampleYears && (asset.meta.calendar === 'calendar-days' ? asset.firstDate.slice(5) !== '01-01' : asset.firstDate.slice(5) > '01-07'));
   assert.equal(asset.samplePartialFirstYear, firstYearPartial);
   assert.equal(asset.firstPartialStartDate, firstYearPartial ? asset.firstDate : null);
 }
-if (model.year === 2026) assert.deepEqual(model.rows.map(asset => asset.sampleYears), [33, 27, 27, 46, 22, 40, 29, 14, 17, 6, 16, 5, 24, 24, 22, 20, 12]);
+if (model.year === 2026) assert.deepEqual(model.rows.map(asset => asset.sampleYears), [16, 33, 27, 27, 46, 22, 40, 29, 14, 17, 6, 16, 5, 24, 24, 22, 20, 12]);
 
 // A second successful production run follows every negative control. Measure
 // only the pure build, excluding JSON parsing, oracle work and rendering.

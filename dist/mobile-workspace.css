@@ -16,9 +16,9 @@
   .atlas-canvas-heading .workbench-mode{width:44px;max-width:44px;padding:11px}
   .atlas-canvas-heading #atlas-mode-name{display:none}
   .mobile-workbench-button{display:flex}
-  body:not([data-page=outlook]) .mobile-chart-home{position:fixed;top:max(6px,var(--mobile-top));left:8px;z-index:48;display:flex;align-items:center;gap:5px;height:40px;min-height:40px;padding:6px 12px 6px 7px;border:1px solid #33465f;border-radius:6px;background:#142131;color:#c8dcf4;font-size:12px}
+  body:not([data-page=outlook]):not([data-page=data]) .mobile-chart-home{position:fixed;top:max(6px,var(--mobile-top));left:8px;z-index:48;display:flex;align-items:center;gap:5px;height:40px;min-height:40px;padding:6px 12px 6px 7px;border:1px solid #33465f;border-radius:6px;background:#142131;color:#c8dcf4;font-size:12px}
   .mobile-chart-home svg{width:19px;height:19px}
-  body:not([data-page=outlook]) .workspace.atlas-details-layout>#main{padding-top:52px;box-sizing:border-box}
+  body:not([data-page=outlook]):not([data-page=data]) .workspace.atlas-details-layout>#main{padding-top:52px;box-sizing:border-box}
   .atlas-plot{contain:layout paint;--mobile-legend-top:calc(var(--indicator-top,90px) + var(--chart-hud-countdown-height,0px) + var(--chart-hud-legend-height,0px) + var(--chart-hud-gap,0px));--mobile-countdown-height:0px;--mobile-countdown-gap:0px}
   .atlas-plot>#lab-metrics,.atlas-plot[data-countdown-visible=true]>#lab-metrics{top:8px;left:10px;right:10px;max-width:calc(100% - 20px);padding:0;gap:4px;min-height:0}
   .readout-main{gap:7px;flex-wrap:wrap;white-space:normal;row-gap:1px}
