@@ -67,11 +67,153 @@
   "numericalEvidence": "asset-comparison-verification.json",
   "acquisitionEvidence": "asset-comparison-acquisition.json",
   "browserQa": {
-    "status": "mobile-fix-awaiting-deployment",
+    "status": "PASS",
     "record": "../../design-qa.md",
-    "initialDesktop": "v1.25.0 passed reference comparison, 17 rows, one table, judgment explanation, CSV and refresh.",
-    "found": "At 390 px, the 210 px sticky name covered leading YTD digits and appeared beneath a price header.",
-    "patch": "Exact 866 px mobile table; name 120 + YTD 84 + judgment 96 = 300 px; aligned sticky name header, scroll hint and column snapping."
+    "verifiedAt": "2026-10-25T09:31:27Z",
+    "deployedCommit": "b0c08ff31181daefa2eafac410a58a15e7d9133f",
+    "url": "https://twoimo.github.io/bitcoin-cycle-atlas/?page=data",
+    "browser": "Chrome cloud browser; responsive iframe preview, not a physical-device performance benchmark",
+    "referenceComparison": "Both user reference images and the deployed v1.25.1 desktop screenshot viewed together; structure, grouping, grid and directional colors confirmed.",
+    "desktop": {
+      "viewport": [
+        1363,
+        936
+      ],
+      "tables": 1,
+      "assetRows": 17,
+      "judgmentButtons": 17,
+      "visibleJudgmentStages": 5
+    },
+    "mobile": [
+      {
+        "viewport": [
+          390,
+          844
+        ],
+        "scrollportWidth": 378,
+        "tableWidth": 866,
+        "scrollLeft": 488,
+        "name": {
+          "x": 0,
+          "width": 120
+        },
+        "nameHeader": {
+          "x": 0,
+          "width": 120
+        },
+        "ytd": {
+          "x": 198,
+          "width": 84,
+          "text": "+11.24%"
+        },
+        "judgment": {
+          "x": 282,
+          "width": 96,
+          "text": "분할 매도"
+        }
+      },
+      {
+        "viewport": [
+          320,
+          740
+        ],
+        "scrollportWidth": 308,
+        "tableWidth": 866,
+        "scrollLeft": 558,
+        "name": {
+          "x": 0,
+          "width": 120
+        },
+        "nameHeader": {
+          "x": 0,
+          "width": 120
+        },
+        "ytd": {
+          "x": 128,
+          "width": 84,
+          "text": "+11.24%"
+        },
+        "judgment": {
+          "x": 212,
+          "width": 96,
+          "text": "분할 매도"
+        }
+      }
+    ],
+    "shortViewport": {
+      "viewport": [
+        390,
+        430
+      ],
+      "scrollContainer": "#data-view",
+      "clientHeight": 378,
+      "scrollHeight": 1052,
+      "scrollTop": 674,
+      "lastAssetAndFooterReachable": true
+    },
+    "reasonDialog": {
+      "asset": "SPY",
+      "viewport": [
+        320,
+        740
+      ],
+      "dialogWidth": 288,
+      "clientWidth": 271,
+      "scrollWidth": 271,
+      "actualThresholdsVisible": true,
+      "closeButtonPassed": true,
+      "desktopEscapePassedIn": "v1.25.0"
+    },
+    "csv": {
+      "verifiedIn": "v1.25.0; export code and numerical data unchanged in v1.25.1",
+      "dataRows": 17,
+      "fields": 34,
+      "matchedIndependentReport": true,
+      "bytes": 15544,
+      "sha256": "a66af6e7cda59bed3ba241433b3ec11d627a1aedc24ac91dccb9f2daa654e76e"
+    },
+    "refresh": "v1.25.0 cleared previous rows while loading and restored all 17 rows; refresh code unchanged in v1.25.1",
+    "console": {
+      "scope": "Captured error logs after 2026-10-25T09:28:00Z during final live QA",
+      "applicationErrors": 0,
+      "unrelatedExtensionErrors": {
+        "desktop": 1,
+        "mobile": 12
+      }
+    },
+    "resolvedP2": "Mobile sticky name covered YTD digits and had the wrong header; exact mobile widths and aligned sticky name header verified at 390 px and 320 px.",
+    "screenshots": [
+      {
+        "name": "desktop",
+        "path": "docs/figures/asset-comparison-v1.25.1-desktop.jpg",
+        "bytes": 160508,
+        "sha256": "b147d5583409974b825234e91ccb68498d13da37597dbe15449fc73b3dbbb551"
+      },
+      {
+        "name": "mobile-390",
+        "path": "docs/figures/asset-comparison-v1.25.1-mobile-390.jpg",
+        "bytes": 77102,
+        "sha256": "fcc058340b033ccb1de489b4b79eb57481bd40fef53397be377af30070e9c7e6"
+      },
+      {
+        "name": "mobile-320",
+        "path": "docs/figures/asset-comparison-v1.25.1-mobile-320.jpg",
+        "bytes": 62455,
+        "sha256": "57552b1b85f1268cf09933b895d0de99a483fb829d0a7f55988756275edb42f3"
+      },
+      {
+        "name": "mobile-reason",
+        "path": "docs/figures/asset-comparison-v1.25.1-mobile-reason.jpg",
+        "bytes": 57003,
+        "sha256": "f0e0cf39e815a75acb1e171be41f0a2eb97554bb1e23fb6e362a741a4c4c6038"
+      },
+      {
+        "name": "mobile-short",
+        "path": "docs/figures/asset-comparison-v1.25.1-mobile-short.jpg",
+        "bytes": 49485,
+        "sha256": "63c650052c4d71b9f47e3dd77032c5a69584947b39dd85dd9308b42013b89bc7"
+      }
+    ]
   },
   "sourceSha256": {
     "dist/app.js": "05aee1076af8c1b268066fc3ba534bf623d8b58c2f86fedf1679410053249d6b",
@@ -101,6 +243,31 @@
     "staticReferences": 278,
     "standaloneModules": 96,
     "sourceArithmetic": "unchanged; original independent oracle/negative controls still apply",
-    "mobileRegression": "Width sum and final column fit constraints; live browser confirmation pending."
+    "mobileRegression": "PASS: actual deployed 390 px and 320 px views show the complete YTD and judgment beside the aligned sticky name; short 390x430 viewport reaches PDBC and footer."
+  },
+  "deployment": {
+    "commit": "b0c08ff31181daefa2eafac410a58a15e7d9133f",
+    "pullRequests": [
+      26,
+      27
+    ],
+    "release": "v1.25.1",
+    "actions": [
+      {
+        "name": "CI",
+        "runId": 40180614357,
+        "conclusion": "success"
+      },
+      {
+        "name": "Deploy Pages",
+        "runId": 40180614339,
+        "conclusion": "success"
+      },
+      {
+        "name": "Release",
+        "runId": 40180614422,
+        "conclusion": "success"
+      }
+    ]
   }
 }
