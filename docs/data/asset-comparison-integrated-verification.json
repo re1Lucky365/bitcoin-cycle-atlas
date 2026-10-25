@@ -1,11 +1,11 @@
 {
-  "version": "1.25.0",
+  "version": "1.25.1",
   "reviewDate": "2026-10-25",
   "node": "v24.22.1",
   "status": "PASS",
   "tests": {
-    "tests": 1015,
-    "pass": 1015,
+    "tests": 1017,
+    "pass": 1017,
     "fail": 0,
     "cancelled": 0,
     "skipped": 0,
@@ -54,7 +54,7 @@
     }
   ],
   "standalone": {
-    "bytes": 11500728,
+    "bytes": 11503145,
     "modules": 96,
     "embeddedSnapshots": 7
   },
@@ -67,15 +67,18 @@
   "numericalEvidence": "asset-comparison-verification.json",
   "acquisitionEvidence": "asset-comparison-acquisition.json",
   "browserQa": {
-    "status": "pending-deployment",
-    "record": "../../design-qa.md"
+    "status": "mobile-fix-awaiting-deployment",
+    "record": "../../design-qa.md",
+    "initialDesktop": "v1.25.0 passed reference comparison, 17 rows, one table, judgment explanation, CSV and refresh.",
+    "found": "At 390 px, the 210 px sticky name covered leading YTD digits and appeared beneath a price header.",
+    "patch": "Exact 866 px mobile table; name 120 + YTD 84 + judgment 96 = 300 px; aligned sticky name header, scroll hint and column snapping."
   },
   "sourceSha256": {
-    "dist/app.js": "0535929cd3cbfcc9ea6ff1e8089f227a6d627041b6effa6d96f73a7f12a77d66",
+    "dist/app.js": "05aee1076af8c1b268066fc3ba534bf623d8b58c2f86fedf1679410053249d6b",
     "dist/asset-comparison-source.js": "4ec4ac85a0ce67687e2d39f3fb22a67319b6d45da31c2b9daa282b4cab3b34f6",
     "dist/asset-comparison.js": "05092f329ff66d1a2f98492fc6204ba72fb88887090260edc14ebb284a11b012",
-    "dist/daily-data-view.js": "1b2874e76cd7d02d1dfbe0d7cddb537b36806727252d7c472631e0d543f0f503",
-    "dist/daily-data.css": "6b3c075e83d3408662c0e696d3729a854f8d28bf7206d9ac9784ee9a26b5bf3d",
+    "dist/daily-data-view.js": "9a7e0e0bff2f31441c5b6aab2b93c7878ce3757b628dee5ba22f781f819f871b",
+    "dist/daily-data.css": "3136c49ab298758e15647fa795ad75587bde3abb774c81de2eae2854ff21aa59",
     "dist/data/asset-comparison.json": "550978f252a5905591ce50e493c0ad5f17a141ac6e7d52d0b41ba79578490678",
     "scripts/refresh-asset-comparison.mjs": "ba757f6243f334e7341c953e5b9295ef5cbe2326aabed4ff6c6f30a66166be42",
     "scripts/verify-asset-comparison.mjs": "fc99f73e71d065936d2246c5f2de46d51a3e7b3815ad4760c8b1fefb2f60f3cd",
@@ -84,12 +87,20 @@
     "tests/asset-comparison-refresh.test.mjs": "77727f2721f25ff4591a23149a6a7ce7fdc5fbade8a5d6ca00362259c0ee799e",
     "tests/asset-comparison.test.mjs": "48f8e69f91005237ad9abd175a69b575a501d51cd1457e186e3ce97444002660",
     "tests/asset-comparison-source.test.mjs": "d20aab7ab38ada9b05c9764b1f8dcc9e1c07fb176a017790e45de5282f3ad215",
-    "tests/daily-data-view.test.mjs": "7ca02e34006490debdc27772e9ef7c853a7aee55f0ea86ae4300fc7767da624d",
+    "tests/daily-data-view.test.mjs": "a2b9b91dd0f78bc31d0256228655cff3820e3c7fbe313cb3d1b172347a6277a1",
     "tests/daily-data-performance.test.mjs": "ea2bb30538f8495adfb9078b9a7718a3fd10f5ef562f8df9bf81dadff5bb03b7"
   },
   "limits": [
     "Computational and bounded state verification does not establish investment profitability or calibrated probabilities.",
     "Same-provider request and cross-asset session checks are not independent verification of every exchange record.",
     "Node computation and inert DOM tests do not establish browser layout or interaction quality."
-  ]
+  ],
+  "referenceReconciliation": "asset-reference-metric-reconciliation.json",
+  "patchVerification": {
+    "tests": 1017,
+    "staticReferences": 278,
+    "standaloneModules": 96,
+    "sourceArithmetic": "unchanged; original independent oracle/negative controls still apply",
+    "mobileRegression": "Width sum and final column fit constraints; live browser confirmation pending."
+  }
 }

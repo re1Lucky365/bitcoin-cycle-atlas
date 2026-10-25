@@ -12,7 +12,7 @@ import { renderForecastView, exportForecastSvg } from './forecast-view.js?v=1.19
 import { initViewportWorkspace } from './viewport-workspace.js?v=1.19.0';
 import { initLabView } from "./lab-view.js?v=1.24.0";
 import { initEvidenceView, showEvidenceView } from './evidence-view.js?v=1.20.0';
-import { initDailyDataView } from './daily-data-view.js?v=1.25.0';
+import { initDailyDataView } from './daily-data-view.js?v=1.25.1';
 import { createAssetComparisonLoader } from './asset-comparison-source.js?v=1.25.0';
 
 const $ = (selector) => document.querySelector(selector);
