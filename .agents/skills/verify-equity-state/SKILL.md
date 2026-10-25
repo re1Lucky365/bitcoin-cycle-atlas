@@ -10,7 +10,7 @@ Keep the observed chart usable while its forecast is pending. Never let revoked 
 ## Coverage and synchronization
 
 - Covered code: `dist/equity-view.js` functions `load`, `render`, `schedule`, `revealReady`, interval/range callbacks, and `pagehide`/`pageshow`; `dist/index.html` boot-script handshake.
-- Last correspondence review: commit `c7fbf50c34a45386300336756b5fd42a0fab0363`. Equity view SHA-256: `0e9cd421cdd831a6fdd618f2ceb87f1d8353a6054d93e40ecf4356dd8c490a3d`.
+- Last correspondence review: commit `1ad3be543e870e74f10708c266f19572b217d25f` (2026-10-25). Previous sync: `c7fbf50c34a45386300336756b5fd42a0fab0363`. Since that review, the daily-data information link and module version URLs changed; no covered await, ownership guard, readiness writer or lifecycle transition changed. Current and negative-control models, 28 initializer replays and all seven product mutations were rerun with unchanged invariants. Equity view SHA-256: `1843735506f4fe16c560902697d81cb35da601decf901bd523e231715b998c44`.
 - Model: `verification/equity-state/EquityLoad.tla`. Bounds: three request generations, daily/weekly displays, automatic/custom range choices. Network continuations and the two animation-frame yields are separate.
 - Actual-code replay: `tests/equity-load-ownership.test.mjs` and `tests/helpers/equity-view-fixture.mjs`. The complete production initializer and actual inline boot script execute with HTTP, imports, rendering and DOM boundaries injected. The test does not copy `load` or inspect its hidden locals.
 - Read `docs/formal-equity/README.md` for correspondence and scope. Existing `verify-market-state` separately covers the crypto candle controller.

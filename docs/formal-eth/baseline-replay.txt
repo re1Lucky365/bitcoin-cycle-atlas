@@ -1,0 +1,240 @@
+TAP version 13
+# Subtest: ETH reveals a rendered observed chart exactly once
+ok 1 - ETH reveals a rendered observed chart exactly once
+  ---
+  duration_ms: 19.522657
+  type: 'test'
+  ...
+# Subtest: ETH initial failure reveals its actionable retry and a retry can recover
+ok 2 - ETH initial failure reveals its actionable retry and a retry can recover
+  ---
+  duration_ms: 7.105216
+  type: 'test'
+  ...
+# Subtest: ETH canceled initialization cannot release the shell before restored data is usable
+not ok 3 - ETH canceled initialization cannot release the shell before restored data is usable
+  ---
+  duration_ms: 5.600973
+  type: 'test'
+  location: '/workspace/scratch/f6561dd83ec0/bitcoin-cycle-atlas/tests/eth-load-ownership.test.mjs:30:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    a canceled initializer must not mark an empty restored chart ready
+    
+    'ready' !== 'loading'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'loading'
+  actual: 'ready'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/f6561dd83ec0/bitcoin-cycle-atlas/tests/eth-load-ownership.test.mjs:33:10)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: ETH hidden initialization and late resize cannot publish retained prices
+not ok 4 - ETH hidden initialization and late resize cannot publish retained prices
+  ---
+  duration_ms: 7.089707
+  type: 'test'
+  location: '/workspace/scratch/f6561dd83ec0/bitcoin-cycle-atlas/tests/eth-load-ownership.test.mjs:39:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    a suspended initialization callback must not release the boot shell
+    
+    'ready' !== 'loading'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'loading'
+  actual: 'ready'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/f6561dd83ec0/bitcoin-cycle-atlas/tests/eth-load-ownership.test.mjs:42:10)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: ETH shortest hidden-layout counterexample does not update an empty suspended page
+not ok 5 - ETH shortest hidden-layout counterexample does not update an empty suspended page
+  ---
+  duration_ms: 6.834633
+  type: 'test'
+  location: '/workspace/scratch/f6561dd83ec0/bitcoin-cycle-atlas/tests/eth-load-ownership.test.mjs:48:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    a suspended layout callback must not publish loading status
+    
+    '불러오는 중' !== ''
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: ''
+  actual: '불러오는 중'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/f6561dd83ec0/bitcoin-cycle-atlas/tests/eth-load-ownership.test.mjs:51:10)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: ETH shortest revoked-initializer counterexample cannot release a suspended empty page
+not ok 6 - ETH shortest revoked-initializer counterexample cannot release a suspended empty page
+  ---
+  duration_ms: 5.724354
+  type: 'test'
+  location: '/workspace/scratch/f6561dd83ec0/bitcoin-cycle-atlas/tests/eth-load-ownership.test.mjs:56:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    a revoked initializer must not release an empty suspended page
+    
+    'ready' !== 'loading'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'loading'
+  actual: 'ready'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/f6561dd83ec0/bitcoin-cycle-atlas/tests/eth-load-ownership.test.mjs:59:10)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: ETH revoked archive success cannot replace the restored chart
+ok 7 - ETH revoked archive success cannot replace the restored chart
+  ---
+  duration_ms: 8.463744
+  type: 'test'
+  ...
+# Subtest: ETH revoked live success cannot replace a newer refresh
+ok 8 - ETH revoked live success cannot replace a newer refresh
+  ---
+  duration_ms: 8.985433
+  type: 'test'
+  ...
+# Subtest: ETH revoked archive failure cannot replace the restored chart
+ok 9 - ETH revoked archive failure cannot replace the restored chart
+  ---
+  duration_ms: 5.065595
+  type: 'test'
+  ...
+# Subtest: ETH revoked live failure cannot replace a newer refresh
+ok 10 - ETH revoked live failure cannot replace a newer refresh
+  ---
+  duration_ms: 8.615842
+  type: 'test'
+  ...
+# Subtest: ETH refresh failure retains valid observed prices and is recoverable
+ok 11 - ETH refresh failure retains valid observed prices and is recoverable
+  ---
+  duration_ms: 11.198472
+  type: 'test'
+  ...
+# Subtest: ETH accepts consecutive refresh clicks before disabled is painted and the latest request wins
+ok 12 - ETH accepts consecutive refresh clicks before disabled is painted and the latest request wins
+  ---
+  duration_ms: 8.817962
+  type: 'test'
+  ...
+# Subtest: ETH refresh preserves a date range chosen while its request was pending
+not ok 13 - ETH refresh preserves a date range chosen while its request was pending
+  ---
+  duration_ms: 7.271662
+  type: 'test'
+  location: '/workspace/scratch/f6561dd83ec0/bitcoin-cycle-atlas/tests/eth-load-ownership.test.mjs:107:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    a live refresh must preserve a newer user date range
+    + actual - expected
+    
+    + 1788134400
+    - 1788998400
+          ^
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1788998400
+  actual: 1788134400
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/f6561dd83ec0/bitcoin-cycle-atlas/tests/eth-load-ownership.test.mjs:111:10)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: ETH data information opens with its escaped original-data link
+not ok 14 - ETH data information opens with its escaped original-data link
+  ---
+  duration_ms: 6.147364
+  type: 'test'
+  location: '/workspace/scratch/f6561dd83ec0/bitcoin-cycle-atlas/tests/eth-load-ownership.test.mjs:115:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Got unwanted exception: the information button must not call an undefined HTML escaper
+    Actual message: "esc is not defined"
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  actual:
+  error: 'esc is not defined'
+  name: 'ReferenceError'
+  stack: |-
+    renderInfo (evalmachine.<anonymous>:125:777)
+    evalmachine.<anonymous>:203:127
+    Node.dispatchEvent (file:///workspace/scratch/f6561dd83ec0/bitcoin-cycle-atlas/tests/helpers/eth-view-fixture.mjs:24:66)
+    click (file:///workspace/scratch/f6561dd83ec0/bitcoin-cycle-atlas/tests/helpers/eth-view-fixture.mjs:135:9)
+    Object.info (file:///workspace/scratch/f6561dd83ec0/bitcoin-cycle-atlas/tests/helpers/eth-view-fixture.mjs:157:19)
+    file:///workspace/scratch/f6561dd83ec0/bitcoin-cycle-atlas/tests/eth-load-ownership.test.mjs:118:42
+    getActual (node:assert:611:5)
+    strict.doesNotThrow (node:assert:779:32)
+    TestContext.<anonymous> (file:///workspace/scratch/f6561dd83ec0/bitcoin-cycle-atlas/tests/eth-load-ownership.test.mjs:118:10)
+    async Test.run (node:internal/test_runner/test:1409:7)
+  operator: 'doesNotThrow'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/f6561dd83ec0/bitcoin-cycle-atlas/tests/eth-load-ownership.test.mjs:118:10)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: ETH intraday force refresh preserves later date and price navigation through the real controller
+not ok 15 - ETH intraday force refresh preserves later date and price navigation through the real controller
+  ---
+  duration_ms: 12.135316
+  type: 'test'
+  location: '/workspace/scratch/f6561dd83ec0/bitcoin-cycle-atlas/tests/eth-load-ownership.test.mjs:123:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    intraday refresh must preserve newer date navigation
+    + actual - expected
+    
+    + 1792238400
+    - 1792652400
+          ^
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1792652400
+  actual: 1792238400
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/f6561dd83ec0/bitcoin-cycle-atlas/tests/eth-load-ownership.test.mjs:130:10)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: ETH switching interval revokes the real intraday force refresh without resetting its new range
+ok 16 - ETH switching interval revokes the real intraday force refresh without resetting its new range
+  ---
+  duration_ms: 12.495513
+  type: 'test'
+  ...
+# Subtest: ETH weekly refresh preserves the later preset and updated observation bounds
+ok 17 - ETH weekly refresh preserves the later preset and updated observation bounds
+  ---
+  duration_ms: 9.174452
+  type: 'test'
+  ...
+1..17
+# tests 17
+# suites 0
+# pass 10
+# fail 7
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 264.416282

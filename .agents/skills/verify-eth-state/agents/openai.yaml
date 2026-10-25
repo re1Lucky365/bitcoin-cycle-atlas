@@ -1,0 +1,4 @@
+interface:
+  display_name: "Verify ETH State"
+  short_description: "Check ETH readiness and refresh ownership"
+  default_prompt: "Use $verify-eth-state to verify ETH lifecycle and refresh changes."

@@ -46,6 +46,8 @@ jobs:
         run: npm run verify:research
       - name: Independently reconcile daily treasury paths
         run: npm run verify:treasury-paths
+      - name: Independently check numerical identities and causal boundaries
+        run: npm run verify:numerics
       - name: Verify bounded request ownership and negative controls
         run: npm run verify:formal
       - name: Verify and package release assets

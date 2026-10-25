@@ -1,0 +1,572 @@
+{
+  "scope": "Separate unreported Node CPU profiles used to locate limiting work. Profiled timings are not the A/B headline measurement; post-profile integrated math dependencies may include concurrent correctness changes. Reported timing provenance is in system-performance-audit-2026-10-25.json.",
+  "baselineRevision": "64c8207cb044d8990289c5a7d39972e21b74c240",
+  "runtime": "v24.22.1",
+  "runs": {
+    "startup-base": {
+      "profileSha256": "0b2840920fb8ca431f347650cbf2d7a6b37bdb95f5f0ebe0f4a28f11f9f76cd0",
+      "samples": 1437,
+      "diagnosticOnly": true,
+      "observations": {
+        "scope": "Builder inventory profile only; hidden comparison/timing helpers are deliberately exercised by the profiling script, not claimed to run on every initial page."
+      },
+      "topSelfTime": [
+        {
+          "function": "sha",
+          "file": "profile-startup-computation.mjs",
+          "line": 18,
+          "sampledMs": 215.237
+        },
+        {
+          "function": "(garbage collector)",
+          "file": "",
+          "line": 0,
+          "sampledMs": 123.807
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.21.0",
+          "line": 242,
+          "sampledMs": 113.597
+        },
+        {
+          "function": "dateFromDay",
+          "file": "cycle-engine.js?v=1.19.0",
+          "line": 44,
+          "sampledMs": 80.845
+        },
+        {
+          "function": "",
+          "file": "market-structure.js",
+          "line": 242,
+          "sampledMs": 60.406
+        },
+        {
+          "function": "utcDay",
+          "file": "cycle-engine.js?v=1.19.0",
+          "line": 26,
+          "sampledMs": 53.85
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.21.0",
+          "line": 251,
+          "sampledMs": 53.422
+        },
+        {
+          "function": "mean",
+          "file": "market-structure.js?v=1.21.0",
+          "line": 27,
+          "sampledMs": 43.343
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.21.0",
+          "line": 27,
+          "sampledMs": 38.145
+        },
+        {
+          "function": "projectLongHorizon",
+          "file": "long-horizon-forecast.js",
+          "line": 254,
+          "sampledMs": 36.242
+        },
+        {
+          "function": "buildDetailedForecast",
+          "file": "detailed-forecast.js?v=1.21.0",
+          "line": 369,
+          "sampledMs": 32.007
+        },
+        {
+          "function": "update",
+          "file": "hash",
+          "line": 186,
+          "sampledMs": 28.113
+        },
+        {
+          "function": "shiftCalendarMonths",
+          "file": "cycle-timing.js?v=1.19.0",
+          "line": 17,
+          "sampledMs": 27.4
+        },
+        {
+          "function": "calibrateCycleTiming",
+          "file": "cycle-calibration.js?v=1.19.0",
+          "line": 82,
+          "sampledMs": 24.857
+        },
+        {
+          "function": "logCurve",
+          "file": "long-horizon-forecast.js",
+          "line": 134,
+          "sampledMs": 23.296
+        }
+      ]
+    },
+    "daily-base": {
+      "profileSha256": "630165c38a8cf2e2edbcee875cbdaf7167fba63ccacc9c3dcd1804e8f9b1c597",
+      "samples": 1857,
+      "diagnosticOnly": true,
+      "observations": {
+        "pageActions": 100,
+        "monthlyWrites": 100,
+        "monthlyCharacters": 6451400,
+        "visibleFinalPage": "101 / 298 페이지 · 최근순 · 20행"
+      },
+      "topSelfTime": [
+        {
+          "function": "formatDailyPercent",
+          "file": "daily-data-view.js",
+          "line": 14,
+          "sampledMs": 1400.534
+        },
+        {
+          "function": "price",
+          "file": "daily-data-view.js",
+          "line": 9,
+          "sampledMs": 177.933
+        },
+        {
+          "function": "(garbage collector)",
+          "file": "",
+          "line": 0,
+          "sampledMs": 67.489
+        },
+        {
+          "function": "heatCell",
+          "file": "daily-data-view.js",
+          "line": 51,
+          "sampledMs": 42.969
+        },
+        {
+          "function": "",
+          "file": "daily-data-view.js",
+          "line": 81,
+          "sampledMs": 38.231
+        },
+        {
+          "function": "esc",
+          "file": "daily-data-view.js",
+          "line": 6,
+          "sampledMs": 29.684
+        },
+        {
+          "function": "paintDetail",
+          "file": "daily-data-view.js",
+          "line": 131,
+          "sampledMs": 29.269
+        },
+        {
+          "function": "renderMonthlyDataTable",
+          "file": "daily-data-view.js",
+          "line": 77,
+          "sampledMs": 28.28
+        },
+        {
+          "function": "analyzeDailySeries",
+          "file": "daily-analytics.js?v=1.22.0",
+          "line": 153,
+          "sampledMs": 27.109
+        },
+        {
+          "function": "dailyTableRows",
+          "file": "daily-data-view.js",
+          "line": 20,
+          "sampledMs": 20.693
+        },
+        {
+          "function": "(program)",
+          "file": "",
+          "line": 0,
+          "sampledMs": 16.436
+        },
+        {
+          "function": "utcDay",
+          "file": "cycle-engine.js?v=1.19.0",
+          "line": 26,
+          "sampledMs": 16.347
+        },
+        {
+          "function": "read",
+          "file": "profile-daily.mjs",
+          "line": 7,
+          "sampledMs": 12.808
+        },
+        {
+          "function": "indicatorsAt",
+          "file": "daily-analytics.js?v=1.22.0",
+          "line": 96,
+          "sampledMs": 11.796
+        },
+        {
+          "function": "readFileUtf8",
+          "file": "",
+          "line": 0,
+          "sampledMs": 10.68
+        }
+      ]
+    },
+    "daily-after": {
+      "profileSha256": "1b548d926ee856cde17a4099b0666037cbfcb3545c35c86f87822f4073b3cc2f",
+      "samples": 830,
+      "diagnosticOnly": true,
+      "observations": {
+        "pageActions": 100,
+        "monthlyWrites": 0,
+        "monthlyCharacters": 0,
+        "visibleFinalPage": "101 / 298 페이지 · 최근순 · 20행"
+      },
+      "topSelfTime": [
+        {
+          "function": "formatDailyPercent",
+          "file": "daily-data-view.js",
+          "line": 14,
+          "sampledMs": 336.277
+        },
+        {
+          "function": "price",
+          "file": "daily-data-view.js",
+          "line": 9,
+          "sampledMs": 272.035
+        },
+        {
+          "function": "paintDetail",
+          "file": "daily-data-view.js",
+          "line": 131,
+          "sampledMs": 67.548
+        },
+        {
+          "function": "(garbage collector)",
+          "file": "",
+          "line": 0,
+          "sampledMs": 52.542
+        },
+        {
+          "function": "analyzeDailySeries",
+          "file": "daily-analytics.js?v=1.22.0",
+          "line": 164,
+          "sampledMs": 38.468
+        },
+        {
+          "function": "dailyTableRows",
+          "file": "daily-data-view.js",
+          "line": 20,
+          "sampledMs": 20.936
+        },
+        {
+          "function": "utcDay",
+          "file": "cycle-engine.js?v=1.19.0",
+          "line": 26,
+          "sampledMs": 20.611
+        },
+        {
+          "function": "(program)",
+          "file": "",
+          "line": 0,
+          "sampledMs": 19.938
+        },
+        {
+          "function": "read",
+          "file": "profile-daily.mjs",
+          "line": 7,
+          "sampledMs": 15.888
+        },
+        {
+          "function": "signalAt",
+          "file": "daily-analytics.js?v=1.22.0",
+          "line": 147,
+          "sampledMs": 12.938
+        },
+        {
+          "function": "indicatorsAt",
+          "file": "daily-analytics.js?v=1.22.0",
+          "line": 107,
+          "sampledMs": 12.434
+        },
+        {
+          "function": "esc",
+          "file": "daily-data-view.js",
+          "line": 6,
+          "sampledMs": 11.617
+        },
+        {
+          "function": "dateOnly",
+          "file": "equity-market-data.js?v=1.18.0",
+          "line": 8,
+          "sampledMs": 9.048
+        },
+        {
+          "function": "iso",
+          "file": "ohlc-data.js?v=1.15.0",
+          "line": 24,
+          "sampledMs": 8.966
+        },
+        {
+          "function": "analyzed",
+          "file": "daily-data-view.js",
+          "line": 107,
+          "sampledMs": 8.262
+        }
+      ]
+    },
+    "structure-base": {
+      "profileSha256": "f681961203fe08cc4d8ef6484dc5185ed589643c8d1e533a59c9e054271c2243",
+      "samples": 1840,
+      "diagnosticOnly": true,
+      "observations": {
+        "scopeActions": 10,
+        "initialDirectCalls": {
+          "rolling": 1,
+          "directional": 2,
+          "analysis": 1,
+          "chart": 1
+        },
+        "repeatedDirectCalls": {
+          "rolling": 10,
+          "directional": 10,
+          "analysis": 0,
+          "chart": 10
+        },
+        "lastSvgCharacters": 36588,
+        "errors": 0
+      },
+      "topSelfTime": [
+        {
+          "function": "dateFromDay",
+          "file": "cycle-engine.js?v=1.19.0",
+          "line": 44,
+          "sampledMs": 665.861
+        },
+        {
+          "function": "periodBounds",
+          "file": "market-structure.js?v=1.21.0",
+          "line": 56,
+          "sampledMs": 236.244
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.21.0",
+          "line": 493,
+          "sampledMs": 195.033
+        },
+        {
+          "function": "(garbage collector)",
+          "file": "",
+          "line": 0,
+          "sampledMs": 113.473
+        },
+        {
+          "function": "utcDay",
+          "file": "cycle-engine.js?v=1.19.0",
+          "line": 26,
+          "sampledMs": 81.146
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.21.0",
+          "line": 242,
+          "sampledMs": 79.831
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.21.0",
+          "line": 531,
+          "sampledMs": 75.641
+        },
+        {
+          "function": "aggregateCloseBars",
+          "file": "market-structure.js?v=1.21.0",
+          "line": 121,
+          "sampledMs": 50.917
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.21.0",
+          "line": 129,
+          "sampledMs": 47.022
+        },
+        {
+          "function": "compileSourceTextModule",
+          "file": "utils",
+          "line": 317,
+          "sampledMs": 32.851
+        },
+        {
+          "function": "",
+          "file": "atlas-price-chart.js?v=1.21.0",
+          "line": 34,
+          "sampledMs": 26.502
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.21.0",
+          "line": 518,
+          "sampledMs": 24.972
+        },
+        {
+          "function": "",
+          "file": "cycle-engine.js?v=1.19.0",
+          "line": 57,
+          "sampledMs": 21.661
+        },
+        {
+          "function": "shiftCalendarMonths",
+          "file": "cycle-timing.js?v=1.19.0",
+          "line": 17,
+          "sampledMs": 19.362
+        },
+        {
+          "function": "periodStatistics",
+          "file": "market-structure.js?v=1.21.0",
+          "line": 79,
+          "sampledMs": 18.707
+        }
+      ]
+    },
+    "structure-after": {
+      "profileSha256": "9a3b4382fbfd6d4273c2b2fb96586146207c98995af9b1dcf5adb5f83827ef43",
+      "samples": 1405,
+      "diagnosticOnly": true,
+      "observations": {
+        "scopeActions": 10,
+        "initialDirectCalls": {
+          "rolling": 0,
+          "directional": 1,
+          "analysis": 1,
+          "chart": 1
+        },
+        "repeatedDirectCalls": {
+          "rolling": 0,
+          "directional": 0,
+          "analysis": 0,
+          "chart": 10
+        },
+        "lastSvgCharacters": 36588,
+        "errors": 0
+      },
+      "topSelfTime": [
+        {
+          "function": "dateFromDay",
+          "file": "cycle-engine.js?v=1.19.0",
+          "line": 44,
+          "sampledMs": 331.959
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.23.0",
+          "line": 519,
+          "sampledMs": 132.884
+        },
+        {
+          "function": "(garbage collector)",
+          "file": "",
+          "line": 0,
+          "sampledMs": 121.543
+        },
+        {
+          "function": "periodBounds",
+          "file": "market-structure.js?v=1.23.0",
+          "line": 82,
+          "sampledMs": 114.258
+        },
+        {
+          "function": "compileSourceTextModule",
+          "file": "utils",
+          "line": 317,
+          "sampledMs": 47.699
+        },
+        {
+          "function": "utcDay",
+          "file": "cycle-engine.js?v=1.19.0",
+          "line": 26,
+          "sampledMs": 43.597
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.23.0",
+          "line": 268,
+          "sampledMs": 39.631
+        },
+        {
+          "function": "geometricPriceMean",
+          "file": "market-structure.js?v=1.23.0",
+          "line": 43,
+          "sampledMs": 37.948
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.23.0",
+          "line": 544,
+          "sampledMs": 36.878
+        },
+        {
+          "function": "aggregateCloseBars",
+          "file": "market-structure.js?v=1.23.0",
+          "line": 147,
+          "sampledMs": 35.598
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.23.0",
+          "line": 557,
+          "sampledMs": 30.425
+        },
+        {
+          "function": "",
+          "file": "market-structure.js?v=1.23.0",
+          "line": 155,
+          "sampledMs": 30.212
+        },
+        {
+          "function": "",
+          "file": "atlas-price-chart.js?v=1.23.0",
+          "line": 34,
+          "sampledMs": 24.708
+        },
+        {
+          "function": "dailyRuns",
+          "file": "atlas-price-chart.js?v=1.23.0",
+          "line": 38,
+          "sampledMs": 24.23
+        },
+        {
+          "function": "evaluateFibonacci",
+          "file": "market-structure.js?v=1.23.0",
+          "line": 499,
+          "sampledMs": 22.37
+        }
+      ]
+    }
+  },
+  "regressions": {
+    "dailyBefore": {
+      "tests": 3,
+      "pass": 0,
+      "fail": 3,
+      "unexpectedHiddenWrites": [
+        11,
+        3,
+        1
+      ]
+    },
+    "dailyAfter": {
+      "newTests": 3,
+      "existingViewTests": 11,
+      "fail": 0
+    },
+    "comparisonBefore": {
+      "tests": 2,
+      "pass": 0,
+      "fail": 2,
+      "redundantDirectRollingCalls": [
+        17,
+        11
+      ]
+    },
+    "comparisonAfter": {
+      "tests": 2,
+      "pass": 2,
+      "fail": 0
+    }
+  }
+}

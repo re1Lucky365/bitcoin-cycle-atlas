@@ -1,0 +1,255 @@
+{
+  "baseCommit": "64c8207cb044d8990289c5a7d39972e21b74c240",
+  "tool": "eslint 9.39.1 / globals 16.5.0",
+  "files": 107,
+  "rules": [
+    "no-undef",
+    "no-constant-binary-expression",
+    "no-dupe-else-if",
+    "no-dupe-args",
+    "no-dupe-keys",
+    "no-unreachable",
+    "no-unsafe-finally",
+    "no-unsafe-negation",
+    "valid-typeof",
+    "constructor-super",
+    "no-async-promise-executor",
+    "no-compare-neg-zero",
+    "no-self-compare",
+    "no-unmodified-loop-condition"
+  ],
+  "findings": [
+    {
+      "file": "dist/eth-view.js",
+      "messages": [
+        {
+          "ruleId": "no-undef",
+          "line": 126,
+          "column": 1058,
+          "message": "'esc' is not defined.",
+          "severity": 2
+        }
+      ]
+    },
+    {
+      "file": "dist/evidence-view.js",
+      "messages": [
+        {
+          "ruleId": "no-unmodified-loop-condition",
+          "line": 15,
+          "column": 8,
+          "message": "'visible' is not modified in this loop.",
+          "severity": 2
+        },
+        {
+          "ruleId": "no-unmodified-loop-condition",
+          "line": 15,
+          "column": 17,
+          "message": "'room' is not modified in this loop.",
+          "severity": 2
+        }
+      ]
+    },
+    {
+      "file": "dist/market-data-controller.js",
+      "messages": [
+        {
+          "ruleId": "no-unmodified-loop-condition",
+          "line": 93,
+          "column": 15,
+          "message": "'active' is not modified in this loop.",
+          "severity": 2
+        },
+        {
+          "ruleId": "no-unmodified-loop-condition",
+          "line": 93,
+          "column": 24,
+          "message": "'request' is not modified in this loop.",
+          "severity": 2
+        }
+      ]
+    }
+  ],
+  "classification": {
+    "confirmedRuntimeBug": "dist/eth-view.js:126: esc is undefined",
+    "reviewedFalsePositives": [
+      {
+        "file": "dist/evidence-view.js",
+        "rule": "no-unmodified-loop-condition",
+        "reason": "shown decreases on every iteration; shown > 1 is a finite termination bound."
+      },
+      {
+        "file": "dist/market-data-controller.js",
+        "rule": "no-unmodified-loop-condition",
+        "reason": "Each awaited page advances history or stops; cancellation changes active from an outside callback. Existing ownership and pagination tests cover this path."
+      }
+    ]
+  },
+  "browserBefore": {
+    "url": "https://twoimo.github.io/bitcoin-cycle-atlas/?symbol=ETHUSD",
+    "observedAtUtc": "2026-10-25T00:58:55.258Z",
+    "action": "Click ETH data source and retrieval status button",
+    "dialogOpened": false,
+    "error": "ReferenceError: esc is not defined",
+    "source": "https://twoimo.github.io/bitcoin-cycle-atlas/eth-view.js?v=1.22.0:126:777",
+    "extensionErrorsExcluded": true
+  },
+  "scope": "Static semantic rules plus one independently reproduced public UI action; not a whole-program proof.",
+  "after": {
+    "checkedAt": "2026-10-25T05:14:16.831Z",
+    "reviewedRuntimeCommit": "1ad3be543e870e74f10708c266f19572b217d25f",
+    "files": 107,
+    "sourceManifestFormat": "SHA-256 of JSON.stringify(sourceHashes) with alphabetically sorted paths",
+    "sourceManifestSha256": "f91263915385d7d44bd4e9b04acebf22f55088ea68c0b7315ebbaf1c59fa3b67",
+    "sourceHashes": {
+      "dist/analysis-dock.js": "08deed2b28ae0a927d519f88fa9b61faaaca901e105befddb2556269f7539343",
+      "dist/app.js": "b5fb4d4b3ef7a2914b4b6fd5784ad9e8edff5ac750ecb5eb7cbc6b448806877a",
+      "dist/atlas-analysis.js": "109421e1868fdecf46d7c1dbb8a65f464e6836b7172360ddf4ee402da1f02493",
+      "dist/atlas-price-chart.js": "d75b5bda198a189f91deb4949538f591d68553e23ec08a2101361aecf1ee29d3",
+      "dist/bitcoin-events.js": "871bc28763906dc15fe61c034388582914c0c018bd13f96af3162571d9295b22",
+      "dist/chart-bottom-bar.js": "09012f7ed5e2c6e1b331592ec0123748da7b65b409747be21ed6034bd93e6aa0",
+      "dist/chart-export-workbench.js": "eb1b2ab5272a32d58e7c0307f930d125cd861a966328f0cb402971a3b0465bfd",
+      "dist/chart-export.js": "02092ff68b0ec8dc25d510beb2cb7fd9609f55ab019d483d5e10b116df0c7f3c",
+      "dist/chart-go-to.js": "f9a1cc781e80603fc0c533d612173fcc37065aee1a68ec82c773be6fae315e0f",
+      "dist/chart-hover.js": "2babcf82e20c0a6aa3aafd8f660a9175b94b11192fe3e4670c645683b8093067",
+      "dist/chart-magnet.js": "e568efbd4da72482a9b825263d8d9da29e45cec47e39a83b2ff11e76b6dd4d9c",
+      "dist/chart-math.js": "2e2b392df1a7842da09c97bc41fe484d53f8fc72061121be7800781f1307b923",
+      "dist/chart-navigation.js": "247d52a6e0799195fefb6199a4e39e57bc17e4b74acf96d86c67026bdc3b51ee",
+      "dist/chart-overlays.js": "91d400ed5f5fe481cfe1263953340a63615a4ad8df6a601f897168b73656eb6b",
+      "dist/chart-presets.js": "ec81e72fc3004a0d897597fc69a3c043b0f12c625cda332d45ea4e9e880c1342",
+      "dist/chart-touch-tracking.js": "6023180f383134922d5b878a1275238997314e9cbdc561e334501177aa4c2681",
+      "dist/chart-view-policy.js": "0051b4d13e161fb4d47293a0172b0f7da2e00bfda4c57877b7aab0af77bd0cb4",
+      "dist/chart-window.js": "ff1527876a0185e8f8a52211170c696bde98f0120c6f0ddde58cea987daaf7cd",
+      "dist/compact-chart-layout.js": "ae310165a5b631769aedc726c5128d45a6f5adc6e8323f8da0917bf0b6c010e4",
+      "dist/cryptocon-audit-data.js": "a86618cb55624a7b1354457b1802a488327e4c16c162f4f3bced6f4423c84b5e",
+      "dist/cryptocon-audit.js": "d2561b61b665d97fa80b49ac4a978dfc4db53ae8ba1c504cdb2d950155351c25",
+      "dist/cryptocon-evidence.js": "06c8b9d57da468215219eb25cdf5be69877a6cee7cd3ee591d83ce378287a9de",
+      "dist/cycle-calibration.js": "428abd1e06363681c9e6ab4c4299da4fecfae370320a3f144ce3607aaf38b4b8",
+      "dist/cycle-engine.js": "f6b88a839f22b96c72306e87bd4760337d259a3190830325b570520472c84346",
+      "dist/cycle-interval-overlay.js": "6b3b28b6600398734f4412beb283b19e9d95a910604b1d858396002c10edf4e3",
+      "dist/cycle-milestones-view.js": "4d10cf2f375b2bd977919434a2356a4fac0174ae359fcf83144d5f4df434bef5",
+      "dist/cycle-milestones.js": "d69400b38c4206d04df879fa3a619046a88a6a9aa8d5eeaf2b94c4990970e9b8",
+      "dist/cycle-selection.js": "a8fd01dc58b14166c4a76271718062d93996bd43f76a176500e58527a4cdd8ba",
+      "dist/cycle-timing.js": "c4b8ac425d33c65a0c9d059f09e084279fc73c31b1911ea401861dcbf8bf98da",
+      "dist/daily-analytics.js": "ddd9f4bc3d26f58158093543677aae01bd71b297d2e8d02a427ccdf4d399d512",
+      "dist/daily-data-source.js": "f2be14fcd9b0b50296f6804f55f6fa2a31bea364b26f809fcd2119e5d9e9ed7c",
+      "dist/daily-data-view.js": "98c061d833e53180dbcffd42d324a3df3502bac114da7c0d75f8ec5e6c3b2fc4",
+      "dist/data-source.js": "9c966e77f3a7de9534e5bac8da20d395865e45afd95123696e86ef55178e9ca9",
+      "dist/data-update.js": "8f0c2b9863a0d4ded0860051ef272ded8c621d36bf6285e9457c5a12af6c06c4",
+      "dist/detailed-forecast.js": "34fac03a15a8ab7f8454f9801e3edb518a983cdc3c7f81f23e978bffc4310629",
+      "dist/dialog-viewport.js": "36dceb75f26ab3c6fec9fa2c1d8ca8cf0a6ddbb19e2b4d7a5bc0f9d901bde28e",
+      "dist/empty-price-chart.js": "702b3355c87d3cbf955380b8f9b24eb7803e305693aff4316c65bd6bdc3821f0",
+      "dist/equity-forecast-chart.js": "3e74aa84f25c1d45b34af3d7a74ea6a2194e11101f6c16e9bece1d51238eae2d",
+      "dist/equity-market-data.js": "7c93eaf2471f354511e3440606cb0ed46b46242803bb7d06e3f06955a2a4cb8d",
+      "dist/equity-view.js": "1843735506f4fe16c560902697d81cb35da601decf901bd523e231715b998c44",
+      "dist/eth-market-data.js": "e2f7e0c6a05c2c3b789ebdb5af3484d32d7a56001b1d63c0f1ecf3251c7bbf75",
+      "dist/eth-view-state.js": "ffebc6c9c73362be067e4eacfc073be4ed2b5f8ea3b1b89fac50fd2df1cf1ec3",
+      "dist/eth-view.js": "bd57616e5ed9515fb876e93bf12d8ff4cf185825465e4e82c0b86b5dde47ab5d",
+      "dist/ethereum-event-observations.js": "9f204e9e21f9663e80e81ce6f8e0681d1a4de6a8e1f75bae8ac8d919aefd844d",
+      "dist/ethereum-events.js": "9cd142ec31d84e613c7429544270abb452ebcfef8db0d3aa143165f6582cc29f",
+      "dist/ethereum-history.js": "61de4a48e652670841d513ad43ac49a0205c759809f8699cc4d5439854fa7641",
+      "dist/evidence-catalog.js": "38bb515bba7e4cbd208088bd71bfd50bceefd3403d8f096b0cadfe08bcec8e21",
+      "dist/evidence-index.js": "e1e8f78da48414308b009366908a832e6df32976feaf0956f1214dae3877bb1f",
+      "dist/evidence-view.js": "619e20a6beee6c1ee199cd642ce8b9105611bb68e5c1baa5f2cec1aaec217b3a",
+      "dist/forecast-engine.js": "80406c21c550a652c3983ef77ea3beb1bb435b8b04aeeb91b959c50760904a7d",
+      "dist/forecast-evidence.js": "1579b491f7fb1153197c5d28511eb5c75a85821b1b1cc19ae23c7176142b51f1",
+      "dist/forecast-validation.js": "8344bfd40d16a9a62173c818c9677f6378f04700892fbb02e8769d4c8d277135",
+      "dist/forecast-view.js": "19725d1ba0f67f23bc68356238689d91af06b874bd390bee855af34c9812a5dd",
+      "dist/history-journal.js": "c92adc17bced791e39ed9cb527934af73487dd6542caa294144a609b0843ee2a",
+      "dist/indicator-preferences.js": "c0ea00cbe1b881e968dd439582b614b26c0bc6871718f00d6b0cb0c12ac09536",
+      "dist/indicator-readouts.js": "50c22dff318ff2e90dcedb067532dc2a2dd9e33f2ded2aec36d30074c307a2b7",
+      "dist/indicator-settings-dialog.js": "8bd9d958ae47bb71ab83fe93c0ba1127d8c79bf7239fd17fa6f6e1be2446bfd8",
+      "dist/indicator-settings.js": "7314a4535a8b46be16b456de6e7490450348a0261da410eabfa925ebd693ca12",
+      "dist/indicator-state.js": "881920a5089e37f7c11f2df2b42d8c0886b28c33792097fd6c995315dcefe747",
+      "dist/indicator-workbench.js": "71c36e8c5102da21b07807f7bbc24a671215e66ec537e3b86bf8ab2ab9d7114c",
+      "dist/inspection-policy.js": "fb5953349307dd3025382df412414ba96777d0cf07403d49c548a941d47b79e3",
+      "dist/intraday-chart.js": "014df0979adae0dc75108b923555b1ecd94c7409e4d97d4a5e33948875ef19d9",
+      "dist/intraday-history.js": "c29b30709c3004a37d8b88922489a133bccf5c2691d73fae806ae92647a89d8f",
+      "dist/lab-view.js": "229c4e9e7a8b3693c1b6d8b50a0eefa09bf484cf67fde6d0570c1ef2386a23e2",
+      "dist/long-horizon-evidence.js": "7b5f9fc162e0c621b6a7df9f0f3d77e76c274040e83b88b0a8301638cb29f2f8",
+      "dist/long-horizon-forecast.js": "fcedcfa438b56136a3910e258a6473d5a3d4fb20b99cab8a22a4cb1a4b77e02c",
+      "dist/long-horizon-view.js": "a6cf5d1fdd529493e8ff1631c02ba4d4500616ab1fe43f962aa0bb87e916ba0f",
+      "dist/market-data-controller.js": "5de1c4b3396551ae71400516f26d35fb6737b0bdad74fcdec403342b2c9991db",
+      "dist/market-structure.js": "57c17ba994c673213f0238f07d0a446151b26846bae712becffa489e31f20b69",
+      "dist/mobile-preview.js": "5defdea2040132f8d776b92335782ab9a7b43b0cb995fd3705adbf0021fa48ee",
+      "dist/mobile-workspace.js": "bdc2be8fcea03e69d174bfacd3038e232e0fef90fdfcd007902057b9f010325f",
+      "dist/ohlc-data.js": "b2a5104c22b0fced11d747cae9fd7797a876b0c7de4e30492376acae791e7f5d",
+      "dist/outlook-engine.js": "d2c1b5505d18b003736fc749cf9fcd1d6eb4907f88df07bcc2bce435649d23e5",
+      "dist/outlook-view.js": "7ac8176bcae14a50adf89b648b515931e1dba0d4cb9a29d4b49b5fc7643b0c7d",
+      "dist/peak-view.js": "f1da3f9e0714706ae1f495a84101b5f83276b46022d97ef061722f9dd24d339e",
+      "dist/peak-zones.js": "3ebbb875ab01d6a73b3292f7b96466649a48eb457fb56a428942d4b9e74902e5",
+      "dist/price-axis.js": "c8c8153450d688ec541a17f81e1bfefb9296fd7f34620d808a7c84495412c888",
+      "dist/price-display.js": "7558e6e6f56825f66c4268a6939808abe21b731bf0fbe3fa8c5766d1b8e87179",
+      "dist/price-legend.js": "2c1995584f7f809758124829396ecdbf546fb2af6c028d4f63cfb74f3c0ec993",
+      "dist/price-view-data.js": "54548b35600e976a31c60d5f2dae6539fee841cf0bd5520f6bd253c90c871634",
+      "dist/published-data.js": "d1db9bd6d2fe97307c0a4d3e654fa4082dc93b431ae14a9b30de10cf694f3a2d",
+      "dist/research-annotations-workbench.js": "48da9e72528466ec9890590cf3abb7bfcbedc85fff04dd504bb4f4fd32ab727b",
+      "dist/research-annotations.js": "b8f2e825bada44959e13375fb8243df188aa4e72aa64a788f7f2f3e555139a49",
+      "dist/research-format.js": "8d4b225cb3ee9f3042c72b12a2f4d3040123473c65bff8549c74bb55a5c0c37a",
+      "dist/research-library-data.js": "20d17df4b01fed0f5a72fe47dba57c68abe294c34eb6fa6a47a90d3ed7b95215",
+      "dist/research-methods.js": "75b8bba6cb3b00968705257af19a7f2fda4250254c0343e424d1190376aca0df",
+      "dist/research-reader.js": "9e93faf253d7ab04689b5b602d795ae446b5d4e0564861a48cfe05b10d323d50",
+      "dist/research-source-data.js": "eb0720b297fe8430cf954e05df782ef5a4edd186a6c3ab727d1cb0bd8b5086b6",
+      "dist/research-source-records.js": "5afa3d9e0f581e718925ea9689424b33f47d1961c38b12c54cbd641f2c786ebb",
+      "dist/research-workbench.js": "51ce4fe6eaf7f2bd514e67a5ef6aa5b9a1bbd9fba31cf45e2f5915f84cc4647e",
+      "dist/scenario-countdown.js": "9b51667f455ab54d2c39b8ebb2f41f01263506becd81833950da7f378f02a45d",
+      "dist/site-entry.js": "bef8f4be76b69f9b336ca936f54532f8c631257ff533d4c66fa6a420eee56d39",
+      "dist/structure-evidence.js": "48fc1cb7f58207ebf6661034be667f5c17a4349e6d4805c65b8287b218a425ad",
+      "dist/symbol-selector.js": "a29d1c908bfcc522224d32d33cd05beeb2bf24c5f5863134a5cca472ca390b19",
+      "dist/timing-view.js": "e47f6f69db210f7cc3086ab7717c1f4231faaca8ec4506467a8ae019677dadba",
+      "dist/treasury-asset-paths.js": "f1b16ced8251459c16826c57c285f44d5a8d78a6a2fa9319dc8d558fb0c42e83",
+      "dist/treasury-catalog.js": "8d7facd79720a048b70e26d91a52d84272b28a5db5fe8e1a3ff8fad380b0881c",
+      "dist/treasury-model.js": "60981b317184453c1d2c6d6756e97fce261938bf5746bc2166b10168b8f15b55",
+      "dist/treasury-projection.js": "d76b6c1483d598e6aaeb71275c6d63d5aeb907e8403f767ad46eb3e319fe1bb0",
+      "dist/treasury-research.js": "ad9f947f8832a8a0f7cedd187e51243eb00453d2476fb5d4154cc645dce0bddb",
+      "dist/viewport-workspace.js": "96a3066de5e85c881302aa7e943271107ab933fb5cfdd6cea9defda9a0ae5e63",
+      "dist/volume-data.js": "6dd407b7f3e93c9714b37a654f240faf7f945e2b4483b0ae05be648c38f70307",
+      "dist/volume-forecast.js": "26241023c26a1c4dba4e1f1339481afe136e01284b80a3a9278ad6a492435dd4",
+      "dist/workbench-chrome.js": "0763bd7ceede2718223538f4b09e6a174db3934c1a308b762933e8d31911f88c",
+      "dist/workspace-history.js": "1e7f2c7a57c7d0d163e5b2ef482324f28732d4d37783f1aa7dd39429691a54c6",
+      "dist/workspace-state.js": "039c021d07cb1757142703f455ee9534f80a4f64cbbfd5f01ca5343baf272765",
+      "dist/workspace-tools.js": "b63cf76d0862bceac497e5e15f2be944bd4c5eb4348c392649f47cf5e761dcce"
+    },
+    "undefinedReferences": 0,
+    "findings": [
+      {
+        "file": "dist/evidence-view.js",
+        "messages": [
+          {
+            "ruleId": "no-unmodified-loop-condition",
+            "line": 15,
+            "column": 8,
+            "message": "'visible' is not modified in this loop.",
+            "severity": 2
+          },
+          {
+            "ruleId": "no-unmodified-loop-condition",
+            "line": 15,
+            "column": 17,
+            "message": "'room' is not modified in this loop.",
+            "severity": 2
+          }
+        ]
+      },
+      {
+        "file": "dist/market-data-controller.js",
+        "messages": [
+          {
+            "ruleId": "no-unmodified-loop-condition",
+            "line": 93,
+            "column": 15,
+            "message": "'active' is not modified in this loop.",
+            "severity": 2
+          },
+          {
+            "ruleId": "no-unmodified-loop-condition",
+            "line": 93,
+            "column": 24,
+            "message": "'request' is not modified in this loop.",
+            "severity": 2
+          }
+        ]
+      }
+    ]
+  }
+}
