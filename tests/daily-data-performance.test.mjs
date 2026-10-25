@@ -1,43 +1,53 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import { buildCycleDecisionTable } from '../dist/cycle-decision.js';
+import { buildAssetComparison } from '../dist/asset-comparison.js';
 import { initDailyDataView } from '../dist/daily-data-view.js';
-import { cycleViewContext, dailyViewSurface } from './helpers/daily-data-view-fixture.mjs';
+import { COMPARISON_SYMBOLS, comparisonViewModel, dailyViewSurface } from './helpers/daily-data-view-fixture.mjs';
 
-// Work counters exercise real render/controller calls; they do not measure paint.
-test('repeated rendering reuses the shared cycle model and does not rewrite an identical table', () => {
-  const context = cycleViewContext(), ui = dailyViewSurface(); let builds = 0, reads = 0;
-  const view = initDailyDataView({ root: ui.root, getCycleContext() { reads++; return { ...context }; }, buildModel(input) { builds++; return buildCycleDecisionTable(input); } });
-  view.render(); const initial = ui.node('data-body').innerHTML; ui.resetWork();
-  for (let index = 0; index < 50; index++) view.render();
-  assert.equal(reads, 51); assert.equal(builds, 1);
-  assert.equal(ui.node('data-body').innerHTML, initial);
-  assert.equal(ui.work()['data-body']?.writes || 0, 0);
+// Count real controller work rather than imposing a machine-dependent millisecond budget.
+test('50 unchanged renders reuse the dataset/model and perform no DOM rewrites', async () => {
+  const ui = dailyViewSurface(), model = comparisonViewModel(); let reads = 0, builds = 0;
+  const view = initDailyDataView({ root: ui.root, asOfDate: '2026-10-25', getComparisonDataset: async () => { reads++; return {}; }, buildModel: () => { builds++; return model; } });
+  await view.render(); const before = ui.snapshot(); ui.resetWork();
+  await Promise.all(Array.from({ length: 50 }, () => view.render()));
+  assert.equal(reads, 1); assert.equal(builds, 1); assert.deepEqual(ui.work(), {});
+  assert.deepEqual(ui.snapshot(), before); view.destroy();
+});
+
+test('UTC date rollover rebuilds freshness once without refetching or retaining an old judgment', async () => {
+  const ui = dailyViewSurface(); let date = '2026-10-25', reads = 0, builds = 0;
+  const view = initDailyDataView({ root: ui.root, asOfDate: () => date, getComparisonDataset: async () => { reads++; return {}; }, buildModel: (_bundle, options) => {
+    builds++; const model = comparisonViewModel({ asOf: options.asOfDate });
+    if (options.asOfDate === '2026-11-01') for (const row of model.rows) row.judgment = { id: 'unavailable', label: '판단 보류', available: false, reason: '최근 종가가 7일보다 오래되었습니다.' };
+    return model;
+  } });
+  await view.render(); date = '2026-11-01'; await view.render(); await view.render();
+  assert.equal(reads, 1); assert.equal(builds, 2); assert.equal(view.state.asOf, date);
+  assert.equal((ui.node('data-body').innerHTML.match(/>판단 보류<\/button>/g) || []).length, 17);
   view.destroy();
 });
 
-test('display filters only select the existing model and never fetch or analyze another asset', () => {
-  const context = cycleViewContext(), ui = dailyViewSurface(); let builds = 0, sourceReads = 0, unrelatedLoads = 0;
-  const view = initDailyDataView({ root: ui.root, getCycleContext() { sourceReads++; return context; }, loadAsset() { unrelatedLoads++; throw new Error('unneeded asset load'); }, buildModel(input) { builds++; return buildCycleDecisionTable(input); } });
-  view.render();
-  for (let index = 0; index < 25; index++) {
-    ui.click('', { cycleEvidence: 'scenario' }); ui.change('cycle-scope', 'all');
-    ui.click('', { cycleEvidence: 'observed' }); ui.change('cycle-scope', 'recent');
-  }
-  assert.equal(builds, 1); assert.equal(sourceReads, 1); assert.equal(unrelatedLoads, 0);
-  assert.match(ui.node('data-body').innerHTML, /data-evidence="observed"/);
-  assert.doesNotMatch(ui.node('data-body').innerHTML, /data-evidence="scenario"/);
-  assert.equal(ui.work()['daily-annual-table'], undefined);
-  assert.equal(ui.work()['daily-monthly-table'], undefined);
-  view.destroy();
+test('method and CSV interactions reuse the ready model without additional source or analysis work', async () => {
+  const ui = dailyViewSurface(), model = comparisonViewModel(); let reads = 0, builds = 0, downloads = 0;
+  const view = initDailyDataView({ root: ui.root, asOfDate: '2026-10-25', getComparisonDataset: async () => { reads++; return {}; }, buildModel: () => { builds++; return model; }, download: () => downloads++ });
+  await view.render(); ui.resetWork();
+  for (let index = 0; index < 25; index++) { ui.click('', { assetReason: 'QQQ' }); ui.click('daily-method-close'); ui.click('export-raw'); }
+  assert.equal(reads, 1); assert.equal(builds, 1); assert.equal(downloads, 25);
+  assert.equal(ui.work()['data-body'], undefined); view.destroy();
 });
 
-test('a genuinely changed chart or dataset invalidates the model once', () => {
-  let context = cycleViewContext(), builds = 0; const ui = dailyViewSurface();
-  const view = initDailyDataView({ root: ui.root, getCycleContext: () => context, buildModel(input) { builds++; return buildCycleDecisionTable(input); } });
-  view.render(); const first = ui.node('data-body').innerHTML;
-  context = cycleViewContext({ offset: 500, scenarioId: 'revised' }); view.render();
-  assert.equal(builds, 2); assert.notEqual(ui.node('data-body').innerHTML, first);
-  view.render(); assert.equal(builds, 2);
-  view.destroy();
+test('the acquired full-history bundle renders all 17 source-backed rows once', async () => {
+  const bundle = JSON.parse(readFileSync(new URL('../dist/data/asset-comparison.json', import.meta.url), 'utf8'));
+  const ui = dailyViewSurface(); let builds = 0, reads = 0;
+  const view = initDailyDataView({ root: ui.root, asOfDate: '2026-10-25', getComparisonDataset: async () => { reads++; return bundle; }, buildModel: (input, options) => { builds++; return buildAssetComparison(input, options); } });
+  const model = await view.render(); assert.equal(view.state.status, 'ready');
+  assert.equal(bundle.assets.length, 17); assert.ok(bundle.assets.reduce((total, asset) => total + asset.prices.length, 0) > 90000);
+  assert.deepEqual(model.rows.map(row => row.symbol), COMPARISON_SYMBOLS);
+  assert.deepEqual([...ui.node('data-body').innerHTML.matchAll(/data-asset-symbol="([^"]+)"/g)].map(match => match[1]), COMPARISON_SYMBOLS);
+  assert.ok(model.rows.every(row => row.sampleYears >= 5));
+  assert.ok(model.rows.every(row => row.sampleEndYear < model.year));
+  assert.ok(model.rows.every(row => ['적극 매수', '분할 매수', '중립', '분할 매도', '적극 매도'].includes(row.judgment.label)));
+  ui.resetWork(); await view.render();
+  assert.equal(reads, 1); assert.equal(builds, 1); assert.deepEqual(ui.work(), {}); view.destroy();
 });

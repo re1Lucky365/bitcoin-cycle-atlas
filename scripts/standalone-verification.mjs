@@ -60,6 +60,7 @@ export async function verifyStandaloneArtifact(html, dist) {
   const snapshots = {
     btc:'btc-daily.json', ohlc:'btc-ohlc.json', volume:'btc-volume.json',
     eth:'eth-ohlc.json', mstr:'mstr-ohlc.json', bmnr:'bmnr-ohlc.json',
+    'asset-comparison':'asset-comparison.json',
   };
   for (const [id, file] of Object.entries(snapshots)) {
     const scripts = [...html.matchAll(new RegExp(`<script\\b[^>]*id=["']embedded-${id}-data["'][^>]*>([\\s\\S]*?)<\\/script>`, 'gi'))];

@@ -98,7 +98,7 @@
   <link rel="stylesheet" href="./equity-view.css?v=1.20.0">
   <link rel="stylesheet" href="./research-reader.css?v=1.19.0">
   <link rel="stylesheet" href="./ethereum-history.css?v=1.17.0-context.1">
-  <link rel="stylesheet" href="./daily-data.css?v=1.24.1">
+  <link rel="stylesheet" href="./daily-data.css?v=1.25.0">
 </head>
 <body>
   <div id="atlas-boot-shell">
@@ -170,7 +170,7 @@
     <nav class="atlas-nav" aria-label="주요 페이지">
       <button data-view="outlook" class="active" aria-current="page" title="통합 차트"><span data-icon="trend"></span><span>통합 차트</span></button>
       <button data-view="evidence" title="리서치 우선순위"><span data-icon="book"></span><span>리서치 자료</span></button>
-      <button data-view="data" title="사이클 판단표"><span data-icon="table"></span><span>사이클 판단표</span></button>
+      <button data-view="data" title="자산 비교표"><span data-icon="table"></span><span>자산 비교표</span></button>
     </nav>
     <div class="atlas-side-foot"><strong>실제 가격과 미래 예시</strong><br><span id="sidebar-asof">관측 · 2026.10.20 UTC</span><br><span id="sidebar-reference">계산 기준 · 2026.10.22</span></div>
   </aside>
@@ -244,7 +244,7 @@
         <details class="lab-details"><summary>정의 · 수식 · 데이터 한계</summary><div id="structure-method" class="lab-details-body"></div></details>
         <details id="legacy-comparison" class="lab-details legacy-comparison"><summary>반감기 · 고점권 · 이전 기준점 비교</summary><div class="legacy-body">
         <section class="chart-card" aria-labelledby="chart-heading">
-          <div class="chart-card-header compact-header"><h1 id="chart-heading">비트코인 사이클 <span class="small-label">BTC / USD</span></h1><div class="compact-actions"><a class="text-link" href="#analysis-workbench" id="jump-forecast">미래 고저점 보기 ↓</a><div class="export-wrap"><button id="export-button" class="subtle-button" aria-haspopup="menu" aria-expanded="false"><span data-icon="table"></span>데이터 · 도구<span data-icon="chevron"></span></button><div id="export-menu" class="dropdown" role="menu" hidden><button data-view="data" role="menuitem">사이클 판단표</button><button id="refresh-button" role="menuitem"><span data-icon="refresh"></span>데이터 갱신</button><button data-method role="menuitem">방법론 · 출처</button><hr><button id="export-csv" role="menuitem">비교 데이터 CSV</button><button id="export-png" role="menuitem">차트 이미지 PNG</button><button id="export-svg" role="menuitem">벡터 이미지 SVG</button><button id="export-timing" role="menuitem">전환 분석 JSON</button><button id="export-research" role="menuitem">고점 · 미래 분석 JSON</button></div></div></div></div>
+          <div class="chart-card-header compact-header"><h1 id="chart-heading">비트코인 사이클 <span class="small-label">BTC / USD</span></h1><div class="compact-actions"><a class="text-link" href="#analysis-workbench" id="jump-forecast">미래 고저점 보기 ↓</a><div class="export-wrap"><button id="export-button" class="subtle-button" aria-haspopup="menu" aria-expanded="false"><span data-icon="table"></span>데이터 · 도구<span data-icon="chevron"></span></button><div id="export-menu" class="dropdown" role="menu" hidden><button data-view="data" role="menuitem">자산 비교표</button><button id="refresh-button" role="menuitem"><span data-icon="refresh"></span>데이터 갱신</button><button data-method role="menuitem">방법론 · 출처</button><hr><button id="export-csv" role="menuitem">비교 데이터 CSV</button><button id="export-png" role="menuitem">차트 이미지 PNG</button><button id="export-svg" role="menuitem">벡터 이미지 SVG</button><button id="export-timing" role="menuitem">전환 분석 JSON</button><button id="export-research" role="menuitem">고점 · 미래 분석 JSON</button></div></div></div></div>
           <div class="anchor-tabs" role="tablist" aria-label="사이클 시작 기준">
             <button id="tab-halving" class="anchor-tab active" role="tab" data-mode="halving" aria-selected="true" aria-controls="chart-panel"><span data-icon="half"></span>반감기<span class="tab-en">Halving</span></button>
             <button id="tab-bottom" class="anchor-tab" role="tab" data-mode="bottom" aria-selected="false" aria-controls="chart-panel" tabindex="-1"><span data-icon="bottom"></span>저점<span class="tab-en">Bottom</span></button>
@@ -298,13 +298,13 @@
 
         </div></details>
       </section>
-      <section id="data-view" hidden aria-label="사이클 판단표"><p role="status">사이클 판단표를 준비하고 있습니다.</p></section>
+      <section id="data-view" hidden aria-label="자산 비교표"><p role="status">자산 비교표를 준비하고 있습니다.</p></section>
       <footer class="footer"><span>Data © <a href="https://coinmetrics.io/" target="_blank" rel="noopener noreferrer">Coin Metrics</a><span class="footer-dot">·</span><a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC 4.0</a></span><button data-method>데이터 · 출처 · 이용 조건 <span>↗</span></button><span>UTC 일말 관측 · 비상업 연구용</span></footer>
     </main>
   </div>
   <dialog id="method-dialog" aria-labelledby="method-title"><div class="dialog-top"><span class="eyebrow">DATA & METHODOLOGY</span><button id="close-method" class="icon-button" aria-label="방법론 닫기"><span data-icon="close"></span></button></div><h2 id="method-title">방법론과 출처</h2><p class="dialog-lead">차트의 출발점부터 가격의 정의까지, 비교에 사용한 기준입니다.</p><div id="method-content"></div><button id="method-done" class="primary-button">확인했습니다</button></dialog>
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
   <dialog id="evidence-dialog" aria-labelledby="evidence-detail-title"><div class="dialog-top"><span class="eyebrow">EVIDENCE & LIMITS</span><button id="evidence-close" class="icon-button" aria-label="자료 상세 닫기"><span data-icon="close"></span></button></div><h2 id="evidence-detail-title"></h2><div id="evidence-detail-body"></div></dialog>
-  <script type="module" src="./site-entry.js?v=1.24.0"></script>
+  <script type="module" src="./site-entry.js?v=1.25.0"></script>
 </body>
 </html>

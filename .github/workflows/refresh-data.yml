@@ -76,6 +76,12 @@ jobs:
       - name: Refresh completed US equity sessions
         continue-on-error: true
         run: npm run refresh:equities
+      - name: Refresh the full 17-asset comparison history
+        # Atomic validation keeps the previous complete bundle on provider failure.
+        continue-on-error: true
+        run: npm run refresh:asset-comparison
+      - name: Verify asset comparison coverage and judgment arithmetic
+        run: npm run verify:asset-comparison
       - name: Rebuild dated treasury anchors and research preservation
         run: npm run build:research
       - name: Test code, fixed research fixtures and refreshed source data
@@ -101,11 +107,11 @@ jobs:
             echo 'Remote main changed during validation. Aborting; a later run will retry from the new revision.'
             exit 1
           fi
-          git add -- dist/data/btc-daily.json dist/data-update.js dist/data/btc-ohlc.json dist/data/btc-volume.json dist/data/cycle-calibration.json dist/data/eth-ohlc.json dist/data/mstr-ohlc.json dist/data/bmnr-ohlc.json dist/treasury-catalog.js
+          git add -- dist/data/btc-daily.json dist/data-update.js dist/data/btc-ohlc.json dist/data/btc-volume.json dist/data/cycle-calibration.json dist/data/eth-ohlc.json dist/data/mstr-ohlc.json dist/data/bmnr-ohlc.json dist/data/asset-comparison.json dist/treasury-catalog.js
           node --input-type=module <<'NODE'
           import { execFile } from 'node:child_process';
           import { promisify } from 'node:util';
-          const allowed = new Set(['dist/data/btc-daily.json', 'dist/data-update.js', 'dist/data/btc-ohlc.json', 'dist/data/btc-volume.json', 'dist/data/cycle-calibration.json', 'dist/data/eth-ohlc.json', 'dist/data/mstr-ohlc.json', 'dist/data/bmnr-ohlc.json', 'dist/treasury-catalog.js']);
+          const allowed = new Set(['dist/data/btc-daily.json', 'dist/data-update.js', 'dist/data/btc-ohlc.json', 'dist/data/btc-volume.json', 'dist/data/cycle-calibration.json', 'dist/data/eth-ohlc.json', 'dist/data/mstr-ohlc.json', 'dist/data/bmnr-ohlc.json', 'dist/data/asset-comparison.json', 'dist/treasury-catalog.js']);
           const { stdout } = await promisify(execFile)('git', ['diff', '--cached', '--name-only', '-z']);
           const staged = stdout.split('\0').filter(Boolean);
           if (staged.some(file => !allowed.has(file))) throw new Error('Unexpected file staged for the data refresh');
