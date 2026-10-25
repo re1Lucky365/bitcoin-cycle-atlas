@@ -1,0 +1,256 @@
+{
+  "status": "PASS",
+  "auditBaselineCommit": "64c8207cb044d8990289c5a7d39972e21b74c240",
+  "node": "v24.22.1",
+  "scope": "Independent arithmetic/coverage/causality oracles on actual product modules, fixed archives and bounded generated inputs; not a universal floating-point proof or predictive-validation certificate.",
+  "regressionSuite": "tests/system-numerical-regressions.test.mjs (run separately by npm test)",
+  "auditedFixes": [
+    {
+      "id": "NUM-01",
+      "module": "dist/daily-analytics.js",
+      "boundary": "An inferred daily gap crossing a year/month end must mark the prior observed period; explicit missingDates cannot double-count it. Exchange sessions require declared missing dates."
+    },
+    {
+      "id": "NUM-02",
+      "module": "dist/cycle-timing.js",
+      "boundary": "Calendar-month shifts preserve years 0000–0099 and reject results outside the accepted 0000–9999 date domain."
+    },
+    {
+      "id": "NUM-03",
+      "module": "dist/market-structure.js",
+      "boundary": "Stable median/slope/log-return/geometric-mean arithmetic retains representable answers; genuinely unrepresentable output metrics fail explicitly."
+    }
+  ],
+  "proofClassification": {
+    "algebra": [
+      "ordered peak-before-trough drawdown",
+      "expense, issuance and principal accounting identities",
+      "peak advance plus bear shortening equals trough advance"
+    ],
+    "boundedExecution": [
+      "fixed archive comparisons",
+      "generated numeric cases",
+      "five causal clock prefixes",
+      "one seeded detailed ensemble and one long-horizon illustrative path"
+    ],
+    "unproved": [
+      "universal floating-point correctness",
+      "forecast accuracy or probability calibration",
+      "signal profitability",
+      "financing availability and market liquidity"
+    ]
+  },
+  "sourceHashes": {
+    "dist/daily-analytics.js": "ddd9f4bc3d26f58158093543677aae01bd71b297d2e8d02a427ccdf4d399d512",
+    "dist/cycle-timing.js": "c4b8ac425d33c65a0c9d059f09e084279fc73c31b1911ea401861dcbf8bf98da",
+    "dist/cycle-calibration.js": "428abd1e06363681c9e6ab4c4299da4fecfae370320a3f144ce3607aaf38b4b8",
+    "dist/market-structure.js": "57c17ba994c673213f0238f07d0a446151b26846bae712becffa489e31f20b69",
+    "dist/treasury-model.js": "60981b317184453c1d2c6d6756e97fce261938bf5746bc2166b10168b8f15b55",
+    "dist/treasury-research.js": "ad9f947f8832a8a0f7cedd187e51243eb00453d2476fb5d4154cc645dce0bddb",
+    "dist/detailed-forecast.js": "34fac03a15a8ab7f8454f9801e3edb518a983cdc3c7f81f23e978bffc4310629",
+    "dist/long-horizon-forecast.js": "fcedcfa438b56136a3910e258a6473d5a3d4fb20b99cab8a22a4cb1a4b77e02c"
+  },
+  "dataHashes": {
+    "dist/data/btc-daily.json": "ba002ee272c8b8f6fe2111e32df85080b3352756d1f46ba11d5dffa5c4ab5bf2",
+    "dist/data/eth-ohlc.json": "0147ff056524da2a340d6b557bdd16d2a1cf32a82c97c96320acac0ed7e059d7",
+    "dist/data/mstr-ohlc.json": "7c387852ce8843bcbce6baa56b5ecdde7dca8bc1e52cbe414da7de3a21a1156f",
+    "dist/data/bmnr-ohlc.json": "ccef07f11f4e20ad160b20f7d02d3f24c997cc6216b6cdd2876575903713bfd6"
+  },
+  "assertions": 324467,
+  "maxAbsoluteErrors": {
+    "mdd": 1.4210854715202004e-14,
+    "returns": 1.8189894035458565e-12,
+    "cagr": 1.4210854715202004e-14,
+    "rsi": 4.973799150320701e-14,
+    "sma": 1.0186340659856796e-10,
+    "accounting": 9.313225746154785e-10,
+    "paths": 0.000030517578125,
+    "ensemble": 1.4551915228366852e-11,
+    "forecast": 0,
+    "long": 5.820766091346741e-11
+  },
+  "realArchiveChecks": [
+    {
+      "symbol": "BTC",
+      "count": 5942,
+      "firstDate": "2010-07-18",
+      "asOf": "2026-10-23",
+      "mddPct": -92.74863345469116,
+      "peakDate": "2011-06-08",
+      "troughDate": "2011-11-18",
+      "cumulativeReturnPct": 94273180.2490382,
+      "cagrPct": 132.96741192906327,
+      "annualPeriods": 17,
+      "monthlyPeriods": 196,
+      "identicalToBaseline": true
+    },
+    {
+      "symbol": "ETH",
+      "count": 3809,
+      "firstDate": "2016-05-18",
+      "asOf": "2026-10-23",
+      "mddPct": -94.01163042380341,
+      "peakDate": "2018-01-13",
+      "troughDate": "2018-12-14",
+      "cumulativeReturnPct": 17990.895295902887,
+      "cagrPct": 64.59231068085326,
+      "annualPeriods": 11,
+      "monthlyPeriods": 126,
+      "identicalToBaseline": true
+    },
+    {
+      "symbol": "MSTR",
+      "count": 7137,
+      "firstDate": "1998-06-11",
+      "asOf": "2026-10-23",
+      "mddPct": -99.85623003575749,
+      "peakDate": "2000-03-10",
+      "troughDate": "2002-07-26",
+      "cumulativeReturnPct": 1282.3431432599853,
+      "cagrPct": 9.700500286087543,
+      "annualPeriods": 29,
+      "monthlyPeriods": 341,
+      "identicalToBaseline": true
+    },
+    {
+      "symbol": "BMNR",
+      "count": 349,
+      "firstDate": "2025-06-05",
+      "asOf": "2026-10-23",
+      "mddPct": -90.14074042991356,
+      "peakDate": "2025-07-03",
+      "troughDate": "2026-06-30",
+      "cumulativeReturnPct": 189.0322531423261,
+      "cagrPct": 115.46689760687099,
+      "annualPeriods": 2,
+      "monthlyPeriods": 17,
+      "identicalToBaseline": true
+    }
+  ],
+  "generated": {
+    "exhaustivePairMddSeries": 300,
+    "calendarComparisons": 200,
+    "treasuryOperations": 1200,
+    "bitcoinIssuanceHeights": 195
+  },
+  "legacyTreasuryPaths": [
+    {
+      "symbol": "MSTR",
+      "scenario": "stress",
+      "pathMode": "target-interpolation",
+      "steps": 94,
+      "points": 126,
+      "financialAsOf": "2026-06-30",
+      "asOf": "2026-10-23",
+      "insolvency": "2033-08-17",
+      "cap": 21000000
+    },
+    {
+      "symbol": "MSTR",
+      "scenario": "base",
+      "pathMode": "target-interpolation",
+      "steps": 125,
+      "points": 126,
+      "financialAsOf": "2026-06-30",
+      "asOf": "2026-10-23",
+      "insolvency": null,
+      "cap": 21000000
+    },
+    {
+      "symbol": "MSTR",
+      "scenario": "bull",
+      "pathMode": "target-interpolation",
+      "steps": 125,
+      "points": 126,
+      "financialAsOf": "2026-06-30",
+      "asOf": "2026-10-23",
+      "insolvency": null,
+      "cap": 21000000
+    },
+    {
+      "symbol": "BMNR",
+      "scenario": "stress",
+      "pathMode": "target-interpolation",
+      "steps": 120,
+      "points": 121,
+      "financialAsOf": "2026-05-31",
+      "asOf": "2026-10-23",
+      "insolvency": null,
+      "cap": 6105000
+    },
+    {
+      "symbol": "BMNR",
+      "scenario": "base",
+      "pathMode": "target-interpolation",
+      "steps": 120,
+      "points": 121,
+      "financialAsOf": "2026-05-31",
+      "asOf": "2026-10-23",
+      "insolvency": null,
+      "cap": 6105000
+    },
+    {
+      "symbol": "BMNR",
+      "scenario": "bull",
+      "pathMode": "target-interpolation",
+      "steps": 120,
+      "points": 121,
+      "financialAsOf": "2026-05-31",
+      "asOf": "2026-10-23",
+      "insolvency": null,
+      "cap": 6105000
+    }
+  ],
+  "treasuryDailyUiPathVerification": "Separate scripts/verify-treasury-paths.mjs; this checker does not claim to rerun its daily asset-path integration coverage.",
+  "causalClockCutoffs": [
+    "2016-07-09",
+    "2020-05-11",
+    "2024-04-20",
+    "2025-10-06",
+    "2026-06-30"
+  ],
+  "calendarIdentity": {
+    "previousPeakDate": "2021-11-08",
+    "previousTroughDate": "2022-11-09",
+    "projectedPeakDate": "2025-11-08",
+    "projectedTroughDate": "2026-11-09",
+    "peakAdvanceDays": 33,
+    "previousPeakShiftDays": 33,
+    "previousBearDurationDays": 366,
+    "projectedBearDurationDays": 366,
+    "currentBearDurationDays": 267,
+    "bearDurationShorteningDays": 99,
+    "troughAdvanceDays": 132,
+    "identityCheck": true,
+    "identity": "trough advance = peak advance + shortening of the projected peak-to-trough interval"
+  },
+  "marketStructureNormalFixtureIdenticalToBaseline": true,
+  "detailedForecast": {
+    "asOf": "2026-10-23",
+    "days": 90,
+    "sampleCount": 16,
+    "appendedFutureCannotChangeCutoff": true,
+    "independentlyCheckedEnvelopeQuantiles": [
+      0.1,
+      0.5,
+      0.9
+    ],
+    "representativeMddPct": 10.728588003405527,
+    "probability": null
+  },
+  "longHorizon": {
+    "asOf": "2026-10-23",
+    "endDate": "2050-12-31",
+    "points": 8836,
+    "valuationAnchors": 2,
+    "probabilitiesCalibrated": false,
+    "isHistoricalVintageBacktest": false
+  },
+  "limitations": [
+    "Generated cases and deterministic fixtures cover finite domains, not all possible inputs.",
+    "Accounting conservation holds for the stated model operations, not omitted taxes, liquidity, convertible exercise or future financing access.",
+    "The bridge terminal price and external valuation curve are imposed conditions; numerical correctness does not prove market accuracy.",
+    "Daily close MDD excludes unobserved and intraday lows; stock outputs are split-adjusted price returns, not dividend-inclusive total returns.",
+    "Calendar identities are algebraic decompositions, not evidence that four-year cycles cause future prices."
+  ]
+}

@@ -1,5 +1,5 @@
 import { HALVINGS, utcDay, validateDataset } from './cycle-engine.js?v=1.19.0';
-import { detectDirectionalChanges, getMacroCycles } from "./market-structure.js?v=1.21.0";
+import { detectDirectionalChanges, getMacroCycles } from "./market-structure.js?v=1.23.0";
 
 /** Retrospective chart annotations. These never alter the observed or assumed price path. */
 export const MILESTONE_TYPES = Object.freeze([

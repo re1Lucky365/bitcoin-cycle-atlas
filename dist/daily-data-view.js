@@ -1,4 +1,4 @@
-import { analyzeDailySeries } from './daily-analytics.js?v=1.22.0';
+import { analyzeDailySeries } from './daily-analytics.js?v=1.23.0';
 import { bitcoinDailyAsset, loadDailyAsset } from './daily-data-source.js?v=1.22.0';
 
 const ASSETS = ['BTC', 'ETH', 'MSTR', 'BMNR'];
@@ -153,7 +153,9 @@ export function initDailyDataView({ root, getBitcoinDataset, download, toast = (
     const gapNote = analysis.summary.missingDayCount ? ` · 결측 ${count(analysis.summary.missingDayCount)}일, MDD는 관측치 기준` : '';
     $('#daily-source-line').innerHTML = `<a href="${esc(asset.sourceUrl)}" target="_blank" rel="noopener noreferrer">${esc(asset.sourceName)} ↗</a><span>${esc(asset.priceNote)}${gapNote}</span><span title="${esc(asset.retrievedAt)}">${esc(analysis.summary.lastDate)}까지</span>`;
     $('#daily-source-line').title = `${asset.coverageNote || ''} · ${asset.timezone} · 수집 ${asset.retrievedAt} · ${asset.license || ''}`;
-    $('#daily-monthly-table').innerHTML = renderMonthlyDataTable(asset, analysis, state);
+    // Paging the daily table must not rebuild hundreds of hidden heatmap cells.
+    // Opening monthly mode always paints from the latest asset/filter/metric.
+    if (state.detail === 'monthly') $('#daily-monthly-table').innerHTML = renderMonthlyDataTable(asset, analysis, state);
   }
   function paint() {
     if (disposed) return;

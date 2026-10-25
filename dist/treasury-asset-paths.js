@@ -1,5 +1,5 @@
 import { utcDay, dateFromDay } from './cycle-engine.js?v=1.19.0';
-import { buildLongHorizonForecasts } from "./long-horizon-forecast.js?v=1.21.0";
+import { buildLongHorizonForecasts } from "./long-horizon-forecast.js?v=1.23.0";
 import { LONG_HORIZON_REVIEW_DATE } from './long-horizon-evidence.js?v=1.11.0';
 
 const SCENARIOS = ['stress', 'base', 'bull'];

@@ -3,7 +3,7 @@
  * separately marked retrospective macro windows. No intraday OHLC is inferred.
  */
 import { utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.19.0';
-import { shiftCalendarMonths } from './cycle-timing.js?v=1.19.0';
+import { shiftCalendarMonths } from './cycle-timing.js?v=1.23.0';
 
 export const MARKET_STRUCTURE_VERSION = 'market-structure-v1';
 export const STATE_LABELS = Object.freeze({
@@ -28,7 +28,37 @@ const mean = (values) => values.length ? values.reduce((a, b) => a + b, 0) / val
 export function median(values) {
   if (!values.length) return null;
   const ordered = [...values].sort((a, b) => a - b), middle = Math.floor(ordered.length / 2);
-  return ordered.length % 2 ? ordered[middle] : (ordered[middle - 1] + ordered[middle]) / 2;
+  if (ordered.length % 2) return ordered[middle];
+  const sum = ordered[middle - 1] + ordered[middle];
+  return Number.isFinite(sum) ? sum / 2 : ordered[middle - 1] / 2 + ordered[middle] / 2;
+}
+function finiteMetrics(record) {
+  for (const key in record) if (typeof record[key] === 'number' && !Number.isFinite(record[key])) throw new RangeError(`Market structure ${key} exceeds the finite numeric range`);
+  return record;
+}
+function logReturn(price, reference) {
+  const ratio = price / reference;
+  // A positive subnormal quotient can already have lost most significant
+  // digits. Use the original operands before taking its logarithm as well.
+  return Number.isFinite(ratio) && ratio >= 2 ** -1022 ? Math.log(ratio) : Math.log(price) - Math.log(reference);
+}
+function geometricPriceMean(rows) {
+  let low = Infinity, high = 0, logSum = 0;
+  for (const row of rows) { low = Math.min(low, row.price); high = Math.max(high, row.price); logSum += Math.log(row.price); }
+  // Every positive geometric mean lies inside its observed input range.
+  // Preserve that exact bound when log/exp roundoff crosses a finite limit.
+  return Math.max(low, Math.min(high, Math.exp(logSum / rows.length)));
+}
+function pairwiseSlope(y1, y2, x1, x2) {
+  const numerator = y2 - y1, denominator = x2 - x1;
+  const finiteNumerator = Number.isFinite(numerator), finiteDenominator = Number.isFinite(denominator);
+  const slope = finiteNumerator && finiteDenominator ? numerator / denominator
+    // Halve before subtracting, then divide once. Dividing each large endpoint
+    // separately can double-round a representable boundary slope to Infinity.
+    : finiteDenominator ? (y2 / 2 - y1 / 2) / (denominator / 2)
+      : (finiteNumerator ? numerator / 2 : y2 / 2 - y1 / 2) / (x2 / 2 - x1 / 2);
+  if (!Number.isFinite(slope)) throw new RangeError('Theil–Sen slope exceeds the finite numeric range');
+  return slope;
 }
 function sampleSD(values) {
   if (values.length < 2) return null;
@@ -90,14 +120,14 @@ function periodStatistics(rows, prior, priorATH) {
     if (row.price > ath) { if (Number.isFinite(ath)) newHighDays++; ath = row.price; }
     maxATHDrawdown = Math.min(maxATHDrawdown, row.price / ath - 1);
     if (previous) {
-      if (row.epochDay - previous.epochDay === 1) returns.push(Math.log(row.price / previous.price));
+      if (row.epochDay - previous.epochDay === 1) returns.push(logReturn(row.price, previous.price));
       else continuous = false;
     }
     previous = row;
   }
   const first = rows[0], last = rows.at(-1), high = extreme(rows), low = extreme(rows, false);
   const rv = continuous ? sampleSD(returns) : null;
-  return {
+  return finiteMetrics({
     date: last.date, price: last.price,
     firstObservationDate: first.date, lastObservationDate: last.date,
     open: first.price, high: high.price, low: low.price, close: last.price,
@@ -114,7 +144,7 @@ function periodStatistics(rows, prior, priorATH) {
     realizedVolPct: rv === null ? null : rv * Math.sqrt(365) * 100,
     volatilityReturnCount: returns.length, volatilityAnnualizationDays: 365,
     newHighDays, discoveryDays: newHighDays, continuous,
-  };
+  });
 }
 
 /** Calendar bins remain partial until every labeled day is observed. */
@@ -247,15 +277,15 @@ export function computeRollingStates(input, {
     const hasLong = i >= longWindow && row.epochDay - rows[i - longWindow].epochDay === longWindow * stepDays;
     const shortRows = hasShort ? rows.slice(i - shortWindow, i + 1) : [];
     const longRows = hasLong ? rows.slice(i - longWindow, i + 1) : [];
-    const shortMA = hasShort ? Math.exp(mean(shortRows.map((p) => Math.log(p.price)))) : null;
-    const longMA = hasLong ? Math.exp(mean(longRows.map((p) => Math.log(p.price)))) : null;
+    const shortMA = hasShort ? geometricPriceMean(shortRows) : null;
+    const longMA = hasLong ? geometricPriceMean(longRows) : null;
     const high = hasShort ? Math.max(...shortRows.map((p) => p.price)) : null;
     const low = hasShort ? Math.min(...shortRows.map((p) => p.price)) : null;
     const rollingReturn = hasShort ? row.price / shortRows[0].price - 1 : null;
     const rollingRange = hasShort ? high / low - 1 : null;
     const rollingDrawdown = hasShort ? row.price / high - 1 : null;
     const rebound = hasShort ? row.price / low - 1 : null;
-    const returns = hasShort ? shortRows.slice(1).map((p, index) => Math.log(p.price / shortRows[index].price)) : [];
+    const returns = hasShort ? shortRows.slice(1).map((p, index) => logReturn(p.price, shortRows[index].price)) : [];
     const rv = sampleSD(returns);
     let state = 'transition';
     if (!hasLong) state = 'warmup';
@@ -267,7 +297,7 @@ export function computeRollingStates(input, {
     else if (row.price >= shortMA && shortMA >= longMA && rollingReturn > 0) state = 'advance';
     else if (row.price < longMA && rollingReturn < 0) state = 'correction';
     else if (row.price < shortMA && rollingReturn < 0) state = 'pullback';
-    return {
+    return finiteMetrics({
       date: row.date, price: row.price, epochDay: row.epochDay, state,
       knownAt: row.date, earliestKnowableUtc: earliestKnowable(row.date), causal: true,
       athPrice: ath, athDrawdownPct: athDrawdown * 100, newATH,
@@ -277,7 +307,7 @@ export function computeRollingStates(input, {
       reboundFromWindowLowPct: rebound === null ? null : rebound * 100,
       realizedVolPct: rv === null ? null : rv * Math.sqrt(365 / stepDays) * 100,
       shortMA, longMA,
-    };
+    });
   });
   return { parameters, points, current: points.at(-1) ?? null, episodes: makeEpisodes(points, stepDays) };
 }
@@ -326,13 +356,13 @@ export function theilSenTrend(records) {
   const slopes = [];
   for (let i = 0; i < values.length; i++) for (let j = i + 1; j < values.length; j++) {
     const x1 = values[i].x ?? i, x2 = values[j].x ?? j;
-    if (x2 !== x1) slopes.push((values[j].value - values[i].value) / (x2 - x1));
+    if (x2 !== x1) slopes.push(pairwiseSlope(values[i].value, values[j].value, x1, x2));
   }
   const slope = median(slopes);
   const leaveOneOut = values.length >= 3 ? values.map((omitted, index) => {
     const subset = values.map((row, i) => ({ ...row, x: row.x ?? i })).filter((_, i) => i !== index);
     const differences = [];
-    for (let i = 0; i < subset.length; i++) for (let j = i + 1; j < subset.length; j++) differences.push((subset[j].value - subset[i].value) / (subset[j].x - subset[i].x));
+    for (let i = 0; i < subset.length; i++) for (let j = i + 1; j < subset.length; j++) differences.push(pairwiseSlope(subset[i].value, subset[j].value, subset[i].x, subset[j].x));
     return { omittedId: omitted.id, slopeDaysPerCycle: median(differences) };
   }) : [];
   const loo = leaveOneOut.map((row) => row.slopeDaysPerCycle).filter((v) => v !== null);
@@ -418,8 +448,7 @@ export function fibonacciLevels(startPrice, endPrice, { ratios = FIBONACCI_RATIO
 function logPriceRatio(price, reference) {
   const relativeChange = (price-reference)/reference;
   if (Math.abs(relativeChange)<=0.5) return Math.log1p(relativeChange);
-  const ratio=price/reference;
-  return Number.isFinite(ratio)&&ratio>0 ? Math.log(ratio) : Math.log(price)-Math.log(reference);
+  return logReturn(price,reference);
 }
 
 function interpolateLogPrice(start, end, ratio) {

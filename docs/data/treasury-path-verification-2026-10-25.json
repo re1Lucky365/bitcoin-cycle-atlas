@@ -1,0 +1,166 @@
+{
+  "status": "PASS",
+  "node": "v24.22.1",
+  "asOf": "2026-10-23",
+  "endYear": 2050,
+  "seed": 20261022,
+  "scope": "Independent daily financial identities and input-boundary verification. This does not establish predictive accuracy, calibrated probabilities or feasible financing.",
+  "sourceHashes": {
+    "scripts/verify-treasury-paths.mjs": "996ea4d65518bb621af618e0899acb42fcd5b784b6f0cc59b657c2d024e1bd60",
+    "dist/treasury-asset-paths.js": "f1b16ced8251459c16826c57c285f44d5a8d78a6a2fa9319dc8d558fb0c42e83",
+    "dist/treasury-model.js": "60981b317184453c1d2c6d6756e97fce261938bf5746bc2166b10168b8f15b55",
+    "dist/long-horizon-forecast.js": "fcedcfa438b56136a3910e258a6473d5a3d4fb20b99cab8a22a4cb1a4b77e02c",
+    "dist/long-horizon-evidence.js": "7b5f9fc162e0c621b6a7df9f0f3d77e76c274040e83b88b0a8301638cb29f2f8",
+    "dist/detailed-forecast.js": "34fac03a15a8ab7f8454f9801e3edb518a983cdc3c7f81f23e978bffc4310629",
+    "dist/cycle-calibration.js": "428abd1e06363681c9e6ab4c4299da4fecfae370320a3f144ce3607aaf38b4b8",
+    "dist/cycle-engine.js": "f6b88a839f22b96c72306e87bd4760337d259a3190830325b570520472c84346",
+    "dist/cycle-timing.js": "c4b8ac425d33c65a0c9d059f09e084279fc73c31b1911ea401861dcbf8bf98da",
+    "dist/market-structure.js": "57c17ba994c673213f0238f07d0a446151b26846bae712becffa489e31f20b69",
+    "dist/treasury-research.js": "ad9f947f8832a8a0f7cedd187e51243eb00453d2476fb5d4154cc645dce0bddb",
+    "dist/treasury-catalog.js": "8d7facd79720a048b70e26d91a52d84272b28a5db5fe8e1a3ff8fad380b0881c"
+  },
+  "inputHashes": {
+    "dist/data/btc-daily.json": "ba002ee272c8b8f6fe2111e32df85080b3352756d1f46ba11d5dffa5c4ab5bf2",
+    "dist/data/eth-ohlc.json": "0147ff056524da2a340d6b557bdd16d2a1cf32a82c97c96320acac0ed7e059d7",
+    "dist/data/mstr-ohlc.json": "7c387852ce8843bcbce6baa56b5ecdde7dca8bc1e52cbe414da7de3a21a1156f",
+    "dist/data/bmnr-ohlc.json": "ccef07f11f4e20ad160b20f7d02d3f24c997cc6216b6cdd2876575903713bfd6",
+    "research-data/treasury-mstr.json": "cac107e363aba4ceb95db085ac351911a3771ba1c1c7818c8adebbfaa7414de1",
+    "research-data/treasury-bmnr.json": "08724dc7eee6b00c303445ef9da9aff266c1f5bb0c0ec863e87846a282041105"
+  },
+  "tolerance": "Financial and baseline identities: 1e-7 + 64 * Number.EPSILON * arithmetic scale, including cumulative quantities used in differences. ETH log residual: 512 * Number.EPSILON * (1 + absolute residual and innovation terms).",
+  "checks": [
+    "six actual-input financial paths conserve holdings, cash, senior claims, issuance and daily calendar events",
+    "every ETH baseline and residual is independently reconciled to the explicit target, actual dated post-Merge source return and declared 90-day scale/730-day persistence",
+    "MSTR asset dates and prices equal the original BTC engine for all three mapped scenarios",
+    "same seed and cutoff reproduce every path after extreme future observations are appended",
+    "same terminal asset price produces independently computed different holdings and share prices after different interim cash-outflow prices",
+    "liquidation is absorbing within its own financial path and does not propagate from another condition through the displayed envelope",
+    "wrong asset, bundle cutoff, future training, missing day, duplicate day, mismatched initial price and non-finite price are rejected",
+    "an older coin anchor is rejected even when its numeric price equals the new exact-date path anchor",
+    "raw ETH archives cannot omit their asset identity or contradict the nested Coinbase source identity"
+  ],
+  "counts": {
+    "activeSteps": 44988,
+    "absorbedSteps": 8022,
+    "financingSteps": 10839,
+    "rewardSaleSteps": 14797,
+    "debtRepayments": 15
+  },
+  "ethResidualChecks": 26505,
+  "rejectedBoundaryCases": 10,
+  "maxAbsoluteErrors": {
+    "grossAssetsUsd": 0,
+    "seniorClaimsUsd": 0,
+    "residualUsd": 0,
+    "premium": 0,
+    "sharePriceUsd": 0,
+    "coinUnits": 3.725290298461914e-09,
+    "rewardUnits": 0,
+    "rewardCashUsd": 3.814697265625e-06,
+    "otherAssetsUsd": 0,
+    "principalUsd": 0,
+    "cashUsd": 0.000732421875,
+    "issuedShares": 4.7637149691581726e-07,
+    "issuanceUsd": 0.0019512176513671875,
+    "ethBaselineUsd": 2.9103830456733704e-11,
+    "ethResidualLog": 4.440892098500626e-16,
+    "fixtureCoinUnits": 6.461050361394882e-09,
+    "fixtureShares": 2.153683453798294e-08
+  },
+  "scenarios": [
+    {
+      "symbol": "MSTR",
+      "scenario": "stress",
+      "asOf": "2026-10-23",
+      "endDate": "2050-12-31",
+      "points": 8836,
+      "upwardAssetDays": 4199,
+      "downwardAssetDays": 4636,
+      "insolventAt": "2040-10-17",
+      "capacityReachedAt": null,
+      "lastPrice": 0,
+      "lastCoinUnits": 324253.4562622509
+    },
+    {
+      "symbol": "MSTR",
+      "scenario": "base",
+      "asOf": "2026-10-23",
+      "endDate": "2050-12-31",
+      "points": 8836,
+      "upwardAssetDays": 4360,
+      "downwardAssetDays": 4475,
+      "insolventAt": null,
+      "capacityReachedAt": null,
+      "lastPrice": 1298.6874949406795,
+      "lastCoinUnits": 877973.6926684522
+    },
+    {
+      "symbol": "MSTR",
+      "scenario": "bull",
+      "asOf": "2026-10-23",
+      "endDate": "2050-12-31",
+      "points": 8836,
+      "upwardAssetDays": 4410,
+      "downwardAssetDays": 4425,
+      "insolventAt": null,
+      "capacityReachedAt": "2047-10-11",
+      "lastPrice": 14114.460535916902,
+      "lastCoinUnits": 21000000
+    },
+    {
+      "symbol": "BMNR",
+      "scenario": "stress",
+      "asOf": "2026-10-23",
+      "endDate": "2050-12-31",
+      "points": 8836,
+      "upwardAssetDays": 4424,
+      "downwardAssetDays": 4411,
+      "insolventAt": "2039-03-29",
+      "capacityReachedAt": null,
+      "lastPrice": 0,
+      "lastCoinUnits": 2431056.6038050354
+    },
+    {
+      "symbol": "BMNR",
+      "scenario": "base",
+      "asOf": "2026-10-23",
+      "endDate": "2050-12-31",
+      "points": 8836,
+      "upwardAssetDays": 4469,
+      "downwardAssetDays": 4366,
+      "insolventAt": null,
+      "capacityReachedAt": "2033-05-28",
+      "lastPrice": 34.564322150234354,
+      "lastCoinUnits": 6105000
+    },
+    {
+      "symbol": "BMNR",
+      "scenario": "bull",
+      "asOf": "2026-10-23",
+      "endDate": "2050-12-31",
+      "points": 8836,
+      "upwardAssetDays": 4516,
+      "downwardAssetDays": 4319,
+      "insolventAt": null,
+      "capacityReachedAt": "2028-02-01",
+      "lastPrice": 453.07936444479844,
+      "lastCoinUnits": 6105000
+    }
+  ],
+  "syntheticPathDependence": [
+    {
+      "intermediatePrice": 50,
+      "finalCoinPrice": 100,
+      "expectedCoinUnits": 104351.32541558263,
+      "actualCoinUnits": 104351.32541558455,
+      "finalSharePrice": 9.349352380284982
+    },
+    {
+      "intermediatePrice": 150,
+      "finalCoinPrice": 100,
+      "expectedCoinUnits": 502417.4030086563,
+      "actualCoinUnits": 502417.4030086498,
+      "finalSharePrice": 45.014064977213934
+    }
+  ]
+}

@@ -1,0 +1,122 @@
+{
+  "view": "customer",
+  "second": {
+    "role": "fix",
+    "label": "ETH lifecycle fix",
+    "lacks": []
+  },
+  "modelStates": 3503,
+  "modelTransitions": 12879,
+  "chartStates": 10,
+  "chartTransitions": 12,
+  "chartStatus": {
+    "works": 11,
+    "wrong": 0,
+    "fixed": 3,
+    "mixed": 0,
+    "after": 0,
+    "worse": 0
+  },
+  "mixedStatus": [],
+  "cover": {
+    "drawn": true,
+    "states": 14,
+    "transitions": 46,
+    "leftOutStates": [
+      "Loading after retry",
+      "Observed chart with refresh error",
+      "Retry available",
+      "Retry waiting for first display"
+    ],
+    "leftOutTransitions": [
+      "Hidden page published updates --> Empty chart announced ready: initial loader finishes",
+      "Loading after retry --> Observed chart ready: saved prices arrive",
+      "Loading after retry --> Page suspended: leave the page",
+      "Loading after retry --> Refreshing observed prices: saved prices arrive",
+      "Loading after retry --> Retry available: saved price request fails",
+      "Loading shell --> Empty chart announced ready: initial loader finishes",
+      "Loading shell --> Retry waiting for first display: saved price request fails",
+      "Observed chart at chosen range --> Observed chart ready: change daily or weekly",
+      "Observed chart at chosen range --> Page suspended: leave the page",
+      "Observed chart at chosen range --> Refreshing with a new range: refresh or retry",
+      "Observed chart ready --> Observed chart at chosen range: choose a date range",
+      "Observed chart ready --> Page suspended: leave the page",
+      "Observed chart with refresh error --> Observed chart ready: change daily or weekly",
+      "Observed chart with refresh error --> Page suspended: leave the page",
+      "Observed chart with refresh error --> Refreshing observed prices: refresh or retry",
+      "Observed chart with refresh error --> Refreshing with a new range: refresh or retry",
+      "Page suspended --> Loading after retry: restore the page",
+      "Page suspended --> Loading shell: restore the page",
+      "Page suspended --> Observed chart at chosen range: restore the page",
+      "Page suspended --> Observed chart ready: restore the page",
+      "Page suspended --> Observed chart with refresh error: restore the page",
+      "Page suspended --> Prices waiting for first display: restore the page",
+      "Prices waiting for first display --> Page suspended: leave the page",
+      "Refresh reset the chosen range --> Hidden page published updates: render available content",
+      "Refreshing observed prices --> Observed chart ready: live prices arrive or change daily or weekly",
+      "Refreshing observed prices --> Observed chart with refresh error: live price request fails",
+      "Refreshing observed prices --> Page suspended: leave the page",
+      "Refreshing with a new range --> Observed chart ready: live prices arrive or change daily or weekly",
+      "Refreshing with a new range --> Observed chart with refresh error: live price request fails",
+      "Refreshing with a new range --> Page suspended: leave the page",
+      "Retry available --> Loading after retry: refresh or retry or change daily or weekly",
+      "Retry available --> Page suspended: leave the page",
+      "Retry waiting for first display --> Page suspended: leave the page",
+      "Retry waiting for first display --> Retry available: initial loader finishes"
+    ]
+  },
+  "classes": [
+    {
+      "n": 1,
+      "end": "Hidden page published updates",
+      "invariant": "NoHiddenPublication",
+      "rule": "A suspended page must publish neither chart updates nor readiness, even if an old queued callback runs. Guarded by dist/eth-view.js:131,163,233.",
+      "cause": "An old frame or layout callback publishes while the page is suspended",
+      "readerSteps": 4,
+      "modelSteps": 5,
+      "counterexamples": 355,
+      "lastSteps": [
+        "render available content",
+        "initial loader finishes"
+      ],
+      "startsHere": false,
+      "fix": "Page suspended"
+    },
+    {
+      "n": 2,
+      "end": "Empty chart announced ready",
+      "invariant": "ReadyHasUsableView",
+      "rule": "Readiness may be announced only when the selected chart has prices or a rendered actionable error. Guarded by dist/eth-view.js:129,152,161,246.",
+      "cause": "A revoked initializer announces readiness before restored data or a retry error exists",
+      "readerSteps": 4,
+      "modelSteps": 5,
+      "counterexamples": 13,
+      "lastSteps": [
+        "initial loader finishes"
+      ],
+      "startsHere": false,
+      "fix": "Page suspended"
+    },
+    {
+      "n": 3,
+      "end": "Refresh reset the chosen range",
+      "invariant": "NavigationSurvivesRefresh",
+      "rule": "A completed refresh may not reset navigation chosen after that request began. Guarded by dist/eth-view.js:90-91,98,106,174,185,192-193,203,205,215.",
+      "cause": "A live response resets a date range the user selected while waiting",
+      "readerSteps": 6,
+      "modelSteps": 7,
+      "counterexamples": 18,
+      "lastSteps": [
+        "live prices arrive"
+      ],
+      "startsHere": false,
+      "fix": "Observed chart at chosen range"
+    }
+  ],
+  "codeLike": [],
+  "uncited": {
+    "EthLoadBaseline.tla": [],
+    "EthLoad.tla": []
+  },
+  "brokenProperties": []
+}

@@ -4,6 +4,19 @@
 
 BTC 첫 접속은 최신 관측일 앞뒤 약 **4년**을 보여 주며, ‘장기 전망’·‘전체’ 또는 축소·이동으로 검토한 출처의 마지막 목표 연도인 **2050년 말**까지 볼 수 있습니다. 미래 가격과 음영은 검증된 목표가·확률구간을 뜻하지 않습니다. [종목별 모델 범위](docs/MODEL_SCOPE.md) · [BTC 표시 종료일 규칙](dist/long-horizon-forecast.js)
 
+## v1.23.0 · 전체 시스템 감사와 재사용할 상태 검증
+
+ETH 정보 창·페이지 복원·조회 중 사용자 선택, 일별 자료의 기간 경계와 극단 수치 연산을 수정했습니다. 공식 pstack 절차로 성능·수치·상태를 병렬 점검하고 별도 reviewer가 반례를 찾아 재검증했습니다. [전체 감사](docs/SYSTEM_AUDIT_2026_10_25.md) · [릴리스 노트](docs/RELEASE_V1_23.md)
+
+- **반복 계산 감소:** 일별 80회 페이지 이동은 1,149.90 → 335.46 ms, 비교 화면 26회 redraw는 1,540.93 → 229.37 ms. 실제 controller·표/SVG 생성의 7회 교대 측정으로 각각 70.83%·85.11% 줄었습니다. 표시 출력 동등성을 대조했으며, 브라우저 네트워크·layout·paint 시간으로 확대하지 않습니다. [원시 표본과 범위](docs/SYSTEM_PERFORMANCE_AUDIT_2026_10_25.md)
+- **독립 수치 검산:** 17,237개 관측의 MDD·SMA·RSI, 재무 보존식과 날짜 인과성을 대조했습니다. subnormal 로그 정보 손실과 MAX 경계 기울기의 중간 반올림까지 고쳤습니다. 정상 저장 자료의 전체 분석 결과는 기준 코드와 동일합니다. [수치 감사](docs/SYSTEM_NUMERICAL_AUDIT_2026_10_25.md) · [독립 반례 검토](docs/SYSTEM_INDEPENDENT_REVIEW_2026_10_25.md)
+- **프로젝트용 형식 검증 스킬:** ETH 실제 initializer 17개, 실제 코드 변이 9개, TLA+ 2,243개 고유 상태의 안전성 검증을 함께 둡니다. 연속 refresh의 모델 누락과 skipped replay 처리도 cold review에서 보완했습니다. [공식 상태전이도](docs/formal-eth/statechart/chart.png) · [모델·한계](docs/formal-eth/README.md) · [독립 스킬 검토](docs/FORMAL_SKILL_REVIEW_2026_10_25.md)
+- **최종 통합 977개 PASS:** 실패·skip·cancel 없이 통과했고, 수치·재무·연구·상태·정적·단일 HTML gate를 검증했습니다. 새 검사는 CI·Pages·릴리스에 포함됩니다. [정확한 소스·실행 결과](docs/data/system-integrated-verification-2026-10-25.json)
+
+## v1.22 · 일별 원자료·연간 수익률·MDD
+
+[일별 원자료 화면](https://twoimo.github.io/bitcoin-cycle-atlas/?page=data)에서 BTC·ETH·MSTR·BMNR의 관측 가격, 일별·연간·월별 수익률, MDD와 지표를 읽고 CSV로 내려받습니다. 색상과 텍스트로 표시하는 매수·중립·매도는 SMA/RSI의 공개된 관찰 규칙이며 수익성을 보증하지 않습니다. 종가 기반 손실, 자료 결측, 주식 세션·분할 조정 기준을 함께 표시합니다.
+
 ## v1.21.0 · 성능·수학·상태 전이 심층 점검
 
 자료 갱신의 과거 세션 누락, 원금 초과 지급과 극단값 되돌림 계산을 수정했습니다. MSTR·BMNR 관측 차트는 코인 응답과 전망 계산이 끝나기 전에 먼저 열리며, 날짜별 근거에 흡수 상태와 실제 모델 공식을 표시합니다. [전체 감사 보고서](docs/SYSTEM_AUDIT_SUMMARY.md) · [v1.21 릴리스 노트](docs/RELEASE_V1_21.md)

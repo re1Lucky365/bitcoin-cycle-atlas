@@ -1,18 +1,18 @@
 import {bitcoinForecastEvidence} from './forecast-evidence.js?v=1.18.0';
 import {openResearchArticle} from './research-reader.js?v=1.20.0';
 import {priceLegendMarkup,priceReadoutKind,observedPriceSourceLabel} from './price-legend.js?v=1.14.0-mobile.1';
-import { buildCycleMilestones, INTERVAL_RELATIONS, MILESTONE_TYPES } from "./cycle-milestones.js?v=1.21.0";
-import { cycleLegendMarkup, cycleMilestoneInspection, cycleIntervalInspection, cycleDurationLabel } from "./cycle-milestones-view.js?v=1.21.0";
+import { buildCycleMilestones, INTERVAL_RELATIONS, MILESTONE_TYPES } from "./cycle-milestones.js?v=1.23.0";
+import { cycleLegendMarkup, cycleMilestoneInspection, cycleIntervalInspection, cycleDurationLabel } from "./cycle-milestones-view.js?v=1.23.0";
 import { resolveCycleSelection, cycleSelectionViewport, cycleOverviewViewport } from './cycle-selection.js?v=1.19.0';
-import { drawAtlasPriceChart as drawChart } from "./atlas-price-chart.js?v=1.21.0";
+import { drawAtlasPriceChart as drawChart } from "./atlas-price-chart.js?v=1.23.0";
 import { renderCryptoConAudit } from './cryptocon-audit.js?v=1.19.0';
 import { bindChartNavigation, panRange } from './chart-navigation.js?v=1.19.0';
-import { renderAtlasAnalysis } from "./atlas-analysis.js?v=1.21.0";
+import { renderAtlasAnalysis } from "./atlas-analysis.js?v=1.23.0";
 import { ANALYSIS_MODES, analysisCalendarDate, shouldPublishInspection, analysisSelectionSummary } from './analysis-dock.js?v=1.14.1-touch.1';
 import { INDICATORS, readIndicatorState, writeIndicatorState, changeIndicatorState, applyIndicatorLayout, isIndicatorVisible, visibleAnalysisIds, indicatorSettings, applyIndicatorPresentation } from './indicator-state.js?v=1.14.1-touch.1';
 import { preparePriceViewData } from './price-view-data.js?v=1.11.0';
 import { chartSelectionHandler } from './inspection-policy.js?v=1.11.0';
-import { buildLongHorizonForecast, LONG_HORIZON_SCENARIOS } from "./long-horizon-forecast.js?v=1.21.0";
+import { buildLongHorizonForecast, LONG_HORIZON_SCENARIOS } from "./long-horizon-forecast.js?v=1.23.0";
 import { longHorizonMethodMarkup } from './long-horizon-view.js?v=1.11.0';
 import { CHART_INTERVALS, chartInterval, isIntradayInterval } from './ohlc-data.js?v=1.11.0';
 import { drawIntradayChart } from "./intraday-chart.js?v=1.21.0";
@@ -22,10 +22,10 @@ import { fitVolumeForecastModel, projectVolumeForecast } from './volume-forecast
 import { BITCOIN_EVENTS } from './bitcoin-events.js?v=1.11.0';
 import { historicalEventDetail } from './research-workbench.js?v=1.14.0-mobile.1';
 import { formatBtcVolume } from './chart-overlays.js?v=1.13.0-research.1';
-import { analyzeMarketStructure, computeRollingStates, detectDirectionalChanges, STATE_LABELS } from "./market-structure.js?v=1.21.0";
+import { analyzeMarketStructure, computeRollingStates, detectDirectionalChanges, STATE_LABELS } from "./market-structure.js?v=1.23.0";
 import { utcDay, dateFromDay } from './cycle-engine.js?v=1.19.0';
-import { shiftCalendarMonths } from './cycle-timing.js?v=1.19.0';
-import { chartPresetRange, DEFAULT_CHART_SPAN, CHART_SPANS } from './chart-presets.js?v=1.19.0';
+import { shiftCalendarMonths } from './cycle-timing.js?v=1.23.0';
+import { chartPresetRange, DEFAULT_CHART_SPAN, CHART_SPANS } from './chart-presets.js?v=1.23.0';
 import { createChartSvgExport } from './chart-export.js?v=1.14.1-png.1';
 import { readWorkspaceViewport, readWorkspacePriceDomain, readWorkspaceAxisOptions, writeWorkspaceViewport, workspaceQuery } from './workspace-state.js?v=1.19.0';
 import { normalizePriceDomain } from './price-axis.js?v=1.14.0-mobile.1';
@@ -564,13 +564,14 @@ export function initLabView() {
   function drawStructure(){
     if(!state.dataset||!state.compareVisible)return;
     try{
-      const a=structure(),b=base(),rolling=computeRollingStates(state.dataset,{frequency:state.structureFrequency,threshold:state.threshold});
+      const a=structure(),b=base(),points=state.structureFrequency==='weekly'?a.weeklyStates:a.dailyStates;
       const start=state.scope==='all'?b.rows[0].date:`${state.scope}-01-01`,end=state.scope==='all'?b.rows.at(-1).date:`${Number(state.scope)+3}-12-31`;
       const actualEnd=end>b.rows.at(-1).date?b.rows.at(-1).date:end;
-      const dc=detectDirectionalChanges(state.dataset,{frequency:state.structureFrequency,threshold:state.threshold});
-      drawChart({svg:$('#structure-chart'),tooltip:$('#structure-tooltip'),rows:b.rows,start,end:actualEnd,frequency:state.structureFrequency,stateStepDays:state.structureFrequency==='weekly'?7:1,states:rolling.points,turns:dc.pivots.map(p=>({date:p.eventDate,price:p.eventPrice,type:p.type,confirmationDate:p.confirmationDate})),historical:true,showStates:true,threshold:state.threshold});
+      // The cached analysis already computed both frequencies at this threshold.
+      const dc=a.pivots[state.structureFrequency];
+      drawChart({svg:$('#structure-chart'),tooltip:$('#structure-tooltip'),rows:b.rows,start,end:actualEnd,frequency:state.structureFrequency,stateStepDays:state.structureFrequency==='weekly'?7:1,states:points,turns:dc.pivots.map(p=>({date:p.eventDate,price:p.eventPrice,type:p.type,confirmationDate:p.confirmationDate})),historical:true,showStates:true,threshold:state.threshold});
       $('#structure-legend').innerHTML=Object.entries(STATE_LABELS).filter(([k])=>k!=='warmup').map(([k,v])=>`<span><i style="background:${COLORS[k]}"></i>${esc(v)}</span>`).join('');
-      drawTimeline(a,rolling.points);renderCycleTable(a);renderPeriods(a);renderStructureDetails(a);
+      drawTimeline(a,points);renderCycleTable(a);renderPeriods(a);renderStructureDetails(a);
       document.dispatchEvent(new CustomEvent('atlas:page-ready',{detail:{page:'compare'}}));
     }catch(error){fail(error);}
   }

@@ -1,5 +1,5 @@
-import {buildTreasuryAssetPaths} from "./treasury-asset-paths.js?v=1.21.0";
-import {buildTreasuryForecasts} from "./treasury-model.js?v=1.21.0";
+import {buildTreasuryAssetPaths} from "./treasury-asset-paths.js?v=1.23.0";
+import {buildTreasuryForecasts} from "./treasury-model.js?v=1.23.0";
 
 import {utcDay} from './cycle-engine.js?v=1.19.0';
 

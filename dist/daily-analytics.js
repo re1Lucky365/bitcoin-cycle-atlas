@@ -67,6 +67,17 @@ function addPeriod(period, row, missingSincePrevious) {
   updateDrawdown(period.drawdown, row);
 }
 
+function closeCrossedPeriod(period, calendar) {
+  // A later observed period proves that any unobserved calendar-day tail of
+  // this period is missing. Exchange weekends/holidays need explicit evidence.
+  if (calendar === 'daily') {
+    const trailing = period.bounds.end - period.last.epochDay;
+    period.missing += trailing;
+    period.trailingMissing = trailing > 0;
+  }
+  return period;
+}
+
 function finishPeriod(period, calendar, asOfDay) {
   const { bounds, baseline, first, last, hasBaseline, drawdown } = period;
   const initialBoundary = hasBaseline && (calendar === 'sessions' || baseline.epochDay === bounds.start - 1);
@@ -180,11 +191,11 @@ export function analyzeDailySeries(prices, { calendar = 'daily', asOfDate, symbo
     const indicators = indicatorsAt(indicatorState, row, contiguousPrevious);
     const year = Number(row.date.slice(0, 4)), monthKey = row.date.slice(0, 7);
     if (yearPeriod?.bounds.year !== year) {
-      if (yearPeriod) annual.push(yearPeriod);
+      if (yearPeriod) annual.push(closeCrossedPeriod(yearPeriod, calendar));
       yearPeriod = newPeriod(row, previous, false);
     }
     if (monthPeriod?.first.date.slice(0, 7) !== monthKey) {
-      if (monthPeriod) monthly.push(monthPeriod);
+      if (monthPeriod) monthly.push(closeCrossedPeriod(monthPeriod, calendar));
       monthPeriod = newPeriod(row, previous, true);
     }
     // A period receives only gaps between its actual baseline and its end.
@@ -209,6 +220,9 @@ export function analyzeDailySeries(prices, { calendar = 'daily', asOfDate, symbo
     const day = utcDay(date);
     if (day < first.epochDay || day > asOfDay) continue;
     if (day > last.epochDay) totalMissing++;
+    // Interior daily gaps, including crossed-period tails, were already
+    // inferred above; an explicit report of the same day must not add it twice.
+    if (calendar === 'daily' && day <= last.epochDay) continue;
     const year = Number(date.slice(0, 4)), month = Number(date.slice(5, 7));
     for (const period of [years.get(year), months.get(year * 12 + month - 1)]) {
       if (period && day > period.last.epochDay) {

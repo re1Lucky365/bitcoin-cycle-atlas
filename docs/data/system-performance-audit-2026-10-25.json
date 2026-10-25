@@ -1,0 +1,689 @@
+{
+  "version": 1,
+  "measuredAt": "2026-10-25T01:04:03.658Z",
+  "claim": "Remove the hidden monthly heatmap work during daily paging; reuse existing state/pivot results during comparison redraws; preserve visible outputs and requested render counts.",
+  "scope": "Real daily controller/analytics with archived 4-asset inputs and real comparison controller/analysis/SVG renderer. Daily journey: first-ready plus 80 page actions and 4 monthly transitions. Comparison journey: first-ready plus 26 frequency/scope/alignment changes. Inert DOM boundary; no browser HTML parsing/layout/paint, network, download latency, or mobile-device timing.",
+  "isolation": "Baseline production JS dependencies on both sides; only daily-data-view.js and lab-view.js are overlaid from the modified tree. Concurrent financial correctness fixes are deliberately excluded from this performance comparison. Comparison import bindings are instrumented to count actual calls; its function bodies and mathematical/render dependencies remain unchanged.",
+  "runtime": {
+    "node": "v24.22.1",
+    "platform": "linux",
+    "architecture": "x64"
+  },
+  "machineBefore": {
+    "loadAverage": [
+      0.15,
+      0.17,
+      0.1
+    ],
+    "cores": 8,
+    "uptimeSeconds": 5682.88
+  },
+  "machineAfter": {
+    "loadAverage": [
+      0.93,
+      0.4,
+      0.18
+    ],
+    "uptimeSeconds": 5739.22
+  },
+  "warmupsPerSide": 2,
+  "samplesPerSide": 7,
+  "order": [
+    "before",
+    "after",
+    "before",
+    "after",
+    "before",
+    "after",
+    "before",
+    "after",
+    "before",
+    "after",
+    "before",
+    "after",
+    "before",
+    "after"
+  ],
+  "errors": 0,
+  "revisions": {
+    "before": "64c8207cb044d8990289c5a7d39972e21b74c240",
+    "afterTreeHead": "64c8207cb044d8990289c5a7d39972e21b74c240"
+  },
+  "sources": {
+    "views": {
+      "daily-data-view.js": {
+        "before": "65b946657637bccfd7abdec574faf57f46ef584c7c0596e40bb0b9cfd2aa0037",
+        "after": "98c061d833e53180dbcffd42d324a3df3502bac114da7c0d75f8ec5e6c3b2fc4"
+      },
+      "lab-view.js": {
+        "before": "5f0d4c1ed21b547ac4711c4729928ae0980298a4eff2a2095b59914ad686a4fe",
+        "after": "229c4e9e7a8b3693c1b6d8b50a0eefa09bf484cf67fde6d0570c1ef2386a23e2"
+      }
+    },
+    "baselineDependencyManifest": "10d3a6d7d36b17945957a906c07df731aeca3740f5e914308f4a842626a3f0b2",
+    "benchmark": "ce94a46456b905ea1cccb5f43386c33a00ca4b0d19510501cb78dc03da7c50cf",
+    "dailyBoundary": "2b6d20938e4e62f6557a6aa7e14e3fdf5a47b5ed9dd897283cb509977d16420f",
+    "structureBoundary": "5984518c3b4ddf2cb27ece9f197509dea16bb7092d757663ab324c1a2a283c77"
+  },
+  "inputs": {
+    "hashes": {
+      "btc-daily.json": "ba002ee272c8b8f6fe2111e32df85080b3352756d1f46ba11d5dffa5c4ab5bf2",
+      "eth-ohlc.json": "0147ff056524da2a340d6b557bdd16d2a1cf32a82c97c96320acac0ed7e059d7",
+      "mstr-ohlc.json": "7c387852ce8843bcbce6baa56b5ecdde7dca8bc1e52cbe414da7de3a21a1156f",
+      "bmnr-ohlc.json": "ccef07f11f4e20ad160b20f7d02d3f24c997cc6216b6cdd2876575903713bfd6"
+    },
+    "rows": {
+      "BTC": 5942,
+      "ETH": 3809,
+      "MSTR": 7137,
+      "BMNR": 349
+    },
+    "asOf": "2026-10-23",
+    "rowLimit": 20,
+    "boundaryClientHeight": 714
+  },
+  "summary": {
+    "before": {
+      "firstReadyMs": {
+        "median": 132.07257800000116,
+        "min": 114.64975699999923,
+        "max": 159.71526200000153
+      },
+      "pagingMs": {
+        "median": 1149.9002399999736,
+        "min": 1123.1918660000083,
+        "max": 1267.5788609999872
+      },
+      "journeyMs": {
+        "median": 1452.7105379999994,
+        "min": 1415.6179490000013,
+        "max": 1574.127996000003
+      }
+    },
+    "after": {
+      "firstReadyMs": {
+        "median": 65.95436099999642,
+        "min": 57.399147999996785,
+        "max": 86.488695
+      },
+      "pagingMs": {
+        "median": 335.45906900000045,
+        "min": 317.8971250000068,
+        "max": 360.9688390000083
+      },
+      "journeyMs": {
+        "median": 532.8433670000013,
+        "min": 500.813979999999,
+        "max": 572.4014160000006
+      }
+    }
+  },
+  "samples": {
+    "before": [
+      {
+        "firstReadyMs": 132.07257800000116,
+        "pagingMs": 1123.1918660000083,
+        "journeyMs": 1415.6179490000013,
+        "outputHash": "aeddfcf385a3797d24b44ad9f366db2c3f8225fee65d85fb84d193c5fed09188",
+        "snapshots": 97,
+        "outputCharacters": 3004178,
+        "consumedDailyRows": 1860,
+        "monthlyReads": 4,
+        "pagingActions": 80,
+        "hiddenMonthlyWrites": 80,
+        "hiddenMonthlyCharacters": 4497040,
+        "errors": 0
+      },
+      {
+        "firstReadyMs": 135.3313019999987,
+        "pagingMs": 1155.1645690000005,
+        "journeyMs": 1452.7105379999994,
+        "outputHash": "aeddfcf385a3797d24b44ad9f366db2c3f8225fee65d85fb84d193c5fed09188",
+        "snapshots": 97,
+        "outputCharacters": 3004178,
+        "consumedDailyRows": 1860,
+        "monthlyReads": 4,
+        "pagingActions": 80,
+        "hiddenMonthlyWrites": 80,
+        "hiddenMonthlyCharacters": 4497040,
+        "errors": 0
+      },
+      {
+        "firstReadyMs": 159.71526200000153,
+        "pagingMs": 1141.769766999998,
+        "journeyMs": 1463.8549530000018,
+        "outputHash": "aeddfcf385a3797d24b44ad9f366db2c3f8225fee65d85fb84d193c5fed09188",
+        "snapshots": 97,
+        "outputCharacters": 3004178,
+        "consumedDailyRows": 1860,
+        "monthlyReads": 4,
+        "pagingActions": 80,
+        "hiddenMonthlyWrites": 80,
+        "hiddenMonthlyCharacters": 4497040,
+        "errors": 0
+      },
+      {
+        "firstReadyMs": 130.82837999999902,
+        "pagingMs": 1198.0415730000168,
+        "journeyMs": 1495.8866389999966,
+        "outputHash": "aeddfcf385a3797d24b44ad9f366db2c3f8225fee65d85fb84d193c5fed09188",
+        "snapshots": 97,
+        "outputCharacters": 3004178,
+        "consumedDailyRows": 1860,
+        "monthlyReads": 4,
+        "pagingActions": 80,
+        "hiddenMonthlyWrites": 80,
+        "hiddenMonthlyCharacters": 4497040,
+        "errors": 0
+      },
+      {
+        "firstReadyMs": 135.5660510000016,
+        "pagingMs": 1135.2032650000401,
+        "journeyMs": 1445.5510619999986,
+        "outputHash": "aeddfcf385a3797d24b44ad9f366db2c3f8225fee65d85fb84d193c5fed09188",
+        "snapshots": 97,
+        "outputCharacters": 3004178,
+        "consumedDailyRows": 1860,
+        "monthlyReads": 4,
+        "pagingActions": 80,
+        "hiddenMonthlyWrites": 80,
+        "hiddenMonthlyCharacters": 4497040,
+        "errors": 0
+      },
+      {
+        "firstReadyMs": 125.38263300000108,
+        "pagingMs": 1267.5788609999872,
+        "journeyMs": 1574.127996000003,
+        "outputHash": "aeddfcf385a3797d24b44ad9f366db2c3f8225fee65d85fb84d193c5fed09188",
+        "snapshots": 97,
+        "outputCharacters": 3004178,
+        "consumedDailyRows": 1860,
+        "monthlyReads": 4,
+        "pagingActions": 80,
+        "hiddenMonthlyWrites": 80,
+        "hiddenMonthlyCharacters": 4497040,
+        "errors": 0
+      },
+      {
+        "firstReadyMs": 114.64975699999923,
+        "pagingMs": 1149.9002399999736,
+        "journeyMs": 1419.9965159999992,
+        "outputHash": "aeddfcf385a3797d24b44ad9f366db2c3f8225fee65d85fb84d193c5fed09188",
+        "snapshots": 97,
+        "outputCharacters": 3004178,
+        "consumedDailyRows": 1860,
+        "monthlyReads": 4,
+        "pagingActions": 80,
+        "hiddenMonthlyWrites": 80,
+        "hiddenMonthlyCharacters": 4497040,
+        "errors": 0
+      }
+    ],
+    "after": [
+      {
+        "firstReadyMs": 84.07492099999945,
+        "pagingMs": 335.45906900000045,
+        "journeyMs": 540.4514099999978,
+        "outputHash": "aeddfcf385a3797d24b44ad9f366db2c3f8225fee65d85fb84d193c5fed09188",
+        "snapshots": 97,
+        "outputCharacters": 3004178,
+        "consumedDailyRows": 1860,
+        "monthlyReads": 4,
+        "pagingActions": 80,
+        "hiddenMonthlyWrites": 0,
+        "hiddenMonthlyCharacters": 0,
+        "errors": 0
+      },
+      {
+        "firstReadyMs": 84.48786200000177,
+        "pagingMs": 360.9688390000083,
+        "journeyMs": 572.4014160000006,
+        "outputHash": "aeddfcf385a3797d24b44ad9f366db2c3f8225fee65d85fb84d193c5fed09188",
+        "snapshots": 97,
+        "outputCharacters": 3004178,
+        "consumedDailyRows": 1860,
+        "monthlyReads": 4,
+        "pagingActions": 80,
+        "hiddenMonthlyWrites": 0,
+        "hiddenMonthlyCharacters": 0,
+        "errors": 0
+      },
+      {
+        "firstReadyMs": 65.29780799999935,
+        "pagingMs": 317.8971250000068,
+        "journeyMs": 500.813979999999,
+        "outputHash": "aeddfcf385a3797d24b44ad9f366db2c3f8225fee65d85fb84d193c5fed09188",
+        "snapshots": 97,
+        "outputCharacters": 3004178,
+        "consumedDailyRows": 1860,
+        "monthlyReads": 4,
+        "pagingActions": 80,
+        "hiddenMonthlyWrites": 0,
+        "hiddenMonthlyCharacters": 0,
+        "errors": 0
+      },
+      {
+        "firstReadyMs": 86.488695,
+        "pagingMs": 355.10665100003826,
+        "journeyMs": 557.0183869999964,
+        "outputHash": "aeddfcf385a3797d24b44ad9f366db2c3f8225fee65d85fb84d193c5fed09188",
+        "snapshots": 97,
+        "outputCharacters": 3004178,
+        "consumedDailyRows": 1860,
+        "monthlyReads": 4,
+        "pagingActions": 80,
+        "hiddenMonthlyWrites": 0,
+        "hiddenMonthlyCharacters": 0,
+        "errors": 0
+      },
+      {
+        "firstReadyMs": 62.17495400000189,
+        "pagingMs": 353.61401900000783,
+        "journeyMs": 532.8433670000013,
+        "outputHash": "aeddfcf385a3797d24b44ad9f366db2c3f8225fee65d85fb84d193c5fed09188",
+        "snapshots": 97,
+        "outputCharacters": 3004178,
+        "consumedDailyRows": 1860,
+        "monthlyReads": 4,
+        "pagingActions": 80,
+        "hiddenMonthlyWrites": 0,
+        "hiddenMonthlyCharacters": 0,
+        "errors": 0
+      },
+      {
+        "firstReadyMs": 57.399147999996785,
+        "pagingMs": 332.91401300002326,
+        "journeyMs": 507.81029000000126,
+        "outputHash": "aeddfcf385a3797d24b44ad9f366db2c3f8225fee65d85fb84d193c5fed09188",
+        "snapshots": 97,
+        "outputCharacters": 3004178,
+        "consumedDailyRows": 1860,
+        "monthlyReads": 4,
+        "pagingActions": 80,
+        "hiddenMonthlyWrites": 0,
+        "hiddenMonthlyCharacters": 0,
+        "errors": 0
+      },
+      {
+        "firstReadyMs": 65.95436099999642,
+        "pagingMs": 324.3022040000724,
+        "journeyMs": 506.1150639999978,
+        "outputHash": "aeddfcf385a3797d24b44ad9f366db2c3f8225fee65d85fb84d193c5fed09188",
+        "snapshots": 97,
+        "outputCharacters": 3004178,
+        "consumedDailyRows": 1860,
+        "monthlyReads": 4,
+        "pagingActions": 80,
+        "hiddenMonthlyWrites": 0,
+        "hiddenMonthlyCharacters": 0,
+        "errors": 0
+      }
+    ]
+  },
+  "structure": {
+    "summary": {
+      "before": {
+        "firstReadyMs": {
+          "median": 1117.324456000002,
+          "min": 1081.140741000003,
+          "max": 1709.0201310000048
+        },
+        "redrawMs": {
+          "median": 1540.9335460000002,
+          "min": 1428.0869450000027,
+          "max": 2042.6443230000004
+        },
+        "journeyMs": {
+          "median": 2724.2962819999957,
+          "min": 2515.3686450000023,
+          "max": 3249.958694000001
+        }
+      },
+      "after": {
+        "firstReadyMs": {
+          "median": 1071.556206000001,
+          "min": 1057.2787050000006,
+          "max": 1138.5101050000012
+        },
+        "redrawMs": {
+          "median": 229.3717460000007,
+          "min": 223.3992330000001,
+          "max": 238.4877839999972
+        },
+        "journeyMs": {
+          "median": 1310.0460939999975,
+          "min": 1286.6537270000008,
+          "max": 1361.9115710000005
+        }
+      }
+    },
+    "samples": {
+      "before": [
+        {
+          "firstReadyMs": 1169.1238979999998,
+          "redrawMs": 1602.5152240000007,
+          "journeyMs": 2771.643028999999,
+          "outputHash": "4841377c81876587a600949af8e66bce2026aad109585ddb38bddb1563e92add",
+          "snapshots": 27,
+          "outputCharacters": 5584170,
+          "firstCalls": {
+            "rolling": 1,
+            "directional": 2,
+            "analysis": 1,
+            "chart": 1
+          },
+          "repeatedCalls": {
+            "rolling": 26,
+            "directional": 26,
+            "analysis": 0,
+            "chart": 26
+          },
+          "errors": 0
+        },
+        {
+          "firstReadyMs": 1081.140741000003,
+          "redrawMs": 2042.6443230000004,
+          "journeyMs": 3123.7885750000023,
+          "outputHash": "4841377c81876587a600949af8e66bce2026aad109585ddb38bddb1563e92add",
+          "snapshots": 27,
+          "outputCharacters": 5584170,
+          "firstCalls": {
+            "rolling": 1,
+            "directional": 2,
+            "analysis": 1,
+            "chart": 1
+          },
+          "repeatedCalls": {
+            "rolling": 26,
+            "directional": 26,
+            "analysis": 0,
+            "chart": 26
+          },
+          "errors": 0
+        },
+        {
+          "firstReadyMs": 1110.5882429999983,
+          "redrawMs": 1514.748741000003,
+          "journeyMs": 2625.3389739999984,
+          "outputHash": "4841377c81876587a600949af8e66bce2026aad109585ddb38bddb1563e92add",
+          "snapshots": 27,
+          "outputCharacters": 5584170,
+          "firstCalls": {
+            "rolling": 1,
+            "directional": 2,
+            "analysis": 1,
+            "chart": 1
+          },
+          "repeatedCalls": {
+            "rolling": 26,
+            "directional": 26,
+            "analysis": 0,
+            "chart": 26
+          },
+          "errors": 0
+        },
+        {
+          "firstReadyMs": 1087.2791660000003,
+          "redrawMs": 1428.0869450000027,
+          "journeyMs": 2515.3686450000023,
+          "outputHash": "4841377c81876587a600949af8e66bce2026aad109585ddb38bddb1563e92add",
+          "snapshots": 27,
+          "outputCharacters": 5584170,
+          "firstCalls": {
+            "rolling": 1,
+            "directional": 2,
+            "analysis": 1,
+            "chart": 1
+          },
+          "repeatedCalls": {
+            "rolling": 26,
+            "directional": 26,
+            "analysis": 0,
+            "chart": 26
+          },
+          "errors": 0
+        },
+        {
+          "firstReadyMs": 1214.4965329999977,
+          "redrawMs": 1509.7973950000014,
+          "journeyMs": 2724.2962819999957,
+          "outputHash": "4841377c81876587a600949af8e66bce2026aad109585ddb38bddb1563e92add",
+          "snapshots": 27,
+          "outputCharacters": 5584170,
+          "firstCalls": {
+            "rolling": 1,
+            "directional": 2,
+            "analysis": 1,
+            "chart": 1
+          },
+          "repeatedCalls": {
+            "rolling": 26,
+            "directional": 26,
+            "analysis": 0,
+            "chart": 26
+          },
+          "errors": 0
+        },
+        {
+          "firstReadyMs": 1709.0201310000048,
+          "redrawMs": 1540.9335460000002,
+          "journeyMs": 3249.958694000001,
+          "outputHash": "4841377c81876587a600949af8e66bce2026aad109585ddb38bddb1563e92add",
+          "snapshots": 27,
+          "outputCharacters": 5584170,
+          "firstCalls": {
+            "rolling": 1,
+            "directional": 2,
+            "analysis": 1,
+            "chart": 1
+          },
+          "repeatedCalls": {
+            "rolling": 26,
+            "directional": 26,
+            "analysis": 0,
+            "chart": 26
+          },
+          "errors": 0
+        },
+        {
+          "firstReadyMs": 1117.324456000002,
+          "redrawMs": 1553.7528499999971,
+          "journeyMs": 2671.590710999997,
+          "outputHash": "4841377c81876587a600949af8e66bce2026aad109585ddb38bddb1563e92add",
+          "snapshots": 27,
+          "outputCharacters": 5584170,
+          "firstCalls": {
+            "rolling": 1,
+            "directional": 2,
+            "analysis": 1,
+            "chart": 1
+          },
+          "repeatedCalls": {
+            "rolling": 26,
+            "directional": 26,
+            "analysis": 0,
+            "chart": 26
+          },
+          "errors": 0
+        }
+      ],
+      "after": [
+        {
+          "firstReadyMs": 1138.5101050000012,
+          "redrawMs": 223.3992330000001,
+          "journeyMs": 1361.9115710000005,
+          "outputHash": "4841377c81876587a600949af8e66bce2026aad109585ddb38bddb1563e92add",
+          "snapshots": 27,
+          "outputCharacters": 5584170,
+          "firstCalls": {
+            "rolling": 0,
+            "directional": 1,
+            "analysis": 1,
+            "chart": 1
+          },
+          "repeatedCalls": {
+            "rolling": 0,
+            "directional": 0,
+            "analysis": 0,
+            "chart": 26
+          },
+          "errors": 0
+        },
+        {
+          "firstReadyMs": 1063.4938000000002,
+          "redrawMs": 223.72311999999874,
+          "journeyMs": 1287.2194619999973,
+          "outputHash": "4841377c81876587a600949af8e66bce2026aad109585ddb38bddb1563e92add",
+          "snapshots": 27,
+          "outputCharacters": 5584170,
+          "firstCalls": {
+            "rolling": 0,
+            "directional": 1,
+            "analysis": 1,
+            "chart": 1
+          },
+          "repeatedCalls": {
+            "rolling": 0,
+            "directional": 0,
+            "analysis": 0,
+            "chart": 26
+          },
+          "errors": 0
+        },
+        {
+          "firstReadyMs": 1057.2787050000006,
+          "redrawMs": 229.3717460000007,
+          "journeyMs": 1286.6537270000008,
+          "outputHash": "4841377c81876587a600949af8e66bce2026aad109585ddb38bddb1563e92add",
+          "snapshots": 27,
+          "outputCharacters": 5584170,
+          "firstCalls": {
+            "rolling": 0,
+            "directional": 1,
+            "analysis": 1,
+            "chart": 1
+          },
+          "repeatedCalls": {
+            "rolling": 0,
+            "directional": 0,
+            "analysis": 0,
+            "chart": 26
+          },
+          "errors": 0
+        },
+        {
+          "firstReadyMs": 1119.1807009999975,
+          "redrawMs": 230.22984700000234,
+          "journeyMs": 1349.4142299999949,
+          "outputHash": "4841377c81876587a600949af8e66bce2026aad109585ddb38bddb1563e92add",
+          "snapshots": 27,
+          "outputCharacters": 5584170,
+          "firstCalls": {
+            "rolling": 0,
+            "directional": 1,
+            "analysis": 1,
+            "chart": 1
+          },
+          "repeatedCalls": {
+            "rolling": 0,
+            "directional": 0,
+            "analysis": 0,
+            "chart": 26
+          },
+          "errors": 0
+        },
+        {
+          "firstReadyMs": 1103.039813000003,
+          "redrawMs": 231.36447299999418,
+          "journeyMs": 1334.4078379999992,
+          "outputHash": "4841377c81876587a600949af8e66bce2026aad109585ddb38bddb1563e92add",
+          "snapshots": 27,
+          "outputCharacters": 5584170,
+          "firstCalls": {
+            "rolling": 0,
+            "directional": 1,
+            "analysis": 1,
+            "chart": 1
+          },
+          "repeatedCalls": {
+            "rolling": 0,
+            "directional": 0,
+            "analysis": 0,
+            "chart": 26
+          },
+          "errors": 0
+        },
+        {
+          "firstReadyMs": 1071.556206000001,
+          "redrawMs": 238.4877839999972,
+          "journeyMs": 1310.0460939999975,
+          "outputHash": "4841377c81876587a600949af8e66bce2026aad109585ddb38bddb1563e92add",
+          "snapshots": 27,
+          "outputCharacters": 5584170,
+          "firstCalls": {
+            "rolling": 0,
+            "directional": 1,
+            "analysis": 1,
+            "chart": 1
+          },
+          "repeatedCalls": {
+            "rolling": 0,
+            "directional": 0,
+            "analysis": 0,
+            "chart": 26
+          },
+          "errors": 0
+        },
+        {
+          "firstReadyMs": 1069.8371229999975,
+          "redrawMs": 227.52895200000057,
+          "journeyMs": 1297.3700400000016,
+          "outputHash": "4841377c81876587a600949af8e66bce2026aad109585ddb38bddb1563e92add",
+          "snapshots": 27,
+          "outputCharacters": 5584170,
+          "firstCalls": {
+            "rolling": 0,
+            "directional": 1,
+            "analysis": 1,
+            "chart": 1
+          },
+          "repeatedCalls": {
+            "rolling": 0,
+            "directional": 0,
+            "analysis": 0,
+            "chart": 26
+          },
+          "errors": 0
+        }
+      ]
+    },
+    "improvements": {
+      "firstReadyMs": {
+        "reductionPct": 4.096236303987322,
+        "ratio": 1.0427119452472295
+      },
+      "redrawMs": {
+        "reductionPct": 85.1147541958957,
+        "ratio": 6.718061718028669
+      },
+      "journeyMs": {
+        "reductionPct": 51.912495617464586,
+        "ratio": 2.079542311127261
+      }
+    }
+  },
+  "improvements": {
+    "firstReadyMs": {
+      "reductionPct": 50.06203255910107,
+      "ratio": 2.0024843846187568
+    },
+    "pagingMs": {
+      "reductionPct": 70.82711548960037,
+      "ratio": 3.4278406704812383
+    },
+    "journeyMs": {
+      "reductionPct": 63.32074745368155,
+      "ratio": 2.726336908684829
+    }
+  }
+}

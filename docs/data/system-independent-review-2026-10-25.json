@@ -1,0 +1,111 @@
+{
+  "status": "PASS",
+  "baselineCommit": "64c8207cb044d8990289c5a7d39972e21b74c240",
+  "executedAt": "2026-10-25T01:15:26.168Z",
+  "node": "v24.22.1",
+  "sourceHashes": {
+    "dist/daily-analytics.js": "ddd9f4bc3d26f58158093543677aae01bd71b297d2e8d02a427ccdf4d399d512",
+    "dist/cycle-timing.js": "c4b8ac425d33c65a0c9d059f09e084279fc73c31b1911ea401861dcbf8bf98da",
+    "dist/market-structure.js": "57c17ba994c673213f0238f07d0a446151b26846bae712becffa489e31f20b69",
+    "dist/daily-data-view.js": "98c061d833e53180dbcffd42d324a3df3502bac114da7c0d75f8ec5e6c3b2fc4",
+    "dist/lab-view.js": "229c4e9e7a8b3693c1b6d8b50a0eefa09bf484cf67fde6d0570c1ef2386a23e2"
+  },
+  "calendarCases": 34356,
+  "missingDateInvariantCases": 80,
+  "periodComparisons": 1451,
+  "prefixComparisons": 325,
+  "rollingPrefixComparisons": 10,
+  "subnormalBoundaries": {
+    "volatility": 1007167.300709229,
+    "expectedVolatility": 1007167.3007092287,
+    "midpoint": 2.722312378772685e-162,
+    "expectedMidpoint": 2.722312378772685e-162,
+    "retracement": 0.9994556386687565,
+    "expectedRetracement": 0.9994556386687565
+  },
+  "finiteBoundaryOracle": "Exact binary64 rational arithmetic with BigInt. Each slope is <= MAX and strictly above the midpoint between MAX and its predecessor.",
+  "finiteBoundaryCases": [
+    {
+      "left": -1.771930152577346e+308,
+      "right": 1.744446372530627e+308,
+      "distance": 1.9560493706715358,
+      "slope": 1.7976931348623157e+308
+    },
+    {
+      "left": -1.257633137051149e+308,
+      "right": 1.7567346219575627e+308,
+      "distance": 1.6767977251243051,
+      "slope": 1.7976931348623157e+308
+    },
+    {
+      "left": -1.7269369229518715e+308,
+      "right": 1.5697870851178163e+308,
+      "distance": 1.8338636022672368,
+      "slope": 1.7976931348623157e+308
+    }
+  ],
+  "genuinelyUnrepresentableSlopeRejected": true,
+  "normalDifferentials": [
+    {
+      "trial": 0,
+      "observations": 180,
+      "completeOutputsEqual": true
+    },
+    {
+      "trial": 1,
+      "observations": 180,
+      "completeOutputsEqual": true
+    },
+    {
+      "trial": 2,
+      "observations": 180,
+      "completeOutputsEqual": true
+    },
+    {
+      "trial": 3,
+      "observations": 180,
+      "completeOutputsEqual": true
+    },
+    {
+      "trial": 4,
+      "observations": 180,
+      "completeOutputsEqual": true
+    },
+    {
+      "trial": 5,
+      "observations": 180,
+      "completeOutputsEqual": true
+    },
+    {
+      "trial": 6,
+      "observations": 180,
+      "completeOutputsEqual": true
+    },
+    {
+      "trial": 7,
+      "observations": 180,
+      "completeOutputsEqual": true
+    },
+    {
+      "trial": 8,
+      "observations": 180,
+      "completeOutputsEqual": true
+    },
+    {
+      "trial": 9,
+      "observations": 180,
+      "completeOutputsEqual": true
+    },
+    {
+      "trial": 10,
+      "observations": 180,
+      "completeOutputsEqual": true
+    },
+    {
+      "trial": 11,
+      "observations": 180,
+      "completeOutputsEqual": true
+    }
+  ],
+  "scope": "Public module calls, explicit missing-date enumeration, native calendar oracle, prefix invariance, exact-binary-rational boundary fixtures, baseline normal-output comparison. No browser or benchmark measurement."
+}
