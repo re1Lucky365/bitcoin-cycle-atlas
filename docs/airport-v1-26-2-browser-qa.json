@@ -1,0 +1,560 @@
+{
+  "source": "http://127.0.0.1:54119/",
+  "results": [
+    {
+      "viewport": 1440,
+      "bodyWidth": 1440,
+      "header": {
+        "x": 47,
+        "y": 4,
+        "width": 1352,
+        "height": 55,
+        "top": 4,
+        "right": 1399,
+        "bottom": 59,
+        "left": 47
+      },
+      "actions": [
+        {
+          "label": "\ud1b5\ud569 \ucc28\ud2b8\ub85c \ub3cc\uc544\uac00\uae30",
+          "rect": {
+            "x": 47,
+            "y": 10,
+            "width": 36,
+            "height": 36,
+            "top": 10,
+            "right": 83,
+            "bottom": 46,
+            "left": 47
+          }
+        },
+        {
+          "label": "\uc790\uc0b0 \ube44\uad50\ud45c",
+          "rect": {
+            "x": 95,
+            "y": 11.90625,
+            "width": 106.453125,
+            "height": 32.1875,
+            "top": 11.90625,
+            "right": 201.453125,
+            "bottom": 44.09375,
+            "left": 95
+          }
+        },
+        {
+          "label": "\uac00\uaca9 \uc790\ub8cc \uac31\uc2e0",
+          "rect": {
+            "x": 1160.65625,
+            "y": 10,
+            "width": 70.09375,
+            "height": 36,
+            "top": 10,
+            "right": 1230.75,
+            "bottom": 46,
+            "left": 1160.65625
+          }
+        },
+        {
+          "label": "\uc790\uc0b0 \ube44\uad50\ud45c \uc77d\ub294 \ubc95",
+          "rect": {
+            "x": 1236.75,
+            "y": 10,
+            "width": 83.5,
+            "height": 36,
+            "top": 10,
+            "right": 1320.25,
+            "bottom": 46,
+            "left": 1236.75
+          }
+        },
+        {
+          "label": "18\uac1c \uc790\uc0b0 CSV \ub0b4\ub824\ubc1b\uae30",
+          "rect": {
+            "x": 1326.25,
+            "y": 10,
+            "width": 72.75,
+            "height": 36,
+            "top": 10,
+            "right": 1399,
+            "bottom": 46,
+            "left": 1326.25
+          }
+        }
+      ],
+      "background": "rgb(18, 22, 29)",
+      "first": "BTC",
+      "count": 18,
+      "overflow": false,
+      "tableWidth": 1339,
+      "dialogBg": "rgb(18, 22, 29)",
+      "lastRowVisible": true,
+      "keyboardFocus": true,
+      "reducedMotion": true,
+      "stickyHeaderDelta": 0
+    },
+    {
+      "viewport": 390,
+      "bodyWidth": 390,
+      "header": {
+        "x": 0,
+        "y": 2,
+        "width": 390,
+        "height": 52,
+        "top": 2,
+        "right": 390,
+        "bottom": 54,
+        "left": 0
+      },
+      "actions": [
+        {
+          "label": "\ud1b5\ud569 \ucc28\ud2b8\ub85c \ub3cc\uc544\uac00\uae30",
+          "rect": {
+            "x": 0,
+            "y": 8,
+            "width": 32,
+            "height": 36,
+            "top": 8,
+            "right": 32,
+            "bottom": 44,
+            "left": 0
+          }
+        },
+        {
+          "label": "\uc790\uc0b0 \ube44\uad50\ud45c",
+          "rect": {
+            "x": 38,
+            "y": 13.40625,
+            "width": 83.46875,
+            "height": 25.1875,
+            "top": 13.40625,
+            "right": 121.46875,
+            "bottom": 38.59375,
+            "left": 38
+          }
+        },
+        {
+          "label": "\uac00\uaca9 \uc790\ub8cc \uac31\uc2e0",
+          "rect": {
+            "x": 250.3125,
+            "y": 8,
+            "width": 35,
+            "height": 36,
+            "top": 8,
+            "right": 285.3125,
+            "bottom": 44,
+            "left": 250.3125
+          }
+        },
+        {
+          "label": "\uc790\uc0b0 \ube44\uad50\ud45c \uc77d\ub294 \ubc95",
+          "rect": {
+            "x": 289.3125,
+            "y": 8,
+            "width": 34,
+            "height": 36,
+            "top": 8,
+            "right": 323.3125,
+            "bottom": 44,
+            "left": 289.3125
+          }
+        },
+        {
+          "label": "18\uac1c \uc790\uc0b0 CSV \ub0b4\ub824\ubc1b\uae30",
+          "rect": {
+            "x": 327.3125,
+            "y": 8,
+            "width": 62.6875,
+            "height": 36,
+            "top": 8,
+            "right": 390,
+            "bottom": 44,
+            "left": 327.3125
+          }
+        }
+      ],
+      "background": "rgb(18, 22, 29)",
+      "first": "BTC",
+      "count": 18,
+      "overflow": false,
+      "tableWidth": 820,
+      "dialogBg": "rgb(18, 22, 29)",
+      "lastRowVisible": true,
+      "keyboardFocus": true,
+      "reducedMotion": true,
+      "stickyHeaderDelta": 0
+    },
+    {
+      "viewport": 320,
+      "bodyWidth": 320,
+      "header": {
+        "x": 0,
+        "y": 2,
+        "width": 320,
+        "height": 52,
+        "top": 2,
+        "right": 320,
+        "bottom": 54,
+        "left": 0
+      },
+      "actions": [
+        {
+          "label": "\ud1b5\ud569 \ucc28\ud2b8\ub85c \ub3cc\uc544\uac00\uae30",
+          "rect": {
+            "x": 0,
+            "y": 8,
+            "width": 32,
+            "height": 36,
+            "top": 8,
+            "right": 32,
+            "bottom": 44,
+            "left": 0
+          }
+        },
+        {
+          "label": "\uc790\uc0b0 \ube44\uad50\ud45c",
+          "rect": {
+            "x": 38,
+            "y": 14.796875,
+            "width": 73.796875,
+            "height": 22.390625,
+            "top": 14.796875,
+            "right": 111.796875,
+            "bottom": 37.1875,
+            "left": 38
+          }
+        },
+        {
+          "label": "\uac00\uaca9 \uc790\ub8cc \uac31\uc2e0",
+          "rect": {
+            "x": 196.375,
+            "y": 8,
+            "width": 31,
+            "height": 36,
+            "top": 8,
+            "right": 227.375,
+            "bottom": 44,
+            "left": 196.375
+          }
+        },
+        {
+          "label": "\uc790\uc0b0 \ube44\uad50\ud45c \uc77d\ub294 \ubc95",
+          "rect": {
+            "x": 230.375,
+            "y": 8,
+            "width": 30,
+            "height": 36,
+            "top": 8,
+            "right": 260.375,
+            "bottom": 44,
+            "left": 230.375
+          }
+        },
+        {
+          "label": "18\uac1c \uc790\uc0b0 CSV \ub0b4\ub824\ubc1b\uae30",
+          "rect": {
+            "x": 263.375,
+            "y": 8,
+            "width": 56.625,
+            "height": 36,
+            "top": 8,
+            "right": 320,
+            "bottom": 44,
+            "left": 263.375
+          }
+        }
+      ],
+      "background": "rgb(18, 22, 29)",
+      "first": "BTC",
+      "count": 18,
+      "overflow": false,
+      "tableWidth": 750,
+      "gutterCheck": {
+        "scrollbar": 0,
+        "gap": 0
+      },
+      "dialogBg": "rgb(18, 22, 29)",
+      "lastRowVisible": true,
+      "keyboardFocus": true,
+      "reducedMotion": true,
+      "stickyHeaderDelta": 0
+    },
+    {
+      "viewport": 700,
+      "bodyWidth": 700,
+      "header": {
+        "x": 44,
+        "y": 2,
+        "width": 618,
+        "height": 52,
+        "top": 2,
+        "right": 662,
+        "bottom": 54,
+        "left": 44
+      },
+      "actions": [
+        {
+          "label": "\ud1b5\ud569 \ucc28\ud2b8\ub85c \ub3cc\uc544\uac00\uae30",
+          "rect": {
+            "x": 44,
+            "y": 8,
+            "width": 32,
+            "height": 36,
+            "top": 8,
+            "right": 76,
+            "bottom": 44,
+            "left": 44
+          }
+        },
+        {
+          "label": "\uc790\uc0b0 \ube44\uad50\ud45c",
+          "rect": {
+            "x": 84,
+            "y": 13.40625,
+            "width": 83.46875,
+            "height": 25.1875,
+            "top": 13.40625,
+            "right": 167.46875,
+            "bottom": 38.59375,
+            "left": 84
+          }
+        },
+        {
+          "label": "\uac00\uaca9 \uc790\ub8cc \uac31\uc2e0",
+          "rect": {
+            "x": 522.3125,
+            "y": 8,
+            "width": 35,
+            "height": 36,
+            "top": 8,
+            "right": 557.3125,
+            "bottom": 44,
+            "left": 522.3125
+          }
+        },
+        {
+          "label": "\uc790\uc0b0 \ube44\uad50\ud45c \uc77d\ub294 \ubc95",
+          "rect": {
+            "x": 561.3125,
+            "y": 8,
+            "width": 34,
+            "height": 36,
+            "top": 8,
+            "right": 595.3125,
+            "bottom": 44,
+            "left": 561.3125
+          }
+        },
+        {
+          "label": "18\uac1c \uc790\uc0b0 CSV \ub0b4\ub824\ubc1b\uae30",
+          "rect": {
+            "x": 599.3125,
+            "y": 8,
+            "width": 62.6875,
+            "height": 36,
+            "top": 8,
+            "right": 662,
+            "bottom": 44,
+            "left": 599.3125
+          }
+        }
+      ],
+      "background": "rgb(18, 22, 29)",
+      "first": "BTC",
+      "count": 18,
+      "overflow": false,
+      "tableWidth": 1048,
+      "dialogBg": "rgb(18, 22, 29)",
+      "lastRowVisible": true,
+      "keyboardFocus": true,
+      "reducedMotion": true,
+      "stickyHeaderDelta": 0
+    },
+    {
+      "viewport": 620,
+      "bodyWidth": 620,
+      "header": {
+        "x": 0,
+        "y": 2,
+        "width": 620,
+        "height": 52,
+        "top": 2,
+        "right": 620,
+        "bottom": 54,
+        "left": 0
+      },
+      "actions": [
+        {
+          "label": "\ud1b5\ud569 \ucc28\ud2b8\ub85c \ub3cc\uc544\uac00\uae30",
+          "rect": {
+            "x": 0,
+            "y": 8,
+            "width": 32,
+            "height": 36,
+            "top": 8,
+            "right": 32,
+            "bottom": 44,
+            "left": 0
+          }
+        },
+        {
+          "label": "\uc790\uc0b0 \ube44\uad50\ud45c",
+          "rect": {
+            "x": 38,
+            "y": 13.40625,
+            "width": 83.46875,
+            "height": 25.1875,
+            "top": 13.40625,
+            "right": 121.46875,
+            "bottom": 38.59375,
+            "left": 38
+          }
+        },
+        {
+          "label": "\uac00\uaca9 \uc790\ub8cc \uac31\uc2e0",
+          "rect": {
+            "x": 480.3125,
+            "y": 8,
+            "width": 35,
+            "height": 36,
+            "top": 8,
+            "right": 515.3125,
+            "bottom": 44,
+            "left": 480.3125
+          }
+        },
+        {
+          "label": "\uc790\uc0b0 \ube44\uad50\ud45c \uc77d\ub294 \ubc95",
+          "rect": {
+            "x": 519.3125,
+            "y": 8,
+            "width": 34,
+            "height": 36,
+            "top": 8,
+            "right": 553.3125,
+            "bottom": 44,
+            "left": 519.3125
+          }
+        },
+        {
+          "label": "18\uac1c \uc790\uc0b0 CSV \ub0b4\ub824\ubc1b\uae30",
+          "rect": {
+            "x": 557.3125,
+            "y": 8,
+            "width": 62.6875,
+            "height": 36,
+            "top": 8,
+            "right": 620,
+            "bottom": 44,
+            "left": 557.3125
+          }
+        }
+      ],
+      "background": "rgb(18, 22, 29)",
+      "first": "BTC",
+      "count": 18,
+      "overflow": false,
+      "tableWidth": 1050,
+      "dialogBg": "rgb(18, 22, 29)",
+      "lastRowVisible": true,
+      "keyboardFocus": true,
+      "reducedMotion": true,
+      "stickyHeaderDelta": 0
+    },
+    {
+      "viewport": 800,
+      "bodyWidth": 800,
+      "header": {
+        "x": 47,
+        "y": 4,
+        "width": 712,
+        "height": 55,
+        "top": 4,
+        "right": 759,
+        "bottom": 59,
+        "left": 47
+      },
+      "actions": [
+        {
+          "label": "\ud1b5\ud569 \ucc28\ud2b8\ub85c \ub3cc\uc544\uac00\uae30",
+          "rect": {
+            "x": 47,
+            "y": 10,
+            "width": 36,
+            "height": 36,
+            "top": 10,
+            "right": 83,
+            "bottom": 46,
+            "left": 47
+          }
+        },
+        {
+          "label": "\uc790\uc0b0 \ube44\uad50\ud45c",
+          "rect": {
+            "x": 95,
+            "y": 11.90625,
+            "width": 106.453125,
+            "height": 32.1875,
+            "top": 11.90625,
+            "right": 201.453125,
+            "bottom": 44.09375,
+            "left": 95
+          }
+        },
+        {
+          "label": "\uac00\uaca9 \uc790\ub8cc \uac31\uc2e0",
+          "rect": {
+            "x": 520.65625,
+            "y": 10,
+            "width": 70.09375,
+            "height": 36,
+            "top": 10,
+            "right": 590.75,
+            "bottom": 46,
+            "left": 520.65625
+          }
+        },
+        {
+          "label": "\uc790\uc0b0 \ube44\uad50\ud45c \uc77d\ub294 \ubc95",
+          "rect": {
+            "x": 596.75,
+            "y": 10,
+            "width": 83.5,
+            "height": 36,
+            "top": 10,
+            "right": 680.25,
+            "bottom": 46,
+            "left": 596.75
+          }
+        },
+        {
+          "label": "18\uac1c \uc790\uc0b0 CSV \ub0b4\ub824\ubc1b\uae30",
+          "rect": {
+            "x": 686.25,
+            "y": 10,
+            "width": 72.75,
+            "height": 36,
+            "top": 10,
+            "right": 759,
+            "bottom": 46,
+            "left": 686.25
+          }
+        }
+      ],
+      "background": "rgb(18, 22, 29)",
+      "first": "BTC",
+      "count": 18,
+      "overflow": false,
+      "tableWidth": 1156,
+      "dialogBg": "rgb(18, 22, 29)",
+      "lastRowVisible": true,
+      "keyboardFocus": true,
+      "reducedMotion": true,
+      "stickyHeaderDelta": 0
+    }
+  ],
+  "csv": {
+    "file": "asset-comparison-2026-10-25.csv",
+    "rows": 18,
+    "fields": 34
+  }
+}

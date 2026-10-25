@@ -64,22 +64,21 @@ test('mobile identity header and scroll hint retain one table and the desktop me
   view.destroy();
 });
 
-test('mobile column geometry prevents table expansion and fits name plus full YTD and judgment at 320px', () => {
-  // This guards the measured regression: 1056px of columns in a 1156px table stretched the sticky name.
-  // Browser QA still checks actual font metrics, header alignment and horizontal scrolling.
+test('mobile geometry fits the fixed name plus complete YTD and judgment without clipped previous values', () => {
   const css = readFileSync(new URL('../dist/daily-data.css', import.meta.url), 'utf8');
   const mobile = css.split('@media (max-width: 760px) {')[1].split('@media (max-width: 620px) {')[0];
-  const width = key => Number(mobile.match(new RegExp(`\\.asset-col-${key} \\{ width: (\\d+)px;`))?.[1]);
-  const columnSum = width('group') + width('category') + width('name') + width('samples') + 2 * width('return') + 2 * width('price') + width('ytd') + width('judgment');
-  const tableSize = mobile.match(/\.asset-comparison-table \{ width: (\d+)px; min-width: (\d+)px;/);
-  assert.equal(Number(tableSize[1]), columnSum);
-  assert.equal(Number(tableSize[2]), columnSum);
-  assert.ok(width('name') + width('ytd') + width('judgment') <= 304, 'keep complete final values visible even with a 16px scrollbar in a 320px viewport');
+  assert.match(mobile, /container-type: inline-size/);
+  assert.match(mobile, /asset-comparison-table \{ width: calc\(100cqw \+ 432px\); min-width: calc\(100cqw \+ 432px\)/);
+  assert.match(mobile, /asset-col-name \{ width: 120px;/);
+  for (const key of ['ytd','judgment']) assert.ok(mobile.includes(`asset-col-${key} { width: calc(50cqw - 60px);`));
+  for (const viewport of [320,390,700]) {
+    const endWidth=(viewport/2-60)*2+120;
+    assert.equal(endWidth,viewport,'fixed identity and complete final metrics fill the inner board width');
+    assert.equal(120+60+180+192+2*(viewport/2-60),viewport+432,'table width equals the visible column sum');
+  }
+  assert.match(mobile, /asset-mobile-category-header, [^}]*asset-category \{ display: none;/);
   assert.match(mobile, /asset-mobile-name-header \{ position: sticky; left: 0;/);
-  assert.match(mobile, /asset-identity-header \{ display: none;/);
-  assert.match(mobile, /asset-mobile-header \{ display: table-cell;/);
-  assert.match(mobile, /asset-name \{[^}]*white-space: normal;[^}]*overflow-wrap: anywhere;/);
-  assert.match(mobile, /asset-name span \{ display: block;/);
+  assert.match(mobile, /asset-name-label \{[^}]*white-space: normal;/);
   assert.match(mobile, /scroll-snap-type: x mandatory; scroll-padding-inline-start: 120px;/);
 });
 
@@ -283,4 +282,41 @@ test('mobile comparison owns its return control without the global fallback or r
  const css = readFileSync(new URL('../dist/mobile-workspace.css', import.meta.url), 'utf8');
  assert.match(css, /body:not\(\[data-page=outlook\]\):not\(\[data-page=data\]\) \.mobile-chart-home/);
  assert.match(css, /body:not\(\[data-page=outlook\]\):not\(\[data-page=data\]\) \.workspace\.atlas-details-layout>#main/);
+});
+
+test('asset identities expose consistent codes and open the same audited explanation', async () => {
+  const {view,ui}=setup();await view.render();
+  const table=ui.node('data-body').innerHTML;
+  assert.equal((table.match(/class="asset-identity"/g)||[]).length,18);
+  assert.match(table, /class="asset-name-symbol">BTC<\/span><span class="asset-name-label">비트코인/);
+  assert.match(table,/aria-label="비트코인 \(BTC\) 수치와 판단 근거 보기"/);
+  ui.click('',{assetReason:'BTC'});
+  const content=ui.node('daily-method-content').innerHTML;
+  assert.match(content,/class="asset-reason-metrics"/);
+  assert.match(content,/위험 자산 · Index ETF · USD/);
+  assert.equal((content.match(/<dt>/g)||[]).length,3);
+  assert.match(content,/<details class="asset-general-method"><summary>계산법과 유의사항/);
+  assert.doesNotMatch(content,/<details class="asset-general-method" open/);
+  assert.match(content,/주문 비중이나 미래 수익률을 뜻하지 않습니다/);
+  view.destroy();
+});
+
+test('mobile quick moves change only the horizontal table position without recomputing or hiding rows', async () => {
+  let reads=0;const {view,ui}=setup({getter:async()=>{reads++;return {};}});await view.render();
+  const before=ui.node('data-body').innerHTML, panel=ui.node('asset-table-scroll'),moves=[];
+  panel.scrollWidth=866;panel.clientWidth=300;panel.scrollTo=options=>moves.push(options);
+  ui.click('asset-scroll-end');ui.click('asset-scroll-start');
+  assert.deepEqual(moves,[{left:566,behavior:'instant'},{left:0,behavior:'instant'}]);
+  assert.equal(reads,1);assert.equal(ui.node('data-body').innerHTML,before);
+  assert.deepEqual(symbols(before),COMPARISON_SYMBOLS);
+  panel.clientWidth=1000;ui.click('asset-scroll-end');assert.equal(moves.at(-1).left,0);
+  view.destroy();ui.click('asset-scroll-end');assert.equal(moves.length,3);
+});
+
+test('sticky headings use a single bounded viewport and preserve the pinned identity corner', () => {
+  const css=readFileSync(new URL('../dist/daily-data.css',import.meta.url),'utf8');
+  assert.match(css,/asset-table-panel \{ display: flex; flex-direction: column; flex: 1; min-height: 0/);
+  assert.match(css,/asset-table-scroll \{ flex: 1; min-height: 0; min-width: 0; overflow: auto/);
+  assert.match(css,/thead th \{ position: sticky; top: 0; z-index: 3/);
+  assert.match(css,/asset-mobile-name-header \{ position: sticky; left: 0; z-index: 4/);
 });
