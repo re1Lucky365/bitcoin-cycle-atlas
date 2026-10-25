@@ -1,0 +1,589 @@
+{
+  "version": 1,
+  "generatedAt": "2026-10-25T09:19:13Z",
+  "acquisitionSnapshotRetrievedAt": "2026-10-25T08:51:00.472Z",
+  "scope": "Recalculation from already acquired Yahoo responses; no new provider requests and no production price or engine changes.",
+  "reference": {
+    "source": "User-supplied reference image; metric values transcribed in task instructions.",
+    "originalFormulaAvailable": false,
+    "currentPriceAndYtdFormulaIndependentlyVerified": false,
+    "units": "percentage points; image displayed to two decimal places"
+  },
+  "calculation": {
+    "completedCalendarYearsThrough": 2025,
+    "excludedCurrentCalendarYear": 2026,
+    "annualBaseline": "First observed New York exchange-session value of each year.",
+    "annualRise": "100 * (maximum annual value / first annual value - 1)",
+    "annualFall": "100 * (minimum annual value / first annual value - 1); not ordered-peak MDD",
+    "weighting": "Equal arithmetic weight per observed calendar year; first partial year included.",
+    "fields": {
+      "close": "indicators.quote[0].close; split-adjusted market close excluding cash distributions",
+      "adjclose": "indicators.adjclose[0].adjclose; provider adjustment includes dividends/distributions"
+    },
+    "rounding": "Annual calculations and means use provider precision; final comparison rounds to two decimals, except the explicitly labeled GLD intermediate-rounding probe."
+  },
+  "summary": {
+    "bothMetricsExactAt2dpSymbols": [
+      "SPY",
+      "QQQ",
+      "NVDA",
+      "AAPL",
+      "GOOG",
+      "MSFT",
+      "AMZN",
+      "META",
+      "AVGO",
+      "TLT",
+      "IEF",
+      "SLV"
+    ],
+    "bothMetricsExactAt2dpAssets": 12,
+    "bothMetricsExactAt2dpCells": 24,
+    "includingGldExcludingPdbc": {
+      "matchedCells": 25,
+      "comparedCells": 26
+    },
+    "interpretation": "Strong numerical evidence that the reference historical averages used dividend-adjusted prices; the original implementation remains unavailable."
+  },
+  "assets": [
+    {
+      "symbol": "SPY",
+      "observedReference": {
+        "meanRisePct": 17.03,
+        "meanFallPct": -9.48
+      },
+      "recomputedClose": {
+        "sampleYears": 33,
+        "startYear": 1993,
+        "endYear": 2025,
+        "meanRisePct": 15.55458502007336,
+        "meanFallPct": -9.83554134601982
+      },
+      "recomputedAdjclose": {
+        "sampleYears": 33,
+        "startYear": 1993,
+        "endYear": 2025,
+        "meanRisePct": 17.026473715252617,
+        "meanFallPct": -9.482875171976149
+      },
+      "adjcloseMatchesReferenceAt2dp": {
+        "rise": true,
+        "fall": true
+      },
+      "source": {
+        "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/SPY?period1=0&period2=1792918260&interval=1d&events=history%2Csplits%2Cdividends",
+        "sourcePage": "https://finance.yahoo.com/quote/SPY/history/",
+        "rawResponseSha256": "e5fc065029c8b78de478574ba6a09bbb6b8b7e723cb2904866b559e6808e3299",
+        "retrievedAt": "2026-10-25T08:51:00.472Z"
+      }
+    },
+    {
+      "symbol": "QQQ",
+      "observedReference": {
+        "meanRisePct": 25.93,
+        "meanFallPct": -14.26
+      },
+      "recomputedClose": {
+        "sampleYears": 27,
+        "startYear": 1999,
+        "endYear": 2025,
+        "meanRisePct": 25.387665461651412,
+        "meanFallPct": -14.36894231558654
+      },
+      "recomputedAdjclose": {
+        "sampleYears": 27,
+        "startYear": 1999,
+        "endYear": 2025,
+        "meanRisePct": 25.927703359308538,
+        "meanFallPct": -14.264029971454526
+      },
+      "adjcloseMatchesReferenceAt2dp": {
+        "rise": true,
+        "fall": true
+      },
+      "source": {
+        "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/QQQ?period1=0&period2=1792918260&interval=1d&events=history%2Csplits%2Cdividends",
+        "sourcePage": "https://finance.yahoo.com/quote/QQQ/history/",
+        "rawResponseSha256": "87f02c7b5bf48b512d1aabbe4899943b44591471d289610a42311f19daac22b0",
+        "retrievedAt": "2026-10-25T08:51:00.472Z"
+      }
+    },
+    {
+      "symbol": "NVDA",
+      "observedReference": {
+        "meanRisePct": 103.05,
+        "meanFallPct": -24.26
+      },
+      "recomputedClose": {
+        "sampleYears": 27,
+        "startYear": 1999,
+        "endYear": 2025,
+        "meanRisePct": 102.55797258363502,
+        "meanFallPct": -24.273110673232015
+      },
+      "recomputedAdjclose": {
+        "sampleYears": 27,
+        "startYear": 1999,
+        "endYear": 2025,
+        "meanRisePct": 103.0488381277263,
+        "meanFallPct": -24.25915771402851
+      },
+      "adjcloseMatchesReferenceAt2dp": {
+        "rise": true,
+        "fall": true
+      },
+      "source": {
+        "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?period1=0&period2=1792918260&interval=1d&events=history%2Csplits%2Cdividends",
+        "sourcePage": "https://finance.yahoo.com/quote/NVDA/history/",
+        "rawResponseSha256": "1a1bd21bf5f3f659d9cd1311f3484a3c46edce0a80494a2ed5d5c21c7d24ae62",
+        "retrievedAt": "2026-10-25T08:51:00.472Z"
+      }
+    },
+    {
+      "symbol": "AAPL",
+      "observedReference": {
+        "meanRisePct": 57.91,
+        "meanFallPct": -20.77
+      },
+      "recomputedClose": {
+        "sampleYears": 46,
+        "startYear": 1980,
+        "endYear": 2025,
+        "meanRisePct": 57.34777718759837,
+        "meanFallPct": -20.97014520020861
+      },
+      "recomputedAdjclose": {
+        "sampleYears": 46,
+        "startYear": 1980,
+        "endYear": 2025,
+        "meanRisePct": 57.90846850574497,
+        "meanFallPct": -20.77117429602416
+      },
+      "adjcloseMatchesReferenceAt2dp": {
+        "rise": true,
+        "fall": true
+      },
+      "source": {
+        "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?period1=0&period2=1792918260&interval=1d&events=history%2Csplits%2Cdividends",
+        "sourcePage": "https://finance.yahoo.com/quote/AAPL/history/",
+        "rawResponseSha256": "30092b5c276264ac7c8fde4571e4d4389639befcd781de3c09c8c9c7839f3f65",
+        "retrievedAt": "2026-10-25T08:51:00.472Z"
+      }
+    },
+    {
+      "symbol": "GOOG",
+      "observedReference": {
+        "meanRisePct": 40.59,
+        "meanFallPct": -14.66
+      },
+      "recomputedClose": {
+        "sampleYears": 22,
+        "startYear": 2004,
+        "endYear": 2025,
+        "meanRisePct": 40.5414864287627,
+        "meanFallPct": -14.660929026627166
+      },
+      "recomputedAdjclose": {
+        "sampleYears": 22,
+        "startYear": 2004,
+        "endYear": 2025,
+        "meanRisePct": 40.58967116255407,
+        "meanFallPct": -14.656945007464532
+      },
+      "adjcloseMatchesReferenceAt2dp": {
+        "rise": true,
+        "fall": true
+      },
+      "source": {
+        "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/GOOG?period1=0&period2=1792918260&interval=1d&events=history%2Csplits%2Cdividends",
+        "sourcePage": "https://finance.yahoo.com/quote/GOOG/history/",
+        "rawResponseSha256": "80211051fff89294a713852ee05f9573361d3f9862eb5a93237c10842d1d99b3",
+        "retrievedAt": "2026-10-25T08:51:00.472Z"
+      }
+    },
+    {
+      "symbol": "MSFT",
+      "observedReference": {
+        "meanRisePct": 46.55,
+        "meanFallPct": -12.15
+      },
+      "recomputedClose": {
+        "sampleYears": 40,
+        "startYear": 1986,
+        "endYear": 2025,
+        "meanRisePct": 45.60940404176186,
+        "meanFallPct": -12.357140928441611
+      },
+      "recomputedAdjclose": {
+        "sampleYears": 40,
+        "startYear": 1986,
+        "endYear": 2025,
+        "meanRisePct": 46.547621281347396,
+        "meanFallPct": -12.146577182098152
+      },
+      "adjcloseMatchesReferenceAt2dp": {
+        "rise": true,
+        "fall": true
+      },
+      "source": {
+        "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?period1=0&period2=1792918260&interval=1d&events=history%2Csplits%2Cdividends",
+        "sourcePage": "https://finance.yahoo.com/quote/MSFT/history/",
+        "rawResponseSha256": "87217ae426fa67fa6871fd3a26fbba0b5604f1022760176cff8ed5a1241292e5",
+        "retrievedAt": "2026-10-25T08:51:00.472Z"
+      }
+    },
+    {
+      "symbol": "AMZN",
+      "observedReference": {
+        "meanRisePct": 97.16,
+        "meanFallPct": -21.26
+      },
+      "recomputedClose": {
+        "sampleYears": 29,
+        "startYear": 1997,
+        "endYear": 2025,
+        "meanRisePct": 97.16207266789134,
+        "meanFallPct": -21.261290431820484
+      },
+      "recomputedAdjclose": {
+        "sampleYears": 29,
+        "startYear": 1997,
+        "endYear": 2025,
+        "meanRisePct": 97.16207266789134,
+        "meanFallPct": -21.261290431820484
+      },
+      "adjcloseMatchesReferenceAt2dp": {
+        "rise": true,
+        "fall": true
+      },
+      "source": {
+        "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/AMZN?period1=0&period2=1792918260&interval=1d&events=history%2Csplits%2Cdividends",
+        "sourcePage": "https://finance.yahoo.com/quote/AMZN/history/",
+        "rawResponseSha256": "9f0d8fcb49161c00121df8318e27941579a06884c663aa7b4568c3d880f49f10",
+        "retrievedAt": "2026-10-25T08:51:00.472Z"
+      }
+    },
+    {
+      "symbol": "META",
+      "observedReference": {
+        "meanRisePct": 53.19,
+        "meanFallPct": -18.17
+      },
+      "recomputedClose": {
+        "sampleYears": 14,
+        "startYear": 2012,
+        "endYear": 2025,
+        "meanRisePct": 53.133494095279055,
+        "meanFallPct": -18.175321524533505
+      },
+      "recomputedAdjclose": {
+        "sampleYears": 14,
+        "startYear": 2012,
+        "endYear": 2025,
+        "meanRisePct": 53.18842404399629,
+        "meanFallPct": -18.170179841522465
+      },
+      "adjcloseMatchesReferenceAt2dp": {
+        "rise": true,
+        "fall": true
+      },
+      "source": {
+        "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/META?period1=0&period2=1792918260&interval=1d&events=history%2Csplits%2Cdividends",
+        "sourcePage": "https://finance.yahoo.com/quote/META/history/",
+        "rawResponseSha256": "f4f82372592b142ce66f85611ca5f645077f7a5bdb285d7c387091e416c36453",
+        "retrievedAt": "2026-10-25T08:51:00.472Z"
+      }
+    },
+    {
+      "symbol": "AVGO",
+      "observedReference": {
+        "meanRisePct": 54.02,
+        "meanFallPct": -12.2
+      },
+      "recomputedClose": {
+        "sampleYears": 17,
+        "startYear": 2009,
+        "endYear": 2025,
+        "meanRisePct": 51.96451521489581,
+        "meanFallPct": -12.482969091660626
+      },
+      "recomputedAdjclose": {
+        "sampleYears": 17,
+        "startYear": 2009,
+        "endYear": 2025,
+        "meanRisePct": 54.01868042855204,
+        "meanFallPct": -12.196131994297977
+      },
+      "adjcloseMatchesReferenceAt2dp": {
+        "rise": true,
+        "fall": true
+      },
+      "source": {
+        "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/AVGO?period1=0&period2=1792918260&interval=1d&events=history%2Csplits%2Cdividends",
+        "sourcePage": "https://finance.yahoo.com/quote/AVGO/history/",
+        "rawResponseSha256": "0c633f64e907146886094440a82705cb99a00452fde897edabe0a0ad52332aad",
+        "retrievedAt": "2026-10-25T08:51:00.472Z"
+      }
+    },
+    {
+      "symbol": "TLT",
+      "observedReference": {
+        "meanRisePct": 13.18,
+        "meanFallPct": -7.44
+      },
+      "recomputedClose": {
+        "sampleYears": 24,
+        "startYear": 2002,
+        "endYear": 2025,
+        "meanRisePct": 11.20551812891245,
+        "meanFallPct": -8.521734784105101
+      },
+      "recomputedAdjclose": {
+        "sampleYears": 24,
+        "startYear": 2002,
+        "endYear": 2025,
+        "meanRisePct": 13.178912130347134,
+        "meanFallPct": -7.442413736812589
+      },
+      "adjcloseMatchesReferenceAt2dp": {
+        "rise": true,
+        "fall": true
+      },
+      "source": {
+        "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/TLT?period1=0&period2=1792918260&interval=1d&events=history%2Csplits%2Cdividends",
+        "sourcePage": "https://finance.yahoo.com/quote/TLT/history/",
+        "rawResponseSha256": "9db53515a3d04a7ef8fd94bc396e7cc89041aa9b0a90411b0daa767339abb6b8",
+        "retrievedAt": "2026-10-25T08:51:00.472Z"
+      }
+    },
+    {
+      "symbol": "IEF",
+      "observedReference": {
+        "meanRisePct": 7.16,
+        "meanFallPct": -3.06
+      },
+      "recomputedClose": {
+        "sampleYears": 24,
+        "startYear": 2002,
+        "endYear": 2025,
+        "meanRisePct": 5.551044725766633,
+        "meanFallPct": -3.9328266656108806
+      },
+      "recomputedAdjclose": {
+        "sampleYears": 24,
+        "startYear": 2002,
+        "endYear": 2025,
+        "meanRisePct": 7.161940781106047,
+        "meanFallPct": -3.0593207624244223
+      },
+      "adjcloseMatchesReferenceAt2dp": {
+        "rise": true,
+        "fall": true
+      },
+      "source": {
+        "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/IEF?period1=0&period2=1792918260&interval=1d&events=history%2Csplits%2Cdividends",
+        "sourcePage": "https://finance.yahoo.com/quote/IEF/history/",
+        "rawResponseSha256": "d9cf57d34c756953c9b4eaa11fd28a28554617339f64c693b1f08af5a280fcb4",
+        "retrievedAt": "2026-10-25T08:51:00.472Z"
+      }
+    },
+    {
+      "symbol": "GLD",
+      "observedReference": {
+        "meanRisePct": 21.58,
+        "meanFallPct": -6.7
+      },
+      "recomputedClose": {
+        "sampleYears": 22,
+        "startYear": 2004,
+        "endYear": 2025,
+        "meanRisePct": 21.575281219520704,
+        "meanFallPct": -6.694575161287792
+      },
+      "recomputedAdjclose": {
+        "sampleYears": 22,
+        "startYear": 2004,
+        "endYear": 2025,
+        "meanRisePct": 21.575281219520704,
+        "meanFallPct": -6.694575161287792
+      },
+      "adjcloseMatchesReferenceAt2dp": {
+        "rise": true,
+        "fall": false
+      },
+      "source": {
+        "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/GLD?period1=0&period2=1792918260&interval=1d&events=history%2Csplits%2Cdividends",
+        "sourcePage": "https://finance.yahoo.com/quote/GLD/history/",
+        "rawResponseSha256": "804216f91188e3f62de96bfdd3c908fd56c0a11934e32af903a0dea2dd6ceb48",
+        "retrievedAt": "2026-10-25T08:51:00.472Z"
+      }
+    },
+    {
+      "symbol": "SLV",
+      "observedReference": {
+        "meanRisePct": 35.53,
+        "meanFallPct": -16.8
+      },
+      "recomputedClose": {
+        "sampleYears": 20,
+        "startYear": 2006,
+        "endYear": 2025,
+        "meanRisePct": 35.528544994527905,
+        "meanFallPct": -16.80123316247933
+      },
+      "recomputedAdjclose": {
+        "sampleYears": 20,
+        "startYear": 2006,
+        "endYear": 2025,
+        "meanRisePct": 35.528544994527905,
+        "meanFallPct": -16.80123316247933
+      },
+      "adjcloseMatchesReferenceAt2dp": {
+        "rise": true,
+        "fall": true
+      },
+      "source": {
+        "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/SLV?period1=0&period2=1792918260&interval=1d&events=history%2Csplits%2Cdividends",
+        "sourcePage": "https://finance.yahoo.com/quote/SLV/history/",
+        "rawResponseSha256": "ddaf057d31cb97c9412cf8620037d0102349c7b57cbc2b2a69b67cda7feca829",
+        "retrievedAt": "2026-10-25T08:51:00.472Z"
+      }
+    },
+    {
+      "symbol": "PDBC",
+      "observedReference": {
+        "meanRisePct": 14.84,
+        "meanFallPct": -11.37,
+        "sampleYears": 11
+      },
+      "recomputedClose": {
+        "sampleYears": 12,
+        "startYear": 2014,
+        "endYear": 2025,
+        "meanRisePct": 13.998861943614836,
+        "meanFallPct": -12.043589738558268
+      },
+      "recomputedAdjclose": {
+        "sampleYears": 12,
+        "startYear": 2014,
+        "endYear": 2025,
+        "meanRisePct": 14.135348037547578,
+        "meanFallPct": -11.00812950449437
+      },
+      "adjcloseMatchesReferenceAt2dp": {
+        "rise": false,
+        "fall": false
+      },
+      "source": {
+        "sourceUrl": "https://query1.finance.yahoo.com/v8/finance/chart/PDBC?period1=0&period2=1792918260&interval=1d&events=history%2Csplits%2Cdividends",
+        "sourcePage": "https://finance.yahoo.com/quote/PDBC/history/",
+        "rawResponseSha256": "0cbd03acbad4f4f17279daa224259f4e6bc5e6e48e90a4c31d3d511abbce5d94",
+        "retrievedAt": "2026-10-25T08:51:00.472Z"
+      }
+    }
+  ],
+  "pdbcVariants": [
+    {
+      "startYear": 2014,
+      "endYear": 2024,
+      "sampleYears": 11,
+      "close": {
+        "sampleYears": 11,
+        "startYear": 2014,
+        "endYear": 2024,
+        "meanRisePct": 14.689889034891001,
+        "meanFallPct": -12.50147471009982
+      },
+      "adjclose": {
+        "sampleYears": 11,
+        "startYear": 2014,
+        "endYear": 2024,
+        "meanRisePct": 14.837286926535114,
+        "meanFallPct": -11.371881761173954
+      },
+      "adjcloseMatchesReferenceAt2dp": {
+        "rise": true,
+        "fall": true
+      }
+    },
+    {
+      "startYear": 2014,
+      "endYear": 2025,
+      "sampleYears": 12,
+      "close": {
+        "sampleYears": 12,
+        "startYear": 2014,
+        "endYear": 2025,
+        "meanRisePct": 13.998861943614836,
+        "meanFallPct": -12.043589738558268
+      },
+      "adjclose": {
+        "sampleYears": 12,
+        "startYear": 2014,
+        "endYear": 2025,
+        "meanRisePct": 14.135348037547578,
+        "meanFallPct": -11.00812950449437
+      },
+      "adjcloseMatchesReferenceAt2dp": {
+        "rise": false,
+        "fall": false
+      }
+    },
+    {
+      "startYear": 2015,
+      "endYear": 2025,
+      "sampleYears": 11,
+      "close": {
+        "sampleYears": 11,
+        "startYear": 2015,
+        "endYear": 2025,
+        "meanRisePct": 15.27148575667073,
+        "meanFallPct": -11.730720813832384
+      },
+      "adjclose": {
+        "sampleYears": 11,
+        "startYear": 2015,
+        "endYear": 2025,
+        "meanRisePct": 15.42037967732463,
+        "meanFallPct": -10.601127000514975
+      },
+      "adjcloseMatchesReferenceAt2dp": {
+        "rise": false,
+        "fall": false
+      }
+    }
+  ],
+  "gldRoundingProbe": {
+    "unroundedMeanFallPct": -6.694575161287792,
+    "displayAt2dpFromUnroundedMean": "-6.69",
+    "sumOfAnnualFallsRoundedTo2dp": "-147.29",
+    "meanOfAnnualFallsRoundedTo2dp": "-6.695",
+    "displayAt2dpWithDecimalHalfUp": "-6.70",
+    "observedReferenceMeanFallPct": -6.7,
+    "interpretation": "Intermediate annual rounding can reproduce -6.70; this does not establish the reference rounding algorithm."
+  },
+  "inferences": [
+    {
+      "finding": "The reference historical means appear dividend-adjusted.",
+      "basis": "All 24 rise/fall cells across the 12 listed exact-match assets round to the supplied reference values.",
+      "status": "inference, not inspection of original calculation code"
+    },
+    {
+      "finding": "PDBC reference sample 11 appears to include 2014 through 2024 and omit 2025.",
+      "basis": "That adjclose window rounds to 14.84 / -11.37; the alternative 2015–2025 window gives 15.42 / -10.60.",
+      "status": "inference from numerical reconciliation, not proof of why the source omitted a year"
+    },
+    {
+      "finding": "The reference appears to combine adjusted historical averages with nominal displayed closes and a nominal price YTD comparison.",
+      "basis": "Historical averages reproduce the adjusted field; displayed price/YTD column semantics suggest nominal prices, but their underlying formula was not independently available.",
+      "status": "qualified inference; current-price/YTD field identity not independently proven"
+    }
+  ],
+  "productionDecision": {
+    "basis": "Keep split-adjusted price-only close consistently for historical averages, year-start/latest displayed prices, YTD, and threshold judgments.",
+    "reason": "Avoid silently mixing dividend-adjusted historical ranges with nominal price changes; explicitly disclose that cash dividends and distributions are excluded.",
+    "pdbcCoverage": "Keep all acquired 2014–2025 historical calendar labels, including the disclosed partial first year.",
+    "priceDataChanged": false,
+    "engineChanged": false
+  }
+}

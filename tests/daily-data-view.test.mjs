@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { assetComparisonCsv, formatDailyPercent, initDailyDataView, renderAssetComparisonRows } from '../dist/daily-data-view.js';
 import { COMPARISON_SYMBOLS, comparisonViewModel, dailyViewSurface, deferred } from './helpers/daily-data-view-fixture.mjs';
@@ -50,6 +51,36 @@ test('each final cell uses an exact five-stage label and opens the relevant expl
   ui.click('daily-method-close'); assert.equal(ui.node('daily-method-dialog').open, false);
   ui.click('', { assetReason: 'missing' }); assert.equal(ui.node('daily-method-dialog').open, false);
   view.destroy();
+});
+
+test('mobile identity header and scroll hint retain one table and the desktop merged heading', () => {
+  const { view, ui } = setup();
+  const frame = ui.root.innerHTML;
+  assert.equal((frame.match(/<table\b/g) || []).length, 1);
+  assert.match(frame, /colspan="3" scope="colgroup" class="asset-identity-header">종목명/);
+  assert.match(frame, /scope="col" class="asset-mobile-header asset-mobile-name-header">종목명/);
+  assert.match(frame, /id="asset-scroll-hint">좌우로 밀어 수치와 맨 끝 판단을 확인하세요/);
+  assert.match(frame, /id="asset-table-scroll"[^>]*aria-describedby="asset-scroll-hint"/);
+  view.destroy();
+});
+
+test('mobile column geometry prevents table expansion and fits name plus full YTD and judgment at 320px', () => {
+  // This guards the measured regression: 1056px of columns in a 1156px table stretched the sticky name.
+  // Browser QA still checks actual font metrics, header alignment and horizontal scrolling.
+  const css = readFileSync(new URL('../dist/daily-data.css', import.meta.url), 'utf8');
+  const mobile = css.split('@media (max-width: 760px) {')[1].split('@media (max-width: 620px) {')[0];
+  const width = key => Number(mobile.match(new RegExp(`\\.asset-col-${key} \\{ width: (\\d+)px;`))?.[1]);
+  const columnSum = width('group') + width('category') + width('name') + width('samples') + 2 * width('return') + 2 * width('price') + width('ytd') + width('judgment');
+  const tableSize = mobile.match(/\.asset-comparison-table \{ width: (\d+)px; min-width: (\d+)px;/);
+  assert.equal(Number(tableSize[1]), columnSum);
+  assert.equal(Number(tableSize[2]), columnSum);
+  assert.ok(width('name') + width('ytd') + width('judgment') <= 304, 'keep complete final values visible even with a 16px scrollbar in a 320px viewport');
+  assert.match(mobile, /asset-mobile-name-header \{ position: sticky; left: 0;/);
+  assert.match(mobile, /asset-identity-header \{ display: none;/);
+  assert.match(mobile, /asset-mobile-header \{ display: table-cell;/);
+  assert.match(mobile, /asset-name \{[^}]*white-space: normal;[^}]*overflow-wrap: anywhere;/);
+  assert.match(mobile, /asset-name span \{ display: block;/);
+  assert.match(mobile, /scroll-snap-type: x mandatory; scroll-padding-inline-start: 120px;/);
 });
 
 test('headers use actual observed trading dates and sample cells disclose partial first years', async () => {

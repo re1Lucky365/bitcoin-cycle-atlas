@@ -24,6 +24,7 @@
 #data-view .asset-context { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 15px; flex: none; padding: 1px 0 2px; color: #a9b9cc; font-size: 11px; line-height: 1.7; }
 #data-view .asset-context strong { color: #edf2f9; font-weight: 600; }
 #data-view .asset-context-source { margin-left: auto; color: #98a9bd; }
+#data-view .asset-scroll-hint { display: none; }
 /* The outer workspace scrolls vertically. The entire 17-row grid keeps its natural height. */
 #data-view .asset-table-panel { flex: none; min-width: 0; border: 1px solid var(--asset-grid); background: var(--asset-paper); color: var(--asset-ink); }
 #data-view .asset-table-scroll { min-width: 0; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; scrollbar-color: #72797c #e3e6e4; }
@@ -41,6 +42,7 @@
 #data-view .asset-comparison-table tbody tr:last-child > th, #data-view .asset-comparison-table tbody tr:last-child > td { border-bottom: 0; }
 #data-view .asset-comparison-table thead th { height: 74px; padding: 10px 7px; color: #202321; background: #d9dcda; font-size: 13px; font-weight: 750; border-bottom-width: 2px; line-height: 1.65; }
 #data-view .asset-comparison-table thead th small { display: block; font-size: 11px; font-weight: 600; line-height: 1.55; }
+#data-view .asset-comparison-table .asset-mobile-header { display: none; }
 #data-view .asset-comparison-table .asset-ytd-header { background: #f5d267; color: #24200e; }
 #data-view .asset-comparison-table .asset-judgment-header { background: #e0e4df; border-left: 2px solid var(--asset-grid); }
 #data-view .asset-comparison-table .asset-group { background: #dedfdd; font-size: 14px; font-weight: 750; letter-spacing: -.4px; padding: 8px 5px; }
@@ -110,6 +112,26 @@
   #data-view .daily-back { font-size: 11px; min-height: 26px; }
   #data-view .asset-context { gap: 3px 10px; font-size: 10px; }
   #data-view .asset-context-source { width: 100%; margin-left: 0; }
+  #data-view .asset-scroll-hint { display: block; flex: none; margin: -2px 0 0; color: #bdc9d8; font-size: 11px; line-height: 1.6; }
+  #data-view .asset-table-scroll { scroll-snap-type: x mandatory; scroll-padding-inline-start: 120px; }
+  /* Match the column sum exactly: extra table width would stretch the sticky name over the final values. */
+  #data-view .asset-comparison-table { width: 866px; min-width: 866px; font-size: 12px; }
+  #data-view .asset-col-group { width: 50px; }
+  #data-view .asset-col-category { width: 84px; }
+  #data-view .asset-col-name { width: 120px; }
+  #data-view .asset-col-samples { width: 60px; }
+  #data-view .asset-col-return { width: 90px; }
+  #data-view .asset-col-price { width: 96px; }
+  #data-view .asset-col-ytd { width: 84px; }
+  #data-view .asset-col-judgment { width: 96px; }
+  #data-view .asset-comparison-table thead th { padding: 8px 6px; font-size: 12px; line-height: 1.4; }
+  #data-view .asset-comparison-table .asset-identity-header { display: none; }
+  #data-view .asset-comparison-table .asset-mobile-header { display: table-cell; }
+  #data-view .asset-comparison-table .asset-mobile-name-header { position: sticky; left: 0; z-index: 2; background: #d9dcda; box-shadow: 2px 0 0 #464b5029; }
+  #data-view .asset-comparison-table thead th:not(.asset-identity-header):not(.asset-mobile-header), #data-view .asset-comparison-table .asset-mobile-group-header { scroll-snap-align: start; }
+  #data-view .asset-comparison-table .asset-name { padding-left: 8px; padding-right: 8px; font-size: 11px; line-height: 1.35; white-space: normal; word-break: keep-all; overflow-wrap: anywhere; }
+  #data-view .asset-name span { display: block; font-size: 10px; line-height: 1.3; }
+  #data-view .asset-comparison-table .asset-ytd { font-size: 13px; }
   #data-view .asset-table-footer { padding: 8px 10px; }
   #data-view .asset-color-key { margin-left: 0; }
   #data-view .daily-method-dialog { padding: 15px 17px 22px; }
