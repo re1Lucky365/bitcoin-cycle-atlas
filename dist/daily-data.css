@@ -6,7 +6,7 @@
   --asset-sign: #f4cb50;
   --asset-muted: #a0aab8;
   display: flex; flex-direction: column; gap: 12px; min-width: 0;
-  overflow: auto; padding: 4px 3px 12px; scrollbar-width: thin;
+  overflow: hidden; padding: 4px 3px 12px; scrollbar-width: thin;
   color: var(--asset-ink); color-scheme: dark;
 }
 #data-view[hidden] { display: none !important; }
@@ -27,10 +27,10 @@
 #data-view .asset-context { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 18px; flex: none; color: var(--asset-muted); font-size: 11px; line-height: 1.7; }
 #data-view .asset-context strong { color: var(--asset-sign); font-weight: 650; }
 #data-view .asset-context-source { margin-left: auto; color: var(--asset-muted); }
-#data-view .asset-scroll-hint { display: none; }
-/* The outer workspace owns vertical scrolling, so the last asset stays reachable. */
-#data-view .asset-table-panel { flex: none; min-width: 0; border: 1px solid var(--asset-grid); border-top: 3px solid var(--asset-sign); background: var(--asset-paper); color: var(--asset-ink); }
-#data-view .asset-table-scroll { min-width: 0; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; scrollbar-color: #536071 var(--asset-paper); }
+#data-view .asset-scroll-hint, #data-view .asset-mobile-nav { display: none; }
+/* One bounded table viewport owns both axes; its headings remain in view. */
+#data-view .asset-table-panel { display: flex; flex-direction: column; flex: 1; min-height: 0; min-width: 0; border: 1px solid var(--asset-grid); border-top: 3px solid var(--asset-sign); background: var(--asset-paper); color: var(--asset-ink); }
+#data-view .asset-table-scroll { flex: 1; min-height: 0; min-width: 0; overflow: auto; overscroll-behavior-x: contain; scrollbar-width: thin; scrollbar-color: #536071 var(--asset-paper); scroll-padding-top: 68px; }
 #data-view .asset-comparison-table { width: 100%; min-width: 1156px; table-layout: fixed; border-spacing: 0; border-collapse: separate; color: var(--asset-ink); background: var(--asset-paper); font-size: 13px; font-variant-numeric: tabular-nums; }
 #data-view .asset-col-group { width: 68px; }
 #data-view .asset-col-category { width: 96px; }
@@ -43,7 +43,7 @@
 #data-view .asset-comparison-table th, #data-view .asset-comparison-table td { border-right: 1px solid #252b3570; border-bottom: 1px solid var(--asset-grid); padding: 8px 10px; height: 43px; box-sizing: border-box; vertical-align: middle; text-align: center; line-height: 1.45; }
 #data-view .asset-comparison-table tr > :last-child { border-right: 0; }
 #data-view .asset-comparison-table tbody tr:last-child > th, #data-view .asset-comparison-table tbody tr:last-child > td { border-bottom: 0; }
-#data-view .asset-comparison-table thead th { height: 68px; padding: 10px 7px; color: #c0c8d3; background: var(--surface-raised, #191e27); font-size: 12px; font-weight: 600; border-bottom: 1px solid #4f4931; line-height: 1.65; }
+#data-view .asset-comparison-table thead th { position: sticky; top: 0; z-index: 3; height: 68px; padding: 10px 7px; color: #c0c8d3; background: var(--surface-raised, #191e27); font-size: 12px; font-weight: 600; border-bottom: 1px solid #4f4931; line-height: 1.65; }
 #data-view .asset-comparison-table thead th small { display: block; color: var(--asset-muted); font: 10px/1.55 ui-monospace, SFMono-Regular, Consolas, monospace; }
 #data-view .asset-comparison-table .asset-mobile-header { display: none; }
 #data-view .asset-comparison-table .asset-ytd-header { color: var(--asset-sign); background: #23221c; }
@@ -53,7 +53,10 @@
 #data-view .asset-comparison-table .asset-group-start:not(:first-child) > th, #data-view .asset-comparison-table .asset-group-start:not(:first-child) > td { border-top: 2px solid #3c4451; }
 #data-view .asset-category { color: var(--asset-muted); background: var(--asset-paper); font-size: 10px; font-weight: 500; white-space: nowrap; }
 #data-view .asset-comparison-table .asset-name { position: sticky; left: 0; z-index: 1; background: var(--asset-paper); text-align: left; padding-left: 12px; font-weight: 650; white-space: nowrap; box-shadow: 1px 0 0 var(--asset-grid); letter-spacing: -.3px; }
-#data-view .asset-name span { color: var(--asset-sign); font: 500 10px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .02em; }
+#data-view .asset-identity { display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 7px; align-items: center; width: 100%; min-height: 30px; padding: 0; border: 0; background: transparent; text-align: left; cursor: pointer; }
+#data-view .asset-identity:hover .asset-name-label { color: var(--asset-sign); }
+#data-view .asset-name-symbol { color: var(--asset-sign); font: 650 11px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .03em; }
+#data-view .asset-name-label { color: var(--asset-ink); font: 600 12px/1.5 var(--font); overflow: hidden; text-overflow: ellipsis; }
 #data-view .asset-samples { color: #b2bdcb; background: var(--asset-paper); font: 12px/1.5 ui-monospace, SFMono-Regular, Consolas, monospace; }
 #data-view .asset-samples sup { margin-left: 2px; color: var(--asset-sign); font-size: 9px; }
 #data-view .asset-comparison-table .asset-price { text-align: right; background: var(--asset-paper); color: #b5bfcd; font: 12px/1.5 ui-monospace, SFMono-Regular, Consolas, monospace; }
@@ -77,7 +80,7 @@
 #data-view .asset-comparison-table .asset-table-empty { height: 220px; padding: 35px 20px; background: var(--asset-paper); color: var(--asset-muted); font-size: 13px; }
 #data-view .asset-table-empty > span { display: block; }
 #data-view #asset-retry { margin-top: 16px; padding: 8px 14px; border: 1px solid #65572e; border-radius: 2px; background: #2d281a; color: var(--asset-sign); font-size: 12px; }
-#data-view .asset-table-footer { padding: 12px 14px; border-top: 1px solid var(--asset-grid); background: var(--asset-paper); color: var(--asset-muted); font-size: 10px; line-height: 1.8; }
+#data-view .asset-table-footer { flex: none; padding: 12px 14px; border-top: 1px solid var(--asset-grid); background: var(--asset-paper); color: var(--asset-muted); font-size: 10px; line-height: 1.8; }
 #data-view .asset-table-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 3px 16px; }
 #data-view #asset-row-count { color: var(--asset-sign); font-weight: 600; }
 #data-view .asset-color-key { display: inline-flex; align-items: center; gap: 5px; margin-left: auto; }
@@ -98,6 +101,15 @@
 #data-view .daily-method-dialog strong { color: var(--asset-ink); font-weight: 600; }
 #data-view .daily-method-dialog a { color: var(--asset-sign); text-decoration: underline; text-underline-offset: 3px; }
 #data-view .asset-method-rules { padding-left: 20px; margin: 10px 0; }
+#data-view .asset-general-method { margin-top: 20px; border-top: 1px solid var(--asset-grid); padding-top: 14px; }
+#data-view .asset-general-method > summary { color: var(--asset-sign); cursor: pointer; font-size: 13px; }
+#data-view .asset-reason-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 16px 0; }
+#data-view .asset-reason-metrics > div { padding: 10px 12px; border: 1px solid var(--asset-grid); background: var(--asset-paper); }
+#data-view .asset-reason-metrics dt { color: var(--asset-muted); font-size: 11px; }
+#data-view .asset-reason-metrics dd { margin: 6px 0 0; font: 600 19px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace; }
+#data-view .asset-text-gain { color: var(--green, #66c3ab); }
+#data-view .asset-text-loss { color: var(--red, #ec8190); }
+#data-view .asset-text-flat { color: var(--asset-ink); }
 #data-view .asset-source-details { margin-top: 22px; border-top: 1px solid var(--asset-grid); padding-top: 15px; }
 #data-view .asset-source-details summary { color: var(--asset-sign); font-size: 13px; cursor: pointer; }
 #data-view .asset-source-details ul { margin: 12px 0 0; padding-left: 18px; }
@@ -117,30 +129,41 @@
   #data-view #asset-refresh span, #data-view #daily-method-open > span:last-child { display: none; }
   #data-view .asset-context { gap: 3px 10px; font-size: 10px; }
   #data-view .asset-context-source { width: 100%; margin-left: 0; }
-  #data-view .asset-scroll-hint { display: block; flex: none; margin: -2px 0 0; color: var(--asset-muted); font-size: 10px; line-height: 1.6; }
-  #data-view .asset-table-scroll { scroll-snap-type: x mandatory; scroll-padding-inline-start: 120px; }
-  #data-view .asset-comparison-table { width: 866px; min-width: 866px; font-size: 12px; }
-  #data-view .asset-col-group { width: 50px; }
-  #data-view .asset-col-category { width: 84px; }
+  #data-view .asset-scroll-hint { display: none; }
+  #data-view .asset-mobile-nav { display: flex; flex: none; align-items: center; justify-content: space-between; gap: 6px; }
+  #data-view .asset-mobile-nav button { min-height: 34px; padding: 5px 8px; border: 1px solid var(--asset-grid); border-radius: 2px; background: var(--surface-raised, #191e27); color: var(--asset-sign); font-size: 11px; }
+  #data-view .asset-mobile-nav > span { color: var(--asset-muted); font-size: 10px; }
+  #data-view .asset-table-scroll { container-type: inline-size; scroll-snap-type: x mandatory; scroll-padding-inline-start: 120px; }
+  #data-view .asset-comparison-table { width: calc(100cqw + 432px); min-width: calc(100cqw + 432px); font-size: 12px; }
+  #data-view .asset-col-group { width: 0px; display: none; }
+  #data-view .asset-col-category { width: 0px; display: none; }
   #data-view .asset-col-name { width: 120px; }
   #data-view .asset-col-samples { width: 60px; }
   #data-view .asset-col-return { width: 90px; }
   #data-view .asset-col-price { width: 96px; }
-  #data-view .asset-col-ytd { width: 84px; }
-  #data-view .asset-col-judgment { width: 96px; }
+  #data-view .asset-col-ytd { width: calc(50cqw - 60px); }
+  #data-view .asset-col-judgment { width: calc(50cqw - 60px); }
   #data-view .asset-comparison-table thead th { padding: 8px 6px; font-size: 12px; line-height: 1.4; }
   #data-view .asset-comparison-table .asset-identity-header { display: none; }
   #data-view .asset-comparison-table .asset-mobile-header { display: table-cell; }
-  #data-view .asset-comparison-table .asset-mobile-name-header { position: sticky; left: 0; z-index: 2; background: var(--surface-raised, #191e27); box-shadow: 1px 0 0 var(--asset-grid); }
+  #data-view .asset-comparison-table .asset-mobile-group-header, #data-view .asset-comparison-table .asset-mobile-category-header, #data-view .asset-comparison-table .asset-group, #data-view .asset-comparison-table .asset-category { display: none; }
+  #data-view .asset-comparison-table .asset-mobile-name-header { position: sticky; left: 0; z-index: 4; background: var(--surface-raised, #191e27); box-shadow: 1px 0 0 var(--asset-grid); }
   #data-view .asset-comparison-table .asset-name { padding-left: 8px; padding-right: 8px; font-size: 11px; line-height: 1.35; white-space: normal; word-break: keep-all; overflow-wrap: anywhere; }
-  #data-view .asset-name span { display: block; font-size: 10px; line-height: 1.3; }
+  #data-view .asset-identity { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  #data-view .asset-name-symbol { font-size: 11px; }
+  #data-view .asset-name-label { font-size: 10px; white-space: normal; overflow: visible; line-height: 1.4; }
   #data-view .asset-comparison-table .asset-return { font-size: 12px; }
   #data-view .asset-comparison-table .asset-ytd { font-size: 13px; }
-  #data-view .asset-table-footer { padding: 8px 10px; }
+  #data-view .asset-table-footer { flex: none; padding: 8px 10px; }
   #data-view .asset-color-key { margin-left: 0; }
   #data-view .daily-method-dialog { padding: 15px 17px 22px; }
   #data-view .daily-method-heading { top: -15px; }
   #data-view .daily-method-heading h2 { font-size: 18px; }
+  #data-view .asset-selected-reason { padding: 0 9px 10px; }
+  #data-view .asset-reason-metrics { gap: 4px; }
+  #data-view .asset-reason-metrics > div { padding: 8px 5px; }
+  #data-view .asset-reason-metrics dt { font-size: 9px; }
+  #data-view .asset-reason-metrics dd { font-size: 13px; }
 }
 @media (max-width: 620px) {
   #data-view .daily-heading { gap: 6px; }
