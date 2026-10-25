@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFile } from 'node:fs/promises';
-import { analyzeDailySeries, DAILY_SIGNAL_RULE } from '../dist/daily-analytics.js';
+import { analyzeDailySeries } from '../dist/daily-analytics.js';
 import { dateFromDay, utcDay } from '../dist/cycle-engine.js';
 
 const rows = (prices, start = '2024-01-01') => prices.map((price, index) => [dateFromDay(utcDay(start) + index), price]);
@@ -108,17 +108,6 @@ test('CAGR compounds actual elapsed calendar days rather than averaging annual r
   assert.equal(analyzeDailySeries(rows([100, 200])).summary.cagrPct, null);
 });
 
-test('Wilder RSI uses fourteen changes and handles flat and one-sided series', () => {
-  const report = analyzeDailySeries(rows([44.34, 44.09, 44.15, 43.61, 44.33, 44.83, 45.10, 45.42, 45.84, 46.08, 45.89, 46.03, 45.61, 46.28, 46.28, 46.00]));
-  assert.equal(report.rows[13].rsi14, null);
-  close(report.rows[14].rsi14, 70.46413502109705);
-  close(report.rows[15].rsi14, 66.24961855355505);
-  const flat = analyzeDailySeries(rows(Array(20).fill(100)));
-  assert.equal(flat.rows[14].rsi14, 50);
-  assert.equal(analyzeDailySeries(rows(Array.from({ length: 20 }, (_, i) => 100 + i))).rows[14].rsi14, 100);
-  assert.equal(analyzeDailySeries(rows(Array.from({ length: 20 }, (_, i) => 100 - i))).rows[14].rsi14, 0);
-});
-
 test('CAGR eligibility follows the first calendar anniversary independently of annualization', () => {
   const year = analyzeDailySeries([['2021-01-01', 100], ['2022-01-01', 110]]);
   close(year.summary.cagrPct, (1.1 ** (365.2425 / 365) - 1) * 100);
@@ -129,41 +118,7 @@ test('CAGR eligibility follows the first calendar anniversary independently of a
   assert.equal(analyzeDailySeries([['2020-02-29', 100], ['2021-02-27', 110]]).summary.cagrPct, null);
 });
 
-test('unrepresentably small prepared moving averages fail instead of emitting zero', () => {
-  assert.throws(() => analyzeDailySeries(rows(Array(200).fill(Number.MIN_VALUE))), /moving average underflow/);
-});
-
-test('signals require 200 observations and do not buy solely because price has fallen', () => {
-  const falling = analyzeDailySeries(rows(Array.from({ length: 240 }, (_, i) => 1000 - i)));
-  assert.equal(falling.rows[198].signal.key, 'unavailable');
-  assert.equal(falling.rows[198].sma200, null);
-  assert.equal(falling.rows[199].signal.key, 'sell');
-  assert.equal(falling.rows.at(-1).signal.key, 'sell');
-  assert.match(falling.rows[199].signal.reason, /SMA50.*SMA200.*RSI14/);
-  assert.equal(falling.rows[48].sma50, null);
-  close(falling.rows[49].sma50, 975.5);
-  close(falling.rows[199].sma200, 900.5);
-  const overheated = analyzeDailySeries(rows(Array.from({ length: 240 }, (_, i) => 100 + i)));
-  assert.equal(overheated.rows.at(-1).signal.key, 'neutral');
-  assert.equal(overheated.rows.at(-1).rsi14, 100);
-  const confirmed = analyzeDailySeries(rows(Array.from({ length: 240 }, (_, i) => 100 + i * 0.1 + (i % 2 ? 1 : -1))));
-  assert.equal(confirmed.rows[199].signal.key, 'buy');
-  assert.match(confirmed.rows[199].signal.reason, /50 ≤ RSI14 < 70/);
-  assert.match(DAILY_SIGNAL_RULE.limitation, /검증된 투자 전략이 아닙니다/);
-});
-
-test('flat prices stay neutral at varied price scales despite floating point summation', () => {
-  for (const price of [0.01, 0.03, 0.1, 13.18, 0.08584, 123.45, 1e15, 1e200, 1e300]) {
-    const report = analyzeDailySeries(rows(Array(600).fill(price)));
-    for (const row of report.rows.slice(199)) {
-      assert.equal(row.signal.key, 'neutral', `Flat ${price} must not fabricate a trend on ${row.date}`);
-      close(row.sma50, price);
-      close(row.sma200, price);
-    }
-  }
-});
-
-test('appending future observations cannot revise historical signals or daily values', () => {
+test('appending future observations cannot revise historical daily risk values', () => {
   const input = rows(Array.from({ length: 450 }, (_, i) => 100 + i / 10 + Math.sin(i / 4) * 3), '2023-10-01');
   const prefix = analyzeDailySeries(input.slice(0, 230));
   const appended = analyzeDailySeries(input);
@@ -172,7 +127,7 @@ test('appending future observations cannot revise historical signals or daily va
   assert.deepEqual(replacement.rows.slice(0, 230), prefix.rows);
 });
 
-test('missing UTC days reset technical indicators and suppress mislabeled daily changes', () => {
+test('missing UTC days suppress mislabeled daily changes and mark incomplete risk windows', () => {
   const input = rows(Array.from({ length: 410 }, (_, i) => 100 + i * 0.1));
   input.splice(210, 1);
   const report = analyzeDailySeries(input);
@@ -180,17 +135,12 @@ test('missing UTC days reset technical indicators and suppress mislabeled daily 
   assert.equal(report.summary.coverageComplete, false);
   const afterGap = report.rows[210];
   assert.equal(afterGap.changePct, null);
-  assert.equal(afterGap.sma50, null);
-  assert.equal(afterGap.sma200, null);
-  assert.equal(afterGap.rsi14, null);
-  assert.equal(afterGap.signal.key, 'unavailable');
-  assert.equal(report.rows[408].signal.key, 'unavailable');
   assert.equal(report.annual[0].coverageComplete, false);
   assert.equal(report.monthly.find(period => period.month === 7).coverageComplete, false);
   assert.ok(report.summary.mddPct <= 0);
 });
 
-test('exchange weekends preserve previous-session returns but known missing sessions reset indicators', () => {
+test('exchange weekends preserve previous-session returns but known missing sessions break daily changes', () => {
   const fridayMonday = analyzeDailySeries([['2024-01-05', 100], ['2024-01-08', 110]], { calendar: 'sessions' });
   close(fridayMonday.rows[1].changePct, 10);
   assert.equal(fridayMonday.summary.missingDayCount, 0);
@@ -264,4 +214,12 @@ test('the checked-in BTC fixture reconciles endpoint return, all-time MDD and ca
   assert.equal(year2024.partial, false);
   assert.equal(year2024.coverageComplete, true);
   assert.ok(report.annual.at(-1).partial);
+});
+
+test('risk-only analytics accepts flat subnormal prices without constructing removed indicators', () => {
+  const report = analyzeDailySeries(rows(Array(240).fill(Number.MIN_VALUE)));
+  assert.equal(report.summary.mddPct, 0);
+  assert.equal(report.summary.cumulativeReturnPct, 0);
+  assert.ok(report.rows.every(row => row.drawdownPct === 0));
+  for (const row of report.rows) for (const field of ['signal', 'sma50', 'sma200', 'rsi14']) assert.equal(Object.hasOwn(row, field), false);
 });

@@ -10,9 +10,9 @@ import { renderForecastView, exportForecastSvg } from './forecast-view.js?v=1.19
 // Changed release modules use a versioned URL so a cached v1.5 module cannot
 // leave a new long-horizon page running the old three-year workbench.
 import { initViewportWorkspace } from './viewport-workspace.js?v=1.19.0';
-import { initLabView } from "./lab-view.js?v=1.23.0";
+import { initLabView } from "./lab-view.js?v=1.24.0";
 import { initEvidenceView, showEvidenceView } from './evidence-view.js?v=1.20.0';
-import { initDailyDataView } from './daily-data-view.js?v=1.23.0';
+import { initDailyDataView } from './daily-data-view.js?v=1.24.0';
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -93,7 +93,6 @@ function persistUrl() {
   try { history.replaceState(null, '', `${location.pathname}${p.size ? `?${p}` : ''}`); } catch {}
 }
 document.documentElement.dataset.theme = 'dark';
-const dailyDataController = initDailyDataView({root: $('#data-view'), getBitcoinDataset: () => state.dataset, download, toast});
 let initialPageRendered = false;
 function finishInitialPage() {
   if (document.documentElement.dataset.boot !== 'loading' || !state.dataset || !initialPageRendered) return;
@@ -108,9 +107,18 @@ function onInitialPageReady(event) {
 document.addEventListener('atlas:page-ready', onInitialPageReady);
 initViewportWorkspace(icon);
 const outlookController = initLabView();
+const dailyDataController = initDailyDataView({
+  root: $('#data-view'), getCycleContext: () => outlookController.getCycleContext(), download, toast,
+  onSelectCycleRow(row) {
+    if (!outlookController.focusCycleRow(row)) return;
+    state.view = 'outlook'; syncPage(); persistUrl();
+    $('#lab-chart').focus({ preventScroll: true });
+  },
+});
 initEvidenceView();
 function syncPage() {
   document.body.dataset.page=state.view;
+  document.title = state.view === 'data' ? '사이클 판단표 · Bitcoin Cycle Atlas' : 'Bitcoin Cycle Atlas';
   for (const view of ['outlook','compare','evidence','data']) document.querySelector(`#${view}-view`).hidden=state.view!==view;
   $$('[data-view]').forEach(n=>{const active=n.dataset.view===state.view;n.classList.toggle('active',active);if(active)n.setAttribute('aria-current','page');else n.removeAttribute('aria-current');});
   showEvidenceView(state.view==='evidence');
@@ -141,8 +149,8 @@ function render(recalculate = true) {
   renderLegend(); renderChart(); renderTable(state.cursor); renderMethod(); renderResearch();
   syncCursorInputs();
   }
-  if(state.view==='data'){renderData();initialPageRendered=true;}
   outlookController.setDataset(state.dataset);
+  if(state.view==='data'){renderData();initialPageRendered=true;}
   document.dispatchEvent(new CustomEvent('atlas:dataset',{detail:{latestObservationDate:state.dataset.prices.at(-1)[0]}}));
   $('#sidebar-asof').textContent=`관측 · ${state.dataset.prices.at(-1)[0].replaceAll('-','.')} UTC`;
   $('#loading-state').hidden = true;

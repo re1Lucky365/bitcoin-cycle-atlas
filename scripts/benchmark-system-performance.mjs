@@ -6,7 +6,6 @@ import { cp, copyFile, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs
 import os from 'node:os';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { dailyViewSurface } from '../tests/helpers/daily-data-view-fixture.mjs';
 import { structureViewFixture } from '../tests/helpers/structure-view-fixture.mjs';
 
 const args = process.argv.slice(2), options = {};
@@ -16,6 +15,11 @@ for (let index = 0; index < args.length; index += 2) {
 }
 assert.ok(options.before && options.after, 'Supply --before BASE_TREE --after MODIFIED_TREE');
 const beforeRoot = path.resolve(options.before), afterRoot = path.resolve(options.after);
+// Historical v1.22-to-v1.23 comparison. Use the fixture from the exact reviewed
+// after tree; the v1.24 cycle table intentionally has different output/controls.
+const { dailyViewSurface } = await import(pathToFileURL(path.join(afterRoot, 'tests/helpers/daily-data-view-fixture.mjs')));
+const afterApi = await import(pathToFileURL(path.join(afterRoot, 'dist/daily-data-view.js')));
+assert.equal(typeof afterApi.renderMonthlyDataTable, 'function', 'This historical output-equivalence benchmark requires the archived v1.23 after tree. Use daily-data-performance.test.mjs for the v1.24 cycle table.');
 assert.notEqual(beforeRoot, afterRoot, 'Distinct baseline and modified source trees are required');
 const sampleCount = Number(options.samples || 7);
 assert.ok(Number.isInteger(sampleCount) && sampleCount >= 5 && sampleCount <= 30, 'Use 5–30 samples per side');

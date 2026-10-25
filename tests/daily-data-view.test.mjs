@@ -1,189 +1,201 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { analyzeDailySeries } from '../dist/daily-analytics.js';
-import { bitcoinDailyAsset } from '../dist/daily-data-source.js';
-import { annualDataCsv, dailyDataCsv, dailyTableRows, formatDailyPercent, initDailyDataView, renderAnnualDataTable, renderMonthlyDataTable } from '../dist/daily-data-view.js';
+import { buildCycleDecisionTable } from '../dist/cycle-decision.js';
+import { cycleDecisionCsv, cycleTableRows, formatDailyPercent, initDailyDataView, renderCycleTableRows } from '../dist/daily-data-view.js';
+import { cycleViewContext, dailyViewSurface } from './helpers/daily-data-view-fixture.mjs';
 
-function dataset({ start = '2019-12-31', length = 240, offset = 0 } = {}) {
-  const first = Date.parse(`${start}T00:00:00Z`);
-  const prices = Array.from({ length }, (_, index) => [new Date(first + index * 86400000).toISOString().slice(0, 10), 100 + offset + index / 4 + Math.sin(index) * 4]);
-  const nextDate = new Date(first + length * 86400000).toISOString();
-  return { meta: { sourceName: 'Coin Metrics Community API', source: 'https://community-api.coinmetrics.io/v4/timeseries/asset-metrics?assets=btc&metrics=PriceUSD', metric: 'PriceUSD', frequency: '1d', timezone: 'UTC', retrievedAt: nextDate, firstDate: prices[0][0], lastDate: prices.at(-1)[0], count: prices.length }, prices };
-}
-function ready(symbol, source = dataset()) {
-  const asset = { ...bitcoinDailyAsset(source), symbol, sourceName: `${symbol} provider`, priceNote: `${symbol} observed daily close` };
-  return { status: 'ready', asset, analysis: analyzeDailySeries(asset.prices, { calendar: asset.calendar, symbol, asOfDate: asset.asOfDate }) };
-}
-const tick = () => new Promise(resolve => setImmediate(resolve));
-function deferred() { let resolve, reject; const promise = new Promise((yes, no) => { resolve = yes; reject = no; }); return { promise, resolve, reject }; }
+const modelOf = context => buildCycleDecisionTable(context);
+const rowIds = markup => [...markup.matchAll(/data-cycle-row-id="([^"]+)"/g)].map(match => match[1]);
 
-class Node {
-  constructor(id = '', dataset = {}) { this.id = id; this.dataset = dataset; this.attrs = new Map(); this.innerHTML = ''; this.textContent = ''; this.value = ''; this.hidden = false; this.disabled = false; this.clientHeight = 238; this.classList = { add() {} }; }
-  setAttribute(key, value) { this.attrs.set(key, value); }
-  removeAttribute(key) { this.attrs.delete(key); }
-  getAttribute(key) { return this.attrs.get(key); }
-  showModal() { this.open = true; }
-  close() { this.open = false; }
-  closest(selector) {
-    if (selector === 'button') return this;
-    const match = selector.match(/^\[data-(.+)\]$/);
-    if (!match) return null;
-    const key = match[1].replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
-    return key in this.dataset ? this : null;
-  }
-}
-function surface(query = '') {
-  const root = new Node('data-view'), nodes = new Map(), listeners = new Map();
-  root.ownerDocument = { defaultView: { location: { search: query } } };
-  root.querySelector = selector => { if (!nodes.has(selector)) nodes.set(selector, new Node(selector.slice(1))); return nodes.get(selector); };
-  const controls = {
-    '[data-daily-asset]': ['BTC', 'ETH', 'MSTR', 'BMNR'].map(symbol => new Node('', { dailyAsset: symbol })),
-    '[data-daily-detail]': ['daily', 'monthly'].map(detail => new Node('', { dailyDetail: detail })),
-    '[data-daily-metric]': ['return', 'mdd'].map(metric => new Node('', { dailyMetric: metric })),
-  };
-  root.querySelectorAll = selector => controls[selector] || [];
-  root.addEventListener = (name, callback) => listeners.set(name, callback);
-  root.removeEventListener = name => listeners.delete(name);
-  return {
-    root, node: id => root.querySelector(`#${id}`),
-    click: (id, values = {}) => listeners.get('click')?.({ target: new Node(id, values) }),
-    change(id, value) { const target = root.querySelector(`#${id}`); target.value = value; listeners.get('change')?.({ target }); },
-  };
-}
-
-test('percentage display preserves missing values, signs, and a true neutral zero', () => {
+// This boundary verifies actual controller outputs/actions, not browser layout.
+// Real DOM and responsive rendering are checked separately in the browser.
+test('percentage formatting preserves missing values and signed finite values', () => {
   assert.equal(formatDailyPercent(null), '—');
   assert.equal(formatDailyPercent(NaN), '—');
   assert.equal(formatDailyPercent(Infinity), '—');
-  assert.equal(formatDailyPercent(-0.0001), '0.00%');
-  assert.equal(formatDailyPercent(1250.125), '+1,250.13%');
-  assert.equal(formatDailyPercent(-12.5), '−12.50%');
+  assert.equal(formatDailyPercent(-.0001, 2), '0.00%');
+  assert.equal(formatDailyPercent(1250.125, 2), '+1,250.13%');
+  assert.equal(formatDailyPercent(-12.5), '−12.5%');
 });
 
-test('daily filters are applied before newest-first pagination and do not mutate analytics', () => {
-  const entry = ready('BTC');
-  const original = entry.analysis.rows.map(row => row.date);
-  const filtered = dailyTableRows(entry.analysis, { year: '2020', month: '2' });
-  assert.equal(filtered.length, 29);
-  assert.equal(filtered[0].date, '2020-02-29');
-  assert.equal(filtered.at(-1).date, '2020-02-01');
-  assert.deepEqual(entry.analysis.rows.map(row => row.date), original);
-  assert.equal(dailyTableRows(entry.analysis, { year: '2021' }).length, 0);
+test('recent filtering preserves the whole preceding interval and separates selection provenance', () => {
+  const rows = [
+    { id: 'old', cycleId: 'a', startDate: '2019-01-01', endDate: '2021-01-01', kind: 'observed' },
+    { id: 'recent', cycleId: 'b', startDate: '2021-01-01', endDate: '2022-11-09', kind: 'observed' },
+    { id: 'mixed', cycleId: 'c', startDate: '2025-01-01', endDate: '2027-01-01', kind: 'mixed', evidenceKind: 'scenario' },
+  ];
+  const model = { asOf: '2026-10-23', rows };
+  assert.deepEqual(cycleTableRows(model).map(row => row.id), ['recent', 'mixed']);
+  assert.equal(cycleTableRows(model)[0].startDate, '2021-01-01', 'filtering must not silently rebase the metric');
+  assert.deepEqual(cycleTableRows(model, { evidence: 'observed' }).map(row => row.id), ['recent']);
+  assert.deepEqual(cycleTableRows(model, { cycle: 'all', evidence: 'scenario' }).map(row => row.id), ['mixed']);
+  assert.deepEqual(cycleTableRows(model, { cycle: 'a' }).map(row => row.id), ['old']);
+  assert.equal(rows.length, 3);
 });
 
-test('CSV exports the filtered observations with exact values, partial YTD and nulls kept empty', () => {
-  const entry = ready('BTC', dataset({ start: '2020-06-01', length: 8 }));
-  const output = dailyDataCsv(entry.asset, entry.analysis, { year: '2020', month: '6' });
-  const lines = output.slice(1).trimEnd().split('\r\n'), headers = lines[0].split(',');
-  assert.equal(lines.length, 9);
-  assert.equal(lines[1].split(',')[0], '2020-06-08');
-  const firstObservation = lines.at(-1).split(',');
-  assert.equal(firstObservation[headers.indexOf('price_usd')], String(entry.analysis.rows[0].price));
-  assert.equal(firstObservation[headers.indexOf('change_pct')], '');
-  assert.equal(firstObservation[headers.indexOf('sma_200')], '');
-  assert.equal(firstObservation[headers.indexOf('ytd_partial')], 'true');
-  assert.ok(output.includes('heuristic-not-backtested'));
-  assert.ok(output.includes(entry.asset.retrievedAt));
-  assert.ok(output.includes('CC BY-NC 4.0'));
-});
-
-test('CSV quotes source commas and protects text cells against spreadsheet formulas', () => {
-  const entry = ready('BTC', dataset({ length: 1 }));
-  entry.asset.sourceName = '=1+1'; entry.asset.priceNote = 'close, "quoted"';
-  const output = dailyDataCsv(entry.asset, entry.analysis);
-  assert.ok(output.includes("'=1+1"));
-  assert.ok(output.includes('"close, ""quoted"""'));
-});
-
-test('annual export includes only displayed years and actually loaded assets with source metadata', () => {
-  const entries = new Map([['BTC', ready('BTC')], ['ETH', { status: 'error', error: 'offline' }], ['MSTR', ready('MSTR')]]);
-  const output = annualDataCsv(entries, [2020]);
-  const lines = output.slice(1).trimEnd().split('\r\n');
-  assert.equal(lines.length, 3);
-  assert.ok(lines[1].startsWith('BTC,2020,')); assert.ok(lines[2].startsWith('MSTR,2020,'));
-  assert.ok(output.includes('baseline_date')); assert.ok(output.includes('coverage_complete'));
-  assert.ok(!output.includes('ETH,2020'));
-});
-
-test('heatmap distinguishes incomplete observations, missing assets and full-history totals', () => {
-  const entries = new Map([['BTC', ready('BTC')], ['ETH', { status: 'error', error: 'offline' }]]);
-  const markup = renderAnnualDataTable(entries, [2018, 2019, 2020]);
-  assert.ok(markup.includes('전체 누적')); assert.ok(markup.includes('전체 CAGR')); assert.ok(markup.includes('전체 MDD'));
-  assert.ok(markup.includes('각 자산의 전체 관측 이력'));
-  assert.ok(markup.includes('이 기간에 관측 자료가 없습니다.'));
-  assert.ok(markup.includes('data-daily-retry="ETH"'));
-  assert.ok(markup.includes('부분기간')); assert.ok(markup.includes('<sup>*</sup>'));
-  const mdd = renderAnnualDataTable(entries, [2020], { metric: 'mdd' });
-  assert.ok(mdd.includes('기간 내 종가 MDD')); assert.ok(mdd.includes('고점 →'));
-});
-
-test('monthly heatmap cells carry the matching asset/year/month drill-down and skip absent months', () => {
-  const entry = ready('BMNR', dataset({ start: '2025-06-05', length: 40 }));
-  const markup = renderMonthlyDataTable(entry.asset, entry.analysis);
-  assert.ok(markup.includes('data-symbol="BMNR" data-year="2025" data-month="6"'));
-  assert.ok(markup.includes('data-month="7"')); assert.ok(!markup.includes('data-month="1"'));
-  assert.ok(markup.includes('부분기간'));
-});
-
-test('controller paints BTC immediately, keeps user selection through independent async loads and exposes failure', async () => {
-  const data = dataset(), ui = surface('?data-asset=ETH'), pending = new Map(['ETH', 'MSTR', 'BMNR'].map(symbol => [symbol, deferred()]));
-  const view = initDailyDataView({ root: ui.root, getBitcoinDataset: () => data, loadAsset: symbol => pending.get(symbol).promise });
+test('the controller creates one semantic table and no removed indicator or comparison interface', () => {
+  const context = cycleViewContext(), ui = dailyViewSurface();
+  const view = initDailyDataView({ root: ui.root, getCycleContext: () => context });
   view.render();
-  assert.ok(ui.node('daily-annual-table').innerHTML.includes('BTC'));
-  assert.ok(ui.node('data-summary').innerHTML.includes('ETH'));
-  ui.click('', { dailyAsset: 'MSTR' });
-  pending.get('MSTR').resolve(ready('MSTR').asset); await tick();
-  assert.ok(ui.node('data-summary').innerHTML.includes('MSTR ·'));
-  assert.ok(ui.node('data-body').innerHTML.includes('2020-08-26'));
-  pending.get('ETH').resolve(ready('ETH').asset); pending.get('BMNR').reject(new Error('offline')); await tick();
-  assert.ok(ui.node('data-summary').innerHTML.includes('MSTR ·'), 'late responses must not switch the selected asset');
-  assert.ok(ui.node('daily-annual-table').innerHTML.includes('data-daily-retry="BMNR"'));
-  assert.ok(!ui.node('daily-annual-table').innerHTML.includes('data-daily-retry="ETH"'));
+  assert.equal((ui.root.innerHTML.match(/<table\b/g) || []).length, 1);
+  assert.equal((ui.root.innerHTML.match(/scope="col"/g) || []).length, 5);
+  assert.match(ui.root.innerHTML, /사이클 판단표/);
+  assert.doesNotMatch(ui.root.innerHTML, /SMA|RSI|daily-annual-table|daily-monthly-table|일별 원자료/);
+  assert.match(ui.node('cycle-context').innerHTML, /2025-01-31/);
+  assert.equal(rowIds(ui.node('data-body').innerHTML).length, modelOf(context).rows.length);
+  assert.match(ui.node('data-body').innerHTML, /현재 관측/);
+  assert.match(ui.node('data-body').innerHTML, /미래 가정/);
+  assert.match(ui.node('data-body').innerHTML, /관측 · 잠정/);
   view.destroy();
 });
 
-test('real period click, filter, page and CSV actions use the same visible rows', async () => {
-  const data = dataset(), ui = surface(), downloads = [];
-  const view = initDailyDataView({ root: ui.root, getBitcoinDataset: () => data, loadAsset: async symbol => ready(symbol).asset, download: (name, blob) => downloads.push({ name, blob }) });
-  view.render(); await tick();
-  ui.click('', { dailyPeriod: '', symbol: 'ETH', year: '2020', month: '2' });
-  assert.equal(ui.node('data-year').value, '2020'); assert.equal(ui.node('daily-month').value, '2');
-  assert.equal(ui.node('data-result-count').textContent, '29개 관측');
-  assert.ok(ui.node('data-body').innerHTML.includes('2020-02-29'));
-  assert.ok(!ui.node('data-body').innerHTML.includes('2020-03-01'));
-  ui.click('data-next'); assert.ok(!ui.node('data-body').innerHTML.includes('2020-02-29'));
-  ui.click('export-raw'); assert.equal(downloads[0].name, 'eth-daily-2020-02.csv');
-  const downloaded = await downloads[0].blob.text();
-  assert.ok(downloaded.includes('2020-02-01,ETH,')); assert.ok(downloaded.includes('2020-02-29,ETH,'));
-  assert.ok(!downloaded.includes('2020-03-01,ETH,'));
-  ui.change('data-year', '2019'); assert.equal(ui.node('daily-month').value, 'all');
-  assert.equal(ui.node('data-result-count').textContent, '1개 관측');
-  assert.ok(ui.node('data-body').innerHTML.includes('첫 관측일부터 계산한 부분기간'));
-  ui.click('', { dailyDetail: 'monthly' });
-  assert.equal(ui.node('daily-monthly-scroll').hidden, false); assert.equal(ui.node('daily-table-scroll').hidden, true);
+test('filters, chart selection and CSV all refer to the same exact model rows', async () => {
+  const context = cycleViewContext(), model = modelOf(context), ui = dailyViewSurface(), downloads = [], selections = [];
+  const view = initDailyDataView({ root: ui.root, getCycleContext: () => context, onSelectCycleRow: row => selections.push(row), download: (name, blob) => downloads.push({ name, blob }) });
+  view.render();
+  ui.click('', { cycleEvidence: 'scenario' });
+  const expected = cycleTableRows(model, { evidence: 'scenario' });
+  assert.deepEqual(rowIds(ui.node('data-body').innerHTML), expected.map(row => row.id));
+  assert.ok(expected.length > 0);
+  ui.click('', { cycleRow: expected[0].id });
+  assert.deepEqual(selections[0], expected[0]);
+  ui.click('', { cycleRow: 'unknown' }); assert.equal(selections.length, 1);
+  ui.click('export-raw'); assert.equal(downloads.length, 1);
+  const exported = await downloads[0].blob.text();
+  assert.match(downloads[0].name, /btc-cycle-review-2025-01-31-recent-scenario\.csv$/);
+  assert.match(exported, /conditional-scenario-not-a-probability/);
+  assert.doesNotMatch(exported, /SMA|RSI|retrospective-not-a-historical-trade-signal/);
+  const lines = exported.slice(1).trimEnd().split('\r\n');
+  assert.equal(lines.length, expected.length + 1);
+  const fields = lines[0].split(',');
+  assert.equal(lines[1].split(',')[fields.indexOf('price_change_pct')], '');
+  assert.equal(lines[1].split(',')[fields.indexOf('period_mdd_pct')], '');
+  ui.click('', { cycleEvidence: 'observed' }); ui.change('cycle-scope', 'current');
+  assert.deepEqual(rowIds(ui.node('data-body').innerHTML), ['observed:range:2025-01-19:2025-01-31', model.current.id]);
+  assert.match(ui.node('data-body').innerHTML, /28일/);
   view.destroy();
 });
 
-test('source replacement updates data without resetting a selected year and destroy ignores pending responses', async () => {
-  let data = dataset(); const ui = surface(), pending = deferred();
-  const view = initDailyDataView({ root: ui.root, getBitcoinDataset: () => data, loadAsset: () => pending.promise });
-  view.render(); ui.change('data-year', '2020');
+test('no prepared chart context clears prior judgments and never labels missing data sideways', () => {
+  let context = cycleViewContext(); const ui = dailyViewSurface(), selected = [];
+  const view = initDailyDataView({ root: ui.root, getCycleContext: () => context, onSelectCycleRow: row => selected.push(row), download() {} });
+  view.render(); const oldId = modelOf(context).rows[0].id;
+  context = null; view.render();
+  assert.deepEqual(rowIds(ui.node('data-body').innerHTML), []);
+  assert.equal(ui.node('export-raw').disabled, true);
+  assert.doesNotMatch(ui.node('data-body').innerHTML, /횡보·관찰|적극 매수/);
+  ui.click('', { cycleRow: oldId }); assert.equal(selected.length, 0);
+  view.destroy();
+});
+
+test('misaligned chart inputs fail visibly without leaving stale rows or an export', () => {
+  let context = cycleViewContext(); const ui = dailyViewSurface();
+  const view = initDailyDataView({ root: ui.root, getCycleContext: () => context, download() {} });
+  view.render();
+  context = { ...context, milestones: { ...context.milestones, asOf: '2025-01-30' } };
+  view.render();
+  assert.match(ui.node('cycle-context').textContent, /일치하지 않아 판단을 보류/);
+  assert.equal(ui.node('export-raw').disabled, true);
+  assert.deepEqual(rowIds(ui.node('data-body').innerHTML), []);
+  view.destroy();
+});
+
+test('displayed price respects the chart cutoff even when the source has later observations', () => {
+  const context = cycleViewContext(), last = context.prices.at(-1), ui = dailyViewSurface();
+  context.prices = [...context.prices, ['2025-02-01', 999999]];
+  context.dataset = { ...context.dataset, prices: context.prices };
+  const view = initDailyDataView({ root: ui.root, getCycleContext: () => context });
+  view.render();
+  assert.match(ui.node('cycle-context').innerHTML, new RegExp(last[1].toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace('.', '\\.')));
+  assert.doesNotMatch(ui.node('cycle-context').innerHTML, /999,999/);
+  view.destroy();
+});
+
+test('a replaced dataset or scenario updates the table while keeping valid selected filters', () => {
+  let context = cycleViewContext(); const ui = dailyViewSurface();
+  const view = initDailyDataView({ root: ui.root, getCycleContext: () => context });
+  view.render(); ui.change('cycle-scope', 'current');
   const before = ui.node('data-body').innerHTML;
-  data = dataset({ offset: 500 }); view.render();
-  assert.equal(ui.node('data-year').value, '2020'); assert.notEqual(ui.node('data-body').innerHTML, before);
-  const painted = ui.node('daily-annual-table').innerHTML; view.destroy();
-  pending.resolve(ready('ETH').asset); await tick();
-  assert.equal(ui.node('daily-annual-table').innerHTML, painted);
+  context = cycleViewContext({ offset: 100 }); view.render();
+  assert.equal(ui.node('cycle-scope').value, 'current');
+  assert.notEqual(ui.node('data-body').innerHTML, before);
+  ui.change('cycle-scope', 'scenario-base');
+  context = cycleViewContext({ scenarioId: 'other' }); view.render();
+  assert.equal(ui.node('cycle-scope').value, 'recent');
+  assert.match(ui.node('cycle-scenario-label').textContent, /다른 미래 가정/);
+  view.destroy();
 });
 
-test('a pre-2011 series safely offers all-history view and the method dialog explains the signal', async () => {
-  const data = dataset({ start: '2010-07-18', length: 8 }), ui = surface();
-  const view = initDailyDataView({ root: ui.root, getBitcoinDataset: () => data, loadAsset: async symbol => ready(symbol, data).asset });
-  assert.doesNotThrow(() => view.render()); await tick();
-  ui.change('daily-scope', 'all'); assert.ok(ui.node('daily-annual-table').innerHTML.includes('data-year="2010"'));
-  ui.click('daily-method-open'); assert.equal(ui.node('daily-method-dialog').open, true);
-  assert.ok(ui.node('daily-method-content').innerHTML.includes('50 ≤ RSI 14 &lt; 70'));
-  assert.ok(ui.node('daily-method-content').innerHTML.includes('수익성·적중률을 검증한 전략이 아니며'));
+test('method dialog explains timeframe, hindsight, and operational sideways criteria without a second table', () => {
+  const context = cycleViewContext(), ui = dailyViewSurface();
+  const view = initDailyDataView({ root: ui.root, getCycleContext: () => context });
+  view.render(); ui.click('daily-method-open');
+  assert.equal(ui.node('daily-method-dialog').open, true);
+  const content = ui.node('daily-method-content').innerHTML;
+  assert.match(content, /28개 일말 가격/); assert.match(content, /최적 수익 기준으로 검증하지/);
+  assert.match(content, /당시 실행할 수 있었던/); assert.match(content, /행에 적힌 시작일부터 종료일까지/);
+  assert.doesNotMatch(content, /<table|SMA|RSI/);
   ui.click('daily-method-close'); assert.equal(ui.node('daily-method-dialog').open, false);
+  view.destroy();
+});
+
+test('CSV and HTML safely preserve quoted source and review text', () => {
+  const model = modelOf(cycleViewContext());
+  model.rows[0] = { ...model.rows[0], phaseLabel: '<img src=x>', action: { ...model.rows[0].action, reason: '=1+1,"source"' } };
+  const output = cycleDecisionCsv(model, [model.rows[0]], { sourceName: '=1+1', sourceUrl: 'https://example.test/', retrievedAt: 'now' });
+  assert.match(output, /'=1\+1/); assert.match(output, /""source""/);
+  const html = renderCycleTableRows([model.rows[0]]);
+  assert.match(html, /&lt;img src=x&gt;/); assert.doesNotMatch(html, /<img/);
+});
+
+test('destroy removes actions and makes subsequent render calls inert', () => {
+  let context = cycleViewContext(); const ui = dailyViewSurface(), downloads = [];
+  const view = initDailyDataView({ root: ui.root, getCycleContext: () => context, download: name => downloads.push(name) });
+  view.render(); const before = ui.snapshot(); view.destroy();
+  context = cycleViewContext({ offset: 700 }); view.render();
+  ui.click('export-raw'); ui.change('cycle-scope', 'all');
+  assert.equal(downloads.length, 0);
+  assert.equal(ui.node('data-body').innerHTML, before.table);
+});
+
+
+test('a throwing shared-chart getter clears all stale plans and recovers without the old error title', () => {
+  const context = cycleViewContext(), ui = dailyViewSurface(), downloads = [], selections = [];
+  let broken = false;
+  const view = initDailyDataView({ root: ui.root, getCycleContext() { if (broken) throw new RangeError('bad replacement as-of'); return context; }, onSelectCycleRow: row => selections.push(row), download: name => downloads.push(name) });
+  view.render(); const oldId = modelOf(context).rows[0].id;
+  broken = true; assert.doesNotThrow(() => view.render());
+  assert.equal(ui.node('export-raw').disabled, true);
+  assert.deepEqual(rowIds(ui.node('data-body').innerHTML), []);
+  assert.match(ui.node('cycle-context').textContent, /판단을 보류/);
+  assert.doesNotMatch(ui.snapshot().context, /cycle-context-price/);
+  assert.equal(ui.node('cycle-scenario-label').textContent, '');
+  ui.click('export-raw'); ui.click('', { cycleRow: oldId });
+  assert.equal(downloads.length, 0); assert.equal(selections.length, 0);
+  broken = false; view.render();
+  assert.ok(rowIds(ui.node('data-body').innerHTML).length > 0);
+  assert.equal(ui.node('export-raw').disabled, false);
+  assert.doesNotMatch(ui.node('cycle-context').title, /bad replacement/);
+  view.destroy();
+});
+
+test('shared cycle boundaries stay visible and the explicit range detail control reveals all episodes', () => {
+  const rows = [
+    { id: 'shared-low', phaseId: 'bottom', cycleId: 'new', cycleIds: ['old', 'new'], endDate: '2024-01-01' },
+    { id: 'range-1', phaseId: 'range', cycleId: 'old', endDate: '2024-01-02' },
+    { id: 'range-2', phaseId: 'range', cycleId: 'old', endDate: '2024-01-03' },
+    { id: 'future-range-1', phaseId: 'range', cycleId: 'future', evidenceKind: 'scenario', endDate: '2027-01-01' },
+    { id: 'future-range-2', phaseId: 'range', cycleId: 'future', evidenceKind: 'scenario', endDate: '2027-02-01' },
+  ];
+  const model = { asOf: '2026-10-23', rows };
+  assert.deepEqual(cycleTableRows(model, { cycle: 'old', allRanges: true }).map(row => row.id), ['shared-low', 'range-1', 'range-2']);
+  assert.deepEqual(cycleTableRows(model).map(row => row.id), ['shared-low', 'range-2', 'future-range-1']);
+  assert.deepEqual(cycleTableRows(model, { allRanges: true }), rows);
+  const ui = dailyViewSurface(), context = cycleViewContext();
+  const view = initDailyDataView({ root: ui.root, getCycleContext: () => context });
+  view.render();
+  ui.node('cycle-all-ranges').checked = true; ui.change('cycle-all-ranges', 'on');
+  assert.deepEqual(rowIds(ui.node('data-body').innerHTML), cycleTableRows(modelOf(context), { allRanges: true }).map(row => row.id));
+  assert.equal((ui.root.innerHTML.match(/<table\b/g) || []).length, 1);
   view.destroy();
 });

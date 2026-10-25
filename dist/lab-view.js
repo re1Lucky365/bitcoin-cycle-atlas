@@ -207,6 +207,51 @@ export function initLabView() {
     if(!milestoneCache.has(m))milestoneCache.set(m,buildCycleMilestones(state.dataset,{forecast:m,asOf:m.asOf}));
     return milestoneCache.get(m);
   }
+  // The table consumes the very same cached path and marker objects as the
+  // chart. It must not silently rebuild another scenario or invent endpoints.
+  function getCycleContext(){
+    if(!state.dataset)return null;
+    const forecast=model();
+    return {dataset:state.dataset,prices:state.dataset.prices,forecast,milestones:cycleAnnotations(forecast),scenarioId:state.scenario,scenarioLabel:forecast.scenario.label};
+  }
+  function focusCycleRow(row){
+    if(!state.dataset||!row?.endDate)return false;
+    const m=model(),data=cycleAnnotations(m),markerIds=row.markerIds||[];
+    const conditional=row.evidenceKind==='scenario';
+    if(conditional&&row.scenarioId!==m.scenario.id)return false;
+    const marker=data.markers.find(item=>item.id===markerIds.at(-1));
+    const interval=data.intervals.find(item=>item.id===(row.chart?.intervalId||row.intervalId));
+    // Ignore stale exported/previous-scenario selections. Current observation
+    // rows have no marker, but still focus their measured price window.
+    if(markerIds.length&&!marker)return false;
+    const minimum=D(base().rows[0].date),maximum=D(m.displayEnd);
+    let start,end;
+    try{start=D(row.startDate||row.endDate);end=D(row.endDate);}catch{return false;}
+    if(start<minimum||end>maximum||end<start)return false;
+    const exactPrice=date=>date<=m.asOf?base().rows.find(point=>point.date===date)?.price:m.path.find(point=>point.date===date)?.price;
+    if(exactPrice(row.endDate)!==row.endPrice||exactPrice(row.startDate||row.endDate)!==row.startPrice)return false;
+    const padding=Math.max(21,Math.ceil((end-start)*.08));
+    marketData.cancel();touchTracking.cancel();state.marketRange=null;
+    state.frequency='daily';state.chartType='line';state.atlasMode='price';
+    state.priceRange={start:dateFromDay(Math.max(minimum,start-padding)),end:dateFromDay(Math.min(maximum,end+padding))};
+    state.priceDomain=null;state.selectedDate=row.endDate;state.selectedEvent=null;state.selectedHistoryEvent=null;
+    state.cycleAnnotations=data;state.cycleCollapsed=false;state.cycleRelation='all';
+    for(const id of ['cycle-landmarks','cycle-intervals']){
+      if(!state.indicators.added.includes(id))state.indicators=changeIndicatorState(state.indicators,{action:'add',id});
+      else if(!shown(id))state.indicators=changeIndicatorState(state.indicators,{action:'visibility',id});
+    }
+    if(interval)inspectCycle('interval',interval.id,{openPanel:true});
+    else if(marker)inspectCycle('marker',marker.id,{openPanel:true});
+    else{
+      state.selectedCycleItem=null;
+      inspect({label:row.phaseLabel,date:row.endDate,kind:conditional?'assumption':'observed',fields:[
+        {label:'표시 기간',value:`${row.startDate} → ${row.endDate} · ${row.days}일`},
+        {label:'검토 단계',value:row.action.label},
+        ...(row.minimumRunKnownAt?[{label:'연속 유지 조건을 알 수 있는 날',value:row.minimumRunKnownAt}]:[]),
+      ],note:`${row.action.reason} ${row.note||''}`},{owner:'price',user:true,openPanel:true});
+    }
+    publishIndicators();schedule();return true;
+  }
   function cycleDetail(kind,id){
     const data=state.cycleAnnotations;
     if(!data)return null;
@@ -755,5 +800,5 @@ export function initLabView() {
   $('#legacy-comparison').addEventListener('toggle',()=>{if($('#legacy-comparison').open)window.dispatchEvent(new Event('resize'));});
   document.addEventListener('visibilitychange',()=>{if(document.hidden)touchTracking.cancel();});
   publishIndicators();
-  return {setDataset(dataset){if(state.dataset===dataset)return;touchTracking.cancel();if(state.selectedDate===state.dataset?.prices.at(-1)?.[0])state.selectedDate=null;state.dataset=dataset;state.base=null;state.analysis=null;state.models.clear();state.futureStates.clear();state.cycleAnnotations=null;volumeProjectionCache.clear();state.volumeProjection=null;state.methodKey=null;state.eventsRenderKey=null;state.hoverReadoutKey=null;if(volumeState.series&&volumeState.series.lastDate<dataset.prices.at(-1)[0])void loadVolume({force:true});schedule();},show(value){state.visible=value;if(value)schedule();},showCompare(value){state.compareVisible=value;if(value)schedule();}};
+  return {getCycleContext,focusCycleRow,setDataset(dataset){if(state.dataset===dataset)return;touchTracking.cancel();if(state.selectedDate===state.dataset?.prices.at(-1)?.[0])state.selectedDate=null;state.dataset=dataset;state.base=null;state.analysis=null;state.models.clear();state.futureStates.clear();state.cycleAnnotations=null;volumeProjectionCache.clear();state.volumeProjection=null;state.methodKey=null;state.eventsRenderKey=null;state.hoverReadoutKey=null;if(volumeState.series&&volumeState.series.lastDate<dataset.prices.at(-1)[0])void loadVolume({force:true});schedule();},show(value){state.visible=value;if(value)schedule();},showCompare(value){state.compareVisible=value;if(value)schedule();}};
 }

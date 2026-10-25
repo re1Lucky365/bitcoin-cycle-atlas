@@ -1,0 +1,4 @@
+interface:
+  display_name: "Verify Cycle Decision Table"
+  short_description: "Check cycle provenance, causal states, and period risk"
+  default_prompt: "Use $verify-cycle-decision to verify a change to cycle decisions and chart checkpoint provenance."
