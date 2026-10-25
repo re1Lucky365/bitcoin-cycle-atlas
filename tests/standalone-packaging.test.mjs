@@ -117,7 +117,7 @@ test('the real standalone is deterministic, preserves every module and snapshot,
   const bundle = await standaloneModuleMap(resolve(root, 'dist'));
   assert.equal(verification.modules, Object.keys(bundle.imports).length);
   assert.equal(verification.snapshots, 6);
-  assert.equal(verification.stylesheets, 22);
+  assert.equal(verification.stylesheets, 23);
   const {stdout} = await run(process.execPath, ['--experimental-vm-modules', runtime, 'artifact', first]);
   assert.deepEqual(JSON.parse(stdout), {modules:verification.modules, parsed:true, linked:true});
   const mapMatch = html.match(/<script type="importmap">([\s\S]*?)<\/script>/);

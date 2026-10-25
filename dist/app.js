@@ -12,6 +12,7 @@ import { renderForecastView, exportForecastSvg } from './forecast-view.js?v=1.19
 import { initViewportWorkspace } from './viewport-workspace.js?v=1.19.0';
 import { initLabView } from "./lab-view.js?v=1.21.0";
 import { initEvidenceView, showEvidenceView } from './evidence-view.js?v=1.20.0';
+import { initDailyDataView } from './daily-data-view.js?v=1.22.0';
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -61,7 +62,7 @@ const state = {
   horizon: ['365','730','1461','current','all'].includes(params.get('range')) ? params.get('range') : '1461',
   cursor: /^\d{1,5}$/.test(params.get('day') || '') ? Number(params.get('day')) : null,
   hidden: new Set((params.get('hide') || '').split(',').filter(Boolean)),
-  view: params.get('page')==='compare'&&!params.has('legacy')?'outlook':['outlook','compare','evidence','data'].includes(params.get('page')) ? params.get('page') : 'outlook', dataset: null, comparison: null, chart: null, dataPage: 0,
+  view: params.get('page')==='compare'&&!params.has('legacy')?'outlook':['outlook','compare','evidence','data'].includes(params.get('page')) ? params.get('page') : 'outlook', dataset: null, comparison: null, chart: null,
   timing: null, timingDataset: null, timingBaseline: ['previous','recent2','all3'].includes(params.get('baseline')) ? params.get('baseline') : 'recent2',
   analysisView: ['forecast','peak','timing'].includes(params.get('analysis')) ? params.get('analysis') : 'forecast',
   peakThreshold: ['0.9','0.93','0.94','0.95','0.98'].includes(params.get('zone')) ? Number(params.get('zone')) : .95,
@@ -92,6 +93,7 @@ function persistUrl() {
   try { history.replaceState(null, '', `${location.pathname}${p.size ? `?${p}` : ''}`); } catch {}
 }
 document.documentElement.dataset.theme = 'dark';
+const dailyDataController = initDailyDataView({root: $('#data-view'), getBitcoinDataset: () => state.dataset, download, toast});
 let initialPageRendered = false;
 function finishInitialPage() {
   if (document.documentElement.dataset.boot !== 'loading' || !state.dataset || !initialPageRendered) return;
@@ -325,22 +327,7 @@ $('#close-method').addEventListener('click', () => $('#method-dialog').close());
 $('#method-dialog').addEventListener('click', e => { if(e.target === $('#method-dialog')) { const r=e.target.getBoundingClientRect(); if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom) e.target.close(); } });
 
 function renderData() {
-  if (!state.dataset) return;
-  const rows = state.dataset.prices;
-  const chosen = $('#data-year').value;
-  const years = [...new Set(rows.map(r=>r[0].slice(0,4)))].reverse();
-  $('#data-year').innerHTML = '<option value="all">전체 연도</option>' + years.map(y=>`<option value="${y}">${y}년</option>`).join('');
-  $('#data-year').value = years.includes(chosen) ? chosen : 'all';
-  $('#data-summary').innerHTML = `<div><label>관측 범위</label><strong>${rows[0][0]} — ${rows.at(-1)[0]}</strong></div><div><label>일별 관측 수</label><strong>${nfmt(rows.length)}개</strong></div><div><label>가격 정의</label><strong>USD · UTC 일말 · 1d</strong></div>`;
-  const filter = $('#data-year').value;
-  const filtered = rows.map((r,i)=>({date:r[0],price:r[1],change:i&&utcDay(r[0])-utcDay(rows[i-1][0])===1?(r[1]/rows[i-1][1]-1)*100:null})).filter(r=>filter==='all'||r.date.startsWith(filter)).reverse();
-  const shell=$('#data-view .table-scroll');
-  const pageSize=Math.max(3,Math.floor((shell.clientHeight-34)/34)||12);
-  const pages = Math.max(1,Math.ceil(filtered.length/pageSize)); state.dataPage = Math.max(0,Math.min(pages-1,state.dataPage));
-  $('#data-result-count').textContent = `${nfmt(filtered.length)}개 관측`;
-  $('#data-body').innerHTML = filtered.slice(state.dataPage*pageSize,state.dataPage*pageSize+pageSize).map(r=>`<tr><td>${r.date}</td><td>${money(r.price,r.price<10?6:4)}</td><td class="${tone(r.change)}">${pct(r.change)}</td><td>PriceUSD</td></tr>`).join('');
-  $('#data-page-label').textContent = `${nfmt(state.dataPage+1)} / ${nfmt(pages)} 페이지 · ${pageSize}행씩 표시`;
-  $('#data-prev').disabled = state.dataPage === 0; $('#data-next').disabled = state.dataPage === pages-1;
+  if (state.dataset) dailyDataController.render();
 }
 $$('[data-view]').forEach(b => b.addEventListener('click', () => {
   state.view = b.dataset.view;
@@ -350,8 +337,6 @@ $$('[data-view]').forEach(b => b.addEventListener('click', () => {
   persistUrl();
   window.scrollTo({top:0,behavior:'instant'});
 }));
-$('#data-year').addEventListener('change',()=>{state.dataPage=0;renderData();});
-$('#data-prev').addEventListener('click',()=>{state.dataPage--;renderData();}); $('#data-next').addEventListener('click',()=>{state.dataPage++;renderData();});
 // Comparison controls must not capture clicks or keys that bubble from the
 // separate analysis dock, which also publishes its current mode in the DOM.
 $$('#compare-view .anchor-tab[data-mode]').forEach(b=>b.addEventListener('click',()=>{state.mode=b.dataset.mode;state.cursor=null;state.hidden.clear();render();}));
@@ -374,7 +359,6 @@ $('#export-timing').addEventListener('click',()=>{if(!state.timing)return;downlo
 $('#export-research').addEventListener('click',()=>{if(!state.forecast)return;download(`bitcoin-peak-forecast-${state.forecast.asOf}.json`,new Blob([JSON.stringify({peakZones:state.peakAnalysis,forecast:state.forecast},null,2)],{type:'application/json'}));closeExport();toast('고점권 비교와 미래 시나리오의 계산 결과를 저장했습니다.');});
 $('#export-forecast-svg').addEventListener('click',()=>{if(!state.forecast)return;download(`bitcoin-future-scenarios-${state.forecast.asOf}.svg`,new Blob([exportForecastSvg()],{type:'image/svg+xml;charset=utf-8'}));toast('조건과 기준일을 포함한 미래 시나리오 그래프를 저장했습니다.');});
 $('#export-csv').addEventListener('click',()=>{if(!state.comparison)return;const c={...state.comparison,series:state.comparison.series.filter(s=>!state.hidden.has(s.id))};download(`bitcoin-cycles-${state.mode}-${c.latest.date}.csv`,new Blob(['\uFEFF'+comparisonToCsv(c)],{type:'text/csv;charset=utf-8'}));closeExport();toast('현재 표시한 사이클의 비교 데이터를 저장했습니다.');});
-$('#export-raw').addEventListener('click',()=>{if(!state.dataset)return;const rows=state.dataset.prices.filter(r=>$('#data-year').value==='all'||r[0].startsWith($('#data-year').value));download(`btc-usd-daily-${$('#data-year').value}.csv`,new Blob(['\uFEFFdate_utc,price_usd,metric,source,license\r\n'+rows.map(r=>`${r[0]},${r[1]},PriceUSD,Coin Metrics,CC BY-NC 4.0`).join('\r\n')+'\r\n'],{type:'text/csv;charset=utf-8'}));toast('선택한 연도의 원자료를 저장했습니다.');});
 function chartExport() {
   const c=state.chart, comp=state.comparison, clone=$('#cycle-chart').cloneNode(true);clone.querySelector('#chart-hitarea')?.remove();
   const css=getComputedStyle(document.documentElement), bg=css.getPropertyValue('--surface').trim(),fg=css.getPropertyValue('--text').trim(),muted=css.getPropertyValue('--muted').trim();

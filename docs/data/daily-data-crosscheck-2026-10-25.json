@@ -1,0 +1,329 @@
+{
+  "version": 1,
+  "status": "bounded-independent-research-check",
+  "inputRevision": "aa73c8c96be7679ef2b5d8e8adde1887a2544475",
+  "generatedAt": "2026-10-25T00:00:54.291044+00:00",
+  "userTimezone": "Asia/Seoul",
+  "method": "Independent Python JSON reader; chronological running peak and worst close/peak-1; annual last close divided by previous year last close; six exact UTC Coinbase bucket timestamps selected from public API responses. No application functions imported.",
+  "limits": [
+    "Six BTC dates only; not a complete independent validation of all dates or assets.",
+    "Coin Metrics reference prices and Coinbase venue last-trade prices have different definitions.",
+    "Price returns exclude dividends, fees, taxes and staking rewards.",
+    "All-history MDD spans each asset own first observation; it is not a common-window comparison.",
+    "This receipt does not test the new UI or profitability of signal rules."
+  ],
+  "assets": [
+    {
+      "symbol": "BTC",
+      "input": "dist/data/btc-daily.json",
+      "inputSha256": "ba002ee272c8b8f6fe2111e32df85080b3352756d1f46ba11d5dffa5c4ab5bf2",
+      "firstDate": "2010-07-18",
+      "lastDate": "2026-10-23",
+      "observationCount": 5942,
+      "sourceRetrievedAt": "2026-10-24T04:37:13.250Z",
+      "allHistoryMaxDrawdownPct": -92.74863345469116,
+      "maxDrawdownPeakDate": "2011-06-08",
+      "maxDrawdownTroughDate": "2011-11-18",
+      "latestDrawdownPct": -35.169607085363474,
+      "annualPriceReturns": [
+        {
+          "year": 2011,
+          "baselineDate": "2010-12-31",
+          "baselinePrice": 0.3,
+          "endDate": "2011-12-31",
+          "endPrice": 4.71430633138515,
+          "returnPct": 1471.43544379505,
+          "partial": false
+        },
+        {
+          "year": 2012,
+          "baselineDate": "2011-12-31",
+          "baselinePrice": 4.71430633138515,
+          "endDate": "2012-12-31",
+          "endPrice": 13.5455524436002,
+          "returnPct": 187.32864373750334,
+          "partial": false
+        },
+        {
+          "year": 2013,
+          "baselineDate": "2012-12-31",
+          "baselinePrice": 13.5455524436002,
+          "endDate": "2013-12-31",
+          "endPrice": 729.557582910579,
+          "returnPct": 5285.95665217973,
+          "partial": false
+        },
+        {
+          "year": 2014,
+          "baselineDate": "2013-12-31",
+          "baselinePrice": 729.557582910579,
+          "endDate": "2014-12-31",
+          "endPrice": 320.662287258913,
+          "returnPct": -56.04702154151742,
+          "partial": false
+        },
+        {
+          "year": 2015,
+          "baselineDate": "2014-12-31",
+          "baselinePrice": 320.662287258913,
+          "endDate": "2015-12-31",
+          "endPrice": 429.677153419053,
+          "returnPct": 33.9967843091314,
+          "partial": false
+        },
+        {
+          "year": 2016,
+          "baselineDate": "2015-12-31",
+          "baselinePrice": 429.677153419053,
+          "endDate": "2016-12-31",
+          "endPrice": 968.970597019287,
+          "returnPct": 125.51131455534362,
+          "partial": false
+        },
+        {
+          "year": 2017,
+          "baselineDate": "2016-12-31",
+          "baselinePrice": 968.970597019287,
+          "endDate": "2017-12-31",
+          "endPrice": 13921.4806414378,
+          "returnPct": 1336.7289042890015,
+          "partial": false
+        },
+        {
+          "year": 2018,
+          "baselineDate": "2017-12-31",
+          "baselinePrice": 13921.4806414378,
+          "endDate": "2018-12-31",
+          "endPrice": 3687.19994009351,
+          "returnPct": -73.51431191077174,
+          "partial": false
+        },
+        {
+          "year": 2019,
+          "baselineDate": "2018-12-31",
+          "baselinePrice": 3687.19994009351,
+          "endDate": "2019-12-31",
+          "endPrice": 7167.39505464641,
+          "returnPct": 94.3858529804771,
+          "partial": false
+        },
+        {
+          "year": 2020,
+          "baselineDate": "2019-12-31",
+          "baselinePrice": 7167.39505464641,
+          "endDate": "2020-12-31",
+          "endPrice": 29022.6714126242,
+          "returnPct": 304.92635317777916,
+          "partial": false
+        },
+        {
+          "year": 2021,
+          "baselineDate": "2020-12-31",
+          "baselinePrice": 29022.6714126242,
+          "endDate": "2021-12-31",
+          "endPrice": 46355.1173302747,
+          "returnPct": 59.72036712689128,
+          "partial": false
+        },
+        {
+          "year": 2022,
+          "baselineDate": "2021-12-31",
+          "baselinePrice": 46355.1173302747,
+          "endDate": "2022-12-31",
+          "endPrice": 16524.2178024547,
+          "returnPct": -64.35298030911751,
+          "partial": false
+        },
+        {
+          "year": 2023,
+          "baselineDate": "2022-12-31",
+          "baselinePrice": 16524.2178024547,
+          "endDate": "2023-12-31",
+          "endPrice": 42217.1587913501,
+          "returnPct": 155.48657912920194,
+          "partial": false
+        },
+        {
+          "year": 2024,
+          "baselineDate": "2023-12-31",
+          "baselinePrice": 42217.1587913501,
+          "endDate": "2024-12-31",
+          "endPrice": 93389.7326016949,
+          "returnPct": 121.2127373688387,
+          "partial": false
+        },
+        {
+          "year": 2025,
+          "baselineDate": "2024-12-31",
+          "baselinePrice": 93389.7326016949,
+          "endDate": "2025-12-31",
+          "endPrice": 87516.9780376972,
+          "returnPct": -6.28843706946336,
+          "partial": false
+        },
+        {
+          "year": 2026,
+          "baselineDate": "2025-12-31",
+          "baselinePrice": 87516.9780376972,
+          "endDate": "2026-10-23",
+          "endPrice": 80924.1837657744,
+          "returnPct": -7.53316033042527,
+          "partial": true
+        }
+      ]
+    },
+    {
+      "symbol": "ETH",
+      "input": "dist/data/eth-ohlc.json",
+      "inputSha256": "0147ff056524da2a340d6b557bdd16d2a1cf32a82c97c96320acac0ed7e059d7",
+      "firstDate": "2016-05-18",
+      "lastDate": "2026-10-23",
+      "observationCount": 3809,
+      "sourceRetrievedAt": "2026-10-24T20:50:27.224Z",
+      "allHistoryMaxDrawdownPct": -94.01163042380341,
+      "maxDrawdownPeakDate": "2018-01-13",
+      "maxDrawdownTroughDate": "2018-12-14",
+      "latestDrawdownPct": -50.646624883052795,
+      "annualPriceReturns": null
+    },
+    {
+      "symbol": "MSTR",
+      "input": "dist/data/mstr-ohlc.json",
+      "inputSha256": "7c387852ce8843bcbce6baa56b5ecdde7dca8bc1e52cbe414da7de3a21a1156f",
+      "firstDate": "1998-06-11",
+      "lastDate": "2026-10-23",
+      "observationCount": 7137,
+      "sourceRetrievedAt": "2026-10-24T20:50:28.725Z",
+      "allHistoryMaxDrawdownPct": -99.85623003575749,
+      "maxDrawdownPeakDate": "2000-03-10",
+      "maxDrawdownTroughDate": "2002-07-26",
+      "latestDrawdownPct": -69.18515107853618,
+      "annualPriceReturns": null
+    },
+    {
+      "symbol": "BMNR",
+      "input": "dist/data/bmnr-ohlc.json",
+      "inputSha256": "ccef07f11f4e20ad160b20f7d02d3f24c997cc6216b6cdd2876575903713bfd6",
+      "firstDate": "2025-06-05",
+      "lastDate": "2026-10-23",
+      "observationCount": 349,
+      "sourceRetrievedAt": "2026-10-24T20:50:29.071Z",
+      "allHistoryMaxDrawdownPct": -90.14074042991356,
+      "maxDrawdownPeakDate": "2025-07-03",
+      "maxDrawdownTroughDate": "2026-06-30",
+      "latestDrawdownPct": -83.40740768997757,
+      "annualPriceReturns": null
+    }
+  ],
+  "coinbaseComparisons": [
+    {
+      "date": "2020-12-31",
+      "url": "https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=86400&start=2020-12-31T00:00:00Z&end=2021-01-01T00:00:00Z",
+      "retrievedAt": "2026-10-25T00:00:54.249907+00:00",
+      "httpStatus": 200,
+      "responseSha256": "5d245856624f3ccacc4bff0d270432a58a6193daffe1177205cadc0551b33cfb",
+      "selectedCandle": [
+        1609372800,
+        28000,
+        29321.9,
+        28897.42,
+        28990.08,
+        28813.88691084
+      ],
+      "coinMetricsCloseUsd": 29022.6714126242,
+      "coinbaseCloseUsd": 28990.08,
+      "coinbaseRelativeDifferencePct": -0.11229639119306745
+    },
+    {
+      "date": "2021-12-31",
+      "url": "https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=86400&start=2021-12-31T00:00:00Z&end=2022-01-01T00:00:00Z",
+      "retrievedAt": "2026-10-25T00:00:54.255213+00:00",
+      "httpStatus": 200,
+      "responseSha256": "27b66ff053ff73aab2246139ceffe772edd1269d406cb690fc1a6dc3da214390",
+      "selectedCandle": [
+        1640908800,
+        45650,
+        48574.7,
+        47122.09,
+        46211.24,
+        19010.24134509
+      ],
+      "coinMetricsCloseUsd": 46355.1173302747,
+      "coinbaseCloseUsd": 46211.24,
+      "coinbaseRelativeDifferencePct": -0.31038068407763797
+    },
+    {
+      "date": "2023-12-31",
+      "url": "https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=86400&start=2023-12-31T00:00:00Z&end=2024-01-01T00:00:00Z",
+      "retrievedAt": "2026-10-25T00:00:54.258283+00:00",
+      "httpStatus": 200,
+      "responseSha256": "30072c94a2f11b4d30039751bf02f25d351f61bcb716091a1007329b25397468",
+      "selectedCandle": [
+        1703980800,
+        41964.68,
+        42850,
+        42139.32,
+        42288.06,
+        11397.57303743
+      ],
+      "coinMetricsCloseUsd": 42217.1587913501,
+      "coinbaseCloseUsd": 42288.06,
+      "coinbaseRelativeDifferencePct": 0.16794405563935744
+    },
+    {
+      "date": "2024-12-31",
+      "url": "https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=86400&start=2024-12-31T00:00:00Z&end=2025-01-01T00:00:00Z",
+      "retrievedAt": "2026-10-25T00:00:54.289001+00:00",
+      "httpStatus": 200,
+      "responseSha256": "940f5eb5e46cf88e37af7368a61b395e0ff1abc28a48a863006df853bc0be549",
+      "selectedCandle": [
+        1735603200,
+        91887.13,
+        96148.94,
+        92620.7,
+        93354.22,
+        10348.6325655
+      ],
+      "coinMetricsCloseUsd": 93389.7326016949,
+      "coinbaseCloseUsd": 93354.22,
+      "coinbaseRelativeDifferencePct": -0.038026237687549536
+    },
+    {
+      "date": "2025-12-31",
+      "url": "https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=86400&start=2025-12-31T00:00:00Z&end=2026-01-01T00:00:00Z",
+      "retrievedAt": "2026-10-25T00:00:54.290531+00:00",
+      "httpStatus": 200,
+      "responseSha256": "0c794ddc988b4928509ff9b6227d8833a4f17b8a56e55c0c492ff8baaf07d0cc",
+      "selectedCandle": [
+        1767139200,
+        87082.64,
+        89100,
+        88397.24,
+        87497.94,
+        7261.18123917
+      ],
+      "coinMetricsCloseUsd": 87516.9780376972,
+      "coinbaseCloseUsd": 87497.94,
+      "coinbaseRelativeDifferencePct": -0.02175353642696054
+    },
+    {
+      "date": "2026-10-23",
+      "url": "https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=86400&start=2026-10-23T00:00:00Z&end=2026-10-24T00:00:00Z",
+      "retrievedAt": "2026-10-25T00:00:54.287905+00:00",
+      "httpStatus": 200,
+      "responseSha256": "1733bc35ee97d0eab800b84650caa20b715c596c7a4554b52a493aeace9fb305",
+      "selectedCandle": [
+        1792713600,
+        80401.34,
+        81962,
+        81305.9,
+        81078.04,
+        4904.75790284
+      ],
+      "coinMetricsCloseUsd": 80924.1837657744,
+      "coinbaseCloseUsd": 81078.04,
+      "coinbaseRelativeDifferencePct": 0.1901239247230624
+    }
+  ],
+  "coinbase2021ReturnPct": 59.40363048325494
+}
