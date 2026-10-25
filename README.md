@@ -481,3 +481,4 @@ python scripts/render-detailed-chart.py --font-dir /path/to/fonts --output build
 v1.4에서는 상단 상태·날짜 카드와 하단 정보줄을 없애고, 값·근거·설정·그래프 선택을 하나의 오른쪽 패널에 모았습니다. 당시 작은 화면 겹침 기준은 600px이었으며, v1.5에서는 900px로 조정했습니다. 모형의 입력과 가정을 구분하는 [모델 범위 설명](docs/MODEL_SCOPE.md)도 v1.4에서 추가했습니다. 당시의 검수·공개 배포 기록은 [v1.4 검증 문서](docs/RIGHT_PANEL_VERIFICATION.md)에 보존합니다.
 
 ![v1.4 당시 한 화면의 통합 차트](docs/figures/Viewport_Chart_Workspace.jpg)
+README.md
