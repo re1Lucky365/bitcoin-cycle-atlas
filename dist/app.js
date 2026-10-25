@@ -1,18 +1,18 @@
 import { buildComparison, getAnchors, getPointAtDay, comparisonToCsv, validateDataset, utcDay } from './cycle-engine.js?v=1.19.0';
 import { fetchLatestDataset } from "./data-source.js?v=1.21.0";
 import { inspectPublishedDataset, shouldCheckPublishedSnapshot } from "./published-data.js?v=1.21.0";
-import { analyzeCycleTiming } from './cycle-timing.js?v=1.19.0';
+import { analyzeCycleTiming } from './cycle-timing.js?v=1.23.0';
 import { renderTimingView } from './timing-view.js?v=1.11.0';
-import { analyzePeakZones } from './peak-zones.js?v=1.19.0';
-import { analyzeCycleForecast } from './forecast-engine.js?v=1.19.0';
+import { analyzePeakZones } from './peak-zones.js?v=1.23.0';
+import { analyzeCycleForecast } from './forecast-engine.js?v=1.23.0';
 import { renderPeakView } from './peak-view.js?v=1.19.0';
 import { renderForecastView, exportForecastSvg } from './forecast-view.js?v=1.19.0';
 // Changed release modules use a versioned URL so a cached v1.5 module cannot
 // leave a new long-horizon page running the old three-year workbench.
 import { initViewportWorkspace } from './viewport-workspace.js?v=1.19.0';
-import { initLabView } from "./lab-view.js?v=1.21.0";
+import { initLabView } from "./lab-view.js?v=1.23.0";
 import { initEvidenceView, showEvidenceView } from './evidence-view.js?v=1.20.0';
-import { initDailyDataView } from './daily-data-view.js?v=1.22.0';
+import { initDailyDataView } from './daily-data-view.js?v=1.23.0';
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];

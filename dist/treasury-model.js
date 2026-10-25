@@ -1,5 +1,5 @@
 import { TREASURY_SNAPSHOTS, TREASURY_MARKET_ANCHORS, TREASURY_FUTURE_EVENTS, TREASURY_TARGETS } from './treasury-research.js?v=1.19.0';
-import { detectDirectionalChanges } from "./market-structure.js?v=1.21.0";
+import { detectDirectionalChanges } from "./market-structure.js?v=1.23.0";
 
 const DAY = 86400000, YEAR = 365.25;
 const day = value => {

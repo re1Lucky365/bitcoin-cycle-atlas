@@ -18,10 +18,12 @@ export function shiftCalendarMonths(date, months) {
   utcDay(date);
   if (!Number.isSafeInteger(months)) throw new TypeError('Calendar month shift must be an integer');
   const [year, month, day] = date.split('-').map(Number);
-  const first = new Date(Date.UTC(year, month - 1 + months, 1));
-  const lastDay = new Date(Date.UTC(first.getUTCFullYear(), first.getUTCMonth() + 1, 0)).getUTCDate();
-  first.setUTCDate(Math.min(day, lastDay));
-  return first.toISOString().slice(0, 10);
+  const targetMonth = year * 12 + month - 1 + months;
+  if (!Number.isSafeInteger(targetMonth) || targetMonth < 0 || targetMonth >= 10000 * 12) throw new RangeError('Calendar month shift must stay in years 0000 through 9999');
+  const targetYear = Math.floor(targetMonth / 12), monthIndex = targetMonth % 12;
+  const leap = targetYear % 4 === 0 && (targetYear % 100 !== 0 || targetYear % 400 === 0);
+  const lastDay = [31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][monthIndex];
+  return `${String(targetYear).padStart(4, '0')}-${String(monthIndex + 1).padStart(2, '0')}-${String(Math.min(day, lastDay)).padStart(2, '0')}`;
 }
 
 export function calendarScenarioWindow(referenceDate, earliestMonths = 5, latestMonths = 3) {

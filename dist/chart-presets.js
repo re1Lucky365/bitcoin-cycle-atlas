@@ -1,5 +1,5 @@
 import { utcDay, dateFromDay } from './cycle-engine.js?v=1.19.0';
-import { shiftCalendarMonths } from './cycle-timing.js?v=1.19.0';
+import { shiftCalendarMonths } from './cycle-timing.js?v=1.23.0';
 
 export const DEFAULT_CHART_SPAN = 'focus';
 export const CHART_SPANS = Object.freeze(['focus', 'near', 'all', 'history']);

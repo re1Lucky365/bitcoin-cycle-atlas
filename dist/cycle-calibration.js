@@ -1,5 +1,5 @@
 import { HALVINGS, utcDay, dateFromDay, validateDataset } from './cycle-engine.js?v=1.19.0';
-import { shiftCalendarMonths } from './cycle-timing.js?v=1.19.0';
+import { shiftCalendarMonths } from './cycle-timing.js?v=1.23.0';
 
 /**
  * An observed-prefix clock adjustment, not a calibrated price prediction.
