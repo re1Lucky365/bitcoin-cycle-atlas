@@ -4,7 +4,7 @@
 
 `node scripts/verify-cycle-decision.mjs`는 **실제 JavaScript 공개 함수**에 유한한 입력 집합을 넣고 독립 계산과 비교한다. 현재 구현은 PASS이며 **27개 의도적 결함**을 각각 예정된 실패로 탐지했다. 기존 9개 결함 검사를 보존하고 횡보 기간·미래 경계·공유 사이클 소속에 관한 18개 검사를 추가했다. 이 검증은 시장 예측, 수익성, 고점·저점 적중률 또는 무한한 입력 영역에 대한 수학적 증명이 아니다.
 
-기준 저장소 커밋은 `3a1be8370a9fd9a71861be3f929493370f08a5ef`이다. 검토한 `dist/cycle-decision.js`의 SHA-256은 `7dad7868a73f43aaea1ca656bf9223a7a4fdabe1d88da75b6d2b59be12ebb0a9`이며 실행 환경은 Node `v24.22.1`이다. 현재 소스의 정확한 SHA-256과 사용한 Node 버전은 매 실행 결과에 출력한다. 커밋 이후에는 프로젝트의 `verify-cycle-decision` 스킬에 기록된 대응 검토 커밋도 확인한다.
+구현과 검증의 대응 검토 커밋은 `8039187b6e2505f306f16b7baf52ccf99e574e39`이다. GitHub에 게시한 이 커밋을 다시 받아 `npm run verify:cycle-table`을 실행해 PASS를 확인했다. 검토한 `dist/cycle-decision.js`의 SHA-256은 `7dad7868a73f43aaea1ca656bf9223a7a4fdabe1d88da75b6d2b59be12ebb0a9`이며 실행 환경은 Node `v24.22.1`이다. 현재 소스의 정확한 SHA-256과 사용한 Node 버전은 매 실행 결과에 출력한다. 프로젝트의 `verify-cycle-decision` 스킬도 같은 대응 검토 커밋과 해시를 기록한다.
 
 ## 중요한 발견과 수정
 

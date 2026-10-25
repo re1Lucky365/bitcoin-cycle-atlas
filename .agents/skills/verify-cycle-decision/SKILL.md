@@ -11,7 +11,7 @@ Keep the promise: **the table never turns future assumptions into realized resul
 
 - Covered code: `dist/cycle-decision.js`, specifically `buildCycleDecisionTable`, `makeRow`, `observedRisk`, `checkpointAction`, `currentObservation`, `sidewaysRuns`, and `rangeRow`.
 - Integration contract: chart marker IDs, endpoint prices and cutoff must match the supplied selected `buildCycleMilestones` result and forecast.
-- Reviewed worktree basis: commit `3a1be8370a9fd9a71861be3f929493370f08a5ef` on 2026-10-25. New module reviewed SHA-256: `7dad7868a73f43aaea1ca656bf9223a7a4fdabe1d88da75b6d2b59be12ebb0a9`. Reviewed runtime: Node `v24.22.1`. The runner prints the current hash; a different hash requires correspondence review before advancing this record.
+- Reviewed committed implementation: `8039187b6e2505f306f16b7baf52ccf99e574e39` on 2026-10-25, verified again after fetching the published commit with `npm run verify:cycle-table`. Covered module SHA-256: `7dad7868a73f43aaea1ca656bf9223a7a4fdabe1d88da75b6d2b59be12ebb0a9`. Reviewed runtime: Node `v24.22.1`. The runner prints the current hash; a different hash requires correspondence review before advancing this record.
 - Verification: `scripts/verify-cycle-decision.mjs`. Detailed bounds and findings: `docs/CYCLE_TABLE_VERIFICATION.md`. The state diagram in `docs/formal-cycle-table/provenance.mmd` documents actual classification branches; it is not a TLA+ proof.
 
 ## Run
