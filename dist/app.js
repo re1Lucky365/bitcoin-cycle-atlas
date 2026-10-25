@@ -12,7 +12,8 @@ import { renderForecastView, exportForecastSvg } from './forecast-view.js?v=1.19
 import { initViewportWorkspace } from './viewport-workspace.js?v=1.19.0';
 import { initLabView } from "./lab-view.js?v=1.24.0";
 import { initEvidenceView, showEvidenceView } from './evidence-view.js?v=1.20.0';
-import { initDailyDataView } from './daily-data-view.js?v=1.24.0';
+import { initDailyDataView } from './daily-data-view.js?v=1.25.0';
+import { createAssetComparisonLoader } from './asset-comparison-source.js?v=1.25.0';
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -95,7 +96,7 @@ function persistUrl() {
 document.documentElement.dataset.theme = 'dark';
 let initialPageRendered = false;
 function finishInitialPage() {
-  if (document.documentElement.dataset.boot !== 'loading' || !state.dataset || !initialPageRendered) return;
+  if (document.documentElement.dataset.boot !== 'loading' || (!state.dataset && state.view !== 'data') || !initialPageRendered) return;
   document.removeEventListener('atlas:page-ready', onInitialPageReady);
   document.dispatchEvent(new CustomEvent('atlas:ready'));
 }
@@ -108,17 +109,15 @@ document.addEventListener('atlas:page-ready', onInitialPageReady);
 initViewportWorkspace(icon);
 const outlookController = initLabView();
 const dailyDataController = initDailyDataView({
-  root: $('#data-view'), getCycleContext: () => outlookController.getCycleContext(), download, toast,
-  onSelectCycleRow(row) {
-    if (!outlookController.focusCycleRow(row)) return;
-    state.view = 'outlook'; syncPage(); persistUrl();
-    $('#lab-chart').focus({ preventScroll: true });
-  },
+  root: $('#data-view'), download, toast,
+  getComparisonDataset: createAssetComparisonLoader({
+    embeddedData: () => document.getElementById('embedded-asset-comparison-data')?.textContent ?? null,
+  }),
 });
 initEvidenceView();
 function syncPage() {
   document.body.dataset.page=state.view;
-  document.title = state.view === 'data' ? '사이클 판단표 · Bitcoin Cycle Atlas' : 'Bitcoin Cycle Atlas';
+  document.title = state.view === 'data' ? '자산 비교표 · Bitcoin Cycle Atlas' : 'Bitcoin Cycle Atlas';
   for (const view of ['outlook','compare','evidence','data']) document.querySelector(`#${view}-view`).hidden=state.view!==view;
   $$('[data-view]').forEach(n=>{const active=n.dataset.view===state.view;n.classList.toggle('active',active);if(active)n.setAttribute('aria-current','page');else n.removeAttribute('aria-current');});
   showEvidenceView(state.view==='evidence');
@@ -126,6 +125,7 @@ function syncPage() {
   outlookController.showCompare(state.view==='compare');
 }
 syncPage();
+if (state.view === 'data') renderData();
 
 function render(recalculate = true) {
   if (!state.dataset) return;
@@ -150,7 +150,7 @@ function render(recalculate = true) {
   syncCursorInputs();
   }
   outlookController.setDataset(state.dataset);
-  if(state.view==='data'){renderData();initialPageRendered=true;}
+  if(state.view==='data') renderData();
   document.dispatchEvent(new CustomEvent('atlas:dataset',{detail:{latestObservationDate:state.dataset.prices.at(-1)[0]}}));
   $('#sidebar-asof').textContent=`관측 · ${state.dataset.prices.at(-1)[0].replaceAll('-','.')} UTC`;
   $('#loading-state').hidden = true;
@@ -335,7 +335,11 @@ $('#close-method').addEventListener('click', () => $('#method-dialog').close());
 $('#method-dialog').addEventListener('click', e => { if(e.target === $('#method-dialog')) { const r=e.target.getBoundingClientRect(); if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom) e.target.close(); } });
 
 function renderData() {
-  if (state.dataset) dailyDataController.render();
+  return dailyDataController.render().then(() => {
+    if (state.view !== 'data') return;
+    initialPageRendered = true;
+    finishInitialPage();
+  });
 }
 $$('[data-view]').forEach(b => b.addEventListener('click', () => {
   state.view = b.dataset.view;
@@ -380,6 +384,9 @@ $('#export-png').addEventListener('click',async()=>{if(!state.chart)return;close
 let refreshing=false;
 let checkingPublished=false,lastPublishedAttempt=Date.now();
 async function refreshPublishedSnapshot() {
+  // Re-evaluate freshness when a long-lived data page crosses UTC midnight.
+  // Same-day renders reuse the model; only the explicit table refresh downloads.
+  if (state.view === 'data' && document.visibilityState === 'visible') void renderData();
   if(checkingPublished||refreshing||!state.dataset||document.getElementById('embedded-btc-data')||!/^https?:$/.test(location.protocol)||!shouldCheckPublishedSnapshot(lastPublishedAttempt,Date.now(),document.visibilityState==='visible'))return;
   checkingPublished=true;lastPublishedAttempt=Date.now();
   const requestedDataset=state.dataset;
@@ -435,7 +442,8 @@ async function init() {
     const today=new Date().toISOString().slice(0,10);if(utcDay(today)-utcDay(state.dataset.prices.at(-1)[0])>1)refreshData({quiet:true});
   } catch (error) {
     console.error('Initial dataset or page setup failed', error);
-    document.dispatchEvent(new CustomEvent('atlas:boot-error'));
+    if (state.view === 'data') renderData();
+    else document.dispatchEvent(new CustomEvent('atlas:boot-error'));
   }
 }
 init();

@@ -1,183 +1,215 @@
-import { buildCycleDecisionTable } from './cycle-decision.js?v=1.24.0';
+import { buildAssetComparison } from './asset-comparison.js?v=1.25.0';
 
+const SYMBOLS = ['SPY', 'QQQ', 'NVDA', 'AAPL', 'GOOG', 'MSFT', 'AMZN', 'META', 'AVGO', 'PLTR', 'TSLA', 'HOOD', 'TLT', 'IEF', 'GLD', 'SLV', 'PDBC'];
+const LABELS = { 'strong-buy': '적극 매수', buy: '분할 매수', neutral: '중립', sell: '분할 매도', 'strong-sell': '적극 매도' };
 const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
 const numeric = value => typeof value === 'number' && Number.isFinite(value);
-const money = value => numeric(value) ? `$${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: value < 10 ? 4 : 2 })}` : '—';
+const price = value => numeric(value) && value > 0 ? value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: value < 1 ? 4 : 2 }) : '—';
 const tone = value => !numeric(value) || Math.abs(value) < .005 ? 'flat' : value > 0 ? 'gain' : 'loss';
-const scenarioRow = row => row.evidenceKind === 'scenario' || row.selectionKind === 'scenario' || row.kind === 'scenario' || row.kind === 'mixed';
-const currentRow = row => row.evidenceKind === 'current' || row.current === true;
-const actionId = row => row.action?.id || 'unavailable';
-const evidenceLabel = row => row.evidenceLabel || (scenarioRow(row) ? row.kind === 'observed' ? '관측 가격 · 가정 기준' : '미래 가정' : currentRow(row) ? '현재 관측' : row.provisional ? '관측 · 잠정' : '과거 · 사후 해석');
+const displayDate = value => typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value) ? value.replaceAll('-', '.') : '확인 중';
+const today = () => new Date().toISOString().slice(0, 10);
 
-export function formatDailyPercent(value, digits = 1) {
+export function formatDailyPercent(value, digits = 2) {
   if (!numeric(value)) return '—';
   const rounded = Math.abs(value) < .5 * 10 ** -digits ? 0 : value;
   return `${rounded > 0 ? '+' : rounded < 0 ? '−' : ''}${Math.abs(rounded).toLocaleString('en-US', { minimumFractionDigits: digits, maximumFractionDigits: digits })}%`;
 }
 
-/** Select whole point-to-point rows; their displayed dates and metric baselines never change. */
-export function cycleTableRows(model, { cycle = 'recent', evidence = 'all', allRanges = false } = {}) {
-  if (!model) return [];
-  const cutoff = new Date(`${model.asOf}T00:00:00Z`);
-  cutoff.setUTCFullYear(cutoff.getUTCFullYear() - 4);
-  const recentStart = cutoff.toISOString().slice(0, 10);
-  const eligible = model.rows.filter(row => {
-    if (evidence === 'observed' && scenarioRow(row)) return false;
-    if (evidence === 'scenario' && !scenarioRow(row)) return false;
-    if (cycle === 'recent') return scenarioRow(row) || row.endDate >= recentStart;
-    return cycle === 'all' || (row.cycleIds || [row.cycleId]).includes(cycle);
-  });
-  if (allRanges) return eligible;
-  const observedRanges = eligible.filter(row => row.phaseId === 'range' && !scenarioRow(row));
-  const recentObserved = observedRanges.findLast(row => !row.rightCensored) || observedRanges.at(-1);
-  const nextConditional = eligible.find(row => row.phaseId === 'range' && scenarioRow(row));
-  return eligible.filter(row => row.phaseId !== 'range' || row === recentObserved || row === nextConditional);
+function judgment(row) {
+  const result = row.judgment;
+  // An incomplete model must never turn unavailable data into a neutral or buy/sell badge.
+  if (result?.available === true && LABELS[result.id] === result.label && Number.isInteger(row.sampleYears) && row.sampleYears >= 5 && numeric(row.meanRisePct) && row.meanRisePct > 0 && numeric(row.meanFallPct) && row.meanFallPct < 0 && numeric(row.ytdPct) && row.coverage?.complete !== false) return result;
+  return { id: 'unavailable', label: '판단 보류', reason: result?.available === false && result.reason ? result.reason : '표본 또는 계산 조건이 충분하지 않아 판단을 보류합니다.', available: false };
+}
+
+function sampleDescription(row) {
+  if (!row.sampleYears) return '이전 연도의 유효한 관측 표본이 없습니다.';
+  const years = `${row.sampleStartYear}–${row.sampleEndYear} · ${row.sampleYears}개 연도`;
+  return `${years}${row.samplePartialFirstYear ? ` · 첫해는 ${row.firstPartialStartDate || row.source?.firstDate || row.sampleStartYear}부터의 일부 기간` : ''} · 올해 제외`;
+}
+
+function safeUrl(value) {
+  try { const url = new URL(value); return ['https:', 'http:'].includes(url.protocol) ? url.href : ''; } catch { return ''; }
+}
+
+function sourceLink(row) {
+  const source = row.source || {}, href = safeUrl(source.url);
+  return href ? `<a href="${esc(href)}" target="_blank" rel="noopener noreferrer">${esc(source.name || '가격 출처')} ↗</a>` : esc(source.name || '출처 확인 필요');
+}
+
+function sharedDate(rows, key) {
+  const dates = new Set(rows.map(row => row[key]).filter(Boolean));
+  return dates.size === 1 && rows.every(row => row[key]) ? [...dates][0] : null;
+}
+
+/** This is one row per asset, without filtering, pagination, or a second summary table. */
+export function renderAssetComparisonRows(rows = []) {
+  if (!rows.length) return '<tr><td colspan="10" class="asset-table-empty">표시할 자산 자료가 없습니다.</td></tr>';
+  const mixedStart = !sharedDate(rows, 'yearStartDate'), mixedLatest = !sharedDate(rows, 'latestDate');
+  return rows.map((row, index) => {
+    const firstInGroup = index === 0 || rows[index - 1].group !== row.group;
+    let groupCell = '';
+    if (firstInGroup) {
+      let count = 1;
+      while (rows[index + count]?.group === row.group) count++;
+      const words = String(row.group || '분류 없음').replace(/^(위험|안전)\s*자산$/, '$1 자산').split(' ');
+      groupCell = `<th scope="rowgroup" rowspan="${count}" class="asset-group">${words.map(word => `<span>${esc(word)}</span>`).join('')}</th>`;
+    }
+    const decision = judgment(row);
+    const dateNote = (date, mixed) => mixed && date ? `<small class="asset-cell-date">${esc(displayDate(date))}</small>` : '';
+    return `<tr data-asset-symbol="${esc(row.symbol)}"${firstInGroup ? ' class="asset-group-start"' : ''}>${groupCell}<td class="asset-category">${esc(row.category)}</td><th scope="row" class="asset-name">${esc(row.name)} <span>(${esc(row.symbol)})</span></th><td class="asset-samples" title="${esc(sampleDescription(row))}" aria-label="${esc(sampleDescription(row))}">${Number.isInteger(row.sampleYears) ? row.sampleYears : '—'}${row.samplePartialFirstYear ? '<sup aria-hidden="true">*</sup>' : ''}</td><td class="asset-return asset-return-${tone(row.meanRisePct)}" title="과거 각 연도의 첫 거래일 종가 대비 연중 최고 종가 상승률을 같은 비중으로 평균">${formatDailyPercent(row.meanRisePct)}</td><td class="asset-return asset-return-${tone(row.meanFallPct)}" title="과거 각 연도의 첫 거래일 종가 대비 연중 최저 종가 낙폭을 같은 비중으로 평균 · MDD 아님">${formatDailyPercent(row.meanFallPct)}</td><td class="asset-price" title="${esc(`${row.yearStartDate || '관측 없음'} · ${row.currency || 'USD'} · 올해 첫 거래일 종가`)}">${price(row.yearStartPrice)}${dateNote(row.yearStartDate, mixedStart)}</td><td class="asset-price asset-latest" title="${esc(`${row.latestDate || '관측 없음'} · ${row.currency || 'USD'} · 최근 관측 종가`)}">${price(row.latestPrice)}${dateNote(row.latestDate, mixedLatest)}</td><td class="asset-return asset-ytd asset-return-${tone(row.ytdPct)}" title="${esc(`${row.yearStartDate || '—'} → ${row.latestDate || '—'} · (최근 종가 ÷ 연초 종가 − 1) × 100`)}">${formatDailyPercent(row.ytdPct)}</td><td class="asset-judgment-cell"><button type="button" class="asset-judgment asset-judgment-${decision.id}" data-asset-reason="${esc(row.symbol)}" title="${esc(decision.reason)}" aria-label="${esc(`${row.name} ${decision.label}: ${decision.reason}`)}">${decision.label}</button></td></tr>`;
+  }).join('');
 }
 
 function csvCell(value) {
   if (value == null || (typeof value === 'number' && !Number.isFinite(value))) return '';
   let text = String(value);
-  if (typeof value !== 'number' && /^[=+\-@\t\r]/.test(text)) text = `'${text}`;
+  if (typeof value !== 'number' && (/^[\u0000-\u0020]*[=+\-@]/.test(text) || /^[\t\r]/.test(text))) text = `'${text}`;
   return /[",\r\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
 }
 
-export function cycleDecisionCsv(model, rows = model?.rows || [], metadata = {}) {
+export function assetComparisonCsv(model) {
   const fields = [
-    ['as_of', 'symbol', 'cycle', 'start_date', 'end_date', 'elapsed_days', 'elapsed_weeks', 'phase', 'review_stage', 'review_scope', 'reason', 'evidence', 'provisional', 'price_change_pct', 'period_mdd_pct', 'mdd_peak_date', 'mdd_trough_date', 'source', 'source_url', 'retrieved_at', 'scenario', 'interpretation'],
-    ...rows.map(row => [model.asOf, 'BTC', row.cycleLabel, row.startDate, row.endDate, row.days, row.weeks, row.phaseLabel, row.action?.label, row.action?.scope || 'end-marker', row.action?.reason || row.reason, evidenceLabel(row), Boolean(row.provisional), row.returnPct, row.mddPct, row.mddPeakDate, row.mddTroughDate, metadata.sourceName || 'Coin Metrics', metadata.sourceUrl || '', metadata.retrievedAt || '', scenarioRow(row) ? metadata.scenarioLabel || '' : '', scenarioRow(row) ? 'conditional-scenario-not-a-probability' : currentRow(row) || row.action?.scope === 'period' ? 'observed-rule-not-a-trading-strategy' : 'retrospective-not-a-historical-trade-signal']),
+    ['comparison_as_of', 'comparison_year', 'group', 'category', 'symbol', 'name', 'currency', 'sample_years', 'sample_start_year', 'sample_end_year', 'partial_first_year', 'first_partial_start_date', 'mean_annual_rise_pct', 'mean_annual_fall_pct_not_mdd', 'year_start_date', 'year_start_close', 'latest_date', 'latest_close', 'year_to_date_pct', 'judgment', 'judgment_reason', 'judgment_available', 'strong_buy_threshold_pct', 'buy_threshold_pct', 'sell_threshold_pct', 'strong_sell_threshold_pct', 'coverage_status', 'coverage_issues', 'source', 'source_url', 'price_definition', 'retrieved_at', 'historical_average_method', 'interpretation'],
+    ...(model?.rows || []).map(row => {
+      const decision = judgment(row), thresholds = row.judgment?.thresholds || {}, source = row.source || {};
+      return [model.asOf, model.year, row.group, row.category, row.symbol, row.name, row.currency || 'USD', row.sampleYears, row.sampleStartYear, row.sampleEndYear, Boolean(row.samplePartialFirstYear), row.firstPartialStartDate, row.meanRisePct, row.meanFallPct, row.yearStartDate, row.yearStartPrice, row.latestDate, row.latestPrice, row.ytdPct, decision.label, decision.reason, decision.available, thresholds.strongBuyPct, thresholds.buyPct, thresholds.sellPct, thresholds.strongSellPct, row.coverage?.status, (row.coverage?.issues || []).join(' | '), source.name, source.url, source.priceDefinition, source.retrievedAt, 'equal-weight prior-calendar-year max/min close versus first-session close; current year excluded; listing partial year disclosed', 'descriptive historical-range rule; not a probability or position size'];
+    }),
   ];
   return '\uFEFF' + fields.map(row => row.map(csvCell).join(',')).join('\r\n') + '\r\n';
 }
 
-function actionMarkup(row) {
-  return `<span class="cycle-review cycle-review-${esc(actionId(row))}">${esc(row.action?.label || '판단 보류')}</span>`;
-}
-function duration(row) {
-  return numeric(row.days) && row.days > 0 ? `${Math.round(row.days).toLocaleString('en-US')}일 · ${(row.weeks ?? row.days / 7).toLocaleString('ko-KR', { maximumFractionDigits: 1 })}주` : '기간 계산 없음';
-}
-function periodMarkup(row, canSelect) {
-  const endpoint = row.endDate || row.date || '—';
-  const label = row.endLabel || row.markerLabel || row.phaseLabel || '기준점';
-  const date = canSelect ? `<button type="button" class="cycle-point-link" data-cycle-row="${esc(row.id)}" aria-label="${esc(`${endpoint} ${label}, 차트에서 보기`)}">${esc(endpoint)}<span aria-hidden="true">↗</span></button>` : `<strong>${esc(endpoint)}</strong>`;
-  return `<span class="cycle-mobile-point">${esc(row.phaseLabel)}<small>${esc(evidenceLabel(row))}</small></span>${date}<small>${row.startDate && row.startDate !== endpoint ? `${esc(row.startDate)}부터` : '해당 날짜의 기준점'}</small><span class="cycle-duration">${duration(row)}</span>`;
-}
-
-export function renderCycleTableRows(rows, { canSelect = false } = {}) {
-  if (!rows.length) return '<tr><td colspan="5" class="cycle-table-empty">선택한 범위에 표시할 기준점이 없습니다.</td></tr>';
-  return rows.map(row => {
-    const assumed = scenarioRow(row), status = evidenceLabel(row);
-    const metricLabel = assumed ? '가정 경로' : '관측 구간';
-    const metrics = numeric(row.returnPct) || numeric(row.mddPct)
-      ? `<span class="cycle-price-change cycle-number-${tone(row.returnPct)}">${formatDailyPercent(row.returnPct)}</span><small>${metricLabel} 가격 변화</small><span class="cycle-mdd" title="${esc(`${row.startDate || row.endDate} → ${row.endDate}의 시간순 고점 뒤 저점 기준. ${row.mddPeakDate || ''} → ${row.mddTroughDate || ''}`)}">최대 낙폭 <strong>${formatDailyPercent(row.mddPct)}</strong></span>`
-      : `<span class="cycle-no-metric">—</span><small>${assumed ? '가정 기준 · 실현 성과 없음' : '비교 구간 없음'}</small>`;
-    return `<tr class="cycle-period-row${assumed ? ' is-scenario' : ''}${currentRow(row) ? ' is-current' : ''}" data-cycle-row-id="${esc(row.id)}" data-evidence="${assumed ? 'scenario' : 'observed'}"><th scope="row" class="cycle-period">${periodMarkup(row, canSelect)}</th><td class="cycle-phase"><strong>${esc(row.phaseLabel || '기준점')}</strong><small>${row.fromLabel ? `${esc(row.fromLabel)} → ${esc(row.phaseLabel)}` : esc(row.cycleLabel || '')}</small><span class="cycle-evidence${assumed ? ' cycle-evidence-scenario' : ''}">${esc(status)}</span></td><td class="cycle-action-cell">${actionMarkup(row)}<small>${assumed ? '가정이 맞을 때 검토' : row.action?.scope === 'period' ? '표시 기간의 가격 조건' : currentRow(row) ? '관측 조건 기준' : '끝 지점의 사후 해석'}</small></td><td class="cycle-reason">${esc(row.action?.reason || row.reason || '')}${currentRow(row) && numeric(row.range28dPct) ? `<small>${esc(row.rangeWindowStart)}부터 28일 · 가격 폭 ${formatDailyPercent(row.range28dPct)} / 등락 ${formatDailyPercent(row.change28dPct)}</small>` : row.coverageComplete === false && numeric(row.mddPct) ? '<small>관측 누락 포함 · 실제 낙폭은 더 클 수 있음</small>' : row.note ? `<small>${esc(row.note)}</small>` : ''}</td><td class="cycle-metrics">${metrics}</td></tr>`;
-  }).join('');
-}
-
 function frame() {
-  return `<header class="daily-heading"><div><button type="button" class="daily-back" data-view="outlook">← 통합 차트</button><h1>사이클 판단표 <span>BTC · 시간과 구간</span></h1></div><div class="daily-heading-actions"><button type="button" class="daily-action" id="daily-method-open">읽는 법</button><button type="button" class="daily-action" id="export-raw" disabled>이 표 CSV ↓</button></div></header>
-    <div class="cycle-context" id="cycle-context" aria-live="polite">차트의 관측 자료와 기준점을 확인하고 있습니다.</div>
-    <section class="cycle-table-panel" aria-label="비트코인 사이클 기간과 검토 단계"><div class="cycle-table-toolbar"><label class="cycle-scope-label" for="cycle-scope">표시 범위<select id="cycle-scope"><option value="recent">최근 4년 기준점 + 가정</option><option value="all">전체 사이클</option></select></label><label class="cycle-detail-toggle"><input id="cycle-all-ranges" type="checkbox">세부 횡보 모두 보기</label><div class="daily-segmented" aria-label="관측과 미래 가정 구분"><button type="button" data-cycle-evidence="all" aria-pressed="true">전체</button><button type="button" data-cycle-evidence="observed" aria-pressed="false">과거·현재 관측</button><button type="button" data-cycle-evidence="scenario" aria-pressed="false">미래 가정</button></div></div>
-    <div class="cycle-table-intro"><p id="cycle-table-note"><strong>고점·저점은 해당 시점, 횡보는 표시 기간의 검토 단계입니다.</strong> 과거 고점·저점은 사후 해석이며, 미래 행은 차트에서 선택한 가정입니다.</p><span id="cycle-scenario-label"></span></div>
-    <div id="cycle-table-scroll" class="cycle-table-scroll" tabindex="0" role="region" aria-label="사이클 판단표, 작은 화면에서는 좌우로 이동"><table class="cycle-table" aria-describedby="cycle-table-note"><caption class="sr-only">비트코인 사이클 기준점별 기간, 검토 단계와 같은 구간의 가격 변화 및 최대 낙폭</caption><thead><tr><th scope="col">기준 지점 · 기간</th><th scope="col">사이클 구간</th><th scope="col">검토 단계</th><th scope="col">판단 근거</th><th scope="col">같은 구간의 가격 변화</th></tr></thead><tbody id="data-body"><tr><td colspan="5" class="cycle-table-empty">차트의 기준점을 불러오는 중입니다.</td></tr></tbody></table></div>
-    <footer class="cycle-table-footer"><span id="cycle-row-count"></span><span>4년은 비교 틀입니다. ‘3년 상승 + 1년 하락’을 법칙으로 적용하지 않습니다.</span><a href="https://docs.coinmetrics.io/asset-metrics/market/priceusd" target="_blank" rel="noopener noreferrer">가격 출처 ↗</a></footer></section>
-    <dialog class="daily-method-dialog" id="daily-method-dialog" aria-labelledby="daily-method-title"><div class="daily-method-heading"><h2 id="daily-method-title">사이클 판단표 읽는 법</h2><button type="button" id="daily-method-close" aria-label="읽는 법 닫기">×</button></div><div id="daily-method-content"></div></dialog>`;
+  return `<header class="daily-heading"><div><button type="button" class="daily-back" data-view="outlook">← 통합 차트</button><h1>자산 비교표 <span>과거 연간 평균과 올해 위치</span></h1></div><div class="daily-heading-actions"><button type="button" class="daily-action" id="asset-refresh">갱신</button><button type="button" class="daily-action" id="daily-method-open">읽는 법</button><button type="button" class="daily-action" id="export-raw" disabled>CSV ↓</button></div></header>
+    <div class="asset-context" id="asset-context" role="status" aria-live="polite">자산 비교표를 열면 가격 자료를 불러옵니다.</div>
+    <section class="asset-table-panel" aria-label="17개 자산의 과거 상승·낙폭과 올해 판단"><div class="asset-table-scroll" id="asset-table-scroll" tabindex="0" role="region" aria-label="자산 비교표. 작은 화면에서는 좌우로 이동할 수 있습니다."><table class="asset-comparison-table" aria-describedby="asset-table-note"><caption class="sr-only">17개 자산별 과거 연간 평균 상승률과 연초 대비 낙폭, 올해 종가와 등락률, 다섯 단계 판단</caption><colgroup><col class="asset-col-group"><col class="asset-col-category"><col class="asset-col-name"><col class="asset-col-samples"><col class="asset-col-return"><col class="asset-col-return"><col class="asset-col-price"><col class="asset-col-price"><col class="asset-col-ytd"><col class="asset-col-judgment"></colgroup><thead><tr><th colspan="3" scope="colgroup" class="asset-identity-header">종목명</th><th scope="col">표본<br>연수</th><th scope="col">평균<br>상승률</th><th scope="col">평균<br>낙폭</th><th scope="col" id="asset-start-header">연초 종가<small>기준일 확인 중</small></th><th scope="col" id="asset-latest-header">최근 종가<small>기준일 확인 중</small></th><th scope="col" class="asset-ytd-header" id="asset-ytd-header">연초 대비<br>상승·하락률</th><th scope="col" class="asset-judgment-header">판단</th></tr></thead><tbody id="data-body"><tr><td colspan="10" class="asset-table-empty">자산별 가격 자료를 준비하고 있습니다.</td></tr></tbody></table></div>
+    <footer class="asset-table-footer"><div class="asset-table-meta"><span id="asset-row-count">17개 자산</span><span>배당·분배금 제외 종가 기준 · USD</span><span class="asset-color-key"><i class="asset-key-gain" aria-hidden="true"></i>상승 <i class="asset-key-loss" aria-hidden="true"></i>하락</span></div><p id="asset-table-note">평균 낙폭은 연초 종가 대비 연중 최저 낙폭이며 <strong>MDD가 아닙니다.</strong> 판단은 과거 평균과 올해 등락률을 비교한 규칙입니다. <span id="asset-sample-note">올해는 평균에서 제외합니다.</span></p></footer></section>
+    <dialog class="daily-method-dialog" id="daily-method-dialog" aria-labelledby="daily-method-title"><div class="daily-method-heading"><h2 id="daily-method-title">자산 비교표 읽는 법</h2><button type="button" id="daily-method-close" aria-label="읽는 법 닫기">×</button></div><div id="daily-method-content"></div></dialog>`;
 }
 
-export function initDailyDataView({ root, getBitcoinDataset, getCycleContext, onSelectCycleRow, download, toast = () => {}, buildModel = buildCycleDecisionTable } = {}) {
-  if (!root || (typeof getBitcoinDataset !== 'function' && typeof getCycleContext !== 'function')) throw new TypeError('Cycle table needs a root and a chart data getter');
-  const state = { cycle: 'recent', evidence: 'all', allRanges: false };
-  let model = null, context = null, identity = null, disposed = false;
+function assertModel(model) {
+  if (!model || !Array.isArray(model.rows) || model.rows.length !== SYMBOLS.length || new Set(model.rows.map(row => row.symbol)).size !== SYMBOLS.length || SYMBOLS.some(symbol => !model.rows.some(row => row.symbol === symbol))) throw new TypeError('17개 자산의 계산 결과가 모두 필요합니다.');
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(model.asOf) || !Number.isInteger(model.year)) throw new TypeError('비교 기준일이 올바르지 않습니다.');
+}
+
+/** A single lazy source, one cached model per UTC date, and explicit retry after failure. */
+export function initDailyDataView({ root, getComparisonDataset, download, toast = () => {}, buildModel = buildAssetComparison, asOfDate = today } = {}) {
+  if (!root || typeof getComparisonDataset !== 'function') throw new TypeError('Asset comparison needs a root and a dataset getter');
+  const state = { status: 'idle', asOf: null, error: null };
+  let bundle = null, model = null, pending = null, request = 0, disposed = false;
   root.classList.add('daily-workspace'); root.innerHTML = frame();
   const $ = selector => root.querySelector(selector);
-  const $$ = selector => [...root.querySelectorAll(selector)];
   const put = (selector, markup) => { const node = $(selector); if (node.innerHTML !== markup) node.innerHTML = markup; };
-  function metadata() {
-    const meta = context?.dataset?.meta || {};
-    return { sourceName: 'Coin Metrics', sourceUrl: meta.source || 'https://docs.coinmetrics.io/asset-metrics/market/priceusd', retrievedAt: meta.retrievedAt || '', scenarioLabel: context?.scenarioLabel || context?.scenarioId || '선택한 차트 가정' };
+  const text = (selector, value) => { const node = $(selector); if (node.textContent !== value) node.textContent = value; };
+
+  function clearRows(message, canRetry = false) {
+    put('#data-body', `<tr><td colspan="10" class="asset-table-empty"><span>${esc(message)}</span>${canRetry ? '<button type="button" id="asset-retry">다시 불러오기</button>' : ''}</td></tr>`);
+    $('#export-raw').disabled = true;
+    $('#asset-refresh').disabled = state.status === 'loading';
+    put('#asset-start-header', '연초 종가<small>기준일 확인 중</small>');
+    put('#asset-latest-header', '최근 종가<small>기준일 확인 중</small>');
+    put('#asset-ytd-header', '연초 대비<br>상승·하락률');
+    text('#asset-row-count', canRetry ? '자료 확인 필요' : '17개 자산 · 자료 준비 중');
+    text('#asset-sample-note', '올해는 평균에서 제외합니다.');
+    if ($('#daily-method-dialog').open) put('#daily-method-content', methodContent());
   }
+
+  function methodContent(selected) {
+    const rows = model?.rows || [];
+    const selectedDecision = selected ? judgment(selected) : null;
+    const thresholds = selected?.judgment?.thresholds;
+    const boundaries = thresholds && ['strongBuyPct', 'buyPct', 'sellPct', 'strongSellPct'].every(key => numeric(thresholds[key]))
+      ? `<ul class="asset-method-rules asset-selected-thresholds"><li><strong>적극 매수</strong> · ${formatDailyPercent(thresholds.strongBuyPct)} 이하</li><li><strong>분할 매수</strong> · ${formatDailyPercent(thresholds.strongBuyPct)} 초과, ${formatDailyPercent(thresholds.buyPct)} 이하</li><li><strong>중립</strong> · ${formatDailyPercent(thresholds.buyPct)} 초과, ${formatDailyPercent(thresholds.sellPct)} 미만</li><li><strong>분할 매도</strong> · ${formatDailyPercent(thresholds.sellPct)} 이상, ${formatDailyPercent(thresholds.strongSellPct)} 미만</li><li><strong>적극 매도</strong> · ${formatDailyPercent(thresholds.strongSellPct)} 이상</li></ul><p>표시는 소수 둘째 자리로 반올림하며 실제 판단은 반올림 전 경계값으로 계산합니다.</p>` : '';
+    const selectedNote = selected ? `<section class="asset-selected-reason"><h3>${esc(selected.name)} (${esc(selected.symbol)}) · ${selectedDecision.label}</h3><p>${esc(selectedDecision.reason)}</p><p>올해 등락률 ${formatDailyPercent(selected.ytdPct)} · 과거 평균 상승 ${formatDailyPercent(selected.meanRisePct)} · 평균 낙폭 ${formatDailyPercent(selected.meanFallPct)}</p>${boundaries}<p>${sourceLink(selected)} · ${esc(selected.yearStartDate || '기준일 없음')} → ${esc(selected.latestDate || '관측 없음')}<br>${esc(sampleDescription(selected))}</p></section>` : '';
+    return `${selectedNote}<h3>평균 상승률과 평균 낙폭</h3><p>과거 각 연도의 <strong>첫 거래일 종가를 0%</strong>로 둡니다. 그해 가장 높은 종가까지의 상승률과 가장 낮은 종가까지의 낙폭을 구한 뒤, 연도별 값을 같은 비중으로 평균합니다. 올해 자료는 이 평균에 넣지 않습니다. 장중 고가·저가와 연말 수익률의 평균이 아닙니다.</p><p>연간 상승률 = (연중 최고 종가 ÷ 첫 거래일 종가 − 1) × 100<br>연간 낙폭 = (연중 최저 종가 ÷ 첫 거래일 종가 − 1) × 100</p><h3>평균 낙폭과 MDD는 다릅니다</h3><p>이 표의 평균 낙폭은 <strong>각 연도의 시작 가격을 고정</strong>합니다. MDD는 시간순으로 갱신되는 고점 이후의 최대 하락을 측정합니다. 예를 들어 종가가 100 → 150 → 120이면 이 표의 연간 낙폭은 0%, 그해 MDD는 −20%입니다. 둘을 같은 값으로 표시하지 않습니다.</p><h3>마지막 열의 다섯 단계</h3><p>올해 등락률을 <strong>r</strong>, 과거 평균 상승률을 <strong>U</strong>, 평균 낙폭을 <strong>D</strong>라고 합니다. D는 음수입니다.</p><ul class="asset-method-rules"><li><strong>적극 매수</strong> · r ≤ D</li><li><strong>분할 매수</strong> · D &lt; r ≤ D ÷ 2</li><li><strong>중립</strong> · D ÷ 2 &lt; r &lt; U ÷ 2</li><li><strong>분할 매도</strong> · U ÷ 2 ≤ r &lt; U</li><li><strong>적극 매도</strong> · r ≥ U</li></ul><p>과거 평균 범위 안에서 올해 가격이 어디에 있는지 구분하는 <strong>비교 규칙</strong>입니다. 확률을 추정하거나 미래의 저점·고점을 확정하지 않으며, 적극·분할이라는 이름이 주문 금액을 정하지 않습니다. 중립도 횡보가 확인됐다는 뜻은 아닙니다. 녹색·분홍색 수익률 셀은 상승·하락 방향을 뜻하고, 매수·매도 구분은 마지막 열에서 읽습니다.</p><h3>표본 연수와 판단 보류</h3><p>표본 연수는 올해 이전에 실제 관측된 연도 수입니다. <strong>*는 상장 첫해 일부 기간이 포함</strong>되었다는 표시입니다. 표본 셀에서 기간을 확인할 수 있고, 아래 종목별 출처에도 표시합니다. 5개 연도 미만, 누락되거나 오래된 자료, 비교할 수 없는 평균값은 판단 보류로 남깁니다. 결측값을 0이나 중립으로 채우지 않습니다.</p><h3>가격과 기준일</h3><p>모든 가격은 USD 종가입니다. 주식분할을 반영하고 배당·분배금을 제외한 종가 기준이므로 총수익률과 다를 수 있습니다. 배당·분배금 지급에 따른 가격 하락도 포함됩니다. 특히 PDBC처럼 큰 분배금이 있는 자산의 낙폭은 분배금을 합친 투자 손실과 다를 수 있습니다. 이 판단을 총수익률이나 수익성 검증으로 해석하지 않습니다. 연초 종가는 올해 첫 거래일 종가이며 전년 마지막 거래일 종가가 아닙니다. 최근 종가는 자료에 포함된 마지막 거래일의 관측값입니다. 종목별 날짜가 다르면 해당 가격 셀에도 기준일을 표시합니다.</p><details class="asset-source-details"><summary>종목별 출처·표본 범위${rows.length ? ` (${rows.length}개)` : ''}</summary>${rows.length ? `<ul>${rows.map(row => `<li><strong>${esc(row.symbol)} · ${esc(row.name)}</strong><br>${sourceLink(row)} · ${esc(sampleDescription(row))}<br>관측 ${esc(row.source?.firstDate || '확인 중')} → ${esc(row.latestDate || '관측 없음')} · 수집 ${esc(row.source?.retrievedAt || bundle?.retrievedAt || '확인 중')}<br>${esc(row.source?.priceDefinition || '가격 정의 확인 필요')}${judgment(row).available ? '' : `<br><span class="asset-source-issue">${esc(judgment(row).reason)}</span>`}</li>`).join('')}</ul>` : '<p>자료를 불러오면 종목별 출처와 실제 관측 범위가 표시됩니다.</p>'}</details>`;
+  }
+
   function paint() {
-    if (disposed) return;
-    const rows = cycleTableRows(model, state);
-    put('#data-body', model ? renderCycleTableRows(rows, { canSelect: typeof onSelectCycleRow === 'function' }) : '<tr><td colspan="5" class="cycle-table-empty">차트의 검증된 기준점이 준비되면 이곳에 표시합니다.</td></tr>');
-    $('#export-raw').disabled = !rows.length || typeof download !== 'function';
-    $('#cycle-scope').disabled = !model;
-    const fullCount = model ? cycleTableRows(model, { ...state, allRanges: true }).length : 0;
-    $('#cycle-row-count').textContent = model ? `${rows.length}개 지점·구간${fullCount > rows.length ? ` · 횡보는 최근 관측·다음 가정 표시 (${fullCount - rows.length}개 더 보기)` : ''}` : '자료 확인 중';
-    $('#cycle-all-ranges').checked = state.allRanges;
-    $('#cycle-all-ranges').disabled = !model;
-    $$('[data-cycle-evidence]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.cycleEvidence === state.evidence)));
-    $('#cycle-scope').value = state.cycle;
+    const rows = model.rows, start = sharedDate(rows, 'yearStartDate'), latest = sharedDate(rows, 'latestDate');
+    const unavailable = rows.filter(row => !judgment(row).available).length;
+    const sources = [...new Set(rows.map(row => row.source?.name).filter(Boolean))];
+    put('#data-body', renderAssetComparisonRows(rows));
+    put('#asset-start-header', `연초 종가<small>${start ? esc(displayDate(start)) : '종목별 기준일'}</small>`);
+    put('#asset-latest-header', `최근 종가<small>${latest ? esc(displayDate(latest)) : '종목별 기준일'}</small>`);
+    put('#asset-ytd-header', `${model.year}년<br>연초 대비 등락률`);
+    put('#asset-context', `<strong>${rows.length}개 자산</strong><span>${model.year}년 비교</span><span>최근 관측 ${latest ? esc(displayDate(latest)) : '종목별 기준일'}</span><span class="asset-context-source">${esc(sources.join(' · ') || '출처 확인 필요')} · USD 종가</span>`);
+    $('#asset-context').title = `판단 기준일 ${model.asOf} · 수집 ${bundle?.retrievedAt || '종목별 출처 참조'}`;
+    text('#asset-row-count', `${rows.length}개 자산 전체${unavailable ? ` · ${unavailable}개 판단 보류` : ''}`);
+    text('#asset-sample-note', `${model.year}년은 평균에서 제외${rows.some(row => row.samplePartialFirstYear) ? ' · * 상장 첫해 일부 기간 포함' : ''}.`);
+    $('#export-raw').disabled = typeof download !== 'function';
+    $('#asset-refresh').disabled = false;
+    $('#asset-table-scroll').setAttribute('aria-busy', 'false');
+    if ($('#daily-method-dialog').open) put('#daily-method-content', methodContent());
   }
-  function failContext(error) {
-    model = null; context = null; identity = null;
-    $('#cycle-context').textContent = '차트 자료와 기준점이 일치하지 않아 판단을 보류합니다. 자료를 다시 갱신해 주세요.';
-    $('#cycle-context').title = String(error?.message || error);
-    $('#cycle-scenario-label').textContent = '';
-    paint();
+
+  function fail(error, date) {
+    model = null; bundle = null;
+    state.status = 'error'; state.asOf = date; state.error = String(error?.message || error);
+    text('#asset-context', '가격 자료를 불러오거나 검증하지 못했습니다. 다시 불러오기를 눌러 주세요.');
+    $('#asset-context').title = state.error;
+    $('#asset-table-scroll').setAttribute('aria-busy', 'false');
+    clearRows('자료를 확인할 수 없어 가격과 판단을 표시하지 않습니다.', true);
+    if ($('#daily-method-dialog').open) put('#daily-method-content', methodContent());
   }
-  function render() {
-    if (disposed) return;
-    let shared, dataset;
+
+  function render({ refresh = false } = {}) {
+    if (disposed || root.hidden) return Promise.resolve(null);
+    let date;
     try {
-      shared = typeof getCycleContext === 'function' ? getCycleContext() : null;
-      dataset = shared?.dataset || getBitcoinDataset?.();
-    } catch (error) { failContext(error); return; }
-    if (!shared?.milestones || !dataset) {
-      model = null; context = null; identity = null;
-      $('#cycle-context').textContent = '통합 차트와 같은 관측 자료·기준점이 준비되면 표시합니다.';
-      $('#cycle-context').title = '';
-      $('#cycle-scenario-label').textContent = '';
-      paint(); return;
-    }
-    context = { ...shared, dataset };
-    const key = [dataset, shared.prices, shared.milestones, shared.forecast];
-    if (!identity || key.some((item, index) => item !== identity[index])) {
+      date = typeof asOfDate === 'function' ? asOfDate() : asOfDate;
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || new Date(`${date}T00:00:00Z`).toISOString().slice(0, 10) !== date) throw new TypeError('비교 기준일이 올바르지 않습니다.');
+    } catch (error) { request++; pending = null; fail(error, null); return Promise.resolve(null); }
+    if (refresh || (pending && state.asOf !== date)) { request++; pending = null; model = null; if (refresh) bundle = null; state.status = 'idle'; }
+    if (pending) return pending;
+    if (state.status === 'ready' && state.asOf === date) return Promise.resolve(model);
+    if (state.status === 'error' && state.asOf === date && !refresh) return Promise.resolve(null);
+    const token = ++request;
+    model = null; state.status = 'loading'; state.asOf = date; state.error = null;
+    text('#asset-context', '17개 자산의 실제 가격 자료와 표본 연수를 확인하고 있습니다.');
+    $('#asset-context').title = '';
+    $('#asset-table-scroll').setAttribute('aria-busy', 'true');
+    clearRows('자산별 가격 자료를 불러오는 중입니다.');
+    pending = (async () => {
+      await Promise.resolve();
+      if (disposed || token !== request) return null;
       try {
-        model = buildModel({ prices: shared.prices || dataset.prices, milestones: shared.milestones, forecast: shared.forecast, asOf: shared.milestones.asOf });
-        identity = key;
-      } catch (error) { failContext(error); return; }
-      const cycles = [...(model.cycles || []), ...(model.current ? [{ id: 'current', label: '현재 관측' }] : [])];
-      if (!['recent', 'all'].includes(state.cycle) && !cycles.some(cycle => cycle.id === state.cycle)) state.cycle = 'recent';
-      $('#cycle-scope').innerHTML = '<option value="recent">최근 4년 기준점 + 가정</option><option value="all">전체 사이클</option>' + cycles.map(cycle => `<option value="${esc(cycle.id)}">${esc(cycle.label)}</option>`).join('');
-    }
-    const latest = (shared.prices || dataset.prices).findLast(row => (Array.isArray(row) ? row[0] : row.date) <= model.asOf);
-    const latestPrice = Array.isArray(latest) ? latest[1] : latest?.price;
-    $('#cycle-context').innerHTML = `<span class="cycle-context-asset">₿ <strong>Bitcoin</strong></span><strong class="cycle-context-price">${money(latestPrice)}</strong><span>실제 관측 <strong>${esc(model.asOf)}</strong>까지</span>${model.current ? `<span class="cycle-context-stage">현재 ${actionMarkup(model.current)}</span>` : ''}<span class="cycle-context-definition">USD 일말 기준 · 고점·저점 확정 신호 아님</span>`;
-    $('#cycle-context').title = `Coin Metrics · 수집 ${metadata().retrievedAt}`;
-    $('#cycle-scenario-label').textContent = `차트의 선택 가정: ${metadata().scenarioLabel}`;
-    paint();
+        const loaded = bundle || await getComparisonDataset();
+        if (disposed || token !== request) return null;
+        const calculated = await buildModel(loaded, { asOfDate: date });
+        if (disposed || token !== request) return null;
+        assertModel(calculated);
+        bundle = loaded; model = calculated; state.status = 'ready';
+        paint();
+        return model;
+      } catch (error) {
+        if (!disposed && token === request) fail(error, date);
+        return null;
+      } finally { if (token === request) pending = null; }
+    })();
+    return pending;
   }
-  function openMethod() {
-    const info = metadata();
-    $('#daily-method-content').innerHTML = `<h3>먼저 기준점을 읽습니다</h3><p>고점·저점 행은 차트의 기준점 하나와 그 앞 기준점부터의 기간을 연결합니다. <strong>매수·매도 검토는 그 행의 마지막 지점에 붙는 설명</strong>입니다. 횡보 행은 표시 기간에 가격 범위 조건이 연속 충족되었다는 별도 관측입니다. 앞 구간 전체에 같은 매매 지시가 발생했다는 뜻이 아닙니다. 날짜를 누르면 통합 차트에서 같은 기준점이나 구간을 확인합니다. 기본 표에서는 모든 고점·저점과 최근 관측 횡보·다음 가정 횡보를 남깁니다. ‘세부 횡보 모두 보기’를 선택하면 같은 표에서 나머지 횡보 구간을 확인할 수 있습니다.</p><h3>매수·횡보·매도와 강한 단계</h3><p>매수·매도는 사이클 위치에 따른 검토 방향입니다. 적극 단계는 설명한 기준점에 더 주의를 기울이라는 구분이며, 높은 수익 확률이나 큰 주문량을 뜻하지 않습니다. 지나고 나서 선택한 과거 저점·고점을 당시 실행할 수 있었던 매매 신호로 읽지 마세요.</p><p><strong>횡보는 관측된 가격 범위 조건을 충족한 경우에만 표시합니다.</strong> 중간 고점이나 기다려야 하는 구간을 자동으로 횡보라고 부르지 않습니다. 자료가 부족하거나 방향을 정할 근거가 없으면 판단을 보류합니다.</p><p>${esc(model?.methodology?.current || '')}</p><p>횡보 구간은 이 조건을 7개 일말 관측 이상 연속 충족한 기간입니다. 시작은 첫 조건 충족일이고, 7개 유지 여부는 일곱 번째 날에야 알 수 있습니다. 짧은 흔들림을 줄이는 표시 기준이며 최적 매매 기간이라는 뜻은 아닙니다. 미래 횡보는 선택한 경로 안의 가정입니다.</p><h3>관측·잠정·미래 가정</h3><p>‘과거 · 사후 해석’은 뒤의 가격까지 알고 선택한 기준점입니다. ‘관측 · 잠정’은 후속 자료에 따라 바뀔 수 있습니다. 점선으로 구분한 ‘미래 가정’은 현재 차트에서 선택한 가격 경로의 조건부 분류입니다. 발생 확률이나 확정된 미래 날짜가 아닙니다. 예측된 저점·고점을 실제 관측값과 섞어 계산하지 않습니다.</p><h3>같은 구간의 가격 변화와 최대 낙폭</h3><p>가격 변화 = (행 마지막 가격 ÷ 시작 가격 − 1) × 100. 최대 낙폭(MDD)은 <strong>이 행에 적힌 시작일부터 종료일까지</strong> 시간순 고점 이후의 가장 큰 일말 가격 하락입니다. 각 행마다 기준 기간이 달라집니다. 미래 가정에는 실제 성과처럼 관측 수익률·MDD를 붙이지 않습니다.</p><p>기간은 UTC 날짜 차이이며, 주 수는 일 수 ÷ 7입니다. 최근 4년 필터는 그 기간에 끝나는 기준점을 보여 줍니다. 앞 기준점이 4년보다 오래됐다면 표시된 전체 구간 그대로 계산하며, 필터 때문에 시작 가격을 바꾸지 않습니다. 결측은 보간하지 않습니다.</p><h3>4년은 비교 틀입니다</h3><p>반감기 간격과 가격 상승·하락 기간은 같은 개념이 아닙니다. ‘3년 상승 + 1년 하락’을 고정 규칙으로 강제하지 않으며, 시계만으로 매수·매도를 정하지 않습니다. BTC의 선택된 사이클을 다른 자산에 그대로 적용하지 않습니다.</p><h3>출처</h3><p><a href="${esc(info.sourceUrl)}" target="_blank" rel="noopener noreferrer">${esc(info.sourceName)} PriceUSD ↗</a> · USD 일말 기준가격 · 장중 고저가 아님<br>최근 완료 관측 ${esc(model?.asOf || '확인 중')} · 수집 ${esc(info.retrievedAt || '확인 중')}<br>Coin Metrics · CC BY-NC 4.0</p>`;
+
+  function openMethod(selected) {
+    put('#daily-method-content', methodContent(selected));
     const dialog = $('#daily-method-dialog');
+    if (dialog.open) return;
     if (typeof dialog.showModal === 'function') dialog.showModal(); else dialog.setAttribute('open', '');
   }
   function closeMethod() { const dialog = $('#daily-method-dialog'); if (typeof dialog.close === 'function') dialog.close(); else dialog.removeAttribute('open'); }
   function click(event) {
-    const evidence = event.target.closest?.('[data-cycle-evidence]');
-    if (evidence) { state.evidence = evidence.dataset.cycleEvidence; paint(); return; }
-    const selected = event.target.closest?.('[data-cycle-row]');
-    if (selected) {
-      const row = model?.rows.find(item => item.id === selected.dataset.cycleRow);
-      if (row && typeof onSelectCycleRow === 'function') onSelectCycleRow(row);
-      return;
-    }
+    if (disposed) return;
+    const reason = event.target.closest?.('[data-asset-reason]');
+    if (reason) { const selected = model?.rows.find(row => row.symbol === reason.dataset.assetReason); if (selected) openMethod(selected); return; }
     const id = event.target.closest?.('button')?.id;
+    if (id === 'asset-refresh') { if (state.status !== 'loading') void render({ refresh: true }); return; }
+    if (id === 'asset-retry') { void render({ refresh: true }); return; }
     if (id === 'daily-method-open') openMethod();
     if (id === 'daily-method-close') closeMethod();
-    if (id === 'export-raw' && model && typeof download === 'function') {
-      const rows = cycleTableRows(model, state);
-      if (!rows.length) return;
-      download(`btc-cycle-review-${model.asOf}-${state.cycle}-${state.evidence}${state.allRanges ? '-all-ranges' : ''}.csv`, new Blob([cycleDecisionCsv(model, rows, metadata())], { type: 'text/csv;charset=utf-8' }));
-      toast('표시 중인 기준점·검토 근거·관측 구분을 저장했습니다.');
+    if (id === 'export-raw' && state.status === 'ready' && model && typeof download === 'function') {
+      download(`asset-comparison-${model.asOf}.csv`, new Blob([assetComparisonCsv(model)], { type: 'text/csv;charset=utf-8' }));
+      toast('17개 자산의 수치·판단 근거·기준일·출처를 저장했습니다.');
     }
   }
-  function change(event) {
-    if (event.target.id === 'cycle-scope') { state.cycle = event.target.value; paint(); }
-    if (event.target.id === 'cycle-all-ranges') { state.allRanges = Boolean(event.target.checked); paint(); }
-  }
-  root.addEventListener('click', click); root.addEventListener('change', change);
-  return { render, destroy() { disposed = true; root.removeEventListener('click', click); root.removeEventListener('change', change); closeMethod(); } };
+  root.addEventListener('click', click);
+  return { render, refresh: () => render({ refresh: true }), get state() { return { ...state }; }, destroy() { disposed = true; request++; pending = null; model = null; bundle = null; root.removeEventListener('click', click); closeMethod(); } };
 }

@@ -3,17 +3,18 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createHash } from 'node:crypto';
 
-// Read-only regression replay of the three initial v1.24 integration findings.
+// Read-only replay of the v1.24 chart/cycle-model integration findings.
+// The data page changed to the asset comparison in v1.25; its asynchronous
+// rendering, single-table structure and failure behavior have dedicated tests.
 // Uses actual exported controllers through an inert browser boundary; does not
 // measure browser layout, touch behavior, painted colors, or market accuracy.
 const root = path.resolve(process.argv[2] || fileURLToPath(new URL('../', import.meta.url)));
-const sourceFiles = ['dist/app.js', 'dist/lab-view.js', 'dist/cycle-decision.js', 'dist/daily-data-view.js', 'dist/daily-data.css', 'dist/cycle-milestones.js', 'dist/long-horizon-forecast.js', 'dist/data/btc-daily.json', 'scripts/verify-cycle-decision.mjs', 'scripts/verify-cycle-table-integration.mjs', 'tests/helpers/structure-view-fixture.mjs', 'tests/helpers/daily-data-view-fixture.mjs'];
+const sourceFiles = ['dist/app.js', 'dist/lab-view.js', 'dist/cycle-decision.js', 'dist/cycle-table-selection.js', 'dist/cycle-milestones.js', 'dist/long-horizon-forecast.js', 'dist/data/btc-daily.json', 'scripts/verify-cycle-decision.mjs', 'scripts/verify-cycle-table-integration.mjs', 'tests/helpers/structure-view-fixture.mjs'];
 const initialHashes = {};
 for (const name of sourceFiles) initialHashes[name] = createHash('sha256').update(await readFile(path.join(root, name))).digest('hex');
 const load = name => import(pathToFileURL(path.join(root, name)).href);
 const { buildCycleDecisionTable } = await load('dist/cycle-decision.js');
-const { initDailyDataView, cycleTableRows } = await load('dist/daily-data-view.js');
-const { dailyViewSurface } = await load('tests/helpers/daily-data-view-fixture.mjs');
+const { cycleTableRows } = await load('dist/cycle-table-selection.js');
 const { structureViewFixture } = await load('tests/helpers/structure-view-fixture.mjs');
 const dataset = JSON.parse(await readFile(path.join(root, 'dist/data/btc-daily.json'), 'utf8'));
 const ui = await structureViewFixture({ root });
@@ -23,7 +24,7 @@ const repeatedContext = ui.view.getCycleContext();
 const baseModel = buildCycleDecisionTable(baseContext);
 const results = {
   command: 'node scripts/verify-cycle-table-integration.mjs',
-  scope: 'Public-controller and generated-markup regression replay with inert DOM boundary; not browser visual verification.',
+  scope: 'Chart-controller and historical cycle-model regression replay with inert DOM boundary; not current asset-comparison UI or browser visual verification.',
   node: process.version,
   asOf: baseModel.asOf,
   checks: [],
@@ -72,31 +73,6 @@ check('scenario changes preserve observed rows and accept valid new rows', scena
 check('public focus rejects previous-scenario rows', scenarios.every(item => item.staleRowsAccepted.length === 0), {
   limitation: 'Controller-contract probe; no normal visible UI route to stale scenario rows was demonstrated.',
 });
-
-// The actual view controller and generated frame, using the existing inert DOM
-// fixture. This checks one-table markup and failure behavior, not browser layout.
-const surface = dailyViewSurface();
-let broken = false;
-const selections = [], downloads = [];
-const view = initDailyDataView({ root: surface.root,
-  getCycleContext() { if (broken) throw new RangeError('review replacement context unavailable'); return baseContext; },
-  onSelectCycleRow: row => selections.push(row.id), download: name => downloads.push(name),
-});
-view.render();
-check('one semantic table and removed indicator interface',
-  (surface.root.innerHTML.match(/<table\b/g) || []).length === 1 &&
-  !/SMA50|SMA200|RSI14|일별 원자료/.test(surface.root.innerHTML));
-broken = true; view.render();
-surface.click('export-raw'); surface.click('', { cycleRow: baseModel.rows[0].id });
-check('throwing shared context clears stale judgments and disables actions',
-  !surface.node('data-body').innerHTML.includes('data-cycle-row-id=') &&
-  surface.node('export-raw').disabled && selections.length === 0 && downloads.length === 0 &&
-  /판단을 보류/.test(surface.node('cycle-context').textContent));
-broken = false; view.render();
-check('shared context recovers without an old error title',
-  surface.node('data-body').innerHTML.includes('data-cycle-row-id=') &&
-  !surface.node('export-raw').disabled && !/review replacement/.test(surface.node('cycle-context').title));
-view.destroy();
 
 for (const name of sourceFiles) {
   results.hashes[name] = createHash('sha256').update(await readFile(path.join(root, name))).digest('hex');
