@@ -24,7 +24,7 @@ test('UTC date rollover rebuilds freshness once without refetching or retaining 
   } });
   await view.render(); date = '2026-11-01'; await view.render(); await view.render();
   assert.equal(reads, 1); assert.equal(builds, 2); assert.equal(view.state.asOf, date);
-  assert.equal((ui.node('data-body').innerHTML.match(/>판단 보류<\/button>/g) || []).length, 17);
+  assert.equal((ui.node('data-body').innerHTML.match(/>판단 보류<\/button>/g) || []).length, 18);
   view.destroy();
 });
 
@@ -37,12 +37,12 @@ test('method and CSV interactions reuse the ready model without additional sourc
   assert.equal(ui.work()['data-body'], undefined); view.destroy();
 });
 
-test('the acquired full-history bundle renders all 17 source-backed rows once', async () => {
+test('the acquired full-history bundle renders all 18 source-backed rows once', async () => {
   const bundle = JSON.parse(readFileSync(new URL('../dist/data/asset-comparison.json', import.meta.url), 'utf8'));
   const ui = dailyViewSurface(); let builds = 0, reads = 0;
   const view = initDailyDataView({ root: ui.root, asOfDate: '2026-10-25', getComparisonDataset: async () => { reads++; return bundle; }, buildModel: (input, options) => { builds++; return buildAssetComparison(input, options); } });
   const model = await view.render(); assert.equal(view.state.status, 'ready');
-  assert.equal(bundle.assets.length, 17); assert.ok(bundle.assets.reduce((total, asset) => total + asset.prices.length, 0) > 90000);
+  assert.equal(bundle.assets.length, 18); assert.ok(bundle.assets.reduce((total, asset) => total + asset.prices.length, 0) > 90000);
   assert.deepEqual(model.rows.map(row => row.symbol), COMPARISON_SYMBOLS);
   assert.deepEqual([...ui.node('data-body').innerHTML.matchAll(/data-asset-symbol="([^"]+)"/g)].map(match => match[1]), COMPARISON_SYMBOLS);
   assert.ok(model.rows.every(row => row.sampleYears >= 5));

@@ -9,7 +9,7 @@ const sha256=value=>createHash('sha256').update(value).digest('hex');
 const utcDate=value=>new Date(value).toISOString().slice(0,10);
 const dayNumber=value=>Date.parse(`${value}T00:00:00Z`)/DAY;
 const isDate=value=>typeof value==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(value)&&Number.isFinite(Date.parse(`${value}T00:00:00Z`))&&utcDate(Date.parse(`${value}T00:00:00Z`))===value;
-export const ASSET_COMPARISON_UNIVERSE=Object.freeze([
+export const YAHOO_COMPARISON_UNIVERSE=Object.freeze([
   {symbol:'SPY',name:'S&P 500',group:'위험 자산',category:'Index ETF',type:'ETF',firstYear:1993},
   {symbol:'QQQ',name:'NASDAQ 100',group:'위험 자산',category:'Index ETF',type:'ETF',firstYear:1999},
   {symbol:'NVDA',name:'엔비디아',group:'위험 자산',category:'대형 기술주',type:'EQUITY',firstYear:1999},
@@ -35,7 +35,7 @@ function sessionDate(seconds){
   return `${parts.year}-${parts.month}-${parts.day}`;
 }
 function definition(symbol){
-  const entry=ASSET_COMPARISON_UNIVERSE.find(item=>item.symbol===symbol);
+  const entry=YAHOO_COMPARISON_UNIVERSE.find(item=>item.symbol===symbol);
   if(!entry)throw new TypeError('Unsupported comparison asset');
   return entry;
 }
@@ -77,7 +77,14 @@ export function parseYahooComparisonAsset(payload,{symbol,retrievedAt,sourceUrl,
   validateAsset(output,{retrievedAt});return output;
 }
 function validateAsset(asset,{retrievedAt}){
-  const expected=definition(asset?.symbol),meta=asset.meta;
+  const meta=asset?.meta;
+  if(asset?.symbol==='BTC'){
+    if(asset.name!=='Bitcoin'||asset.group!=='위험 자산'||asset.category!=='디지털 자산'||asset.currency!=='USD'||meta?.sourceName!=='Coin Metrics Community API'||meta.metric!=='PriceUSD'||meta.frequency!=='1d'||meta.timezone!=='UTC'||meta.calendar!=='calendar-days'||meta.adjustment!=='none'||meta.completedOnly!==true||!Array.isArray(asset.prices)||!asset.prices.length)throw new TypeError('BTC: invalid calendar-day archive identity or provenance');
+    let previous='',yearCounts=new Map();for(const pair of asset.prices){if(!Array.isArray(pair)||pair.length!==2||!isDate(pair[0])||pair[0]<=previous||pair[0]>=utcDate(Date.parse(retrievedAt))||!Number.isFinite(pair[1])||pair[1]<=0)throw new TypeError('BTC: invalid archived UTC daily price');if(previous&&dayNumber(pair[0])-dayNumber(previous)!==1)throw new RangeError('BTC: calendar-day archive has a missing date');previous=pair[0];const year=Number(pair[0].slice(0,4));yearCounts.set(year,(yearCounts.get(year)||0)+1);}
+    if(meta.firstDate!==asset.prices[0][0]||meta.lastDate!==asset.prices.at(-1)[0]||meta.count!==asset.prices.length||meta.missingDayCount!==0||meta.excludedUnfinishedCount!==0)throw new TypeError('BTC: archive coverage metadata mismatch');
+    return {symbol:'BTC',firstDate:meta.firstDate,lastDate:meta.lastDate,observations:asset.prices.length,completedCalendarLabels:[...yearCounts.keys()].filter(year=>year<Number(utcDate(Date.parse(retrievedAt)).slice(0,4))).length,firstYearSessions:yearCounts.get(Number(meta.firstDate.slice(0,4))),maxGapDays:1,unavailableSessions:0,calendar:'calendar-days'};
+  }
+  const expected=definition(asset?.symbol);
   if(asset.name!==expected.name||asset.group!==expected.group||asset.category!==expected.category||asset.currency!=='USD'||!Array.isArray(asset.prices)||!asset.prices.length)throw new TypeError(`${expected.symbol}: invalid archive identity`);
   if(meta?.sourceName!=='Yahoo Finance'||meta.adjustment!=='split-adjusted-close'||meta.calendar!=='sessions'||meta.dataGranularity!=='1d'||meta.completedOnly!==true||meta.completionRule!=='session-date-before-retrieval-utc-date'||meta.exchangeTimezone!=='America/New_York'||meta.instrumentType!==expected.type||meta.retrievedAt!==retrievedAt||meta.sourceUrl!==assetComparisonSourceUrl(expected.symbol,Date.parse(retrievedAt))||!/^[a-f0-9]{64}$/.test(meta.responseSha256))throw new TypeError(`${expected.symbol}: invalid archive provenance`);
   const cutoff=utcDate(Date.parse(retrievedAt)),years=new Map();let previous='',maxGapDays=0;
@@ -103,12 +110,13 @@ function validateAsset(asset,{retrievedAt}){
 }
 export function crossAssetSessionCoverage(bundle){
   const owners=new Map();
-  for(const asset of bundle.assets)for(const [date] of asset.prices){
+  for(const asset of bundle.assets)if((asset.meta?.calendar??'sessions')==='sessions')for(const [date] of asset.prices){
     if(!owners.has(date))owners.set(date,new Set());owners.get(date).add(asset.symbol);
   }
   const union=[...owners.keys()].sort();
   return bundle.assets.map(asset=>{
     const own=new Set(asset.prices.map(row=>row[0])),first=asset.prices[0][0],last=asset.prices.at(-1)[0];
+    if((asset.meta?.calendar??'sessions')!=='sessions')return {method:'calendar-days-not-compared-to-exchange-sessions',firstPeerDate:null,lastPeerDate:null,peerObservedSessions:0,matchedSessions:0,unpairedSessions:0,missingDates:[]};
     const peers=union.filter(date=>date>=first&&date<=last&&owners.get(date).size>(owners.get(date).has(asset.symbol)?1:0));
     const missingDates=peers.filter(date=>!own.has(date)),matchedSessions=peers.length-missingDates.length;
     return {method:'union-of-other-assets-observed-session-dates',firstPeerDate:peers[0]||null,lastPeerDate:peers.at(-1)||null,peerObservedSessions:peers.length,matchedSessions,unpairedSessions:own.size-matchedSessions,missingDates};
@@ -118,13 +126,14 @@ export function attachPeerSessionMetadata(bundle){
   const comparisons=crossAssetSessionCoverage(bundle);
   for(let index=0;index<bundle.assets.length;index++){
     const meta=bundle.assets[index].meta;meta.peerSessionCheck=comparisons[index];
-    meta.missingDates=[...new Set([...meta.unavailableSessions,...comparisons[index].missingDates])].sort();
+    meta.unavailableSessions??=[];meta.missingDates=[...new Set([...meta.unavailableSessions,...comparisons[index].missingDates])].sort();
   }
   return bundle;
 }
 export function validateAssetComparisonBundle(bundle){
-  if(bundle?.version!==1||!Number.isFinite(Date.parse(bundle.retrievedAt))||!Array.isArray(bundle.assets)||bundle.assets.length!==ASSET_COMPARISON_UNIVERSE.length)throw new TypeError('Invalid asset-comparison bundle');
-  if(bundle.assets.some((asset,index)=>asset.symbol!==ASSET_COMPARISON_UNIVERSE[index].symbol))throw new TypeError('Comparison universe ordering or membership mismatch');
+  if(bundle?.version!==1||!Number.isFinite(Date.parse(bundle.retrievedAt))||!Array.isArray(bundle.assets)||bundle.assets.length!==YAHOO_COMPARISON_UNIVERSE.length+1)throw new TypeError('Invalid asset-comparison bundle');
+  const expectedSymbols=['BTC',...YAHOO_COMPARISON_UNIVERSE.map(asset=>asset.symbol)];
+  if(bundle.assets.some((asset,index)=>asset.symbol!==expectedSymbols[index]))throw new TypeError('Comparison universe ordering or membership mismatch');
   const coverage=bundle.assets.map(asset=>validateAsset(asset,bundle)),comparisons=crossAssetSessionCoverage(bundle);
   return coverage.map((entry,index)=>{
     if(JSON.stringify(bundle.assets[index].meta.peerSessionCheck)!==JSON.stringify(comparisons[index]))throw new TypeError(`${entry.symbol}: cross-asset session metadata mismatch`);
@@ -164,11 +173,11 @@ async function fetchWithRetry(sourceUrl,{fetchImpl,symbol}){
   }
 }
 export async function fetchAssetComparisonBundle({now=Date.now(),fetchImpl=globalThis.fetch,onAsset=()=>{}}={}){
-  const retrievedAt=new Date(now).toISOString(),assets=new Array(ASSET_COMPARISON_UNIVERSE.length);let next=0,failed=false;
+  const retrievedAt=new Date(now).toISOString(),assets=new Array(YAHOO_COMPARISON_UNIVERSE.length);let next=0,failed=false;
   async function worker(){
     for(let index=next++;index<assets.length&&!failed;index=next++){
       try{
-      const {symbol}=ASSET_COMPARISON_UNIVERSE[index],sourceUrl=assetComparisonSourceUrl(symbol,now);
+      const {symbol}=YAHOO_COMPARISON_UNIVERSE[index],sourceUrl=assetComparisonSourceUrl(symbol,now);
       const response=await fetchWithRetry(sourceUrl,{fetchImpl,symbol});
       const raw=await response.text();
       assets[index]=parseYahooComparisonAsset(JSON.parse(raw),{symbol,retrievedAt,sourceUrl,responseSha256:sha256(raw)});
@@ -178,7 +187,9 @@ export async function fetchAssetComparisonBundle({now=Date.now(),fetchImpl=globa
   }
   const results=await Promise.allSettled(Array.from({length:3},worker));
   const failure=results.find(result=>result.status==='rejected');if(failure)throw failure.reason;
-  const bundle=attachPeerSessionMetadata({version:1,retrievedAt,assets});validateAssetComparisonBundle(bundle);return bundle;
+  const btcArchive=JSON.parse(await readFile(resolve(root,'dist/data/btc-daily.json'),'utf8'));
+  const btc={symbol:'BTC',name:'Bitcoin',group:'위험 자산',category:'디지털 자산',currency:'USD',prices:btcArchive.prices,meta:{...btcArchive.meta,calendar:'calendar-days',adjustment:'none',completedOnly:true}};
+  const bundle=attachPeerSessionMetadata({version:1,retrievedAt,assets:[btc,...assets]});validateAssetComparisonBundle(bundle);return bundle;
 }
 export async function refreshAssetComparisonFile(output,{now=Date.now(),fetchImpl=globalThis.fetch,onAsset}={}){
   let previous=null;
