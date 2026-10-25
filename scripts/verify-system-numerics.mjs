@@ -63,27 +63,15 @@ for (const [symbol, archive] of Object.entries(archives)) {
     near(period.mddPct, expected.mddPct, 'mdd:calendar-period');
     near(period.returnPct, 100 * (selected.at(-1)[1] - selected[0][1]) / selected[0][1], 'returns:calendar-period');
   }
-  let segment = [], gain = 0, loss = 0;
-  for (let index = 0; index < prices.length; index++) {
-    if (calendar === 'daily' && index && epoch(prices[index][0]) - epoch(prices[index - 1][0]) !== 1) { segment = []; gain = 0; loss = 0; }
-    segment.push(prices[index][1]);
-    const count = segment.length;
-    for (const window of [50, 200]) if (count >= window) near(model.rows[index][`sma${window}`], segment.slice(-window).reduce((a, b) => a + b, 0) / window, 'sma:window');
-    if (count > 1) {
-      const change = segment.at(-1) - segment.at(-2);
-      if (count <= 15) { gain += Math.max(change, 0); loss += Math.max(-change, 0); }
-      if (count === 15) { gain /= 14; loss /= 14; }
-      if (count > 15) { gain = (13 * gain + Math.max(change, 0)) / 14; loss = (13 * loss + Math.max(-change, 0)) / 14; }
-    }
-    if (count >= 15) near(model.rows[index].rsi14, gain + loss === 0 ? 50 : 100 * gain / (gain + loss), 'rsi:Wilder');
-  }
   let identicalToBaseline = null;
   if (baseline) {
     const previous = await moduleAt('daily-analytics', baseline);
-    assert.deepEqual(model, previous.analyzeDailySeries(prices, { calendar, symbol }));
+    const old = previous.analyzeDailySeries(prices, { calendar, symbol });
+    old.rows = old.rows.map(({ sma50, sma200, rsi14, signal, ...risk }) => risk);
+    assert.deepEqual(model, old);
     identicalToBaseline = true;
   }
-  actualData.push({ symbol, count: prices.length, firstDate: prices[0][0], asOf: prices.at(-1)[0], ...oracle, cumulativeReturnPct: model.summary.cumulativeReturnPct, cagrPct: model.summary.cagrPct, annualPeriods: model.annual.length, monthlyPeriods: model.monthly.length, identicalToBaseline });
+  actualData.push({ symbol, count: prices.length, firstDate: prices[0][0], asOf: prices.at(-1)[0], ...oracle, cumulativeReturnPct: model.summary.cumulativeReturnPct, cagrPct: model.summary.cagrPct, annualPeriods: model.annual.length, monthlyPeriods: model.monthly.length, identicalRiskOutputsToBaseline: identicalToBaseline });
 }
 
 let randomState = 20261025;

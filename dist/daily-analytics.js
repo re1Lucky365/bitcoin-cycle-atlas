@@ -1,25 +1,9 @@
 import { utcDay, validateDataset } from './cycle-engine.js?v=1.19.0';
 
 const YEAR_DAYS = 365.2425;
-const RSI_PERIOD = 14;
-
-export const DAILY_SIGNAL_RULE = Object.freeze({
-  version: 'sma50-sma200-rsi14-v1',
-  buy: '종가 > SMA200, SMA50 > SMA200, 50 ≤ RSI14 < 70',
-  sell: '종가 < SMA200, SMA50 < SMA200, RSI14 < 50',
-  neutral: '충분한 자료가 있으나 매수·매도 조건이 모두 충족되지 않음',
-  limitation: '과거 종가로 계산한 앱의 관찰 규칙이며 수익성이 검증된 투자 전략이 아닙니다. MDD 자체는 매수 신호가 아닙니다.',
-});
-
 function finite(value, name) {
   if (!Number.isFinite(value)) throw new RangeError(`Non-finite daily analytics result: ${name}`);
   return Object.is(value, -0) ? 0 : value;
-}
-
-function positiveMean(value, name) {
-  const mean = finite(value, name);
-  if (mean <= 0) throw new RangeError(`Daily analytics moving average underflow: ${name}`);
-  return mean;
 }
 
 function returnPct(price, base) {
@@ -94,71 +78,6 @@ function finishPeriod(period, calendar, asOfDay) {
   };
 }
 
-function newIndicators() {
-  return { count: 0, window: [], sma50Sum: { value: 0, error: 0 }, sma200Sum: { value: 0, error: 0 }, gains: 0, losses: 0, avgGain: null, avgLoss: null };
-}
-
-function addMeanTerm(sum, term) {
-  const adjusted = term - sum.error, value = sum.value + adjusted;
-  sum.error = (value - sum.value) - adjusted;
-  sum.value = finite(value, 'moving average');
-}
-
-function indicatorsAt(state, row, previous) {
-  state.count++;
-  state.window.push(row.price);
-  if (state.window.length > 50) addMeanTerm(state.sma50Sum, -state.window[state.window.length - 51] / 50);
-  if (state.window.length > 200) {
-    addMeanTerm(state.sma200Sum, -state.window.shift() / 200);
-  }
-  addMeanTerm(state.sma50Sum, row.price / 50);
-  addMeanTerm(state.sma200Sum, row.price / 200);
-  // Periodic rebasing bounds subtraction drift without rescanning history.
-  if (state.count % 200 === 0) {
-    state.sma50Sum = { value: 0, error: 0 }; state.sma200Sum = { value: 0, error: 0 };
-    for (const price of state.window.slice(-50)) addMeanTerm(state.sma50Sum, price / 50);
-    for (const price of state.window) addMeanTerm(state.sma200Sum, price / 200);
-  }
-  const changes = state.count - 1;
-  if (previous) {
-    const delta = row.price - previous.price;
-    const gain = Math.max(0, delta), loss = Math.max(0, -delta);
-    if (changes <= RSI_PERIOD) {
-      state.gains += gain / RSI_PERIOD;
-      state.losses += loss / RSI_PERIOD;
-      if (changes === RSI_PERIOD) { state.avgGain = state.gains; state.avgLoss = state.losses; }
-    } else {
-      state.avgGain = state.avgGain * (13 / 14) + gain / 14;
-      state.avgLoss = state.avgLoss * (13 / 14) + loss / 14;
-    }
-  }
-  let rsi14 = null;
-  if (state.avgGain !== null) {
-    finite(state.avgGain, 'RSI average gain'); finite(state.avgLoss, 'RSI average loss');
-    rsi14 = state.avgGain === 0 && state.avgLoss === 0 ? 50 : state.avgLoss === 0 ? 100 : state.avgGain === 0 ? 0 : 100 / (1 + state.avgLoss / state.avgGain);
-  }
-  return {
-    sma50: state.count >= 50 ? positiveMean(state.sma50Sum.value, 'SMA50') : null,
-    sma200: state.count >= 200 ? positiveMean(state.sma200Sum.value, 'SMA200') : null,
-    rsi14,
-  };
-}
-
-function signalAt(price, { sma50, sma200, rsi14 }, count) {
-  if (sma200 === null || rsi14 === null) {
-    return { key: 'unavailable', label: '자료 부족', reason: `연속 ${count}/200개 관측. SMA200 준비 전에는 매수·중립·매도를 판정하지 않습니다.` };
-  }
-  const values = `종가 ${price.toPrecision(6)}, SMA50 ${sma50.toPrecision(6)}, SMA200 ${sma200.toPrecision(6)}, RSI14 ${rsi14.toFixed(2)}`;
-  const above = (a, b) => a - b > Math.max(Math.abs(a), Math.abs(b)) * 8 * Number.EPSILON;
-  if (above(price, sma200) && above(sma50, sma200) && !above(50, rsi14) && above(70, rsi14)) {
-    return { key: 'buy', label: '매수', reason: `${DAILY_SIGNAL_RULE.buy} 충족. ${values}. 다음 관측부터 참고하는 관찰 신호입니다.` };
-  }
-  if (above(sma200, price) && above(sma200, sma50) && above(50, rsi14)) {
-    return { key: 'sell', label: '매도', reason: `${DAILY_SIGNAL_RULE.sell} 충족. ${values}. 다음 관측부터 참고하는 관찰 신호입니다.` };
-  }
-  return { key: 'neutral', label: '중립', reason: `${DAILY_SIGNAL_RULE.neutral}. ${values}.` };
-}
-
 /** Price returns use observed closes. All per-row values are causal. MDD is
  * negative and keeps ordered peak/trough dates; gaps can understate its loss magnitude. */
 export function analyzeDailySeries(prices, { calendar = 'daily', asOfDate, symbol = '', missingDates = [] } = {}) {
@@ -174,7 +93,7 @@ export function analyzeDailySeries(prices, { calendar = 'daily', asOfDate, symbo
     missingSet.add(date);
   }
   const missingDays = [...missingSet].map(utcDay).sort((a, b) => a - b);
-  let missingIndex = 0, totalMissing = 0, indicatorState = newIndicators();
+  let missingIndex = 0, totalMissing = 0;
   let yearPeriod = null, monthPeriod = null;
   const rows = [], annual = [], monthly = [], lifetime = newDrawdown(first);
   for (let index = 0; index < input.length; index++) {
@@ -186,9 +105,7 @@ export function analyzeDailySeries(prices, { calendar = 'daily', asOfDate, symbo
     }
     const missing = previous ? calendar === 'daily' ? row.epochDay - previous.epochDay - 1 : knownMissing : 0;
     totalMissing += missing;
-    if (missing > 0) indicatorState = newIndicators();
     const contiguousPrevious = previous && missing === 0 ? previous : null;
-    const indicators = indicatorsAt(indicatorState, row, contiguousPrevious);
     const year = Number(row.date.slice(0, 4)), monthKey = row.date.slice(0, 7);
     if (yearPeriod?.bounds.year !== year) {
       if (yearPeriod) annual.push(closeCrossedPeriod(yearPeriod, calendar));
@@ -208,7 +125,6 @@ export function analyzeDailySeries(prices, { calendar = 'daily', asOfDate, symbo
       changePct: contiguousPrevious ? returnPct(row.price, previous.price) : null,
       drawdownPct, mddToDatePct: lifetime.mddPct, peakDate: lifetime.peak.date,
       recoveryPct: returnPct(lifetime.peak.price, row.price),
-      ...indicators, signal: signalAt(row.price, indicators, indicatorState.count),
       ytdPct: returnPct(row.price, yearPeriod.baseline.price),
       ytdPartial: !yearPeriod.hasBaseline || (calendar === 'daily' && yearPeriod.baseline.epochDay !== yearPeriod.bounds.start - 1),
     });

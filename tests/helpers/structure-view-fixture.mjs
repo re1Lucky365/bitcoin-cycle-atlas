@@ -59,7 +59,7 @@ export async function structureViewFixture({ root = fileURLToPath(new URL('../..
   const context = vm.createContext({
     __deps: deps, document, window, URLSearchParams, URL, Date, Intl, AbortSignal, location: { search: '' },
     console: { error: (...values) => errors.push(values.map(value => value?.stack || String(value)).join(' ')) },
-    CustomEvent: class { constructor(type, options = {}) { this.type = type; Object.assign(this, options); } },
+    queueMicrotask, CustomEvent: class { constructor(type, options = {}) { this.type = type; Object.assign(this, options); } },
     ResizeObserver: class { observe() {} }, requestAnimationFrame: fn => frames.push(fn),
   });
   vm.runInContext(`${transformed}\nglobalThis.start=initLabView;`, context);

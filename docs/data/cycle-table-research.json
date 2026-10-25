@@ -1,0 +1,222 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "node scripts/research-cycle-table.mjs",
+  "baselineRevision": "3a1be8370a9fd9a71861be3f929493370f08a5ef",
+  "inputFile": "dist/data/btc-daily.json",
+  "inputSha256": "ba002ee272c8b8f6fe2111e32df85080b3352756d1f46ba11d5dffa5c4ab5bf2",
+  "source": {
+    "name": "Coin Metrics Community API",
+    "url": "https://community-api.coinmetrics.io/v4/timeseries/asset-metrics?assets=btc&metrics=PriceUSD&frequency=1d&start_time=2010-07-18&end_time=2026-10-24&page_size=10000&paging_from=start",
+    "metric": "PriceUSD",
+    "frequency": "1d",
+    "retrievedAt": "2026-10-24T04:37:13.250Z"
+  },
+  "asOf": "2026-10-23",
+  "observationCount": 5942,
+  "method": {
+    "peakSelection": "Maximum daily Coin Metrics PriceUSD within each named peak year; earliest tie.",
+    "troughSelection": "Minimum from this selected peak through the next selected peak, inclusive; latest cycle through asOf only.",
+    "duration": "UTC elapsed days. No inclusive +1 and no forced 365-day year.",
+    "mdd": "Minimum of price/runningPeak - 1 within the explicitly stated ordered daily-price window.",
+    "independentArithmetic": true,
+    "chartParityChecked": true,
+    "hypotheticalTradingPerformance": false,
+    "selectionIsRetrospective": true,
+    "cycleSelectionWasPreSpecifiedInChart": true,
+    "cyclesAreIndependentTrials": false
+  },
+  "cycles": [
+    {
+      "peakYear": 2011,
+      "startDate": "2010-07-18",
+      "peakDate": "2011-06-08",
+      "endDate": "2011-11-18",
+      "startPrice": 0.08584,
+      "peakPrice": 29.0299213267095,
+      "endPrice": 2.10506600321449,
+      "bullDays": 325,
+      "bearDays": 163,
+      "cycleDays": 488,
+      "bullVersus36MonthsDays": -771,
+      "bearVersus12MonthsDays": -203,
+      "leftCensored": true,
+      "rightCensored": false,
+      "complete": false,
+      "risePathMdd": {
+        "pct": -50.12455837558003,
+        "peakDate": "2010-11-06",
+        "troughDate": "2010-12-09"
+      },
+      "fullCycleMdd": {
+        "pct": -92.74863345469116,
+        "peakDate": "2011-06-08",
+        "troughDate": "2011-11-18"
+      },
+      "peakToTroughPct": -92.74863345469116
+    },
+    {
+      "peakYear": 2013,
+      "startDate": "2011-11-18",
+      "peakDate": "2013-12-04",
+      "endDate": "2015-01-14",
+      "startPrice": 2.10506600321449,
+      "peakPrice": 1134.93223088837,
+      "endPrice": 175.637640561075,
+      "bullDays": 747,
+      "bearDays": 406,
+      "cycleDays": 1153,
+      "bullVersus36MonthsDays": -349,
+      "bearVersus12MonthsDays": 41,
+      "leftCensored": false,
+      "rightCensored": false,
+      "complete": true,
+      "risePathMdd": {
+        "pct": -71.2411916618093,
+        "peakDate": "2013-04-09",
+        "troughDate": "2013-07-06"
+      },
+      "fullCycleMdd": {
+        "pct": -84.52439398750758,
+        "peakDate": "2013-12-04",
+        "troughDate": "2015-01-14"
+      },
+      "peakToTroughPct": -84.52439398750758
+    },
+    {
+      "peakYear": 2017,
+      "startDate": "2015-01-14",
+      "peakDate": "2017-12-16",
+      "endDate": "2018-12-15",
+      "startPrice": 175.637640561075,
+      "peakPrice": 19640.5138834015,
+      "endPrice": 3185.07404383402,
+      "bullDays": 1067,
+      "bearDays": 364,
+      "cycleDays": 1431,
+      "bullVersus36MonthsDays": -29,
+      "bearVersus12MonthsDays": -1,
+      "leftCensored": false,
+      "rightCensored": false,
+      "complete": true,
+      "risePathMdd": {
+        "pct": -35.756163397850536,
+        "peakDate": "2017-06-11",
+        "troughDate": "2017-07-16"
+      },
+      "fullCycleMdd": {
+        "pct": -83.78314303412512,
+        "peakDate": "2017-12-16",
+        "troughDate": "2018-12-15"
+      },
+      "peakToTroughPct": -83.78314303412512
+    },
+    {
+      "peakYear": 2021,
+      "startDate": "2018-12-15",
+      "peakDate": "2021-11-08",
+      "endDate": "2022-11-09",
+      "startPrice": 3185.07404383402,
+      "peakPrice": 67541.7555081824,
+      "endPrice": 15758.2912819988,
+      "bullDays": 1059,
+      "bearDays": 366,
+      "cycleDays": 1425,
+      "bullVersus36MonthsDays": -37,
+      "bearVersus12MonthsDays": 1,
+      "leftCensored": false,
+      "rightCensored": false,
+      "complete": true,
+      "risePathMdd": {
+        "pct": -61.446507002827886,
+        "peakDate": "2019-06-26",
+        "troughDate": "2020-03-12"
+      },
+      "fullCycleMdd": {
+        "pct": -76.66881595920356,
+        "peakDate": "2021-11-08",
+        "troughDate": "2022-11-09"
+      },
+      "peakToTroughPct": -76.66881595920356
+    },
+    {
+      "peakYear": 2025,
+      "startDate": "2022-11-09",
+      "peakDate": "2025-10-06",
+      "endDate": "2026-06-30",
+      "startPrice": 15758.2912819988,
+      "peakPrice": 124824.453666861,
+      "endPrice": 58525.0753614845,
+      "bullDays": 1062,
+      "bearDays": 267,
+      "cycleDays": 1329,
+      "bullVersus36MonthsDays": -34,
+      "bearVersus12MonthsDays": -98,
+      "leftCensored": false,
+      "rightCensored": true,
+      "complete": false,
+      "risePathMdd": {
+        "pct": -28.049027604886778,
+        "peakDate": "2024-12-17",
+        "troughDate": "2025-04-08"
+      },
+      "fullCycleMdd": {
+        "pct": -53.11409452054985,
+        "peakDate": "2025-10-06",
+        "troughDate": "2026-06-30"
+      },
+      "peakToTroughPct": -53.11409452054985
+    }
+  ],
+  "closed": {
+    "count": 3,
+    "peakYears": [
+      2013,
+      2017,
+      2021
+    ],
+    "bullDays": {
+      "min": 747,
+      "median": 1059,
+      "max": 1067
+    },
+    "bearDays": {
+      "min": 364,
+      "median": 366,
+      "max": 406
+    },
+    "cycleDays": {
+      "min": 1153,
+      "median": 1425,
+      "max": 1431
+    }
+  },
+  "matureClosed": {
+    "count": 2,
+    "peakYears": [
+      2017,
+      2021
+    ],
+    "bullDays": {
+      "min": 1059,
+      "median": 1063,
+      "max": 1067
+    },
+    "bearDays": {
+      "min": 364,
+      "median": 365,
+      "max": 366
+    },
+    "cycleDays": {
+      "min": 1425,
+      "median": 1428,
+      "max": 1431
+    }
+  },
+  "interpretation": [
+    "The closed mature cycles resemble roughly three years from selected low to high and one year from high to low, but n=2 is descriptive only.",
+    "The early 2013 cycle is a counterexample to enforcing 36 rise months plus 12 fall months across the chart history.",
+    "A positive low-to-high endpoint return does not mean monotonic rising prices; rise-path MDD is measured independently.",
+    "The newest trough is provisional. Neither its timing nor its recovery makes the current cycle complete.",
+    "These historical annotation choices are not real-time trade signals, causal halving effects, independent holdout tests, or probability estimates."
+  ]
+}

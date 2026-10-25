@@ -1,0 +1,155 @@
+{
+  "command": "node scripts/verify-cycle-table-integration.mjs",
+  "scope": "Public-controller and generated-markup regression replay with inert DOM boundary; not browser visual verification.",
+  "node": "v24.22.1",
+  "asOf": "2026-10-23",
+  "checks": [
+    {
+      "name": "shared cached chart context",
+      "status": "PASS"
+    },
+    {
+      "name": "fresh base rows focus successfully",
+      "status": "PASS",
+      "rows": 103,
+      "rejectedFresh": []
+    },
+    {
+      "name": "cycle filters retain their chart closing low",
+      "status": "PASS",
+      "cycles": [
+        {
+          "cycleId": "peak-2011",
+          "chartStart": "2010-07-18",
+          "chartEnd": "2011-11-18",
+          "chartClosingLow": "2011-11-18",
+          "tableLastDate": "2011-11-18",
+          "includesClosingLow": true
+        },
+        {
+          "cycleId": "peak-2013",
+          "chartStart": "2011-11-18",
+          "chartEnd": "2015-01-14",
+          "chartClosingLow": "2015-01-14",
+          "tableLastDate": "2015-01-14",
+          "includesClosingLow": true
+        },
+        {
+          "cycleId": "peak-2017",
+          "chartStart": "2015-01-14",
+          "chartEnd": "2018-12-15",
+          "chartClosingLow": "2018-12-15",
+          "tableLastDate": "2018-12-15",
+          "includesClosingLow": true
+        },
+        {
+          "cycleId": "peak-2021",
+          "chartStart": "2018-12-15",
+          "chartEnd": "2022-11-09",
+          "chartClosingLow": "2022-11-09",
+          "tableLastDate": "2022-11-09",
+          "includesClosingLow": true
+        },
+        {
+          "cycleId": "peak-2025",
+          "chartStart": "2022-11-09",
+          "chartEnd": "2026-06-30",
+          "chartClosingLow": "2026-06-30",
+          "tableLastDate": "2026-06-30",
+          "includesClosingLow": true
+        }
+      ]
+    },
+    {
+      "name": "requested historical and conditional sideways periods exist",
+      "status": "PASS",
+      "historicalRows": 39,
+      "conditionalRows": 34,
+      "currentRows": 1
+    },
+    {
+      "name": "scenario changes preserve observed rows and accept valid new rows",
+      "status": "PASS",
+      "scenarios": [
+        {
+          "scenarioId": "accelerated",
+          "rows": 96,
+          "historicalStable": true,
+          "newRowsRejected": [],
+          "staleRowsAccepted": []
+        },
+        {
+          "scenarioId": "wait",
+          "rows": 103,
+          "historicalStable": true,
+          "newRowsRejected": [],
+          "staleRowsAccepted": []
+        },
+        {
+          "scenarioId": "late",
+          "rows": 99,
+          "historicalStable": true,
+          "newRowsRejected": [],
+          "staleRowsAccepted": []
+        },
+        {
+          "scenarioId": "stress",
+          "rows": 97,
+          "historicalStable": true,
+          "newRowsRejected": [],
+          "staleRowsAccepted": []
+        }
+      ]
+    },
+    {
+      "name": "public focus rejects previous-scenario rows",
+      "status": "PASS",
+      "limitation": "Controller-contract probe; no normal visible UI route to stale scenario rows was demonstrated."
+    },
+    {
+      "name": "one semantic table and removed indicator interface",
+      "status": "PASS"
+    },
+    {
+      "name": "throwing shared context clears stale judgments and disables actions",
+      "status": "PASS"
+    },
+    {
+      "name": "shared context recovers without an old error title",
+      "status": "PASS"
+    },
+    {
+      "name": "source snapshot remained stable during probe",
+      "status": "PASS",
+      "initialHashes": {
+        "dist/app.js": "25ea5ec567ff943642903b898b9975826d79410453777da6bdb4bcd011bc1966",
+        "dist/lab-view.js": "f80c539dd1d24893169913466fc5dd090827d4ae7b2c21f7902785b34fe814c4",
+        "dist/cycle-decision.js": "7dad7868a73f43aaea1ca656bf9223a7a4fdabe1d88da75b6d2b59be12ebb0a9",
+        "dist/daily-data-view.js": "c2b345ca88aa3b91046a36dbcdad11a0e101f84dcf3d890a9b4afec8769becab",
+        "dist/daily-data.css": "9c22c452c760a6d9796bc2a9a06a89ee64d96b7219bf5c7754e2979e6f578da1",
+        "dist/cycle-milestones.js": "d69400b38c4206d04df879fa3a619046a88a6a9aa8d5eeaf2b94c4990970e9b8",
+        "dist/long-horizon-forecast.js": "fcedcfa438b56136a3910e258a6473d5a3d4fb20b99cab8a22a4cb1a4b77e02c",
+        "dist/data/btc-daily.json": "ba002ee272c8b8f6fe2111e32df85080b3352756d1f46ba11d5dffa5c4ab5bf2",
+        "scripts/verify-cycle-decision.mjs": "a03afe26952c7cc51a4cc3afe30c7d797bceaf931bde80cd6c3ecf43501a66d1",
+        "scripts/verify-cycle-table-integration.mjs": "ac8ba00c07e68b1dc7bf60fc2c6d2f2f5ba5b9c5306844c6421bcb886786875f",
+        "tests/helpers/structure-view-fixture.mjs": "ba63460e91024ae1682e5474e58f3299a2a106c9b37686dd7686042b652bf691",
+        "tests/helpers/daily-data-view-fixture.mjs": "48cd4d9b280f99cd3a271dd51cacf29761cbd9b2db834c753c248c40fb3fd60d"
+      }
+    }
+  ],
+  "hashes": {
+    "dist/app.js": "25ea5ec567ff943642903b898b9975826d79410453777da6bdb4bcd011bc1966",
+    "dist/lab-view.js": "f80c539dd1d24893169913466fc5dd090827d4ae7b2c21f7902785b34fe814c4",
+    "dist/cycle-decision.js": "7dad7868a73f43aaea1ca656bf9223a7a4fdabe1d88da75b6d2b59be12ebb0a9",
+    "dist/daily-data-view.js": "c2b345ca88aa3b91046a36dbcdad11a0e101f84dcf3d890a9b4afec8769becab",
+    "dist/daily-data.css": "9c22c452c760a6d9796bc2a9a06a89ee64d96b7219bf5c7754e2979e6f578da1",
+    "dist/cycle-milestones.js": "d69400b38c4206d04df879fa3a619046a88a6a9aa8d5eeaf2b94c4990970e9b8",
+    "dist/long-horizon-forecast.js": "fcedcfa438b56136a3910e258a6473d5a3d4fb20b99cab8a22a4cb1a4b77e02c",
+    "dist/data/btc-daily.json": "ba002ee272c8b8f6fe2111e32df85080b3352756d1f46ba11d5dffa5c4ab5bf2",
+    "scripts/verify-cycle-decision.mjs": "a03afe26952c7cc51a4cc3afe30c7d797bceaf931bde80cd6c3ecf43501a66d1",
+    "scripts/verify-cycle-table-integration.mjs": "ac8ba00c07e68b1dc7bf60fc2c6d2f2f5ba5b9c5306844c6421bcb886786875f",
+    "tests/helpers/structure-view-fixture.mjs": "ba63460e91024ae1682e5474e58f3299a2a106c9b37686dd7686042b652bf691",
+    "tests/helpers/daily-data-view-fixture.mjs": "48cd4d9b280f99cd3a271dd51cacf29761cbd9b2db834c753c248c40fb3fd60d"
+  },
+  "status": "PASS"
+}

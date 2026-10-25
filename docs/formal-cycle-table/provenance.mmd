@@ -1,0 +1,27 @@
+stateDiagram-v2
+    direction TB
+    [*] --> Validate
+    state "새 자료로 행 재계산" as Validate
+    state "표시 중단" as Blocked
+    state "차트 기준점 분류" as Checkpoint
+    state "날짜별 28일 조건과 연속 충족 수" as Window
+    state "과거 사후 기준" as Historical
+    state "잠정 관측 기준" as Provisional
+    state "선택한 가정의 지점 또는 기간" as Conditional
+    state "관측된 횡보 조건 기간" as ObservedPeriod
+    state "횡보 기간 미표시" as NoPeriod
+    Validate --> Blocked: 기준일·가격·경로 불일치
+    Validate --> Checkpoint: 일치하는 차트 표식
+    Validate --> Window: 일치하는 가격 자료
+    Checkpoint --> Historical: 실제 가격 + 완료된 원래 표식
+    Checkpoint --> Provisional: 실제 가격 + 잠정 원래 표식
+    Checkpoint --> Conditional: 미래 경로 또는 가정이 선택한 역할
+    Window --> NoPeriod: 완전한 창 또는 연속 7개 미충족
+    Window --> ObservedPeriod: 기준일 이하 연속 7개 이상 충족
+    Window --> Conditional: 선택한 미래 범위에서 별도 7개 이상 충족
+    Provisional --> Validate: 새 실제 관측과 표식 갱신
+    Conditional --> Validate: 경로 변경 또는 새 실제 자료
+    ObservedPeriod --> Validate: 새 관측 또는 기준일 변경
+    NoPeriod --> Validate: 새 가격 자료
+    Blocked --> Validate: 일치하는 자료 재조회
+    Historical --> Validate: 조회 기준일 변경

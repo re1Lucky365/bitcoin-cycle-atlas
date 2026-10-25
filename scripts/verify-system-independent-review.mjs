@@ -83,7 +83,7 @@ for (let trial = 0; trial < 80; trial++) {
 
 const causalPrices = Array.from({ length: 500 }, (_, i) => [dateAt(epoch('2024-01-01') + i), 200 + i / 10 + 70 * Math.sin(i / 25)]).filter((_, i) => i !== 230);
 const causalDaily = analyzeDailySeries(causalPrices);
-assert.ok(causalDaily.rows.some(row => row.sma200 !== null && row.signal.key !== 'unavailable'));
+assert.ok(causalDaily.rows.some(row => Number.isFinite(row.changePct) && Number.isFinite(row.drawdownPct)));
 for (const length of [199, 200, 229, 250, 480]) {
   assert.deepEqual(analyzeDailySeries(causalPrices.slice(0, length)).rows, causalDaily.rows.slice(0, length));
   prefixComparisons++;
@@ -146,10 +146,12 @@ if (baseline) {
   const oldMarket = await load('market-structure', baseline), oldDaily = await load('daily-analytics', baseline);
   for (let trial = 0; trial < 12; trial++) {
     const prices = Array.from({ length: 180 }, (_, i) => [dateAt(epoch('2024-01-01') + i), 200 + 150 * Math.sin(i / (trial + 3)) + random()]);
-    assert.deepEqual(analyzeDailySeries(prices), oldDaily.analyzeDailySeries(prices));
+    const previousRisk = oldDaily.analyzeDailySeries(prices);
+    previousRisk.rows = previousRisk.rows.map(({ sma50, sma200, rsi14, signal, ...risk }) => risk);
+    assert.deepEqual(analyzeDailySeries(prices), previousRisk);
     for (const frequency of ['daily', 'weekly']) assert.deepEqual(market.computeRollingStates(prices, { frequency }), oldMarket.computeRollingStates(prices, { frequency }));
     for (const frequency of ['weekly', 'monthly', 'quarterly', 'four-year']) assert.deepEqual(market.aggregateCloseBars(prices, { frequency }), oldMarket.aggregateCloseBars(prices, { frequency }));
-    normalDifferentials.push({ trial, observations: prices.length, completeOutputsEqual: true });
+    normalDifferentials.push({ trial, observations: prices.length, riskAndMarketOutputsEqual: true });
   }
 }
 
